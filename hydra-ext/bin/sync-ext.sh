@@ -28,11 +28,10 @@ for arg in "$@"; do
             echo ""
             echo "Steps performed:"
             echo "  1. Build executables"
-            echo "  2. Generate Haskell ext modules"
-            echo "  3. Rebuild (to pick up new Haskell files)"
-            echo "  4. Export ext modules to JSON"
-            echo "  5. Generate ext Java from JSON"
-            echo "  6. Compile ext Java"
+            echo "  2. Generate ext encoder/decoder source modules"
+            echo "  3. Generate Haskell ext modules"
+            echo "  4. Rebuild (to pick up new Haskell files)"
+            echo "  5. Export ext modules to JSON"
             exit 0
             ;;
     esac
@@ -51,25 +50,36 @@ echo "Synchronizing Hydra-Ext"
 echo "=========================================="
 echo ""
 
-echo "Step 1/4: Building executables..."
+echo "Step 1/5: Building executables..."
 echo ""
 stack build \
+    hydra-ext:exe:update-ext-sources \
     hydra-ext:exe:update-haskell-ext-main \
     hydra-ext:exe:update-json-ext \
     hydra-ext:exe:bootstrap-from-json
 
 echo ""
-echo "Step 2/4: Generating Haskell ext modules..."
+echo "Step 2/5: Generating ext encoder/decoder source modules..."
+echo ""
+stack exec update-ext-sources -- $RTS_FLAGS
+
+# Rebuild to pick up new encoder/decoder source modules
+echo ""
+echo "Rebuilding..."
+stack build
+
+echo ""
+echo "Step 3/5: Generating Haskell ext modules..."
 echo ""
 stack exec update-haskell-ext-main -- $RTS_FLAGS
 
 echo ""
-echo "Step 3/4: Rebuilding..."
+echo "Step 4/5: Rebuilding..."
 echo ""
 stack build
 
 echo ""
-echo "Step 4/4: Exporting ext modules to JSON..."
+echo "Step 5/5: Exporting ext modules to JSON..."
 echo ""
 stack exec update-json-ext -- $RTS_FLAGS
 

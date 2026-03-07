@@ -43,6 +43,14 @@ executables:
     dependencies:
       - hydra-ext
 
+  update-ext-sources:
+    main: Main.hs
+    source-dirs:
+      - src/exec/update-ext-sources
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra-ext
+
   update-json-ext:
     main: Main.hs
     source-dirs:
