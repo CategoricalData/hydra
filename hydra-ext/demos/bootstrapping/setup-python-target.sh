@@ -1,27 +1,15 @@
 #!/bin/bash
-# Copy static resources and run tests for a Python bootstrap target directory.
+# Clean output directory and copy static resources for a Python bootstrap target.
 # This is host-language-independent: the same static resources are needed
 # regardless of which host (Haskell, Java, Python) generated the code.
 #
 # Usage: ./setup-python-target.sh <output-dir>
-#
-# The output directory should already contain src/gen-main/python/ with generated code.
 
 set -e
 
-# Parse arguments
-NO_TEST=false
-POSITIONAL_ARGS=()
-for arg in "$@"; do
-    case "$arg" in
-        --no-test) NO_TEST=true ;;
-        *) POSITIONAL_ARGS+=("$arg") ;;
-    esac
-done
-
-OUTPUT_DIR="${POSITIONAL_ARGS[0]}"
+OUTPUT_DIR="$1"
 if [ -z "$OUTPUT_DIR" ]; then
-    echo "Usage: $0 [--no-test] <output-dir>"
+    echo "Usage: $0 <output-dir>"
     exit 1
 fi
 
@@ -30,21 +18,12 @@ HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 HYDRA_PYTHON_DIR="$HYDRA_ROOT/hydra-python"
 PYTHON_RESOURCES="$SCRIPT_DIR/resources/python"
 
-# Create namespace package __init__.py files in generated directories.
-echo "Creating namespace package __init__.py files..."
-for gen_dir in "$OUTPUT_DIR/src/gen-main/python" "$OUTPUT_DIR/src/gen-test/python"; do
-    if [ -d "$gen_dir" ]; then
-        find "$gen_dir" -type d -not -name "__pycache__" -not -path "*/__pycache__/*" | while read dir; do
-            if [ "$dir" = "$gen_dir" ]; then continue; fi
-            if [ ! -f "$dir/__init__.py" ]; then
-                echo "from pkgutil import extend_path" > "$dir/__init__.py"
-                echo "__path__ = extend_path(__path__, __name__)" >> "$dir/__init__.py"
-            fi
-        done
-    fi
-done
+# Clean and create output directory
+echo "Preparing output directory: $OUTPUT_DIR"
+rm -rf "$OUTPUT_DIR"
+mkdir -p "$OUTPUT_DIR"
 
-# Step: Copy static resources
+# Copy static resources
 echo "Copying static resources for Python target..."
 
 # Build/config files
@@ -76,6 +55,7 @@ echo "  Copying ext modules from baseline..."
 PY_GEN="$OUTPUT_DIR/src/gen-main/python"
 PY_BASELINE="$HYDRA_PYTHON_DIR/src/gen-main/python"
 if [ -d "$PY_BASELINE/hydra/ext" ]; then
+    mkdir -p "$PY_GEN/hydra"
     rm -rf "$PY_GEN/hydra/ext"
     cp -r "$PY_BASELINE/hydra/ext" "$PY_GEN/hydra/"
     # Ensure __init__.py files exist in ext directories
@@ -107,31 +87,6 @@ if [ ! -e "$OUTPUT_DIR/../hydra-haskell" ]; then
 fi
 
 # Summary
-MAIN_COUNT=$(find "$OUTPUT_DIR/src/gen-main" -name "*.py" ! -name "__init__.py" 2>/dev/null | wc -l | tr -d ' ')
-TEST_COUNT=$(find "$OUTPUT_DIR/src/gen-test" -name "*.py" ! -name "__init__.py" 2>/dev/null | wc -l | tr -d ' ')
 STATIC_COUNT=$(find "$OUTPUT_DIR/src/main" -name "*.py" ! -name "__init__.py" 2>/dev/null | wc -l | tr -d ' ')
-echo "  Generated main modules:   $MAIN_COUNT files"
-echo "  Generated test modules:   $TEST_COUNT files"
-echo "  Static resources:         $STATIC_COUNT files"
+echo "  Static resources: $STATIC_COUNT files"
 echo ""
-
-if [ "$NO_TEST" = true ]; then
-    echo ""
-    exit 0
-fi
-
-# Run tests
-echo "Running Python tests..."
-STEP_START=$(date +%s)
-cd "$OUTPUT_DIR"
-TEST_DIRS="src/test/python"
-if [ -d "src/gen-test/python/generation" ]; then
-    TEST_DIRS="$TEST_DIRS src/gen-test/python/generation"
-fi
-HYDRA_BENCHMARK_OUTPUT="${HYDRA_BENCHMARK_OUTPUT:-}" pytest $TEST_DIRS 2>&1
-TEST_EXIT=$?
-STEP_END=$(date +%s)
-echo "  Test time: $((STEP_END - STEP_START))s"
-echo ""
-
-exit $TEST_EXIT

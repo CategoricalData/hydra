@@ -3,10 +3,9 @@
 # Demonstrates that Haskell can independently load and process Hydra modules
 # from a language-independent JSON representation.
 #
-# Usage: ./haskell-bootstrap.sh --target <haskell|java|python> [--include-tests] [--kernel-only] [--types-only] [--output <dir>]
+# Usage: ./invoke-haskell-host.sh --target <haskell|java|python> [--include-tests] [--kernel-only] [--types-only] [--output <dir>]
 #
-# When --output is provided, output goes to <dir>/haskell-to-<target>/
-# (matching the convention used by java-bootstrap.sh and python-bootstrap.sh).
+# When --output is provided, output goes to <dir>/haskell-to-<target>/.
 #
 # The detailed step-by-step output (timing, file counts, etc.) is provided
 # by the bootstrap-from-json executable itself.

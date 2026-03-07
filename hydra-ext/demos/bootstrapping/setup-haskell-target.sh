@@ -1,27 +1,15 @@
 #!/bin/bash
-# Copy static resources and run tests for a Haskell bootstrap target directory.
+# Clean output directory and copy static resources for a Haskell bootstrap target.
 # This is host-language-independent: the same static resources are needed
 # regardless of which host (Haskell, Java, Python) generated the code.
 #
 # Usage: ./setup-haskell-target.sh <output-dir>
-#
-# The output directory should already contain src/gen-main/haskell/ with generated code.
 
 set -e
 
-# Parse arguments
-NO_TEST=false
-POSITIONAL_ARGS=()
-for arg in "$@"; do
-    case "$arg" in
-        --no-test) NO_TEST=true ;;
-        *) POSITIONAL_ARGS+=("$arg") ;;
-    esac
-done
-
-OUTPUT_DIR="${POSITIONAL_ARGS[0]}"
+OUTPUT_DIR="$1"
 if [ -z "$OUTPUT_DIR" ]; then
-    echo "Usage: $0 [--no-test] <output-dir>"
+    echo "Usage: $0 <output-dir>"
     exit 1
 fi
 
@@ -30,7 +18,12 @@ HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 HYDRA_HASKELL_DIR="$HYDRA_ROOT/hydra-haskell"
 HASKELL_RESOURCES="$SCRIPT_DIR/resources/haskell"
 
-# Step: Copy static resources
+# Clean and create output directory
+echo "Preparing output directory: $OUTPUT_DIR"
+rm -rf "$OUTPUT_DIR"
+mkdir -p "$OUTPUT_DIR"
+
+# Copy static resources
 echo "Copying static resources for Haskell target..."
 
 # Build files
@@ -53,6 +46,7 @@ echo "  Copying ext modules from baseline..."
 HS_GEN="$OUTPUT_DIR/src/gen-main/haskell"
 HS_BASELINE="$HYDRA_HASKELL_DIR/src/gen-main/haskell"
 if [ -d "$HS_BASELINE/Hydra/Ext" ]; then
+    mkdir -p "$HS_GEN/Hydra"
     rm -rf "$HS_GEN/Hydra/Ext"
     cp -r "$HS_BASELINE/Hydra/Ext" "$HS_GEN/Hydra/"
     echo "    Copied Hydra/Ext from baseline"
@@ -85,33 +79,6 @@ fi
 touch "$OUTPUT_DIR/LICENSE"
 
 # Summary
-MAIN_COUNT=$(find "$OUTPUT_DIR/src/gen-main" -name "*.hs" 2>/dev/null | wc -l | tr -d ' ')
-TEST_COUNT=$(find "$OUTPUT_DIR/src/gen-test" -name "*.hs" 2>/dev/null | wc -l | tr -d ' ')
 STATIC_COUNT=$(find "$OUTPUT_DIR/src/main" -name "*.hs" 2>/dev/null | wc -l | tr -d ' ')
-echo "  Generated main modules:   $MAIN_COUNT files"
-echo "  Generated test modules:   $TEST_COUNT files"
-echo "  Static resources:         $STATIC_COUNT files"
+echo "  Static resources: $STATIC_COUNT files"
 echo ""
-
-# Build
-echo "Building Haskell target..."
-STEP_START=$(date +%s)
-cd "$OUTPUT_DIR"
-stack build 2>&1
-BUILD_END=$(date +%s)
-echo "  Build time: $((BUILD_END - STEP_START))s"
-
-if [ "$NO_TEST" = true ]; then
-    echo ""
-    exit 0
-fi
-
-# Run tests
-echo "Running Haskell tests..."
-HYDRA_BENCHMARK_OUTPUT="${HYDRA_BENCHMARK_OUTPUT:-}" stack test 2>&1
-TEST_EXIT=$?
-TEST_END=$(date +%s)
-echo "  Test time: $((TEST_END - BUILD_END))s"
-echo ""
-
-exit $TEST_EXIT

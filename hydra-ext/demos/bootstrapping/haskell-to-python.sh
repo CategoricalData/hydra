@@ -1,7 +1,5 @@
 #!/bin/bash
 # Bootstrap Hydra to Python from JSON modules (via Haskell host).
-# Generates code into a standalone /tmp directory, copies static resources,
-# then runs the Python test suite.
 #
 # Usage: ./haskell-to-python.sh [--types-only] [--kernel-only]
 
@@ -48,24 +46,19 @@ fi
 echo "  JSON input files: $JSON_COUNT (in $JSON_DIR)"
 echo ""
 
-# Step 2: Clean output directory
-echo "Step 2: Preparing output directory..."
-rm -rf "$OUTPUT_DIR"
-mkdir -p "$OUTPUT_DIR"
-echo "  Cleaned: $OUTPUT_DIR"
-echo ""
+# Step 2: Set up target directory (clean + copy static files)
+"$SCRIPT_DIR/setup-python-target.sh" "$OUTPUT_DIR"
 
-# Step 3: Bootstrap from JSON via Haskell host
-echo "Step 3: Mapping JSON to Python (via Haskell host)..."
+# Step 3: Generate code
+echo "Step 3: Generating Python code (via Haskell host)..."
 STEP_START=$(date +%s)
-"$SCRIPT_DIR/haskell-bootstrap.sh" --target python --output "$OUTPUT_BASE" --include-tests $EXTRA_FLAGS 2>&1
+"$SCRIPT_DIR/invoke-haskell-host.sh" --target python --output "$OUTPUT_BASE" --include-tests $EXTRA_FLAGS 2>&1
 STEP_END=$(date +%s)
 echo "  Time: $((STEP_END - STEP_START))s"
 echo ""
 
-# Steps 4-6: Copy static resources and run tests
-echo "Steps 4-6: Setting up target and running tests..."
-"$SCRIPT_DIR/setup-python-target.sh" "$OUTPUT_DIR"
+# Step 4: Build and test
+"$SCRIPT_DIR/test-python-target.sh" "$OUTPUT_DIR"
 TEST_EXIT=$?
 
 TOTAL_END=$(date +%s)
