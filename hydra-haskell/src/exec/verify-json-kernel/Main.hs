@@ -22,34 +22,19 @@ import System.Directory (doesFileExist)
 import System.FilePath ((</>))
 import System.IO (hFlush, stdout)
 import qualified Data.Map as M
-import qualified Data.ByteString.Lazy as BS
-import qualified Data.Aeson as A
-import qualified Data.Aeson.KeyMap as AKM
-import qualified Data.Aeson.Key as AK
-import qualified Data.Text as T
-import qualified Data.Vector as V
-import qualified Data.Scientific as SC
+import qualified Hydra.Json.Parser as JsonParser
+import Hydra.Parsing (ParseResult(..), ParseSuccess(..), ParseError(..))
 
 flushPut :: String -> IO ()
 flushPut s = putStrLn s >> hFlush stdout
 
--- | Convert Aeson JSON value to Hydra JSON value
-aesonToHydra :: A.Value -> Json.Value
-aesonToHydra v = case v of
-  A.Object km -> Json.ValueObject $ M.fromList (mapPair <$> AKM.toList km)
-    where
-      mapPair (k, v') = (AK.toString k, aesonToHydra v')
-  A.Array a -> Json.ValueArray (aesonToHydra <$> V.toList a)
-  A.String t -> Json.ValueString $ T.unpack t
-  A.Number s -> Json.ValueNumber $ SC.toRealFloat s
-  A.Bool b -> Json.ValueBoolean b
-  A.Null -> Json.ValueNull
-
--- | Parse JSON from file using Aeson (fast)
+-- | Parse JSON from file using the native Hydra JSON parser
 parseJsonFile :: FilePath -> IO (Either String Json.Value)
 parseJsonFile fp = do
-  content <- BS.readFile fp
-  return $ aesonToHydra <$> A.eitherDecode content
+  content <- readFile fp
+  return $ case JsonParser.parseJson content of
+    ParseResultSuccess success -> Right (parseSuccessValue success)
+    ParseResultFailure err -> Left $ parseErrorMessage err
 
 -- | Build a schema map (Name -> Type) from a graph's schema types.
 -- This is used by the JSON decoder to resolve type variables.
@@ -101,7 +86,7 @@ main = do
         flushPut $ "  ✗ " ++ nsStr ++ " (file not found)"
         return (False, nsStr ++ ": file not found")
       else do
-        -- Parse JSON using Aeson (fast!)
+        -- Parse JSON using Hydra's native parser
         parseResult <- parseJsonFile filePath
         case parseResult of
           Left err -> do
