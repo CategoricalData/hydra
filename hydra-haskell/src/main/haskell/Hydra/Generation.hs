@@ -9,7 +9,9 @@ import Hydra.Ext.Haskell.Coder
 import Hydra.Ext.Haskell.Language
 import Hydra.Module (_Module)
 import qualified Hydra.Json.Model as Json
+import qualified Hydra.Json.Parser as JsonParser
 import qualified Hydra.Json.Writer as JsonWriter
+import Hydra.Parsing (ParseResult(..), ParseSuccess(..), ParseError(..))
 import Hydra.Staging.Yaml.Modules
 import Hydra.Staging.Yaml.Language
 import Hydra.Sources.Libraries
@@ -24,19 +26,11 @@ import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
 import qualified Hydra.CodeGeneration as CodeGeneration
 
 import qualified Control.Monad as CM
-import qualified Data.Aeson as A
-import qualified Data.Aeson.KeyMap as AKM
-import qualified Data.Aeson.Key as AK
-import qualified Data.ByteString.Lazy as BS
-import qualified Data.Scientific as SC
-import qualified Data.Vector as V
-import Data.Word (Word8)
 import qualified System.FilePath as FP
 import qualified Data.List as L
 import qualified Data.List.Split as LS
 import qualified Data.Map as M
 import qualified Data.Set as S
-import qualified Data.Text as T
 import qualified System.Directory as SD
 import qualified Data.Maybe as Y
 
@@ -297,32 +291,22 @@ writeManifestJson basePath = do
 -- JSON Module Import
 ----------------------------------------
 
--- | Convert an Aeson JSON value to a Hydra JSON value.
-aesonToHydra :: A.Value -> Json.Value
-aesonToHydra v = case v of
-  A.Object km -> Json.ValueObject $ M.fromList (mapPair <$> AKM.toList km)
-    where
-      mapPair (k, v') = (AK.toString k, aesonToHydra v')
-  A.Array a -> Json.ValueArray (aesonToHydra <$> V.toList a)
-  A.String t -> Json.ValueString $ T.unpack t
-  A.Number s -> Json.ValueNumber $ SC.toRealFloat s
-  A.Bool b -> Json.ValueBoolean b
-  A.Null -> Json.ValueNull
-
--- | Parse a JSON file using Aeson and convert to Hydra JSON.
+-- | Parse a JSON file using the native Hydra JSON parser.
 -- Pre-processes the content to escape control characters that the Hydra JSON writer
 -- doesn't escape (e.g. null bytes in string literals).
 parseJsonFile :: FilePath -> IO (Either String Json.Value)
 parseJsonFile fp = do
-  content <- BS.readFile fp
+  content <- readFile fp
   let escaped = escapeControlCharsInJson content
-  return $ aesonToHydra <$> A.eitherDecode escaped
+  return $ case JsonParser.parseJson escaped of
+    ParseResultSuccess success -> Right (parseSuccessValue success)
+    ParseResultFailure err -> Left $ parseErrorMessage err
 
 -- | Escape unescaped control characters (< 0x20) inside JSON string literals.
--- Thin ByteString wrapper around CodeGeneration.escapeControlCharsInJson (which operates on [Int]).
-escapeControlCharsInJson :: BS.ByteString -> BS.ByteString
+-- Thin String wrapper around CodeGeneration.escapeControlCharsInJson (which operates on [Int]).
+escapeControlCharsInJson :: String -> String
 escapeControlCharsInJson input =
-  BS.pack $ fmap fromIntegral $ CodeGeneration.escapeControlCharsInJson $ fmap fromIntegral $ BS.unpack input
+  fmap (toEnum . fromIntegral) $ CodeGeneration.escapeControlCharsInJson $ fmap (fromIntegral . fromEnum) input
 
 -- | Read a field from manifest.json as a list of Namespaces.
 readManifestField :: FilePath -> String -> IO [Namespace]
