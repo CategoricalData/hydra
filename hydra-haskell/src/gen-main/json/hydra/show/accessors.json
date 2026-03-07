@@ -1549,7 +1549,7 @@
                                   "parameter": "t0"}},
                               "type": [
                                 {
-                                  "constraints": null,
+                                  "constraints": [[{"@key": "t2", "@value": {"classes": ["ordering"]}}]],
                                   "type": {
                                     "pair": {
                                       "first": {

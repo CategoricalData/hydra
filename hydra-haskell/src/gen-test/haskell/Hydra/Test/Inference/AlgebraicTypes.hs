@@ -925,7 +925,10 @@ testGroupForMaps = Testing.TestGroup {
           Core.typeSchemeType = (Core.TypeMap (Core.MapType {
             Core.mapTypeKeys = (Core.TypeVariable (Core.Name "t0")),
             Core.mapTypeValues = (Core.TypeVariable (Core.Name "t1"))})),
-          Core.typeSchemeConstraints = Nothing}})),
+          Core.typeSchemeConstraints = (Just (M.fromList [
+            (Core.Name "t0", Core.TypeVariableMetadata {
+              Core.typeVariableMetadataClasses = (S.fromList [
+                Core.Name "ordering"])})]))}})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = [
         Testing.Tag "disabledForMinimalInference"]},
@@ -951,7 +954,10 @@ testGroupForMaps = Testing.TestGroup {
               Core.functionTypeCodomain = (Core.TypeMap (Core.MapType {
                 Core.mapTypeKeys = (Core.TypeVariable (Core.Name "t0")),
                 Core.mapTypeValues = (Core.TypeLiteral (Core.LiteralTypeFloat Core.FloatTypeFloat64))}))}))})),
-          Core.typeSchemeConstraints = Nothing}})),
+          Core.typeSchemeConstraints = (Just (M.fromList [
+            (Core.Name "t0", Core.TypeVariableMetadata {
+              Core.typeVariableMetadataClasses = (S.fromList [
+                Core.Name "ordering"])})]))}})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = [
         Testing.Tag "disabledForMinimalInference"]}]}
@@ -1248,7 +1254,10 @@ testGroupForSets = Testing.TestGroup {
           Core.typeSchemeVariables = [
             Core.Name "t0"],
           Core.typeSchemeType = (Core.TypeSet (Core.TypeSet (Core.TypeVariable (Core.Name "t0")))),
-          Core.typeSchemeConstraints = Nothing}})),
+          Core.typeSchemeConstraints = (Just (M.fromList [
+            (Core.Name "t0", Core.TypeVariableMetadata {
+              Core.typeVariableMetadataClasses = (S.fromList [
+                Core.Name "ordering"])})]))}})),
       Testing.testCaseWithMetadataDescription = Nothing,
       Testing.testCaseWithMetadataTags = [
         Testing.Tag "disabledForMinimalInference"]}]}
