@@ -41,6 +41,9 @@ expectMono i tags term typ = infTest ("#" ++ show i) tags (asTerm term) $ T.mono
 expectPoly :: AsTerm t Term => Int -> [Tag] -> t -> [String] -> TTerm Type -> TTerm TestCaseWithMetadata
 expectPoly i tags term params typ = infTest ("#" ++ show i) tags (asTerm term) $ T.poly params typ
 
+expectPolyConstrained :: AsTerm t Term => Int -> [Tag] -> t -> [String] -> [(String, [String])] -> TTerm Type -> TTerm TestCaseWithMetadata
+expectPolyConstrained i tags term params constraints typ = infTest ("#" ++ show i) tags (asTerm term) $ T.polyConstrained params constraints typ
+
 groupRef = MetaTerms.varNamePhantom . bindingName
 
 primCase :: String -> Name -> [TTerm Term] -> TTerm Term -> TTerm TestCaseWithMetadata
