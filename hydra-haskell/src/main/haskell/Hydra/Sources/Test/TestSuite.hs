@@ -45,6 +45,7 @@ import qualified Hydra.Sources.Test.Inference.AlgorithmW as InferenceAlgorithmW
 import qualified Hydra.Sources.Test.Inference.Failures as InferenceFailures
 import qualified Hydra.Sources.Test.Inference.Fundamentals as InferenceFundamentals
 import qualified Hydra.Sources.Test.Inference.KernelExamples as InferenceKernelExamples
+import qualified Hydra.Sources.Test.Inference.Classes as InferenceClasses
 import qualified Hydra.Sources.Test.Inference.NominalTypes as InferenceNominalTypes
 import qualified Hydra.Sources.Test.Json.Coder as JsonCoder
 import qualified Hydra.Sources.Test.Json.Parser as JsonParser
@@ -137,7 +138,7 @@ testSuiteModules =
    CheckingFailures.module_, CheckingFundamentals.module_, CheckingNominalTypes.module_,
    -- Inference tests (including sub-modules)
    InferenceAll.module_,
-   InferenceAlgebraicTypes.module_, InferenceAlgorithmW.module_, InferenceFailures.module_,
+   InferenceAlgebraicTypes.module_, InferenceAlgorithmW.module_, InferenceClasses.module_, InferenceFailures.module_,
    InferenceFundamentals.module_, InferenceKernelExamples.module_, InferenceNominalTypes.module_,
    -- Substitution and unification tests
    Substitution.module_, Unification.module_]

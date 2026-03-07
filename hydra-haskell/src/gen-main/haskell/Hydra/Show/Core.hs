@@ -450,11 +450,24 @@ typeScheme ts =
       let varNames = (Lists.map Core.unName vars)
       in  
         let fa = (Logic.ifElse (Lists.null vars) "" (Strings.cat [
-                "\8704[",
+                "forall ",
                 (Strings.intercalate "," varNames),
-                "]."]))
-        in (Strings.cat [
-          "(",
-          fa,
-          (type_ body),
-          ")"])
+                ". "]))
+        in  
+          let toConstraintPair = (\v -> \c -> Strings.cat [
+                  Core.unName c,
+                  " ",
+                  (Core.unName v)])
+          in  
+            let toConstraintPairs = (\p -> Lists.map (toConstraintPair (Pairs.first p)) (Sets.toList (Core.typeVariableMetadataClasses (Pairs.second p))))
+            in  
+              let tc = (Maybes.maybe [] (\m -> Lists.concat (Lists.map toConstraintPairs (Maps.toList m))) (Core.typeSchemeConstraints ts))
+              in (Strings.cat [
+                "(",
+                fa,
+                (Logic.ifElse (Lists.null tc) "" (Strings.cat [
+                  "(",
+                  (Strings.intercalate ", " tc),
+                  ") => "])),
+                (type_ body),
+                ")"])

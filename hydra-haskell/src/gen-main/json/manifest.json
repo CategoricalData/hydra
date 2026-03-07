@@ -298,6 +298,7 @@
     "hydra.test.inference.all",
     "hydra.test.inference.algebraicTypes",
     "hydra.test.inference.algorithmW",
+    "hydra.test.inference.classes",
     "hydra.test.inference.failures",
     "hydra.test.inference.fundamentals",
     "hydra.test.inference.kernelExamples",

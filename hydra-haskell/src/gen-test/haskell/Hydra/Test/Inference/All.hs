@@ -6,6 +6,7 @@ module Hydra.Test.Inference.All where
 
 import qualified Hydra.Test.Inference.AlgebraicTypes as AlgebraicTypes
 import qualified Hydra.Test.Inference.AlgorithmW as AlgorithmW
+import qualified Hydra.Test.Inference.Classes as Classes
 import qualified Hydra.Test.Inference.Failures as Failures
 import qualified Hydra.Test.Inference.Fundamentals as Fundamentals
 import qualified Hydra.Test.Inference.KernelExamples as KernelExamples
@@ -26,6 +27,7 @@ allTests = Testing.TestGroup {
   Testing.testGroupSubgroups = [
     AlgebraicTypes.allTests,
     AlgorithmW.allTests,
+    Classes.allTests,
     Failures.allTests,
     Fundamentals.allTests,
     KernelExamples.allTests,
