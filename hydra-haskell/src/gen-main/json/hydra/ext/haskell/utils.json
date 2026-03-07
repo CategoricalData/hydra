@@ -827,7 +827,7 @@
                                                               "parameter": "t0"}},
                                                           "type": [
                                                             {
-                                                              "constraints": null,
+                                                              "constraints": [[{"@key": "t0", "@value": {"classes": ["ordering"]}}]],
                                                               "type": {
                                                                 "function": {
                                                                   "codomain": {
@@ -948,7 +948,10 @@
                                                                               "parameter": "t0"}},
                                                                           "type": [
                                                                             {
-                                                                              "constraints": null,
+                                                                              "constraints": [
+                                                                                [
+                                                                                  {"@key": "t0", "@value": {"classes": ["ordering"]}},
+                                                                                  {"@key": "t2", "@value": {"classes": ["ordering"]}}]],
                                                                               "type": {
                                                                                 "pair": {
                                                                                   "first": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "t1"}}},

@@ -24,7 +24,8 @@ allTests = Testing.TestGroup {
     testGroupForPartialApplication,
     testGroupForLetBindings,
     testGroupForComposition,
-    testGroupForNestedContainers],
+    testGroupForNestedContainers,
+    testGroupForCollectionTerms],
   Testing.testGroupCases = []}
 
 testGroupForMonomorphicConstraints :: Testing.TestGroup
@@ -1062,4 +1063,268 @@ testGroupForNestedContainers = Testing.TestGroup {
                     Core.Name "ordering"])})]))}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}],
+  Testing.testGroupCases = []}
+
+testGroupForCollectionTerms :: Testing.TestGroup
+testGroupForCollectionTerms = Testing.TestGroup {
+  Testing.testGroupName = "Collection term constraints",
+  Testing.testGroupDescription = Nothing,
+  Testing.testGroupSubgroups = [
+    Testing.TestGroup {
+      Testing.testGroupName = "Set literals",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [],
+      Testing.testGroupCases = [
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "#1",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+            Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermSet (S.fromList [
+                Core.TermVariable (Core.Name "x")]))}))),
+            Testing.inferenceTestCaseOutput = Core.TypeScheme {
+              Core.typeSchemeVariables = [
+                Core.Name "t0"],
+              Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                Core.functionTypeCodomain = (Core.TypeSet (Core.TypeVariable (Core.Name "t0")))})),
+              Core.typeSchemeConstraints = (Just (M.fromList [
+                (Core.Name "t0", Core.TypeVariableMetadata {
+                  Core.typeVariableMetadataClasses = (S.fromList [
+                    Core.Name "ordering"])})]))}})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = [
+            Testing.Tag "disabledForMinimalInference"]},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "#2",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+            Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "y"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermSet (S.fromList [
+                  Core.TermVariable (Core.Name "x"),
+                  (Core.TermVariable (Core.Name "y"))]))})))}))),
+            Testing.inferenceTestCaseOutput = Core.TypeScheme {
+              Core.typeSchemeVariables = [
+                Core.Name "t0"],
+              Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
+                  Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                  Core.functionTypeCodomain = (Core.TypeSet (Core.TypeVariable (Core.Name "t0")))}))})),
+              Core.typeSchemeConstraints = (Just (M.fromList [
+                (Core.Name "t0", Core.TypeVariableMetadata {
+                  Core.typeVariableMetadataClasses = (S.fromList [
+                    Core.Name "ordering"])})]))}})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = [
+            Testing.Tag "disabledForMinimalInference"]},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "#3",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+            Testing.inferenceTestCaseInput = (Core.TermSet (S.fromList [
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+              (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))])),
+            Testing.inferenceTestCaseOutput = Core.TypeScheme {
+              Core.typeSchemeVariables = [],
+              Core.typeSchemeType = (Core.TypeSet (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))),
+              Core.typeSchemeConstraints = Nothing}})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = [
+            Testing.Tag "disabledForMinimalInference"]}]},
+    Testing.TestGroup {
+      Testing.testGroupName = "Map literals",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [],
+      Testing.testGroupCases = [
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "#1",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+            Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "k"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+                Core.lambdaParameter = (Core.Name "v"),
+                Core.lambdaDomain = Nothing,
+                Core.lambdaBody = (Core.TermMap (M.fromList [
+                  (Core.TermVariable (Core.Name "k"), (Core.TermVariable (Core.Name "v")))]))})))}))),
+            Testing.inferenceTestCaseOutput = Core.TypeScheme {
+              Core.typeSchemeVariables = [
+                Core.Name "t0",
+                (Core.Name "t1")],
+              Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
+                  Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t1")),
+                  Core.functionTypeCodomain = (Core.TypeMap (Core.MapType {
+                    Core.mapTypeKeys = (Core.TypeVariable (Core.Name "t0")),
+                    Core.mapTypeValues = (Core.TypeVariable (Core.Name "t1"))}))}))})),
+              Core.typeSchemeConstraints = (Just (M.fromList [
+                (Core.Name "t0", Core.TypeVariableMetadata {
+                  Core.typeVariableMetadataClasses = (S.fromList [
+                    Core.Name "ordering"])})]))}})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = [
+            Testing.Tag "disabledForMinimalInference"]},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "#2",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+            Testing.inferenceTestCaseInput = (Core.TermMap (M.fromList [
+              (Core.TermLiteral (Core.LiteralString "a"), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1))))])),
+            Testing.inferenceTestCaseOutput = Core.TypeScheme {
+              Core.typeSchemeVariables = [],
+              Core.typeSchemeType = (Core.TypeMap (Core.MapType {
+                Core.mapTypeKeys = (Core.TypeLiteral Core.LiteralTypeString),
+                Core.mapTypeValues = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+              Core.typeSchemeConstraints = Nothing}})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = [
+            Testing.Tag "disabledForMinimalInference"]}]},
+    Testing.TestGroup {
+      Testing.testGroupName = "Collection terms with primitives",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [],
+      Testing.testGroupCases = [
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "#1",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+            Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "x"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermSet (S.fromList [
+                Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.negate"))),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}),
+                (Core.TermVariable (Core.Name "x"))]))}))),
+            Testing.inferenceTestCaseOutput = Core.TypeScheme {
+              Core.typeSchemeVariables = [],
+              Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                Core.functionTypeDomain = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                Core.functionTypeCodomain = (Core.TypeSet (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)))})),
+              Core.typeSchemeConstraints = Nothing}})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = [
+            Testing.Tag "disabledForMinimalInference"]},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "#2",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+            Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "k"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermMap (M.fromList [
+                (Core.TermVariable (Core.Name "k"), (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.sort"))),
+                  Core.applicationArgument = (Core.TermList [
+                    Core.TermVariable (Core.Name "k")])})))]))}))),
+            Testing.inferenceTestCaseOutput = Core.TypeScheme {
+              Core.typeSchemeVariables = [
+                Core.Name "t0"],
+              Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
+                Core.functionTypeCodomain = (Core.TypeMap (Core.MapType {
+                  Core.mapTypeKeys = (Core.TypeVariable (Core.Name "t0")),
+                  Core.mapTypeValues = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))}))})),
+              Core.typeSchemeConstraints = (Just (M.fromList [
+                (Core.Name "t0", Core.TypeVariableMetadata {
+                  Core.typeVariableMetadataClasses = (S.fromList [
+                    Core.Name "ordering"])})]))}})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = [
+            Testing.Tag "disabledForMinimalInference"]}]},
+    Testing.TestGroup {
+      Testing.testGroupName = "Constraint propagation through collection elements",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [],
+      Testing.testGroupCases = [
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "#1",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+            Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "xs"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermMap (M.fromList [
+                (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.length"))),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))}), (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.sets.fromList"))),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))})))]))}))),
+            Testing.inferenceTestCaseOutput = Core.TypeScheme {
+              Core.typeSchemeVariables = [
+                Core.Name "t0"],
+              Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                Core.functionTypeDomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
+                Core.functionTypeCodomain = (Core.TypeMap (Core.MapType {
+                  Core.mapTypeKeys = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32)),
+                  Core.mapTypeValues = (Core.TypeSet (Core.TypeVariable (Core.Name "t0")))}))})),
+              Core.typeSchemeConstraints = (Just (M.fromList [
+                (Core.Name "t0", Core.TypeVariableMetadata {
+                  Core.typeVariableMetadataClasses = (S.fromList [
+                    Core.Name "ordering"])})]))}})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = [
+            Testing.Tag "disabledForMinimalInference"]},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "#2",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+            Testing.inferenceTestCaseInput = (Core.TermList [
+              Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.sort"))]),
+            Testing.inferenceTestCaseOutput = Core.TypeScheme {
+              Core.typeSchemeVariables = [
+                Core.Name "t0"],
+              Core.typeSchemeType = (Core.TypeList (Core.TypeFunction (Core.FunctionType {
+                Core.functionTypeDomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
+                Core.functionTypeCodomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0")))}))),
+              Core.typeSchemeConstraints = (Just (M.fromList [
+                (Core.Name "t0", Core.TypeVariableMetadata {
+                  Core.typeVariableMetadataClasses = (S.fromList [
+                    Core.Name "ordering"])})]))}})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = [
+            Testing.Tag "disabledForMinimalInference"]},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "#3",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+            Testing.inferenceTestCaseInput = (Core.TermPair (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.sets.fromList")), (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))))),
+            Testing.inferenceTestCaseOutput = Core.TypeScheme {
+              Core.typeSchemeVariables = [
+                Core.Name "t0"],
+              Core.typeSchemeType = (Core.TypePair (Core.PairType {
+                Core.pairTypeFirst = (Core.TypeFunction (Core.FunctionType {
+                  Core.functionTypeDomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
+                  Core.functionTypeCodomain = (Core.TypeSet (Core.TypeVariable (Core.Name "t0")))})),
+                Core.pairTypeSecond = (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))})),
+              Core.typeSchemeConstraints = (Just (M.fromList [
+                (Core.Name "t0", Core.TypeVariableMetadata {
+                  Core.typeVariableMetadataClasses = (S.fromList [
+                    Core.Name "ordering"])})]))}})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = [
+            Testing.Tag "disabledForMinimalInference"]},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "#4",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseInference (Testing.InferenceTestCase {
+            Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
+              Core.lambdaParameter = (Core.Name "xs"),
+              Core.lambdaDomain = Nothing,
+              Core.lambdaBody = (Core.TermSet (S.fromList [
+                Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.sets.fromList"))),
+                  Core.applicationArgument = (Core.TermVariable (Core.Name "xs"))})]))}))),
+            Testing.inferenceTestCaseOutput = Core.TypeScheme {
+              Core.typeSchemeVariables = [
+                Core.Name "t0"],
+              Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+                Core.functionTypeDomain = (Core.TypeList (Core.TypeVariable (Core.Name "t0"))),
+                Core.functionTypeCodomain = (Core.TypeSet (Core.TypeSet (Core.TypeVariable (Core.Name "t0"))))})),
+              Core.typeSchemeConstraints = (Just (M.fromList [
+                (Core.Name "t0", Core.TypeVariableMetadata {
+                  Core.typeVariableMetadataClasses = (S.fromList [
+                    Core.Name "ordering"])})]))}})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = [
+            Testing.Tag "disabledForMinimalInference"]}]}],
   Testing.testGroupCases = []}
