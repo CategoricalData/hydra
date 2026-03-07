@@ -512,8 +512,8 @@ public interface Coder {
       
       @Override
       public hydra.core.Type visit(hydra.core.Type.Variable v) {
-        return hydra.lib.maps.FindWithDefault.apply(
-          t,
+        return hydra.lib.maps.FindWithDefault.applyLazy(
+          () -> t,
           (v).value,
           s);
       }
@@ -874,28 +874,46 @@ public interface Coder {
               args)), hydra.util.Maybe.just("applyLazy")))),
           () -> hydra.lib.logic.IfElse.lazy(
             hydra.lib.logic.And.apply(
-              hydra.lib.logic.Or.apply(
-                hydra.lib.equality.Equal.apply(
-                  name,
-                  new hydra.core.Name("hydra.lib.maybes.fromMaybe")),
-                hydra.lib.logic.Or.apply(
-                  hydra.lib.equality.Equal.apply(
-                    name,
-                    new hydra.core.Name("hydra.lib.eithers.fromLeft")),
-                  hydra.lib.equality.Equal.apply(
-                    name,
-                    new hydra.core.Name("hydra.lib.eithers.fromRight")))),
+              hydra.lib.equality.Equal.apply(
+                name,
+                new hydra.core.Name("hydra.lib.maps.findWithDefault")),
               hydra.lib.equality.Equal.apply(
                 hydra.lib.lists.Length.apply(args),
-                2)),
+                3)),
             () -> (hydra.util.Pair<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>) ((hydra.util.Pair<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>) (new hydra.util.Pair<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>(java.util.List.of(
               hydra.ext.java.coder.Coder.wrapInSupplierLambda(hydra.lib.lists.At.apply(
                 0,
                 args)),
               hydra.lib.lists.At.apply(
                 1,
+                args),
+              hydra.lib.lists.At.apply(
+                2,
                 args)), hydra.util.Maybe.just("applyLazy")))),
-            () -> (hydra.util.Pair<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>) ((hydra.util.Pair<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>) (new hydra.util.Pair<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>(args, (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()))))))));
+            () -> hydra.lib.logic.IfElse.lazy(
+              hydra.lib.logic.And.apply(
+                hydra.lib.logic.Or.apply(
+                  hydra.lib.equality.Equal.apply(
+                    name,
+                    new hydra.core.Name("hydra.lib.maybes.fromMaybe")),
+                  hydra.lib.logic.Or.apply(
+                    hydra.lib.equality.Equal.apply(
+                      name,
+                      new hydra.core.Name("hydra.lib.eithers.fromLeft")),
+                    hydra.lib.equality.Equal.apply(
+                      name,
+                      new hydra.core.Name("hydra.lib.eithers.fromRight")))),
+                hydra.lib.equality.Equal.apply(
+                  hydra.lib.lists.Length.apply(args),
+                  2)),
+              () -> (hydra.util.Pair<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>) ((hydra.util.Pair<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>) (new hydra.util.Pair<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>(java.util.List.of(
+                hydra.ext.java.coder.Coder.wrapInSupplierLambda(hydra.lib.lists.At.apply(
+                  0,
+                  args)),
+                hydra.lib.lists.At.apply(
+                  1,
+                  args)), hydra.util.Maybe.just("applyLazy")))),
+              () -> (hydra.util.Pair<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>) ((hydra.util.Pair<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>) (new hydra.util.Pair<java.util.List<hydra.ext.java.syntax.Expression>, hydra.util.Maybe<String>>(args, (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing())))))))));
   }
   
   static hydra.ext.java.syntax.Expression wrapInSupplierLambda(hydra.ext.java.syntax.Expression expr) {
@@ -3638,8 +3656,8 @@ public interface Coder {
       
       @Override
       public hydra.core.Type visit(hydra.core.Type.Variable v) {
-        return hydra.lib.maps.FindWithDefault.apply(
-          t,
+        return hydra.lib.maps.FindWithDefault.applyLazy(
+          () -> t,
           (v).value,
           subst);
       }
@@ -3696,8 +3714,8 @@ public interface Coder {
       argSubst,
       remainingSubst.get()));
     return hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.core.Name, hydra.core.Type>) (v -> hydra.lib.maps.FindWithDefault.apply(
-        new hydra.core.Type.Variable(v),
+      (java.util.function.Function<hydra.core.Name, hydra.core.Type>) (v -> hydra.lib.maps.FindWithDefault.applyLazy(
+        () -> new hydra.core.Type.Variable(v),
         v,
         fullSubst.get())),
       schemeVars);

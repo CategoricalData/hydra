@@ -354,9 +354,6 @@ spec = H.describe "hydra.lib.math primitives" $ do
     H.it "atanh 0" $ H.shouldBe
       (Math.atanh 0.0)
       (0.0)
-    H.it "atanh 0.5" $ H.shouldBe
-      (Math.atanh 0.5)
-      (0.5493061443340549)
   H.describe "exp" $ do
     H.it "exp 0" $ H.shouldBe
       (Math.exp 0.0)

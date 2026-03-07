@@ -294,7 +294,12 @@ module_ = Module.Module {
                                           Core.fieldName = (Core.Name "string"),
                                           Core.fieldTerm = (Core.TermVariable (Core.Name "x"))}}))}}))}))),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))}]})))),
-      Core.bindingType = Nothing}],
+      Core.bindingType = (Just (Core.TypeScheme {
+        Core.typeSchemeVariables = [],
+        Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+          Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.json.model.Value")),
+          Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
+        Core.typeSchemeConstraints = Nothing}))}],
   Module.moduleTermDependencies = [
     Module.Namespace "hydra.encode.core"],
   Module.moduleTypeDependencies = [

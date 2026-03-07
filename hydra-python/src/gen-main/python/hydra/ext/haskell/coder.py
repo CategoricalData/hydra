@@ -443,14 +443,7 @@ def find_ord_variables(typ: hydra.core.Type) -> frozenset[hydra.core.Name]:
             case _:
                 return names
     def is_type_variable(v: hydra.core.Name) -> bool:
-        name_str = v.value
-        @lru_cache(1)
-        def has_no_namespace() -> bool:
-            return hydra.lib.maybes.is_nothing(hydra.names.namespace_of(v))
-        @lru_cache(1)
-        def starts_with_t() -> bool:
-            return hydra.lib.equality.equal(hydra.lib.strings.char_at(0, name_str), 116)
-        return hydra.lib.logic.and_(has_no_namespace(), starts_with_t())
+        return hydra.lib.maybes.is_nothing(hydra.names.namespace_of(v))
     def try_type(names: frozenset[hydra.core.Name], t: hydra.core.Type) -> frozenset[hydra.core.Name]:
         match hydra.rewriting.deannotate_type(t):
             case hydra.core.TypeVariable(value=v):

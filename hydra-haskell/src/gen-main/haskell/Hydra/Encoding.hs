@@ -14,7 +14,9 @@ import qualified Hydra.Graph as Graph
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Logic as Logic
+import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
+import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
@@ -33,7 +35,7 @@ encodeBinding cx graph b = (Eithers.bind (Eithers.bimap (\_wc_e -> Context.InCon
   Context.inContextContext = cx}) (\_wc_a -> _wc_a) (Core_.type_ graph (Core.bindingTerm b))) (\typ -> Right (Core.Binding {
   Core.bindingName = (encodeBindingName (Core.bindingName b)),
   Core.bindingTerm = (encodeType typ),
-  Core.bindingType = Nothing})))
+  Core.bindingType = (Just (encoderTypeScheme typ))})))
 
 -- | Generate a binding name for an encoder function from a type name
 encodeBindingName :: (Core.Name -> Core.Name)
@@ -41,6 +43,116 @@ encodeBindingName n = (Logic.ifElse (Logic.not (Lists.null (Lists.tail (Strings.
   "hydra",
   "encode"] (Lists.concat2 (Lists.tail (Lists.init (Strings.splitOn "." (Core.unName n)))) [
   Formatting.decapitalize (Names.localNameOf n)])))) (Core.Name (Formatting.decapitalize (Names.localNameOf n))))
+
+-- | Collect forall type variable names from a type
+encoderCollectForallVariables :: (Core.Type -> [Core.Name])
+encoderCollectForallVariables typ = ((\x -> case x of
+  Core.TypeAnnotated v0 -> (encoderCollectForallVariables (Core.annotatedTypeBody v0))
+  Core.TypeForall v0 -> (Lists.cons (Core.forallTypeParameter v0) (encoderCollectForallVariables (Core.forallTypeBody v0)))
+  _ -> []) typ)
+
+-- | Collect type variables needing Ord constraints
+encoderCollectOrdVars :: (Core.Type -> [Core.Name])
+encoderCollectOrdVars typ = ((\x -> case x of
+  Core.TypeAnnotated v0 -> (encoderCollectOrdVars (Core.annotatedTypeBody v0))
+  Core.TypeApplication v0 -> (Lists.concat2 (encoderCollectOrdVars (Core.applicationTypeFunction v0)) (encoderCollectOrdVars (Core.applicationTypeArgument v0)))
+  Core.TypeEither v0 -> (Lists.concat2 (encoderCollectOrdVars (Core.eitherTypeLeft v0)) (encoderCollectOrdVars (Core.eitherTypeRight v0)))
+  Core.TypeForall v0 -> (encoderCollectOrdVars (Core.forallTypeBody v0))
+  Core.TypeList v0 -> (encoderCollectOrdVars v0)
+  Core.TypeMap v0 -> (Lists.concat [
+    encoderCollectTypeVarsFromType (Core.mapTypeKeys v0),
+    (encoderCollectOrdVars (Core.mapTypeKeys v0)),
+    (encoderCollectOrdVars (Core.mapTypeValues v0))])
+  Core.TypeMaybe v0 -> (encoderCollectOrdVars v0)
+  Core.TypePair v0 -> (Lists.concat2 (encoderCollectOrdVars (Core.pairTypeFirst v0)) (encoderCollectOrdVars (Core.pairTypeSecond v0)))
+  Core.TypeRecord v0 -> (Lists.concat (Lists.map (\ft -> encoderCollectOrdVars (Core.fieldTypeType ft)) (Core.rowTypeFields v0)))
+  Core.TypeSet v0 -> (Lists.concat2 (encoderCollectTypeVarsFromType v0) (encoderCollectOrdVars v0))
+  Core.TypeUnion v0 -> (Lists.concat (Lists.map (\ft -> encoderCollectOrdVars (Core.fieldTypeType ft)) (Core.rowTypeFields v0)))
+  Core.TypeWrap v0 -> (encoderCollectOrdVars (Core.wrappedTypeBody v0))
+  _ -> []) typ)
+
+-- | Collect all type variable names from a type expression
+encoderCollectTypeVarsFromType :: (Core.Type -> [Core.Name])
+encoderCollectTypeVarsFromType typ = ((\x -> case x of
+  Core.TypeAnnotated v0 -> (encoderCollectTypeVarsFromType (Core.annotatedTypeBody v0))
+  Core.TypeApplication v0 -> (Lists.concat2 (encoderCollectTypeVarsFromType (Core.applicationTypeFunction v0)) (encoderCollectTypeVarsFromType (Core.applicationTypeArgument v0)))
+  Core.TypeForall v0 -> (encoderCollectTypeVarsFromType (Core.forallTypeBody v0))
+  Core.TypeList v0 -> (encoderCollectTypeVarsFromType v0)
+  Core.TypeMap v0 -> (Lists.concat2 (encoderCollectTypeVarsFromType (Core.mapTypeKeys v0)) (encoderCollectTypeVarsFromType (Core.mapTypeValues v0)))
+  Core.TypeMaybe v0 -> (encoderCollectTypeVarsFromType v0)
+  Core.TypePair v0 -> (Lists.concat2 (encoderCollectTypeVarsFromType (Core.pairTypeFirst v0)) (encoderCollectTypeVarsFromType (Core.pairTypeSecond v0)))
+  Core.TypeRecord v0 -> (Lists.concat (Lists.map (\ft -> encoderCollectTypeVarsFromType (Core.fieldTypeType ft)) (Core.rowTypeFields v0)))
+  Core.TypeSet v0 -> (encoderCollectTypeVarsFromType v0)
+  Core.TypeUnion v0 -> (Lists.concat (Lists.map (\ft -> encoderCollectTypeVarsFromType (Core.fieldTypeType ft)) (Core.rowTypeFields v0)))
+  Core.TypeVariable v0 -> [
+    v0]
+  Core.TypeWrap v0 -> (encoderCollectTypeVarsFromType (Core.wrappedTypeBody v0))
+  _ -> []) typ)
+
+-- | Get full result type for encoder input
+encoderFullResultType :: (Core.Type -> Core.Type)
+encoderFullResultType typ = ((\x -> case x of
+  Core.TypeAnnotated v0 -> (encoderFullResultType (Core.annotatedTypeBody v0))
+  Core.TypeApplication v0 -> (Core.TypeApplication (Core.ApplicationType {
+    Core.applicationTypeFunction = (encoderFullResultType (Core.applicationTypeFunction v0)),
+    Core.applicationTypeArgument = (Core.applicationTypeArgument v0)}))
+  Core.TypeEither v0 -> (Core.TypeEither (Core.EitherType {
+    Core.eitherTypeLeft = (encoderFullResultType (Core.eitherTypeLeft v0)),
+    Core.eitherTypeRight = (encoderFullResultType (Core.eitherTypeRight v0))}))
+  Core.TypeForall v0 -> (Core.TypeApplication (Core.ApplicationType {
+    Core.applicationTypeFunction = (encoderFullResultType (Core.forallTypeBody v0)),
+    Core.applicationTypeArgument = (Core.TypeVariable (Core.forallTypeParameter v0))}))
+  Core.TypeList v0 -> (Core.TypeList (encoderFullResultType v0))
+  Core.TypeLiteral _ -> (Core.TypeVariable (Core.Name "hydra.core.Literal"))
+  Core.TypeMap v0 -> (Core.TypeMap (Core.MapType {
+    Core.mapTypeKeys = (encoderFullResultType (Core.mapTypeKeys v0)),
+    Core.mapTypeValues = (encoderFullResultType (Core.mapTypeValues v0))}))
+  Core.TypeMaybe v0 -> (Core.TypeMaybe (encoderFullResultType v0))
+  Core.TypePair v0 -> (Core.TypePair (Core.PairType {
+    Core.pairTypeFirst = (encoderFullResultType (Core.pairTypeFirst v0)),
+    Core.pairTypeSecond = (encoderFullResultType (Core.pairTypeSecond v0))}))
+  Core.TypeRecord v0 -> (Core.TypeVariable (Core.rowTypeTypeName v0))
+  Core.TypeSet v0 -> (Core.TypeSet (encoderFullResultType v0))
+  Core.TypeUnion v0 -> (Core.TypeVariable (Core.rowTypeTypeName v0))
+  Core.TypeUnit -> Core.TypeUnit
+  Core.TypeVariable v0 -> (Core.TypeVariable v0)
+  Core.TypeWrap v0 -> (Core.TypeVariable (Core.wrappedTypeTypeName v0))
+  _ -> (Core.TypeVariable (Core.Name "hydra.core.Term"))) typ)
+
+-- | Build encoder function type
+encoderType :: (Core.Type -> Core.Type)
+encoderType typ =  
+  let resultType = (encoderFullResultType typ)
+  in  
+    let baseType = (Core.TypeFunction (Core.FunctionType {
+            Core.functionTypeDomain = resultType,
+            Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))
+    in (prependForallEncoders baseType typ)
+
+-- | Construct a TypeScheme for an encoder function from a source type
+encoderTypeScheme :: (Core.Type -> Core.TypeScheme)
+encoderTypeScheme typ =  
+  let typeVars = (encoderCollectForallVariables typ) 
+      encoderFunType = (encoderType typ)
+      allOrdVars = (encoderCollectOrdVars typ)
+      ordVars = (Lists.filter (\v -> Lists.elem v typeVars) allOrdVars)
+      constraints = (Logic.ifElse (Lists.null ordVars) Nothing (Just (Maps.fromList (Lists.map (\v -> (v, Core.TypeVariableMetadata {
+              Core.typeVariableMetadataClasses = (Sets.singleton (Core.Name "ordering"))})) ordVars))))
+  in Core.TypeScheme {
+    Core.typeSchemeVariables = typeVars,
+    Core.typeSchemeType = encoderFunType,
+    Core.typeSchemeConstraints = constraints}
+
+-- | Prepend encoder types for forall parameters to base type
+prependForallEncoders :: (Core.Type -> Core.Type -> Core.Type)
+prependForallEncoders baseType typ = ((\x -> case x of
+  Core.TypeAnnotated v0 -> (prependForallEncoders baseType (Core.annotatedTypeBody v0))
+  Core.TypeForall v0 -> (Core.TypeFunction (Core.FunctionType {
+    Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
+      Core.functionTypeDomain = (Core.TypeVariable (Core.forallTypeParameter v0)),
+      Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
+    Core.functionTypeCodomain = (prependForallEncoders baseType (Core.forallTypeBody v0))}))
+  _ -> baseType) typ)
 
 -- | Generate the encoder for a field's value
 encodeFieldValue :: (Core.Name -> Core.Name -> Core.Type -> Core.Term)

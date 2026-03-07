@@ -91,7 +91,7 @@
               "@key": "description",
               "@value": {
                 "literal": {
-                  "string": "Collect type variables needing Ord constraints (from Set element types)"}}}],
+                  "string": "Collect type variables needing Ord constraints (from Map key and Set element types)"}}}],
           "body": {
             "function": {
               "lambda": {
@@ -222,17 +222,17 @@
                                       "body": {
                                         "application": {
                                           "argument": {
-                                            "application": {
-                                              "argument": {
+                                            "list": [
+                                              {
                                                 "application": {
-                                                  "argument": {"variable": "mt"},
-                                                  "function": {
-                                                    "function": {
-                                                      "elimination": {"record": {"field": "values", "typeName": "hydra.core.MapType"}}}}}},
-                                              "function": {"variable": "hydra.decoding.collectOrdConstrainedVariables"}}},
-                                          "function": {
-                                            "application": {
-                                              "argument": {
+                                                  "argument": {
+                                                    "application": {
+                                                      "argument": {"variable": "mt"},
+                                                      "function": {
+                                                        "function": {
+                                                          "elimination": {"record": {"field": "keys", "typeName": "hydra.core.MapType"}}}}}},
+                                                  "function": {"variable": "hydra.decoding.collectTypeVariablesFromType"}}},
+                                              {
                                                 "application": {
                                                   "argument": {
                                                     "application": {
@@ -241,10 +241,19 @@
                                                         "function": {
                                                           "elimination": {"record": {"field": "keys", "typeName": "hydra.core.MapType"}}}}}},
                                                   "function": {"variable": "hydra.decoding.collectOrdConstrainedVariables"}}},
-                                              "function": {
-                                                "typeApplication": {
-                                                  "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
-                                                  "type": {"variable": "hydra.core.Name"}}}}}}},
+                                              {
+                                                "application": {
+                                                  "argument": {
+                                                    "application": {
+                                                      "argument": {"variable": "mt"},
+                                                      "function": {
+                                                        "function": {
+                                                          "elimination": {"record": {"field": "values", "typeName": "hydra.core.MapType"}}}}}},
+                                                  "function": {"variable": "hydra.decoding.collectOrdConstrainedVariables"}}}]},
+                                          "function": {
+                                            "typeApplication": {
+                                              "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                              "type": {"variable": "hydra.core.Name"}}}}},
                                       "domain": [{"variable": "hydra.core.MapType"}],
                                       "parameter": "mt"}}}},
                               {

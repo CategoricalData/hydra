@@ -75,7 +75,7 @@ relationSchema t x = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "foreignKeys"),
       Core.fieldTerm = ((\xs -> Core.TermList (Lists.map foreignKey xs)) (Relational.relationSchemaForeignKeys x))}]}))
 
-relationship :: ((t0 -> Core.Term) -> Relational.Relationship t0 -> Core.Term)
+relationship :: Ord t0 => ((t0 -> Core.Term) -> Relational.Relationship t0 -> Core.Term)
 relationship v x = (Core.TermWrap (Core.WrappedTerm {
   Core.wrappedTermTypeName = (Core.Name "hydra.relational.Relationship"),
   Core.wrappedTermBody = ((\s -> Core.TermSet (Sets.map (\m -> Core.TermMap (Maps.bimap columnName v m)) s)) (Relational.unRelationship x))}))

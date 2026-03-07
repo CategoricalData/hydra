@@ -52,7 +52,12 @@ module_ = Module.Module {
                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.error.DecodingError")))),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))}))),
-      Core.bindingType = Nothing},
+      Core.bindingType = (Just (Core.TypeScheme {
+        Core.typeSchemeVariables = [],
+        Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+          Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.error.DecodingError")),
+          Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
+        Core.typeSchemeConstraints = Nothing}))},
     Core.Binding {
       Core.bindingName = (Core.Name "hydra.encode.error.error"),
       Core.bindingTerm = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
@@ -155,7 +160,12 @@ module_ = Module.Module {
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.error.unificationError")),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))}]})))),
-      Core.bindingType = Nothing},
+      Core.bindingType = (Just (Core.TypeScheme {
+        Core.typeSchemeVariables = [],
+        Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+          Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.error.Error")),
+          Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
+        Core.typeSchemeConstraints = Nothing}))},
     Core.Binding {
       Core.bindingName = (Core.Name "hydra.encode.error.otherError"),
       Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -191,7 +201,12 @@ module_ = Module.Module {
                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.error.OtherError")))),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))}))),
-      Core.bindingType = Nothing},
+      Core.bindingType = (Just (Core.TypeScheme {
+        Core.typeSchemeVariables = [],
+        Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+          Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.error.OtherError")),
+          Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
+        Core.typeSchemeConstraints = Nothing}))},
     Core.Binding {
       Core.bindingName = (Core.Name "hydra.encode.error.unificationError"),
       Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -274,7 +289,12 @@ module_ = Module.Module {
                                 Core.projectionTypeName = (Core.Name "hydra.error.UnificationError"),
                                 Core.projectionField = (Core.Name "message")})))),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-      Core.bindingType = Nothing}],
+      Core.bindingType = (Just (Core.TypeScheme {
+        Core.typeSchemeVariables = [],
+        Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+          Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.error.UnificationError")),
+          Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
+        Core.typeSchemeConstraints = Nothing}))}],
   Module.moduleTermDependencies = [
     Module.Namespace "hydra.encode.context",
     (Module.Namespace "hydra.encode.core")],

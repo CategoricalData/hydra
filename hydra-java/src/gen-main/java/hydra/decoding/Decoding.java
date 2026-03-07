@@ -65,9 +65,10 @@ public interface Decoding {
       
       @Override
       public java.util.List<hydra.core.Name> visit(hydra.core.Type.Map mt) {
-        return hydra.lib.lists.Concat2.apply(
+        return hydra.lib.lists.Concat.apply(java.util.List.of(
+          hydra.decoding.Decoding.collectTypeVariablesFromType(((mt).value).keys),
           hydra.decoding.Decoding.collectOrdConstrainedVariables(((mt).value).keys),
-          hydra.decoding.Decoding.collectOrdConstrainedVariables(((mt).value).values));
+          hydra.decoding.Decoding.collectOrdConstrainedVariables(((mt).value).values)));
       }
       
       @Override

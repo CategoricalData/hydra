@@ -101,7 +101,12 @@ module_ = Module.Module {
                                       Core.fieldName = (Core.Name "unit"),
                                       Core.fieldTerm = Core.TermUnit}}))}))),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))}]})))),
-      Core.bindingType = Nothing}],
+      Core.bindingType = (Just (Core.TypeScheme {
+        Core.typeSchemeVariables = [],
+        Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+          Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.classes.TypeClass")),
+          Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
+        Core.typeSchemeConstraints = Nothing}))}],
   Module.moduleTermDependencies = [
     Module.Namespace "hydra.encode.core"],
   Module.moduleTypeDependencies = [

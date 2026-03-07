@@ -214,7 +214,19 @@ module_ = Module.Module {
                                   Core.projectionTypeName = (Core.Name "hydra.typing.FunctionStructure"),
                                   Core.projectionField = (Core.Name "environment")})))),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))})))}))),
-      Core.bindingType = Nothing},
+      Core.bindingType = (Just (Core.TypeScheme {
+        Core.typeSchemeVariables = [
+          Core.Name "env"],
+        Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+          Core.functionTypeDomain = (Core.TypeFunction (Core.FunctionType {
+            Core.functionTypeDomain = (Core.TypeVariable (Core.Name "env")),
+            Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
+          Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
+            Core.functionTypeDomain = (Core.TypeApplication (Core.ApplicationType {
+              Core.applicationTypeFunction = (Core.TypeVariable (Core.Name "hydra.typing.FunctionStructure")),
+              Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "env"))})),
+            Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))})),
+        Core.typeSchemeConstraints = Nothing}))},
     Core.Binding {
       Core.bindingName = (Core.Name "hydra.encode.typing.inferenceResult"),
       Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -333,7 +345,12 @@ module_ = Module.Module {
                                 Core.projectionTypeName = (Core.Name "hydra.typing.InferenceResult"),
                                 Core.projectionField = (Core.Name "context")})))),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-      Core.bindingType = Nothing},
+      Core.bindingType = (Just (Core.TypeScheme {
+        Core.typeSchemeVariables = [],
+        Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+          Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.typing.InferenceResult")),
+          Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
+        Core.typeSchemeConstraints = Nothing}))},
     Core.Binding {
       Core.bindingName = (Core.Name "hydra.encode.typing.termSubst"),
       Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -371,7 +388,12 @@ module_ = Module.Module {
                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.typing.TermSubst")))),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))}))),
-      Core.bindingType = Nothing},
+      Core.bindingType = (Just (Core.TypeScheme {
+        Core.typeSchemeVariables = [],
+        Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+          Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.typing.TermSubst")),
+          Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
+        Core.typeSchemeConstraints = Nothing}))},
     Core.Binding {
       Core.bindingName = (Core.Name "hydra.encode.typing.typeConstraint"),
       Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -454,7 +476,12 @@ module_ = Module.Module {
                                 Core.projectionTypeName = (Core.Name "hydra.typing.TypeConstraint"),
                                 Core.projectionField = (Core.Name "comment")})))),
                               Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-      Core.bindingType = Nothing},
+      Core.bindingType = (Just (Core.TypeScheme {
+        Core.typeSchemeVariables = [],
+        Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+          Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.typing.TypeConstraint")),
+          Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
+        Core.typeSchemeConstraints = Nothing}))},
     Core.Binding {
       Core.bindingName = (Core.Name "hydra.encode.typing.typeSubst"),
       Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
@@ -492,7 +519,12 @@ module_ = Module.Module {
                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.typing.TypeSubst")))),
                       Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))}))),
-      Core.bindingType = Nothing}],
+      Core.bindingType = (Just (Core.TypeScheme {
+        Core.typeSchemeVariables = [],
+        Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
+          Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.typing.TypeSubst")),
+          Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
+        Core.typeSchemeConstraints = Nothing}))}],
   Module.moduleTermDependencies = [
     Module.Namespace "hydra.encode.core",
     (Module.Namespace "hydra.encode.context")],
