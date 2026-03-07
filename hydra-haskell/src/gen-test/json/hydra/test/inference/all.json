@@ -23,6 +23,7 @@
                     "list": [
                       {"variable": "hydra.test.inference.algebraicTypes.allTests"},
                       {"variable": "hydra.test.inference.algorithmW.allTests"},
+                      {"variable": "hydra.test.inference.classes.allTests"},
                       {"variable": "hydra.test.inference.failures.allTests"},
                       {"variable": "hydra.test.inference.fundamentals.allTests"},
                       {"variable": "hydra.test.inference.kernelExamples.allTests"},
@@ -43,6 +44,7 @@
   "termDependencies": [
     "hydra.test.inference.algebraicTypes",
     "hydra.test.inference.algorithmW",
+    "hydra.test.inference.classes",
     "hydra.test.inference.failures",
     "hydra.test.inference.fundamentals",
     "hydra.test.inference.kernelExamples",

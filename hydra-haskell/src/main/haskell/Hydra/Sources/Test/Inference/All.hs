@@ -15,6 +15,7 @@ import qualified Data.Map  as M
 
 import qualified Hydra.Sources.Test.Inference.AlgebraicTypes as AlgebraicTypes
 import qualified Hydra.Sources.Test.Inference.AlgorithmW as AlgorithmW
+import qualified Hydra.Sources.Test.Inference.Classes as Classes
 import qualified Hydra.Sources.Test.Inference.Failures as Failures
 import qualified Hydra.Sources.Test.Inference.Fundamentals as Fundamentals
 import qualified Hydra.Sources.Test.Inference.KernelExamples as KernelExamples
@@ -32,6 +33,7 @@ module_ = Module ns elements namespaces kernelTypesNamespaces $
     namespaces = [
       AlgebraicTypes.ns,
       AlgorithmW.ns,
+      Classes.ns,
       Failures.ns,
       Fundamentals.ns,
       KernelExamples.ns,
@@ -45,6 +47,7 @@ allTests = definitionInModule module_ "allTests" $
     subgroups = [
       AlgebraicTypes.allTests,
       AlgorithmW.allTests,
+      Classes.allTests,
       Failures.allTests,
       Fundamentals.allTests,
       KernelExamples.allTests,

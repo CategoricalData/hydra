@@ -233,12 +233,24 @@
                                                           {
                                                             "name": "constraints",
                                                             "term": {
-                                                              "typeApplication": {
-                                                                "body": {"maybe": null},
-                                                                "type": {
-                                                                  "map": {
-                                                                    "keys": {"variable": "hydra.core.Name"},
-                                                                    "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                              "maybe": [
+                                                                {
+                                                                  "map": [
+                                                                    {
+                                                                      "@key": {
+                                                                        "wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}},
+                                                                      "@value": {
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "classes",
+                                                                              "term": {
+                                                                                "set": [
+                                                                                  {
+                                                                                    "wrap": {
+                                                                                      "body": {"literal": {"string": "ordering"}},
+                                                                                      "typeName": "hydra.core.Name"}}]}}],
+                                                                          "typeName": "hydra.core.TypeVariableMetadata"}}}]}]}}],
                                                         "typeName": "hydra.core.TypeScheme"}}}],
                                                 "typeName": "hydra.testing.InferenceTestCase"}}},
                                           "typeName": "hydra.testing.TestCase"}}},
@@ -425,12 +437,24 @@
                                                           {
                                                             "name": "constraints",
                                                             "term": {
-                                                              "typeApplication": {
-                                                                "body": {"maybe": null},
-                                                                "type": {
-                                                                  "map": {
-                                                                    "keys": {"variable": "hydra.core.Name"},
-                                                                    "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                              "maybe": [
+                                                                {
+                                                                  "map": [
+                                                                    {
+                                                                      "@key": {
+                                                                        "wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}},
+                                                                      "@value": {
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "classes",
+                                                                              "term": {
+                                                                                "set": [
+                                                                                  {
+                                                                                    "wrap": {
+                                                                                      "body": {"literal": {"string": "ordering"}},
+                                                                                      "typeName": "hydra.core.Name"}}]}}],
+                                                                          "typeName": "hydra.core.TypeVariableMetadata"}}}]}]}}],
                                                         "typeName": "hydra.core.TypeScheme"}}}],
                                                 "typeName": "hydra.testing.InferenceTestCase"}}},
                                           "typeName": "hydra.testing.TestCase"}}},
@@ -598,12 +622,39 @@
                                                           {
                                                             "name": "constraints",
                                                             "term": {
-                                                              "typeApplication": {
-                                                                "body": {"maybe": null},
-                                                                "type": {
-                                                                  "map": {
-                                                                    "keys": {"variable": "hydra.core.Name"},
-                                                                    "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                              "maybe": [
+                                                                {
+                                                                  "map": [
+                                                                    {
+                                                                      "@key": {
+                                                                        "wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}},
+                                                                      "@value": {
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "classes",
+                                                                              "term": {
+                                                                                "set": [
+                                                                                  {
+                                                                                    "wrap": {
+                                                                                      "body": {"literal": {"string": "ordering"}},
+                                                                                      "typeName": "hydra.core.Name"}}]}}],
+                                                                          "typeName": "hydra.core.TypeVariableMetadata"}}},
+                                                                    {
+                                                                      "@key": {
+                                                                        "wrap": {"body": {"literal": {"string": "t1"}}, "typeName": "hydra.core.Name"}},
+                                                                      "@value": {
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "classes",
+                                                                              "term": {
+                                                                                "set": [
+                                                                                  {
+                                                                                    "wrap": {
+                                                                                      "body": {"literal": {"string": "ordering"}},
+                                                                                      "typeName": "hydra.core.Name"}}]}}],
+                                                                          "typeName": "hydra.core.TypeVariableMetadata"}}}]}]}}],
                                                         "typeName": "hydra.core.TypeScheme"}}}],
                                                 "typeName": "hydra.testing.InferenceTestCase"}}},
                                           "typeName": "hydra.testing.TestCase"}}},
@@ -905,12 +956,24 @@
                                                           {
                                                             "name": "constraints",
                                                             "term": {
-                                                              "typeApplication": {
-                                                                "body": {"maybe": null},
-                                                                "type": {
-                                                                  "map": {
-                                                                    "keys": {"variable": "hydra.core.Name"},
-                                                                    "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                              "maybe": [
+                                                                {
+                                                                  "map": [
+                                                                    {
+                                                                      "@key": {
+                                                                        "wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}},
+                                                                      "@value": {
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "classes",
+                                                                              "term": {
+                                                                                "set": [
+                                                                                  {
+                                                                                    "wrap": {
+                                                                                      "body": {"literal": {"string": "ordering"}},
+                                                                                      "typeName": "hydra.core.Name"}}]}}],
+                                                                          "typeName": "hydra.core.TypeVariableMetadata"}}}]}]}}],
                                                         "typeName": "hydra.core.TypeScheme"}}}],
                                                 "typeName": "hydra.testing.InferenceTestCase"}}},
                                           "typeName": "hydra.testing.TestCase"}}},
@@ -1137,12 +1200,39 @@
                                                           {
                                                             "name": "constraints",
                                                             "term": {
-                                                              "typeApplication": {
-                                                                "body": {"maybe": null},
-                                                                "type": {
-                                                                  "map": {
-                                                                    "keys": {"variable": "hydra.core.Name"},
-                                                                    "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                              "maybe": [
+                                                                {
+                                                                  "map": [
+                                                                    {
+                                                                      "@key": {
+                                                                        "wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}},
+                                                                      "@value": {
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "classes",
+                                                                              "term": {
+                                                                                "set": [
+                                                                                  {
+                                                                                    "wrap": {
+                                                                                      "body": {"literal": {"string": "ordering"}},
+                                                                                      "typeName": "hydra.core.Name"}}]}}],
+                                                                          "typeName": "hydra.core.TypeVariableMetadata"}}},
+                                                                    {
+                                                                      "@key": {
+                                                                        "wrap": {"body": {"literal": {"string": "t1"}}, "typeName": "hydra.core.Name"}},
+                                                                      "@value": {
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "classes",
+                                                                              "term": {
+                                                                                "set": [
+                                                                                  {
+                                                                                    "wrap": {
+                                                                                      "body": {"literal": {"string": "ordering"}},
+                                                                                      "typeName": "hydra.core.Name"}}]}}],
+                                                                          "typeName": "hydra.core.TypeVariableMetadata"}}}]}]}}],
                                                         "typeName": "hydra.core.TypeScheme"}}}],
                                                 "typeName": "hydra.testing.InferenceTestCase"}}},
                                           "typeName": "hydra.testing.TestCase"}}},
@@ -1636,12 +1726,24 @@
                                                           {
                                                             "name": "constraints",
                                                             "term": {
-                                                              "typeApplication": {
-                                                                "body": {"maybe": null},
-                                                                "type": {
-                                                                  "map": {
-                                                                    "keys": {"variable": "hydra.core.Name"},
-                                                                    "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                              "maybe": [
+                                                                {
+                                                                  "map": [
+                                                                    {
+                                                                      "@key": {
+                                                                        "wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}},
+                                                                      "@value": {
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "classes",
+                                                                              "term": {
+                                                                                "set": [
+                                                                                  {
+                                                                                    "wrap": {
+                                                                                      "body": {"literal": {"string": "ordering"}},
+                                                                                      "typeName": "hydra.core.Name"}}]}}],
+                                                                          "typeName": "hydra.core.TypeVariableMetadata"}}}]}]}}],
                                                         "typeName": "hydra.core.TypeScheme"}}}],
                                                 "typeName": "hydra.testing.InferenceTestCase"}}},
                                           "typeName": "hydra.testing.TestCase"}}},
@@ -1902,12 +2004,24 @@
                                                           {
                                                             "name": "constraints",
                                                             "term": {
-                                                              "typeApplication": {
-                                                                "body": {"maybe": null},
-                                                                "type": {
-                                                                  "map": {
-                                                                    "keys": {"variable": "hydra.core.Name"},
-                                                                    "values": {"variable": "hydra.core.TypeVariableMetadata"}}}}}}],
+                                                              "maybe": [
+                                                                {
+                                                                  "map": [
+                                                                    {
+                                                                      "@key": {
+                                                                        "wrap": {"body": {"literal": {"string": "t2"}}, "typeName": "hydra.core.Name"}},
+                                                                      "@value": {
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "classes",
+                                                                              "term": {
+                                                                                "set": [
+                                                                                  {
+                                                                                    "wrap": {
+                                                                                      "body": {"literal": {"string": "ordering"}},
+                                                                                      "typeName": "hydra.core.Name"}}]}}],
+                                                                          "typeName": "hydra.core.TypeVariableMetadata"}}}]}]}}],
                                                         "typeName": "hydra.core.TypeScheme"}}}],
                                                 "typeName": "hydra.testing.InferenceTestCase"}}},
                                           "typeName": "hydra.testing.TestCase"}}},
