@@ -247,13 +247,13 @@ testGroupForMaps = define "testGroupForMaps" $
         (string "firstName", string "Arthur"),
         (string "lastName", string "Dent")])
       (T.map T.string T.string),
-    expectPoly 2 [tag_disabledForMinimalInference]
+    expectPolyConstrained 2 [tag_disabledForMinimalInference]
       (mapTerm [])
-      ["t0", "t1"] (T.map (T.var "t0") (T.var "t1")),
-    expectPoly 3 [tag_disabledForMinimalInference]
+      ["t0", "t1"] [("t0", ["ordering"])] (T.map (T.var "t0") (T.var "t1")),
+    expectPolyConstrained 3 [tag_disabledForMinimalInference]
       (lambdas ["x", "y"] $ mapTerm
         [(var "x", float64 0.1), (var "y", float64 0.2)])
-      ["t0"] (T.function (T.var "t0") (T.function (T.var "t0") (T.map (T.var "t0") T.float64)))]
+      ["t0"] [("t0", ["ordering"])] (T.function (T.var "t0") (T.function (T.var "t0") (T.map (T.var "t0") T.float64)))]
 
 testGroupForOptionals :: TBinding TestGroup
 testGroupForOptionals = define "testGroupForOptionals" $
@@ -325,6 +325,6 @@ testGroupForSets = define "testGroupForSets" $
     expectMono 1 [tag_disabledForMinimalInference]
       (set [true])
       (T.set T.boolean),
-    expectPoly 2 [tag_disabledForMinimalInference]
+    expectPolyConstrained 2 [tag_disabledForMinimalInference]
       (set [set []])
-      ["t0"] (T.set $ T.set $ T.var "t0")]
+      ["t0"] [("t0", ["ordering"])] (T.set $ T.set $ T.var "t0")]
