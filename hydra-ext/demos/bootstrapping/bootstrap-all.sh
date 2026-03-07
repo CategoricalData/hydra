@@ -154,6 +154,18 @@ create_run_dir() {
     echo "$run_dir"
 }
 
+# If the output base directory already exists, rename it to <dir>.1, .2, etc.
+preserve_existing_output() {
+    if [ -d "$OUTPUT_BASE" ]; then
+        local n=1
+        while [ -e "${OUTPUT_BASE}.${n}" ]; do
+            n=$((n + 1))
+        done
+        mv "$OUTPUT_BASE" "${OUTPUT_BASE}.${n}"
+        echo "  Preserved existing output as ${OUTPUT_BASE}.${n}"
+    fi
+}
+
 # Find the latest (or specified) run directory
 find_run_dir() {
     if [ -n "$RUN_SPEC" ]; then
@@ -377,6 +389,8 @@ do_generate() {
     local RUN_DIR
     RUN_DIR=$(create_run_dir)
 
+    preserve_existing_output
+
     local mode_label="Generate"
     if [ "$run_tests" = "true" ]; then
         mode_label="Generate + Test"
@@ -419,19 +433,21 @@ do_generate() {
             local demo_dir="$OUTPUT_BASE/${path_key}"
             local logfile="$RUN_DIR/${path_key}.log"
 
-            # Run code generation
+            # Set up target directory (clean + copy static files)
             set +e
-            "$SCRIPT_DIR/${host}-bootstrap.sh" --target "$target" --output "$OUTPUT_BASE" --include-tests --kernel-only $EXTRA_FLAGS 2>&1 | tee "$logfile"
+            "$SCRIPT_DIR/setup-${target}-target.sh" "$demo_dir" 2>&1 | tee "$logfile"
             exit_code=${PIPESTATUS[0]}
 
-            # Run setup (build, and optionally tests)
+            # Generate code
             if [ $exit_code -eq 0 ]; then
+                "$SCRIPT_DIR/invoke-${host}-host.sh" --target "$target" --output "$OUTPUT_BASE" --include-tests --kernel-only $EXTRA_FLAGS 2>&1 | tee -a "$logfile"
+                exit_code=${PIPESTATUS[0]}
+            fi
+
+            # Build and test
+            if [ $exit_code -eq 0 ] && [ "$run_tests" = "true" ]; then
                 local bench_file="$RUN_DIR/${path_key}.benchmark.json"
-                if [ "$run_tests" = "true" ]; then
-                    HYDRA_BENCHMARK_OUTPUT="$bench_file" "$SCRIPT_DIR/setup-${target}-target.sh" "$demo_dir" 2>&1 | tee -a "$logfile"
-                else
-                    "$SCRIPT_DIR/setup-${target}-target.sh" --no-test "$demo_dir" 2>&1 | tee -a "$logfile"
-                fi
+                HYDRA_BENCHMARK_OUTPUT="$bench_file" "$SCRIPT_DIR/test-${target}-target.sh" "$demo_dir" 2>&1 | tee -a "$logfile"
                 exit_code=${PIPESTATUS[0]}
             fi
             set -e
