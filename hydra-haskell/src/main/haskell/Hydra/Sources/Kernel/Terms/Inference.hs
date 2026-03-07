@@ -558,7 +558,8 @@ inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
   "fcx4" <~ Pairs.second (var "caseRp") $
   "iterms" <~ Pairs.first (var "caseResults") $
   "itypes" <~ Pairs.first (Pairs.second $ var "caseResults") $
-  "isubst" <~ Pairs.second (Pairs.second $ var "caseResults") $
+  "isubst" <~ Pairs.first (Pairs.second $ Pairs.second $ var "caseResults") $
+  "caseElemConstraints" <~ Pairs.second (Pairs.second $ Pairs.second $ var "caseResults") $
   "codvResult" <~ Schemas.freshName @@ var "fcx4" $
   "codv" <~ Pairs.first (var "codvResult") $
   "fcx5" <~ Pairs.second (var "codvResult") $
@@ -579,8 +580,10 @@ inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
         (string "case type"))
       (Maps.lookup (var "fname") (var "caseMap")))
     (var "fnames") (var "itypes")) $
+  "dfltClassConstraints" <~ Maybes.fromMaybe Maps.empty (Maybes.map (unaryFunction Typing.inferenceResultClassConstraints) (var "dfltResult")) $
+  "allElemConstraints" <~ mergeClassConstraints @@ var "caseElemConstraints" @@ var "dfltClassConstraints" $
   "mcResult" <<= mapConstraints @@ var "fcx5" @@ var "cx"
-    @@ ("subst" ~> yield
+    @@ ("subst" ~> yieldWithConstraints
       @@ var "fcx5"
       @@ (buildTypeApplicationTerm @@ var "svars"
           @@ (Core.termFunction $ Core.functionElimination $ Core.eliminationUnion $
@@ -592,25 +595,30 @@ inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
       @@ (Substitution.composeTypeSubstList
         @@ (Lists.concat $ list [
           Monads.maybeToList @@ (Maybes.map (unaryFunction Typing.inferenceResultSubst) (var "dfltResult")),
-          list [var "isubst", var "subst"]])))
+          list [var "isubst", var "subst"]]))
+      @@ (Substitution.substInClassConstraints @@ var "subst" @@ var "allElemConstraints"))
     @@ (Lists.concat $ list [var "dfltConstraints", var "caseConstraints"]) $
   right (var "mcResult")
 
-inferTypeOfCollection :: TBinding (Context -> Graph -> (Type -> Type) -> ([Term] -> Term) -> String -> [Term] -> Prelude.Either (InContext OtherError) InferenceResult)
+inferTypeOfCollection :: TBinding (Context -> Graph -> (Type -> Type) -> ([Term] -> Term) -> String -> S.Set Name -> [Term] -> Prelude.Either (InContext OtherError) InferenceResult)
 inferTypeOfCollection = define "inferTypeOfCollection" $
-  doc "Infer the type of a collection (Either version)" $
-  "fcx" ~> "cx" ~> "typCons" ~> "trmCons" ~> "desc" ~> "els" ~>
+  doc "Infer the type of a collection. The classNames parameter specifies type classes (e.g. ordering) that the element type variable must satisfy." $
+  "fcx" ~> "cx" ~> "typCons" ~> "trmCons" ~> "desc" ~> "classNames" ~> "els" ~>
   "varResult" <~ Schemas.freshName @@ var "fcx" $
   "var" <~ Pairs.first (var "varResult") $
   "fcx2" <~ Pairs.second (var "varResult") $
+  "classConstraints" <~ Logic.ifElse (Sets.null $ var "classNames")
+    Maps.empty
+    (Maps.singleton (var "var") (Core.typeVariableMetadata $ var "classNames")) $
   Logic.ifElse (Lists.null $ var "els")
-    (right (yield
+    (right (yieldWithConstraints
       @@ var "fcx2"
       @@ (buildTypeApplicationTerm
         @@ list [var "var"]
         @@ (var "trmCons" @@ list ([] :: [TTerm Term])))
       @@ (var "typCons" @@ (Core.typeVariable $ var "var"))
-      @@ (Substitution.idTypeSubst)))
+      @@ (Substitution.idTypeSubst)
+      @@ var "classConstraints"))
     ("resultsRp" <<= inferMany @@ var "fcx2" @@ var "cx" @@
       (Lists.zip (var "els") $ Lists.map ("i" ~> Strings.cat $ list [(string "#"), Literals.showInt32 $ var "i"]) $
         Math.range (int32 1) (Math.add (Lists.length $ var "els") (int32 1))) $
@@ -618,14 +626,16 @@ inferTypeOfCollection = define "inferTypeOfCollection" $
     "fcx3" <~ Pairs.second (var "resultsRp") $
     "terms" <~ Pairs.first (var "results") $
     "types" <~ Pairs.first (Pairs.second $ var "results") $
-    "subst1" <~ Pairs.second (Pairs.second $ var "results") $
+    "subst1" <~ Pairs.first (Pairs.second $ Pairs.second $ var "results") $
+    "elemConstraints" <~ Pairs.second (Pairs.second $ Pairs.second $ var "results") $
     "constraints" <~ Lists.map ("t" ~> Typing.typeConstraint (Core.typeVariable $ var "var") (var "t") (var "desc")) (var "types") $
+    "allConstraints" <~ mergeClassConstraints @@ var "classConstraints" @@ var "elemConstraints" $
     "mcResult" <<= mapConstraints @@ var "fcx3" @@ var "cx" @@
       ("subst2" ~>
         "iterm" <~ var "trmCons" @@ var "terms" $
         "itype" <~ var "typCons" @@ (Core.typeVariable $ var "var") $
         "isubst" <~ Substitution.composeTypeSubst @@ var "subst1" @@ var "subst2" $
-        yield @@ var "fcx3" @@ var "iterm" @@ var "itype" @@ var "isubst") @@
+        yieldWithConstraints @@ var "fcx3" @@ var "iterm" @@ var "itype" @@ var "isubst" @@ (Substitution.substInClassConstraints @@ var "subst2" @@ var "allConstraints")) @@
       var "constraints" $
     right (var "mcResult"))
 
@@ -748,6 +758,7 @@ inferTypeOfList = define "inferTypeOfList" $
     @@ (unaryFunction Core.typeList)
     @@ (unaryFunction Core.termList)
     @@ (string "list element")
+    @@ (Sets.empty :: TTerm (S.Set Name))
 
 inferTypeOfMap :: TBinding (Context -> Graph -> M.Map Term Term -> Prelude.Either (InContext OtherError) InferenceResult)
 inferTypeOfMap = define "inferTypeOfMap" $
@@ -759,36 +770,42 @@ inferTypeOfMap = define "inferTypeOfMap" $
   "vvarResult" <~ Schemas.freshName @@ var "fcx2" $
   "vvar" <~ Pairs.first (var "vvarResult") $
   "fcx3" <~ Pairs.second (var "vvarResult") $
+  "keyConstraints" <~ Maps.singleton (var "kvar") (Core.typeVariableMetadata $ Sets.singleton $ Core.nameLift _TypeClass_ordering) $
   Logic.ifElse (Maps.null $ var "m")
-    (right (yield
+    (right (yieldWithConstraints
       @@ var "fcx3"
       @@ (buildTypeApplicationTerm
         @@ list [var "kvar", var "vvar"]
         @@ (Core.termMap Maps.empty))
       @@ (Core.typeMap $ Core.mapType (Core.typeVariable $ var "kvar") (Core.typeVariable $ var "vvar"))
-      @@ Substitution.idTypeSubst))
+      @@ Substitution.idTypeSubst
+      @@ var "keyConstraints"))
     ("kRp" <<= inferMany @@ var "fcx3" @@ var "cx" @@
       (Lists.map ("k" ~> pair (var "k") (string "map key")) $ Maps.keys $ var "m") $
     "kResults" <~ Pairs.first (var "kRp") $
     "fcx4" <~ Pairs.second (var "kRp") $
     "kterms" <~ Pairs.first (var "kResults") $
     "ktypes" <~ Pairs.first (Pairs.second $ var "kResults") $
-    "ksubst" <~ Pairs.second (Pairs.second $ var "kResults") $
-    "vRp" <<= inferMany @@ var "fcx4" @@ var "cx" @@
+    "ksubst" <~ Pairs.first (Pairs.second $ Pairs.second $ var "kResults") $
+    "kElemConstraints" <~ Pairs.second (Pairs.second $ Pairs.second $ var "kResults") $
+    "vRp" <<= inferMany @@ var "fcx4" @@ (Substitution.substInContext @@ var "ksubst" @@ var "cx") @@
       (Lists.map ("v" ~> pair (var "v") (string "map value")) $ Maps.elems $ var "m") $
     "vResults" <~ Pairs.first (var "vRp") $
     "fcx5" <~ Pairs.second (var "vRp") $
     "vterms" <~ Pairs.first (var "vResults") $
     "vtypes" <~ Pairs.first (Pairs.second $ var "vResults") $
-    "vsubst" <~ Pairs.second (Pairs.second $ var "vResults") $
+    "vsubst" <~ Pairs.first (Pairs.second $ Pairs.second $ var "vResults") $
+    "vElemConstraints" <~ Pairs.second (Pairs.second $ Pairs.second $ var "vResults") $
     "kcons" <~ Lists.map ("t" ~> Typing.typeConstraint (Core.typeVariable $ var "kvar") (var "t") (string "map key")) (var "ktypes") $
     "vcons" <~ Lists.map ("t" ~> Typing.typeConstraint (Core.typeVariable $ var "vvar") (var "t") (string "map value")) (var "vtypes") $
+    "allMapConstraints" <~ mergeClassConstraints @@ var "keyConstraints" @@ (mergeClassConstraints @@ var "kElemConstraints" @@ var "vElemConstraints") $
     "mcResult" <<= mapConstraints @@ var "fcx5" @@ var "cx" @@
-      ("subst" ~> yield
+      ("subst" ~> yieldWithConstraints
         @@ var "fcx5"
         @@ (Core.termMap $ Maps.fromList $ Lists.zip (var "kterms") (var "vterms"))
         @@ (Core.typeMap $ Core.mapType (Core.typeVariable $ var "kvar") (Core.typeVariable $ var "vvar"))
-        @@ (Substitution.composeTypeSubstList @@ list [var "ksubst", var "vsubst", var "subst"])) @@
+        @@ (Substitution.composeTypeSubstList @@ list [var "ksubst", var "vsubst", var "subst"])
+        @@ (Substitution.substInClassConstraints @@ var "subst" @@ var "allMapConstraints")) @@
       (Lists.concat $ list [var "kcons", var "vcons"]) $
     right (var "mcResult"))
 
@@ -805,6 +822,7 @@ inferTypeOfOptional = define "inferTypeOfOptional" $
     @@ (unaryFunction Core.typeMaybe)
     @@ var "trmCons"
     @@ (string "optional element")
+    @@ (Sets.empty :: TTerm (S.Set Name))
     @@ (Maybes.maybe (list ([] :: [TTerm Term])) (unaryFunction Lists.singleton) $ var "m")
 
 inferTypeOfPair :: TBinding (Context -> Graph -> (Term, Term) -> Prelude.Either (InContext OtherError) InferenceResult)
@@ -818,7 +836,8 @@ inferTypeOfPair = define "inferTypeOfPair" $
   "fcx2" <~ Pairs.second (var "rp") $
   "iterms" <~ Pairs.first (var "results") $
   "itypes" <~ Pairs.first (Pairs.second $ var "results") $
-  "isubst" <~ Pairs.second (Pairs.second $ var "results") $
+  "isubst" <~ Pairs.first (Pairs.second $ Pairs.second $ var "results") $
+  "pairElemConstraints" <~ Pairs.second (Pairs.second $ Pairs.second $ var "results") $
   "ifst" <~ Lists.head (var "iterms") $
   "isnd" <~ Lists.head (Lists.tail $ var "iterms") $
   "tyFst" <~ Lists.head (var "itypes") $
@@ -827,11 +846,12 @@ inferTypeOfPair = define "inferTypeOfPair" $
   "termWithTypes" <~ (Core.termTypeApplication $ Core.typeApplicationTerm
     (Core.termTypeApplication $ Core.typeApplicationTerm (var "pairTerm") (var "tyFst"))
     (var "tySnd")) $
-  right (yield
+  right (yieldWithConstraints
     @@ var "fcx2"
     @@ var "termWithTypes"
     @@ (Core.typePair $ Core.pairType (var "tyFst") (var "tySnd"))
-    @@ var "isubst")
+    @@ var "isubst"
+    @@ var "pairElemConstraints")
 
 inferTypeOfPrimitive :: TBinding (Context -> Graph -> Name -> Prelude.Either (InContext OtherError) InferenceResult)
 inferTypeOfPrimitive = define "inferTypeOfPrimitive" $
@@ -899,11 +919,12 @@ inferTypeOfRecord = define "inferTypeOfRecord" $
   "stype" <~ Core.typeSchemeType (var "schemaType") $
   "iterms" <~ Pairs.first (var "results") $
   "itypes" <~ Pairs.first (Pairs.second $ var "results") $
-  "isubst" <~ Pairs.second (Pairs.second $ var "results") $
+  "isubst" <~ Pairs.first (Pairs.second $ Pairs.second $ var "results") $
+  "recElemConstraints" <~ Pairs.second (Pairs.second $ Pairs.second $ var "results") $
   "ityp" <~ Core.typeRecord (Core.rowType (var "tname") $
       Lists.zipWith ("n" ~> "t" ~> Core.fieldType (var "n") (var "t")) (var "fnames") (var "itypes")) $
   "mcResult" <<= mapConstraints @@ var "fcx3" @@ var "cx" @@
-    ("subst" ~> yield
+    ("subst" ~> yieldWithConstraints
       @@ var "fcx3"
       @@ (buildTypeApplicationTerm @@ var "svars" @@
         (Core.termRecord $ Core.record (var "tname") $ Lists.zipWith
@@ -911,7 +932,8 @@ inferTypeOfRecord = define "inferTypeOfRecord" $
           (var "fnames")
           (var "iterms")))
       @@ (Schemas.nominalApplication @@ var "tname" @@ Lists.map (unaryFunction Core.typeVariable) (var "svars"))
-      @@ (Substitution.composeTypeSubst @@ var "isubst" @@ var "subst")) @@
+      @@ (Substitution.composeTypeSubst @@ var "isubst" @@ var "subst")
+      @@ (Substitution.substInClassConstraints @@ var "subst" @@ var "recElemConstraints")) @@
     list [Typing.typeConstraint (var "stype") (var "ityp") (string "schema type of record")] $
   right (var "mcResult")
 
@@ -926,6 +948,7 @@ inferTypeOfSet = define "inferTypeOfSet" $
     @@ (unaryFunction Core.typeSet)
     @@ ("terms" ~> Core.termSet $ Sets.fromList $ var "terms")
     @@ (string "set element")
+    @@ (Sets.singleton $ Core.nameLift _TypeClass_ordering)
     @@ (Sets.toList $ var "s")
 
 inferTypeOfTerm :: TBinding (Context -> Graph -> Term -> String -> Prelude.Either (InContext OtherError) InferenceResult)
@@ -1274,9 +1297,9 @@ inferTypesOfTemporaryBindings = define "inferTypesOfTemporaryBindings" $
     (right $ pair (pair (list ([] :: [TTerm Term])) (pair (list ([] :: [TTerm Type])) (pair (Substitution.idTypeSubst) Maps.empty))) (var "fcx"))
     (var "dflt")
 
-inferMany :: TBinding (Context -> Graph -> [(Term, String)] -> Prelude.Either (InContext OtherError) (([Term], ([Type], TypeSubst)), Context))
+inferMany :: TBinding (Context -> Graph -> [(Term, String)] -> Prelude.Either (InContext OtherError) (([Term], ([Type], (TypeSubst, M.Map Name TypeVariableMetadata))), Context))
 inferMany = define "inferMany" $
-  doc "Infer types for multiple terms (Either version)" $
+  doc "Infer types for multiple terms, propagating class constraints from sub-expressions" $
   "fcx" ~> "cx" ~> "pairs" ~>
   "dflt" <~ (
     "e" <~ Pairs.first (Lists.head $ var "pairs") $
@@ -1287,19 +1310,23 @@ inferMany = define "inferMany" $
     "e1" <~ Typing.inferenceResultTerm (var "result1") $
     "t1" <~ Typing.inferenceResultType (var "result1") $
     "s1" <~ Typing.inferenceResultSubst (var "result1") $
+    "c1" <~ Typing.inferenceResultClassConstraints (var "result1") $
     "rp2" <<= inferMany @@ var "fcx2" @@ (Substitution.substInContext @@ var "s1" @@ var "cx") @@ var "tl" $
     "result2" <~ Pairs.first (var "rp2") $
     "fcx3" <~ Pairs.second (var "rp2") $
     "e2" <~ Pairs.first (var "result2") $
     "t2" <~ Pairs.first (Pairs.second $ var "result2") $
-    "s2" <~ Pairs.second (Pairs.second $ var "result2") $
+    "s2" <~ Pairs.first (Pairs.second $ Pairs.second $ var "result2") $
+    "c2" <~ Pairs.second (Pairs.second $ Pairs.second $ var "result2") $
+    "c1Subst" <~ Substitution.substInClassConstraints @@ var "s2" @@ var "c1" $
+    "mergedConstraints" <~ mergeClassConstraints @@ var "c1Subst" @@ var "c2" $
     right $ pair (pair
       (Lists.cons (Substitution.substTypesInTerm @@ var "s2" @@ var "e1") (var "e2"))
       (pair
         (Lists.cons (Substitution.substInType @@ var "s2" @@ var "t1") (var "t2"))
-        (Substitution.composeTypeSubst @@ var "s1" @@ var "s2"))) (var "fcx3")) $
+        (pair (Substitution.composeTypeSubst @@ var "s1" @@ var "s2") (var "mergedConstraints")))) (var "fcx3")) $
   Logic.ifElse (Lists.null $ var "pairs")
-    (right $ pair (pair (list ([] :: [TTerm Term])) $ pair (list ([] :: [TTerm Type])) (Substitution.idTypeSubst)) (var "fcx"))
+    (right $ pair (pair (list ([] :: [TTerm Term])) $ pair (list ([] :: [TTerm Type])) (pair Substitution.idTypeSubst Maps.empty)) (var "fcx"))
     (var "dflt")
 
 yieldDebug :: TBinding (Context -> Graph -> String -> Term -> Type -> TypeSubst -> Prelude.Either (InContext OtherError) InferenceResult)
