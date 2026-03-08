@@ -3,6 +3,7 @@ package hydra.lib.maps;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
+import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Maybe;
@@ -38,7 +39,7 @@ public class FindWithDefault extends PrimitiveFunction {
      */
     @Override
     public TypeScheme type() {
-        return scheme("v", "k",
+        return Types.constrained2("v", Types.NONE, "k", Types.ORD,
                 function("v", function("k", function(hydra.dsl.Types.map("k", "v"), "v"))));
     }
 

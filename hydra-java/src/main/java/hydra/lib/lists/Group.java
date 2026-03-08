@@ -15,6 +15,7 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
+import static hydra.dsl.Types.schemeEq;
 import hydra.context.Context;
 import hydra.context.InContext;
 import hydra.error.OtherError;
@@ -31,7 +32,7 @@ public class Group extends PrimitiveFunction {
 
     @Override
     public TypeScheme type() {
-        return scheme("a", function(list("a"), list(list("a"))));
+        return schemeEq("a", function(list("a"), list(list("a"))));
     }
 
     @Override

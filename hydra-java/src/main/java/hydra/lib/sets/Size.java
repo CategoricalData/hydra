@@ -15,6 +15,7 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.scheme;
+import static hydra.dsl.Types.schemeOrd;
 import static hydra.dsl.Types.set;
 import hydra.context.Context;
 import hydra.context.InContext;
@@ -40,7 +41,7 @@ public class Size extends PrimitiveFunction {
      */
     @Override
     public TypeScheme type() {
-        return scheme("x", function(set("x"), int32()));
+        return schemeOrd("x", function(set("x"), int32()));
     }
 
     /**

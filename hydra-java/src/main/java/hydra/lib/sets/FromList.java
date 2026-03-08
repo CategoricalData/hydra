@@ -17,6 +17,7 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
+import static hydra.dsl.Types.schemeOrd;
 import static hydra.dsl.Types.set;
 import hydra.context.Context;
 import hydra.context.InContext;
@@ -42,7 +43,7 @@ public class FromList extends PrimitiveFunction {
      */
     @Override
     public TypeScheme type() {
-        return scheme("x", function(list("x"), set("x")));
+        return schemeOrd("x", function(list("x"), set("x")));
     }
 
     /**

@@ -40,7 +40,7 @@ public class Lookup extends PrimitiveFunction {
      */
     @Override
     public TypeScheme type() {
-        return scheme("k", "v",
+        return Types.constrained2("k", Types.ORD, "v", Types.NONE,
                 function(Types.var("k"), map("k", "v"), optional("v")));
     }
 

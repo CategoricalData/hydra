@@ -42,7 +42,7 @@ public class Alter extends PrimitiveFunction {
      */
     @Override
     public TypeScheme type() {
-        return scheme("v", "k",
+        return Types.constrained2("v", Types.NONE, "k", Types.ORD,
                 function(function(optional("v"), optional("v")), Types.var("k"), map("k", "v"), map("k", "v")));
     }
 

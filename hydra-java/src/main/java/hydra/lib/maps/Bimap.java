@@ -4,6 +4,7 @@ import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
+import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Maybe;
@@ -40,10 +41,8 @@ public class Bimap extends PrimitiveFunction {
      */
     @Override
     public TypeScheme type() {
-        return new TypeScheme(
-                Arrays.asList(new Name("k1"), new Name("k2"), new Name("v1"), new Name("v2")),
-                function(function("k1", "k2"), function("v1", "v2"), map("k1", "v1"), map("k2", "v2")),
-                Maybe.nothing());
+        return Types.constrained4("k1", Types.ORD, "k2", Types.ORD, "v1", Types.NONE, "v2", Types.NONE,
+                function(function("k1", "k2"), function("v1", "v2"), map("k1", "v1"), map("k2", "v2")));
     }
 
     /**

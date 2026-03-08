@@ -40,7 +40,7 @@ public class Map extends PrimitiveFunction {
      */
     @Override
     public TypeScheme type() {
-        return scheme("x", "y",
+        return Types.constrained2("x", Types.ORD, "y", Types.ORD,
                 function(function("x", "y"), set("x"), set("y")));
     }
 

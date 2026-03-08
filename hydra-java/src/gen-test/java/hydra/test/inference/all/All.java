@@ -10,6 +10,7 @@ public interface All {
     return new hydra.testing.TestGroup("inference", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), java.util.List.of(
       hydra.test.inference.algebraicTypes.AlgebraicTypes.allTests(),
       hydra.test.inference.algorithmW.AlgorithmW.allTests(),
+      hydra.test.inference.classes.Classes.allTests(),
       hydra.test.inference.failures.Failures.allTests(),
       hydra.test.inference.fundamentals.Fundamentals.allTests(),
       hydra.test.inference.kernelExamples.KernelExamples.allTests(),

@@ -470,6 +470,67 @@ public interface Types {
         return new TypeScheme(vars, body, Maybe.just(constraintMap));
     }
 
+    Set<Name> ORD = java.util.Set.of(name("ordering"));
+    Set<Name> EQ = java.util.Set.of(name("equality"));
+    Set<Name> NONE = java.util.Set.of();
+
+    /**
+     * Create a type scheme with one Ord-constrained type variable.
+     */
+    static TypeScheme schemeOrd(String var, Type body) {
+        return constrained1(var, ORD, body);
+    }
+
+    /**
+     * Create a type scheme with one Eq-constrained type variable.
+     */
+    static TypeScheme schemeEq(String var, Type body) {
+        return constrained1(var, EQ, body);
+    }
+
+    /**
+     * Create a constrained type scheme with one variable.
+     */
+    static TypeScheme constrained1(String v1, Set<Name> c1, Type body) {
+        Map<Name, TypeVariableMetadata> cm = new HashMap<>();
+        if (!c1.isEmpty()) cm.put(name(v1), new TypeVariableMetadata(c1));
+        return new TypeScheme(Arrays.asList(name(v1)), body, Maybe.just(cm));
+    }
+
+    /**
+     * Create a constrained type scheme with two ordered variables.
+     */
+    static TypeScheme constrained2(String v1, Set<Name> c1, String v2, Set<Name> c2, Type body) {
+        Map<Name, TypeVariableMetadata> cm = new HashMap<>();
+        if (!c1.isEmpty()) cm.put(name(v1), new TypeVariableMetadata(c1));
+        if (!c2.isEmpty()) cm.put(name(v2), new TypeVariableMetadata(c2));
+        return new TypeScheme(Arrays.asList(name(v1), name(v2)), body, Maybe.just(cm));
+    }
+
+    /**
+     * Create a constrained type scheme with three ordered variables.
+     */
+    static TypeScheme constrained3(String v1, Set<Name> c1, String v2, Set<Name> c2, String v3, Set<Name> c3, Type body) {
+        Map<Name, TypeVariableMetadata> cm = new HashMap<>();
+        if (!c1.isEmpty()) cm.put(name(v1), new TypeVariableMetadata(c1));
+        if (!c2.isEmpty()) cm.put(name(v2), new TypeVariableMetadata(c2));
+        if (!c3.isEmpty()) cm.put(name(v3), new TypeVariableMetadata(c3));
+        return new TypeScheme(Arrays.asList(name(v1), name(v2), name(v3)), body, Maybe.just(cm));
+    }
+
+    /**
+     * Create a constrained type scheme with four ordered variables.
+     */
+    static TypeScheme constrained4(String v1, Set<Name> c1, String v2, Set<Name> c2,
+                                    String v3, Set<Name> c3, String v4, Set<Name> c4, Type body) {
+        Map<Name, TypeVariableMetadata> cm = new HashMap<>();
+        if (!c1.isEmpty()) cm.put(name(v1), new TypeVariableMetadata(c1));
+        if (!c2.isEmpty()) cm.put(name(v2), new TypeVariableMetadata(c2));
+        if (!c3.isEmpty()) cm.put(name(v3), new TypeVariableMetadata(c3));
+        if (!c4.isEmpty()) cm.put(name(v4), new TypeVariableMetadata(c4));
+        return new TypeScheme(Arrays.asList(name(v1), name(v2), name(v3), name(v4)), body, Maybe.just(cm));
+    }
+
     /**
      * Create a type scheme with one type variable.
      * @param var the type variable name

@@ -42,7 +42,7 @@ public class FilterWithKey extends PrimitiveFunction {
      */
     @Override
     public TypeScheme type() {
-        return scheme("k", "v",
+        return Types.constrained2("k", Types.ORD, "v", Types.NONE,
                 function(function(Types.var("k"), Types.var("v"), boolean_()), map("k", "v"), map("k", "v")));
     }
 

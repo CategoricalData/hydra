@@ -33,10 +33,8 @@ public class SortOn extends PrimitiveFunction {
 
     @Override
     public TypeScheme type() {
-        return new hydra.core.TypeScheme(
-                Arrays.asList(new hydra.core.Name("a"), new hydra.core.Name("b")),
-                function(function("a", "b"), list("a"), list("a")),
-                Maybe.nothing());
+        return Types.constrained2("a", Types.NONE, "b", Types.ORD,
+                function(function("a", "b"), list("a"), list("a")));
     }
 
     @Override

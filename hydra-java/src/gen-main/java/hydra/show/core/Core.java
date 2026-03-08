@@ -805,14 +805,36 @@ public interface Core {
       hydra.lib.lists.Null.apply(vars),
       () -> "",
       () -> hydra.lib.strings.Cat.apply(java.util.List.of(
-        "\u2200[",
+        "forall ",
         hydra.lib.strings.Intercalate.apply(
           ",",
           varNames.get()),
-        "]."))));
+        ". "))));
+    java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Name, String>> toConstraintPair = (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Name, String>>) (v -> (java.util.function.Function<hydra.core.Name, String>) (c -> hydra.lib.strings.Cat.apply(java.util.List.of(
+      (c).value,
+      " ",
+      (v).value))));
+    java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.TypeVariableMetadata>, java.util.List<String>> toConstraintPairs = (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.TypeVariableMetadata>, java.util.List<String>>) (p -> hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.core.Name, String>) (v1 -> ((toConstraintPair).apply(hydra.lib.pairs.First.apply(p))).apply(v1)),
+      hydra.lib.sets.ToList.apply((hydra.lib.pairs.Second.apply(p)).classes)));
+    hydra.util.Lazy<java.util.List<String>> tc = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+      () -> (java.util.List<String>) (java.util.List.<String>of()),
+      (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>, java.util.List<String>>) (m -> hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
+        toConstraintPairs,
+        hydra.lib.maps.ToList.apply(m)))),
+      (ts).constraints));
     return hydra.lib.strings.Cat.apply(java.util.List.of(
       "(",
       fa.get(),
+      hydra.lib.logic.IfElse.lazy(
+        hydra.lib.lists.Null.apply(tc.get()),
+        () -> "",
+        () -> hydra.lib.strings.Cat.apply(java.util.List.of(
+          "(",
+          hydra.lib.strings.Intercalate.apply(
+            ", ",
+            tc.get()),
+          ") => "))),
       hydra.show.core.Core.type(body),
       ")"));
   }

@@ -63,11 +63,11 @@ def v(name: str) -> TypeVar_:
 
 
 def v_ord(name: str) -> TypeVar_:
-    return TypeVar_(name, [Name("hydra.util.TypeClass.ordering")])
+    return TypeVar_(name, [Name("ordering")])
 
 
 def v_eq(name: str) -> TypeVar_:
-    return TypeVar_(name, [Name("hydra.util.TypeClass.equality")])
+    return TypeVar_(name, [Name("equality")])
 
 
 def build_type_scheme(vars: list[TypeVar_], typ: Type):
@@ -205,7 +205,7 @@ def string() -> TermCoder[str]:
 def comparison() -> TermCoder[Comparison]:
     import hydra.extract.util as extract_util
     return TermCoder(
-        type=types.var("Comparison"),
+        type=types.var("hydra.util.Comparison"),
         encode=lambda cx, g, t: extract_util.comparison(cx, g, t),
         decode=lambda cx, c: Right(terms.comparison(c))
     )
@@ -222,7 +222,7 @@ def float_type() -> TermCoder[FloatType]:
             case Right(value=v):
                 return Right(v)
     return TermCoder(
-        type=types.var("FloatType"),
+        type=types.var("hydra.core.FloatType"),
         encode=encode,
         decode=lambda cx, ft: Right(encode_core.float_type(ft))
     )
@@ -230,7 +230,7 @@ def float_type() -> TermCoder[FloatType]:
 
 def float_value() -> TermCoder[FloatValue]:
     return TermCoder(
-        type=types.var("FloatValue"),
+        type=types.var("hydra.core.FloatValue"),
         encode=lambda cx, g, t: extract.float_value(cx, g, t),
         decode=lambda cx, fv: Right(terms.float_(fv))
     )
@@ -247,7 +247,7 @@ def integer_type() -> TermCoder[IntegerType]:
             case Right(value=v):
                 return Right(v)
     return TermCoder(
-        type=types.var("IntegerType"),
+        type=types.var("hydra.core.IntegerType"),
         encode=encode,
         decode=lambda cx, it: Right(encode_core.integer_type(it))
     )
@@ -255,7 +255,7 @@ def integer_type() -> TermCoder[IntegerType]:
 
 def integer_value() -> TermCoder[IntegerValue]:
     return TermCoder(
-        type=types.var("IntegerValue"),
+        type=types.var("hydra.core.IntegerValue"),
         encode=lambda cx, g, t: extract.integer_value(cx, g, t),
         decode=lambda cx, iv: Right(terms.integer(iv))
     )
@@ -263,7 +263,7 @@ def integer_value() -> TermCoder[IntegerValue]:
 
 def literal() -> TermCoder[Literal]:
     return TermCoder(
-        type=types.var("Literal"),
+        type=types.var("hydra.core.Literal"),
         encode=lambda cx, g, t: extract.literal(cx, g, t),
         decode=lambda cx, lit: Right(terms.literal(lit))
     )
@@ -280,7 +280,7 @@ def literal_type() -> TermCoder[LiteralType]:
             case Right(value=v):
                 return Right(v)
     return TermCoder(
-        type=types.var("LiteralType"),
+        type=types.var("hydra.core.LiteralType"),
         encode=encode,
         decode=lambda cx, lt: Right(encode_core.literal_type(lt))
     )
@@ -288,7 +288,7 @@ def literal_type() -> TermCoder[LiteralType]:
 
 def term() -> TermCoder[Term]:
     return TermCoder(
-        type=types.var("Term"),
+        type=types.var("hydra.core.Term"),
         encode=lambda cx, g, t: Right(t),
         decode=lambda cx, t: Right(t)
     )
@@ -305,7 +305,7 @@ def type_() -> TermCoder[Type]:
             case Right(value=v):
                 return Right(v)
     return TermCoder(
-        type=types.var("Type"),
+        type=types.var("hydra.core.Type"),
         encode=encode,
         decode=lambda cx, t: Right(encode_core.type(t))
     )
@@ -512,7 +512,7 @@ def variable(v: str) -> TermCoder[Term]:
 # Primitive constructors
 
 def prim0(
-        name: Name, value: Callable[[], A], variables: list[str], output: TermCoder[A]
+        name: Name, value: Callable[[], A], variables: list[TypeVar_], output: TermCoder[A]
 ) -> Primitive:
     """Create a 0-argument primitive function."""
     def impl(cx: Context, g: Graph, args: frozenlist[Term]) -> Either[InContext[Error], Term]:
@@ -520,14 +520,14 @@ def prim0(
         return wrap_other(cx, result)
 
     return Primitive(
-        name=name, type=types.poly(variables, output.type), implementation=impl
+        name=name, type=build_type_scheme(variables, output.type), implementation=impl
     )
 
 
 def prim1(
         name: Name,
         compute: Callable[[A], B],
-        variables: list[str],
+        variables: list[TypeVar_],
         input1: TermCoder[A],
         output: TermCoder[B],
 ) -> Primitive:
@@ -551,7 +551,7 @@ def prim1(
 
     return Primitive(
         name=name,
-        type=types.poly(variables, types.function(input1.type, output.type)),
+        type=build_type_scheme(variables, types.function(input1.type, output.type)),
         implementation=impl,
     )
 
@@ -559,7 +559,7 @@ def prim1(
 def prim2(
         name: Name,
         compute: Callable[[A, B], C],
-        variables: list[str],
+        variables: list[TypeVar_],
         input1: TermCoder[A],
         input2: TermCoder[B],
         output: TermCoder[C],
@@ -590,7 +590,7 @@ def prim2(
 
     return Primitive(
         name=name,
-        type=types.poly(
+        type=build_type_scheme(
             variables,
             types.function(input1.type, types.function(input2.type, output.type)),
         ),
@@ -601,7 +601,7 @@ def prim2(
 def prim3(
         name: Name,
         compute: Callable[[A, B, C], D],
-        variables: list[str],
+        variables: list[TypeVar_],
         input1: TermCoder[A],
         input2: TermCoder[B],
         input3: TermCoder[C],
@@ -639,7 +639,7 @@ def prim3(
 
     return Primitive(
         name=name,
-        type=types.poly(
+        type=build_type_scheme(
             variables,
             types.function(
                 input1.type,

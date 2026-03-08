@@ -4,6 +4,7 @@ import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
+import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
@@ -41,7 +42,7 @@ public class Filter extends PrimitiveFunction {
      */
     @Override
     public TypeScheme type() {
-        return scheme("v", "k",
+        return Types.constrained2("v", Types.NONE, "k", Types.ORD,
                 function(function("v", boolean_()), map("k", "v"), map("k", "v")));
     }
 

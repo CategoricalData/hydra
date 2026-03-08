@@ -4,6 +4,7 @@ import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
+import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
@@ -38,7 +39,7 @@ public class Map extends PrimitiveFunction {
      */
     @Override
     public TypeScheme type() {
-        return scheme("v1", "v2", "k",
+        return Types.constrained3("v1", Types.NONE, "v2", Types.NONE, "k", Types.ORD,
             function(function("v1", "v2"), map("k", "v1"), map("k", "v2")));
     }
 
