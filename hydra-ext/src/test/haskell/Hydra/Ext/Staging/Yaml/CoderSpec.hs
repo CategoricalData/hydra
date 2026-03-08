@@ -1,13 +1,13 @@
 {-
-stack ghci hydra:lib hydra:hydra-test
+stack ghci hydra-ext:lib hydra-ext:hydra-ext-test
 
-Test.Hspec.hspec Hydra.Staging.Yaml.CoderSpec.spec
+Test.Hspec.hspec Hydra.Ext.Staging.Yaml.CoderSpec.spec
 -}
-module Hydra.Staging.Yaml.CoderSpec where
+module Hydra.Ext.Staging.Yaml.CoderSpec where
 
 import Hydra.Kernel
 import Hydra.Dsl.Terms
-import Hydra.Staging.Yaml.Coder
+import Hydra.Ext.Staging.Yaml.Coder
 import qualified Hydra.Ext.Org.Yaml.Model as YM
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.Tests

@@ -1,17 +1,16 @@
--- Note: these tests are dependent on HsYaml, both because the Serde depends on HsYaml
---       and because of the particular serialization style.
+-- Note: these tests depend on the particular serialization style of the native YAML writer.
 
 {-
-stack ghci hydra:lib hydra:hydra-test
+stack ghci hydra-ext:lib hydra-ext:hydra-ext-test
 
-Test.Hspec.hspec Hydra.Staging.Yaml.SerdeSpec.spec
+Test.Hspec.hspec Hydra.Ext.Staging.Yaml.SerdeSpec.spec
 -}
 
-module Hydra.Staging.Yaml.SerdeSpec where
+module Hydra.Ext.Staging.Yaml.SerdeSpec where
 
 import Hydra.Kernel
 import Hydra.Dsl.Terms
-import Hydra.Staging.Yaml.Serde
+import Hydra.Ext.Staging.Yaml.Serde
 import qualified Hydra.Dsl.Types as Types
 
 import Hydra.TestData
