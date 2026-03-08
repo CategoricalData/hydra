@@ -162,24 +162,11 @@ def is_disabled(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
     disabled_tag = hydra.testing.Tag("disabled")
     return disabled_tag in tcase.tags
 
-def is_disabled_for_python(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
-    """Check if a test case is marked as disabled for Python.
-
-    These are tests that are too slow in Python (typically type inference tests
-    with complex polymorphism) and should be skipped until performance is improved.
-    """
-    disabled_for_python_tag = hydra.testing.Tag("disabledForPython")
-    return disabled_for_python_tag in tcase.tags
-
 import os
 import time
 import subprocess
 import atexit
 from decimal import Decimal
-
-# Environment variable to force running slow tests (disabledForPython)
-# Set HYDRA_RUN_SLOW_TESTS=1 to run these tests
-RUN_SLOW_TESTS = os.environ.get("HYDRA_RUN_SLOW_TESTS", "0") == "1"
 
 # Benchmark output path. When set, the test runner records group-level
 # wall-clock timing and writes a JSON benchmark file after all tests complete.
@@ -195,14 +182,8 @@ def should_skip_test(tcase: hydra.testing.TestCaseWithMetadata) -> bool:
 
     Skip tests that are:
     - disabled: explicitly marked as not working
-    - disabledForPython: causes RecursionError in Python
-      unless HYDRA_RUN_SLOW_TESTS=1 is set
     """
-    if is_disabled(tcase):
-        return True
-    if is_disabled_for_python(tcase) and not RUN_SLOW_TESTS:
-        return True
-    return False
+    return is_disabled(tcase)
 
 
 def _empty_context() -> hydra.context.Context:
