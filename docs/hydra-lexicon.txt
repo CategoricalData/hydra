@@ -255,8 +255,6 @@ Types:
   hydra.compute.Flow = (∀s.(∀v.wrap[hydra.compute.Flow]((s → hydra.compute.Trace → (hydra.compute.FlowState @ s @ v)))))
   hydra.compute.FlowState = (∀s.(∀v.record{value:maybe<v>, state:s, trace:hydra.compute.Trace}))
   hydra.compute.Trace = record{stack:list<string>, messages:list<string>, other:map<hydra.core.Name, hydra.core.Term>}
-  hydra.constraints.PathEquation = record{left:hydra.query.Path, right:hydra.query.Path}
-  hydra.constraints.PatternImplication = record{antecedent:hydra.query.Pattern, consequent:hydra.query.Pattern}
   hydra.core.AnnotatedTerm = record{body:hydra.core.Term, annotation:map<hydra.core.Name, hydra.core.Term>}
   hydra.core.AnnotatedType = record{body:hydra.core.Type, annotation:map<hydra.core.Name, hydra.core.Term>}
   hydra.core.Application = record{function:hydra.core.Term, argument:hydra.core.Term}
@@ -328,7 +326,9 @@ Types:
   hydra.query.GraphPattern = record{graph:hydra.core.Name, patterns:list<hydra.query.Pattern>}
   hydra.query.Node = union{term:hydra.core.Term, variable:hydra.query.Variable, wildcard:unit}
   hydra.query.Path = union{step:hydra.query.Step, regex:hydra.query.RegexSequence, inverse:hydra.query.Path}
+  hydra.query.PathEquation = record{left:hydra.query.Path, right:hydra.query.Path}
   hydra.query.Pattern = union{triple:hydra.query.TriplePattern, negation:hydra.query.Pattern, conjunction:list<hydra.query.Pattern>, disjunction:list<hydra.query.Pattern>, graph:hydra.query.GraphPattern}
+  hydra.query.PatternImplication = record{antecedent:hydra.query.Pattern, consequent:hydra.query.Pattern}
   hydra.query.Query = record{variables:list<hydra.query.Variable>, patterns:list<hydra.query.Pattern>}
   hydra.query.Range = record{min:int32, max:int32}
   hydra.query.RegexQuantifier = union{one:unit, zeroOrOne:unit, zeroOrMore:unit, oneOrMore:unit, exactly:int32, atLeast:int32, range:hydra.query.Range}

@@ -25,7 +25,9 @@ module_ = Module ns elements [Core.ns] [Core.ns] $
       graphPattern,
       node,
       path,
+      pathEquation,
       pattern,
+      patternImplication,
       query,
       range,
       regexQuantifier,
@@ -90,6 +92,28 @@ path = define "Path" $
     "inverse">:
       doc "A path given by the inverse of another path"
       path]
+
+pathEquation :: Binding
+pathEquation = define "PathEquation" $
+  doc "A declared equivalence between two abstract paths in a graph" $
+  T.record [
+    "left">:
+      doc "The left-hand side of the equation"
+      path,
+    "right">:
+      doc "The right-hand side of the equation"
+      path]
+
+patternImplication :: Binding
+patternImplication = define "PatternImplication" $
+  doc "A pattern which, if it matches in a given graph, implies that another pattern must also match. Query variables are shared between the two patterns." $
+  T.record [
+    "antecedent">:
+      doc "The pattern which, if it matches, triggers the constraint"
+      pattern,
+    "consequent">:
+      doc "The pattern which must also match when the antecedent matches"
+      pattern]
 
 pattern :: Binding
 pattern = define "Pattern" $

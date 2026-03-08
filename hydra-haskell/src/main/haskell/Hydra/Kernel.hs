@@ -30,7 +30,6 @@ module Hydra.Kernel (
   module Hydra.Coders,
   module Hydra.Compute,
   module Hydra.Constants,
-  module Hydra.Constraints,
   module Hydra.Context,
   module Hydra.Core,
   module Hydra.Error,
@@ -78,7 +77,6 @@ import Hydra.Classes
 import Hydra.Coders
 import Hydra.Compute
 import Hydra.Constants
-import Hydra.Constraints
 import Hydra.Context
 import Hydra.Core
 import Hydra.Error

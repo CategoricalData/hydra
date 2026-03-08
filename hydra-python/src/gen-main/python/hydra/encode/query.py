@@ -141,5 +141,11 @@ def pattern(v1: hydra.query.Pattern) -> hydra.core.Term:
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
+def path_equation(x: hydra.query.PathEquation) -> hydra.core.Term:
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.query.PathEquation"), (hydra.core.Field(hydra.core.Name("left"), path(x.left)), hydra.core.Field(hydra.core.Name("right"), path(x.right))))))
+
+def pattern_implication(x: hydra.query.PatternImplication) -> hydra.core.Term:
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.query.PatternImplication"), (hydra.core.Field(hydra.core.Name("antecedent"), pattern(x.antecedent)), hydra.core.Field(hydra.core.Name("consequent"), pattern(x.consequent))))))
+
 def query(x: hydra.query.Query) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.query.Query"), (hydra.core.Field(hydra.core.Name("variables"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda x1: variable(x1)), x.variables)))), hydra.core.Field(hydra.core.Name("patterns"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda x1: pattern(x1)), x.patterns))))))))

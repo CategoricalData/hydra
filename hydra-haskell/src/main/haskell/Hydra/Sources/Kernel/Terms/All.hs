@@ -51,7 +51,6 @@ import qualified Hydra.Sources.Decode.Ast           as DecodeAst
 import qualified Hydra.Sources.Decode.Classes       as DecodeClasses
 import qualified Hydra.Sources.Decode.Coders        as DecodeCoders
 import qualified Hydra.Sources.Decode.Context       as DecodeContext
-import qualified Hydra.Sources.Decode.Constraints   as DecodeConstraints
 import qualified Hydra.Sources.Decode.Core          as DecodeCore
 import qualified Hydra.Sources.Decode.Grammar       as DecodeGrammar
 import qualified Hydra.Sources.Decode.Json.Model    as DecodeJson
@@ -74,7 +73,6 @@ import qualified Hydra.Sources.Encode.Ast           as EncodeAst
 import qualified Hydra.Sources.Encode.Classes       as EncodeClasses
 import qualified Hydra.Sources.Encode.Coders        as EncodeCoders
 import qualified Hydra.Sources.Encode.Context       as EncodeContext
-import qualified Hydra.Sources.Encode.Constraints   as EncodeConstraints
 import qualified Hydra.Sources.Encode.Core          as EncodeCore
 import qualified Hydra.Sources.Encode.Grammar       as EncodeGrammar
 import qualified Hydra.Sources.Encode.Json.Model    as EncodeJson
@@ -146,7 +144,6 @@ kernelDecodingModules = [
   DecodeClasses.module_,
   DecodeCoders.module_,
   DecodeContext.module_,
-  DecodeConstraints.module_,
   DecodeCore.module_,
   DecodeGrammar.module_,
   DecodeJson.module_,
@@ -170,7 +167,6 @@ kernelEncodingModules = [
   EncodeClasses.module_,
   EncodeCoders.module_,
   EncodeContext.module_,
-  EncodeConstraints.module_,
   EncodeCore.module_,
   EncodeGrammar.module_,
   EncodeJson.module_,

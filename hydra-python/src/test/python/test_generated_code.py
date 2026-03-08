@@ -78,7 +78,6 @@ pyright src/gen-main/python/hydra/accessors.py
 pyright src/gen-main/python/hydra/ast.py
 pyright src/gen-main/python/hydra/coders.py
 pyright src/gen-main/python/hydra/compute.py
-pyright src/gen-main/python/hydra/constraints.py
 pyright src/gen-main/python/hydra/core.py
 pyright src/gen-main/python/hydra/grammar.py
 pyright src/gen-main/python/hydra/graph.py
@@ -142,7 +141,6 @@ from hydra.accessors import *
 from hydra.ast import *
 from hydra.coders import *
 from hydra.compute import *
-from hydra.constraints import *
 from hydra.core import *
 from hydra.grammar import *
 from hydra.graph import *
