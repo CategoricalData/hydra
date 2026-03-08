@@ -59,7 +59,7 @@ data Primitive =
     primitiveName :: Core.Name,
     -- | The type signature of the primitive function
     primitiveType :: Core.TypeScheme,
-    -- | A concrete implementation of the primitive function
+    -- | A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting.
     primitiveImplementation :: (Context.Context -> Graph -> [Core.Term] -> Either (Context.InContext Error.Error) Core.Term)}
 
 _Primitive = (Core.Name "hydra.graph.Primitive")

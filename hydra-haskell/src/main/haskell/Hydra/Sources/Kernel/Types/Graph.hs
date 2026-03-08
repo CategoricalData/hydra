@@ -68,7 +68,11 @@ primitive = define "Primitive" $
       doc "The type signature of the primitive function"
       Core.typeScheme,
     "implementation">:
-      doc "A concrete implementation of the primitive function" $
+      doc ("A concrete implementation of the primitive function."
+        ++ " The Context and Graph parameters are needed by higher-order primitives"
+        ++ " (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments"
+        ++ " via term reduction; the Graph provides variable and primitive bindings,"
+        ++ " while the Context supports tracing and error reporting.") $
       Context.context ~> graph ~> T.list Core.term ~> T.either_ (Context.inContext @@ Error.error_) Core.term]
 
 termCoder :: Binding

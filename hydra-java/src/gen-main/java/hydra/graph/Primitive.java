@@ -27,7 +27,7 @@ public class Primitive implements Serializable, Comparable<Primitive> {
   public final hydra.core.TypeScheme type;
   
   /**
-   * A concrete implementation of the primitive function
+   * A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting.
    */
   public final java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>> implementation;
   
