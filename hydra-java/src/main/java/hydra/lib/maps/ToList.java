@@ -44,7 +44,7 @@ public class ToList extends PrimitiveFunction {
      */
     @Override
     public TypeScheme type() {
-        return scheme("k", "v", function(
+        return Types.constrained2("k", Types.ORD, "v", Types.NONE, function(
                 map("k", "v"),
                 list(pair(variable("k"), variable("v")))));
     }

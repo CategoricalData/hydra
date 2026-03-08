@@ -12,6 +12,7 @@ import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
+import static hydra.dsl.Types.schemeOrd;
 import hydra.context.Context;
 import hydra.context.InContext;
 import hydra.error.OtherError;
@@ -28,7 +29,7 @@ public class Max extends PrimitiveFunction {
 
     @Override
     public TypeScheme type() {
-        return scheme("x", function(Types.var("x"), Types.var("x"), Types.var("x")));
+        return schemeOrd("x", function(Types.var("x"), Types.var("x"), Types.var("x")));
     }
 
     @Override

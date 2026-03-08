@@ -15,6 +15,7 @@ import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
+import static hydra.dsl.Types.schemeEq;
 import hydra.context.Context;
 import hydra.context.InContext;
 import hydra.error.OtherError;
@@ -31,7 +32,7 @@ public class Elem extends PrimitiveFunction {
 
     @Override
     public TypeScheme type() {
-        return scheme("a", function(Types.var("a"), list("a"), boolean_()));
+        return schemeEq("a", function(Types.var("a"), list("a"), boolean_()));
     }
 
     @Override

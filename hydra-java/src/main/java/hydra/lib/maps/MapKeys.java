@@ -39,7 +39,7 @@ public class MapKeys extends PrimitiveFunction {
      */
     @Override
     public TypeScheme type() {
-        return scheme("k1", "k2", "v",
+        return Types.constrained3("k1", Types.ORD, "k2", Types.ORD, "v", Types.NONE,
             function(function("k1", "k2"), map("k1", "v"), map("k2", "v")));
     }
 

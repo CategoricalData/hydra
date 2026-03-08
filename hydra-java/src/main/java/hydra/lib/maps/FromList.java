@@ -3,6 +3,7 @@ package hydra.lib.maps;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
+import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Pair;
@@ -43,7 +44,7 @@ public class FromList extends PrimitiveFunction {
      */
     @Override
     public TypeScheme type() {
-        return scheme("k", "v",
+        return Types.constrained2("k", Types.ORD, "v", Types.NONE,
                 function(list(pair(variable("k"), variable("v"))), map("k", "v")));
     }
 

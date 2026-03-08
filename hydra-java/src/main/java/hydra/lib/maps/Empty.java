@@ -38,7 +38,7 @@ public class Empty extends PrimitiveFunction {
      */
     @Override
     public TypeScheme type() {
-        return scheme("k", "v", map("k", "v"));
+        return Types.constrained2("k", Types.ORD, "v", Types.NONE, map("k", "v"));
     }
 
     /**

@@ -39,10 +39,11 @@ from hydra.core import (
     TypeUnion,
     TypeUnit,
     TypeVariable,
+    TypeVariableMetadata,
     TypeWrap,
     WrappedType,
 )
-from hydra.dsl.python import FrozenDict, Nothing
+from hydra.dsl.python import FrozenDict, Just, Nothing
 
 # Type alias: anything that can be used as a Type
 # Mirrors Haskell's AsType typeclass: Type, Binding, or str
@@ -180,6 +181,20 @@ def poly(vs: Sequence[str], t: Type) -> TypeScheme:
     This represents a type forall a b. a -> b that can be instantiated with different types.
     """
     return TypeScheme(tuple(Name(v) for v in vs), t, Nothing())
+
+
+def poly_constrained(vs_with_constraints: Sequence[tuple[str, list[Name]]], t: Type) -> TypeScheme:
+    """Create a polymorphic type scheme with type variables and class constraints.
+
+    Example: poly_constrained([("k", [Name("hydra.util.TypeClass.ordering")]), ("v", [])],
+                              function(var("k"), var("v")))
+    """
+    vars = tuple(Name(v) for v, _ in vs_with_constraints)
+    constraint_map = FrozenDict({
+        Name(v): TypeVariableMetadata(frozenset(classes))
+        for v, classes in vs_with_constraints if classes
+    })
+    return TypeScheme(vars, t, Just(constraint_map) if constraint_map else Nothing())
 
 
 def bigfloat() -> Type:

@@ -16,6 +16,7 @@ import java.util.function.Function;
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
+import static hydra.dsl.Types.schemeOrd;
 import hydra.context.Context;
 import hydra.context.InContext;
 import hydra.error.OtherError;
@@ -32,7 +33,7 @@ public class Sort extends PrimitiveFunction {
 
     @Override
     public TypeScheme type() {
-        return scheme("a", function(list("a"), list("a")));
+        return schemeOrd("a", function(list("a"), list("a")));
     }
 
     @Override

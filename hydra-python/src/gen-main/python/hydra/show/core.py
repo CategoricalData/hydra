@@ -283,8 +283,15 @@ def type_scheme(ts: hydra.core.TypeScheme) -> str:
         return hydra.lib.lists.map((lambda v1: v1.value), vars)
     @lru_cache(1)
     def fa() -> str:
-        return hydra.lib.logic.if_else(hydra.lib.lists.null(vars), (lambda : ""), (lambda : hydra.lib.strings.cat(("∀[", hydra.lib.strings.intercalate(",", var_names()), "]."))))
-    return hydra.lib.strings.cat(("(", fa(), type(body), ")"))
+        return hydra.lib.logic.if_else(hydra.lib.lists.null(vars), (lambda : ""), (lambda : hydra.lib.strings.cat(("forall ", hydra.lib.strings.intercalate(",", var_names()), ". "))))
+    def to_constraint_pair(v: hydra.core.Name, c: hydra.core.Name) -> str:
+        return hydra.lib.strings.cat((c.value, " ", v.value))
+    def to_constraint_pairs(p: tuple[hydra.core.Name, hydra.core.TypeVariableMetadata]) -> frozenlist[str]:
+        return hydra.lib.lists.map((lambda v1: to_constraint_pair(hydra.lib.pairs.first(p), v1)), hydra.lib.sets.to_list(hydra.lib.pairs.second(p).classes))
+    @lru_cache(1)
+    def tc() -> frozenlist[str]:
+        return hydra.lib.maybes.maybe((), (lambda m: hydra.lib.lists.concat(hydra.lib.lists.map((lambda x1: to_constraint_pairs(x1)), hydra.lib.maps.to_list(m)))), ts.constraints)
+    return hydra.lib.strings.cat(("(", fa(), hydra.lib.logic.if_else(hydra.lib.lists.null(tc()), (lambda : ""), (lambda : hydra.lib.strings.cat(("(", hydra.lib.strings.intercalate(", ", tc()), ") => ")))), type(body), ")"))
 
 def binding(el: hydra.core.Binding) -> str:
     r"""Show a binding as a string."""
