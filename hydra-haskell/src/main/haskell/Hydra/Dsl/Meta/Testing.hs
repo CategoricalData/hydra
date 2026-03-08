@@ -27,7 +27,6 @@ type Int32 = I.Int32
 
 tag_disabled = Tag "disabled"
 tag_disabledForMinimalInference = Tag "disabledForMinimalInference"
-tag_disabledForPython = Tag "disabledForPython"
 
 noTags :: TTerm [Tag]
 noTags = Phantoms.list ([] :: [TTerm Tag])
@@ -74,7 +73,6 @@ infTest name tags term ts = testCaseWithMetadata (Phantoms.string name)
 
 isDisabled tcase = tag_disabled `L.elem` Testing.testCaseWithMetadataTags tcase
 isDisabledForMinimalInference tcase = tag_disabledForMinimalInference `L.elem` Testing.testCaseWithMetadataTags tcase
-isDisabledForPython tcase = tag_disabledForPython `L.elem` Testing.testCaseWithMetadataTags tcase
 
 mapTerm :: [(TTerm Term, TTerm Term)] -> TTerm Term
 mapTerm pairs = TTerm $ TermUnion $ Injection _Term $ Field _Term_map $ TermMap $ M.fromList [(unTTerm k, unTTerm v) | (k, v) <- pairs]
