@@ -31,7 +31,7 @@ import Hydra.Ext.Rust.Coder (moduleToRust)
 import Hydra.Ext.Rust.Language (rustLanguage)
 import Hydra.Ext.Staging.Scala.Coder
 import Hydra.Ext.Staging.Yaml.Modules
-import Hydra.Ext.Staging.Yaml.Language
+import Hydra.Ext.Org.Yaml.Language
 
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Writer as JsonWriter

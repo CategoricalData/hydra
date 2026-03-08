@@ -123,6 +123,8 @@
     "hydra.ext.rust.syntax",
     "hydra.ext.typeScript.language",
     "hydra.ext.typeScript.model",
+    "hydra.ext.org.yaml.language",
+    "hydra.ext.org.yaml.coder",
     "hydra.decode.pg.mapping",
     "hydra.decode.pg.model",
     "hydra.encode.pg.mapping",

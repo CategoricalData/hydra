@@ -3,11 +3,9 @@
 module Hydra.Ext.Staging.Yaml.Modules (moduleToYaml) where
 
 import Hydra.Kernel
-import Hydra.Ext.Staging.Yaml.Coder
+import Hydra.Ext.Org.Yaml.Coder
 import Hydra.Ext.Staging.Yaml.Serde
-import Hydra.Ext.Staging.Yaml.Language
 import qualified Hydra.Ext.Org.Yaml.Model as YM
-import qualified Hydra.Dsl.Types as Types
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -28,7 +26,7 @@ constructModule mod termDefs cx g = do
     Right $ YM.NodeMapping $ M.fromList keyvals
   where
     toYaml (TermDefinition name term typeScheme) = do
-      coder <- yamlCoder cx g (typeSchemeType typeScheme)
+      coder <- yamlCoder (typeSchemeType typeScheme) cx g
       node <- coderEncode coder cx term
       Right (YM.NodeScalar $ YM.ScalarStr $ localNameOf name, node)
     ns = unNamespace $ moduleNamespace mod
