@@ -1,6 +1,6 @@
 -- | Language constraints for YAML, defining which Hydra types can be represented in YAML
 
-module Hydra.Staging.Yaml.Language where
+module Hydra.Ext.Staging.Yaml.Language where
 
 import Hydra.Kernel
 

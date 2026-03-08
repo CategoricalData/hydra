@@ -1,11 +1,11 @@
 -- | Module-level YAML generation for Hydra terms
 
-module Hydra.Staging.Yaml.Modules (moduleToYaml) where
+module Hydra.Ext.Staging.Yaml.Modules (moduleToYaml) where
 
 import Hydra.Kernel
-import Hydra.Staging.Yaml.Coder
-import Hydra.Staging.Yaml.Serde
-import Hydra.Staging.Yaml.Language
+import Hydra.Ext.Staging.Yaml.Coder
+import Hydra.Ext.Staging.Yaml.Serde
+import Hydra.Ext.Staging.Yaml.Language
 import qualified Hydra.Ext.Org.Yaml.Model as YM
 import qualified Hydra.Dsl.Types as Types
 

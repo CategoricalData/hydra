@@ -9,11 +9,7 @@ import Hydra.Ext.Haskell.Coder
 import Hydra.Ext.Haskell.Language
 import Hydra.Module (_Module)
 import qualified Hydra.Json.Model as Json
-import qualified Hydra.Json.Parser as JsonParser
 import qualified Hydra.Json.Writer as JsonWriter
-import Hydra.Parsing (ParseResult(..), ParseSuccess(..), ParseError(..))
-import Hydra.Staging.Yaml.Modules
-import Hydra.Staging.Yaml.Language
 import Hydra.Sources.Libraries
 import qualified Hydra.Context as Context
 import qualified Hydra.Decoding as Decoding
@@ -26,18 +22,24 @@ import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
 import qualified Hydra.CodeGeneration as CodeGeneration
 
 import qualified Control.Monad as CM
+import qualified Data.Aeson as A
+import qualified Data.Aeson.KeyMap as AKM
+import qualified Data.Aeson.Key as AK
+import qualified Data.ByteString.Lazy as BS
+import qualified Data.Scientific as SC
+import qualified Data.Vector as V
 import qualified System.FilePath as FP
 import qualified Data.List as L
 import qualified Data.List.Split as LS
 import qualified Data.Map as M
-import qualified Data.Set as S
+import qualified Data.Text as T
 import qualified System.Directory as SD
 import qualified Data.Maybe as Y
 
 
 -- | Format an InContext OtherError with trace information
 formatError :: Context.InContext Error.OtherError -> String
-formatError ic = formatError ic ++ traceInfo
+formatError ic = Error.unOtherError (Context.inContextObject ic) ++ traceInfo
   where
     cx = Context.inContextContext ic
     stack = Context.contextTrace cx
@@ -86,65 +88,6 @@ writeHaskell = generateSources moduleToHaskell haskellLanguage True False False 
 
 -- writeJson :: FP.FilePath -> [Module] -> IO ()
 -- writeJson = generateSources Json.printModule
-
--- | YAML generation - only processes data modules (term definitions), skips schema modules
--- First argument: output directory
--- Second argument: universe modules (all modules for type/term resolution)
--- Third argument: modules to transform and generate
-writeYaml :: FP.FilePath -> [Module] -> [Module] -> IO ()
-writeYaml basePath universeModules modulesToGenerate =
-    case generateFiles modulesToGenerate of
-      Left ic -> fail $ "Failed to generate YAML files: " ++ formatError ic
-      Right files -> mapM_ writePair files
-  where
-    cx = Monads.emptyContext
-    constraints = languageConstraints yamlLanguage
-    hasNativeTypes mod = not $ L.null $ L.filter isNativeType $ moduleElements mod
-
-    -- Build the complete universe by computing transitive closure of dependencies
-    namespaceMap = M.fromList [(moduleNamespace m, m) | m <- universeModules ++ modulesToGenerate]
-
-    transitiveClosure :: [Module] -> S.Set Namespace
-    transitiveClosure startMods = go (S.fromList $ moduleNamespace <$> startMods) S.empty
-      where
-        go pending visited
-          | S.null pending = visited
-          | otherwise =
-              let newVisited = S.union visited pending
-                  nextDeps = S.fromList $ concat
-                    [moduleTermDependencies m ++ moduleTypeDependencies m
-                    | ns <- S.toList pending
-                    , Just m <- [M.lookup ns namespaceMap]]
-                  newPending = S.difference nextDeps newVisited
-              in go newPending newVisited
-
-    allNeededNamespaces = transitiveClosure modulesToGenerate
-    completeUniverse = [m | ns <- S.toList allNeededNamespaces, Just m <- [M.lookup ns namespaceMap]]
-                    ++ modulesToGenerate
-
-    generateFiles mods =
-        let dataModules = L.filter (not . hasNativeTypes) mods
-        in if L.null dataModules
-          then Right []
-          else do
-            let g0 = modulesToGraph completeUniverse completeUniverse
-                namespaces = fmap moduleNamespace dataModules
-                dataElements = L.filter (not . isNativeType) $ L.concatMap moduleElements completeUniverse
-            -- Infer types on the data graph before adaptation (eta expansion requires types)
-            ((g0', _inferredBindings), _cx1) <- inferGraphTypes cx dataElements g0
-            (g1, defLists) <- wrapStringError $ dataGraphToDefinitions constraints True True False False dataElements g0' namespaces cx
-            L.concat . fmap M.toList <$> CM.zipWithM (forEachModule g1) dataModules defLists
-
-    forEachModule g1 mod defs = moduleToYaml mod (fmap DefinitionTerm defs) cx g1
-
-    wrapStringError :: Either String a -> Either (Context.InContext Error.OtherError) a
-    wrapStringError (Left err) = Left $ Context.InContext (Error.OtherError err) cx
-    wrapStringError (Right a) = Right a
-
-    writePair (path, contents) = do
-      let fullPath = basePath FP.</> path
-      SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
-      writeFile fullPath contents
 
 -- | Generate and write the lexicon file (IO wrapper).
 writeLexicon :: FilePath -> IO ()
@@ -291,22 +234,32 @@ writeManifestJson basePath = do
 -- JSON Module Import
 ----------------------------------------
 
--- | Parse a JSON file using the native Hydra JSON parser.
+-- | Convert an Aeson JSON value to a Hydra JSON value.
+aesonToHydra :: A.Value -> Json.Value
+aesonToHydra v = case v of
+  A.Object km -> Json.ValueObject $ M.fromList (mapPair <$> AKM.toList km)
+    where
+      mapPair (k, v') = (AK.toString k, aesonToHydra v')
+  A.Array a -> Json.ValueArray (aesonToHydra <$> V.toList a)
+  A.String t -> Json.ValueString $ T.unpack t
+  A.Number s -> Json.ValueNumber $ SC.toRealFloat s
+  A.Bool b -> Json.ValueBoolean b
+  A.Null -> Json.ValueNull
+
+-- | Parse a JSON file using Aeson and convert to Hydra JSON.
 -- Pre-processes the content to escape control characters that the Hydra JSON writer
 -- doesn't escape (e.g. null bytes in string literals).
 parseJsonFile :: FilePath -> IO (Either String Json.Value)
 parseJsonFile fp = do
-  content <- readFile fp
+  content <- BS.readFile fp
   let escaped = escapeControlCharsInJson content
-  return $ case JsonParser.parseJson escaped of
-    ParseResultSuccess success -> Right (parseSuccessValue success)
-    ParseResultFailure err -> Left $ parseErrorMessage err
+  return $ aesonToHydra <$> A.eitherDecode escaped
 
 -- | Escape unescaped control characters (< 0x20) inside JSON string literals.
--- Thin String wrapper around CodeGeneration.escapeControlCharsInJson (which operates on [Int]).
-escapeControlCharsInJson :: String -> String
+-- Thin ByteString wrapper around CodeGeneration.escapeControlCharsInJson (which operates on [Int]).
+escapeControlCharsInJson :: BS.ByteString -> BS.ByteString
 escapeControlCharsInJson input =
-  fmap (toEnum . fromIntegral) $ CodeGeneration.escapeControlCharsInJson $ fmap (fromIntegral . fromEnum) input
+  BS.pack $ fmap fromIntegral $ CodeGeneration.escapeControlCharsInJson $ fmap fromIntegral $ BS.unpack input
 
 -- | Read a field from manifest.json as a list of Namespaces.
 readManifestField :: FilePath -> String -> IO [Namespace]

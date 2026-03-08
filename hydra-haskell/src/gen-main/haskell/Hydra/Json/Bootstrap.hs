@@ -1507,7 +1507,7 @@ typesByName = (M.fromList [
                       Core.applicationTypeArgument = (Core.TypeVariable (Core.Name "hydra.error.Error"))})),
                     Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.core.Term"))}))}))}))})),
             Core.annotatedTypeAnnotation = (M.fromList [
-              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A concrete implementation of the primitive function")))])}))}]})),
+              (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting.")))])}))}]})),
     Core.annotatedTypeAnnotation = (M.fromList [
       (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A built-in function or constant")))])}))),
   (Core.Name "hydra.graph.TermCoder", (Core.TypeAnnotated (Core.AnnotatedType {

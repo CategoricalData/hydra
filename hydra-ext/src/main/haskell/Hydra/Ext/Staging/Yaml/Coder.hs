@@ -1,10 +1,10 @@
 -- | Bidirectional coder between Hydra terms and YAML nodes
 
-module Hydra.Staging.Yaml.Coder (yamlCoder) where
+module Hydra.Ext.Staging.Yaml.Coder (yamlCoder) where
 
 import Hydra.Kernel
 import Hydra.Adapt.Modules (languageAdapter)
-import Hydra.Staging.Yaml.Language
+import Hydra.Ext.Staging.Yaml.Language
 import Hydra.Adapt.Utils
 import qualified Hydra.Ext.Org.Yaml.Model as YM
 import qualified Hydra.Dsl.Terms as Terms
