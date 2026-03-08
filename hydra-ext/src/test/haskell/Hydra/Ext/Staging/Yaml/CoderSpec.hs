@@ -7,7 +7,7 @@ module Hydra.Ext.Staging.Yaml.CoderSpec where
 
 import Hydra.Kernel
 import Hydra.Dsl.Terms
-import Hydra.Ext.Staging.Yaml.Coder
+import Hydra.Ext.Org.Yaml.Coder
 import qualified Hydra.Ext.Org.Yaml.Model as YM
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.Tests
@@ -97,7 +97,7 @@ spec = do
   unsupportedTypesAreTransformed
 
 checkYamlCoder :: Type -> Term -> YM.Node -> H.Expectation
-checkYamlCoder typ term node = case yamlCoder emptyContext testGraph typ of
+checkYamlCoder typ term node = case yamlCoder typ emptyContext testGraph of
     Left ic -> HL.assertFailure $ "yamlCoder failed: " ++ show (inContextObject ic)
     Right step -> do
       coderEncode step emptyContext term `H.shouldBe` Right node
