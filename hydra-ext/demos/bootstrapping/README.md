@@ -18,7 +18,8 @@ Each bootstrapping path proceeds as follows:
 3. Copy minimal static resources (primitive libraries, build files, test runners)
 4. Build and test the generated project
 
-All output goes to `/tmp/hydra-bootstrapping-demo/` with subdirectories:
+By default, all output goes to `/tmp/hydra-bootstrapping-demo/` with subdirectories
+(override with `--output`):
 
 ```
 /tmp/hydra-bootstrapping-demo/
