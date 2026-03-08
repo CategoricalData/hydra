@@ -19,7 +19,8 @@
 #   --types-only            Only generate type-defining modules
 #   --kernel-only           Only generate kernel modules
 #   --tag TAG               Append a tag to the run directory name
-#   --dir DIR               Override runs directory (default: $HYDRA_ROOT/bootstrap/runs)
+#   --runs DIR              Override runs directory (default: $HYDRA_ROOT/bootstrap/runs)
+#   --output DIR            Override output directory for generated code (default: /tmp/hydra-bootstrapping-demo)
 #   --repeat N              Run tests N times (default: 1)
 #   --run RUN               Use a specific run directory (test mode)
 #   --paths p1,p2,...       Test only specific paths (test mode)
@@ -73,8 +74,10 @@ while [ $# -gt 0 ]; do
         --kernel-only) EXTRA_FLAGS="$EXTRA_FLAGS --kernel-only" ;;
         --tag) TAG="$2"; shift ;;
         --tag=*) TAG="${1#--tag=}" ;;
-        --dir) RUNS_DIR="$2"; shift ;;
-        --dir=*) RUNS_DIR="${1#--dir=}" ;;
+        --runs) RUNS_DIR="$2"; shift ;;
+        --runs=*) RUNS_DIR="${1#--runs=}" ;;
+        --output) OUTPUT_BASE="$2"; shift ;;
+        --output=*) OUTPUT_BASE="${1#--output=}" ;;
         --repeat) REPEAT="$2"; shift ;;
         --repeat=*) REPEAT="${1#--repeat=}" ;;
         --run) RUN_SPEC="$2"; shift ;;

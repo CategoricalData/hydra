@@ -1,7 +1,7 @@
 #!/bin/bash
 # Bootstrap Hydra to Python from JSON modules (via Python host).
 #
-# Usage: ./python-to-python.sh [--types-only] [--kernel-only]
+# Usage: ./python-to-python.sh [--output DIR] [--types-only] [--kernel-only]
 
 set -e
 
@@ -10,15 +10,18 @@ HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 HYDRA_HASKELL_DIR="$HYDRA_ROOT/hydra-haskell"
 
 OUTPUT_BASE="/tmp/hydra-bootstrapping-demo"
-OUTPUT_DIR="$OUTPUT_BASE/python-to-python"
 
 # Collect extra flags
 EXTRA_FLAGS=""
-for arg in "$@"; do
-    case "$arg" in
-        --types-only|--kernel-only) EXTRA_FLAGS="$EXTRA_FLAGS $arg" ;;
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --output) OUTPUT_BASE="$2"; shift ;;
+        --output=*) OUTPUT_BASE="${1#--output=}" ;;
+        --types-only|--kernel-only) EXTRA_FLAGS="$EXTRA_FLAGS $1" ;;
     esac
+    shift
 done
+OUTPUT_DIR="$OUTPUT_BASE/python-to-python"
 
 echo "=========================================="
 echo "Python to Python bootstrapping demo"

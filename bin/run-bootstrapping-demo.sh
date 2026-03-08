@@ -9,7 +9,8 @@
 #
 # Options (passed through to bootstrap-all.sh):
 #   --tag TAG               Append a human-readable tag to the run directory name
-#   --dir DIR               Override runs directory (default: bootstrap/runs)
+#   --runs DIR              Override runs directory (default: bootstrap/runs)
+#   --output DIR            Override output directory for generated code (default: /tmp/hydra-bootstrapping-demo)
 #   --hosts=LANG,...        Run only specified host languages
 #   --targets=LANG,...      Generate only specified target languages
 #   --types-only            Only generate type-defining modules

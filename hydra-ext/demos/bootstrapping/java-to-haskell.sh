@@ -1,7 +1,7 @@
 #!/bin/bash
 # Bootstrap Hydra to Haskell from JSON modules (via Java host).
 #
-# Usage: ./java-to-haskell.sh [--types-only] [--kernel-only]
+# Usage: ./java-to-haskell.sh [--output DIR] [--types-only] [--kernel-only]
 
 set -e
 
@@ -10,15 +10,18 @@ HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 HYDRA_HASKELL_DIR="$HYDRA_ROOT/hydra-haskell"
 
 OUTPUT_BASE="/tmp/hydra-bootstrapping-demo"
-OUTPUT_DIR="$OUTPUT_BASE/java-to-haskell"
 
 # Collect extra flags
 EXTRA_FLAGS=""
-for arg in "$@"; do
-    case "$arg" in
-        --types-only|--kernel-only) EXTRA_FLAGS="$EXTRA_FLAGS $arg" ;;
+while [ $# -gt 0 ]; do
+    case "$1" in
+        --output) OUTPUT_BASE="$2"; shift ;;
+        --output=*) OUTPUT_BASE="${1#--output=}" ;;
+        --types-only|--kernel-only) EXTRA_FLAGS="$EXTRA_FLAGS $1" ;;
     esac
+    shift
 done
+OUTPUT_DIR="$OUTPUT_BASE/java-to-haskell"
 
 echo "=========================================="
 echo "Java to Haskell bootstrapping demo"
