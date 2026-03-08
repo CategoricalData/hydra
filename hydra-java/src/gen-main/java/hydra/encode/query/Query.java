@@ -97,6 +97,12 @@ public interface Query {
     });
   }
   
+  static hydra.core.Term pathEquation(hydra.query.PathEquation x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.PathEquation"), java.util.List.of(
+      new hydra.core.Field(new hydra.core.Name("left"), hydra.encode.query.Query.path((x).left)),
+      new hydra.core.Field(new hydra.core.Name("right"), hydra.encode.query.Query.path((x).right)))));
+  }
+  
   static hydra.core.Term pattern(hydra.query.Pattern v1) {
     return (v1).accept(new hydra.query.Pattern.PartialVisitor<>() {
       @Override
@@ -128,6 +134,12 @@ public interface Query {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.query.Pattern"), new hydra.core.Field(new hydra.core.Name("graph"), hydra.encode.query.Query.graphPattern((y).value))));
       }
     });
+  }
+  
+  static hydra.core.Term patternImplication(hydra.query.PatternImplication x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.query.PatternImplication"), java.util.List.of(
+      new hydra.core.Field(new hydra.core.Name("antecedent"), hydra.encode.query.Query.pattern((x).antecedent)),
+      new hydra.core.Field(new hydra.core.Name("consequent"), hydra.encode.query.Query.pattern((x).consequent)))));
   }
   
   static hydra.core.Term query(hydra.query.Query x) {

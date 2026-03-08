@@ -1,6 +1,6 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.constraints;
+package hydra.query;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A pattern which, if it matches in a given graph, implies that another pattern must also match. Query variables are shared between the two patterns.
  */
 public class PatternImplication implements Serializable, Comparable<PatternImplication> {
-  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.constraints.PatternImplication");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.query.PatternImplication");
   
   public static final hydra.core.Name ANTECEDENT = new hydra.core.Name("antecedent");
   

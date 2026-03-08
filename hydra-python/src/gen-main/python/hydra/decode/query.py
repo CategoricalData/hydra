@@ -293,6 +293,32 @@ def pattern(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 return Left(hydra.error.DecodingError("expected union of type hydra.query.Pattern"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.error.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_query_pattern_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
+def path_equation(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_query_path_equation_1(cx, v1):
+        match v1:
+            case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
+                def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
+                    return hydra.extract.helpers.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("left", (lambda x1, x2: path(x1, x2)), field_map(), cx), (lambda field_left: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("right", (lambda x1, x2: path(x1, x2)), field_map(), cx), (lambda field_right: Right(hydra.query.PathEquation(field_left, field_right))))))
+            
+            case _:
+                return Left(hydra.error.DecodingError("expected record of type hydra.query.PathEquation"))
+    return hydra.lib.eithers.either((lambda err: Left(hydra.error.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_query_path_equation_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+
+def pattern_implication(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_query_pattern_implication_1(cx, v1):
+        match v1:
+            case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
+                def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
+                    return hydra.extract.helpers.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("antecedent", (lambda x1, x2: pattern(x1, x2)), field_map(), cx), (lambda field_antecedent: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("consequent", (lambda x1, x2: pattern(x1, x2)), field_map(), cx), (lambda field_consequent: Right(hydra.query.PatternImplication(field_antecedent, field_consequent))))))
+            
+            case _:
+                return Left(hydra.error.DecodingError("expected record of type hydra.query.PatternImplication"))
+    return hydra.lib.eithers.either((lambda err: Left(hydra.error.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_query_pattern_implication_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+
 def query(cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_query_query_1(cx, v1):
         match v1:

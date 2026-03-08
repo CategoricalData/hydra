@@ -1,6 +1,6 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.constraints;
+package hydra.query;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
  * A declared equivalence between two abstract paths in a graph
  */
 public class PathEquation implements Serializable, Comparable<PathEquation> {
-  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.constraints.PathEquation");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.query.PathEquation");
   
   public static final hydra.core.Name LEFT = new hydra.core.Name("left");
   

@@ -145,9 +145,6 @@ Hydra's kernel consists of **21 type modules** organized into logical categories
 - Type inference and reconstruction
 - Type constraints and substitutions
 
-**Constraints.hs** - `hydra.constraints` namespace
-- Path and pattern-based graph constraints
-
 #### Data Format Models (4 modules)
 
 **Ast.hs** - `hydra.ast` - Common syntax tree for serializers

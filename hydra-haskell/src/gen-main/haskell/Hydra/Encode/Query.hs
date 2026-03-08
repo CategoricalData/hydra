@@ -110,6 +110,17 @@ path x = case x of
       Core.fieldName = (Core.Name "inverse"),
       Core.fieldTerm = (path v0)}}))
 
+pathEquation :: (Query.PathEquation -> Core.Term)
+pathEquation x = (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.query.PathEquation"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "left"),
+      Core.fieldTerm = (path (Query.pathEquationLeft x))},
+    Core.Field {
+      Core.fieldName = (Core.Name "right"),
+      Core.fieldTerm = (path (Query.pathEquationRight x))}]}))
+
 pattern :: (Query.Pattern -> Core.Term)
 pattern x = case x of
   Query.PatternTriple v0 -> (Core.TermUnion (Core.Injection {
@@ -137,6 +148,17 @@ pattern x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "graph"),
       Core.fieldTerm = (graphPattern v0)}}))
+
+patternImplication :: (Query.PatternImplication -> Core.Term)
+patternImplication x = (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.query.PatternImplication"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "antecedent"),
+      Core.fieldTerm = (pattern (Query.patternImplicationAntecedent x))},
+    Core.Field {
+      Core.fieldName = (Core.Name "consequent"),
+      Core.fieldTerm = (pattern (Query.patternImplicationConsequent x))}]}))
 
 query :: (Query.Query -> Core.Term)
 query x = (Core.TermRecord (Core.Record {

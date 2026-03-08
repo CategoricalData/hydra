@@ -106,6 +106,21 @@ _Path_regex = (Core.Name "regex")
 
 _Path_inverse = (Core.Name "inverse")
 
+-- | A declared equivalence between two abstract paths in a graph
+data PathEquation = 
+  PathEquation {
+    -- | The left-hand side of the equation
+    pathEquationLeft :: Path,
+    -- | The right-hand side of the equation
+    pathEquationRight :: Path}
+  deriving (Eq, Ord, Read, Show)
+
+_PathEquation = (Core.Name "hydra.query.PathEquation")
+
+_PathEquation_left = (Core.Name "left")
+
+_PathEquation_right = (Core.Name "right")
+
 -- | A query pattern
 data Pattern = 
   -- | A subject/predicate/object pattern
@@ -131,6 +146,21 @@ _Pattern_conjunction = (Core.Name "conjunction")
 _Pattern_disjunction = (Core.Name "disjunction")
 
 _Pattern_graph = (Core.Name "graph")
+
+-- | A pattern which, if it matches in a given graph, implies that another pattern must also match. Query variables are shared between the two patterns.
+data PatternImplication = 
+  PatternImplication {
+    -- | The pattern which, if it matches, triggers the constraint
+    patternImplicationAntecedent :: Pattern,
+    -- | The pattern which must also match when the antecedent matches
+    patternImplicationConsequent :: Pattern}
+  deriving (Eq, Ord, Read, Show)
+
+_PatternImplication = (Core.Name "hydra.query.PatternImplication")
+
+_PatternImplication_antecedent = (Core.Name "antecedent")
+
+_PatternImplication_consequent = (Core.Name "consequent")
 
 -- | A SELECT-style graph pattern matching query
 data Query = 

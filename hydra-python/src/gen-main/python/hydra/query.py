@@ -101,6 +101,17 @@ class Path(metaclass=_PathMeta):
     REGEX = hydra.core.Name("regex")
     INVERSE = hydra.core.Name("inverse")
 
+@dataclass(frozen=True)
+class PathEquation:
+    r"""A declared equivalence between two abstract paths in a graph."""
+    
+    left: Annotated[Path, "The left-hand side of the equation"]
+    right: Annotated[Path, "The right-hand side of the equation"]
+    
+    TYPE_ = hydra.core.Name("hydra.query.PathEquation")
+    LEFT = hydra.core.Name("left")
+    RIGHT = hydra.core.Name("right")
+
 class PatternTriple(Node["TriplePattern"]):
     r"""A subject/predicate/object pattern"""
 
@@ -130,6 +141,17 @@ class Pattern(metaclass=_PatternMeta):
     CONJUNCTION = hydra.core.Name("conjunction")
     DISJUNCTION = hydra.core.Name("disjunction")
     GRAPH = hydra.core.Name("graph")
+
+@dataclass(frozen=True)
+class PatternImplication:
+    r"""A pattern which, if it matches in a given graph, implies that another pattern must also match. Query variables are shared between the two patterns."""
+    
+    antecedent: Annotated[Pattern, "The pattern which, if it matches, triggers the constraint"]
+    consequent: Annotated[Pattern, "The pattern which must also match when the antecedent matches"]
+    
+    TYPE_ = hydra.core.Name("hydra.query.PatternImplication")
+    ANTECEDENT = hydra.core.Name("antecedent")
+    CONSEQUENT = hydra.core.Name("consequent")
 
 @dataclass(frozen=True)
 class Query:

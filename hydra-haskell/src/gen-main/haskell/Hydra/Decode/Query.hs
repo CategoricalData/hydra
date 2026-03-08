@@ -98,6 +98,15 @@ path cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\strippe
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Error.DecodingError "expected union of type hydra.query.Path"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
+pathEquation :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Query.PathEquation)
+pathEquation cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
+    in (Eithers.bind (Helpers.requireField "left" path fieldMap cx) (\field_left -> Eithers.bind (Helpers.requireField "right" path fieldMap cx) (\field_right -> Right (Query.PathEquation {
+      Query.pathEquationLeft = field_left,
+      Query.pathEquationRight = field_right}))))
+  _ -> (Left (Error.DecodingError "expected record of type hydra.query.PathEquation"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+
 pattern :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Query.Pattern)
 pattern cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
@@ -117,6 +126,15 @@ pattern cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stri
       " in union type ",
       (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
   _ -> (Left (Error.DecodingError "expected union of type hydra.query.Pattern"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+
+patternImplication :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Query.PatternImplication)
+patternImplication cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
+  Core.TermRecord v0 ->  
+    let fieldMap = (Helpers.toFieldMap v0)
+    in (Eithers.bind (Helpers.requireField "antecedent" pattern fieldMap cx) (\field_antecedent -> Eithers.bind (Helpers.requireField "consequent" pattern fieldMap cx) (\field_consequent -> Right (Query.PatternImplication {
+      Query.patternImplicationAntecedent = field_antecedent,
+      Query.patternImplicationConsequent = field_consequent}))))
+  _ -> (Left (Error.DecodingError "expected record of type hydra.query.PatternImplication"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 query :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Query.Query)
 query cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
