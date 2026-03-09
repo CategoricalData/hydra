@@ -38,7 +38,7 @@ alphaConvert :: (Core.Name -> Core.Name -> Core.Term -> Core.Term)
 alphaConvert vold vnew term = (Rewriting.replaceFreeTermVariable vold (Core.TermVariable vnew) term)
 
 -- | Eagerly beta-reduce a type by substituting type arguments into type lambdas
-betaReduceType :: (Context.Context -> Graph.Graph -> Core.Type -> Either String Core.Type)
+betaReduceType :: (Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Error.OtherError) Core.Type)
 betaReduceType cx graph typ =  
   let reduceApp = (\app ->  
           let lhs = (Core.applicationTypeFunction app)
@@ -51,7 +51,7 @@ betaReduceType cx graph typ =
                 Core.annotatedTypeBody = a,
                 Core.annotatedTypeAnnotation = (Core.annotatedTypeAnnotation v0)}))))
               Core.TypeForall v0 -> (betaReduceType cx graph (Rewriting.replaceFreeTypeVariable (Core.forallTypeParameter v0) rhs (Core.forallTypeBody v0)))
-              Core.TypeVariable v0 -> (Eithers.bind (Eithers.bimap (\ic -> Error.unOtherError (Context.inContextObject ic)) (\x -> x) (Schemas.requireType cx graph v0)) (\t_ -> betaReduceType cx graph (Core.TypeApplication (Core.ApplicationType {
+              Core.TypeVariable v0 -> (Eithers.bind (Schemas.requireType cx graph v0) (\t_ -> betaReduceType cx graph (Core.TypeApplication (Core.ApplicationType {
                 Core.applicationTypeFunction = t_,
                 Core.applicationTypeArgument = rhs}))))) lhs))
   in  

@@ -7303,5 +7303,15 @@
               "domain": {"variable": "hydra.testing.JoinTypesTestCase"}}},
           "variables": []}]}],
   "namespace": "hydra.encode.testing",
-  "termDependencies": ["hydra.encode.core"],
+  "termDependencies": [
+    "hydra.encode.core",
+    "hydra.encode.ast",
+    "hydra.encode.coders",
+    "hydra.encode.compute",
+    "hydra.encode.graph",
+    "hydra.encode.json.model",
+    "hydra.encode.module",
+    "hydra.encode.parsing",
+    "hydra.encode.typing",
+    "hydra.encode.util"],
   "typeDependencies": ["hydra.testing"]}

@@ -915,5 +915,5 @@
               "domain": {"variable": "hydra.module.TypeDefinition"}}},
           "variables": []}]}],
   "namespace": "hydra.encode.module",
-  "termDependencies": ["hydra.encode.core"],
+  "termDependencies": ["hydra.encode.core", "hydra.encode.graph"],
   "typeDependencies": ["hydra.module"]}

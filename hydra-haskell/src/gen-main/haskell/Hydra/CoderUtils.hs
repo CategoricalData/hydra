@@ -124,7 +124,7 @@ isComplexVariable tc name =
   let metaLookup = (Maps.lookup name (Graph.graphMetadata tc))
   in (Logic.ifElse (Maybes.isJust metaLookup) True (Logic.ifElse (Sets.member name (Graph.graphLambdaVariables tc)) True ( 
     let typeLookup = (Maps.lookup name (Graph.graphBoundTypes tc))
-    in (Logic.not (Maybes.isJust typeLookup)))))
+    in (Maybes.maybe True (\ts -> Equality.gt (Arity.typeSchemeArity ts) 0) typeLookup))))
 
 -- | Check if a binding needs to be treated as a function
 isComplexBinding :: (Graph.Graph -> Core.Binding -> Bool)
