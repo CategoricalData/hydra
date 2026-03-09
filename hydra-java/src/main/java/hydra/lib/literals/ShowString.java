@@ -79,27 +79,31 @@ public class ShowString extends PrimitiveFunction {
     private static String escapeHaskell(String str) {
         StringBuilder sb = new StringBuilder();
         boolean lastWasNumericEscape = false;
-        for (int i = 0; i < str.length(); i++) {
-            char c = str.charAt(i);
-            if (lastWasNumericEscape && c >= '0' && c <= '9') {
+        // Iterate over Unicode code points (not UTF-16 code units) so that
+        // characters outside the Basic Multilingual Plane (e.g. emoji) are
+        // emitted as a single \NNNNNN escape rather than a surrogate pair.
+        for (int i = 0; i < str.length(); ) {
+            int cp = str.codePointAt(i);
+            i += Character.charCount(cp);
+            if (lastWasNumericEscape && cp >= '0' && cp <= '9') {
                 sb.append("\\&");
             }
             lastWasNumericEscape = false;
-            if (c == '\\') {
+            if (cp == '\\') {
                 sb.append("\\\\");
-            } else if (c == '"') {
+            } else if (cp == '"') {
                 sb.append("\\\"");
-            } else if (c < 0x20) {
+            } else if (cp < 0x20) {
                 sb.append('\\');
-                sb.append(ASCII_CONTROL_NAMES[c]);
-            } else if (c == 0x7F) {
+                sb.append(ASCII_CONTROL_NAMES[cp]);
+            } else if (cp == 0x7F) {
                 sb.append("\\DEL");
-            } else if (c > 0x7F) {
+            } else if (cp > 0x7F) {
                 sb.append('\\');
-                sb.append((int) c);
+                sb.append(cp);
                 lastWasNumericEscape = true;
             } else {
-                sb.append(c);
+                sb.appendCodePoint(cp);
             }
         }
         return sb.toString();
