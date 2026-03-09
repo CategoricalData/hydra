@@ -45,3 +45,5 @@ tests:
       - HUnit
       - QuickCheck
       - mtl
+      - process
+      - time
