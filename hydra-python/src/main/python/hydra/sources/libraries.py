@@ -119,12 +119,12 @@ def register_eithers_primitives() -> dict[Name, Primitive]:
         qname(namespace, "bind"), eithers.bind, [_x, _y, _z],
         prims.either(x, y), fun(y, prims.either(x, z)), prims.either(x, z)
     )
-    # bimap :: (x -> y) -> (z -> w) -> Either x z -> Either y w
+    # bimap :: (x -> z) -> (y -> w) -> Either x y -> Either z w
     w = prims.variable("w")
     _w = prims.v("w")
     primitives[qname(namespace, "bimap")] = prims.prim3(
         qname(namespace, "bimap"), eithers.bimap, [_x, _y, _z, _w],
-        fun(x, y), fun(z, w), prims.either(x, z), prims.either(y, w)
+        fun(x, z), fun(y, w), prims.either(x, y), prims.either(z, w)
     )
     # either :: (x -> z) -> (y -> z) -> Either x y -> z
     primitives[qname(namespace, "either")] = prims.prim3(
