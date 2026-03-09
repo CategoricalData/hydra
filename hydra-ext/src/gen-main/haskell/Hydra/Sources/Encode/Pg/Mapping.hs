@@ -904,7 +904,9 @@ module_ = Module.Module {
           Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
         Core.typeSchemeConstraints = Nothing}))}],
   Module.moduleTermDependencies = [
-    Module.Namespace "hydra.encode.core"],
+    Module.Namespace "hydra.encode.core",
+    (Module.Namespace "hydra.encode.pg.model"),
+    (Module.Namespace "hydra.encode.compute")],
   Module.moduleTypeDependencies = [
     Module.Namespace "hydra.pg.mapping"],
   Module.moduleDescription = (Just "Term encoders for hydra.pg.mapping")}

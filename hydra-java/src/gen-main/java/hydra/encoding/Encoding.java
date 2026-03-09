@@ -517,9 +517,13 @@ public interface Encoding {
                 graph,
                 b))),
             typeBindings),
-          (java.util.function.Function<java.util.List<hydra.core.Binding>, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.module.Module>>>) (encodedBindings -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.module.Module>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.module.Module>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.module.Module>>right(hydra.util.Maybe.just(new hydra.module.Module(hydra.encoding.Encoding.encodeNamespace((mod).namespace), encodedBindings, hydra.lib.lists.Map.apply(
-            hydra.encoding.Encoding::encodeNamespace,
-            (mod).typeDependencies), java.util.List.of((mod).namespace), hydra.util.Maybe.just(hydra.lib.strings.Cat.apply(java.util.List.of(
+          (java.util.function.Function<java.util.List<hydra.core.Binding>, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.module.Module>>>) (encodedBindings -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.module.Module>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.module.Module>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.module.Module>>right(hydra.util.Maybe.just(new hydra.module.Module(hydra.encoding.Encoding.encodeNamespace((mod).namespace), encodedBindings, hydra.lib.lists.Nub.apply(hydra.lib.lists.Concat2.apply(
+            hydra.lib.lists.Map.apply(
+              hydra.encoding.Encoding::encodeNamespace,
+              (mod).typeDependencies),
+            hydra.lib.lists.Map.apply(
+              hydra.encoding.Encoding::encodeNamespace,
+              (mod).termDependencies))), java.util.List.of((mod).namespace), hydra.util.Maybe.just(hydra.lib.strings.Cat.apply(java.util.List.of(
             "Term encoders for ",
             ((mod).namespace).value)))))))))))));
   }

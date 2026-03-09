@@ -13,21 +13,21 @@ public interface Reduction {
       term);
   }
   
-  static hydra.util.Either<String, hydra.core.Type> betaReduceType(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Type typ) {
-    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.ApplicationType, hydra.util.Either<String, hydra.core.Type>>> reduceApp = new java.util.concurrent.atomic.AtomicReference<>();
-    reduceApp.set((java.util.function.Function<hydra.core.ApplicationType, hydra.util.Either<String, hydra.core.Type>>) (app -> {
+  static hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type> betaReduceType(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Type typ) {
+    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.ApplicationType, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>>> reduceApp = new java.util.concurrent.atomic.AtomicReference<>();
+    reduceApp.set((java.util.function.Function<hydra.core.ApplicationType, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>>) (app -> {
       hydra.core.Type lhs = (app).function;
       hydra.core.Type rhs = (app).argument;
       return (lhs).accept(new hydra.core.Type.PartialVisitor<>() {
         @Override
-        public hydra.util.Either<String, hydra.core.Type> visit(hydra.core.Type.Annotated at) {
+        public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type> visit(hydra.core.Type.Annotated at) {
           return hydra.lib.eithers.Bind.apply(
             (reduceApp.get()).apply(new hydra.core.ApplicationType(((at).value).body, rhs)),
-            (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>) (a -> (hydra.util.Either<String, hydra.core.Type>) ((hydra.util.Either<String, hydra.core.Type>) (hydra.util.Either.<String, hydra.core.Type>right(new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(a, ((at).value).annotation)))))));
+            (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>>) (a -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>right(new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(a, ((at).value).annotation)))))));
         }
         
         @Override
-        public hydra.util.Either<String, hydra.core.Type> visit(hydra.core.Type.Forall ft) {
+        public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type> visit(hydra.core.Type.Forall ft) {
           return hydra.reduction.Reduction.betaReduceType(
             cx,
             graph,
@@ -38,16 +38,13 @@ public interface Reduction {
         }
         
         @Override
-        public hydra.util.Either<String, hydra.core.Type> visit(hydra.core.Type.Variable name) {
+        public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type> visit(hydra.core.Type.Variable name) {
           return hydra.lib.eithers.Bind.apply(
-            hydra.lib.eithers.Bimap.apply(
-              (java.util.function.Function<hydra.context.InContext<hydra.error.OtherError>, String>) (ic -> (((java.util.function.Function<hydra.context.InContext<hydra.error.OtherError>, hydra.error.OtherError>) (projected -> projected.object)).apply(ic)).value),
-              (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (x -> x),
-              hydra.schemas.Schemas.requireType(
-                cx,
-                graph,
-                (name).value)),
-            (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>) (t_ -> hydra.reduction.Reduction.betaReduceType(
+            hydra.schemas.Schemas.requireType(
+              cx,
+              graph,
+              (name).value),
+            (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>>) (t_ -> hydra.reduction.Reduction.betaReduceType(
               cx,
               graph,
               new hydra.core.Type.Application(new hydra.core.ApplicationType(t_, rhs)))));
@@ -55,28 +52,28 @@ public interface Reduction {
       });
     }));
     return hydra.rewriting.Rewriting.rewriteTypeM(
-      (java.util.function.Function<java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>, java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>>) (v1 -> (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>) (v2 -> hydra.reduction.Reduction.betaReduceType_mapExpr(
+      (java.util.function.Function<java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>>, java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>>>) (v1 -> (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>>) (v2 -> hydra.reduction.Reduction.betaReduceType_mapExpr(
         reduceApp.get(),
         v1,
         v2))),
       typ);
   }
   
-  static <T0> hydra.util.Either<String, hydra.core.Type> betaReduceType_mapExpr(java.util.function.Function<hydra.core.ApplicationType, hydra.util.Either<String, hydra.core.Type>> reduceApp, java.util.function.Function<T0, hydra.util.Either<String, hydra.core.Type>> recurse, T0 t) {
-    java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>> findApp = (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>) (r -> (r).accept(new hydra.core.Type.PartialVisitor<>() {
+  static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type> betaReduceType_mapExpr(java.util.function.Function<hydra.core.ApplicationType, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>> reduceApp, java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>> recurse, T0 t) {
+    java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>> findApp = (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>>) (r -> (r).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
-      public hydra.util.Either<String, hydra.core.Type> otherwise(hydra.core.Type instance) {
-        return (hydra.util.Either<String, hydra.core.Type>) ((hydra.util.Either<String, hydra.core.Type>) (hydra.util.Either.<String, hydra.core.Type>right(r)));
+      public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type> otherwise(hydra.core.Type instance) {
+        return (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>right(r)));
       }
       
       @Override
-      public hydra.util.Either<String, hydra.core.Type> visit(hydra.core.Type.Application a) {
+      public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type> visit(hydra.core.Type.Application a) {
         return (reduceApp).apply((a).value);
       }
     }));
     return hydra.lib.eithers.Bind.apply(
       (recurse).apply(t),
-      (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>) (r -> (findApp).apply(r)));
+      (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>>) (r -> (findApp).apply(r)));
   }
   
   static hydra.core.Term contractTerm(hydra.core.Term term) {
