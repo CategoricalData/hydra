@@ -32,11 +32,15 @@ def bind(x: Maybe[A], f: Callable[[A], Maybe[B]]) -> Maybe[B]:
             return f(val)
 
 
-def cases(m: Maybe[A], n: B, j: Callable[[A], B]) -> B:
-    """Handle an optional value with different parameter order than maybe."""
+def cases(m: Maybe[A], n: B | Callable[[], B], j: Callable[[A], B]) -> B:
+    """Handle an optional value with different parameter order than maybe.
+
+    When n is callable (a thunk/lambda), it is only evaluated if m is Nothing.
+    This enables lazy evaluation matching Haskell semantics.
+    """
     match m:
         case Nothing():
-            return n
+            return n() if callable(n) else n  # type: ignore[return-value]
         case Just(val):
             return j(val)
 
@@ -70,13 +74,16 @@ def from_just(x: Maybe[A]) -> A:
             raise ValueError("from_just: Nothing")
 
 
-def from_maybe(default: A, x: Maybe[A]) -> A:
-    """Get a value from an optional value, or return a default value."""
+def from_maybe(default: A | Callable[[], A], x: Maybe[A]) -> A:
+    """Get a value from an optional value, or return a default value.
+
+    When default is callable (a thunk/lambda), it is only evaluated if x is Nothing.
+    """
     match x:
         case Just(val):
             return val
         case Nothing():
-            return default
+            return default() if callable(default) else default  # type: ignore[return-value]
 
 
 def is_just(x: Maybe[Any]) -> bool:
@@ -111,11 +118,14 @@ def map_maybe(f: Callable[[A], Maybe[B]], xs: Sequence[A]) -> frozenlist[B]:
     return tuple(result)
 
 
-def maybe(default: B, f: Callable[[A], B], x: Maybe[A]) -> B:
-    """Handle an optional value, with transformation."""
+def maybe(default: B | Callable[[], B], f: Callable[[A], B], x: Maybe[A]) -> B:
+    """Handle an optional value, with transformation.
+
+    When default is callable (a thunk/lambda), it is only evaluated if x is Nothing.
+    """
     match x:
         case Nothing():
-            return default
+            return default() if callable(default) else default  # type: ignore[return-value]
         case Just(val):
             return f(val)
 
