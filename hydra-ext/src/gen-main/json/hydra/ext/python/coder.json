@@ -362,7 +362,176 @@
                     "lambda": {
                       "body": {
                         "application": {
-                          "argument": {"variable": "args"},
+                          "argument": {
+                            "application": {
+                              "argument": {
+                                "application": {
+                                  "argument": {"variable": "args"},
+                                  "function": {
+                                    "application": {
+                                      "argument": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "args"},
+                                              "function": {
+                                                "typeApplication": {
+                                                  "body": {"function": {"primitive": "hydra.lib.lists.tail"}},
+                                                  "type": {"variable": "hydra.ext.python.syntax.Expression"}}}}},
+                                          "function": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {
+                                                    "application": {
+                                                      "argument": {"variable": "args"},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {"literal": {"integer": {"int32": 0}}},
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {"function": {"primitive": "hydra.lib.lists.at"}},
+                                                              "type": {"variable": "hydra.ext.python.syntax.Expression"}}}}}}},
+                                                  "function": {"variable": "hydra.ext.python.coder.wrapInNullaryLambda"}}},
+                                              "function": {
+                                                "typeApplication": {
+                                                  "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
+                                                  "type": {"variable": "hydra.ext.python.syntax.Expression"}}}}}}},
+                                      "function": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {"literal": {"integer": {"int32": 1}}},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "application": {
+                                                          "argument": {"variable": "args"},
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {"function": {"primitive": "hydra.lib.lists.length"}},
+                                                              "type": {"variable": "hydra.ext.python.syntax.Expression"}}}}},
+                                                      "function": {
+                                                        "typeApplication": {
+                                                          "body": {"function": {"primitive": "hydra.lib.equality.gte"}},
+                                                          "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "wrap": {
+                                                              "body": {"literal": {"string": "hydra.lib.maybes.fromMaybe"}},
+                                                              "typeName": "hydra.core.Name"}},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {"variable": "name"},
+                                                              "function": {
+                                                                "typeApplication": {
+                                                                  "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                                  "type": {"variable": "hydra.core.Name"}}}}}}},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "wrap": {
+                                                                  "body": {"literal": {"string": "hydra.lib.maybes.maybe"}},
+                                                                  "typeName": "hydra.core.Name"}},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {"variable": "name"},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                                      "type": {"variable": "hydra.core.Name"}}}}}}},
+                                                          "function": {"function": {"primitive": "hydra.lib.logic.or"}}}}}},
+                                                  "function": {"function": {"primitive": "hydra.lib.logic.and"}}}}}},
+                                          "function": {
+                                            "typeApplication": {
+                                              "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                              "type": {"list": {"variable": "hydra.ext.python.syntax.Expression"}}}}}}}}}},
+                              "function": {
+                                "application": {
+                                  "argument": {
+                                    "list": [
+                                      {
+                                        "application": {
+                                          "argument": {"variable": "args"},
+                                          "function": {
+                                            "application": {
+                                              "argument": {"literal": {"integer": {"int32": 0}}},
+                                              "function": {
+                                                "typeApplication": {
+                                                  "body": {"function": {"primitive": "hydra.lib.lists.at"}},
+                                                  "type": {"variable": "hydra.ext.python.syntax.Expression"}}}}}}},
+                                      {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "args"},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {"literal": {"integer": {"int32": 1}}},
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {"function": {"primitive": "hydra.lib.lists.at"}},
+                                                      "type": {"variable": "hydra.ext.python.syntax.Expression"}}}}}}},
+                                          "function": {"variable": "hydra.ext.python.coder.wrapInNullaryLambda"}}},
+                                      {
+                                        "application": {
+                                          "argument": {"variable": "args"},
+                                          "function": {
+                                            "application": {
+                                              "argument": {"literal": {"integer": {"int32": 2}}},
+                                              "function": {
+                                                "typeApplication": {
+                                                  "body": {"function": {"primitive": "hydra.lib.lists.at"}},
+                                                  "type": {"variable": "hydra.ext.python.syntax.Expression"}}}}}}}]},
+                                  "function": {
+                                    "application": {
+                                      "argument": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"literal": {"integer": {"int32": 3}}},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {
+                                                    "application": {
+                                                      "argument": {"variable": "args"},
+                                                      "function": {
+                                                        "typeApplication": {
+                                                          "body": {"function": {"primitive": "hydra.lib.lists.length"}},
+                                                          "type": {"variable": "hydra.ext.python.syntax.Expression"}}}}},
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                      "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                          "function": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {
+                                                    "wrap": {
+                                                      "body": {"literal": {"string": "hydra.lib.maybes.cases"}},
+                                                      "typeName": "hydra.core.Name"}},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"variable": "name"},
+                                                      "function": {
+                                                        "typeApplication": {
+                                                          "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                          "type": {"variable": "hydra.core.Name"}}}}}}},
+                                              "function": {"function": {"primitive": "hydra.lib.logic.and"}}}}}},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                          "type": {"list": {"variable": "hydra.ext.python.syntax.Expression"}}}}}}}}}},
                           "function": {
                             "application": {
                               "argument": {
