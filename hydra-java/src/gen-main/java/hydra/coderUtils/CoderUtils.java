@@ -260,7 +260,12 @@ public interface CoderUtils {
           hydra.util.Lazy<hydra.util.Maybe<hydra.core.TypeScheme>> typeLookup = new hydra.util.Lazy<>(() -> hydra.lib.maps.Lookup.apply(
             name,
             (tc).boundTypes));
-          return hydra.lib.logic.Not.apply(hydra.lib.maybes.IsJust.apply(typeLookup.get()));
+          return hydra.lib.maybes.Maybe.applyLazy(
+            () -> true,
+            (java.util.function.Function<hydra.core.TypeScheme, Boolean>) (ts -> hydra.lib.equality.Gt.apply(
+              hydra.arity.Arity.typeSchemeArity(ts),
+              0)),
+            typeLookup.get());
         })).get()));
   }
   

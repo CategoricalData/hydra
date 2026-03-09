@@ -37,10 +37,10 @@ def alpha_convert(vold: hydra.core.Name, vnew: hydra.core.Name, term: hydra.core
     
     return hydra.rewriting.replace_free_term_variable(vold, cast(hydra.core.Term, hydra.core.TermVariable(vnew)), term)
 
-def beta_reduce_type(cx: hydra.context.Context, graph: hydra.graph.Graph, typ: hydra.core.Type) -> Either[str, hydra.core.Type]:
+def beta_reduce_type(cx: hydra.context.Context, graph: hydra.graph.Graph, typ: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Type]:
     r"""Eagerly beta-reduce a type by substituting type arguments into type lambdas."""
     
-    def reduce_app(app: hydra.core.ApplicationType) -> Either[str, hydra.core.Type]:
+    def reduce_app(app: hydra.core.ApplicationType) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Type]:
         lhs = app.function
         rhs = app.argument
         match lhs:
@@ -51,11 +51,11 @@ def beta_reduce_type(cx: hydra.context.Context, graph: hydra.graph.Graph, typ: h
                 return beta_reduce_type(cx, graph, hydra.rewriting.replace_free_type_variable(ft.parameter, rhs, ft.body))
             
             case hydra.core.TypeVariable(value=name):
-                return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda ic: ic.object.value), (lambda x: x), hydra.schemas.require_type(cx, graph, name)), (lambda t_: beta_reduce_type(cx, graph, cast(hydra.core.Type, hydra.core.TypeApplication(hydra.core.ApplicationType(t_, rhs))))))
+                return hydra.lib.eithers.bind(hydra.schemas.require_type(cx, graph, name), (lambda t_: beta_reduce_type(cx, graph, cast(hydra.core.Type, hydra.core.TypeApplication(hydra.core.ApplicationType(t_, rhs))))))
             
             case _:
                 raise TypeError("Unsupported Type")
-    def map_expr(recurse: Callable[[T0], Either[str, hydra.core.Type]], t: T0) -> Either[str, hydra.core.Type]:
+    def map_expr(recurse: Callable[[T0], Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Type]], t: T0) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Type]:
         def find_app(r: hydra.core.Type):
             def _hoist_find_app_1(r, v1):
                 match v1:

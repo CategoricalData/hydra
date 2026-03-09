@@ -125,11 +125,17 @@ def record_field_reference(namespaces: hydra.module.Namespaces[hydra.ext.haskell
     @lru_cache(1)
     def decapitalized() -> str:
         return hydra.formatting.decapitalize(type_name_str())
-    capitalized = hydra.formatting.capitalize(fname_str)
-    nm = hydra.lib.strings.cat2(decapitalized(), capitalized)
-    qual_name = hydra.module.QualifiedName(ns, nm)
-    unqual_name = hydra.names.unqualify_name(qual_name)
-    return element_reference(namespaces, unqual_name)
+    @lru_cache(1)
+    def capitalized() -> str:
+        return hydra.formatting.capitalize(fname_str)
+    @lru_cache(1)
+    def nm() -> str:
+        return hydra.lib.strings.cat2(decapitalized(), capitalized())
+    qual_name = hydra.module.QualifiedName(ns, nm())
+    @lru_cache(1)
+    def unqual_name() -> hydra.core.Name:
+        return hydra.names.unqualify_name(qual_name)
+    return element_reference(namespaces, unqual_name())
 
 def simple_value_binding(hname: hydra.ext.haskell.ast.Name, rhs: hydra.ext.haskell.ast.Expression, bindings: Maybe[hydra.ext.haskell.ast.LocalBindings]) -> hydra.ext.haskell.ast.ValueBinding:
     r"""Create a simple value binding (e.g., 'foo = expr' or 'foo = expr where ...')."""
@@ -161,7 +167,9 @@ def union_field_reference(bound_names: frozenset[hydra.core.Name], namespaces: h
     @lru_cache(1)
     def capitalized_type_name() -> str:
         return hydra.formatting.capitalize(type_name_str())
-    capitalized_field_name = hydra.formatting.capitalize(fname_str)
+    @lru_cache(1)
+    def capitalized_field_name() -> str:
+        return hydra.formatting.capitalize(fname_str)
     def deconflict(name: str) -> str:
         @lru_cache(1)
         def tname() -> hydra.core.Name:
@@ -169,10 +177,12 @@ def union_field_reference(bound_names: frozenset[hydra.core.Name], namespaces: h
         return hydra.lib.logic.if_else(hydra.lib.sets.member(tname(), bound_names), (lambda : deconflict(hydra.lib.strings.cat2(name, "_"))), (lambda : name))
     @lru_cache(1)
     def nm() -> str:
-        return deconflict(hydra.lib.strings.cat2(capitalized_type_name(), capitalized_field_name))
+        return deconflict(hydra.lib.strings.cat2(capitalized_type_name(), capitalized_field_name()))
     qual_name = hydra.module.QualifiedName(ns, nm())
-    unqual_name = hydra.names.unqualify_name(qual_name)
-    return element_reference(namespaces, unqual_name)
+    @lru_cache(1)
+    def unqual_name() -> hydra.core.Name:
+        return hydra.names.unqualify_name(qual_name)
+    return element_reference(namespaces, unqual_name())
 
 def unpack_forall_type(t: hydra.core.Type) -> tuple[frozenlist[hydra.core.Name], hydra.core.Type]:
     r"""Unpack nested forall types into a list of type variables and the inner type."""

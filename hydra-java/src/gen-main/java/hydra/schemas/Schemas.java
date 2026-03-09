@@ -207,18 +207,22 @@ public interface Schemas {
         (b).name,
         s))),
       (g).lambdaVariables,
-      bindings), hydra.lib.lists.Foldl.apply(
-      (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Term>, java.util.function.Function<hydra.core.Binding, java.util.Map<hydra.core.Name, hydra.core.Term>>>) (m -> (java.util.function.Function<hydra.core.Binding, java.util.Map<hydra.core.Name, hydra.core.Term>>) (b -> hydra.lib.maybes.Maybe.applyLazy(
-        () -> hydra.lib.maps.Delete.apply(
-          (b).name,
-          m),
-        (java.util.function.Function<hydra.core.Term, java.util.Map<hydra.core.Name, hydra.core.Term>>) (t -> hydra.lib.maps.Insert.apply(
-          (b).name,
-          t,
-          m)),
-        ((forBinding).apply(g2)).apply(b)))),
-      (g).metadata,
-      bindings), (g).primitives, (g).schemaTypes, (g).typeVariables);
+      bindings), (hydra.lib.lists.Foldl.apply(
+      (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.graph.Graph>>) (gAcc -> (java.util.function.Function<hydra.core.Binding, hydra.graph.Graph>) (b -> {
+        java.util.Map<hydra.core.Name, hydra.core.Term> m = (gAcc).metadata;
+        hydra.util.Lazy<java.util.Map<hydra.core.Name, hydra.core.Term>> newMeta = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+          () -> hydra.lib.maps.Delete.apply(
+            (b).name,
+            m),
+          (java.util.function.Function<hydra.core.Term, java.util.Map<hydra.core.Name, hydra.core.Term>>) (t -> hydra.lib.maps.Insert.apply(
+            (b).name,
+            t,
+            m)),
+          ((forBinding).apply(gAcc)).apply(b)));
+        return new hydra.graph.Graph((gAcc).boundTerms, (gAcc).boundTypes, (gAcc).classConstraints, (gAcc).lambdaVariables, newMeta.get(), (gAcc).primitives, (gAcc).schemaTypes, (gAcc).typeVariables);
+      })),
+      g2,
+      bindings)).metadata, (g).primitives, (g).schemaTypes, (g).typeVariables);
   }
   
   static hydra.graph.Graph extendGraphForTypeLambda(hydra.graph.Graph g, hydra.core.TypeLambda tlam) {

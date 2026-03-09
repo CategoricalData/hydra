@@ -1033,7 +1033,9 @@ def encode_case_block(cx: T0, env: hydra.ext.python.helpers.PythonEnvironment, t
     
     fname = field.name
     fterm = field.term
-    stripped = hydra.rewriting.deannotate_and_detype_term(fterm)
+    @lru_cache(1)
+    def stripped() -> hydra.core.Term:
+        return hydra.rewriting.deannotate_and_detype_term(fterm)
     @lru_cache(1)
     def effective_lambda():
         def _hoist_effective_lambda_1(v1):
@@ -1042,13 +1044,13 @@ def encode_case_block(cx: T0, env: hydra.ext.python.helpers.PythonEnvironment, t
                     return lam
                 
                 case _:
-                    return (synthetic_var2 := hydra.core.Name("_matchValue"), hydra.core.Lambda(synthetic_var2, Nothing(), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(stripped, cast(hydra.core.Term, hydra.core.TermVariable(synthetic_var2)))))))[1]
-        match stripped:
+                    return (synthetic_var2 := hydra.core.Name("_matchValue"), hydra.core.Lambda(synthetic_var2, Nothing(), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(stripped(), cast(hydra.core.Term, hydra.core.TermVariable(synthetic_var2)))))))[1]
+        match stripped():
             case hydra.core.TermFunction(value=f):
                 return _hoist_effective_lambda_1(f)
             
             case _:
-                return (synthetic_var := hydra.core.Name("_matchValue"), hydra.core.Lambda(synthetic_var, Nothing(), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(stripped, cast(hydra.core.Term, hydra.core.TermVariable(synthetic_var)))))))[1]
+                return (synthetic_var := hydra.core.Name("_matchValue"), hydra.core.Lambda(synthetic_var, Nothing(), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(stripped(), cast(hydra.core.Term, hydra.core.TermVariable(synthetic_var)))))))[1]
     v = effective_lambda().parameter
     raw_body = effective_lambda().body
     @lru_cache(1)
