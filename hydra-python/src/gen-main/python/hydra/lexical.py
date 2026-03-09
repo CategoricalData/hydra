@@ -83,7 +83,7 @@ def dereference_schema_type(name: hydra.core.Name, types: FrozenDict[hydra.core.
 def dereference_variable(graph: hydra.graph.Graph, name: hydra.core.Name) -> Either[str, hydra.core.Binding]:
     r"""Look up a binding by name in a graph, returning Either an error or the binding."""
     
-    return hydra.lib.maybes.maybe(Left(hydra.lib.strings.cat2("no such element: ", name.value)), (lambda right_: Right(right_)), lookup_element(graph, name))
+    return hydra.lib.maybes.maybe((lambda : Left(hydra.lib.strings.cat2("no such element: ", name.value))), (lambda right_: Right(right_)), lookup_element(graph, name))
 
 def elements_to_graph(parent: hydra.graph.Graph, schema_types: FrozenDict[hydra.core.Name, hydra.core.TypeScheme], elements: frozenlist[hydra.core.Binding]) -> hydra.graph.Graph:
     r"""Create a graph from a parent graph, schema types, and list of element bindings."""
@@ -130,7 +130,7 @@ def fields_of(t: hydra.core.Type) -> frozenlist[hydra.core.FieldType]:
                 return ()
 
 def get_field(cx: hydra.context.Context, m: FrozenDict[hydra.core.Name, T0], fname: hydra.core.Name, decode: Callable[[T0], Either[hydra.context.InContext[hydra.error.OtherError], T1]]) -> Either[hydra.context.InContext[hydra.error.OtherError], T0]:
-    return hydra.lib.maybes.maybe(Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected field ", fname.value), " not found")), cx)), decode, hydra.lib.maps.lookup(fname, m))
+    return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected field ", fname.value), " not found")), cx))), decode, hydra.lib.maps.lookup(fname, m))
 
 def graph_to_bindings(g: hydra.graph.Graph) -> frozenlist[hydra.core.Binding]:
     r"""Reconstruct a list of Bindings from a Graph's boundTerms and boundTypes."""
@@ -154,7 +154,7 @@ def require_element(cx: hydra.context.Context, graph: hydra.graph.Graph, name: h
     @lru_cache(1)
     def err_msg() -> str:
         return hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("no such element: ", name.value), ". Available elements: {"), hydra.lib.strings.intercalate(", ", ellipsis(hydra.lib.lists.map((lambda v1: v1.value), hydra.lib.maps.keys(graph.bound_terms))))), "}")
-    return hydra.lib.maybes.maybe(Left(hydra.context.InContext(hydra.error.OtherError(err_msg()), cx)), (lambda x: Right(x)), dereference_element(graph, name))
+    return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(hydra.error.OtherError(err_msg()), cx))), (lambda x: Right(x)), dereference_element(graph, name))
 
 def match_union(cx: hydra.context.Context, graph: hydra.graph.Graph, tname: hydra.core.Name, pairs: frozenlist[tuple[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.context.InContext[hydra.error.OtherError], T0]]]], term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], T0]:
     @lru_cache(1)
@@ -172,7 +172,7 @@ def match_union(cx: hydra.context.Context, graph: hydra.graph.Graph, tname: hydr
             def exp() -> Either[hydra.context.InContext[hydra.error.OtherError], T0]:
                 fname = injection.field.name
                 val = injection.field.term
-                return hydra.lib.maybes.maybe(Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("no matching case for field \"", fname.value), "\" in union type "), tname.value)), cx)), (lambda f: f(val)), hydra.lib.maps.lookup(fname, mapping()))
+                return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("no matching case for field \"", fname.value), "\" in union type "), tname.value)), cx))), (lambda f: f(val)), hydra.lib.maps.lookup(fname, mapping()))
             return hydra.lib.logic.if_else(hydra.lib.equality.equal(injection.type_name.value, tname.value), (lambda : exp()), (lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected injection for type ", tname.value), ", got "), hydra.show.core.term(term))), cx))))
         
         case _:
@@ -196,13 +196,13 @@ def match_record(cx: hydra.context.Context, graph: T0, decode: Callable[[FrozenD
             return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("expected a record, got ", hydra.show.core.term(term))), cx))
 
 def require_primitive(cx: hydra.context.Context, graph: hydra.graph.Graph, name: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.graph.Primitive]:
-    return hydra.lib.maybes.maybe(Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("no such primitive function: ", name.value)), cx)), (lambda x: Right(x)), lookup_primitive(graph, name))
+    return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("no such primitive function: ", name.value)), cx))), (lambda x: Right(x)), lookup_primitive(graph, name))
 
 def require_primitive_type(cx: hydra.context.Context, tx: hydra.graph.Graph, name: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.TypeScheme]:
     @lru_cache(1)
     def mts() -> Maybe[hydra.core.TypeScheme]:
         return hydra.lib.maps.lookup(name, hydra.lib.maps.from_list(hydra.lib.lists.map((lambda _gpt_p: (_gpt_p.name, _gpt_p.type)), hydra.lib.maps.elems(tx.primitives))))
-    return hydra.lib.maybes.maybe(Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("no such primitive function: ", name.value)), cx)), (lambda ts: Right(ts)), mts())
+    return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("no such primitive function: ", name.value)), cx))), (lambda ts: Right(ts)), mts())
 
 def resolve_term(graph: hydra.graph.Graph, name: hydra.core.Name) -> Maybe[hydra.core.Term]:
     r"""TODO: distinguish between lambda-bound and let-bound variables."""
@@ -217,10 +217,10 @@ def resolve_term(graph: hydra.graph.Graph, name: hydra.core.Name) -> Maybe[hydra
             
             case _:
                 return Just(term)
-    return hydra.lib.maybes.maybe(Nothing(), (lambda x1: recurse(x1)), lookup_term(graph, name))
+    return hydra.lib.maybes.maybe((lambda : Nothing()), (lambda x1: recurse(x1)), lookup_term(graph, name))
 
 def require_term(cx: hydra.context.Context, graph: hydra.graph.Graph, name: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Term]:
-    return hydra.lib.maybes.maybe(Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("no such element: ", name.value)), cx)), (lambda x: Right(x)), resolve_term(graph, name))
+    return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("no such element: ", name.value)), cx))), (lambda x: Right(x)), resolve_term(graph, name))
 
 def strip_and_dereference_term(cx: hydra.context.Context, graph: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Term]:
     @lru_cache(1)

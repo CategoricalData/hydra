@@ -409,7 +409,7 @@ def maybe_term(cx: hydra.context.Context, f: Callable[[hydra.core.Term], Either[
     def _hoist_hydra_extract_core_maybe_term_1(cx, f, term, v1):
         match v1:
             case hydra.core.TermMaybe(value=mt):
-                return hydra.lib.maybes.maybe(Right(Nothing()), (lambda t: hydra.lib.eithers.map((lambda x1: hydra.lib.maybes.pure(x1)), f(t))), mt)
+                return hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda t: hydra.lib.eithers.map((lambda x1: hydra.lib.maybes.pure(x1)), f(t))), mt)
             
             case _:
                 return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "maybe value"), " but found "), hydra.show.core.term(term))), cx))

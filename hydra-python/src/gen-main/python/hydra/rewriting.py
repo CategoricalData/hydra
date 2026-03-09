@@ -325,13 +325,13 @@ def substitute_variables(subst: FrozenDict[hydra.core.Name, hydra.core.Name], te
         def _hoist_replace_1(recurse, term2, v1):
             match v1:
                 case hydra.core.FunctionLambda(value=l):
-                    return hydra.lib.maybes.maybe(recurse(term2), (lambda _: term2), hydra.lib.maps.lookup(l.parameter, subst))
+                    return hydra.lib.maybes.maybe((lambda : recurse(term2)), (lambda _: term2), hydra.lib.maps.lookup(l.parameter, subst))
                 
                 case _:
                     return recurse(term2)
         match term2:
             case hydra.core.TermVariable(value=n):
-                return cast(hydra.core.Term, hydra.core.TermVariable(hydra.lib.maybes.from_maybe(n, hydra.lib.maps.lookup(n, subst))))
+                return cast(hydra.core.Term, hydra.core.TermVariable(hydra.lib.maybes.from_maybe((lambda : n), hydra.lib.maps.lookup(n, subst))))
             
             case hydra.core.TermFunction(value=_match_value):
                 return _hoist_replace_1(recurse, term2, _match_value)
@@ -441,7 +441,7 @@ def subterms(v1: hydra.core.Term) -> frozenlist[hydra.core.Term]:
                 case hydra.core.FunctionElimination(value=v13):
                     match v13:
                         case hydra.core.EliminationUnion(value=cs):
-                            return hydra.lib.lists.concat2(hydra.lib.maybes.maybe((), (lambda t: (t,)), cs.default), hydra.lib.lists.map((lambda v1: v1.term), cs.cases))
+                            return hydra.lib.lists.concat2(hydra.lib.maybes.maybe((lambda : ()), (lambda t: (t,)), cs.default), hydra.lib.lists.map((lambda v1: v1.term), cs.cases))
                         
                         case _:
                             return ()
@@ -465,7 +465,7 @@ def subterms(v1: hydra.core.Term) -> frozenlist[hydra.core.Term]:
             return hydra.lib.lists.concat(hydra.lib.lists.map((lambda p: (hydra.lib.pairs.first(p), hydra.lib.pairs.second(p))), hydra.lib.maps.to_list(m)))
         
         case hydra.core.TermMaybe(value=m2):
-            return hydra.lib.maybes.maybe((), (lambda t: (t,)), m2)
+            return hydra.lib.maybes.maybe((lambda : ()), (lambda t: (t,)), m2)
         
         case hydra.core.TermPair(value=p2):
             return (hydra.lib.pairs.first(p2), hydra.lib.pairs.second(p2))
@@ -615,7 +615,7 @@ def free_type_variables_in_term(term0: hydra.core.Term) -> frozenset[hydra.core.
                 case hydra.core.FunctionLambda(value=l):
                     @lru_cache(1)
                     def domt() -> frozenset[hydra.core.Name]:
-                        return hydra.lib.maybes.maybe(hydra.lib.sets.empty(), (lambda v12: try_type(vars, v12)), l.domain)
+                        return hydra.lib.maybes.maybe((lambda : hydra.lib.sets.empty()), (lambda v12: try_type(vars, v12)), l.domain)
                     return hydra.lib.sets.union(domt(), recurse(l.body))
                 
                 case _:
@@ -628,8 +628,8 @@ def free_type_variables_in_term(term0: hydra.core.Term) -> frozenset[hydra.core.
                 def for_binding(b: hydra.core.Binding) -> frozenset[hydra.core.Name]:
                     @lru_cache(1)
                     def new_vars() -> frozenset[hydra.core.Name]:
-                        return hydra.lib.maybes.maybe(vars, (lambda ts: hydra.lib.sets.union(vars, hydra.lib.sets.from_list(ts.variables))), b.type)
-                    return hydra.lib.sets.union(get_all(new_vars(), b.term), hydra.lib.maybes.maybe(hydra.lib.sets.empty(), (lambda ts: try_type(new_vars(), ts.type)), b.type))
+                        return hydra.lib.maybes.maybe((lambda : vars), (lambda ts: hydra.lib.sets.union(vars, hydra.lib.sets.from_list(ts.variables))), b.type)
+                    return hydra.lib.sets.union(get_all(new_vars(), b.term), hydra.lib.maybes.maybe((lambda : hydra.lib.sets.empty()), (lambda ts: try_type(new_vars(), ts.type)), b.type))
                 return hydra.lib.sets.union(all_of(hydra.lib.lists.map((lambda x1: for_binding(x1)), l.bindings)), recurse(l.body))
             
             case hydra.core.TermTypeApplication(value=tt):
@@ -786,7 +786,7 @@ def inline_type(schema: FrozenDict[hydra.core.Name, hydra.core.Type], typ: hydra
             def _hoist_after_recurse_1(tr, v1):
                 match v1:
                     case hydra.core.TypeVariable(value=v):
-                        return hydra.lib.maybes.maybe(Left(hydra.lib.strings.cat2("No such type in schema: ", v.value)), (lambda v12: inline_type(schema, v12)), hydra.lib.maps.lookup(v, schema))
+                        return hydra.lib.maybes.maybe((lambda : Left(hydra.lib.strings.cat2("No such type in schema: ", v.value))), (lambda v12: inline_type(schema, v12)), hydra.lib.maps.lookup(v, schema))
                     
                     case _:
                         return Right(tr)
@@ -869,7 +869,7 @@ def normalize_type_variables_in_term(term: hydra.core.Term) -> hydra.core.Term:
     r"""Recursively replace the type variables of let bindings with the systematic type variables t0, t1, t2, ..."""
     
     def replace_name(subst: FrozenDict[T0, T0], v: T0) -> T0:
-        return hydra.lib.maybes.from_maybe(v, hydra.lib.maps.lookup(v, subst))
+        return hydra.lib.maybes.from_maybe((lambda : v), hydra.lib.maps.lookup(v, subst))
     def subst_type(subst: FrozenDict[hydra.core.Name, hydra.core.Name], typ: hydra.core.Type) -> hydra.core.Type:
         def rewrite(recurse: Callable[[hydra.core.Type], hydra.core.Type], typ2: hydra.core.Type) -> hydra.core.Type:
             match typ2:
@@ -949,7 +949,7 @@ def normalize_type_variables_in_term(term: hydra.core.Term) -> hydra.core.Term:
                             def new_val() -> hydra.core.Term:
                                 return rewrite_with_subst(((new_subst(), new_bound()), hydra.lib.math.add(next(), k())), b().term)
                             def rename_constraint_keys(constraint_map: FrozenDict[hydra.core.Name, T0]) -> FrozenDict[hydra.core.Name, T0]:
-                                return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda p: (old_name := hydra.lib.pairs.first(p), meta := hydra.lib.pairs.second(p), new_name := hydra.lib.maybes.from_maybe(old_name, hydra.lib.maps.lookup(old_name, new_subst())), (new_name, meta))[3]), hydra.lib.maps.to_list(constraint_map)))
+                                return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda p: (old_name := hydra.lib.pairs.first(p), meta := hydra.lib.pairs.second(p), new_name := hydra.lib.maybes.from_maybe((lambda : old_name), hydra.lib.maps.lookup(old_name, new_subst())), (new_name, meta))[3]), hydra.lib.maps.to_list(constraint_map)))
                             old_constraints = ts.constraints
                             @lru_cache(1)
                             def new_constraints() -> Maybe[FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]]:
@@ -958,7 +958,7 @@ def normalize_type_variables_in_term(term: hydra.core.Term) -> hydra.core.Term:
                             def b1() -> hydra.core.Binding:
                                 return hydra.core.Binding(b().name, new_val(), Just(hydra.core.TypeScheme(new_vars(), subst_type(new_subst(), typ), new_constraints())))
                             return step(hydra.lib.lists.cons(b1(), acc), tl())
-                        return hydra.lib.logic.if_else(hydra.lib.lists.null(bs), (lambda : hydra.lib.lists.reverse(acc)), (lambda : hydra.lib.maybes.maybe(no_type(), (lambda ts: with_type(ts)), b().type)))
+                        return hydra.lib.logic.if_else(hydra.lib.lists.null(bs), (lambda : hydra.lib.lists.reverse(acc)), (lambda : hydra.lib.maybes.maybe((lambda : no_type()), (lambda ts: with_type(ts)), b().type)))
                     @lru_cache(1)
                     def bindings1() -> frozenlist[hydra.core.Binding]:
                         return step((), bindings0)
@@ -1158,7 +1158,7 @@ def replace_typedefs(types: FrozenDict[hydra.core.Name, hydra.core.TypeScheme], 
                 def for_type_scheme(ts: hydra.core.TypeScheme) -> hydra.core.Type:
                     t = ts.type
                     return hydra.lib.logic.if_else(hydra.lib.lists.null(ts.variables), (lambda : for_mono(t)), (lambda : typ))
-                return hydra.lib.maybes.maybe(typ, (lambda ts: for_type_scheme(ts)), hydra.lib.maps.lookup(v, types))
+                return hydra.lib.maybes.maybe((lambda : typ), (lambda ts: for_type_scheme(ts)), hydra.lib.maps.lookup(v, types))
             
             case hydra.core.TypeWrap():
                 return typ
@@ -1215,7 +1215,7 @@ def rewrite_and_fold_term(f: Callable[[
                                 return hydra.lib.maybes.map((lambda v12: recurse(val, v12)), cs.default)
                             @lru_cache(1)
                             def val1() -> tuple[T1, hydra.core.Term]:
-                                return hydra.lib.maybes.maybe(val, (lambda x1: hydra.lib.pairs.first(x1)), rmd())
+                                return hydra.lib.maybes.maybe((lambda : val), (lambda x1: hydra.lib.pairs.first(x1)), rmd())
                             @lru_cache(1)
                             def rcases() -> tuple[T1, frozenlist[hydra.core.Field]]:
                                 return for_fields(val1(), cs.cases)
@@ -1279,7 +1279,7 @@ def rewrite_and_fold_term(f: Callable[[
                     return for_many((lambda x1, x2: for_pair(x1, x2)), (lambda pairs: cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.from_list(pairs)))), val0, hydra.lib.maps.to_list(m))
                 
                 case hydra.core.TermMaybe(value=mt):
-                    return hydra.lib.maybes.maybe(dflt(), (lambda t: for_single(recurse, (lambda t1: cast(hydra.core.Term, hydra.core.TermMaybe(Just(t1)))), val0, t)), mt)
+                    return hydra.lib.maybes.maybe((lambda : dflt()), (lambda t: for_single(recurse, (lambda t1: cast(hydra.core.Term, hydra.core.TermMaybe(Just(t1)))), val0, t)), mt)
                 
                 case hydra.core.TermPair(value=p):
                     @lru_cache(1)
@@ -1364,7 +1364,7 @@ def rewrite_and_fold_term_with_path(f: Callable[[
                                 return hydra.lib.maybes.map((lambda def_: recurse(hydra.lib.lists.concat2(path, (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorUnionCasesDefault()),)), val, def_)), cs.default)
                             @lru_cache(1)
                             def val1() -> tuple[T1, hydra.core.Term]:
-                                return hydra.lib.maybes.maybe(val, (lambda x1: hydra.lib.pairs.first(x1)), rmd())
+                                return hydra.lib.maybes.maybe((lambda : val), (lambda x1: hydra.lib.pairs.first(x1)), rmd())
                             @lru_cache(1)
                             def rcases() -> tuple[T1, frozenlist[hydra.core.Term]]:
                                 return for_many_with_accessors(recurse, (lambda x: x), val1(), hydra.lib.lists.map((lambda f2: (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorUnionCasesBranch(f2.name)), f2.term)), cs.cases))
@@ -1442,7 +1442,7 @@ def rewrite_and_fold_term_with_path(f: Callable[[
                     return (hydra.lib.pairs.first(hydra.lib.pairs.second(rr())), cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.from_list(hydra.lib.lists.reverse(hydra.lib.pairs.second(hydra.lib.pairs.second(rr())))))))
                 
                 case hydra.core.TermMaybe(value=mt):
-                    return hydra.lib.maybes.maybe(dflt(), (lambda t: for_single_with_accessor(recurse, (lambda t1: cast(hydra.core.Term, hydra.core.TermMaybe(Just(t1)))), cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorMaybeTerm()), val0, t)), mt)
+                    return hydra.lib.maybes.maybe((lambda : dflt()), (lambda t: for_single_with_accessor(recurse, (lambda t1: cast(hydra.core.Term, hydra.core.TermMaybe(Just(t1)))), cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorMaybeTerm()), val0, t)), mt)
                 
                 case hydra.core.TermPair(value=p):
                     @lru_cache(1)
@@ -1519,7 +1519,7 @@ def rewrite_term_m(f: Callable[[
                                     n = cs.type_name
                                     def_ = cs.default
                                     cases = cs.cases
-                                    return hydra.lib.eithers.bind(hydra.lib.maybes.maybe(Right(Nothing()), (lambda t: hydra.lib.eithers.map((lambda x1: hydra.lib.maybes.pure(x1)), recurse(t))), def_), (lambda rdef: hydra.lib.eithers.map((lambda rcases: cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(n, rdef, rcases)))))), hydra.lib.eithers.map_list((lambda x1: for_field(x1)), cases))))
+                                    return hydra.lib.eithers.bind(hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda t: hydra.lib.eithers.map((lambda x1: hydra.lib.maybes.pure(x1)), recurse(t))), def_), (lambda rdef: hydra.lib.eithers.map((lambda rcases: cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(n, rdef, rcases)))))), hydra.lib.eithers.map_list((lambda x1: for_field(x1)), cases))))
                                 
                                 case hydra.core.EliminationWrap(value=name):
                                     return Right(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationWrap(name)))))
@@ -1741,7 +1741,7 @@ def rewrite_term_with_context_m(f: Callable[[
                         n = cs.type_name
                         def_ = cs.default
                         cases = cs.cases
-                        return hydra.lib.eithers.bind(hydra.lib.maybes.maybe(Right(Nothing()), (lambda t: hydra.lib.eithers.map((lambda x1: hydra.lib.maybes.pure(x1)), recurse(t))), def_), (lambda rdef: hydra.lib.eithers.map((lambda rcases: cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(n, rdef, rcases)))))), hydra.lib.eithers.map_list((lambda x1: for_field(x1)), cases))))
+                        return hydra.lib.eithers.bind(hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda t: hydra.lib.eithers.map((lambda x1: hydra.lib.maybes.pure(x1)), recurse(t))), def_), (lambda rdef: hydra.lib.eithers.map((lambda rcases: cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(n, rdef, rcases)))))), hydra.lib.eithers.map_list((lambda x1: for_field(x1)), cases))))
                     
                     case hydra.core.EliminationWrap(value=name):
                         return Right(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationWrap(name)))))
@@ -1935,7 +1935,7 @@ def substitute_type_variables(subst: FrozenDict[hydra.core.Name, hydra.core.Name
     def replace(recurse: Callable[[hydra.core.Type], hydra.core.Type], typ2: hydra.core.Type) -> hydra.core.Type:
         match typ2:
             case hydra.core.TypeVariable(value=n):
-                return cast(hydra.core.Type, hydra.core.TypeVariable(hydra.lib.maybes.from_maybe(n, hydra.lib.maps.lookup(n, subst))))
+                return cast(hydra.core.Type, hydra.core.TypeVariable(hydra.lib.maybes.from_maybe((lambda : n), hydra.lib.maps.lookup(n, subst))))
             
             case _:
                 return recurse(typ2)
@@ -1959,7 +1959,7 @@ def subterms_with_accessors(v1: hydra.core.Term) -> frozenlist[tuple[hydra.acces
                 case hydra.core.FunctionElimination(value=v13):
                     match v13:
                         case hydra.core.EliminationUnion(value=cs):
-                            return hydra.lib.lists.concat2(hydra.lib.maybes.maybe((), (lambda t: ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorUnionCasesDefault()), t),)), cs.default), hydra.lib.lists.map((lambda f: (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorUnionCasesBranch(f.name)), f.term)), cs.cases))
+                            return hydra.lib.lists.concat2(hydra.lib.maybes.maybe((lambda : ()), (lambda t: ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorUnionCasesDefault()), t),)), cs.default), hydra.lib.lists.map((lambda f: (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorUnionCasesBranch(f.name)), f.term)), cs.cases))
                         
                         case _:
                             return ()
@@ -1983,7 +1983,7 @@ def subterms_with_accessors(v1: hydra.core.Term) -> frozenlist[tuple[hydra.acces
             return hydra.lib.lists.concat(hydra.lib.lists.map((lambda p: ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorMapKey(0)), hydra.lib.pairs.first(p)), (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorMapValue(0)), hydra.lib.pairs.second(p)))), hydra.lib.maps.to_list(m)))
         
         case hydra.core.TermMaybe(value=m2):
-            return hydra.lib.maybes.maybe((), (lambda t: ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorMaybeTerm()), t),)), m2)
+            return hydra.lib.maybes.maybe((lambda : ()), (lambda t: ((cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorMaybeTerm()), t),)), m2)
         
         case hydra.core.TermPair():
             return ()
@@ -2077,7 +2077,7 @@ def to_short_names(original: frozenlist[hydra.core.Name]) -> FrozenDict[hydra.co
             return hydra.names.local_name_of(name)
         @lru_cache(1)
         def group() -> frozenset[hydra.core.Name]:
-            return hydra.lib.maybes.from_maybe(hydra.lib.sets.empty(), hydra.lib.maps.lookup(local(), acc))
+            return hydra.lib.maybes.from_maybe((lambda : hydra.lib.sets.empty()), hydra.lib.maps.lookup(local(), acc))
         return hydra.lib.maps.insert(local(), hydra.lib.sets.insert(name, group()), acc)
     def group_names_by_local(names: frozenlist[hydra.core.Name]) -> FrozenDict[str, frozenset[hydra.core.Name]]:
         return hydra.lib.lists.foldl((lambda x1, x2: add_name(x1, x2)), hydra.lib.maps.empty(), names)
@@ -2125,7 +2125,7 @@ def topological_sort_binding_map(binding_map: FrozenDict[hydra.core.Name, hydra.
             return hydra.lib.pairs.second(name_and_term)
         return (name(), hydra.lib.logic.if_else(has_type_annotation(term()), (lambda : ()), (lambda : hydra.lib.sets.to_list(hydra.lib.sets.intersection(keys(), free_variables_in_term(term()))))))
     def to_pair(name: hydra.core.Name) -> tuple[hydra.core.Name, hydra.core.Term]:
-        return (name, hydra.lib.maybes.from_maybe(cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("Impossible!")))), hydra.lib.maps.lookup(name, binding_map)))
+        return (name, hydra.lib.maybes.from_maybe((lambda : cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("Impossible!"))))), hydra.lib.maps.lookup(name, binding_map)))
     return hydra.lib.lists.map((lambda v1: hydra.lib.lists.map((lambda x1: to_pair(x1)), v1)), hydra.sorting.topological_sort_components(hydra.lib.lists.map((lambda x1: deps_of(x1)), bindings())))
 
 def topological_sort_bindings(els: frozenlist[hydra.core.Binding]) -> Either[frozenlist[frozenlist[hydra.core.Name]], frozenlist[hydra.core.Name]]:
@@ -2194,7 +2194,7 @@ def unshadow_variables(term0: hydra.core.Term) -> hydra.core.Term:
                 return recurse(m2(), term)
             
             case hydra.core.TermVariable(value=v):
-                return cast(hydra.core.Term, hydra.core.TermVariable(hydra.lib.maybes.maybe(v, (lambda renamed: renamed), hydra.lib.maps.lookup(v, m))))
+                return cast(hydra.core.Term, hydra.core.TermVariable(hydra.lib.maybes.maybe((lambda : v), (lambda renamed: renamed), hydra.lib.maps.lookup(v, m))))
             
             case _:
                 return recurse(m, term)

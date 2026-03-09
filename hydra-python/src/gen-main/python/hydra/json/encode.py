@@ -119,7 +119,7 @@ def to_json(term: hydra.core.Term) -> Either[str, hydra.json.model.Value]:
             return hydra.lib.eithers.map((lambda vs: cast(hydra.json.model.Value, hydra.json.model.ValueArray(vs))), results())
         
         case hydra.core.TermMaybe(value=opt):
-            return hydra.lib.maybes.maybe(Right(cast(hydra.json.model.Value, hydra.json.model.ValueNull())), (lambda v: (encoded_maybe := to_json(v), hydra.lib.eithers.map((lambda encoded: cast(hydra.json.model.Value, hydra.json.model.ValueArray((encoded,)))), encoded_maybe))[1]), opt)
+            return hydra.lib.maybes.maybe((lambda : Right(cast(hydra.json.model.Value, hydra.json.model.ValueNull()))), (lambda v: (encoded_maybe := to_json(v), hydra.lib.eithers.map((lambda encoded: cast(hydra.json.model.Value, hydra.json.model.ValueArray((encoded,)))), encoded_maybe))[1]), opt)
         
         case hydra.core.TermRecord(value=r):
             def encode_field(f: hydra.core.Field) -> Either[str, tuple[str, hydra.json.model.Value]]:

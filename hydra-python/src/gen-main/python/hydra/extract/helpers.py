@@ -105,7 +105,7 @@ def decode_wrapped(body_decoder: Callable[[hydra.graph.Graph, hydra.core.Term], 
 def require_field(field_name: str, decoder: Callable[[T0, T1], Either[hydra.error.DecodingError, T2]], field_map: FrozenDict[hydra.core.Name, T1], g: T0) -> Either[hydra.error.DecodingError, T2]:
     r"""Require a field from a record's field map and decode it."""
     
-    return hydra.lib.maybes.maybe(Left(hydra.error.DecodingError(hydra.lib.strings.cat(("missing field ", field_name, " in record")))), (lambda field_term: decoder(g, field_term)), hydra.lib.maps.lookup(hydra.core.Name(field_name), field_map))
+    return hydra.lib.maybes.maybe((lambda : Left(hydra.error.DecodingError(hydra.lib.strings.cat(("missing field ", field_name, " in record"))))), (lambda field_term: decoder(g, field_term)), hydra.lib.maps.lookup(hydra.core.Name(field_name), field_map))
 
 def to_field_map(record: hydra.core.Record) -> FrozenDict[hydra.core.Name, hydra.core.Term]:
     r"""Convert a Record's fields to a Map from Name to Term."""

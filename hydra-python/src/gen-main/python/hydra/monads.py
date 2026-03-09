@@ -23,4 +23,4 @@ def empty_context() -> hydra.context.Context:
 def maybe_to_list(mx: Maybe[T0]) -> frozenlist[T0]:
     r"""Converts an optional value either to an empty list (if nothing) or a singleton list (if just)."""
     
-    return hydra.lib.maybes.maybe((), (lambda x1: hydra.lib.lists.pure(x1)), mx)
+    return hydra.lib.maybes.maybe((lambda : ()), (lambda x1: hydra.lib.lists.pure(x1)), mx)

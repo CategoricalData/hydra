@@ -108,7 +108,7 @@ def name_to_file_path(ns_conv: hydra.util.CaseConvention, local_conv: hydra.util
         return hydra.lib.strings.intercalate("/", hydra.lib.lists.map((lambda part: hydra.formatting.convert_case(hydra.util.CaseConvention.CAMEL, ns_conv, part)), hydra.lib.strings.split_on(".", ns2.value)))
     @lru_cache(1)
     def prefix() -> str:
-        return hydra.lib.maybes.maybe("", (lambda n: hydra.lib.strings.cat2(ns_to_file_path(n), "/")), ns)
+        return hydra.lib.maybes.maybe((lambda : ""), (lambda n: hydra.lib.strings.cat2(ns_to_file_path(n), "/")), ns)
     @lru_cache(1)
     def suffix() -> str:
         return hydra.formatting.convert_case(hydra.util.CaseConvention.PASCAL, local_conv, local)

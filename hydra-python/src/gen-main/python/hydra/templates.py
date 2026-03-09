@@ -139,7 +139,7 @@ def instantiate_template(cx: hydra.context.Context, minimal: bool, schema: Froze
             return hydra.lib.logic.if_else(minimal, (lambda : Right(cast(hydra.core.Term, hydra.core.TermSet(hydra.lib.sets.empty())))), (lambda : hydra.lib.eithers.bind(inst(et2), (lambda e: Right(cast(hydra.core.Term, hydra.core.TermSet(hydra.lib.sets.from_list((e,)))))))))
         
         case hydra.core.TypeVariable(value=tname):
-            return hydra.lib.maybes.maybe(Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("Type variable ", hydra.lib.strings.cat2(hydra.show.core.term(cast(hydra.core.Term, hydra.core.TermVariable(tname))), " not found in schema"))), cx)), (lambda x1: inst(x1)), hydra.lib.maps.lookup(tname, schema))
+            return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("Type variable ", hydra.lib.strings.cat2(hydra.show.core.term(cast(hydra.core.Term, hydra.core.TermVariable(tname))), " not found in schema"))), cx))), (lambda x1: inst(x1)), hydra.lib.maps.lookup(tname, schema))
         
         case hydra.core.TypeWrap(value=wt):
             tname = wt.type_name

@@ -41,7 +41,7 @@ def bind(cx: hydra.context.Context, g: T0, opt_term: hydra.core.Term, fun_term: 
     
     match opt_term:
         case hydra.core.TermMaybe(value=m):
-            return Right(hydra.lib.maybes.maybe(cast(hydra.core.Term, hydra.core.TermMaybe(Nothing())), (lambda val: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, val)))), m))
+            return Right(hydra.lib.maybes.maybe((lambda : cast(hydra.core.Term, hydra.core.TermMaybe(Nothing()))), (lambda val: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, val)))), m))
         
         case _:
             return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "optional value"), " but found "), hydra.show.core.term(opt_term))), cx))
@@ -51,7 +51,7 @@ def cases(cx: hydra.context.Context, g: T0, opt_term: hydra.core.Term, default_t
     
     match opt_term:
         case hydra.core.TermMaybe(value=m):
-            return Right(hydra.lib.maybes.maybe(default_term, (lambda val: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, val)))), m))
+            return Right(hydra.lib.maybes.maybe((lambda : default_term), (lambda val: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, val)))), m))
         
         case _:
             return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "optional value"), " but found "), hydra.show.core.term(opt_term))), cx))
@@ -81,7 +81,7 @@ def maybe(cx: hydra.context.Context, g: T0, default_term: hydra.core.Term, fun_t
     
     match opt_term:
         case hydra.core.TermMaybe(value=m):
-            return Right(hydra.lib.maybes.maybe(default_term, (lambda val: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, val)))), m))
+            return Right(hydra.lib.maybes.maybe((lambda : default_term), (lambda val: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, val)))), m))
         
         case _:
             return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "optional value"), " but found "), hydra.show.core.term(opt_term))), cx))

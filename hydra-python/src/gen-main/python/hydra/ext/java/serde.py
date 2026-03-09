@@ -67,7 +67,7 @@ def single_line_comment(c: str) -> hydra.ast.Expr:
 def with_comments(mc: Maybe[str], expr: hydra.ast.Expr) -> hydra.ast.Expr:
     r"""Wrap an expression with optional Javadoc comments."""
     
-    return hydra.lib.maybes.maybe(expr, (lambda c: hydra.serialization.newline_sep((hydra.serialization.cst(hydra.lib.strings.cat2("/**\n", hydra.lib.strings.cat2(hydra.lib.strings.intercalate("\n", hydra.lib.lists.map((lambda l: hydra.lib.strings.cat2(" * ", l)), hydra.lib.strings.lines(sanitize_java_comment(c)))), "\n */"))), expr))), mc)
+    return hydra.lib.maybes.maybe((lambda : expr), (lambda c: hydra.serialization.newline_sep((hydra.serialization.cst(hydra.lib.strings.cat2("/**\n", hydra.lib.strings.cat2(hydra.lib.strings.intercalate("\n", hydra.lib.lists.map((lambda l: hydra.lib.strings.cat2(" * ", l)), hydra.lib.strings.lines(sanitize_java_comment(c)))), "\n */"))), expr))), mc)
 
 def write_identifier(id: hydra.ext.java.syntax.Identifier) -> hydra.ast.Expr:
     return hydra.serialization.cst(id.value)
@@ -485,7 +485,7 @@ def write_class_declaration(d: hydra.ext.java.syntax.ClassDeclaration) -> hydra.
 def write_class_instance_creation_expression(cice: hydra.ext.java.syntax.ClassInstanceCreationExpression) -> hydra.ast.Expr:
     mqual = cice.qualifier
     e = cice.expression
-    return hydra.lib.maybes.maybe(write_unqualified_class_instance_creation_expression(e), (lambda q: hydra.serialization.dot_sep((write_class_instance_creation_expression_qualifier(q), write_unqualified_class_instance_creation_expression(e)))), mqual)
+    return hydra.lib.maybes.maybe((lambda : write_unqualified_class_instance_creation_expression(e)), (lambda q: hydra.serialization.dot_sep((write_class_instance_creation_expression_qualifier(q), write_unqualified_class_instance_creation_expression(e)))), mqual)
 
 def write_class_instance_creation_expression_qualifier(q: hydra.ext.java.syntax.ClassInstanceCreationExpression_Qualifier) -> hydra.ast.Expr:
     match q:
@@ -1216,7 +1216,7 @@ def write_shift_expression(e: hydra.ext.java.syntax.ShiftExpression) -> hydra.as
 def write_single_element_annotation(sea: hydra.ext.java.syntax.SingleElementAnnotation) -> hydra.ast.Expr:
     tname = sea.name
     mv = sea.value
-    return hydra.lib.maybes.maybe(write_marker_annotation(hydra.ext.java.syntax.MarkerAnnotation(tname)), (lambda v: hydra.serialization.prefix("@", hydra.serialization.no_sep((write_type_name(tname), hydra.serialization.paren_list(False, (write_element_value(v),)))))), mv)
+    return hydra.lib.maybes.maybe((lambda : write_marker_annotation(hydra.ext.java.syntax.MarkerAnnotation(tname))), (lambda v: hydra.serialization.prefix("@", hydra.serialization.no_sep((write_type_name(tname), hydra.serialization.paren_list(False, (write_element_value(v),)))))), mv)
 
 def write_statement(s: hydra.ext.java.syntax.Statement) -> hydra.ast.Expr:
     match s:
@@ -1424,7 +1424,7 @@ def write_variable_declarator(vd: hydra.ext.java.syntax.VariableDeclarator) -> h
     @lru_cache(1)
     def id_sec() -> hydra.ast.Expr:
         return write_variable_declarator_id(id)
-    return hydra.lib.maybes.maybe(id_sec(), (lambda init: hydra.serialization.infix_ws("=", id_sec(), write_variable_initializer(init))), minit)
+    return hydra.lib.maybes.maybe((lambda : id_sec()), (lambda init: hydra.serialization.infix_ws("=", id_sec(), write_variable_initializer(init))), minit)
 
 def write_variable_initializer(i: hydra.ext.java.syntax.VariableInitializer) -> hydra.ast.Expr:
     match i:
@@ -1453,7 +1453,7 @@ def write_while_statement(ws: hydra.ext.java.syntax.WhileStatement) -> hydra.ast
     body = ws.body
     @lru_cache(1)
     def cond_ser() -> hydra.ast.Expr:
-        return hydra.lib.maybes.maybe(hydra.serialization.cst("true"), (lambda c: write_expression(c)), mcond)
+        return hydra.lib.maybes.maybe((lambda : hydra.serialization.cst("true")), (lambda c: write_expression(c)), mcond)
     return hydra.serialization.space_sep((hydra.serialization.cst("while"), hydra.serialization.paren_list(False, (cond_ser(),)), hydra.serialization.curly_block(hydra.serialization.full_block_style, write_statement(body))))
 
 def write_wildcard(w: hydra.ext.java.syntax.Wildcard) -> hydra.ast.Expr:

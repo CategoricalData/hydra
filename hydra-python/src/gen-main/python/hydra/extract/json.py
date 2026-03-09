@@ -71,17 +71,17 @@ def opt(fname: T0, m: FrozenDict[T0, T1]) -> Maybe[T1]:
 def opt_array(fname: T0, m: FrozenDict[T0, hydra.json.model.Value]) -> Either[str, Maybe[frozenlist[hydra.json.model.Value]]]:
     r"""Look up an optional array field in a JSON object."""
     
-    return hydra.lib.maybes.maybe(Right(Nothing()), (lambda a: hydra.lib.eithers.map((lambda x: Just(x)), expect_array(a))), opt(fname, m))
+    return hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda a: hydra.lib.eithers.map((lambda x: Just(x)), expect_array(a))), opt(fname, m))
 
 def opt_string(fname: T0, m: FrozenDict[T0, hydra.json.model.Value]) -> Either[str, Maybe[str]]:
     r"""Look up an optional string field in a JSON object."""
     
-    return hydra.lib.maybes.maybe(Right(Nothing()), (lambda s: hydra.lib.eithers.map((lambda x: Just(x)), expect_string(s))), opt(fname, m))
+    return hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda s: hydra.lib.eithers.map((lambda x: Just(x)), expect_string(s))), opt(fname, m))
 
 def require(fname: T0, m: FrozenDict[T0, T1]) -> Either[str, T1]:
     r"""Look up a required field in a JSON object, failing if not found."""
     
-    return hydra.lib.maybes.maybe(Left(hydra.lib.strings.cat(("required attribute ", show_value(fname), " not found"))), (lambda value: Right(value)), hydra.lib.maps.lookup(fname, m))
+    return hydra.lib.maybes.maybe((lambda : Left(hydra.lib.strings.cat(("required attribute ", show_value(fname), " not found")))), (lambda value: Right(value)), hydra.lib.maps.lookup(fname, m))
 
 def require_array(fname: T0, m: FrozenDict[T0, hydra.json.model.Value]) -> Either[str, frozenlist[hydra.json.model.Value]]:
     r"""Look up a required array field in a JSON object."""

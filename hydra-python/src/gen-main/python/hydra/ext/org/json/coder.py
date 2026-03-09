@@ -55,7 +55,7 @@ def decode_record(rt: hydra.core.RowType, coders: frozenlist[tuple[hydra.core.Fi
             default_value = cast(hydra.json.model.Value, hydra.json.model.ValueNull())
             @lru_cache(1)
             def json_value() -> hydra.json.model.Value:
-                return hydra.lib.maybes.from_maybe(default_value, hydra.lib.maps.lookup(fname.value, m))
+                return hydra.lib.maybes.from_maybe((lambda : default_value), hydra.lib.maps.lookup(fname.value, m))
             return hydra.lib.eithers.bind(coder_().decode(cx, json_value()), (lambda v: Right(hydra.core.Field(fname, v))))
         return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda x1: decode_field(x1)), coders), (lambda fields: Right(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(rt.type_name, fields))))))
     match n:
@@ -74,7 +74,7 @@ def encode_record(coders: frozenlist[tuple[hydra.core.FieldType, hydra.compute.C
     def match_maybe_term(fvalue: hydra.core.Term, coder_: hydra.compute.Coder[hydra.core.Term, T0], fname: hydra.core.Name, dflt: Either[hydra.context.InContext[hydra.error.OtherError], Maybe[tuple[str, T0]]]) -> Either[hydra.context.InContext[hydra.error.OtherError], Maybe[tuple[str, T0]]]:
         match fvalue:
             case hydra.core.TermMaybe(value=opt):
-                return hydra.lib.maybes.maybe(Right(Nothing()), (lambda v: hydra.lib.eithers.bind(coder_.encode(cx, v), (lambda encoded: Right(Just((fname.value, encoded)))))), opt)
+                return hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda v: hydra.lib.eithers.bind(coder_.encode(cx, v), (lambda encoded: Right(Just((fname.value, encoded)))))), opt)
             
             case _:
                 return dflt
@@ -306,7 +306,7 @@ def untyped_term_to_json(term: hydra.core.Term) -> Either[T0, hydra.json.model.V
     def match_term_maybe(for_term: Callable[[hydra.core.Term], Either[T0, Maybe[hydra.json.model.Value]]], t: hydra.core.Term) -> Either[T0, Maybe[hydra.json.model.Value]]:
         match t:
             case hydra.core.TermMaybe(value=mt):
-                return hydra.lib.maybes.maybe(Right(Nothing()), for_term, mt)
+                return hydra.lib.maybes.maybe((lambda : Right(Nothing())), for_term, mt)
             
             case _:
                 return hydra.lib.eithers.map((lambda x1: hydra.lib.maybes.pure(x1)), recurse(t))
@@ -395,7 +395,7 @@ def untyped_term_to_json(term: hydra.core.Term) -> Either[T0, hydra.json.model.V
                 return Right(match_literal(lit))
             
             case hydra.core.TermMaybe(value=mt):
-                return hydra.lib.maybes.maybe(Right(cast(hydra.json.model.Value, hydra.json.model.ValueNull())), (lambda x1: recurse(x1)), mt)
+                return hydra.lib.maybes.maybe((lambda : Right(cast(hydra.json.model.Value, hydra.json.model.ValueNull()))), (lambda x1: recurse(x1)), mt)
             
             case hydra.core.TermRecord(value=r):
                 fields = r.fields
@@ -412,7 +412,7 @@ def untyped_term_to_json(term: hydra.core.Term) -> Either[T0, hydra.json.model.V
             
             case hydra.core.TermUnion(value=i):
                 field = i.field
-                return hydra.lib.logic.if_else(hydra.lib.equality.equal(field.term, cast(hydra.core.Term, hydra.core.TermUnit())), (lambda : Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(field.name.value)))), (lambda : hydra.lib.eithers.bind(field_to_keyval(field), (lambda mkeyval: Right(cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list(hydra.lib.maybes.maybe((), (lambda keyval: (keyval,)), mkeyval)))))))))
+                return hydra.lib.logic.if_else(hydra.lib.equality.equal(field.term, cast(hydra.core.Term, hydra.core.TermUnit())), (lambda : Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(field.name.value)))), (lambda : hydra.lib.eithers.bind(field_to_keyval(field), (lambda mkeyval: Right(cast(hydra.json.model.Value, hydra.json.model.ValueObject(hydra.lib.maps.from_list(hydra.lib.maybes.maybe((lambda : ()), (lambda keyval: (keyval,)), mkeyval)))))))))
             
             case hydra.core.TermVariable(value=v):
                 return Right(cast(hydra.json.model.Value, hydra.json.model.ValueString(v.value)))

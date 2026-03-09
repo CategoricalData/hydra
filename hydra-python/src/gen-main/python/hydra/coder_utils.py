@@ -50,7 +50,7 @@ def analyze_function_term_with_gather(cx: hydra.context.Context, for_binding: Ca
         def _hoist_hydra_coder_utils_analyze_function_term_with_gather_1(arg_mode, args, bindings, cx, doms, for_binding, g_env, get_t_c, set_t_c, t, tapps, tparams, v1):
             match v1:
                 case hydra.core.FunctionLambda(value=lam):
-                    return hydra.lib.logic.if_else(arg_mode, (lambda : (v := lam.parameter, (dom := hydra.lib.maybes.maybe(cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("_"))), (lambda x_: x_), lam.domain), (body := lam.body, (new_env := set_t_c(hydra.schemas.extend_graph_for_lambda(get_t_c(g_env), lam), g_env), analyze_function_term_with_gather(cx, for_binding, get_t_c, set_t_c, arg_mode, new_env, tparams, hydra.lib.lists.cons(v, args), bindings, hydra.lib.lists.cons(dom, doms), tapps, body))[1])[1])[1])[1]), (lambda : analyze_function_term_with_finish(cx, get_t_c, g_env, tparams, args, bindings, doms, tapps, t)))
+                    return hydra.lib.logic.if_else(arg_mode, (lambda : (v := lam.parameter, (dom := hydra.lib.maybes.maybe((lambda : cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("_")))), (lambda x_: x_), lam.domain), (body := lam.body, (new_env := set_t_c(hydra.schemas.extend_graph_for_lambda(get_t_c(g_env), lam), g_env), analyze_function_term_with_gather(cx, for_binding, get_t_c, set_t_c, arg_mode, new_env, tparams, hydra.lib.lists.cons(v, args), bindings, hydra.lib.lists.cons(dom, doms), tapps, body))[1])[1])[1])[1]), (lambda : analyze_function_term_with_finish(cx, get_t_c, g_env, tparams, args, bindings, doms, tapps, t)))
                 
                 case _:
                     return analyze_function_term_with_finish(cx, get_t_c, g_env, tparams, args, bindings, doms, tapps, t)
@@ -81,7 +81,7 @@ def is_complex_variable(tc: hydra.graph.Graph, name: hydra.core.Name) -> bool:
     @lru_cache(1)
     def meta_lookup() -> Maybe[hydra.core.Term]:
         return hydra.lib.maps.lookup(name, tc.metadata)
-    return hydra.lib.logic.if_else(hydra.lib.maybes.is_just(meta_lookup()), (lambda : True), (lambda : hydra.lib.logic.if_else(hydra.lib.sets.member(name, tc.lambda_variables), (lambda : True), (lambda : (type_lookup := hydra.lib.maps.lookup(name, tc.bound_types), hydra.lib.maybes.maybe(True, (lambda ts: hydra.lib.equality.gt(hydra.arity.type_scheme_arity(ts), 0)), type_lookup))[1]))))
+    return hydra.lib.logic.if_else(hydra.lib.maybes.is_just(meta_lookup()), (lambda : True), (lambda : hydra.lib.logic.if_else(hydra.lib.sets.member(name, tc.lambda_variables), (lambda : True), (lambda : (type_lookup := hydra.lib.maps.lookup(name, tc.bound_types), hydra.lib.maybes.maybe((lambda : True), (lambda ts: hydra.lib.equality.gt(hydra.arity.type_scheme_arity(ts), 0)), type_lookup))[1]))))
 
 def is_complex_term(tc: hydra.graph.Graph, t: hydra.core.Term) -> bool:
     r"""Check if a term needs to be treated as a function rather than a simple value."""
@@ -107,7 +107,7 @@ def is_complex_binding(tc: hydra.graph.Graph, b: hydra.core.Binding) -> bool:
     
     term = b.term
     mts = b.type
-    return hydra.lib.maybes.cases(mts, is_complex_term(tc, term), (lambda ts: (is_polymorphic := hydra.lib.logic.not_(hydra.lib.lists.null(ts.variables)), is_non_nullary := hydra.lib.equality.gt(hydra.arity.type_arity(ts.type), 0), is_complex := is_complex_term(tc, term), hydra.lib.logic.or_(hydra.lib.logic.or_(is_polymorphic, is_non_nullary), is_complex))[3]))
+    return hydra.lib.maybes.cases(mts, (lambda : is_complex_term(tc, term)), (lambda ts: (is_polymorphic := hydra.lib.logic.not_(hydra.lib.lists.null(ts.variables)), is_non_nullary := hydra.lib.equality.gt(hydra.arity.type_arity(ts.type), 0), is_complex := is_complex_term(tc, term), hydra.lib.logic.or_(hydra.lib.logic.or_(is_polymorphic, is_non_nullary), is_complex))[3]))
 
 def binding_metadata(tc: hydra.graph.Graph, b: hydra.core.Binding) -> Maybe[hydra.core.Term]:
     r"""Produces metadata for a binding if it is complex."""
@@ -213,7 +213,7 @@ def is_tail_recursive_in_tail_position(func_name: hydra.core.Name, term: hydra.c
                             return hydra.lib.lists.foldl((lambda ok, field: hydra.lib.logic.and_(ok, is_tail_recursive_in_tail_position(func_name, field.term))), True, cases_)
                         @lru_cache(1)
                         def dflt_ok() -> bool:
-                            return hydra.lib.maybes.maybe(True, (lambda d: is_tail_recursive_in_tail_position(func_name, d)), dflt)
+                            return hydra.lib.maybes.maybe((lambda : True), (lambda d: is_tail_recursive_in_tail_position(func_name, d)), dflt)
                         @lru_cache(1)
                         def args_ok() -> bool:
                             return hydra.lib.lists.foldl((lambda ok, arg: hydra.lib.logic.and_(ok, hydra.rewriting.is_free_variable_in_term(func_name, arg))), True, gather_args())
@@ -333,7 +333,7 @@ def is_trivial_term(t: hydra.core.Term):
             return _hoist_body_3(fun)
         
         case hydra.core.TermMaybe(value=opt):
-            return hydra.lib.maybes.maybe(True, (lambda inner: is_trivial_term(inner)), opt)
+            return hydra.lib.maybes.maybe((lambda : True), (lambda inner: is_trivial_term(inner)), opt)
         
         case hydra.core.TermRecord(value=rec):
             return hydra.lib.lists.foldl((lambda acc, fld: hydra.lib.logic.and_(acc, is_trivial_term(fld.term))), True, rec.fields)

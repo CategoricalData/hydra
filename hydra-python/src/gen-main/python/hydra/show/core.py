@@ -290,7 +290,7 @@ def type_scheme(ts: hydra.core.TypeScheme) -> str:
         return hydra.lib.lists.map((lambda v1: to_constraint_pair(hydra.lib.pairs.first(p), v1)), hydra.lib.sets.to_list(hydra.lib.pairs.second(p).classes))
     @lru_cache(1)
     def tc() -> frozenlist[str]:
-        return hydra.lib.maybes.maybe((), (lambda m: hydra.lib.lists.concat(hydra.lib.lists.map((lambda x1: to_constraint_pairs(x1)), hydra.lib.maps.to_list(m)))), ts.constraints)
+        return hydra.lib.maybes.maybe((lambda : ()), (lambda m: hydra.lib.lists.concat(hydra.lib.lists.map((lambda x1: to_constraint_pairs(x1)), hydra.lib.maps.to_list(m)))), ts.constraints)
     return hydra.lib.strings.cat(("(", fa(), hydra.lib.logic.if_else(hydra.lib.lists.null(tc()), (lambda : ""), (lambda : hydra.lib.strings.cat(("(", hydra.lib.strings.intercalate(", ", tc()), ") => ")))), type(body), ")"))
 
 def binding(el: hydra.core.Binding) -> str:
@@ -300,7 +300,7 @@ def binding(el: hydra.core.Binding) -> str:
     t = el.term
     @lru_cache(1)
     def type_str() -> str:
-        return hydra.lib.maybes.maybe("", (lambda ts: hydra.lib.strings.cat((":(", type_scheme(ts), ")"))), el.type)
+        return hydra.lib.maybes.maybe((lambda : ""), (lambda ts: hydra.lib.strings.cat((":(", type_scheme(ts), ")"))), el.type)
     return hydra.lib.strings.cat((name, type_str(), " = ", term(t)))
 
 def elimination(elm: hydra.core.Elimination) -> str:
@@ -318,7 +318,7 @@ def elimination(elm: hydra.core.Elimination) -> str:
             cases = cs.cases
             @lru_cache(1)
             def default_field() -> frozenlist[hydra.core.Field]:
-                return hydra.lib.maybes.maybe((), (lambda d: (hydra.core.Field(hydra.core.Name("[default]"), d),)), mdef)
+                return hydra.lib.maybes.maybe((lambda : ()), (lambda d: (hydra.core.Field(hydra.core.Name("[default]"), d),)), mdef)
             @lru_cache(1)
             def all_fields() -> frozenlist[hydra.core.Field]:
                 return hydra.lib.lists.concat((cases, default_field()))
@@ -374,7 +374,7 @@ def lambda_(l: hydra.core.Lambda) -> str:
     body = l.body
     @lru_cache(1)
     def type_str() -> str:
-        return hydra.lib.maybes.maybe("", (lambda t: hydra.lib.strings.cat2(":", type(t))), mt)
+        return hydra.lib.maybes.maybe((lambda : ""), (lambda t: hydra.lib.strings.cat2(":", type(t))), mt)
     return hydra.lib.strings.cat(("λ", v, type_str(), ".", term(body)))
 
 def let(l: hydra.core.Let) -> str:
@@ -439,7 +439,7 @@ def term(t: hydra.core.Term) -> str:
             return hydra.lib.strings.cat(("{", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map((lambda x1: entry(x1)), hydra.lib.maps.to_list(m))), "}"))
         
         case hydra.core.TermMaybe(value=mt):
-            return hydra.lib.maybes.maybe("nothing", (lambda t2: hydra.lib.strings.cat(("just(", term(t2), ")"))), mt)
+            return hydra.lib.maybes.maybe((lambda : "nothing"), (lambda t2: hydra.lib.strings.cat(("just(", term(t2), ")"))), mt)
         
         case hydra.core.TermPair(value=p):
             return hydra.lib.strings.cat(("(", term(hydra.lib.pairs.first(p)), ", ", term(hydra.lib.pairs.second(p)), ")"))
