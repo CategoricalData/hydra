@@ -83,7 +83,7 @@ def for_type_reference(cx: hydra.coders.AdapterContext, name: hydra.core.Name) -
     r"""This function accounts for recursive type definitions."""
     
     def encdec(name2: hydra.core.Name, adapters0: FrozenDict[hydra.core.Name, hydra.compute.Adapter[T0, T1, T2, T2]], dir: hydra.coders.CoderDirection, cx2: hydra.context.Context, term: T2) -> Either[hydra.context.InContext[hydra.error.OtherError], T2]:
-        return hydra.lib.maybes.maybe(Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("no adapter for reference type ", name2.value)), cx2)), (lambda ad: hydra.adapt.utils.encode_decode(dir, ad.coder, cx2, term)), hydra.lib.maps.lookup(name2, adapters0))
+        return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("no adapter for reference type ", name2.value)), cx2))), (lambda ad: hydra.adapt.utils.encode_decode(dir, ad.coder, cx2, term)), hydra.lib.maps.lookup(name2, adapters0))
     def for_type(cx2: hydra.coders.AdapterContext, adapters0: T0, t: hydra.core.Type) -> Either[str, hydra.compute.Adapter[hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
         return hydra.lib.eithers.bind(term_adapter(cx2, t), (lambda actual: Right(actual)))
     def for_missing_adapter(cx2: hydra.coders.AdapterContext, lossy: bool, adapters0: FrozenDict[hydra.core.Name, hydra.compute.Adapter[hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]], placeholder: hydra.compute.Adapter[hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]) -> Either[str, hydra.compute.Adapter[hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
@@ -94,13 +94,13 @@ def for_type_reference(cx: hydra.coders.AdapterContext, name: hydra.core.Name) -
         @lru_cache(1)
         def mt() -> Maybe[hydra.core.Type]:
             return hydra.schemas.resolve_type(new_cx.graph, cast(hydra.core.Type, hydra.core.TypeVariable(name)))
-        return hydra.lib.maybes.maybe(Right(hydra.compute.Adapter(lossy, cast(hydra.core.Type, hydra.core.TypeVariable(name)), cast(hydra.core.Type, hydra.core.TypeVariable(name)), hydra.adapt.utils.bidirectional((lambda dir, _cx, term: Right(term))))), (lambda v1: for_type(cx2, adapters0, v1)), mt())
+        return hydra.lib.maybes.maybe((lambda : Right(hydra.compute.Adapter(lossy, cast(hydra.core.Type, hydra.core.TypeVariable(name)), cast(hydra.core.Type, hydra.core.TypeVariable(name)), hydra.adapt.utils.bidirectional((lambda dir, _cx, term: Right(term)))))), (lambda v1: for_type(cx2, adapters0, v1)), mt())
     lossy = False
     adapters = cx.adapters
     @lru_cache(1)
     def placeholder() -> hydra.compute.Adapter[hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]:
         return hydra.compute.Adapter(lossy, cast(hydra.core.Type, hydra.core.TypeVariable(name)), cast(hydra.core.Type, hydra.core.TypeVariable(name)), hydra.adapt.utils.bidirectional((lambda v1, v2, v3: encdec(name, adapters, v1, v2, v3))))
-    return hydra.lib.maybes.maybe(for_missing_adapter(cx, lossy, adapters, placeholder()), (lambda x: Right(x)), hydra.lib.maps.lookup(name, adapters))
+    return hydra.lib.maybes.maybe((lambda : for_missing_adapter(cx, lossy, adapters, placeholder())), (lambda x: Right(x)), hydra.lib.maps.lookup(name, adapters))
 
 def function_to_union(cx: hydra.coders.AdapterContext, t: hydra.core.Type) -> Either[str, hydra.compute.Adapter[hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
     r"""Convert function types to union types."""
@@ -147,7 +147,7 @@ def function_to_union(cx: hydra.coders.AdapterContext, t: hydra.core.Type) -> Ei
             return hydra.rewriting.deannotate_term(term)
         return ad.coder.encode(cx2, enc_term(term, stripped_term()))
     def read_from_string(cx2: hydra.context.Context, graph: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Term]:
-        return hydra.lib.eithers.bind(hydra.extract.core.string(cx2, graph, term), (lambda s: hydra.lib.maybes.maybe(Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("failed to parse term: ", s)), cx2)), (lambda x: Right(x)), hydra.show.core.read_term(s))))
+        return hydra.lib.eithers.bind(hydra.extract.core.string(cx2, graph, term), (lambda s: hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("failed to parse term: ", s)), cx2))), (lambda x: Right(x)), hydra.show.core.read_term(s))))
     def decode(graph: hydra.graph.Graph, ad: hydra.compute.Adapter[T0, T1, hydra.core.Term, T2], cx2: hydra.context.Context, term: T2) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Term]:
         def not_found(fname: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.OtherError], T3]:
             return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("unexpected field: ", fname.value)), cx2))
@@ -163,7 +163,7 @@ def function_to_union(cx: hydra.coders.AdapterContext, t: hydra.core.Type) -> Ei
             return read_from_string(cx2, graph, fterm)
         def for_variable(fterm: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Term]:
             return hydra.lib.eithers.bind(hydra.extract.core.string(cx2, graph, fterm), (lambda s: Right(cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name(s))))))
-        return hydra.lib.eithers.bind(ad.coder.decode(cx2, term), (lambda inj_term: hydra.lib.eithers.bind(hydra.extract.core.injection(cx2, function_proxy_name, graph, inj_term), (lambda field: (fname := field.name, fterm := field.term, hydra.lib.maybes.from_maybe(not_found(fname), hydra.lib.maps.lookup(fname, hydra.lib.maps.from_list(((hydra.core.Name("wrap"), for_wrapped(fterm)), (hydra.core.Name("record"), for_projection(fterm)), (hydra.core.Name("union"), for_cases(fterm)), (hydra.core.Name("lambda"), for_lambda(fterm)), (hydra.core.Name("primitive"), for_primitive(fterm)), (hydra.core.Name("variable"), for_variable(fterm)))))))[2]))))
+        return hydra.lib.eithers.bind(ad.coder.decode(cx2, term), (lambda inj_term: hydra.lib.eithers.bind(hydra.extract.core.injection(cx2, function_proxy_name, graph, inj_term), (lambda field: (fname := field.name, fterm := field.term, hydra.lib.maybes.from_maybe((lambda : not_found(fname)), hydra.lib.maps.lookup(fname, hydra.lib.maps.from_list(((hydra.core.Name("wrap"), for_wrapped(fterm)), (hydra.core.Name("record"), for_projection(fterm)), (hydra.core.Name("union"), for_cases(fterm)), (hydra.core.Name("lambda"), for_lambda(fterm)), (hydra.core.Name("primitive"), for_primitive(fterm)), (hydra.core.Name("variable"), for_variable(fterm)))))))[2]))))
     match t:
         case hydra.core.TypeFunction(value=ft):
             dom = ft.domain
@@ -193,7 +193,7 @@ def maybe_to_list(cx: hydra.coders.AdapterContext, t: hydra.core.Type) -> Either
     def encode(ad: hydra.compute.Adapter[T0, T1, hydra.core.Term, hydra.core.Term], cx2: hydra.context.Context, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Term]:
         match term:
             case hydra.core.TermMaybe(value=m):
-                return hydra.lib.maybes.maybe(Right(cast(hydra.core.Term, hydra.core.TermList(()))), (lambda r: hydra.lib.eithers.bind(hydra.adapt.utils.encode_decode(hydra.coders.CoderDirection.ENCODE, ad.coder, cx2, r), (lambda encoded: Right(cast(hydra.core.Term, hydra.core.TermList((encoded,))))))), m)
+                return hydra.lib.maybes.maybe((lambda : Right(cast(hydra.core.Term, hydra.core.TermList(())))), (lambda r: hydra.lib.eithers.bind(hydra.adapt.utils.encode_decode(hydra.coders.CoderDirection.ENCODE, ad.coder, cx2, r), (lambda encoded: Right(cast(hydra.core.Term, hydra.core.TermList((encoded,))))))), m)
             
             case _:
                 raise TypeError("Unsupported Term")
@@ -271,7 +271,7 @@ def pass_function(cx: hydra.coders.AdapterContext, t: hydra.core.Type) -> Either
             case _:
                 return Right(Nothing())
     def get_coder(case_ads: FrozenDict[T0, hydra.compute.Adapter[T1, T2, T3, T3]], fname: T0) -> hydra.compute.Coder[T3, T3]:
-        return hydra.lib.maybes.maybe(hydra.adapt.utils.id_coder(), (lambda v1: v1.coder), hydra.lib.maps.lookup(fname, case_ads))
+        return hydra.lib.maybes.maybe((lambda : hydra.adapt.utils.id_coder()), (lambda v1: v1.coder), hydra.lib.maps.lookup(fname, case_ads))
     def for_elimination(dir: hydra.coders.CoderDirection, cx2: hydra.context.Context, cod_ad: hydra.compute.Adapter[T0, T1, hydra.core.Term, hydra.core.Term], case_ads: FrozenDict[hydra.core.Name, hydra.compute.Adapter[T2, T3, hydra.core.Field, hydra.core.Field]], e: hydra.core.Elimination) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Elimination]:
         match e:
             case hydra.core.EliminationUnion(value=cs):

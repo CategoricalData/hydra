@@ -133,7 +133,7 @@ def import_aliases_for_module(mod: hydra.module.Module) -> hydra.ext.java.helper
     return hydra.ext.java.helpers.Aliases(mod.namespace, hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty(), Nothing(), hydra.lib.sets.empty())
 
 def java_method_body(mstmts: Maybe[frozenlist[hydra.ext.java.syntax.BlockStatement]]) -> hydra.ext.java.syntax.MethodBody:
-    return hydra.lib.maybes.cases(mstmts, cast(hydra.ext.java.syntax.MethodBody, hydra.ext.java.syntax.MethodBodyNone()), (lambda stmts: cast(hydra.ext.java.syntax.MethodBody, hydra.ext.java.syntax.MethodBodyBlock(hydra.ext.java.syntax.Block(stmts)))))
+    return hydra.lib.maybes.cases(mstmts, (lambda : cast(hydra.ext.java.syntax.MethodBody, hydra.ext.java.syntax.MethodBodyNone())), (lambda stmts: cast(hydra.ext.java.syntax.MethodBody, hydra.ext.java.syntax.MethodBodyBlock(hydra.ext.java.syntax.Block(stmts)))))
 
 def java_method_header(tparams: frozenlist[hydra.ext.java.syntax.TypeParameter], method_name: str, params: frozenlist[hydra.ext.java.syntax.FormalParameter], result: hydra.ext.java.syntax.Result) -> hydra.ext.java.syntax.MethodHeader:
     return hydra.ext.java.syntax.MethodHeader(tparams, result, hydra.ext.java.syntax.MethodDeclarator(hydra.ext.java.syntax.Identifier(method_name), Nothing(), params), Nothing())
@@ -150,7 +150,7 @@ def java_primary_to_java_expression(p: hydra.ext.java.syntax.Primary) -> hydra.e
 def java_array_creation(prim_type: hydra.ext.java.syntax.PrimitiveTypeWithAnnotations, minit: Maybe[hydra.ext.java.syntax.ArrayInitializer]) -> hydra.ext.java.syntax.Expression:
     @lru_cache(1)
     def init_() -> hydra.ext.java.syntax.ArrayInitializer:
-        return hydra.lib.maybes.cases(minit, hydra.ext.java.syntax.ArrayInitializer(()), (lambda i: i))
+        return hydra.lib.maybes.cases(minit, (lambda : hydra.ext.java.syntax.ArrayInitializer(())), (lambda i: i))
     return java_primary_to_java_expression(cast(hydra.ext.java.syntax.Primary, hydra.ext.java.syntax.PrimaryArrayCreation(cast(hydra.ext.java.syntax.ArrayCreationExpression, hydra.ext.java.syntax.ArrayCreationExpressionPrimitiveArray(hydra.ext.java.syntax.ArrayCreationExpression_PrimitiveArray(prim_type, (), init_()))))))
 
 def java_array_initializer(exprs: frozenlist[hydra.ext.java.syntax.Expression]) -> hydra.ext.java.syntax.ArrayInitializer:
@@ -205,13 +205,13 @@ def name_to_qualified_java_name(aliases: hydra.ext.java.helpers.Aliases, qualify
     local = qn().local
     @lru_cache(1)
     def alias() -> Maybe[hydra.ext.java.syntax.PackageName]:
-        return hydra.lib.maybes.cases(ns_, Nothing(), (lambda n: Just(hydra.lib.maybes.cases(hydra.lib.maps.lookup(n, aliases.packages), hydra.ext.java.names.java_package_name(hydra.lib.strings.split_on(".", n.value)), (lambda id: id)))))
+        return hydra.lib.maybes.cases(ns_, (lambda : Nothing()), (lambda n: Just(hydra.lib.maybes.cases(hydra.lib.maps.lookup(n, aliases.packages), (lambda : hydra.ext.java.names.java_package_name(hydra.lib.strings.split_on(".", n.value))), (lambda id: id)))))
     @lru_cache(1)
     def pkg() -> hydra.ext.java.syntax.ClassTypeQualifier:
-        return hydra.lib.logic.if_else(qualify, (lambda : hydra.lib.maybes.cases(alias(), cast(hydra.ext.java.syntax.ClassTypeQualifier, hydra.ext.java.syntax.ClassTypeQualifierNone()), (lambda p: cast(hydra.ext.java.syntax.ClassTypeQualifier, hydra.ext.java.syntax.ClassTypeQualifierPackage(p))))), (lambda : cast(hydra.ext.java.syntax.ClassTypeQualifier, hydra.ext.java.syntax.ClassTypeQualifierNone())))
+        return hydra.lib.logic.if_else(qualify, (lambda : hydra.lib.maybes.cases(alias(), (lambda : cast(hydra.ext.java.syntax.ClassTypeQualifier, hydra.ext.java.syntax.ClassTypeQualifierNone())), (lambda p: cast(hydra.ext.java.syntax.ClassTypeQualifier, hydra.ext.java.syntax.ClassTypeQualifierPackage(p))))), (lambda : cast(hydra.ext.java.syntax.ClassTypeQualifier, hydra.ext.java.syntax.ClassTypeQualifierNone())))
     @lru_cache(1)
     def jid() -> hydra.ext.java.syntax.TypeIdentifier:
-        return java_type_identifier(hydra.lib.maybes.cases(mlocal, sanitize_java_name(local), (lambda l: hydra.lib.strings.cat2(hydra.lib.strings.cat2(sanitize_java_name(local), "."), sanitize_java_name(l)))))
+        return java_type_identifier(hydra.lib.maybes.cases(mlocal, (lambda : sanitize_java_name(local)), (lambda l: hydra.lib.strings.cat2(hydra.lib.strings.cat2(sanitize_java_name(local), "."), sanitize_java_name(l)))))
     return (jid(), pkg())
 
 def name_to_java_class_type(aliases: hydra.ext.java.helpers.Aliases, qualify: bool, args: frozenlist[hydra.ext.java.syntax.TypeArgument], name: hydra.core.Name, mlocal: Maybe[str]) -> hydra.ext.java.syntax.ClassType:
@@ -235,7 +235,7 @@ def java_class_declaration(aliases: hydra.ext.java.helpers.Aliases, tparams: fro
 def java_class_type(args: frozenlist[hydra.ext.java.syntax.ReferenceType], pkg: Maybe[hydra.ext.java.syntax.PackageName], id: str) -> hydra.ext.java.syntax.ClassType:
     @lru_cache(1)
     def qual() -> hydra.ext.java.syntax.ClassTypeQualifier:
-        return hydra.lib.maybes.cases(pkg, cast(hydra.ext.java.syntax.ClassTypeQualifier, hydra.ext.java.syntax.ClassTypeQualifierNone()), (lambda p: cast(hydra.ext.java.syntax.ClassTypeQualifier, hydra.ext.java.syntax.ClassTypeQualifierPackage(p))))
+        return hydra.lib.maybes.cases(pkg, (lambda : cast(hydra.ext.java.syntax.ClassTypeQualifier, hydra.ext.java.syntax.ClassTypeQualifierNone())), (lambda p: cast(hydra.ext.java.syntax.ClassTypeQualifier, hydra.ext.java.syntax.ClassTypeQualifierPackage(p))))
     @lru_cache(1)
     def targs() -> frozenlist[hydra.ext.java.syntax.TypeArgument]:
         return hydra.lib.lists.map((lambda rt: cast(hydra.ext.java.syntax.TypeArgument, hydra.ext.java.syntax.TypeArgumentReference(rt))), args)
@@ -487,7 +487,7 @@ def java_unary_expression_to_java_relational_expression(ue: hydra.ext.java.synta
     return cast(hydra.ext.java.syntax.RelationalExpression, hydra.ext.java.syntax.RelationalExpressionSimple(cast(hydra.ext.java.syntax.ShiftExpression, hydra.ext.java.syntax.ShiftExpressionUnary(cast(hydra.ext.java.syntax.AdditiveExpression, hydra.ext.java.syntax.AdditiveExpressionUnary(cast(hydra.ext.java.syntax.MultiplicativeExpression, hydra.ext.java.syntax.MultiplicativeExpressionUnary(ue))))))))
 
 def lookup_java_var_name(aliases: hydra.ext.java.helpers.Aliases, name: hydra.core.Name) -> hydra.core.Name:
-    return hydra.lib.maybes.cases(hydra.lib.maps.lookup(name, aliases.var_renames), name, (lambda renamed: renamed))
+    return hydra.lib.maybes.cases(hydra.lib.maps.lookup(name, aliases.var_renames), (lambda : name), (lambda renamed: renamed))
 
 def make_constructor(aliases: hydra.ext.java.helpers.Aliases, el_name: hydra.core.Name, private: bool, params: frozenlist[hydra.ext.java.syntax.FormalParameter], stmts: frozenlist[hydra.ext.java.syntax.BlockStatement]) -> hydra.ext.java.syntax.ClassBodyDeclaration:
     @lru_cache(1)
@@ -508,7 +508,7 @@ def method_declaration(mods: frozenlist[hydra.ext.java.syntax.MethodModifier], t
 def method_invocation(lhs: Maybe[Either[hydra.ext.java.syntax.ExpressionName, hydra.ext.java.syntax.Primary]], method_name: hydra.ext.java.syntax.Identifier, args: frozenlist[hydra.ext.java.syntax.Expression]) -> hydra.ext.java.syntax.MethodInvocation:
     @lru_cache(1)
     def header() -> hydra.ext.java.syntax.MethodInvocation_Header:
-        return hydra.lib.maybes.cases(lhs, cast(hydra.ext.java.syntax.MethodInvocation_Header, hydra.ext.java.syntax.MethodInvocation_HeaderSimple(hydra.ext.java.syntax.MethodName(method_name))), (lambda either: cast(hydra.ext.java.syntax.MethodInvocation_Header, hydra.ext.java.syntax.MethodInvocation_HeaderComplex(hydra.ext.java.syntax.MethodInvocation_Complex(hydra.lib.eithers.either((lambda en: cast(hydra.ext.java.syntax.MethodInvocation_Variant, hydra.ext.java.syntax.MethodInvocation_VariantExpression(en))), (lambda p: cast(hydra.ext.java.syntax.MethodInvocation_Variant, hydra.ext.java.syntax.MethodInvocation_VariantPrimary(p))), either), (), method_name)))))
+        return hydra.lib.maybes.cases(lhs, (lambda : cast(hydra.ext.java.syntax.MethodInvocation_Header, hydra.ext.java.syntax.MethodInvocation_HeaderSimple(hydra.ext.java.syntax.MethodName(method_name)))), (lambda either: cast(hydra.ext.java.syntax.MethodInvocation_Header, hydra.ext.java.syntax.MethodInvocation_HeaderComplex(hydra.ext.java.syntax.MethodInvocation_Complex(hydra.lib.eithers.either((lambda en: cast(hydra.ext.java.syntax.MethodInvocation_Variant, hydra.ext.java.syntax.MethodInvocation_VariantExpression(en))), (lambda p: cast(hydra.ext.java.syntax.MethodInvocation_Variant, hydra.ext.java.syntax.MethodInvocation_VariantPrimary(p))), either), (), method_name)))))
     return hydra.ext.java.syntax.MethodInvocation(header(), args)
 
 def method_invocation_static(self: hydra.ext.java.syntax.Identifier, method_name: hydra.ext.java.syntax.Identifier, args: frozenlist[hydra.ext.java.syntax.Expression]) -> hydra.ext.java.syntax.MethodInvocation:
@@ -526,7 +526,7 @@ def name_to_java_name(aliases: hydra.ext.java.helpers.Aliases, name: hydra.core.
         return hydra.names.qualify_name(name)
     ns_ = qn().namespace
     local = qn().local
-    return hydra.lib.logic.if_else(is_escaped(name.value), (lambda : hydra.ext.java.syntax.Identifier(sanitize_java_name(local))), (lambda : hydra.lib.maybes.cases(ns_, hydra.ext.java.syntax.Identifier(local), (lambda gname: (parts := hydra.lib.maybes.cases(hydra.lib.maps.lookup(gname, aliases.packages), hydra.lib.strings.split_on(".", gname.value), (lambda pkg_name: hydra.lib.lists.map((lambda i: i.value), pkg_name.value))), all_parts := hydra.lib.lists.concat2(parts, (sanitize_java_name(local),)), hydra.ext.java.syntax.Identifier(hydra.lib.strings.intercalate(".", all_parts)))[2]))))
+    return hydra.lib.logic.if_else(is_escaped(name.value), (lambda : hydra.ext.java.syntax.Identifier(sanitize_java_name(local))), (lambda : hydra.lib.maybes.cases(ns_, (lambda : hydra.ext.java.syntax.Identifier(local)), (lambda gname: (parts := hydra.lib.maybes.cases(hydra.lib.maps.lookup(gname, aliases.packages), (lambda : hydra.lib.strings.split_on(".", gname.value)), (lambda pkg_name: hydra.lib.lists.map((lambda i: i.value), pkg_name.value))), all_parts := hydra.lib.lists.concat2(parts, (sanitize_java_name(local),)), hydra.ext.java.syntax.Identifier(hydra.lib.strings.intercalate(".", all_parts)))[2]))))
 
 def name_to_java_reference_type(aliases: hydra.ext.java.helpers.Aliases, qualify: bool, args: frozenlist[hydra.ext.java.syntax.TypeArgument], name: hydra.core.Name, mlocal: Maybe[str]) -> hydra.ext.java.syntax.ReferenceType:
     return cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeClassOrInterface(cast(hydra.ext.java.syntax.ClassOrInterfaceType, hydra.ext.java.syntax.ClassOrInterfaceTypeClass(name_to_java_class_type(aliases, qualify, args, name, mlocal)))))

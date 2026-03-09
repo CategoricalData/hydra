@@ -140,7 +140,7 @@ def eta_expansion_arity(graph: hydra.graph.Graph, term: hydra.core.Term):
             return eta_expansion_arity(graph, tt.body)
         
         case hydra.core.TermVariable(value=name):
-            return hydra.lib.maybes.maybe(0, (lambda ts: hydra.arity.type_arity(ts.type)), hydra.lib.maybes.bind(hydra.lexical.lookup_element(graph, name), (lambda b: b.type)))
+            return hydra.lib.maybes.maybe((lambda : 0), (lambda ts: hydra.arity.type_arity(ts.type)), hydra.lib.maybes.bind(hydra.lexical.lookup_element(graph, name), (lambda b: b.type)))
         
         case _:
             return 0
@@ -190,7 +190,7 @@ def eta_expand_term_new(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra
                     return 0
                 
                 case hydra.core.FunctionPrimitive(value=name):
-                    return hydra.lib.maybes.maybe(0, (lambda x1: hydra.arity.type_scheme_arity(x1)), hydra.lib.maps.lookup(name, hydra.lib.maps.from_list(hydra.lib.lists.map((lambda _gpt_p: (_gpt_p.name, _gpt_p.type)), hydra.lib.maps.elems(tx.primitives)))))
+                    return hydra.lib.maybes.maybe((lambda : 0), (lambda x1: hydra.arity.type_scheme_arity(x1)), hydra.lib.maps.lookup(name, hydra.lib.maps.from_list(hydra.lib.lists.map((lambda _gpt_p: (_gpt_p.name, _gpt_p.type)), hydra.lib.maps.elems(tx.primitives)))))
                 
                 case _:
                     raise AssertionError("Unreachable: all variants handled")
@@ -214,7 +214,7 @@ def eta_expand_term_new(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra
                 return term_arity_with_context(tx, tat.body)
             
             case hydra.core.TermVariable(value=name):
-                return hydra.lib.maybes.maybe(0, (lambda x1: hydra.arity.type_arity(x1)), hydra.lib.maybes.map((lambda x1: hydra.rewriting.type_scheme_to_f_type(x1)), hydra.lib.maps.lookup(name, tx.bound_types)))
+                return hydra.lib.maybes.maybe((lambda : 0), (lambda x1: hydra.arity.type_arity(x1)), hydra.lib.maybes.map((lambda x1: hydra.rewriting.type_scheme_to_f_type(x1)), hydra.lib.maps.lookup(name, tx.bound_types)))
             
             case _:
                 return 0
@@ -235,7 +235,7 @@ def eta_expand_term_new(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra
                 
                 case _:
                     return hydra.lib.lists.map((lambda _: Nothing()), hydra.lib.math.range_(1, n))
-        return hydra.lib.logic.if_else(hydra.lib.equality.lte(n, 0), (lambda : ()), (lambda : hydra.lib.maybes.maybe(hydra.lib.lists.map((lambda _: Nothing()), hydra.lib.math.range_(1, n)), (lambda typ: _hoist_domain_types_1(n, typ)), mt)))
+        return hydra.lib.logic.if_else(hydra.lib.equality.lte(n, 0), (lambda : ()), (lambda : hydra.lib.maybes.maybe((lambda : hydra.lib.lists.map((lambda _: Nothing()), hydra.lib.math.range_(1, n))), (lambda typ: _hoist_domain_types_1(n, typ)), mt)))
     def peel_function_domains(mtyp: Maybe[hydra.core.Type], n: int):
         def _hoist_peel_function_domains_1(n, v1):
             match v1:
@@ -253,7 +253,7 @@ def eta_expand_term_new(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra
                 
                 case _:
                     return Nothing()
-        return hydra.lib.logic.if_else(hydra.lib.equality.lte(n, 0), (lambda : mtyp), (lambda : hydra.lib.maybes.maybe(Nothing(), (lambda typ: _hoist_peel_function_domains_1(n, typ)), mtyp)))
+        return hydra.lib.logic.if_else(hydra.lib.equality.lte(n, 0), (lambda : mtyp), (lambda : hydra.lib.maybes.maybe((lambda : Nothing()), (lambda typ: _hoist_peel_function_domains_1(n, typ)), mtyp)))
     def expand(always_pad: bool, args: frozenlist[hydra.core.Term], arity: int, head_typ: Maybe[hydra.core.Type], head: hydra.core.Term) -> hydra.core.Term:
         @lru_cache(1)
         def applied() -> hydra.core.Term:
@@ -264,7 +264,7 @@ def eta_expand_term_new(tx0: hydra.graph.Graph, term0: hydra.core.Term) -> hydra
         @lru_cache(1)
         def needed() -> int:
             return hydra.lib.math.sub(arity, num_args())
-        return hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.equality.gt(needed(), 0), hydra.lib.logic.or_(always_pad, hydra.lib.equality.gt(num_args(), 0))), (lambda : (indices := hydra.lib.math.range_(1, needed()), (remaining_type := peel_function_domains(head_typ, num_args()), (domains := domain_types(needed(), remaining_type), (codomain_type := peel_function_domains(remaining_type, needed()), (fully_applied_raw := hydra.lib.lists.foldl((lambda body, i: (vn := hydra.core.Name(hydra.lib.strings.cat2("v", hydra.lib.literals.show_int32(i))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(body, cast(hydra.core.Term, hydra.core.TermVariable(vn))))))[1]), applied(), indices), (fully_applied := hydra.lib.maybes.maybe(fully_applied_raw, (lambda ct: cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(fully_applied_raw, hydra.lib.maps.singleton(hydra.core.Name("type"), hydra.encode.core.type(ct)))))), codomain_type), (indexed_domains := hydra.lib.lists.zip(indices, domains), hydra.lib.lists.foldl((lambda body, id_pair: (i := hydra.lib.pairs.first(id_pair), dom := hydra.lib.pairs.second(id_pair), vn := hydra.core.Name(hydra.lib.strings.cat2("v", hydra.lib.literals.show_int32(i))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(vn, dom, body))))))[3]), fully_applied, hydra.lib.lists.reverse(indexed_domains)))[1])[1])[1])[1])[1])[1])[1]), (lambda : applied()))
+        return hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.equality.gt(needed(), 0), hydra.lib.logic.or_(always_pad, hydra.lib.equality.gt(num_args(), 0))), (lambda : (indices := hydra.lib.math.range_(1, needed()), (remaining_type := peel_function_domains(head_typ, num_args()), (domains := domain_types(needed(), remaining_type), (codomain_type := peel_function_domains(remaining_type, needed()), (fully_applied_raw := hydra.lib.lists.foldl((lambda body, i: (vn := hydra.core.Name(hydra.lib.strings.cat2("v", hydra.lib.literals.show_int32(i))), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(body, cast(hydra.core.Term, hydra.core.TermVariable(vn))))))[1]), applied(), indices), (fully_applied := hydra.lib.maybes.maybe((lambda : fully_applied_raw), (lambda ct: cast(hydra.core.Term, hydra.core.TermAnnotated(hydra.core.AnnotatedTerm(fully_applied_raw, hydra.lib.maps.singleton(hydra.core.Name("type"), hydra.encode.core.type(ct)))))), codomain_type), (indexed_domains := hydra.lib.lists.zip(indices, domains), hydra.lib.lists.foldl((lambda body, id_pair: (i := hydra.lib.pairs.first(id_pair), dom := hydra.lib.pairs.second(id_pair), vn := hydra.core.Name(hydra.lib.strings.cat2("v", hydra.lib.literals.show_int32(i))), cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(vn, dom, body))))))[3]), fully_applied, hydra.lib.lists.reverse(indexed_domains)))[1])[1])[1])[1])[1])[1])[1]), (lambda : applied()))
     def rewrite_with_args(args: frozenlist[hydra.core.Term], tx: hydra.graph.Graph, term: hydra.core.Term):
         def recurse(tx1: hydra.graph.Graph, term1: hydra.core.Term) -> hydra.core.Term:
             return rewrite_with_args((), tx1, term1)
@@ -546,7 +546,7 @@ def eta_expand_typed_term(cx: hydra.context.Context, tx0: hydra.graph.Graph, ter
                         return (txt := hydra.schemas.extend_graph_for_type_lambda(tx2, tl), arity_of(txt, tl.body))[1]
                     
                     case hydra.core.TermVariable(value=name):
-                        return hydra.lib.maybes.maybe(hydra.lib.eithers.map((lambda _tc: hydra.arity.type_arity(hydra.lib.pairs.first(_tc))), hydra.checking.type_of(cx, tx2, (), cast(hydra.core.Term, hydra.core.TermVariable(name)))), (lambda t: Right(hydra.arity.type_arity(t))), hydra.lib.maybes.map((lambda x1: hydra.rewriting.type_scheme_to_f_type(x1)), hydra.lib.maps.lookup(name, tx2.bound_types)))
+                        return hydra.lib.maybes.maybe((lambda : hydra.lib.eithers.map((lambda _tc: hydra.arity.type_arity(hydra.lib.pairs.first(_tc))), hydra.checking.type_of(cx, tx2, (), cast(hydra.core.Term, hydra.core.TermVariable(name))))), (lambda t: Right(hydra.arity.type_arity(t))), hydra.lib.maybes.map((lambda x1: hydra.rewriting.type_scheme_to_f_type(x1)), hydra.lib.maps.lookup(name, tx2.bound_types)))
                     
                     case _:
                         return dflt()
@@ -715,7 +715,7 @@ def reduce_term(cx: hydra.context.Context, graph: hydra.graph.Graph, eager: bool
                 return hydra.lib.eithers.bind(hydra.extract.core.record(cx, proj.type_name, graph, hydra.rewriting.deannotate_term(reduced_arg)), (lambda fields: (matching_fields := hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name, proj.field)), fields), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields), (lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat(("no such field: ", proj.field.value, " in ", proj.type_name.value, " record"))), cx))), (lambda : Right(hydra.lib.lists.head(matching_fields).term))))[1]))
             
             case hydra.core.EliminationUnion(value=cs):
-                return hydra.lib.eithers.bind(hydra.extract.core.injection(cx, cs.type_name, graph, reduced_arg), (lambda field: (matching_fields := hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name, field.name)), cs.cases), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields), (lambda : hydra.lib.maybes.maybe(Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat(("no such field ", field.name.value, " in ", cs.type_name.value, " case statement"))), cx)), (lambda x: Right(x)), cs.default)), (lambda : Right(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(hydra.lib.lists.head(matching_fields).term, field.term)))))))[1]))
+                return hydra.lib.eithers.bind(hydra.extract.core.injection(cx, cs.type_name, graph, reduced_arg), (lambda field: (matching_fields := hydra.lib.lists.filter((lambda f: hydra.lib.equality.equal(f.name, field.name)), cs.cases), hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields), (lambda : hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat(("no such field ", field.name.value, " in ", cs.type_name.value, " case statement"))), cx))), (lambda x: Right(x)), cs.default)), (lambda : Right(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(hydra.lib.lists.head(matching_fields).term, field.term)))))))[1]))
             
             case hydra.core.EliminationWrap(value=name):
                 return hydra.extract.core.wrap(cx, name, graph, reduced_arg)
@@ -776,7 +776,7 @@ def reduce_term(cx: hydra.context.Context, graph: hydra.graph.Graph, eager: bool
                 @lru_cache(1)
                 def m_binding() -> Maybe[hydra.core.Binding]:
                     return hydra.lexical.dereference_element(graph, v)
-                return hydra.lib.maybes.maybe(Right(apply_to_arguments(original, args)), (lambda binding: apply_if_nullary(eager2, binding.term, args)), m_binding())
+                return hydra.lib.maybes.maybe((lambda : Right(apply_to_arguments(original, args))), (lambda binding: apply_if_nullary(eager2, binding.term, args)), m_binding())
             
             case hydra.core.TermLet(value=lt):
                 bindings = lt.bindings
@@ -827,7 +827,7 @@ def term_is_value(term: hydra.core.Term) -> bool:
                     return True
                 
                 case hydra.core.EliminationUnion(value=cs):
-                    return hydra.lib.logic.and_(check_fields(cs.cases), hydra.lib.maybes.maybe(True, (lambda x1: term_is_value(x1)), cs.default))
+                    return hydra.lib.logic.and_(check_fields(cs.cases), hydra.lib.maybes.maybe((lambda : True), (lambda x1: term_is_value(x1)), cs.default))
                 
                 case _:
                     raise AssertionError("Unreachable: all variants handled")
@@ -863,7 +863,7 @@ def term_is_value(term: hydra.core.Term) -> bool:
             return hydra.lib.lists.foldl((lambda b, kv: hydra.lib.logic.and_(b, hydra.lib.logic.and_(term_is_value(hydra.lib.pairs.first(kv)), term_is_value(hydra.lib.pairs.second(kv))))), True, hydra.lib.maps.to_list(m))
         
         case hydra.core.TermMaybe(value=m2):
-            return hydra.lib.maybes.maybe(True, (lambda x1: term_is_value(x1)), m2)
+            return hydra.lib.maybes.maybe((lambda : True), (lambda x1: term_is_value(x1)), m2)
         
         case hydra.core.TermRecord(value=r):
             return check_fields(r.fields)

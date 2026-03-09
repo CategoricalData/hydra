@@ -35,7 +35,7 @@ def compact_name(namespaces: FrozenDict[hydra.module.Namespace, str], name: hydr
         return qualify_name(name)
     mns = qual_name().namespace
     local = qual_name().local
-    return hydra.lib.maybes.maybe(name.value, (lambda ns: hydra.lib.maybes.maybe(local, (lambda pre: hydra.lib.strings.cat((pre, ":", local))), hydra.lib.maps.lookup(ns, namespaces))), mns)
+    return hydra.lib.maybes.maybe((lambda : name.value), (lambda ns: hydra.lib.maybes.maybe((lambda : local), (lambda pre: hydra.lib.strings.cat((pre, ":", local))), hydra.lib.maps.lookup(ns, namespaces))), mns)
 
 def local_name_of(arg_: hydra.core.Name) -> str:
     r"""Extract the local part of a name."""
@@ -70,5 +70,5 @@ def unqualify_name(qname: hydra.module.QualifiedName) -> hydra.core.Name:
     
     @lru_cache(1)
     def prefix() -> str:
-        return hydra.lib.maybes.maybe("", (lambda n: hydra.lib.strings.cat2(n.value, ".")), qname.namespace)
+        return hydra.lib.maybes.maybe((lambda : ""), (lambda n: hydra.lib.strings.cat2(n.value, ".")), qname.namespace)
     return hydra.core.Name(hydra.lib.strings.cat2(prefix(), qname.local))

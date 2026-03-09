@@ -38,7 +38,7 @@ def aggregate_annotations(get_value: Callable[[T0], Maybe[T1]], get_x: Callable[
     r"""Aggregate annotations from nested structures."""
     
     def to_pairs(rest: frozenlist[frozenlist[tuple[T2, T3]]], t2: T0) -> frozenlist[frozenlist[tuple[T2, T3]]]:
-        return hydra.lib.maybes.maybe(rest, (lambda yy: to_pairs(hydra.lib.lists.cons(hydra.lib.maps.to_list(get_anns(yy)), rest), get_x(yy))), get_value(t2))
+        return hydra.lib.maybes.maybe((lambda : rest), (lambda yy: to_pairs(hydra.lib.lists.cons(hydra.lib.maps.to_list(get_anns(yy)), rest), get_x(yy))), get_value(t2))
     return hydra.lib.maps.from_list(hydra.lib.lists.concat(to_pairs((), t)))
 
 def get_attr(key: hydra.core.Name, cx: hydra.context.Context) -> Maybe[hydra.core.Term]:
@@ -49,7 +49,7 @@ def get_attr(key: hydra.core.Name, cx: hydra.context.Context) -> Maybe[hydra.cor
 def get_debug_id(cx: hydra.context.Context) -> Either[hydra.context.InContext[hydra.error.OtherError], Maybe[str]]:
     r"""Get the debug ID from context (Either version)."""
     
-    return hydra.lib.maybes.maybe(Right(Nothing()), (lambda term: hydra.lib.eithers.map((lambda x1: hydra.lib.maybes.pure(x1)), hydra.extract.core.string(cx, hydra.graph.Graph(hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty()), term))), get_attr(hydra.constants.key_debug_id, cx))
+    return hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda term: hydra.lib.eithers.map((lambda x1: hydra.lib.maybes.pure(x1)), hydra.extract.core.string(cx, hydra.graph.Graph(hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty()), term))), get_attr(hydra.constants.key_debug_id, cx))
 
 def debug_if(cx: hydra.context.Context, debug_id: str, message: str) -> Either[hydra.context.InContext[hydra.error.OtherError], None]:
     r"""Debug if the debug ID matches (Either version)."""
@@ -59,7 +59,7 @@ def debug_if(cx: hydra.context.Context, debug_id: str, message: str) -> Either[h
 def get_attr_with_default(key: hydra.core.Name, def_: hydra.core.Term, cx: hydra.context.Context) -> hydra.core.Term:
     r"""Get an attribute with a default value from context (pure version)."""
     
-    return hydra.lib.maybes.from_maybe(def_, get_attr(key, cx))
+    return hydra.lib.maybes.from_maybe((lambda : def_), get_attr(key, cx))
 
 def has_flag(cx: hydra.context.Context, flag: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.OtherError], bool]:
     r"""Check if flag is set (Either version)."""
@@ -96,12 +96,12 @@ def get_count(key: hydra.core.Name, cx: hydra.context.Context):
             
             case _:
                 return 0
-    return hydra.lib.maybes.maybe(0, (lambda term: _hoist_hydra_annotations_get_count_3(term)), hydra.lib.maps.lookup(key, cx.other))
+    return hydra.lib.maybes.maybe((lambda : 0), (lambda term: _hoist_hydra_annotations_get_count_3(term)), hydra.lib.maps.lookup(key, cx.other))
 
 def get_description(cx: hydra.context.Context, graph: hydra.graph.Graph, anns: FrozenDict[hydra.core.Name, hydra.core.Term]) -> Either[hydra.context.InContext[hydra.error.OtherError], Maybe[str]]:
     r"""Get description from annotations map (Either version)."""
     
-    return hydra.lib.maybes.maybe(Right(Nothing()), (lambda term: hydra.lib.eithers.map((lambda x1: hydra.lib.maybes.pure(x1)), hydra.extract.core.string(cx, graph, term))), hydra.lib.maps.lookup(hydra.core.Name("description"), anns))
+    return hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda term: hydra.lib.eithers.map((lambda x1: hydra.lib.maybes.pure(x1)), hydra.extract.core.string(cx, graph, term))), hydra.lib.maps.lookup(hydra.core.Name("description"), anns))
 
 def term_annotation_internal(term: hydra.core.Term) -> FrozenDict[hydra.core.Name, hydra.core.Term]:
     r"""Get internal term annotations."""
@@ -141,7 +141,7 @@ def get_term_description(cx: hydra.context.Context, graph: hydra.graph.Graph, te
 def get_type(graph: hydra.graph.Graph, anns: FrozenDict[hydra.core.Name, hydra.core.Term]) -> Either[hydra.error.DecodingError, Maybe[hydra.core.Type]]:
     r"""Get type from annotations."""
     
-    return hydra.lib.maybes.maybe(Right(Nothing()), (lambda dat: hydra.lib.eithers.map((lambda x1: hydra.lib.maybes.pure(x1)), hydra.decode.core.type(graph, dat))), hydra.lib.maps.lookup(hydra.constants.key_type, anns))
+    return hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda dat: hydra.lib.eithers.map((lambda x1: hydra.lib.maybes.pure(x1)), hydra.decode.core.type(graph, dat))), hydra.lib.maps.lookup(hydra.constants.key_type, anns))
 
 def type_annotation_internal(typ: hydra.core.Type) -> FrozenDict[hydra.core.Name, hydra.core.Term]:
     r"""Get internal type annotations."""
@@ -167,8 +167,8 @@ def get_type_classes(cx: hydra.context.Context, graph: hydra.graph.Graph, term: 
         @lru_cache(1)
         def by_name() -> FrozenDict[hydra.core.Name, hydra.classes.TypeClass]:
             return hydra.lib.maps.from_list(((hydra.core.Name("equality"), hydra.classes.TypeClass.EQUALITY), (hydra.core.Name("ordering"), hydra.classes.TypeClass.ORDERING)))
-        return hydra.lib.eithers.bind(hydra.extract.core.unit_variant(cx, hydra.core.Name("hydra.classes.TypeClass"), graph, term2), (lambda fn: hydra.lib.maybes.maybe(Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("unexpected: expected type class, got ", hydra.show.core.term(term2))), cx)), (lambda x: Right(x)), hydra.lib.maps.lookup(fn, by_name()))))
-    return hydra.lib.maybes.maybe(Right(hydra.lib.maps.empty()), (lambda term2: hydra.extract.core.map(cx, (lambda t: hydra.lib.eithers.bimap((lambda de: hydra.context.InContext(hydra.error.OtherError(de.value), cx)), (lambda x: x), hydra.decode.core.name(graph, t))), (lambda v1: hydra.extract.core.set_of(cx, (lambda x1: decode_class(x1)), graph, v1)), graph, term2)), get_term_annotation(hydra.constants.key_classes, term))
+        return hydra.lib.eithers.bind(hydra.extract.core.unit_variant(cx, hydra.core.Name("hydra.classes.TypeClass"), graph, term2), (lambda fn: hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("unexpected: expected type class, got ", hydra.show.core.term(term2))), cx))), (lambda x: Right(x)), hydra.lib.maps.lookup(fn, by_name()))))
+    return hydra.lib.maybes.maybe((lambda : Right(hydra.lib.maps.empty())), (lambda term2: hydra.extract.core.map(cx, (lambda t: hydra.lib.eithers.bimap((lambda de: hydra.context.InContext(hydra.error.OtherError(de.value), cx)), (lambda x: x), hydra.decode.core.name(graph, t))), (lambda v1: hydra.extract.core.set_of(cx, (lambda x1: decode_class(x1)), graph, v1)), graph, term2)), get_term_annotation(hydra.constants.key_classes, term))
 
 def get_type_description(cx: hydra.context.Context, graph: hydra.graph.Graph, typ: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.OtherError], Maybe[str]]:
     r"""Get type description (Either version)."""
@@ -190,8 +190,8 @@ def is_native_type(el: hydra.core.Binding) -> bool:
     
     @lru_cache(1)
     def is_flagged_as_first_class_type() -> bool:
-        return hydra.lib.maybes.from_maybe(False, hydra.lib.maybes.map((lambda _: True), get_term_annotation(hydra.constants.key_first_class_type, el.term)))
-    return hydra.lib.maybes.maybe(False, (lambda ts: hydra.lib.logic.and_(hydra.lib.equality.equal(ts, hydra.core.TypeScheme((), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type"))), Nothing())), hydra.lib.logic.not_(is_flagged_as_first_class_type()))), el.type)
+        return hydra.lib.maybes.from_maybe((lambda : False), hydra.lib.maybes.map((lambda _: True), get_term_annotation(hydra.constants.key_first_class_type, el.term)))
+    return hydra.lib.maybes.maybe((lambda : False), (lambda ts: hydra.lib.logic.and_(hydra.lib.equality.equal(ts, hydra.core.TypeScheme((), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Type"))), Nothing())), hydra.lib.logic.not_(is_flagged_as_first_class_type()))), el.type)
 
 def put_attr(key: hydra.core.Name, val: hydra.core.Term, cx: hydra.context.Context) -> hydra.context.Context:
     r"""Set an attribute in a context."""

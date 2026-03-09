@@ -93,12 +93,12 @@ def py_name_to_py_primary(name: hydra.ext.python.syntax.Name) -> hydra.ext.pytho
 def annotated_expression(mcomment: Maybe[str], expr: hydra.ext.python.syntax.Expression) -> hydra.ext.python.syntax.Expression:
     r"""Annotate an expression with an optional comment using Annotated[]."""
     
-    return hydra.lib.maybes.maybe(expr, (lambda c: py_primary_to_py_expression(primary_with_expression_slices(py_name_to_py_primary(hydra.ext.python.syntax.Name("Annotated")), (expr, double_quoted_string(c))))), mcomment)
+    return hydra.lib.maybes.maybe((lambda : expr), (lambda c: py_primary_to_py_expression(primary_with_expression_slices(py_name_to_py_primary(hydra.ext.python.syntax.Name("Annotated")), (expr, double_quoted_string(c))))), mcomment)
 
 def annotated_statement(mcomment: Maybe[str], stmt: hydra.ext.python.syntax.Statement) -> hydra.ext.python.syntax.Statement:
     r"""Annotate a statement with an optional comment."""
     
-    return hydra.lib.maybes.maybe(stmt, (lambda c: cast(hydra.ext.python.syntax.Statement, hydra.ext.python.syntax.StatementAnnotated(hydra.ext.python.syntax.AnnotatedStatement(c, stmt)))), mcomment)
+    return hydra.lib.maybes.maybe((lambda : stmt), (lambda c: cast(hydra.ext.python.syntax.Statement, hydra.ext.python.syntax.StatementAnnotated(hydra.ext.python.syntax.AnnotatedStatement(c, stmt)))), mcomment)
 
 def py_simple_statement_to_py_statement(s: hydra.ext.python.syntax.SimpleStatement) -> hydra.ext.python.syntax.Statement:
     r"""Convert a SimpleStatement to a Statement."""
@@ -252,7 +252,7 @@ def indented_block(mcomment: Maybe[str], stmts: frozenlist[frozenlist[hydra.ext.
     
     @lru_cache(1)
     def comment_group() -> frozenlist[hydra.ext.python.syntax.Statement]:
-        return hydra.lib.maybes.maybe((), (lambda s: (comment_statement(s),)), mcomment)
+        return hydra.lib.maybes.maybe((lambda : ()), (lambda s: (comment_statement(s),)), mcomment)
     @lru_cache(1)
     def groups() -> frozenlist[frozenlist[hydra.ext.python.syntax.Statement]]:
         return hydra.lib.lists.filter((lambda g: hydra.lib.logic.not_(hydra.lib.lists.null(g))), hydra.lib.lists.cons(comment_group(), stmts))
@@ -326,7 +326,7 @@ def py_expression_to_disjunction(e: hydra.ext.python.syntax.Expression) -> hydra
 def py_expression_to_py_primary(e: hydra.ext.python.syntax.Expression) -> hydra.ext.python.syntax.Primary:
     r"""Extracts the primary from an expression, or wraps it in parentheses if the expression does not contain a primary."""
     
-    return hydra.lib.maybes.maybe(cast(hydra.ext.python.syntax.Primary, hydra.ext.python.syntax.PrimarySimple(cast(hydra.ext.python.syntax.Atom, hydra.ext.python.syntax.AtomGroup(cast(hydra.ext.python.syntax.Group, hydra.ext.python.syntax.GroupExpression(cast(hydra.ext.python.syntax.NamedExpression, hydra.ext.python.syntax.NamedExpressionSimple(e)))))))), (lambda prim: prim), decode_py_expression_to_py_primary(e))
+    return hydra.lib.maybes.maybe((lambda : cast(hydra.ext.python.syntax.Primary, hydra.ext.python.syntax.PrimarySimple(cast(hydra.ext.python.syntax.Atom, hydra.ext.python.syntax.AtomGroup(cast(hydra.ext.python.syntax.Group, hydra.ext.python.syntax.GroupExpression(cast(hydra.ext.python.syntax.NamedExpression, hydra.ext.python.syntax.NamedExpressionSimple(e))))))))), (lambda prim: prim), decode_py_expression_to_py_primary(e))
 
 def py_expression_to_py_star_named_expression(expr: hydra.ext.python.syntax.Expression) -> hydra.ext.python.syntax.StarNamedExpression:
     r"""Convert an Expression to a StarNamedExpression."""

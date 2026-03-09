@@ -323,7 +323,7 @@ def value_binding_to_expr(vb: hydra.ext.haskell.ast.ValueBinding) -> hydra.ast.E
             @lru_cache(1)
             def body() -> hydra.ast.Expr:
                 return hydra.serialization.ifx(hydra.ext.haskell.operators.define_op(), pattern_to_expr(pat), right_hand_side_to_expr(rhs))
-            return hydra.lib.maybes.maybe(body(), (lambda local_bindings: (bindings := local_bindings.value, hydra.serialization.indent_block(hydra.lib.lists.cons(body(), (hydra.serialization.indent_block(hydra.lib.lists.cons(hydra.serialization.cst("where"), hydra.lib.lists.map((lambda x1: local_binding_to_expr(x1)), bindings))),))))[1]), local)
+            return hydra.lib.maybes.maybe((lambda : body()), (lambda local_bindings: (bindings := local_bindings.value, hydra.serialization.indent_block(hydra.lib.lists.cons(body(), (hydra.serialization.indent_block(hydra.lib.lists.cons(hydra.serialization.cst("where"), hydra.lib.lists.map((lambda x1: local_binding_to_expr(x1)), bindings))),))))[1]), local)
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -345,7 +345,7 @@ def field_with_comments_to_expr(field_with_comments: hydra.ext.haskell.ast.Field
     
     field = field_with_comments.field
     mc = field_with_comments.comments
-    return hydra.lib.maybes.maybe(field_to_expr(field), (lambda c: hydra.serialization.newline_sep(hydra.lib.lists.cons(hydra.serialization.cst(to_haskell_comments(c)), (field_to_expr(field),)))), mc)
+    return hydra.lib.maybes.maybe((lambda : field_to_expr(field)), (lambda c: hydra.serialization.newline_sep(hydra.lib.lists.cons(hydra.serialization.cst(to_haskell_comments(c)), (field_to_expr(field),)))), mc)
 
 def constructor_to_expr(cons: hydra.ext.haskell.ast.Constructor) -> hydra.ast.Expr:
     r"""Convert a data constructor to an AST expression."""
@@ -369,7 +369,7 @@ def constructor_with_comments_to_expr(cons_with_comments: hydra.ext.haskell.ast.
     
     body = cons_with_comments.body
     mc = cons_with_comments.comments
-    return hydra.lib.maybes.maybe(constructor_to_expr(body), (lambda c: hydra.serialization.newline_sep(hydra.lib.lists.cons(hydra.serialization.cst(to_haskell_comments(c)), (constructor_to_expr(body),)))), mc)
+    return hydra.lib.maybes.maybe((lambda : constructor_to_expr(body)), (lambda c: hydra.serialization.newline_sep(hydra.lib.lists.cons(hydra.serialization.cst(to_haskell_comments(c)), (constructor_to_expr(body),)))), mc)
 
 def data_or_newtype_to_expr(kw: hydra.ext.haskell.ast.DataOrNewtype) -> hydra.ast.Expr:
     r"""Convert a data/newtype keyword to an AST expression."""
@@ -450,7 +450,7 @@ def declaration_with_comments_to_expr(decl_with_comments: hydra.ext.haskell.ast.
     
     body = decl_with_comments.body
     mc = decl_with_comments.comments
-    return hydra.lib.maybes.maybe(declaration_to_expr(body), (lambda c: hydra.serialization.newline_sep(hydra.lib.lists.cons(hydra.serialization.cst(to_haskell_comments(c)), (declaration_to_expr(body),)))), mc)
+    return hydra.lib.maybes.maybe((lambda : declaration_to_expr(body)), (lambda c: hydra.serialization.newline_sep(hydra.lib.lists.cons(hydra.serialization.cst(to_haskell_comments(c)), (declaration_to_expr(body),)))), mc)
 
 def import_export_spec_to_expr(spec: hydra.ext.haskell.ast.ImportExportSpec) -> hydra.ast.Expr:
     r"""Convert an import/export specification to an AST expression."""
@@ -486,7 +486,7 @@ def module_head_to_expr(module_head: hydra.ext.haskell.ast.ModuleHead) -> hydra.
     @lru_cache(1)
     def head() -> hydra.ast.Expr:
         return hydra.serialization.space_sep(hydra.lib.lists.cons(hydra.serialization.cst("module"), hydra.lib.lists.cons(hydra.serialization.cst(mname), (hydra.serialization.cst("where"),))))
-    return hydra.lib.maybes.maybe(head(), (lambda c: hydra.serialization.newline_sep(hydra.lib.lists.cons(hydra.serialization.cst(to_haskell_comments(c)), hydra.lib.lists.cons(hydra.serialization.cst(""), (head(),))))), mc)
+    return hydra.lib.maybes.maybe((lambda : head()), (lambda c: hydra.serialization.newline_sep(hydra.lib.lists.cons(hydra.serialization.cst(to_haskell_comments(c)), hydra.lib.lists.cons(hydra.serialization.cst(""), (head(),))))), mc)
 
 def to_simple_comments(c: str) -> str:
     r"""Convert a string to simple line comments."""
@@ -504,7 +504,7 @@ def module_to_expr(module: hydra.ext.haskell.ast.Module) -> hydra.ast.Expr:
         return (hydra.serialization.cst(to_simple_comments(hydra.constants.warning_auto_generated_file)),)
     @lru_cache(1)
     def header_line() -> frozenlist[hydra.ast.Expr]:
-        return hydra.lib.maybes.maybe((), (lambda h: (module_head_to_expr(h),)), mh)
+        return hydra.lib.maybes.maybe((lambda : ()), (lambda h: (module_head_to_expr(h),)), mh)
     @lru_cache(1)
     def decl_lines() -> frozenlist[hydra.ast.Expr]:
         return hydra.lib.lists.map((lambda x1: declaration_with_comments_to_expr(x1)), decls)

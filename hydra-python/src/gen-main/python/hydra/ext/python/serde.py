@@ -658,7 +658,7 @@ def encode_import_from_as_name(ifan: hydra.ext.python.syntax.ImportFromAsName) -
     
     name = ifan.name
     alias = ifan.as_
-    return hydra.lib.maybes.maybe(encode_name(name), (lambda a: hydra.serialization.space_sep((encode_name(name), hydra.serialization.cst("as"), encode_name(a)))), alias)
+    return hydra.lib.maybes.maybe((lambda : encode_name(name)), (lambda a: hydra.serialization.space_sep((encode_name(name), hydra.serialization.cst("as"), encode_name(a)))), alias)
 
 def encode_import_from_targets(t: hydra.ext.python.syntax.ImportFromTargets) -> hydra.ast.Expr:
     r"""Serialize import from targets."""

@@ -54,7 +54,7 @@ def transitive_deps(get_deps: Callable[[hydra.module.Module], frozenlist[hydra.m
     def initial_deps() -> frozenset[hydra.module.Namespace]:
         return hydra.lib.sets.from_list(hydra.lib.lists.concat(hydra.lib.lists.map((lambda m: hydra.lib.lists.filter((lambda dep: hydra.lib.logic.not_(hydra.lib.equality.equal(dep, m.namespace))), get_deps(m))), start_mods)))
     def go(pending: frozenset[hydra.module.Namespace], visited: frozenset[hydra.module.Namespace]) -> frozenset[hydra.module.Namespace]:
-        return hydra.lib.logic.if_else(hydra.lib.sets.null(pending), (lambda : visited), (lambda : (new_visited := hydra.lib.sets.union(visited, pending), (next_deps := hydra.lib.sets.from_list(hydra.lib.lists.concat(hydra.lib.lists.map((lambda nsv: hydra.lib.maybes.maybe((), (lambda dep_mod: get_deps(dep_mod)), hydra.lib.maps.lookup(nsv, ns_map))), hydra.lib.sets.to_list(pending)))), (new_pending := hydra.lib.sets.difference(next_deps, new_visited), go(new_pending, new_visited))[1])[1])[1]))
+        return hydra.lib.logic.if_else(hydra.lib.sets.null(pending), (lambda : visited), (lambda : (new_visited := hydra.lib.sets.union(visited, pending), (next_deps := hydra.lib.sets.from_list(hydra.lib.lists.concat(hydra.lib.lists.map((lambda nsv: hydra.lib.maybes.maybe((lambda : ()), (lambda dep_mod: get_deps(dep_mod)), hydra.lib.maps.lookup(nsv, ns_map))), hydra.lib.sets.to_list(pending)))), (new_pending := hydra.lib.sets.difference(next_deps, new_visited), go(new_pending, new_visited))[1])[1])[1]))
     return go(initial_deps(), hydra.lib.sets.empty())
 
 def module_term_deps_transitive(ns_map: FrozenDict[hydra.module.Namespace, hydra.module.Module], modules: frozenlist[hydra.module.Module]) -> frozenlist[hydra.module.Module]:
@@ -147,7 +147,7 @@ def format_term_binding(binding: hydra.core.Binding) -> str:
     name = binding.name.value
     @lru_cache(1)
     def type_str() -> str:
-        return hydra.lib.maybes.maybe("?", (lambda scheme: hydra.show.core.type_scheme(scheme)), binding.type)
+        return hydra.lib.maybes.maybe((lambda : "?"), (lambda scheme: hydra.show.core.type_scheme(scheme)), binding.type)
     return hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("  ", name), " : "), type_str())
 
 def format_type_binding(graph: hydra.graph.Graph, binding: hydra.core.Binding) -> Either[hydra.error.DecodingError, str]:

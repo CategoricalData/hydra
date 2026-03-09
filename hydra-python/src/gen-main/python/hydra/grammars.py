@@ -86,7 +86,7 @@ def find_names(pats: frozenlist[hydra.grammar.Pattern]) -> frozenlist[str]:
             return raw_name(pat)
         @lru_cache(1)
         def name_and_index() -> tuple[str, int]:
-            return hydra.lib.maybes.maybe((rn(), 1), (lambda i: (hydra.lib.strings.cat2(rn(), hydra.lib.literals.show_int32(hydra.lib.math.add(i, 1))), hydra.lib.math.add(i, 1))), hydra.lib.maps.lookup(rn(), name_map()))
+            return hydra.lib.maybes.maybe((lambda : (rn(), 1)), (lambda i: (hydra.lib.strings.cat2(rn(), hydra.lib.literals.show_int32(hydra.lib.math.add(i, 1))), hydra.lib.math.add(i, 1))), hydra.lib.maps.lookup(rn(), name_map()))
         @lru_cache(1)
         def nn() -> str:
             return hydra.lib.pairs.first(name_and_index())

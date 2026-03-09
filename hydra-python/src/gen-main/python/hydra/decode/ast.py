@@ -28,7 +28,7 @@ def associativity(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.error.DecodingError, hydra.ast.Associativity]]]:
                     return hydra.lib.maps.from_list(((hydra.core.Name("none"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.ast.Associativity.NONE), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("left"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.ast.Associativity.LEFT), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("right"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.ast.Associativity.RIGHT), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("both"), (lambda input: hydra.lib.eithers.map((lambda t: hydra.ast.Associativity.BOTH), hydra.extract.helpers.decode_unit(cx, input))))))
-                return hydra.lib.maybes.maybe(Left(hydra.error.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union type ", tname.value)))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
+                return hydra.lib.maybes.maybe((lambda : Left(hydra.error.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union type ", tname.value))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
             
             case _:
                 return Left(hydra.error.DecodingError("expected union of type hydra.ast.Associativity"))
@@ -165,7 +165,7 @@ def indent_style(cx: hydra.graph.Graph, raw: hydra.core.Term):
                             case _:
                                 return Left(hydra.error.DecodingError("expected literal"))
                     return hydra.lib.maps.from_list(((hydra.core.Name("allLines"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.ast.IndentStyle, hydra.ast.IndentStyleAllLines(t))), hydra.lib.eithers.either((lambda err: Left(hydra.error.DecodingError(err))), (lambda stripped2: _hoist_variant_map_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, input))))), (hydra.core.Name("subsequentLines"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.ast.IndentStyle, hydra.ast.IndentStyleSubsequentLines(t))), hydra.lib.eithers.either((lambda err: Left(hydra.error.DecodingError(err))), (lambda stripped2: _hoist_variant_map_4(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, input)))))))
-                return hydra.lib.maybes.maybe(Left(hydra.error.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union type ", tname.value)))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
+                return hydra.lib.maybes.maybe((lambda : Left(hydra.error.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union type ", tname.value))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
             
             case _:
                 return Left(hydra.error.DecodingError("expected union of type hydra.ast.IndentStyle"))
@@ -196,7 +196,7 @@ def ws(cx: hydra.graph.Graph, raw: hydra.core.Term):
                             case _:
                                 return Left(hydra.error.DecodingError("expected literal"))
                     return hydra.lib.maps.from_list(((hydra.core.Name("none"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.ast.Ws, hydra.ast.WsNone())), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("space"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.ast.Ws, hydra.ast.WsSpace())), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("break"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.ast.Ws, hydra.ast.WsBreak())), hydra.extract.helpers.decode_unit(cx, input)))), (hydra.core.Name("breakAndIndent"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.ast.Ws, hydra.ast.WsBreakAndIndent(t))), hydra.lib.eithers.either((lambda err: Left(hydra.error.DecodingError(err))), (lambda stripped2: _hoist_variant_map_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, input))))), (hydra.core.Name("doubleBreak"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.ast.Ws, hydra.ast.WsDoubleBreak())), hydra.extract.helpers.decode_unit(cx, input))))))
-                return hydra.lib.maybes.maybe(Left(hydra.error.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union type ", tname.value)))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
+                return hydra.lib.maybes.maybe((lambda : Left(hydra.error.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union type ", tname.value))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
             
             case _:
                 return Left(hydra.error.DecodingError("expected union of type hydra.ast.Ws"))
@@ -283,7 +283,7 @@ def expr(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.error.DecodingError, hydra.ast.Expr]]]:
                     return hydra.lib.maps.from_list(((hydra.core.Name("const"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.ast.Expr, hydra.ast.ExprConst(t))), symbol(cx, input)))), (hydra.core.Name("indent"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.ast.Expr, hydra.ast.ExprIndent(t))), indented_expression(cx, input)))), (hydra.core.Name("op"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.ast.Expr, hydra.ast.ExprOp(t))), op_expr(cx, input)))), (hydra.core.Name("brackets"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.ast.Expr, hydra.ast.ExprBrackets(t))), bracket_expr(cx, input))))))
-                return hydra.lib.maybes.maybe(Left(hydra.error.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union type ", tname.value)))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
+                return hydra.lib.maybes.maybe((lambda : Left(hydra.error.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union type ", tname.value))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
             
             case _:
                 return Left(hydra.error.DecodingError("expected union of type hydra.ast.Expr"))

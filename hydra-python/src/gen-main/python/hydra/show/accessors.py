@@ -186,7 +186,7 @@ def term_to_accessor_graph(namespaces: FrozenDict[hydra.module.Namespace, str], 
                 return helper(ids1(), mroot, next_path(), state_after_bindings(), (cast(hydra.accessors.TermAccessor, hydra.accessors.TermAccessorLetBody()), env))
             
             case hydra.core.TermVariable(value=name):
-                return hydra.lib.maybes.maybe(state, (lambda root: hydra.lib.maybes.maybe(state, (lambda node: (edge := hydra.accessors.AccessorEdge(root, hydra.accessors.AccessorPath(hydra.lib.lists.reverse(next_path())), node), new_edges := hydra.lib.lists.cons(edge, edges()), ((nodes(), new_edges), visited()))[2]), hydra.lib.maps.lookup(name, ids))), mroot)
+                return hydra.lib.maybes.maybe((lambda : state), (lambda root: hydra.lib.maybes.maybe((lambda : state), (lambda node: (edge := hydra.accessors.AccessorEdge(root, hydra.accessors.AccessorPath(hydra.lib.lists.reverse(next_path())), node), new_edges := hydra.lib.lists.cons(edge, edges()), ((nodes(), new_edges), visited()))[2]), hydra.lib.maps.lookup(name, ids))), mroot)
             
             case _:
                 return hydra.lib.lists.foldl((lambda v1, v2: helper(ids, mroot, next_path(), v1, v2)), state, hydra.rewriting.subterms_with_accessors(current_term()))

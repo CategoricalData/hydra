@@ -43,12 +43,12 @@ def decode_boolean(v1: hydra.json.model.Value) -> Either[str, bool]:
 def decode_optional_field(decode_value: Callable[[T0], Either[T1, T2]], name: T3, m: FrozenDict[T3, T0]) -> Either[T0, Maybe[T2]]:
     r"""Decode an optional field from a JSON object."""
     
-    return hydra.lib.maybes.maybe(Right(Nothing()), (lambda v: hydra.lib.eithers.map((lambda x: Just(x)), decode_value(v))), hydra.lib.maps.lookup(name, m))
+    return hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda v: hydra.lib.eithers.map((lambda x: Just(x)), decode_value(v))), hydra.lib.maps.lookup(name, m))
 
 def decode_field(decode_value: Callable[[T0], Either[str, T1]], name: str, m: FrozenDict[str, T0]) -> Either[str, T1]:
     r"""Decode a required field from a JSON object."""
     
-    return hydra.lib.eithers.bind(decode_optional_field(decode_value, name, m), (lambda v1: hydra.lib.maybes.maybe(Left(hydra.lib.strings.cat2("missing field: ", name)), (lambda f: Right(f)), v1)))
+    return hydra.lib.eithers.bind(decode_optional_field(decode_value, name, m), (lambda v1: hydra.lib.maybes.maybe((lambda : Left(hydra.lib.strings.cat2("missing field: ", name))), (lambda f: Right(f)), v1)))
 
 def decode_object(v1: hydra.json.model.Value) -> Either[str, FrozenDict[str, hydra.json.model.Value]]:
     r"""Decode a JSON object value."""

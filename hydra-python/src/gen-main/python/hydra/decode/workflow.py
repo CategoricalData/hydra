@@ -57,7 +57,7 @@ def schema_spec(cx: hydra.graph.Graph, raw: hydra.core.Term):
                             case _:
                                 return Left(hydra.error.DecodingError("expected literal"))
                     return hydra.lib.maps.from_list(((hydra.core.Name("hydra"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.workflow.SchemaSpec, hydra.workflow.SchemaSpecHydra(t))), hydra_schema_spec(cx, input)))), (hydra.core.Name("file"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.workflow.SchemaSpec, hydra.workflow.SchemaSpecFile(t))), hydra.lib.eithers.either((lambda err: Left(hydra.error.DecodingError(err))), (lambda stripped2: _hoist_variant_map_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx, input))))), (hydra.core.Name("provided"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.workflow.SchemaSpec, hydra.workflow.SchemaSpecProvided())), hydra.extract.helpers.decode_unit(cx, input))))))
-                return hydra.lib.maybes.maybe(Left(hydra.error.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union type ", tname.value)))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
+                return hydra.lib.maybes.maybe((lambda : Left(hydra.error.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union type ", tname.value))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
             
             case _:
                 return Left(hydra.error.DecodingError("expected union of type hydra.workflow.SchemaSpec"))

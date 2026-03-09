@@ -60,7 +60,7 @@ def json_null() -> hydra.parsing.Parser[hydra.json.model.Value]:
 def json_exponent_part() -> hydra.parsing.Parser[Maybe[str]]:
     r"""Parse the optional exponent part of a JSON number."""
     
-    return hydra.parsers.optional(hydra.parsers.bind(hydra.parsers.satisfy((lambda c: hydra.lib.logic.or_(hydra.lib.equality.equal(c, 101), hydra.lib.equality.equal(c, 69)))), (lambda _: hydra.parsers.bind(hydra.parsers.optional(hydra.parsers.satisfy((lambda c: hydra.lib.logic.or_(hydra.lib.equality.equal(c, 43), hydra.lib.equality.equal(c, 45))))), (lambda sign: hydra.parsers.map((lambda digits: hydra.lib.strings.cat2(hydra.lib.strings.cat2("e", hydra.lib.maybes.maybe("", (lambda arg_: hydra.lib.strings.from_list(hydra.lib.lists.pure(arg_))), sign)), digits)), digits()))))))
+    return hydra.parsers.optional(hydra.parsers.bind(hydra.parsers.satisfy((lambda c: hydra.lib.logic.or_(hydra.lib.equality.equal(c, 101), hydra.lib.equality.equal(c, 69)))), (lambda _: hydra.parsers.bind(hydra.parsers.optional(hydra.parsers.satisfy((lambda c: hydra.lib.logic.or_(hydra.lib.equality.equal(c, 43), hydra.lib.equality.equal(c, 45))))), (lambda sign: hydra.parsers.map((lambda digits: hydra.lib.strings.cat2(hydra.lib.strings.cat2("e", hydra.lib.maybes.maybe((lambda : ""), (lambda arg_: hydra.lib.strings.from_list(hydra.lib.lists.pure(arg_))), sign)), digits)), digits()))))))
 
 @lru_cache(1)
 def json_fraction_part() -> hydra.parsing.Parser[Maybe[str]]:
@@ -72,13 +72,13 @@ def json_fraction_part() -> hydra.parsing.Parser[Maybe[str]]:
 def json_integer_part() -> hydra.parsing.Parser[str]:
     r"""Parse the integer part of a JSON number (optional minus, then digits)."""
     
-    return hydra.parsers.bind(hydra.parsers.optional(hydra.parsers.char(45)), (lambda sign: hydra.parsers.bind(digits(), (lambda digits: hydra.parsers.pure(hydra.lib.maybes.maybe(digits, (lambda _: hydra.lib.strings.cat2("-", digits)), sign))))))
+    return hydra.parsers.bind(hydra.parsers.optional(hydra.parsers.char(45)), (lambda sign: hydra.parsers.bind(digits(), (lambda digits: hydra.parsers.pure(hydra.lib.maybes.maybe((lambda : digits), (lambda _: hydra.lib.strings.cat2("-", digits)), sign))))))
 
 @lru_cache(1)
 def json_number() -> hydra.parsing.Parser[hydra.json.model.Value]:
     r"""Parse a JSON number (integer, decimal, or scientific notation)."""
     
-    return token(hydra.parsers.bind(json_integer_part(), (lambda int_part: hydra.parsers.bind(json_fraction_part(), (lambda frac_part: hydra.parsers.bind(json_exponent_part(), (lambda exp_part: (num_str := hydra.lib.strings.cat2(hydra.lib.strings.cat2(int_part, hydra.lib.maybes.maybe("", (lambda x1: hydra.lib.equality.identity(x1)), frac_part)), hydra.lib.maybes.maybe("", (lambda x1: hydra.lib.equality.identity(x1)), exp_part)), hydra.parsers.pure(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.maybes.maybe(Decimal('0.0'), (lambda x1: hydra.lib.equality.identity(x1)), hydra.lib.literals.read_bigfloat(num_str))))))[1])))))))
+    return token(hydra.parsers.bind(json_integer_part(), (lambda int_part: hydra.parsers.bind(json_fraction_part(), (lambda frac_part: hydra.parsers.bind(json_exponent_part(), (lambda exp_part: (num_str := hydra.lib.strings.cat2(hydra.lib.strings.cat2(int_part, hydra.lib.maybes.maybe((lambda : ""), (lambda x1: hydra.lib.equality.identity(x1)), frac_part)), hydra.lib.maybes.maybe((lambda : ""), (lambda x1: hydra.lib.equality.identity(x1)), exp_part)), hydra.parsers.pure(cast(hydra.json.model.Value, hydra.json.model.ValueNumber(hydra.lib.maybes.maybe((lambda : Decimal('0.0')), (lambda x1: hydra.lib.equality.identity(x1)), hydra.lib.literals.read_bigfloat(num_str))))))[1])))))))
 
 @lru_cache(1)
 def json_escape_char() -> hydra.parsing.Parser[int]:

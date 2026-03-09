@@ -72,7 +72,7 @@ def element_reference(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.
     def esc_local() -> str:
         return sanitize_haskell_name(local)
     mns = qname().namespace
-    return hydra.lib.maybes.cases(qname().namespace, simple_name(local), (lambda ns: hydra.lib.maybes.cases(hydra.lib.maps.lookup(ns, namespaces_map()), simple_name(local), (lambda mn: (alias_str := mn.value, hydra.lib.logic.if_else(hydra.lib.equality.equal(ns, gname()), (lambda : simple_name(esc_local())), (lambda : raw_name(hydra.lib.strings.cat((alias_str, ".", sanitize_haskell_name(local)))))))[1]))))
+    return hydra.lib.maybes.cases(qname().namespace, (lambda : simple_name(local)), (lambda ns: hydra.lib.maybes.cases(hydra.lib.maps.lookup(ns, namespaces_map()), (lambda : simple_name(local)), (lambda mn: (alias_str := mn.value, hydra.lib.logic.if_else(hydra.lib.equality.equal(ns, gname()), (lambda : simple_name(esc_local())), (lambda : raw_name(hydra.lib.strings.cat((alias_str, ".", sanitize_haskell_name(local)))))))[1]))))
 
 def hsapp(l: hydra.ext.haskell.ast.Expression, r: hydra.ext.haskell.ast.Expression) -> hydra.ext.haskell.ast.Expression:
     r"""Create a Haskell function application expression."""

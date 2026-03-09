@@ -43,7 +43,7 @@ def satisfy(pred: Callable[[int], bool]) -> hydra.parsing.Parser[int]:
         @lru_cache(1)
         def codes() -> frozenlist[int]:
             return hydra.lib.strings.to_list(input)
-        return hydra.lib.maybes.maybe(cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(hydra.parsing.ParseError("unexpected end of input", input))), (lambda c: (rest := hydra.lib.strings.from_list(hydra.lib.lists.drop(1, codes())), hydra.lib.logic.if_else(pred(c), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(hydra.parsing.ParseSuccess(c, rest)))), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(hydra.parsing.ParseError("character did not satisfy predicate", input))))))[1]), hydra.lib.lists.safe_head(codes()))
+        return hydra.lib.maybes.maybe((lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(hydra.parsing.ParseError("unexpected end of input", input)))), (lambda c: (rest := hydra.lib.strings.from_list(hydra.lib.lists.drop(1, codes())), hydra.lib.logic.if_else(pred(c), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(hydra.parsing.ParseSuccess(c, rest)))), (lambda : cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(hydra.parsing.ParseError("character did not satisfy predicate", input))))))[1]), hydra.lib.lists.safe_head(codes()))
     return hydra.parsing.Parser((lambda x1: parse(x1)))
 
 @lru_cache(1)

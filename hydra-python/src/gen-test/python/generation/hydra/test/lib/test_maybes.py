@@ -76,11 +76,11 @@ def test_bind__nothing_to_nothing():
 
 def test_cases__just_applies_function():
 
-    assert (hydra.lib.maybes.cases(Just(5), 0, (lambda x: hydra.lib.math.mul(x, 2)))) == (10)
+    assert (hydra.lib.maybes.cases(Just(5), (lambda : 0), (lambda x: hydra.lib.math.mul(x, 2)))) == (10)
 
 def test_cases__nothing_returns_default():
 
-    assert (hydra.lib.maybes.cases(Nothing(), 99, (lambda x: hydra.lib.math.mul(x, 2)))) == (99)
+    assert (hydra.lib.maybes.cases(Nothing(), (lambda : 99), (lambda x: hydra.lib.math.mul(x, 2)))) == (99)
 
 # cat
 
@@ -124,11 +124,11 @@ def test_fromjust__extract_from_just():
 
 def test_frommaybe__just_value():
 
-    assert (hydra.lib.maybes.from_maybe(0, Just(42))) == (42)
+    assert (hydra.lib.maybes.from_maybe((lambda : 0), Just(42))) == (42)
 
 def test_frommaybe__nothing_with_default():
 
-    assert (hydra.lib.maybes.from_maybe(99, Nothing())) == (99)
+    assert (hydra.lib.maybes.from_maybe((lambda : 99), Nothing())) == (99)
 
 # isJust
 
@@ -178,11 +178,11 @@ def test_mapmaybe__empty_input():
 
 def test_maybe__just_value_applies_function():
 
-    assert (hydra.lib.maybes.maybe(0, (lambda x: hydra.lib.math.mul(x, 2)), Just(5))) == (10)
+    assert (hydra.lib.maybes.maybe((lambda : 0), (lambda x: hydra.lib.math.mul(x, 2)), Just(5))) == (10)
 
 def test_maybe__nothing_returns_default():
 
-    assert (hydra.lib.maybes.maybe(99, (lambda x: hydra.lib.math.mul(x, 2)), Nothing())) == (99)
+    assert (hydra.lib.maybes.maybe((lambda : 99), (lambda x: hydra.lib.math.mul(x, 2)), Nothing())) == (99)
 
 # pure
 
