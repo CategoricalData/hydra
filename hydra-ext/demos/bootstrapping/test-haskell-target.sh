@@ -16,4 +16,8 @@ cd "$OUTPUT_DIR"
 stack build 2>&1
 
 echo "Running Haskell tests..."
-HYDRA_BENCHMARK_OUTPUT="${HYDRA_BENCHMARK_OUTPUT:-}" stack test 2>&1
+if [ -n "${HYDRA_BENCHMARK_OUTPUT:-}" ]; then
+    HYDRA_BENCHMARK_OUTPUT="$HYDRA_BENCHMARK_OUTPUT" stack test 2>&1
+else
+    stack test 2>&1
+fi
