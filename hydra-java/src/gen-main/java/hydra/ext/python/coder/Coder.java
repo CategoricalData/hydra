@@ -71,7 +71,42 @@ public interface Coder {
         hydra.ext.python.coder.Coder.wrapInNullaryLambda(hydra.lib.lists.At.apply(
           2,
           args))),
-      () -> args);
+      () -> hydra.lib.logic.IfElse.lazy(
+        hydra.lib.logic.And.apply(
+          hydra.lib.equality.Equal.apply(
+            name,
+            new hydra.core.Name("hydra.lib.maybes.cases")),
+          hydra.lib.equality.Equal.apply(
+            hydra.lib.lists.Length.apply(args),
+            3)),
+        () -> java.util.List.of(
+          hydra.lib.lists.At.apply(
+            0,
+            args),
+          hydra.ext.python.coder.Coder.wrapInNullaryLambda(hydra.lib.lists.At.apply(
+            1,
+            args)),
+          hydra.lib.lists.At.apply(
+            2,
+            args)),
+        () -> hydra.lib.logic.IfElse.lazy(
+          hydra.lib.logic.And.apply(
+            hydra.lib.logic.Or.apply(
+              hydra.lib.equality.Equal.apply(
+                name,
+                new hydra.core.Name("hydra.lib.maybes.maybe")),
+              hydra.lib.equality.Equal.apply(
+                name,
+                new hydra.core.Name("hydra.lib.maybes.fromMaybe"))),
+            hydra.lib.equality.Gte.apply(
+              hydra.lib.lists.Length.apply(args),
+              1)),
+          () -> hydra.lib.lists.Cons.apply(
+            hydra.ext.python.coder.Coder.wrapInNullaryLambda(hydra.lib.lists.At.apply(
+              0,
+              args)),
+            hydra.lib.lists.Tail.apply(args)),
+          () -> args)));
   }
   
   static hydra.ext.python.syntax.Expression pyInt(java.math.BigInteger n) {
