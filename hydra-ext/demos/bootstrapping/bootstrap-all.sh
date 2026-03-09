@@ -35,18 +35,6 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 HYDRA_ROOT="$( cd "$SCRIPT_DIR/../../.." && pwd )"
 OUTPUT_BASE="/tmp/hydra-bootstrapping-demo"
 
-# Ensure JAVA_HOME is set to a Java 17+ JDK (required by Hydra's Gradle build).
-# If JAVA_HOME is already set and valid, use it as-is.
-if [ -n "${JAVA_HOME:-}" ] && "$JAVA_HOME/bin/java" -version 2>&1 | grep -qE '"(17|18|19|2[0-9])\.' ; then
-    export JAVA_HOME
-elif command -v /usr/libexec/java_home > /dev/null 2>&1; then
-    # macOS: use java_home utility
-    JAVA_HOME=$(/usr/libexec/java_home -v 17 2>/dev/null || true)
-    if [ -n "${JAVA_HOME:-}" ]; then
-        export JAVA_HOME
-    fi
-fi
-
 # Parse subcommand
 SUBCOMMAND="all"
 case "${1:-}" in
@@ -90,6 +78,128 @@ done
 
 IFS=',' read -ra HOST_LIST <<< "$HOSTS"
 IFS=',' read -ra TARGET_LIST <<< "$TARGETS"
+
+# ============================================================
+# Environment checks
+# ============================================================
+
+# Determine which tool families are needed based on selected hosts and targets.
+NEED_STACK=false
+NEED_JAVA=false
+NEED_PYTHON=false
+for lang in "${HOST_LIST[@]}" "${TARGET_LIST[@]}"; do
+    case "$lang" in
+        haskell) NEED_STACK=true ;;
+        java)    NEED_JAVA=true ;;
+        python)  NEED_PYTHON=true ;;
+    esac
+done
+
+ENV_ERRORS=()
+ENV_WARNINGS=()
+
+# --- Stack / GHC (for Haskell host or target) ---
+if $NEED_STACK; then
+    if ! command -v stack > /dev/null 2>&1; then
+        ENV_ERRORS+=("stack is not installed. Install from https://docs.haskellstack.org/")
+    else
+        STACK_VER=$(stack --numeric-version 2>/dev/null || echo "0")
+        STACK_MAJOR=$(echo "$STACK_VER" | cut -d. -f1)
+        if [ "$STACK_MAJOR" -lt 2 ]; then
+            ENV_ERRORS+=("stack version $STACK_VER is too old; version 2.x or later is required")
+        fi
+    fi
+fi
+
+# --- Java 17+ (for Java host or target) ---
+if $NEED_JAVA; then
+    # Try to locate a Java 17+ JDK and set JAVA_HOME.
+    if [ -n "${JAVA_HOME:-}" ] && "$JAVA_HOME/bin/java" -version 2>&1 | grep -qE '"(17|18|19|2[0-9])\.' ; then
+        export JAVA_HOME
+    elif command -v /usr/libexec/java_home > /dev/null 2>&1; then
+        JAVA_HOME=$(/usr/libexec/java_home -v 17 2>/dev/null || true)
+        if [ -n "${JAVA_HOME:-}" ]; then
+            export JAVA_HOME
+        fi
+    fi
+
+    # Validate that java is available and is 17+.
+    JAVA_CMD="${JAVA_HOME:+$JAVA_HOME/bin/}java"
+    if ! command -v "$JAVA_CMD" > /dev/null 2>&1; then
+        ENV_ERRORS+=("java is not installed. JDK 17 or later is required.")
+    else
+        JAVA_VER=$("$JAVA_CMD" -version 2>&1 | head -1 | sed -E 's/.*"([0-9]+).*/\1/')
+        if [ -n "$JAVA_VER" ] && [ "$JAVA_VER" -lt 17 ] 2>/dev/null; then
+            ENV_ERRORS+=("Java $JAVA_VER is too old; version 17 or later is required (found: $("$JAVA_CMD" -version 2>&1 | head -1))")
+        fi
+    fi
+fi
+
+# --- Python 3.12+ (for Python host or target) ---
+if $NEED_PYTHON; then
+    # Check for any usable Python 3.12+.
+    # Look on PATH first, then in the hydra-python venvs (matching invoke-python-host.sh).
+    HYDRA_PYTHON_DIR="$HYDRA_ROOT/hydra-python"
+    PYTHON_CMD=""
+    for candidate in pypy3 python3 python \
+        "$HYDRA_PYTHON_DIR/.venv-pypy/bin/pypy3" \
+        "$HYDRA_PYTHON_DIR/.venv/bin/python3"; do
+        if command -v "$candidate" > /dev/null 2>&1 || [ -x "$candidate" ]; then
+            PY_VER=$("$candidate" -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")' 2>/dev/null || echo "0.0")
+            PY_MAJOR=$(echo "$PY_VER" | cut -d. -f1)
+            PY_MINOR=$(echo "$PY_VER" | cut -d. -f2)
+            if [ "$PY_MAJOR" -ge 3 ] && [ "$PY_MINOR" -ge 12 ] 2>/dev/null; then
+                PYTHON_CMD="$candidate"
+                break
+            fi
+        fi
+    done
+
+    if [ -z "$PYTHON_CMD" ]; then
+        ENV_ERRORS+=("Python 3.12 or later is required but not found. Create a venv: cd hydra-python && python3.12 -m venv .venv")
+    fi
+
+    # Check for pytest (needed for Python target testing).
+    for t in "${TARGET_LIST[@]}"; do
+        if [ "$t" = "python" ]; then
+            if [ -n "$PYTHON_CMD" ] && ! "$PYTHON_CMD" -m pytest --version > /dev/null 2>&1; then
+                ENV_WARNINGS+=("pytest is not installed; Python target tests will fail. Install with: pip install pytest")
+            fi
+            break
+        fi
+    done
+
+    # Check for pypy3 (recommended for Python host).
+    for h in "${HOST_LIST[@]}"; do
+        if [ "$h" = "python" ]; then
+            if ! command -v pypy3 > /dev/null 2>&1 && [ ! -x "$HYDRA_PYTHON_DIR/.venv-pypy/bin/pypy3" ]; then
+                ENV_WARNINGS+=("pypy3 is not installed. PyPy3 is strongly recommended for Python host (CPython is very slow for term-level generation).")
+            fi
+            break
+        fi
+    done
+fi
+
+# Report results.
+if [ ${#ENV_ERRORS[@]} -gt 0 ]; then
+    echo "Environment check FAILED:"
+    for msg in "${ENV_ERRORS[@]}"; do
+        echo "  ERROR: $msg"
+    done
+    if [ ${#ENV_WARNINGS[@]} -gt 0 ]; then
+        for msg in "${ENV_WARNINGS[@]}"; do
+            echo "  WARNING: $msg"
+        done
+    fi
+    exit 1
+fi
+if [ ${#ENV_WARNINGS[@]} -gt 0 ]; then
+    echo "Environment check:"
+    for msg in "${ENV_WARNINGS[@]}"; do
+        echo "  WARNING: $msg"
+    done
+    echo ""
+fi
 
 # ============================================================
 # Shared utilities
