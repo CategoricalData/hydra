@@ -326,7 +326,25 @@ wrapLazyArguments = def "wrapLazyArguments" $
         Lists.at (int32 0) (var "args"),
         wrapInNullaryLambda @@ (Lists.at (int32 1) (var "args")),
         wrapInNullaryLambda @@ (Lists.at (int32 2) (var "args"))])
-      (var "args")
+      (Logic.ifElse
+        (Logic.and
+          (Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.cases"))
+          (Equality.equal (Lists.length (var "args")) (int32 3)))
+        -- For cases, wrap argument 2 (the Nothing branch) for lazy evaluation
+        (list [
+          Lists.at (int32 0) (var "args"),
+          wrapInNullaryLambda @@ (Lists.at (int32 1) (var "args")),
+          Lists.at (int32 2) (var "args")])
+        (Logic.ifElse
+          (Logic.and
+            (Logic.or
+              (Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.maybe"))
+              (Equality.equal (var "name") (Core.name $ string "hydra.lib.maybes.fromMaybe")))
+            (Equality.gte (Lists.length (var "args")) (int32 1)))
+          -- For maybe/fromMaybe, wrap argument 1 (the default value)
+          (Lists.cons (wrapInNullaryLambda @@ (Lists.at (int32 0) (var "args")))
+                      (Lists.tail (var "args")))
+          (var "args")))
 
 -- | Create integer literal expression
 pyInt :: TBinding (Integer -> Py.Expression)
