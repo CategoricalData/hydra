@@ -268,9 +268,18 @@ isComplexVariable = define "isComplexVariable" $
     (Logic.ifElse
       (Sets.member (var "name") (Graph.graphLambdaVariables $ var "tc"))
       (boolean True)
-      -- If not in graph, assume mutual recursion (complex)
+      -- Check if the variable is in the graph's bound types
       ("typeLookup" <~ Maps.lookup (var "name") (Graph.graphBoundTypes $ var "tc") $
-       Logic.not (Maybes.isJust (var "typeLookup"))))
+       Maybes.maybe
+         -- If not in graph at all, assume mutual recursion (complex)
+         (boolean True)
+         -- If in graph, check if the binding itself is non-nullary (a function).
+         -- Non-nullary bindings are always complex (they take parameters).
+         -- Nullary bindings are assumed non-complex from this check;
+         -- their actual complexity will be determined by isComplexBinding
+         -- at the reference site.
+         ("ts" ~> Equality.gt (Arity.typeSchemeArity @@ var "ts") (int32 0))
+         (var "typeLookup")))
 
 -- | Check if a binding is complex and needs to be treated as a function
 isComplexBinding :: TBinding (Graph -> Binding -> Bool)
