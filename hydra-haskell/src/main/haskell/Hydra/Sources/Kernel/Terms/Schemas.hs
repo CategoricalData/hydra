@@ -325,12 +325,23 @@ extendGraphForLet = define "extendGraphForLet" $
     (Lists.foldl ("s" ~> "b" ~> Sets.delete (Core.bindingName $ var "b") (var "s"))
       (Graph.graphLambdaVariables $ var "g")
       (var "bindings"))
-    -- Update metadata per binding, using g2 so sibling bindings are visible
-    (Lists.foldl
-      ("m" ~> "b" ~> optCases (var "forBinding" @@ var "g2" @@ var "b")
-        (Maps.delete (Core.bindingName $ var "b") (var "m"))
-        ("t" ~> Maps.insert (Core.bindingName $ var "b") (var "t") (var "m")))
-      (Graph.graphMetadata $ var "g")
+    -- Update metadata per binding, accumulating a full graph so each binding sees earlier siblings' metadata
+    (Graph.graphMetadata $ Lists.foldl
+      ("gAcc" ~> "b" ~>
+        "m" <~ (Graph.graphMetadata $ var "gAcc") $
+        "newMeta" <~ (optCases (var "forBinding" @@ var "gAcc" @@ var "b")
+          (Maps.delete (Core.bindingName $ var "b") (var "m"))
+          ("t" ~> Maps.insert (Core.bindingName $ var "b") (var "t") (var "m"))) $
+        Graph.graph
+          (Graph.graphBoundTerms $ var "gAcc")
+          (Graph.graphBoundTypes $ var "gAcc")
+          (Graph.graphClassConstraints $ var "gAcc")
+          (Graph.graphLambdaVariables $ var "gAcc")
+          (var "newMeta")
+          (Graph.graphPrimitives $ var "gAcc")
+          (Graph.graphSchemaTypes $ var "gAcc")
+          (Graph.graphTypeVariables $ var "gAcc"))
+      (var "g2")
       (var "bindings"))
     (Graph.graphPrimitives $ var "g")
     (Graph.graphSchemaTypes $ var "g")
