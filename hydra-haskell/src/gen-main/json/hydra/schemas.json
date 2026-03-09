@@ -2035,108 +2035,197 @@
                                             "name": "metadata",
                                             "term": {
                                               "application": {
-                                                "argument": {"variable": "bindings"},
-                                                "function": {
+                                                "argument": {
                                                   "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {"variable": "g"},
-                                                        "function": {
-                                                          "function": {
-                                                            "elimination": {"record": {"field": "metadata", "typeName": "hydra.graph.Graph"}}}}}},
+                                                    "argument": {"variable": "bindings"},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {
-                                                          "function": {
-                                                            "lambda": {
-                                                              "body": {
-                                                                "function": {
-                                                                  "lambda": {
-                                                                    "body": {
-                                                                      "application": {
-                                                                        "argument": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "b"},
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "g2"},
-                                                                                "function": {"variable": "forBinding"}}}}},
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "argument": {
-                                                                              "function": {
-                                                                                "lambda": {
-                                                                                  "body": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "m"},
-                                                                                      "function": {
-                                                                                        "application": {
-                                                                                          "argument": {"variable": "t"},
-                                                                                          "function": {
-                                                                                            "application": {
-                                                                                              "argument": {
-                                                                                                "application": {
-                                                                                                  "argument": {"variable": "b"},
-                                                                                                  "function": {
-                                                                                                    "function": {
-                                                                                                      "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}}}},
-                                                                                              "function": {
-                                                                                                "typeApplication": {
-                                                                                                  "body": {
-                                                                                                    "typeApplication": {
-                                                                                                      "body": {"function": {"primitive": "hydra.lib.maps.insert"}},
-                                                                                                      "type": {"variable": "hydra.core.Name"}}},
-                                                                                                  "type": {"variable": "hydra.core.Term"}}}}}}}}},
-                                                                                  "domain": [{"variable": "hydra.core.Term"}],
-                                                                                  "parameter": "t"}}},
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "argument": {
+                                                        "argument": {"variable": "g2"},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "function": {
+                                                                "lambda": {
+                                                                  "body": {
+                                                                    "function": {
+                                                                      "lambda": {
+                                                                        "body": {
+                                                                          "let": {
+                                                                            "bindings": [
+                                                                              {
+                                                                                "name": "m",
+                                                                                "term": {
                                                                                   "application": {
-                                                                                    "argument": {"variable": "m"},
+                                                                                    "argument": {"variable": "gAcc"},
                                                                                     "function": {
+                                                                                      "function": {
+                                                                                        "elimination": {"record": {"field": "metadata", "typeName": "hydra.graph.Graph"}}}}}},
+                                                                                "type": [
+                                                                                  {
+                                                                                    "constraints": null,
+                                                                                    "type": {
+                                                                                      "map": {
+                                                                                        "keys": {"variable": "hydra.core.Name"},
+                                                                                        "values": {"variable": "hydra.core.Term"}}},
+                                                                                    "variables": []}]}],
+                                                                            "body": {
+                                                                              "let": {
+                                                                                "bindings": [
+                                                                                  {
+                                                                                    "name": "newMeta",
+                                                                                    "term": {
                                                                                       "application": {
                                                                                         "argument": {
                                                                                           "application": {
                                                                                             "argument": {"variable": "b"},
                                                                                             "function": {
-                                                                                              "function": {
-                                                                                                "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}}}},
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "gAcc"},
+                                                                                                "function": {"variable": "forBinding"}}}}},
                                                                                         "function": {
-                                                                                          "typeApplication": {
-                                                                                            "body": {
-                                                                                              "typeApplication": {
-                                                                                                "body": {"function": {"primitive": "hydra.lib.maps.delete"}},
-                                                                                                "type": {"variable": "hydra.core.Name"}}},
-                                                                                            "type": {"variable": "hydra.core.Term"}}}}}}},
-                                                                                "function": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "function": {
+                                                                                                "lambda": {
+                                                                                                  "body": {
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "m"},
+                                                                                                      "function": {
+                                                                                                        "application": {
+                                                                                                          "argument": {"variable": "t"},
+                                                                                                          "function": {
+                                                                                                            "application": {
+                                                                                                              "argument": {
+                                                                                                                "application": {
+                                                                                                                  "argument": {"variable": "b"},
+                                                                                                                  "function": {
+                                                                                                                    "function": {
+                                                                                                                      "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}}}},
+                                                                                                              "function": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {
+                                                                                                                    "typeApplication": {
+                                                                                                                      "body": {"function": {"primitive": "hydra.lib.maps.insert"}},
+                                                                                                                      "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                  "type": {"variable": "hydra.core.Term"}}}}}}}}},
+                                                                                                  "domain": [{"variable": "hydra.core.Term"}],
+                                                                                                  "parameter": "t"}}},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "m"},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {
+                                                                                                          "application": {
+                                                                                                            "argument": {"variable": "b"},
+                                                                                                            "function": {
+                                                                                                              "function": {
+                                                                                                                "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}}}},
+                                                                                                        "function": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {"function": {"primitive": "hydra.lib.maps.delete"}},
+                                                                                                                "type": {"variable": "hydra.core.Name"}}},
+                                                                                                            "type": {"variable": "hydra.core.Term"}}}}}}},
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                                                                        "type": {
+                                                                                                          "map": {
+                                                                                                            "keys": {"variable": "hydra.core.Name"},
+                                                                                                            "values": {"variable": "hydra.core.Term"}}}}},
+                                                                                                    "type": {"variable": "hydra.core.Term"}}}}}}}}},
+                                                                                    "type": [
+                                                                                      {
+                                                                                        "constraints": null,
                                                                                         "type": {
                                                                                           "map": {
                                                                                             "keys": {"variable": "hydra.core.Name"},
-                                                                                            "values": {"variable": "hydra.core.Term"}}}}},
-                                                                                    "type": {"variable": "hydra.core.Term"}}}}}}}}},
-                                                                    "domain": [{"variable": "hydra.core.Binding"}],
-                                                                    "parameter": "b"}}},
-                                                              "domain": [
-                                                                {
-                                                                  "map": {
-                                                                    "keys": {"variable": "hydra.core.Name"},
-                                                                    "values": {"variable": "hydra.core.Term"}}}],
-                                                              "parameter": "m"}}},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {
+                                                                                            "values": {"variable": "hydra.core.Term"}}},
+                                                                                        "variables": []}]}],
+                                                                                "body": {
+                                                                                  "record": {
+                                                                                    "fields": [
+                                                                                      {
+                                                                                        "name": "boundTerms",
+                                                                                        "term": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "gAcc"},
+                                                                                            "function": {
+                                                                                              "function": {
+                                                                                                "elimination": {"record": {"field": "boundTerms", "typeName": "hydra.graph.Graph"}}}}}}},
+                                                                                      {
+                                                                                        "name": "boundTypes",
+                                                                                        "term": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "gAcc"},
+                                                                                            "function": {
+                                                                                              "function": {
+                                                                                                "elimination": {"record": {"field": "boundTypes", "typeName": "hydra.graph.Graph"}}}}}}},
+                                                                                      {
+                                                                                        "name": "classConstraints",
+                                                                                        "term": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "gAcc"},
+                                                                                            "function": {
+                                                                                              "function": {
+                                                                                                "elimination": {
+                                                                                                  "record": {"field": "classConstraints", "typeName": "hydra.graph.Graph"}}}}}}},
+                                                                                      {
+                                                                                        "name": "lambdaVariables",
+                                                                                        "term": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "gAcc"},
+                                                                                            "function": {
+                                                                                              "function": {
+                                                                                                "elimination": {
+                                                                                                  "record": {"field": "lambdaVariables", "typeName": "hydra.graph.Graph"}}}}}}},
+                                                                                      {"name": "metadata", "term": {"variable": "newMeta"}},
+                                                                                      {
+                                                                                        "name": "primitives",
+                                                                                        "term": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "gAcc"},
+                                                                                            "function": {
+                                                                                              "function": {
+                                                                                                "elimination": {"record": {"field": "primitives", "typeName": "hydra.graph.Graph"}}}}}}},
+                                                                                      {
+                                                                                        "name": "schemaTypes",
+                                                                                        "term": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "gAcc"},
+                                                                                            "function": {
+                                                                                              "function": {
+                                                                                                "elimination": {"record": {"field": "schemaTypes", "typeName": "hydra.graph.Graph"}}}}}}},
+                                                                                      {
+                                                                                        "name": "typeVariables",
+                                                                                        "term": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "gAcc"},
+                                                                                            "function": {
+                                                                                              "function": {
+                                                                                                "elimination": {
+                                                                                                  "record": {"field": "typeVariables", "typeName": "hydra.graph.Graph"}}}}}}}],
+                                                                                    "typeName": "hydra.graph.Graph"}}}}}},
+                                                                        "domain": [{"variable": "hydra.core.Binding"}],
+                                                                        "parameter": "b"}}},
+                                                                  "domain": [{"variable": "hydra.graph.Graph"}],
+                                                                  "parameter": "gAcc"}}},
+                                                            "function": {
                                                               "typeApplication": {
-                                                                "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
-                                                                "type": {
-                                                                  "map": {
-                                                                    "keys": {"variable": "hydra.core.Name"},
-                                                                    "values": {"variable": "hydra.core.Term"}}}}},
-                                                            "type": {"variable": "hydra.core.Binding"}}}}}}}}}},
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
+                                                                    "type": {"variable": "hydra.graph.Graph"}}},
+                                                                "type": {"variable": "hydra.core.Binding"}}}}}}}}},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {"record": {"field": "metadata", "typeName": "hydra.graph.Graph"}}}}}}},
                                           {
                                             "name": "primitives",
                                             "term": {

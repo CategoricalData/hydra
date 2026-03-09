@@ -342,7 +342,9 @@ module_ = Module.Module {
           Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
         Core.typeSchemeConstraints = Nothing}))}],
   Module.moduleTermDependencies = [
-    Module.Namespace "hydra.encode.core"],
+    Module.Namespace "hydra.encode.core",
+    (Module.Namespace "hydra.encode.graph"),
+    (Module.Namespace "hydra.encode.module")],
   Module.moduleTypeDependencies = [
     Module.Namespace "hydra.workflow"],
   Module.moduleDescription = (Just "Term encoders for hydra.workflow")}

@@ -423,5 +423,5 @@
               "domain": {"variable": "hydra.workflow.TransformWorkflow"}}},
           "variables": []}]}],
   "namespace": "hydra.encode.workflow",
-  "termDependencies": ["hydra.encode.core"],
+  "termDependencies": ["hydra.encode.core", "hydra.encode.graph", "hydra.encode.module"],
   "typeDependencies": ["hydra.workflow"]}

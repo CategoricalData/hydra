@@ -142,7 +142,19 @@ extendGraphForLet forBinding g letrec =
       Graph.graphBoundTypes = (Maps.union (Maps.fromList (Maybes.cat (Lists.map (\b -> Maybes.map (\ts -> (Core.bindingName b, ts)) (Core.bindingType b)) bindings))) (Graph.graphBoundTypes g)),
       Graph.graphClassConstraints = (Graph.graphClassConstraints g),
       Graph.graphLambdaVariables = (Lists.foldl (\s -> \b -> Sets.delete (Core.bindingName b) s) (Graph.graphLambdaVariables g) bindings),
-      Graph.graphMetadata = (Lists.foldl (\m -> \b -> Maybes.maybe (Maps.delete (Core.bindingName b) m) (\t -> Maps.insert (Core.bindingName b) t m) (forBinding g2 b)) (Graph.graphMetadata g) bindings),
+      Graph.graphMetadata = (Graph.graphMetadata (Lists.foldl (\gAcc -> \b ->  
+        let m = (Graph.graphMetadata gAcc)
+        in  
+          let newMeta = (Maybes.maybe (Maps.delete (Core.bindingName b) m) (\t -> Maps.insert (Core.bindingName b) t m) (forBinding gAcc b))
+          in Graph.Graph {
+            Graph.graphBoundTerms = (Graph.graphBoundTerms gAcc),
+            Graph.graphBoundTypes = (Graph.graphBoundTypes gAcc),
+            Graph.graphClassConstraints = (Graph.graphClassConstraints gAcc),
+            Graph.graphLambdaVariables = (Graph.graphLambdaVariables gAcc),
+            Graph.graphMetadata = newMeta,
+            Graph.graphPrimitives = (Graph.graphPrimitives gAcc),
+            Graph.graphSchemaTypes = (Graph.graphSchemaTypes gAcc),
+            Graph.graphTypeVariables = (Graph.graphTypeVariables gAcc)}) g2 bindings)),
       Graph.graphPrimitives = (Graph.graphPrimitives g),
       Graph.graphSchemaTypes = (Graph.graphSchemaTypes g),
       Graph.graphTypeVariables = (Graph.graphTypeVariables g)}

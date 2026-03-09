@@ -3724,21 +3724,54 @@
                                                                               "application": {
                                                                                 "argument": {
                                                                                   "application": {
-                                                                                    "argument": {"variable": "mod"},
+                                                                                    "argument": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "mod"},
+                                                                                            "function": {
+                                                                                              "function": {
+                                                                                                "elimination": {
+                                                                                                  "record": {"field": "termDependencies", "typeName": "hydra.module.Module"}}}}}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "hydra.encoding.encodeNamespace"},
+                                                                                            "function": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                                    "type": {"variable": "hydra.module.Namespace"}}},
+                                                                                                "type": {"variable": "hydra.module.Namespace"}}}}}}},
                                                                                     "function": {
-                                                                                      "function": {
-                                                                                        "elimination": {
-                                                                                          "record": {"field": "typeDependencies", "typeName": "hydra.module.Module"}}}}}},
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "hydra.encoding.encodeNamespace"},
-                                                                                    "function": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "mod"},
+                                                                                                "function": {
+                                                                                                  "function": {
+                                                                                                    "elimination": {
+                                                                                                      "record": {"field": "typeDependencies", "typeName": "hydra.module.Module"}}}}}},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "hydra.encoding.encodeNamespace"},
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                                        "type": {"variable": "hydra.module.Namespace"}}},
+                                                                                                    "type": {"variable": "hydra.module.Namespace"}}}}}}},
+                                                                                        "function": {
                                                                                           "typeApplication": {
-                                                                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
-                                                                                            "type": {"variable": "hydra.module.Namespace"}}},
-                                                                                        "type": {"variable": "hydra.module.Namespace"}}}}}}}},
+                                                                                            "body": {"function": {"primitive": "hydra.lib.lists.concat2"}},
+                                                                                            "type": {"variable": "hydra.module.Namespace"}}}}}}},
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"function": {"primitive": "hydra.lib.lists.nub"}},
+                                                                                    "type": {"variable": "hydra.module.Namespace"}}}}}},
                                                                           {
                                                                             "name": "typeDependencies",
                                                                             "term": {

@@ -1043,14 +1043,37 @@
                                               "variables": []}]}],
                                       "body": {
                                         "application": {
-                                          "argument": {
+                                          "argument": {"variable": "typeLookup"},
+                                          "function": {
                                             "application": {
-                                              "argument": {"variable": "typeLookup"},
+                                              "argument": {
+                                                "function": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "application": {
+                                                        "argument": {"literal": {"integer": {"int32": 0}}},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "ts"},
+                                                                "function": {"variable": "hydra.arity.typeSchemeArity"}}},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {"function": {"primitive": "hydra.lib.equality.gt"}},
+                                                                "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                    "domain": [{"variable": "hydra.core.TypeScheme"}],
+                                                    "parameter": "ts"}}},
                                               "function": {
-                                                "typeApplication": {
-                                                  "body": {"function": {"primitive": "hydra.lib.maybes.isJust"}},
-                                                  "type": {"variable": "hydra.core.TypeScheme"}}}}},
-                                          "function": {"function": {"primitive": "hydra.lib.logic.not"}}}}}},
+                                                "application": {
+                                                  "argument": {"literal": {"boolean": true}},
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                          "type": {"literal": {"boolean": {}}}}},
+                                                      "type": {"variable": "hydra.core.TypeScheme"}}}}}}}}}}},
                                   "function": {
                                     "application": {
                                       "argument": {"literal": {"boolean": true}},

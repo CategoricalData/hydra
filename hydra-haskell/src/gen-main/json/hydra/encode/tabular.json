@@ -527,5 +527,5 @@
               "domain": {"variable": "hydra.tabular.TableType"}}},
           "variables": []}]}],
   "namespace": "hydra.encode.tabular",
-  "termDependencies": ["hydra.encode.core"],
+  "termDependencies": ["hydra.encode.core", "hydra.encode.relational"],
   "typeDependencies": ["hydra.tabular"]}

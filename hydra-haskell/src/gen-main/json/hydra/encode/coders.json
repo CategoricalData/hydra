@@ -280,5 +280,9 @@
               "domain": {"variable": "hydra.coders.TraversalOrder"}}},
           "variables": []}]}],
   "namespace": "hydra.encode.coders",
-  "termDependencies": ["hydra.encode.core"],
+  "termDependencies": [
+    "hydra.encode.core",
+    "hydra.encode.graph",
+    "hydra.encode.compute",
+    "hydra.encode.variants"],
   "typeDependencies": ["hydra.coders"]}

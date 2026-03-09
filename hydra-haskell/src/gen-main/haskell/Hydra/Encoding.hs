@@ -378,7 +378,7 @@ encodeModule cx graph mod = (Eithers.bind (filterTypeBindings cx graph (Module.m
   Context.inContextContext = (Context.inContextContext ic)}) (\x -> x) (encodeBinding cx graph b)) typeBindings) (\encodedBindings -> Right (Just (Module.Module {
   Module.moduleNamespace = (encodeNamespace (Module.moduleNamespace mod)),
   Module.moduleElements = encodedBindings,
-  Module.moduleTermDependencies = (Lists.map encodeNamespace (Module.moduleTypeDependencies mod)),
+  Module.moduleTermDependencies = (Lists.nub (Lists.concat2 (Lists.map encodeNamespace (Module.moduleTypeDependencies mod)) (Lists.map encodeNamespace (Module.moduleTermDependencies mod)))),
   Module.moduleTypeDependencies = [
     Module.moduleNamespace mod],
   Module.moduleDescription = (Just (Strings.cat [

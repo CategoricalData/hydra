@@ -5311,7 +5311,16 @@ module_ = Module.Module {
           Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
         Core.typeSchemeConstraints = Nothing}))}],
   Module.moduleTermDependencies = [
-    Module.Namespace "hydra.encode.core"],
+    Module.Namespace "hydra.encode.core",
+    (Module.Namespace "hydra.encode.ast"),
+    (Module.Namespace "hydra.encode.coders"),
+    (Module.Namespace "hydra.encode.compute"),
+    (Module.Namespace "hydra.encode.graph"),
+    (Module.Namespace "hydra.encode.json.model"),
+    (Module.Namespace "hydra.encode.module"),
+    (Module.Namespace "hydra.encode.parsing"),
+    (Module.Namespace "hydra.encode.typing"),
+    (Module.Namespace "hydra.encode.util")],
   Module.moduleTypeDependencies = [
     Module.Namespace "hydra.testing"],
   Module.moduleDescription = (Just "Term encoders for hydra.testing")}
