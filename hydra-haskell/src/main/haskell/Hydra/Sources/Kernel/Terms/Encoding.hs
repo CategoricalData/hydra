@@ -431,13 +431,15 @@ encodeModule = define "encodeModule" $
           ("ic" ~> Ctx.inContext (Error.otherError (Error.unDecodingError @@ Ctx.inContextObject (var "ic"))) (Ctx.inContextContext (var "ic")))
           ("x" ~> var "x")
           (encodeBinding @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
-        -- The encoder module depends on encoder modules for the type dependencies
-        -- E.g., hydra.encode.module depends on hydra.encode.core
+        -- The encoder module depends on encoder modules for both the type and term dependencies
+        -- E.g., hydra.encode.constraints depends on hydra.encode.core (type dep) and hydra.encode.query (term dep)
         right (just (Module.module_
           (encodeNamespace @@ (Module.moduleNamespace (var "mod")))
           (var "encodedBindings")
-          -- Transform each type dependency namespace to its encoder namespace
-          (primitive _lists_map @@ encodeNamespace @@ (Module.moduleTypeDependencies (var "mod")))
+          -- Transform both type and term dependency namespaces to their encoder namespaces
+          (Lists.nub (Lists.concat2
+            (primitive _lists_map @@ encodeNamespace @@ (Module.moduleTypeDependencies (var "mod")))
+            (primitive _lists_map @@ encodeNamespace @@ (Module.moduleTermDependencies (var "mod")))))
           -- The encoder module depends on the original type module
           (list [Module.moduleNamespace (var "mod")])
           (just (Strings.cat $ list [
