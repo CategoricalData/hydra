@@ -114,7 +114,7 @@ alphaConvert = define "alphaConvert" $
 
 -- Note: this is eager beta reduction, in that we always descend into subtypes,
 --       and always reduce the right-hand side of an application prior to substitution
-betaReduceType :: TBinding (Context -> Graph -> Type -> Prelude.Either String Type)
+betaReduceType :: TBinding (Context -> Graph -> Type -> Prelude.Either (InContext OtherError) Type)
 betaReduceType = define "betaReduceType" $
   doc "Eagerly beta-reduce a type by substituting type arguments into type lambdas" $
   "cx" ~> "graph" ~> "typ" ~>
@@ -133,7 +133,7 @@ betaReduceType = define "betaReduceType" $
           @@ var "rhs"
           @@ (Core.forallTypeBody $ var "ft")),
       _Type_variable>>: "name" ~>
-        "t'" <<= Eithers.bimap formatOtherError ("x" ~> var "x") (Schemas.requireType @@ var "cx" @@ var "graph" @@ var "name") $
+        "t'" <<= Schemas.requireType @@ var "cx" @@ var "graph" @@ var "name" $
         betaReduceType @@ var "cx" @@ var "graph" @@ (Core.typeApplication $ Core.applicationType (var "t'") (var "rhs"))]) $
   "mapExpr" <~ ("recurse" ~> "t" ~>
     "findApp" <~ ("r" ~> cases _Type (var "r")
