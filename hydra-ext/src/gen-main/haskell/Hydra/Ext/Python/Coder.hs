@@ -80,7 +80,10 @@ wrapLazyArguments :: (Core.Name -> [Syntax.Expression] -> [Syntax.Expression])
 wrapLazyArguments name args = (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.logic.ifElse")) (Equality.equal (Lists.length args) 3)) [
   Lists.at 0 args,
   (wrapInNullaryLambda (Lists.at 1 args)),
-  (wrapInNullaryLambda (Lists.at 2 args))] args)
+  (wrapInNullaryLambda (Lists.at 2 args))] (Logic.ifElse (Logic.and (Equality.equal name (Core.Name "hydra.lib.maybes.cases")) (Equality.equal (Lists.length args) 3)) [
+  Lists.at 0 args,
+  (wrapInNullaryLambda (Lists.at 1 args)),
+  (Lists.at 2 args)] (Logic.ifElse (Logic.and (Logic.or (Equality.equal name (Core.Name "hydra.lib.maybes.maybe")) (Equality.equal name (Core.Name "hydra.lib.maybes.fromMaybe"))) (Equality.gte (Lists.length args) 1)) (Lists.cons (wrapInNullaryLambda (Lists.at 0 args)) (Lists.tail args)) args)))
 
 -- | Create integer literal expression
 pyInt :: (Integer -> Syntax.Expression)
