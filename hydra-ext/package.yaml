@@ -57,6 +57,22 @@ executables:
     dependencies:
       - hydra-ext
 
+  test-one-module:
+    main: Main.hs
+    source-dirs:
+      - src/exec/test-one-module
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra-ext
+
+  diag-module:
+    main: Main.hs
+    source-dirs:
+      - src/exec/diag-module
+    ghc-options: [-rtsopts]
+    dependencies:
+      - hydra-ext
+
   bootstrap-from-json:
     main: Main.hs
     source-dirs:
