@@ -1,3 +1,5 @@
+-- Note: the canonical definition is now in Hydra.Ext.Sources.Graphql.Serde.
+-- This staging module is kept for backward compatibility.
 module Hydra.Ext.Staging.Graphql.Serde (exprDocument) where
 
 import Hydra.Kernel

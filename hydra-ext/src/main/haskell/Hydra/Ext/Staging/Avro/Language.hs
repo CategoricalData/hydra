@@ -5,6 +5,9 @@ import Hydra.Kernel
 import qualified Data.Set as S
 
 
+-- Note: the canonical definition is now in Hydra.Ext.Sources.Avro.Language.
+-- This module is kept for backward compatibility.
+
 avroLanguage :: Language
 avroLanguage = Language (LanguageName "hydra.ext.avro") $ LanguageConstraints {
   languageConstraintsEliminationVariants = S.empty,
@@ -14,19 +17,10 @@ avroLanguage = Language (LanguageName "hydra.ext.avro") $ LanguageConstraints {
   languageConstraintsFunctionVariants = S.empty,
   languageConstraintsIntegerTypes = S.fromList [IntegerTypeInt32, IntegerTypeInt64],
   languageConstraintsTermVariants = S.fromList [
-    TermVariantList,
-    TermVariantLiteral,
-    TermVariantMap,
-    TermVariantMaybe,
-    TermVariantRecord],
+    TermVariantList, TermVariantLiteral, TermVariantMap, TermVariantMaybe, TermVariantRecord],
   languageConstraintsTypeVariants = S.fromList [
-    TypeVariantAnnotated,
-    TypeVariantList,
-    TypeVariantLiteral,
-    TypeVariantMap,
-    TypeVariantWrap,
-    TypeVariantMaybe,
-    TypeVariantRecord],
+    TypeVariantAnnotated, TypeVariantList, TypeVariantLiteral, TypeVariantMap,
+    TypeVariantWrap, TypeVariantMaybe, TypeVariantRecord],
   languageConstraintsTypes = \typ -> case deannotateType typ of
     TypeMaybe (TypeMaybe _) -> False
     _ -> True }

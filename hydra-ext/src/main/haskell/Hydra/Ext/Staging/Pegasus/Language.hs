@@ -5,6 +5,9 @@ import Hydra.Kernel
 import qualified Data.Set as S
 
 
+-- Note: the canonical definition is now in Hydra.Ext.Sources.Pegasus.Language.
+-- This module is kept for backward compatibility.
+
 pdlLanguage :: Language
 pdlLanguage = Language (LanguageName "hydra.ext.pegasus.pdl") $ LanguageConstraints {
   languageConstraintsEliminationVariants = S.empty,
