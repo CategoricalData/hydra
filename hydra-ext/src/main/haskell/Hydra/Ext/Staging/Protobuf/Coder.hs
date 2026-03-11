@@ -7,7 +7,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Decode.Core as DecodeCore
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Schemas as Schemas
-import Hydra.Ext.Staging.Protobuf.Serde
+import Hydra.Ext.Protobuf.Serde
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Util as Util

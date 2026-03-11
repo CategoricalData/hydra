@@ -19,11 +19,11 @@ import Hydra.Ext.Protobuf.Language (protobufLanguage)
 import Hydra.Ext.Python.Language
 import Hydra.Ext.Staging.Pegasus.Language (pdlLanguage)
 import Hydra.Ext.Staging.Scala.Language (scalaLanguage)
-import Hydra.Ext.Staging.Cpp.Coder
+-- import Hydra.Ext.Staging.Cpp.Coder -- temporarily disabled; gen-main Cpp/Names and Cpp/Utils need regeneration first
 import Hydra.Ext.Staging.Graphql.Coder
 import Hydra.Ext.Staging.Graphql.Language (graphqlLanguage)
 import Hydra.Ext.Java.Coder (moduleToJava)
-import Hydra.Ext.Staging.Json.Schema.Coder
+import Hydra.Ext.Json.Schema.Coder
 import Hydra.Ext.Staging.Pegasus.Coder
 import Hydra.Ext.Staging.Protobuf.Coder
 import Hydra.Ext.Python.Coder (moduleToPython)
@@ -47,13 +47,18 @@ import qualified Data.Set as S
 import qualified System.Directory as SD
 import qualified System.FilePath as FP
 
+-- | Options for JSON Schema code generation (was previously in Staging module)
+data JsonSchemaOptions = JsonSchemaOptions {
+  jsonSchemaOptionsShortNames :: Bool
+}
 
 -- | Write a manifest.json listing ext module namespaces.
 -- This mirrors writeManifestJson in Hydra.Generation but for hydra-ext module lists.
 writeExtManifestJson :: FilePath -> IO ()
 writeExtManifestJson basePath = do
     let jsonVal = Json.ValueObject $ M.fromList [
-            ("hydraCoderModules", namespacesJson hydraCoderModules),
+            ("hydraBootstrapCoderModules", namespacesJson hydraBootstrapCoderModules),
+            ("hydraExtEssentialModules", namespacesJson hydraExtEssentialModules),
             ("hydraExtJavaModules", namespacesJson hydraExtJavaModules),
             ("hydraExtModules", namespacesJson hydraExtJsonModules)]
         jsonStr = JsonWriter.printJson jsonVal
@@ -67,8 +72,9 @@ writeExtManifestJson basePath = do
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
-writeCpp :: FP.FilePath -> [Module] -> [Module] -> IO Int
-writeCpp = generateSources moduleToCpp cppLanguage True False False False
+-- writeCpp :: FP.FilePath -> [Module] -> [Module] -> IO Int
+-- writeCpp = generateSources moduleToCpp cppLanguage True False False False
+-- Note: temporarily disabled; gen-main Cpp/Names and Cpp/Utils need regeneration first
 
 -- | Generate GraphQL source files from modules.
 -- First argument: output directory

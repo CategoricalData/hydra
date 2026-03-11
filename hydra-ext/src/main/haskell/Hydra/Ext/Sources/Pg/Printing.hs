@@ -1,7 +1,8 @@
-module Hydra.Ext.Sources.Protobuf.Language (protobufLanguageModule, protobufLanguage) where
+module Hydra.Ext.Sources.Pg.Printing where
 
 -- Standard imports for term-level sources outside of the kernel
-import Hydra.Kernel
+import Hydra.Kernel hiding (
+  printEdge, printGraph, printLazyGraph, printProperty, printVertex)
 import Hydra.Sources.Libraries
 import           Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
@@ -88,88 +89,94 @@ import qualified Data.Map                                  as M
 import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
+-- Additional imports
+import qualified Hydra.Pg.Model as PG
+import qualified Hydra.Ext.Sources.Pg.Model as PgModel
 
-protobufLanguageDefinition :: String -> TTerm a -> TBinding a
-protobufLanguageDefinition = definitionInModule protobufLanguageModule
 
-protobufLanguageModule :: Module
-protobufLanguageModule = Module (Namespace "hydra.ext.protobuf.language")
-  [toBinding protobufLanguage, toBinding protobufReservedWords]
-  [Lexical.ns, Rewriting.ns]
-  KernelTypes.kernelTypesNamespaces $
-  Just "Language constraints for Protobuf v3"
+define :: String -> TTerm a -> TBinding a
+define = definitionInModule module_
 
-protobufLanguage :: TBinding Language
-protobufLanguage = protobufLanguageDefinition "protobufLanguage" $
-  doc "Language constraints for Protocol Buffers v3" $ lets [
-  "eliminationVariants">: Sets.empty,
-  "literalVariants">: Sets.fromList $ list [
-    Variants.literalVariantBinary,
-    Variants.literalVariantBoolean,
-    Variants.literalVariantFloat,
-    Variants.literalVariantInteger,
-    Variants.literalVariantString],
-  "floatTypes">: Sets.fromList $ list [
-    Core.floatTypeFloat32,
-    Core.floatTypeFloat64],
-  "functionVariants">: Sets.empty,
-  "integerTypes">: Sets.fromList $ list [
-    Core.integerTypeInt32,
-    Core.integerTypeInt64,
-    Core.integerTypeUint32,
-    Core.integerTypeUint64],
-  "termVariants">: Sets.fromList $ list [
-    Variants.termVariantEither,
-    Variants.termVariantList,
-    Variants.termVariantLiteral,
-    Variants.termVariantMap,
-    Variants.termVariantMaybe,
-    Variants.termVariantPair,
-    Variants.termVariantRecord,
-    Variants.termVariantSet,
-    Variants.termVariantUnion,
-    Variants.termVariantUnit,
-    Variants.termVariantWrap],
-  "typeVariants">: Sets.fromList $ list [
-    Variants.typeVariantAnnotated,
-    Variants.typeVariantEither,
-    Variants.typeVariantList,
-    Variants.typeVariantLiteral,
-    Variants.typeVariantMap,
-    Variants.typeVariantMaybe,
-    Variants.typeVariantPair,
-    Variants.typeVariantRecord,
-    Variants.typeVariantSet,
-    Variants.typeVariantUnion,
-    Variants.typeVariantUnit,
-    Variants.typeVariantVariable,
-    Variants.typeVariantWrap],
-  "typePredicate">: "typ" ~> cases _Type (var "typ")
-    (Just true) [
-    _Type_map>>: "mt" ~> lets [
-      "valuesType">: Core.mapTypeValues $ var "mt",
-      "stripped">: Rewriting.deannotateType @@ var "valuesType"] $
-      cases _Type (var "stripped")
-        (Just true) [
-        _Type_maybe>>: constant false]]] $
-  Coders.language
-    (Coders.languageName $ string "hydra.ext.protobuf")
-    (Coders.languageConstraints
-      (var "eliminationVariants")
-      (var "literalVariants")
-      (var "floatTypes")
-      (var "functionVariants")
-      (var "integerTypes")
-      (var "termVariants")
-      (var "typeVariants")
-      (var "typePredicate"))
+ns :: Namespace
+ns = Namespace "hydra.pg.printing"
 
-protobufReservedWords :: TBinding (S.Set String)
-protobufReservedWords = protobufLanguageDefinition "protobufReservedWords" $
-  doc "A set of reserved words in Protobuf" $ lets [
-  "fieldNames">:
-    doc "See: http://google.github.io/proto-lens/reserved-names.html" $
-    list $ string <$> [
-      "case", "class", "data", "default", "deriving", "do", "else", "foreign", "if", "import", "in", "infix", "infixl",
-      "infixr", "instance", "let", "mdo", "module", "newtype", "of", "pattern", "proc", "rec", "then", "type", "where"]] $
-  Sets.fromList $ Lists.concat $ list [var "fieldNames"]
+module_ :: Module
+module_ = Module ns elements
+    []
+    (PgModel.ns:KernelTypes.kernelTypesNamespaces) $
+    Just "Printing functions for property graph elements"
+  where
+    elements = [
+      toBinding printEdge,
+      toBinding printGraph,
+      toBinding printLazyGraph,
+      toBinding printProperty,
+      toBinding printVertex]
+
+-- | Print an edge using the provided printer functions
+printEdge :: TBinding ((v -> String) -> PG.Edge v -> String)
+printEdge = define "printEdge" $
+  doc "Print an edge using the provided value printer" $
+  "printValue" ~> "edge" ~> lets [
+    "label">: unwrap PG._EdgeLabel @@ (project PG._Edge PG._Edge_label @@ var "edge"),
+    "id">: var "printValue" @@ (project PG._Edge PG._Edge_id @@ var "edge"),
+    "outId">: var "printValue" @@ (project PG._Edge PG._Edge_out @@ var "edge"),
+    "inId">: var "printValue" @@ (project PG._Edge PG._Edge_in @@ var "edge"),
+    "props">: Strings.intercalate (string ", ") (Lists.map
+      ("p" ~> printProperty @@ var "printValue" @@ (Pairs.first $ var "p") @@ (Pairs.second $ var "p"))
+      (Maps.toList $ project PG._Edge PG._Edge_properties @@ var "edge"))] $
+    Strings.cat $ list [
+      var "id", string ": ",
+      string "(", var "outId", string ")-[:",
+      var "label", string " {",
+      var "props",
+      string "}]->(",
+      var "inId", string ")"]
+
+-- | Print a graph using the provided printer functions
+printGraph :: TBinding ((v -> String) -> PG.Graph v -> String)
+printGraph = define "printGraph" $
+  doc "Print a graph using the provided value printer" $
+  "printValue" ~> "graph" ~>
+    printLazyGraph @@ var "printValue" @@
+      (record PG._LazyGraph [
+        PG._LazyGraph_vertices>>: Maps.elems (project PG._Graph PG._Graph_vertices @@ var "graph"),
+        PG._LazyGraph_edges>>: Maps.elems (project PG._Graph PG._Graph_edges @@ var "graph")])
+
+-- | Print a lazy graph using the provided printer functions
+printLazyGraph :: TBinding ((v -> String) -> PG.LazyGraph v -> String)
+printLazyGraph = define "printLazyGraph" $
+  doc "Print a lazy graph using the provided value printer" $
+  "printValue" ~> "lg" ~> lets [
+    "vertices">: project PG._LazyGraph PG._LazyGraph_vertices @@ var "lg",
+    "edges">: project PG._LazyGraph PG._LazyGraph_edges @@ var "lg"] $
+    Strings.cat $ list [
+      string "vertices:",
+      Strings.cat (Lists.map ("v" ~> Strings.cat (list [string "\n\t", printVertex @@ var "printValue" @@ var "v"])) (var "vertices")),
+      string "\nedges:",
+      Strings.cat (Lists.map ("e" ~> Strings.cat (list [string "\n\t", printEdge @@ var "printValue" @@ var "e"])) (var "edges"))]
+
+-- | Print a property using the provided printer functions
+printProperty :: TBinding ((v -> String) -> PG.PropertyKey -> v -> String)
+printProperty = define "printProperty" $
+  doc "Print a property using the provided value printer" $
+  "printValue" ~> "key" ~> "value" ~>
+    Strings.cat $ list [
+      unwrap PG._PropertyKey @@ var "key",
+      string ": ",
+      var "printValue" @@ var "value"]
+
+-- | Print a vertex using the provided printer functions
+printVertex :: TBinding ((v -> String) -> PG.Vertex v -> String)
+printVertex = define "printVertex" $
+  doc "Print a vertex using the provided value printer" $
+  "printValue" ~> "vertex" ~> lets [
+    "label">: unwrap PG._VertexLabel @@ (project PG._Vertex PG._Vertex_label @@ var "vertex"),
+    "id">: var "printValue" @@ (project PG._Vertex PG._Vertex_id @@ var "vertex"),
+    "props">: Strings.intercalate (string ", ") (Lists.map
+      ("p" ~> printProperty @@ var "printValue" @@ (Pairs.first $ var "p") @@ (Pairs.second $ var "p"))
+      (Maps.toList $ project PG._Vertex PG._Vertex_properties @@ var "vertex"))] $
+    Strings.cat $ list [
+      var "id", string ": (", var "label", string ": {",
+      var "props",
+      string "})"]
