@@ -90,8 +90,8 @@ apply_ = define "apply" $
   doc "Interpreter-friendly applicative apply for List terms." $
   "cx" ~> "g" ~>
   "funsTerm" ~> "argsTerm" ~>
-  "funs" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "funsTerm") $
-  "arguments" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "argsTerm") $
+  "funs" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "funsTerm") $
+  "arguments" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "argsTerm") $
   "applyOne" <~ ("f" ~> Lists.map
     ("arg" ~> Core.termApplication $ Core.application (var "f") (var "arg"))
     (var "arguments")) $
@@ -104,7 +104,7 @@ bind_ = define "bind" $
   doc "Interpreter-friendly monadic bind for List terms." $
   "cx" ~> "g" ~>
   "listTerm" ~> "funTerm" ~>
-  "elements" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
+  "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
   right $ Core.termApplication $ Core.application
     (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat)
     (Core.termList $ Lists.map
@@ -134,7 +134,7 @@ filter_ = define "filter" $
   doc "Interpreter-friendly filter for List terms." $
   "cx" ~> "g" ~>
   "predTerm" ~> "listTerm" ~>
-  "elements" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
+  "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
   -- Build: concat (map (\el -> ifElse (pred el) [el] []) elements)
   right $ Core.termApplication $ Core.application
     (Core.termFunction $ Core.functionPrimitive $ encodedName _lists_concat)
@@ -171,7 +171,7 @@ foldl_ = define "foldl" $
   doc "Interpreter-friendly left fold for List terms." $
   "cx" ~> "g" ~>
   "funTerm" ~> "initTerm" ~> "listTerm" ~>
-  "elements" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
+  "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
   -- Build nested applications: f (f (f init e1) e2) e3
   right $ Lists.foldl
     ("acc" ~> "el" ~> Core.termApplication $ Core.application
@@ -188,7 +188,7 @@ map_ = define "map" $
   doc "Interpreter-friendly map for List terms." $
   "cx" ~> "g" ~>
   "funTerm" ~> "listTerm" ~>
-  "elements" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
+  "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
   -- Build the mapped list by folding over elements and accumulating applications
   -- This avoids calling lists.map recursively
   right $ Core.termList $ Lists.reverse $ Lists.foldl
@@ -206,7 +206,7 @@ partition_ = define "partition" $
   doc "Interpreter-friendly partition for List terms." $
   "cx" ~> "g" ~>
   "predTerm" ~> "listTerm" ~>
-  "elements" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
+  "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
   -- State: (yeses, nos) - two accumulators
   -- Initial: ([], [])
   -- Step: ifElse (pred el) (append yeses [el], nos) (yeses, append nos [el])
@@ -259,7 +259,7 @@ sortOn_ = define "sortOn" $
   doc "Interpreter-friendly sortOn for List terms." $
   "cx" ~> "g" ~>
   "projTerm" ~> "listTerm" ~>
-  "elements" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
+  "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
   -- Build: foldl (\sorted x -> insert x sorted) [] elements
   -- where insert x sorted = let (before, after) = span (\y -> lte (proj y) (proj x)) sorted
   --                         in concat [before, [x], after]
@@ -306,7 +306,7 @@ span_ = define "span" $
   doc "Interpreter-friendly span for List terms." $
   "cx" ~> "g" ~>
   "predTerm" ~> "listTerm" ~>
-  "elements" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
+  "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
   -- State: ((taking, left), right) as nested pairs
   -- Initial: ((true, []), [])
   -- Step: ifElse (and taking (pred el))
@@ -384,8 +384,8 @@ zipWith_ = define "zipWith" $
   doc "Interpreter-friendly zipWith for List terms." $
   "cx" ~> "g" ~>
   "funTerm" ~> "listTerm1" ~> "listTerm2" ~>
-  "elements1" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm1") $
-  "elements2" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm2") $
+  "elements1" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm1") $
+  "elements2" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm2") $
   -- Build: [f a1 b1, f a2 b2, ...]
   right $ Core.termList $ Lists.map
     ("p" ~>

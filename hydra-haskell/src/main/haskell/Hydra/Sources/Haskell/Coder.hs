@@ -165,7 +165,7 @@ adaptTypeToHaskellAndEncode = haskellCoderDefinition "adaptTypeToHaskellAndEncod
   "enc" <~ ("t" ~> encodeType @@ var "namespaces" @@ var "t" @@ var "cx" @@ var "g") $
   cases _Type (Rewriting.deannotateType @@ var "typ")
     (Just (
-      "adaptedType" <<= liftStringError (var "cx") (AdaptModules.adaptTypeToLanguage @@ HaskellLanguage.haskellLanguage @@ var "cx" @@ var "g" @@ var "typ") $
+      "adaptedType" <<~ liftStringError (var "cx") (AdaptModules.adaptTypeToLanguage @@ HaskellLanguage.haskellLanguage @@ var "cx" @@ var "g" @@ var "typ") $
       var "enc" @@ var "adaptedType")) [
     _Type_variable>>: constant (var "enc" @@ var "typ")]
 
@@ -198,7 +198,7 @@ constructModule = haskellCoderDefinition "constructModule" $
         "typ">: Module.typeDefinitionType $ var "type"] $
         toTypeDeclarationsFrom @@ var "namespaces" @@ var "name" @@ var "typ" @@ var "cx" @@ var "g",
       _Definition_term>>: "term" ~>
-        "d" <<= toDataDeclaration @@ var "namespaces" @@ var "term" @@ var "cx" @@ var "g" $
+        "d" <<~ toDataDeclaration @@ var "namespaces" @@ var "term" @@ var "cx" @@ var "g" $
         right $ list [var "d"]],
     "importName">: "name" ~>
       wrap H._ModuleName $ Strings.intercalate (string ".") (Lists.map (Formatting.capitalize) (Strings.splitOn (string ".") (var "name"))),
@@ -243,7 +243,7 @@ constructModule = haskellCoderDefinition "constructModule" $
         (Logic.ifElse (Schemas.moduleContainsBinaryLiterals @@ var "mod")
           (list [pair (pair (string "Hydra.Lib.Literals") (just $ string "Literals")) (list ([] :: [TTerm String]))])
           (list ([] :: [TTerm ((String, Maybe String), [String])])))] $
-    "declLists" <<= Eithers.mapList (var "createDeclarations") (var "defs") $ lets [
+    "declLists" <<~ Eithers.mapList (var "createDeclarations") (var "defs") $ lets [
     "decls">: Lists.concat $ var "declLists",
     "mc">: Module.moduleDescription $ var "mod"] $
     right $ record H._Module [
@@ -273,15 +273,15 @@ encodeFunction = haskellCoderDefinition "encodeFunction" $
             "def">: Core.caseStatementDefault $ var "stmt",
             "fields">: Core.caseStatementCases $ var "stmt",
             "caseExpr">:
-              "rt" <<= Schemas.requireUnionType @@ var "cx" @@ var "g" @@ var "dn" $ lets [
+              "rt" <<~ Schemas.requireUnionType @@ var "cx" @@ var "g" @@ var "dn" $ lets [
               "toFieldMapEntry">: "f" ~>
                 pair (Core.fieldTypeName $ var "f") (var "f"),
               "fieldMap">: Maps.fromList $ Lists.map (var "toFieldMapEntry") (Core.rowTypeFields $ var "rt")] $
-              "ecases" <<= Eithers.mapList (var "toAlt" @@ var "fieldMap") (var "fields") $
-              "dcases" <<= (Maybes.cases (var "def")
+              "ecases" <<~ Eithers.mapList (var "toAlt" @@ var "fieldMap") (var "fields") $
+              "dcases" <<~ (Maybes.cases (var "def")
                 (right $ list ([] :: [TTerm H.CaseRhs])) $
                 "d" ~>
-                  "cs" <<= Eithers.map (unaryFunction $ wrap H._CaseRhs) (encodeTerm @@ var "depth" @@ var "namespaces" @@ var "d" @@ var "cx" @@ var "g") $ lets [
+                  "cs" <<~ Eithers.map (unaryFunction $ wrap H._CaseRhs) (encodeTerm @@ var "depth" @@ var "namespaces" @@ var "d" @@ var "cx" @@ var "g") $ lets [
                   "lhs">: inject H._Pattern H._Pattern_name $ HaskellUtils.rawName @@ (Constants.ignoredVariable),
                   "alt">: record H._Alternative [
                     H._Alternative_pattern>>: var "lhs",
@@ -301,7 +301,7 @@ encodeFunction = haskellCoderDefinition "encodeFunction" $
                   (Constants.ignoredVariable)
                   (var "v0"),
                 "hname">: HaskellUtils.unionFieldReference @@ (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g"))) @@ var "namespaces" @@ var "dn" @@ var "fn"] $
-                    "args" <<= (Maybes.cases (Maps.lookup (var "fn") (var "fieldMap"))
+                    "args" <<~ (Maybes.cases (Maps.lookup (var "fn") (var "fieldMap"))
                         (Ctx.failInContext (Error.otherError (Strings.cat $ list [string "field ", Literals.showString $ (Core.unName $ var "fn"),
                           string " not found in ", Literals.showString $ (Core.unName $ var "dn")])) (var "cx")) $
                         "fieldType" ~> lets [
@@ -312,7 +312,7 @@ encodeFunction = haskellCoderDefinition "encodeFunction" $
                             (Just $ right $ var "singleArg") [
                             _Type_unit>>: constant $ right $ var "noArgs"]) $ lets [
                     "lhs">: HaskellUtils.applicationPattern @@ var "hname" @@ var "args"] $
-                    "rhs" <<= Eithers.map (unaryFunction $ wrap H._CaseRhs) (encodeTerm @@ (Math.add (var "depth") (int32 1)) @@ var "namespaces" @@ var "rhsTerm" @@ var "cx" @@ var "g") $
+                    "rhs" <<~ Eithers.map (unaryFunction $ wrap H._CaseRhs) (encodeTerm @@ (Math.add (var "depth") (int32 1)) @@ var "namespaces" @@ var "rhsTerm" @@ var "cx" @@ var "g") $
                     right $ record H._Alternative [
                       H._Alternative_pattern>>: var "lhs",
                       H._Alternative_rhs>>: var "rhs",
@@ -321,7 +321,7 @@ encodeFunction = haskellCoderDefinition "encodeFunction" $
       _Function_lambda>>: "lam" ~> lets [
         "v">: Core.lambdaParameter $ var "lam",
         "body">: Core.lambdaBody $ var "lam"] $
-        "hbody" <<= encodeTerm @@ var "depth" @@ var "namespaces" @@ var "body" @@ var "cx" @@ var "g" $
+        "hbody" <<~ encodeTerm @@ var "depth" @@ var "namespaces" @@ var "body" @@ var "cx" @@ var "g" $
           right $ HaskellUtils.hslambda @@ (HaskellUtils.elementReference @@ var "namespaces" @@ var "v") @@ var "hbody",
       _Function_primitive>>: "name" ~>
         right $ inject H._Expression H._Expression_variable $ HaskellUtils.elementReference @@ var "namespaces" @@ var "name"]
@@ -380,31 +380,31 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
       "encodePair">: "pair" ~> lets [
         "k">: Pairs.first $ var "pair",
         "v">: Pairs.second $ var "pair"] $
-        "hk" <<= var "encode" @@ var "k" $
-        "hv" <<= var "encode" @@ var "v" $
+        "hk" <<~ var "encode" @@ var "k" $
+        "hv" <<~ var "encode" @@ var "v" $
         right $ inject H._Expression H._Expression_tuple $ list [var "hk", var "hv"]] $
-      "rhs" <<= Eithers.map
+      "rhs" <<~ Eithers.map
         (unaryFunction $ inject H._Expression H._Expression_list)
         (Eithers.mapList (var "encodePair") $ Maps.toList (var "m")) $
       right $ HaskellUtils.hsapp @@ var "lhs" @@ var "rhs") $
     "nonemptySet" <~ ("s" ~> lets [
       "lhs">: HaskellUtils.hsvar @@ string "S.fromList" ] $
-      "rhs" <<= encodeTerm @@ var "depth" @@ var "namespaces" @@ (inject _Term _Term_list $ Sets.toList $ var "s") @@ var "cx" @@ var "g" $
+      "rhs" <<~ encodeTerm @@ var "depth" @@ var "namespaces" @@ (inject _Term _Term_list $ Sets.toList $ var "s") @@ var "cx" @@ var "g" $
       right $ HaskellUtils.hsapp @@ var "lhs" @@ var "rhs") $
     cases _Term (Rewriting.deannotateTerm @@ var "term")
       (Just $ Ctx.failInContext (Error.otherError (Strings.cat2 (string "unexpected term: ") (ShowCore.term @@ var "term"))) (var "cx")) [
       _Term_application>>: "app" ~> lets [
         "fun">: Core.applicationFunction $ var "app",
         "arg">: Core.applicationArgument $ var "app"] $
-        "hfun" <<= var "encode" @@ var "fun" $
-          "harg" <<= var "encode" @@ var "arg" $
+        "hfun" <<~ var "encode" @@ var "fun" $
+          "harg" <<~ var "encode" @@ var "arg" $
             right $ HaskellUtils.hsapp @@ var "hfun" @@ var "harg",
       _Term_either>>: "e" ~> Eithers.either_
           ("l" ~>
-            "hl" <<= var "encode" @@ var "l" $
+            "hl" <<~ var "encode" @@ var "l" $
               right $ HaskellUtils.hsapp @@ (HaskellUtils.hsvar @@ string "Left") @@ var "hl")
           ("r" ~>
-            "hr" <<= var "encode" @@ var "r" $
+            "hr" <<~ var "encode" @@ var "r" $
               right $ HaskellUtils.hsapp @@ (HaskellUtils.hsvar @@ string "Right") @@ var "hr")
           (var "e"),
       _Term_function>>: "f" ~>
@@ -416,15 +416,15 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
           "name">: Core.bindingName $ var "binding",
           "term'">: Core.bindingTerm $ var "binding",
           "hname">: HaskellUtils.simpleName @@ (Core.unName $ var "name")] $
-          "hexpr" <<= var "encode" @@ var "term'" $
+          "hexpr" <<~ var "encode" @@ var "term'" $
           right $ inject H._LocalBinding H._LocalBinding_value $ HaskellUtils.simpleValueBinding @@ var "hname" @@ var "hexpr" @@ nothing] $
-        "hbindings" <<= Eithers.mapList (var "encodeBinding") (var "bindings") $
-        "hinner" <<= var "encode" @@ var "env" $
+        "hbindings" <<~ Eithers.mapList (var "encodeBinding") (var "bindings") $
+        "hinner" <<~ var "encode" @@ var "env" $
         right $ inject H._Expression H._Expression_let $ record H._LetExpression [
           H._LetExpression_bindings>>: var "hbindings",
           H._LetExpression_inner>>: var "hinner"],
       _Term_list>>: "els" ~>
-        "helems" <<= Eithers.mapList (var "encode") (var "els") $
+        "helems" <<~ Eithers.mapList (var "encode") (var "els") $
           right $ inject H._Expression H._Expression_list $ var "helems",
       _Term_literal>>: "v" ~>
         encodeLiteral @@ var "v" @@ var "cx",
@@ -435,11 +435,11 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
         Maybes.cases (var "m")
           (right $ HaskellUtils.hsvar @@ string "Nothing") $
           "t" ~>
-            "ht" <<= var "encode" @@ var "t" $
+            "ht" <<~ var "encode" @@ var "t" $
               right $ HaskellUtils.hsapp @@ (HaskellUtils.hsvar @@ string "Just") @@ var "ht",
       _Term_pair>>: "p" ~>
-        "f" <<= var "encode" @@ Pairs.first (var "p") $
-        "s" <<= var "encode" @@ Pairs.second (var "p") $
+        "f" <<~ var "encode" @@ Pairs.first (var "p") $
+        "s" <<~ var "encode" @@ Pairs.second (var "p") $
         right $ inject H._Expression H._Expression_tuple $ list [var "f", var "s"],
       _Term_record>>: "record" ~> lets [
         "sname">: Core.recordTypeName $ var "record",
@@ -448,12 +448,12 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
           "fn">: Core.fieldName $ var "field",
           "ft">: Core.fieldTerm $ var "field",
           "fieldRef">: HaskellUtils.recordFieldReference @@ var "namespaces" @@ var "sname" @@ var "fn"] $
-          "hft" <<= var "encode" @@ var "ft" $
+          "hft" <<~ var "encode" @@ var "ft" $
           right $ record H._FieldUpdate [
             H._FieldUpdate_name>>: var "fieldRef",
             H._FieldUpdate_value>>: var "hft"],
           "typeName">: HaskellUtils.elementReference @@ var "namespaces" @@ var "sname"] $
-          "updates" <<= Eithers.mapList (var "toFieldUpdate") (var "fields") $
+          "updates" <<~ Eithers.mapList (var "toFieldUpdate") (var "fields") $
           right $ inject H._Expression H._Expression_constructRecord $ record H._ConstructRecordExpression [
             H._ConstructRecordExpression_name>>: var "typeName",
             H._ConstructRecordExpression_fields>>: var "updates"],
@@ -473,7 +473,7 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
         "ft">: Core.fieldTerm $ var "field",
         "lhs">: inject H._Expression H._Expression_variable $ HaskellUtils.unionFieldReference @@ (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g"))) @@ var "namespaces" @@ var "sname" @@ var "fn",
         "dflt">: Eithers.map (HaskellUtils.hsapp @@ var "lhs") (var "encode" @@ var "ft")] $
-        "ftyp" <<= Schemas.requireUnionField_ @@ var "cx" @@ var "g" @@ var "sname" @@ var "fn" $
+        "ftyp" <<~ Schemas.requireUnionField_ @@ var "cx" @@ var "g" @@ var "sname" @@ var "fn" $
         cases _Type (Rewriting.deannotateType @@ var "ftyp")
           (Just $ var "dflt") [
           _Type_unit>>: constant $ right $ var "lhs"],
@@ -484,7 +484,7 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
         "tname">: Core.wrappedTermTypeName $ var "wrapped",
         "term'">: Core.wrappedTermBody $ var "wrapped",
         "lhs">: inject H._Expression H._Expression_variable $ HaskellUtils.elementReference @@ var "namespaces" @@ var "tname"] $
-        "rhs" <<= var "encode" @@ var "term'" $
+        "rhs" <<~ var "encode" @@ var "term'" $
         right $ HaskellUtils.hsapp @@ var "lhs" @@ var "rhs"]
 
 encodeType :: TBinding (HaskellNamespaces -> Type -> Context -> Graph -> Either (InContext OtherError) H.Type)
@@ -501,14 +501,14 @@ encodeType = haskellCoderDefinition "encodeType" $
     _Type_application>>: "app" ~> lets [
       "lhs">: Core.applicationTypeFunction $ var "app",
       "rhs">: Core.applicationTypeArgument $ var "app"] $
-      "hlhs" <<= var "encode" @@ var "lhs" $
-        "hrhs" <<= var "encode" @@ var "rhs" $
+      "hlhs" <<~ var "encode" @@ var "lhs" $
+        "hrhs" <<~ var "encode" @@ var "rhs" $
           right $ HaskellUtils.toTypeApplication @@ list [var "hlhs", var "hrhs"],
     _Type_either>>: "eitherType" ~> lets [
       "left'">: Core.eitherTypeLeft $ var "eitherType",
       "right'">: Core.eitherTypeRight $ var "eitherType"] $
-      "hleft" <<= var "encode" @@ var "left'" $
-      "hright" <<= var "encode" @@ var "right'" $
+      "hleft" <<~ var "encode" @@ var "left'" $
+      "hright" <<~ var "encode" @@ var "right'" $
       right $ HaskellUtils.toTypeApplication @@ list [
           inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Either",
           var "hleft",
@@ -516,8 +516,8 @@ encodeType = haskellCoderDefinition "encodeType" $
     _Type_function>>: "funType" ~> lets [
       "dom">: Core.functionTypeDomain $ var "funType",
       "cod">: Core.functionTypeCodomain $ var "funType"] $
-      "hdom" <<= var "encode" @@ var "dom" $
-        "hcod" <<= var "encode" @@ var "cod" $
+      "hdom" <<~ var "encode" @@ var "dom" $
+        "hcod" <<~ var "encode" @@ var "cod" $
           right $ inject H._Type H._Type_function $ record H._FunctionType [
             H._FunctionType_domain>>: var "hdom",
             H._FunctionType_codomain>>: var "hcod"],
@@ -526,7 +526,7 @@ encodeType = haskellCoderDefinition "encodeType" $
       "body">: Core.forallTypeBody $ var "forallType"] $
       var "encode" @@ var "body",
     _Type_list>>: "lt" ~>
-      "hlt" <<= var "encode" @@ var "lt" $
+      "hlt" <<~ var "encode" @@ var "lt" $
         right $ inject H._Type H._Type_list $ var "hlt",
     _Type_literal>>: "lt" ~>
       cases _LiteralType (var "lt")
@@ -561,24 +561,24 @@ encodeType = haskellCoderDefinition "encodeType" $
     _Type_map>>: "mapType" ~> lets [
       "kt">: Core.mapTypeKeys $ var "mapType",
       "vt">: Core.mapTypeValues $ var "mapType"] $
-      "hkt" <<= var "encode" @@ var "kt" $
-      "hvt" <<= var "encode" @@ var "vt" $
+      "hkt" <<~ var "encode" @@ var "kt" $
+      "hvt" <<~ var "encode" @@ var "vt" $
       right $ HaskellUtils.toTypeApplication @@ list [
           inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "M.Map",
           var "hkt",
           var "hvt"],
     _Type_maybe>>: "ot" ~>
-      "hot" <<= var "encode" @@ var "ot" $
+      "hot" <<~ var "encode" @@ var "ot" $
       right $ HaskellUtils.toTypeApplication @@ list [
           inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Maybe",
           var "hot"],
     _Type_pair>>: "pt" ~>
-      "f" <<= var "encode" @@ (Core.pairTypeFirst $ var "pt") $
-      "s" <<= var "encode" @@ (Core.pairTypeSecond $ var "pt") $
+      "f" <<~ var "encode" @@ (Core.pairTypeFirst $ var "pt") $
+      "s" <<~ var "encode" @@ (Core.pairTypeSecond $ var "pt") $
         right $ inject H._Type H._Type_tuple $ list [var "f", var "s"],
     _Type_record>>: "rt" ~> var "ref" @@ (Core.rowTypeTypeName $ var "rt"),
     _Type_set>>: "st" ~>
-      "hst" <<= var "encode" @@ var "st" $
+      "hst" <<~ var "encode" @@ var "st" $
       right $ HaskellUtils.toTypeApplication @@ list [
           inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "S.Set",
           var "hst"],
@@ -614,7 +614,7 @@ encodeTypeWithClassAssertions = haskellCoderDefinition "encodeTypeWithClassAsser
       "toPair">: "c" ~>
         pair (var "name") (var "c")] $
       Lists.map (var "toPair") (Sets.toList $ var "clsSet")] $
-      "htyp" <<= adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "typ" @@ var "cx" @@ var "g" $
+      "htyp" <<~ adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "typ" @@ var "cx" @@ var "g" $
       Logic.ifElse (Lists.null $ var "assertPairs")
         (right $ var "htyp") (lets [
           "encoded">: Lists.map (var "encodeAssertion") (var "assertPairs"),
@@ -660,14 +660,14 @@ moduleToHaskellModule :: TBinding (Module -> [Definition] -> Context -> Graph ->
 moduleToHaskellModule = haskellCoderDefinition "moduleToHaskellModule" $
   doc "Convert a Hydra module and definitions to a Haskell module AST" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>
-    "namespaces" <<= HaskellUtils.namespacesForModule @@ var "mod" @@ var "cx" @@ var "g" $
+    "namespaces" <<~ HaskellUtils.namespacesForModule @@ var "mod" @@ var "cx" @@ var "g" $
       constructModule @@ var "namespaces" @@ var "mod" @@ var "defs" @@ var "cx" @@ var "g"
 
 moduleToHaskell :: TBinding (Module -> [Definition] -> Context -> Graph -> Prelude.Either (InContext OtherError) (M.Map String String))
 moduleToHaskell = haskellCoderDefinition "moduleToHaskell" $
   doc "Convert a Hydra module to Haskell source code as a filepath-to-content map" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>
-  "hsmod" <<= moduleToHaskellModule @@ var "mod" @@ var "defs" @@ var "cx" @@ var "g" $ lets [
+  "hsmod" <<~ moduleToHaskellModule @@ var "mod" @@ var "defs" @@ var "cx" @@ var "g" $ lets [
   "s">: Serialization.printExpr @@ (Serialization.parenthesize @@ (HaskellSerde.moduleToExpr @@ var "hsmod")),
   "filepath">: Names.namespaceToFilePath @@ Util.caseConventionPascal @@ (wrap _FileExtension $ string "hs") @@ (Module.moduleNamespace $ var "mod")] $
   right $ Maps.singleton (var "filepath") (var "s")
@@ -732,15 +732,15 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
     "toDecl">: "comments" ~> "hname'" ~> "term'" ~> "bindings" ~>
       cases _Term (Rewriting.deannotateTerm @@ var "term'")
         (Just $
-          "hterm" <<= encodeTerm @@ int32 0 @@ var "namespaces" @@ var "term'" @@ var "cx" @@ var "g" $ lets [
+          "hterm" <<~ encodeTerm @@ int32 0 @@ var "namespaces" @@ var "term'" @@ var "cx" @@ var "g" $ lets [
          "vb">: HaskellUtils.simpleValueBinding @@ var "hname'" @@ var "hterm" @@ var "bindings",
          -- Extract constraints from the TypeScheme and convert to class assertions
          "schemeConstraints">: Core.typeSchemeConstraints (var "typ"),
          "schemeClasses">: typeSchemeConstraintsToClassMap @@ var "schemeConstraints"] $
-         "explicitClasses" <<= Annotations.getTypeClasses @@ var "cx" @@ var "g" @@ (Rewriting.removeTypesFromTerm @@ var "term") $
+         "explicitClasses" <<~ Annotations.getTypeClasses @@ var "cx" @@ var "g" @@ (Rewriting.removeTypesFromTerm @@ var "term") $
          -- Combine constraints from TypeScheme with any explicit annotations
          "combinedClasses" <~ Maps.union (var "schemeClasses") (var "explicitClasses") $
-         "htype" <<= encodeTypeWithClassAssertions @@ var "namespaces" @@ var "combinedClasses" @@ (Core.typeSchemeType $ var "typ") @@ var "cx" @@ var "g" $ lets [
+         "htype" <<~ encodeTypeWithClassAssertions @@ var "namespaces" @@ var "combinedClasses" @@ (Core.typeSchemeType $ var "typ") @@ var "cx" @@ var "g" $ lets [
          "decl">: inject H._Declaration H._Declaration_typedBinding $ record H._TypedBinding [
            H._TypedBinding_typeSignature>>: record H._TypeSignature [
              H._TypeSignature_name>>: var "hname'",
@@ -757,13 +757,13 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
             inject H._LocalBinding H._LocalBinding_value $ HaskellUtils.simpleValueBinding @@ var "hname''" @@ var "hterm'" @@ nothing,
           "hnames">: Lists.map ("binding" ~> HaskellUtils.simpleName @@ (Core.unName $ Core.bindingName $ var "binding")) (var "lbindings"),
           "terms">: Lists.map (unaryFunction $ Core.bindingTerm) (var "lbindings")] $
-          "hterms" <<= Eithers.mapList ("t" ~> encodeTerm @@ int32 0 @@ var "namespaces" @@ var "t" @@ var "cx" @@ var "g") (var "terms") $ lets [
+          "hterms" <<~ Eithers.mapList ("t" ~> encodeTerm @@ int32 0 @@ var "namespaces" @@ var "t" @@ var "cx" @@ var "g") (var "terms") $ lets [
           "hbindings">: Lists.zipWith (var "toBinding") (var "hnames") (var "hterms"),
           -- Merge new bindings with any previously accumulated bindings from outer lets
           "prevBindings">: Maybes.maybe (list ([] :: [TTerm H.LocalBinding])) ("lb" ~> unwrap H._LocalBindings @@ var "lb") (var "bindings"),
           "allBindings">: Lists.concat2 (var "prevBindings") (var "hbindings")] $
           var "toDecl" @@ var "comments" @@ var "hname'" @@ var "env" @@ (just $ wrap H._LocalBindings $ var "allBindings")]] $
-    "comments" <<= Annotations.getTermDescription @@ var "cx" @@ var "g" @@ var "term" $
+    "comments" <<~ Annotations.getTermDescription @@ var "cx" @@ var "g" @@ var "term" $
     var "toDecl" @@ var "comments" @@ var "hname" @@ var "term" @@ nothing
 
 -- | Simplified version of toTypeDeclarations that works with Name and Type directly
@@ -785,7 +785,7 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
           H._ApplicationDeclarationHead_operand>>: var "hvar"]),
     "newtypeCons">: "tname" ~> "typ'" ~> lets [
       "hname0">: HaskellUtils.simpleName @@ (HaskellUtils.newtypeAccessorName @@ var "tname")] $
-      "htype" <<= adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "typ'" @@ var "cx" @@ var "g" $ lets [
+      "htype" <<~ adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "typ'" @@ var "cx" @@ var "g" $ lets [
       "hfield">: record H._FieldWithComments [
         H._FieldWithComments_field>>: record H._Field [
           H._Field_name>>: var "hname0",
@@ -804,14 +804,14 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
         "hname'">: HaskellUtils.simpleName @@ Strings.cat2
           (Formatting.decapitalize @@ var "lname'")
           (Formatting.capitalize @@ (Core.unName $ var "fname"))] $
-        "htype" <<= adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "ftype" @@ var "cx" @@ var "g" $
-        "comments" <<= Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "ftype" $
+        "htype" <<~ adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "ftype" @@ var "cx" @@ var "g" $
+        "comments" <<~ Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "ftype" $
         right $ record H._FieldWithComments [
           H._FieldWithComments_field>>: record H._Field [
             H._Field_name>>: var "hname'",
             H._Field_type>>: var "htype"],
           H._FieldWithComments_comments>>: var "comments"]] $
-      "hFields" <<= Eithers.mapList (var "toField") (var "fields") $
+      "hFields" <<~ Eithers.mapList (var "toField") (var "fields") $
       right $ record H._ConstructorWithComments [
         H._ConstructorWithComments_body>>: inject H._Constructor H._Constructor_record $ record H._RecordConstructor [
           H._RecordConstructor_name>>: HaskellUtils.simpleName @@ var "lname'",
@@ -827,18 +827,18 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
         Logic.ifElse (Sets.member (var "tname") (var "boundNames'"))
           (var "deconflict" @@ Strings.cat2 (var "name") (string "_"))
           (var "name")] $
-      "comments" <<= Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "ftype" $ lets [
+      "comments" <<~ Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "ftype" $ lets [
       "nm">: var "deconflict" @@ Strings.cat2 (Formatting.capitalize @@ var "lname'") (Formatting.capitalize @@ (Core.unName $ var "fname"))] $
-      "typeList" <<= (Logic.ifElse (Equality.equal (Rewriting.deannotateType @@ var "ftype") MetaTypes.unit)
+      "typeList" <<~ (Logic.ifElse (Equality.equal (Rewriting.deannotateType @@ var "ftype") MetaTypes.unit)
         (right $ list ([] :: [TTerm H.CaseRhs])) $
-        "htype" <<= adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "ftype" @@ var "cx" @@ var "g" $
+        "htype" <<~ adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "ftype" @@ var "cx" @@ var "g" $
           right $ list [var "htype"]) $
       right $ record H._ConstructorWithComments [
         H._ConstructorWithComments_body>>: inject H._Constructor H._Constructor_ordinary $ record H._OrdinaryConstructor [
           H._OrdinaryConstructor_name>>: HaskellUtils.simpleName @@ var "nm",
           H._OrdinaryConstructor_fields>>: var "typeList"],
         H._ConstructorWithComments_comments>>: var "comments"]] $
-      "isSer" <<= Schemas.isSerializableByName @@ var "cx" @@ var "g" @@ var "elementName" $ lets [
+      "isSer" <<~ Schemas.isSerializableByName @@ var "cx" @@ var "g" @@ var "elementName" $ lets [
       "deriv">: wrap H._Deriving $ Logic.ifElse (var "isSer")
         (Lists.map (HaskellUtils.rawName) (list [string "Eq", string "Ord", string "Read", string "Show"]))
         (list ([] :: [TTerm H.Name])),
@@ -846,13 +846,13 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
       "vars">: Pairs.first $ var "unpackResult",
       "t'">: Pairs.second $ var "unpackResult",
       "hd">: var "declHead" @@ var "hname" @@ (Lists.reverse $ var "vars")] $
-      "decl" <<= (cases _Type (Rewriting.deannotateType @@ var "t'")
-        (Just $ "htype" <<= (adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "typ" @@ var "cx" @@ var "g") $
+      "decl" <<~ (cases _Type (Rewriting.deannotateType @@ var "t'")
+        (Just $ "htype" <<~ (adaptTypeToHaskellAndEncode @@ var "namespaces" @@ var "typ" @@ var "cx" @@ var "g") $
           right $ inject H._Declaration H._Declaration_type $ record H._TypeDeclaration [
             H._TypeDeclaration_name>>: var "hd",
             H._TypeDeclaration_type>>: var "htype"]) [
         _Type_record>>: "rt" ~>
-          "cons" <<= (var "recordCons" @@ var "lname" @@ (Core.rowTypeFields $ var "rt")) $
+          "cons" <<~ (var "recordCons" @@ var "lname" @@ (Core.rowTypeFields $ var "rt")) $
           right $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
             H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_data,
             H._DataDeclaration_context>>: list ([] :: [TTerm H.Assertion]),
@@ -860,7 +860,7 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
             H._DataDeclaration_constructors>>: list [var "cons"],
             H._DataDeclaration_deriving>>: list [var "deriv"]],
         _Type_union>>: "rt" ~>
-          "cons" <<= Eithers.mapList (var "unionCons" @@ (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g"))) @@ var "lname") (Core.rowTypeFields $ var "rt") $
+          "cons" <<~ Eithers.mapList (var "unionCons" @@ (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g"))) @@ var "lname") (Core.rowTypeFields $ var "rt") $
           right $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
             H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_data,
             H._DataDeclaration_context>>: list ([] :: [TTerm H.Assertion]),
@@ -869,16 +869,16 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
             H._DataDeclaration_deriving>>: list [var "deriv"]],
         _Type_wrap>>: "wrapped" ~> lets [
           "wt">: Core.wrappedTypeBody $ var "wrapped"] $
-          "cons" <<= var "newtypeCons" @@ var "elementName" @@ var "wt" $
+          "cons" <<~ var "newtypeCons" @@ var "elementName" @@ var "wt" $
             right $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
               H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_newtype,
               H._DataDeclaration_context>>: list ([] :: [TTerm H.Assertion]),
               H._DataDeclaration_head>>: var "hd",
               H._DataDeclaration_constructors>>: list [var "cons"],
               H._DataDeclaration_deriving>>: list [var "deriv"]]]) $
-      "comments" <<= Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ" $
-      "tdecls" <<= (Logic.ifElse (includeTypeDefinitions)
-        ("decl'" <<= typeDecl @@ var "namespaces" @@ var "elementName" @@ var "typ" @@ var "cx" @@ var "g" $
+      "comments" <<~ Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ" $
+      "tdecls" <<~ (Logic.ifElse (includeTypeDefinitions)
+        ("decl'" <<~ typeDecl @@ var "namespaces" @@ var "elementName" @@ var "typ" @@ var "cx" @@ var "g" $
           right $ list [var "decl'"])
         (right $ list ([] :: [TTerm H.DeclarationWithComments]))) $ lets [
       "mainDecl">: record H._DeclarationWithComments [
@@ -927,7 +927,7 @@ typeDecl = haskellCoderDefinition "typeDecl" $
         Maybes.map ("ns" ~> Core.termVariable $ Names.qname @@ var "ns" @@ (Strings.cat $ list [string "_", var "local", string "_type_"])) (var "mns")] $
       Maybes.fromMaybe (var "recurse" @@ var "term") (Maybes.bind (var "variantResult") (var "forType")),
     "finalTerm">: Rewriting.rewriteTerm @@ var "rewrite" @@ var "rawTerm"] $
-    "expr" <<= encodeTerm @@ int32 0 @@ var "namespaces" @@ var "finalTerm" @@ var "cx" @@ var "g" $ lets [
+    "expr" <<~ encodeTerm @@ int32 0 @@ var "namespaces" @@ var "finalTerm" @@ var "cx" @@ var "g" $ lets [
     "rhs">: wrap H._RightHandSide $ var "expr",
     "hname">: HaskellUtils.simpleName @@ (var "typeNameLocal" @@ var "name"),
     "pat">: HaskellUtils.applicationPattern @@ var "hname" @@ list ([] :: [TTerm H.Pattern]),

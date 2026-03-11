@@ -156,21 +156,21 @@ adaptDataGraph = define "adaptDataGraph" $
   "schemaTypes0" <~ Graph.graphSchemaTypes (var "graph0") $
   -- Adapt schema types
   "schemaBindings" <~ Schemas.typesToElements @@ Maps.map ("ts" ~> Rewriting.typeSchemeToFType @@ var "ts") (var "schemaTypes0") $
-  "schemaResult" <<= Logic.ifElse (Maps.null (var "schemaTypes0"))
+  "schemaResult" <<~ Logic.ifElse (Maps.null (var "schemaTypes0"))
     (right (Maps.empty :: TTerm (M.Map Name TypeScheme)))
-    ("tmap0" <<= Eithers.bimap formatDecodingError ("x" ~> var "x") (Schemas.graphAsTypes @@ var "cx" @@ var "graph0" @@ var "schemaBindings") $
-      "tmap1" <<= adaptGraphSchema @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
+    ("tmap0" <<~ Eithers.bimap formatDecodingError ("x" ~> var "x") (Schemas.graphAsTypes @@ var "cx" @@ var "graph0" @@ var "schemaBindings") $
+      "tmap1" <<~ adaptGraphSchema @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
       right $ Maps.map ("t" ~> Schemas.typeToTypeScheme @@ var "t") (var "tmap1")) $
   "adaptedSchemaTypes" <~ var "schemaResult" $
   "gterm0" <~ Core.termLet (Core.let_ (var "els0") Core.termUnit) $
   "gterm1" <~ Logic.ifElse (var "doExpand")
     (var "transform" @@ var "graph0" @@ var "gterm0")
     (var "gterm0") $
-  "gterm2" <<= adaptTerm @@ var "constraints" @@ var "litmap" @@ var "cx" @@ var "graph0" @@ var "gterm1" $
+  "gterm2" <<~ adaptTerm @@ var "constraints" @@ var "litmap" @@ var "cx" @@ var "graph0" @@ var "gterm1" $
   -- Adapt lambda domains in the adapted term.
   -- Lambda domains carry pre-adaptation types (e.g. bigfloat) that must be adapted to match
   -- the post-adaptation terms (e.g. float64). This preserves type annotations.
-  "gterm3" <<= Rewriting.rewriteTermM @@ (adaptLambdaDomains @@ var "constraints" @@ var "litmap") @@ var "gterm2" $
+  "gterm3" <<~ Rewriting.rewriteTermM @@ (adaptLambdaDomains @@ var "constraints" @@ var "litmap") @@ var "gterm2" $
   "els1Raw" <~ Schemas.termAsBindings @@ var "gterm3" $
 
   -- Adapt nested let binding TypeSchemes within each top-level binding's term.
@@ -181,19 +181,19 @@ adaptDataGraph = define "adaptDataGraph" $
   -- Adapting (rather than stripping) TypeSchemes converts stale types like bigfloat→float64
   -- while preserving type-class constraints like Ord needed by decodeSet.
   "processBinding" <~ ("el" ~>
-    "newTerm" <<= Rewriting.rewriteTermM @@ (adaptNestedTypes @@ var "constraints" @@ var "litmap") @@ (Core.bindingTerm $ var "el") $
-    "adaptedType" <<= optCases (Core.bindingType $ var "el")
+    "newTerm" <<~ Rewriting.rewriteTermM @@ (adaptNestedTypes @@ var "constraints" @@ var "litmap") @@ (Core.bindingTerm $ var "el") $
+    "adaptedType" <<~ optCases (Core.bindingType $ var "el")
       (right nothing)
       ("ts" ~>
-        "ts1" <<= adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts" $
+        "ts1" <<~ adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts" $
         right $ just $ var "ts1") $
     right $ Core.binding
       (Core.bindingName $ var "el")
       (var "newTerm")
       (var "adaptedType")) $
-  "els1" <<= Eithers.mapList (var "processBinding") (var "els1Raw") $
-  "primPairs" <<= Eithers.mapList ("kv" ~>
-    "prim1" <<= adaptPrimitive @@ var "constraints" @@ var "litmap" @@ (Pairs.second $ var "kv") $
+  "els1" <<~ Eithers.mapList (var "processBinding") (var "els1Raw") $
+  "primPairs" <<~ Eithers.mapList ("kv" ~>
+    "prim1" <<~ adaptPrimitive @@ var "constraints" @@ var "litmap" @@ (Pairs.second $ var "kv") $
     right $ pair (Pairs.first $ var "kv") (var "prim1")) (Maps.toList (var "prims0")) $
   "prims1" <~ Maps.fromList (var "primPairs") $
   "adaptedGraph" <~ Graph.graphWithSchemaTypes
@@ -209,17 +209,17 @@ adaptLambdaDomains :: TBinding (LanguageConstraints -> M.Map LiteralType Literal
 adaptLambdaDomains = define "adaptLambdaDomains" $
   doc "Rewrite callback for adapting lambda domain types in a term" $
   "constraints" ~> "litmap" ~> "recurse" ~> "term" ~>
-  "rewritten" <<= var "recurse" @@ var "term" $
+  "rewritten" <<~ var "recurse" @@ var "term" $
   cases _Term (var "rewritten")
     (Just $ right $ var "rewritten") [
     _Term_function>>: "f" ~>
       cases _Function (var "f")
         (Just $ right $ Core.termFunction $ var "f") [
         _Function_lambda>>: "l" ~>
-          "adaptedDomain" <<= optCases (Core.lambdaDomain $ var "l")
+          "adaptedDomain" <<~ optCases (Core.lambdaDomain $ var "l")
             (right nothing)
             ("dom" ~>
-              "dom1" <<= adaptType @@ var "constraints" @@ var "litmap" @@ var "dom" $
+              "dom1" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ var "dom" $
               right $ just $ var "dom1") $
           right $ Core.termFunction $ Core.functionLambda $ Core.lambda
             (Core.lambdaParameter $ var "l")
@@ -234,21 +234,21 @@ adaptNestedTypes :: TBinding (LanguageConstraints -> M.Map LiteralType LiteralTy
 adaptNestedTypes = define "adaptNestedTypes" $
   doc "Rewrite callback for adapting nested let binding TypeSchemes in a term" $
   "constraints" ~> "litmap" ~> "recurse" ~> "term" ~>
-  "rewritten" <<= var "recurse" @@ var "term" $
+  "rewritten" <<~ var "recurse" @@ var "term" $
   cases _Term (var "rewritten")
     (Just $ right $ var "rewritten") [
     _Term_let>>: "lt" ~>
       "adaptB" <~ ("b" ~>
-        "adaptedBType" <<= optCases (Core.bindingType $ var "b")
+        "adaptedBType" <<~ optCases (Core.bindingType $ var "b")
           (right nothing)
           ("ts" ~>
-            "ts1" <<= adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts" $
+            "ts1" <<~ adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts" $
             right $ just $ var "ts1") $
         right $ Core.binding
           (Core.bindingName $ var "b")
           (Core.bindingTerm $ var "b")
           (var "adaptedBType")) $
-      "adaptedBindings" <<= Eithers.mapList (var "adaptB") (Core.letBindings $ var "lt") $
+      "adaptedBindings" <<~ Eithers.mapList (var "adaptB") (Core.letBindings $ var "lt") $
       right $ Core.termLet $ Core.let_
         (var "adaptedBindings")
         (Core.letBody $ var "lt")]
@@ -260,9 +260,9 @@ adaptGraphSchema = define "adaptGraphSchema" $
   "mapPair" <~ ("pair" ~>
     "name" <~ Pairs.first (var "pair") $
     "typ" <~ Pairs.second (var "pair") $
-    "typ1" <<= adaptType @@ var "constraints" @@ var "litmap" @@ var "typ" $
+    "typ1" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ var "typ" $
     right $ pair (var "name") (var "typ1")) $
-  "pairs" <<= Eithers.mapList (var "mapPair") (Maps.toList $ var "types0") $
+  "pairs" <<~ Eithers.mapList (var "mapPair") (Maps.toList $ var "types0") $
   right $ Maps.fromList (var "pairs")
 
 adaptIntegerType :: TBinding (LanguageConstraints -> IntegerType -> Maybe IntegerType)
@@ -346,7 +346,7 @@ adaptPrimitive = define "adaptPrimitive" $
   doc "Adapt a primitive to the given language constraints, prior to inference" $
   "constraints" ~> "litmap" ~> "prim0" ~>
   "ts0" <~ Graph.primitiveType (var "prim0") $
-  "ts1" <<= adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts0" $
+  "ts1" <<~ adaptTypeScheme @@ var "constraints" @@ var "litmap" @@ var "ts0" $
   right $ Graph.primitiveWithType (var "prim0") (var "ts1")
 
 -- Note: this function could be made more efficient through precomputation of alternatives,
@@ -365,14 +365,14 @@ adaptTerm = define "adaptTerm" $
           (Core.termLiteral $ adaptLiteralValue @@ var "litmap" @@ var "lt" @@ var "l")]),
     "forUnsupported">: ("term" ~> lets [
       "forNonNull">: ("alts" ~>
-        "mterm" <<= var "tryTerm" @@ Lists.head (var "alts") $
+        "mterm" <<~ var "tryTerm" @@ Lists.head (var "alts") $
         optCases (var "mterm")
           (var "tryAlts" @@ Lists.tail (var "alts"))
           ("t" ~> right $ just $ var "t")),
       "tryAlts">: ("alts" ~> Logic.ifElse (Lists.null $ var "alts")
         (right nothing)
         (var "forNonNull" @@ var "alts"))] $
-      "alts0" <<= termAlternatives @@ var "cx" @@ var "graph" @@ var "term" $
+      "alts0" <<~ termAlternatives @@ var "cx" @@ var "graph" @@ var "term" $
       var "tryAlts" @@ var "alts0"),
     "tryTerm">: ("term" ~>
       "supportedVariant" <~ Sets.member
@@ -381,18 +381,18 @@ adaptTerm = define "adaptTerm" $
       Logic.ifElse (var "supportedVariant")
         (var "forSupported" @@ var "term")
         (var "forUnsupported" @@ var "term"))] $
-    "term1" <<= var "recurse" @@ var "term0" $
+    "term1" <<~ var "recurse" @@ var "term0" $
     -- Type application/lambda wrappers pass through unconditionally.
     -- fsub already recursed into their bodies; we must not strip the wrappers
     -- because they carry type information needed by typeOf in the coders.
     cases _Term (var "term1")
       (Just $
-        "mterm" <<= var "tryTerm" @@ var "term1" $
+        "mterm" <<~ var "tryTerm" @@ var "term1" $
         optCases (var "mterm")
           (left $ (string "no alternatives for term: ") ++ (ShowCore.term @@ var "term1"))
           ("term2" ~> right $ var "term2"))
       [_Term_typeApplication>>: "ta" ~>
-         "atyp" <<= adaptType @@ var "constraints" @@ var "litmap" @@ (Core.typeApplicationTermType $ var "ta") $
+         "atyp" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ (Core.typeApplicationTermType $ var "ta") $
          right $ Core.termTypeApplication $ Core.typeApplicationTerm
            (Core.typeApplicationTermBody $ var "ta")
            (var "atyp"),
@@ -427,7 +427,7 @@ adaptType = define "adaptType" $
       (var "forSupported" @@ var "typ")
       (var "forUnsupported" @@ var "typ"))] $
   "rewrite" <~ ("recurse" ~> "typ" ~>
-    "type1" <<= var "recurse" @@ var "typ" $
+    "type1" <<~ var "recurse" @@ var "typ" $
     optCases (var "tryType" @@ var "type1")
       (left $ (string "no alternatives for type: ") ++ (ShowCore.type_ @@ var "typ"))
       ("type2" ~> right $ var "type2")) $
@@ -439,7 +439,7 @@ adaptTypeScheme = define "adaptTypeScheme" $
   "constraints" ~> "litmap" ~> "ts0" ~>
   "vars0" <~ Core.typeSchemeVariables (var "ts0") $
   "t0" <~ Core.typeSchemeType (var "ts0") $
-  "t1" <<= adaptType @@ var "constraints" @@ var "litmap" @@ var "t0" $
+  "t1" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ var "t0" $
   right $ Core.typeScheme (var "vars0") (var "t1") (Core.typeSchemeConstraints (var "ts0"))
 
 pushTypeAppsInward :: TBinding (Term -> Term)
@@ -629,14 +629,14 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
 
   -- Step 2: infer types if necessary
   -- inferGraphTypes now takes ordered bindings and returns (Graph, [Binding])
-  "bins2" <<= Logic.ifElse (var "doInfer")
+  "bins2" <<~ Logic.ifElse (var "doInfer")
      (Eithers.map ("result" ~> Pairs.second (Pairs.first (var "result")))
        (Eithers.bimap formatOtherError ("x" ~> var "x")
          (Inference.inferGraphTypes @@ var "cx" @@ var "bins1" @@ (var "rebuildGraph" @@ var "bins1"))))
      (var "checkBindingsTyped" @@ string "after case hoisting" @@ var "bins1") $
 
   -- Step 3: hoist let bindings if necessary (currently, for the Java target)
-  "bins3" <<= Logic.ifElse (var "doHoistPolymorphicLetBindings")
+  "bins3" <<~ Logic.ifElse (var "doHoistPolymorphicLetBindings")
     (var "checkBindingsTyped" @@ string "after let hoisting"
       @@ (var "hoistPoly" @@ var "bins2"))
     (right $ var "bins2") $
@@ -646,10 +646,10 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
   -- (literal types, lambda domains, TypeSchemes).
   -- Pass ordered bins3 to adaptDataGraph so it uses them instead of graphToBindings.
   -- adaptDataGraph returns (Graph, [Binding]) preserving binding order.
-  "adaptResult" <<= adaptDataGraph @@ var "constraints" @@ var "doExpand" @@ var "bins3" @@ var "cx" @@ (var "rebuildGraph" @@ var "bins3") $
+  "adaptResult" <<~ adaptDataGraph @@ var "constraints" @@ var "doExpand" @@ var "bins3" @@ var "cx" @@ (var "rebuildGraph" @@ var "bins3") $
   "adapted" <~ Pairs.first (var "adaptResult") $
   "adaptedBindings" <~ Pairs.second (var "adaptResult") $
-  "bins4" <<= var "checkBindingsTyped" @@ (string "after adaptation") @@ var "adaptedBindings" $
+  "bins4" <<~ var "checkBindingsTyped" @@ (string "after adaptation") @@ var "adaptedBindings" $
 
   -- Step 5: normalize bindings
   "bins5" <~ var "normalizeBindings" @@ var "bins4" $
@@ -713,8 +713,8 @@ schemaGraphToDefinitions = define "schemaGraphToDefinitions" $
     <> " then return a corresponding type definition for each element name.") $
   "constraints" ~> "graph" ~> "nameLists" ~> "cx" ~>
   "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
-  "tmap0" <<= Eithers.bimap formatDecodingError ("x" ~> var "x") (Schemas.graphAsTypes @@ var "cx" @@ var "graph" @@ (Lexical.graphToBindings @@ var "graph")) $
-  "tmap1" <<= adaptGraphSchema @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
+  "tmap0" <<~ Eithers.bimap formatDecodingError ("x" ~> var "x") (Schemas.graphAsTypes @@ var "cx" @@ var "graph" @@ (Lexical.graphToBindings @@ var "graph")) $
+  "tmap1" <<~ adaptGraphSchema @@ var "constraints" @@ var "litmap" @@ var "tmap0" $
   "toDef" <~ ("pair" ~> Module.typeDefinition (Pairs.first $ var "pair") (Pairs.second $ var "pair")) $
   right $ pair
     (var "tmap1")
@@ -752,7 +752,7 @@ termAlternatives = define "termAlternatives" $
         Core.field (var "fname") $ Core.termMaybe $ Logic.ifElse (Equality.equal (var "ftname") (var "fname"))
           (just $ var "fterm")
           (nothing)) $
-      "rt" <<= Eithers.bimap formatOtherError ("x" ~> var "x") (Schemas.requireUnionType @@ var "cx" @@ var "graph" @@ var "tname") $
+      "rt" <<~ Eithers.bimap formatOtherError ("x" ~> var "x") (Schemas.requireUnionType @@ var "cx" @@ var "graph" @@ var "tname") $
       right $ list [
         Core.termRecord $ Core.record (var "tname") (Lists.map (var "forFieldType") (Core.rowTypeFields $ var "rt"))],
     _Term_unit>>: constant $ right $ list [

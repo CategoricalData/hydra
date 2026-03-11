@@ -530,10 +530,10 @@ decodeModule :: TBinding (Context -> Graph -> Module -> Prelude.Either (InContex
 decodeModule = define "decodeModule" $
   doc "Transform a type module into a decoder module" $
   "cx" ~> "graph" ~> "mod" ~>
-    "typeBindings" <<= (filterTypeBindings @@ var "cx" @@ var "graph" @@ (Module.moduleElements (var "mod"))) $
+    "typeBindings" <<~ (filterTypeBindings @@ var "cx" @@ var "graph" @@ (Module.moduleElements (var "mod"))) $
     Logic.ifElse (Lists.null (var "typeBindings"))
       (right nothing)
-      ("decodedBindings" <<= Eithers.mapList ("b" ~>
+      ("decodedBindings" <<~ Eithers.mapList ("b" ~>
         Eithers.bimap
           ("ic" ~> Ctx.inContext (Error.otherError (Error.unDecodingError @@ Ctx.inContextObject (var "ic"))) (Ctx.inContextContext (var "ic")))
           ("x" ~> var "x")
@@ -785,5 +785,5 @@ isDecodableBinding :: TBinding (Context -> Graph -> Binding -> Prelude.Either (I
 isDecodableBinding = define "isDecodableBinding" $
   doc "Check if a binding is decodable (serializable type)" $
   "cx" ~> "graph" ~> "b" ~>
-    "serializable" <<= Schemas.isSerializableByName @@ var "cx" @@ var "graph" @@ (Core.bindingName (var "b")) $
+    "serializable" <<~ Schemas.isSerializableByName @@ var "cx" @@ var "graph" @@ (Core.bindingName (var "b")) $
     right (Logic.ifElse (var "serializable") (just (var "b")) nothing)

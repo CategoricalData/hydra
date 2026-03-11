@@ -563,8 +563,8 @@ encodeApplicationType = def "encodeApplicationType" $
     "bodyAndArgs" <~ (var "gatherParams" @@ (inject _Type _Type_application $ var "at") @@ list ([] :: [TTerm Type])) $
     "body" <~ Pairs.first (var "bodyAndArgs") $
     "args" <~ Pairs.second (var "bodyAndArgs") $
-    "pyBody" <<= encodeType @@ var "env" @@ var "body" $
-    "pyArgs" <<= Eithers.mapList (encodeType @@ var "env") (var "args") $
+    "pyBody" <<~ encodeType @@ var "env" @@ var "body" $
+    "pyArgs" <<~ Eithers.mapList (encodeType @@ var "env") (var "args") $
     right $ PyUtils.primaryAndParams @@ (PyUtils.pyExpressionToPyPrimary @@ var "pyBody") @@ var "pyArgs"
 
 -- | Encode a forall type to Python expression.
@@ -600,7 +600,7 @@ encodeForallType = def "encodeForallType" $
     "bodyAndParams" <~ (var "gatherParams" @@ (inject _Type _Type_forall $ var "lt") @@ list ([] :: [TTerm Name])) $
     "body" <~ Pairs.first (var "bodyAndParams") $
     "params" <~ Pairs.second (var "bodyAndParams") $
-    "pyBody" <<= encodeType @@ var "env" @@ var "body" $
+    "pyBody" <<~ encodeType @@ var "env" @@ var "body" $
     right $ PyUtils.primaryAndParams
       @@ (PyUtils.pyExpressionToPyPrimary @@ var "pyBody")
       @@ (Lists.map ("n" ~> PyDsl.pyNameToPyExpression $ PyDsl.name $ Core.unName (var "n")) (var "params"))
@@ -638,8 +638,8 @@ encodeFunctionType = def "encodeFunctionType" $
     "domsAndCod" <~ (var "gatherParams" @@ list ([] :: [TTerm Type]) @@ var "ft") $
     "doms" <~ Pairs.first (var "domsAndCod") $
     "cod" <~ Pairs.second (var "domsAndCod") $
-    "pydoms" <<= Eithers.mapList (encodeType @@ var "env") (var "doms") $
-    "pycod" <<= encodeType @@ var "env" @@ var "cod" $
+    "pydoms" <<~ Eithers.mapList (encodeType @@ var "env") (var "doms") $
+    "pycod" <<~ encodeType @@ var "env" @@ var "cod" $
     right $ PyUtils.pyPrimaryToPyExpression @@
       (PyUtils.primaryWithSlices
         @@ (PyDsl.pyNameToPyPrimary $ PyDsl.name $ string "Callable")
@@ -660,34 +660,34 @@ encodeType = def "encodeType" $
       _Type_function>>: "ft" ~> encodeFunctionType @@ var "env" @@ var "ft",
       _Type_forall>>: "lt" ~> encodeForallType @@ var "env" @@ var "lt",
       _Type_list>>: "et" ~>
-        "pyet" <<= encodeType @@ var "env" @@ var "et" $
+        "pyet" <<~ encodeType @@ var "env" @@ var "et" $
         right $ PyUtils.nameAndParams @@ (PyDsl.name $ string "frozenlist") @@ list [var "pyet"],
       _Type_map>>: "mt" ~>
-        "pykt" <<= encodeType @@ var "env" @@ (project _MapType _MapType_keys @@ var "mt") $
-        "pyvt" <<= encodeType @@ var "env" @@ (project _MapType _MapType_values @@ var "mt") $
+        "pykt" <<~ encodeType @@ var "env" @@ (project _MapType _MapType_keys @@ var "mt") $
+        "pyvt" <<~ encodeType @@ var "env" @@ (project _MapType _MapType_values @@ var "mt") $
         right $ PyUtils.nameAndParams @@ (PyDsl.name $ string "FrozenDict") @@ list [var "pykt", var "pyvt"],
       _Type_literal>>: "lt" ~> encodeLiteralType @@ var "lt",
       _Type_maybe>>: "et" ~>
-        "ptype" <<= encodeType @@ var "env" @@ var "et" $
+        "ptype" <<~ encodeType @@ var "env" @@ var "et" $
         right $ PyUtils.pyPrimaryToPyExpression @@
           (PyUtils.primaryWithExpressionSlices @@
             (PyDsl.pyNameToPyPrimary $ PyDsl.name $ string "Maybe") @@
             list [var "ptype"]),
       _Type_either>>: "eitherT" ~>
-        "pyleft" <<= encodeType @@ var "env" @@ (project _EitherType _EitherType_left @@ var "eitherT") $
-        "pyright" <<= encodeType @@ var "env" @@ (project _EitherType _EitherType_right @@ var "eitherT") $
+        "pyleft" <<~ encodeType @@ var "env" @@ (project _EitherType _EitherType_left @@ var "eitherT") $
+        "pyright" <<~ encodeType @@ var "env" @@ (project _EitherType _EitherType_right @@ var "eitherT") $
         right $ PyUtils.pyPrimaryToPyExpression @@
           (PyUtils.primaryWithExpressionSlices @@
             (PyDsl.pyNameToPyPrimary $ PyDsl.name $ string "Either") @@
             list [var "pyleft", var "pyright"]),
       _Type_pair>>: "pairT" ~>
-        "pyFirst" <<= encodeType @@ var "env" @@ (project _PairType _PairType_first @@ var "pairT") $
-        "pySecond" <<= encodeType @@ var "env" @@ (project _PairType _PairType_second @@ var "pairT") $
+        "pyFirst" <<~ encodeType @@ var "env" @@ (project _PairType _PairType_first @@ var "pairT") $
+        "pySecond" <<~ encodeType @@ var "env" @@ (project _PairType _PairType_second @@ var "pairT") $
         right $ PyUtils.nameAndParams @@ (PyDsl.name $ string "tuple") @@ list [var "pyFirst", var "pySecond"],
       _Type_record>>: "rt" ~>
         right $ PyNames.typeVariableReference @@ var "env" @@ (project _RowType _RowType_typeName @@ var "rt"),
       _Type_set>>: "et" ~>
-        "pyet" <<= encodeType @@ var "env" @@ var "et" $
+        "pyet" <<~ encodeType @@ var "env" @@ var "et" $
         right $ PyUtils.nameAndParams @@ (PyDsl.name $ string "frozenset") @@ list [var "pyet"],
       _Type_union>>: "rt" ~>
         right $ PyNames.typeVariableReference @@ var "env" @@ (project _RowType _RowType_typeName @@ var "rt"),
@@ -705,7 +705,7 @@ encodeTypeQuoted :: TBinding (PyHelpers.PythonEnvironment -> Type -> Either (InC
 encodeTypeQuoted = def "encodeTypeQuoted" $
   doc "Encode a type to a Python expression, quoting if the type has free variables" $
   "env" ~> "typ" ~>
-    "pytype" <<= encodeType @@ var "env" @@ var "typ" $
+    "pytype" <<~ encodeType @@ var "env" @@ var "typ" $
     right $ Logic.ifElse (Sets.null (Rewriting.freeVariablesInType @@ var "typ"))
       (var "pytype")
       (PyUtils.doubleQuotedString @@ (Serialization.printExpr @@ (PySerde.encodeExpression @@ var "pytype")))
@@ -750,7 +750,7 @@ encodeWrappedType = def "encodeWrappedType" $
   doc "Encode a wrapped type (newtype) to a Python class definition" $
   "env" ~> "name" ~> "typ" ~> "comment" ~>
     "tparamList" <~ (Pairs.first $ project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "env") $
-    "ptypeQuoted" <<= encodeTypeQuoted @@ var "env" @@ var "typ" $
+    "ptypeQuoted" <<~ encodeTypeQuoted @@ var "env" @@ var "typ" $
     "pyName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionPascal @@ var "env" @@ var "name") $
     "body" <~ (PyUtils.indentedBlock @@ var "comment" @@ list ([] :: [TTerm [Py.Statement]])) $
     -- Generate TYPE_ as a dotted assignment after the class: ClassName.TYPE_ = Name("...")
@@ -1119,14 +1119,14 @@ encodeDefaultCaseBlock :: TBinding ((Term -> Either (InContext OtherError) Py.Ex
 encodeDefaultCaseBlock = def "encodeDefaultCaseBlock" $
   doc "Encode the default (wildcard) case block for a match statement" $
   "encodeTerm" ~> "isFull" ~> "mdflt" ~> "tname" ~>
-    "stmt" <<= optCases (var "mdflt")
+    "stmt" <<~ optCases (var "mdflt")
       -- No default provided
       (right $ Logic.ifElse (var "isFull")
         (PyUtils.raiseAssertionError @@ string "Unreachable: all variants handled")
         (PyUtils.raiseTypeError @@ (Strings.cat2 (string "Unsupported ") (Names.localNameOf @@ var "tname"))))
       -- Default term provided - encode it as a return statement
       ("d" ~>
-        "pyexpr" <<= (var "encodeTerm" @@ var "d") $
+        "pyexpr" <<~ (var "encodeTerm" @@ var "d") $
         right $ PyUtils.returnSingle @@ var "pyexpr") $
     "patterns" <~ (PyUtils.pyClosedPatternToPyPatterns @@ PyDsl.closedPatternWildcard) $
     "body" <~ (PyUtils.indentedBlock @@ nothing @@ list [list [var "stmt"]]) $
@@ -1185,7 +1185,7 @@ encodeCaseBlock = def "encodeCaseBlock" $
     "pattern" <~ (variantClosedPattern @@ var "env2" @@ var "tname" @@ var "fname" @@ var "pyVariantName"
       @@ var "rowType" @@ var "isEnum" @@ var "v" @@ var "shouldCapture") $
     -- Encode the body using the provided encoder with extended env
-    "stmts" <<= (var "encodeBody" @@ var "env2" @@ var "effectiveBody") $
+    "stmts" <<~ (var "encodeBody" @@ var "env2" @@ var "effectiveBody") $
     "pyBody" <~ (PyUtils.indentedBlock @@ nothing @@ list [var "stmts"]) $
     right $ PyDsl.caseBlock
       (PyUtils.pyClosedPatternToPyPatterns @@ var "pattern")
@@ -1222,9 +1222,9 @@ encodeFieldType = def "encodeFieldType" $
   "cx" ~> "env" ~> "fieldType" ~>
     "fname" <~ Core.fieldTypeName (var "fieldType") $
     "ftype" <~ Core.fieldTypeType (var "fieldType") $
-    "comment" <<= (Annotations.getTypeDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "ftype") $
+    "comment" <<~ (Annotations.getTypeDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "ftype") $
     "pyName" <~ (PyDsl.singleTargetName $ PyNames.encodeFieldName @@ var "env" @@ var "fname") $
-    "pyType" <<= (encodeType @@ var "env" @@ var "ftype") $
+    "pyType" <<~ (encodeType @@ var "env" @@ var "ftype") $
     "annotatedPyType" <~ (PyUtils.annotatedExpression @@ var "comment" @@ var "pyType") $
     right $ PyUtils.pyAssignmentToPyStatement @@
       (PyDsl.assignmentTyped $ PyDsl.typedAssignment (var "pyName") (var "annotatedPyType") nothing)
@@ -1248,7 +1248,7 @@ encodeRecordType = def "encodeRecordType" $
   doc "Encode a record type as a Python dataclass" $
   "cx" ~> "env" ~> "name" ~> "rowType" ~> "comment" ~>
     "tfields" <~ Core.rowTypeFields (var "rowType") $
-    "pyFields" <<= (Eithers.mapList (encodeFieldType @@ var "cx" @@ var "env") (var "tfields")) $
+    "pyFields" <<~ (Eithers.mapList (encodeFieldType @@ var "cx" @@ var "env") (var "tfields")) $
     -- Generate class-level name constants
     "constStmts" <~ (encodeNameConstants @@ var "env" @@ var "name" @@ var "tfields") $
     "body" <~ (PyUtils.indentedBlock @@ var "comment" @@ list [var "pyFields", var "constStmts"]) $
@@ -1277,7 +1277,7 @@ encodeEnumValueAssignment = def "encodeEnumValueAssignment" $
   "cx" ~> "env" ~> "fieldType" ~>
     "fname" <~ Core.fieldTypeName (var "fieldType") $
     "ftype" <~ Core.fieldTypeType (var "fieldType") $
-    "mcomment" <<= (Annotations.getTypeDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "ftype") $
+    "mcomment" <<~ (Annotations.getTypeDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "ftype") $
     "pyName" <~ (PyNames.encodeEnumValue @@ var "env" @@ var "fname") $
     "fnameStr" <~ (Core.unName $ var "fname") $
     "pyValue" <~ (PyUtils.functionCall
@@ -1313,7 +1313,7 @@ encodeUnionField = def "encodeUnionField" $
   "cx" ~> "env" ~> "unionName" ~> "fieldType" ~>
     "fname" <~ Core.fieldTypeName (var "fieldType") $
     "ftype" <~ Core.fieldTypeType (var "fieldType") $
-    "fcomment" <<= (Annotations.getTypeDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "ftype") $
+    "fcomment" <<~ (Annotations.getTypeDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "ftype") $
     "isUnit" <~ (Equality.equal (Rewriting.deannotateType @@ var "ftype") (Core.typeUnit)) $
     "varName" <~ (deconflictVariantName @@ false @@ var "env" @@ var "unionName" @@ var "fname" @@ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env")) $
     "tparamNames" <~ (findTypeParams @@ var "env" @@ var "ftype") $
@@ -1324,9 +1324,9 @@ encodeUnionField = def "encodeUnionField" $
       (PyUtils.indentedBlock @@ var "fcomment" @@ list [PyUtils.unitVariantMethods @@ var "varName"])
       (PyUtils.indentedBlock @@ var "fcomment" @@ Phantoms.list ([] :: [TTerm [Py.Statement]])) $
     -- For unit types, no args; otherwise variantArgs
-    "margs" <<= Logic.ifElse (var "isUnit")
+    "margs" <<~ Logic.ifElse (var "isUnit")
       (right (nothing :: TTerm (Maybe Py.Args)))
-      ("quotedType" <<= (encodeTypeQuoted @@ var "env" @@ var "ftype") $
+      ("quotedType" <<~ (encodeTypeQuoted @@ var "env" @@ var "ftype") $
        right $ just (variantArgs @@ var "quotedType" @@ Phantoms.list ([] :: [TTerm Name]))) $
     right $ PyUtils.pyClassDefinitionToPyStatement @@
       PyDsl.classDefinition
@@ -1344,7 +1344,7 @@ encodeUnionType = def "encodeUnionType" $
     "tfields" <~ Core.rowTypeFields (var "rowType") $
     Logic.ifElse (Schemas.isEnumRowType @@ var "rowType")
       -- Enum case: enum values are Name objects; TYPE_ assigned after class to avoid becoming a member
-      ("vals" <<= (Eithers.mapList (encodeEnumValueAssignment @@ var "cx" @@ var "env") (var "tfields")) $
+      ("vals" <<~ (Eithers.mapList (encodeEnumValueAssignment @@ var "cx" @@ var "env") (var "tfields")) $
        "body" <~ (PyUtils.indentedBlock @@ var "comment" @@ var "vals") $
        "enumName" <~ PyDsl.name (string "Enum") $
        "args" <~ (just $ PyUtils.pyExpressionsToPyArgs @@ list [PyUtils.pyNameToPyExpression @@ var "enumName"]) $
@@ -1361,7 +1361,7 @@ encodeUnionType = def "encodeUnionType" $
          var "typeConstStmt"])
       -- Union case: pass constants to the union class body
       ("constStmts" <~ (encodeNameConstants @@ var "env" @@ var "name" @@ var "tfields") $
-       "fieldStmts" <<= (Eithers.mapList (encodeUnionField @@ var "cx" @@ var "env" @@ var "name") (var "tfields")) $
+       "fieldStmts" <<~ (Eithers.mapList (encodeUnionField @@ var "cx" @@ var "env" @@ var "name") (var "tfields")) $
        "tparams" <~ (environmentTypeParameters @@ var "env") $
        "unionAlts" <~ Lists.map (encodeUnionFieldAlt @@ var "env" @@ var "name") (var "tfields") $
        "unionStmts" <~ (unionTypeStatementsFor @@ var "env" @@
@@ -1402,7 +1402,7 @@ encodeTypeAssignment :: TBinding (Context -> PyHelpers.PythonEnvironment -> Name
 encodeTypeAssignment = def "encodeTypeAssignment" $
   doc "Encode a type definition, dispatching based on type structure" $
   "cx" ~> "env" ~> "name" ~> "typ" ~> "comment" ~>
-    "defStmts" <<= (encodeTypeAssignmentInner @@ var "cx" @@ var "env" @@ var "name" @@ var "typ" @@ var "comment") $
+    "defStmts" <<~ (encodeTypeAssignmentInner @@ var "cx" @@ var "env" @@ var "name" @@ var "typ" @@ var "comment") $
     right $ Lists.map ("s" ~> list [var "s"]) (var "defStmts")
 
 -- | Inner type assignment encoding that handles forall unwrapping
@@ -1412,7 +1412,7 @@ encodeTypeAssignmentInner = def "encodeTypeAssignmentInner" $
   "cx" ~> "env" ~> "name" ~> "typ" ~> "comment" ~>
     "stripped" <~ (Rewriting.deannotateType @@ var "typ") $
     -- Default: simple type alias
-    "dflt" <~ ("typeExpr" <<= (encodeType @@ var "env" @@ var "typ") $
+    "dflt" <~ ("typeExpr" <<~ (encodeType @@ var "env" @@ var "typ") $
        right $ encodeTypeDefSingle @@ var "env" @@ var "name" @@ var "comment" @@ var "typeExpr") $
     cases _Type (var "stripped") (Just (var "dflt")) [
       -- Forall: extend environment with type variable and recurse
@@ -1442,7 +1442,7 @@ encodeField = def "encodeField" $
   "cx" ~> "env" ~> "field" ~> "encodeTerm" ~>
     "fname" <~ Core.fieldName (var "field") $
     "fterm" <~ Core.fieldTerm (var "field") $
-    "pterm" <<= (var "encodeTerm" @@ var "fterm") $
+    "pterm" <<~ (var "encodeTerm" @@ var "fterm") $
     right $ pair (PyNames.encodeFieldName @@ var "env" @@ var "fname") (var "pterm")
 
 -- | Encode bindings as function definitions
@@ -1486,7 +1486,7 @@ encodeBindingAs = def "encodeBindingAs" $
             "tname" <~ (Core.caseStatementTypeName $ var "cs") $
             "dflt" <~ (Core.caseStatementDefault $ var "cs") $
             "cases_" <~ (Core.caseStatementCases $ var "cs") $
-            "rt" <<= (Schemas.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
+            "rt" <<~ (Schemas.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
             "isEnum" <~ (Schemas.isEnumRowType @@ var "rt") $
             "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
             "innerParam" <~ (PyDsl.param (PyDsl.name $ string "x") nothing) $
@@ -1497,8 +1497,8 @@ encodeBindingAs = def "encodeBindingAs" $
               Phantoms.field Py._ParamNoDefaultParameters_paramNoDefault (list [var "param"]),
               Phantoms.field Py._ParamNoDefaultParameters_paramWithDefault (Phantoms.list ([] :: [TTerm Py.ParamWithDefault])),
               Phantoms.field Py._ParamNoDefaultParameters_starEtc nothing]) $
-            "pyCases" <<= (Eithers.mapList (encodeCaseBlock @@ var "cx" @@ var "env" @@ var "tname" @@ var "rt" @@ var "isEnum" @@ ("e" ~> "t" ~> encodeTermMultiline @@ var "cx" @@ var "e" @@ var "t")) (var "cases_")) $
-            "pyDflt" <<= (encodeDefaultCaseBlock @@ ("t" ~> encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "t") @@ var "isFull" @@ var "dflt" @@ var "tname") $
+            "pyCases" <<~ (Eithers.mapList (encodeCaseBlock @@ var "cx" @@ var "env" @@ var "tname" @@ var "rt" @@ var "isEnum" @@ ("e" ~> "t" ~> encodeTermMultiline @@ var "cx" @@ var "e" @@ var "t")) (var "cases_")) $
+            "pyDflt" <<~ (encodeDefaultCaseBlock @@ ("t" ~> encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "t") @@ var "isFull" @@ var "dflt" @@ var "tname") $
             "subj" <~ (PyDsl.subjectExpressionSimple $ PyDsl.namedExpressionSimple $ PyUtils.pyNameToPyExpression @@ (PyDsl.name $ string "x")) $
             "allCases" <~ (Lists.concat2 (var "pyCases") (var "pyDflt")) $
             "matchStmt" <~ (PyDsl.statementCompound $ PyDsl.compoundStatementMatch $ Phantoms.record Py._MatchStatement [
@@ -1527,7 +1527,7 @@ encodeBindingAs = def "encodeBindingAs" $
                 "tname" <~ (Core.caseStatementTypeName $ var "cs") $
                 "dflt" <~ (Core.caseStatementDefault $ var "cs") $
                 "cases_" <~ (Core.caseStatementCases $ var "cs") $
-                "rt" <<= (Schemas.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
+                "rt" <<~ (Schemas.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
                 "isEnum" <~ (Schemas.isEnumRowType @@ var "rt") $
                 "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
                 "innerParam" <~ (PyDsl.param (PyDsl.name $ string "x") nothing) $
@@ -1538,8 +1538,8 @@ encodeBindingAs = def "encodeBindingAs" $
                   Phantoms.field Py._ParamNoDefaultParameters_paramNoDefault (list [var "param"]),
                   Phantoms.field Py._ParamNoDefaultParameters_paramWithDefault (Phantoms.list ([] :: [TTerm Py.ParamWithDefault])),
                   Phantoms.field Py._ParamNoDefaultParameters_starEtc nothing]) $
-                "pyCases" <<= (Eithers.mapList (encodeCaseBlock @@ var "cx" @@ var "env" @@ var "tname" @@ var "rt" @@ var "isEnum" @@ ("e" ~> "t" ~> encodeTermMultiline @@ var "cx" @@ var "e" @@ var "t")) (var "cases_")) $
-                "pyDflt" <<= (encodeDefaultCaseBlock @@ ("t" ~> encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "t") @@ var "isFull" @@ var "dflt" @@ var "tname") $
+                "pyCases" <<~ (Eithers.mapList (encodeCaseBlock @@ var "cx" @@ var "env" @@ var "tname" @@ var "rt" @@ var "isEnum" @@ ("e" ~> "t" ~> encodeTermMultiline @@ var "cx" @@ var "e" @@ var "t")) (var "cases_")) $
+                "pyDflt" <<~ (encodeDefaultCaseBlock @@ ("t" ~> encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "t") @@ var "isFull" @@ var "dflt" @@ var "tname") $
                 "subj" <~ (PyDsl.subjectExpressionSimple $ PyDsl.namedExpressionSimple $ PyUtils.pyNameToPyExpression @@ (PyDsl.name $ string "x")) $
                 "allCases" <~ (Lists.concat2 (var "pyCases") (var "pyDflt")) $
                 "matchStmt" <~ (PyDsl.statementCompound $ PyDsl.compoundStatementMatch $ Phantoms.record Py._MatchStatement [
@@ -1566,7 +1566,7 @@ encodeBindingAs = def "encodeBindingAs" $
             "dflt" <~ (Pairs.first $ var "rest1") $
             "rest2" <~ (Pairs.second $ var "rest1") $
             "cases_" <~ (Pairs.first $ var "rest2") $
-            "rt" <<= (Schemas.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
+            "rt" <<~ (Schemas.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
             "isEnum" <~ (Schemas.isEnumRowType @@ var "rt") $
             "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
             -- Separate captured variables (all but last) from the match parameter (last).
@@ -1594,8 +1594,8 @@ encodeBindingAs = def "encodeBindingAs" $
             -- Extend environment with all gathered lambda parameters before encoding cases
             "envWithParams" <~ (extendEnvWithLambdaParams @@ var "env" @@ var "term1") $
             -- Encode the match statement using extended environment
-            "pyCases" <<= (Eithers.mapList (encodeCaseBlock @@ var "cx" @@ var "envWithParams" @@ var "tname" @@ var "rt" @@ var "isEnum" @@ ("e" ~> "t" ~> encodeTermMultiline @@ var "cx" @@ var "e" @@ var "t")) (var "cases_")) $
-            "pyDflt" <<= (encodeDefaultCaseBlock @@ ("t" ~> encodeTermInline @@ var "cx" @@ var "envWithParams" @@ false @@ var "t") @@ var "isFull" @@ var "dflt" @@ var "tname") $
+            "pyCases" <<~ (Eithers.mapList (encodeCaseBlock @@ var "cx" @@ var "envWithParams" @@ var "tname" @@ var "rt" @@ var "isEnum" @@ ("e" ~> "t" ~> encodeTermMultiline @@ var "cx" @@ var "e" @@ var "t")) (var "cases_")) $
+            "pyDflt" <<~ (encodeDefaultCaseBlock @@ ("t" ~> encodeTermInline @@ var "cx" @@ var "envWithParams" @@ false @@ var "t") @@ var "isFull" @@ var "dflt" @@ var "tname") $
             "subj" <~ (PyDsl.subjectExpressionSimple $ PyDsl.namedExpressionSimple $ PyUtils.pyNameToPyExpression @@ var "matchArgName") $
             "allCases" <~ (Lists.concat2 (var "pyCases") (var "pyDflt")) $
             "matchStmt" <~ (PyDsl.statementCompound $ PyDsl.compoundStatementMatch $ Phantoms.record Py._MatchStatement [
@@ -1614,7 +1614,7 @@ encodeBindingAs = def "encodeBindingAs" $
           (var "mcsa"))
       -- Binding with type scheme - use encodeTermAssignment
       ("ts" ~>
-        "comment" <<= (Annotations.getTermDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "term1") $
+        "comment" <<~ (Annotations.getTermDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "term1") $
         "normComment" <~ (Maybes.map CoderUtils.normalizeComment (var "comment")) $
         encodeTermAssignment @@ var "cx" @@ var "env" @@ var "name1" @@ var "term1" @@ var "ts" @@ var "normComment")
       (var "mts")
@@ -1631,14 +1631,14 @@ encodeDefinition = def "encodeDefinition" $
         "name" <~ (project _TermDefinition _TermDefinition_name @@ var "td") $
         "term" <~ (project _TermDefinition _TermDefinition_term @@ var "td") $
         "typ" <~ (project _TermDefinition _TermDefinition_type @@ var "td") $
-        "comment" <<= (Annotations.getTermDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "term") $
+        "comment" <<~ (Annotations.getTermDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "term") $
         "normComment" <~ (Maybes.map CoderUtils.normalizeComment (var "comment")) $
-        "stmt" <<= (encodeTermAssignment @@ var "cx" @@ var "env" @@ var "name" @@ var "term" @@ var "typ" @@ var "normComment") $
+        "stmt" <<~ (encodeTermAssignment @@ var "cx" @@ var "env" @@ var "name" @@ var "term" @@ var "typ" @@ var "normComment") $
         right $ list [list [var "stmt"]],
       _Definition_type>>: "td" ~>
         "name" <~ (project _TypeDefinition _TypeDefinition_name @@ var "td") $
         "typ" <~ (project _TypeDefinition _TypeDefinition_type @@ var "td") $
-        "comment" <<= (Annotations.getTypeDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "typ") $
+        "comment" <<~ (Annotations.getTypeDescription @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "typ") $
         "normComment" <~ (Maybes.map CoderUtils.normalizeComment (var "comment")) $
         encodeTypeAssignment @@ var "cx" @@ var "env" @@ var "name" @@ var "typ" @@ var "normComment"]
 
@@ -1873,7 +1873,7 @@ encodeBindingAsAssignment = def "encodeBindingAsAssignment" $
     "term" <~ Core.bindingTerm (var "binding") $
     "mts" <~ Core.bindingType (var "binding") $
     "pyName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name") $
-    "pbody" <<= (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
+    "pbody" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
     "tc" <~ (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_graph @@ var "env") $
     "isComplexVar" <~ (CoderUtils.isComplexVariable @@ var "tc" @@ var "name") $
     "termIsComplex" <~ (CoderUtils.isComplexTerm @@ var "tc" @@ var "term") $
@@ -1916,7 +1916,7 @@ encodeTermMultilineTCO = def "encodeTermMultilineTCO" $
     Logic.ifElse (Logic.and (var "isSelfCall")
                             (Equality.equal (Lists.length $ var "gatherArgs") (Lists.length $ var "paramNames")))
       -- TAIL CALL: emit param reassignment + continue
-      ("pyArgs" <<= Eithers.mapList ("a" ~> encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "a") (var "gatherArgs") $
+      ("pyArgs" <<~ Eithers.mapList ("a" ~> encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "a") (var "gatherArgs") $
         "assignments" <~ (Lists.map ("pair" ~>
           "paramName" <~ (Pairs.first $ var "pair") $
           "pyArg" <~ (Pairs.second $ var "pair") $
@@ -1935,32 +1935,32 @@ encodeTermMultilineTCO = def "encodeTermMultilineTCO" $
           ("arg" <~ (Lists.head $ var "args2") $
             cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "body2") (Just $
               -- Default: not a case statement, encode as return
-              "expr" <<= (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
+              "expr" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
               right $ list [PyUtils.returnSingle @@ var "expr"]) [
               _Term_function>>: "f" ~>
                 cases _Function (var "f") (Just $
-                  "expr" <<= (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
+                  "expr" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
                   right $ list [PyUtils.returnSingle @@ var "expr"]) [
                   _Function_elimination>>: "e" ~>
                     cases _Elimination (var "e") (Just $
-                      "expr" <<= (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
+                      "expr" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
                       right $ list [PyUtils.returnSingle @@ var "expr"]) [
                       _Elimination_union>>: "cs" ~>
                         -- Case statement: use encodeCaseBlock with TCO-aware body encoder
                         "tname" <~ (Core.caseStatementTypeName $ var "cs") $
                         "dflt" <~ (Core.caseStatementDefault $ var "cs") $
                         "cases_" <~ (Core.caseStatementCases $ var "cs") $
-                        "rt" <<= (Schemas.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
+                        "rt" <<~ (Schemas.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
                         "isEnum" <~ (Schemas.isEnumRowType @@ var "rt") $
                         "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
-                        "pyArg" <<= (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "arg") $
+                        "pyArg" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "arg") $
                         -- Use TCO body encoder for each case branch
-                        "pyCases" <<= (Eithers.mapList
+                        "pyCases" <<~ (Eithers.mapList
                           (encodeCaseBlock @@ var "cx" @@ var "env" @@ var "tname" @@ var "rt" @@ var "isEnum"
                             @@ ("e2" ~> "t2" ~> encodeTermMultilineTCO @@ var "cx" @@ var "e2" @@ var "funcName" @@ var "paramNames" @@ var "t2"))
                           (deduplicateCaseVariables @@ var "cases_")) $
                         -- Default case: uses normal return encoding (base case is never a tail call)
-                        "pyDflt" <<= (encodeDefaultCaseBlock
+                        "pyDflt" <<~ (encodeDefaultCaseBlock
                           @@ ("t2" ~> encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "t2")
                           @@ var "isFull" @@ var "dflt" @@ var "tname") $
                         "subj" <~ (PyDsl.subjectExpressionSimple $ PyDsl.namedExpressionSimple $ var "pyArg") $
@@ -1970,7 +1970,7 @@ encodeTermMultilineTCO = def "encodeTermMultilineTCO" $
                             Phantoms.field Py._MatchStatement_cases (Lists.concat2 (var "pyCases") (var "pyDflt"))]) $
                         right $ list [var "matchStmt"]]]])
           -- Not a single-arg application: fall back to normal return
-          ("expr" <<= (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
+          ("expr" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
             right $ list [PyUtils.returnSingle @@ var "expr"]))
 
 -- | Encode a function definition with parameters and body.
@@ -1982,11 +1982,11 @@ encodeFunctionDefinition = def "encodeFunctionDefinition" $
   doc "Encode a function definition with parameters and body" $
   "cx" ~> "env" ~> "name" ~> "tparams" ~> "args" ~> "body" ~> "doms" ~> "mcod" ~> "comment" ~> "prefixes" ~>
     -- Create parameters by zipping arg names with domain types
-    "pyArgs" <<= Eithers.mapList
+    "pyArgs" <<~ Eithers.mapList
       ("pair" ~>
         "argName" <~ Pairs.first (var "pair") $
         "typ" <~ Pairs.second (var "pair") $
-        "pyTyp" <<= (encodeType @@ var "env" @@ var "typ") $
+        "pyTyp" <<~ (encodeType @@ var "env" @@ var "typ") $
         right $ PyDsl.paramNoDefaultSimple $ PyDsl.param
           (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env" @@ var "argName")
           (just $ PyDsl.annotation $ var "pyTyp"))
@@ -1996,24 +1996,24 @@ encodeFunctionDefinition = def "encodeFunctionDefinition" $
     "isTCO" <~ (Logic.and
       (Logic.not $ Lists.null (var "args"))
       (CoderUtils.isSelfTailRecursive @@ var "name" @@ var "body")) $
-    "block" <<= (Logic.ifElse (var "isTCO")
+    "block" <<~ (Logic.ifElse (var "isTCO")
       -- TCO path: wrap body in while True loop
       -- Note: prefixes (let-binding statements) go INSIDE the while loop so they are
       -- re-evaluated each iteration when parameters change via reassignment + continue.
-      ("tcoStmts" <<= (encodeTermMultilineTCO @@ var "cx" @@ var "env" @@ var "name" @@ var "args" @@ var "body") $
+      ("tcoStmts" <<~ (encodeTermMultilineTCO @@ var "cx" @@ var "env" @@ var "name" @@ var "args" @@ var "body") $
         "trueExpr" <~ (PyDsl.namedExpressionSimple $ PyUtils.pyAtomToPyExpression @@ PyDsl.atomTrue) $
         "whileBody" <~ (PyUtils.indentedBlock @@ nothing @@ list [Lists.concat2 (var "prefixes") (var "tcoStmts")]) $
         "whileStmt" <~ (PyDsl.statementCompound $ PyDsl.compoundStatementWhile $
           PyDsl.whileStatement (var "trueExpr") (var "whileBody") nothing) $
         right $ PyUtils.indentedBlock @@ var "comment" @@ list [list [var "whileStmt"]])
       -- Normal path: encode body as statements with return
-      ("stmts" <<= (encodeTermMultiline @@ var "cx" @@ var "env" @@ var "body") $
+      ("stmts" <<~ (encodeTermMultiline @@ var "cx" @@ var "env" @@ var "body") $
         right $ PyUtils.indentedBlock @@ var "comment" @@ list [Lists.concat2 (var "prefixes") (var "stmts")])) $
     -- Encode return type if present
-    "mreturnType" <<= optCases (var "mcod")
+    "mreturnType" <<~ optCases (var "mcod")
       (right (nothing :: TTerm (Maybe Py.Expression)))
       ("cod" ~>
-        "pytyp" <<= (encodeType @@ var "env" @@ var "cod") $
+        "pytyp" <<~ (encodeType @@ var "env" @@ var "cod") $
         right $ just (var "pytyp")) $
     -- Type parameters (only for Python 3.12+)
     "pyTparams" <~ (Logic.ifElse useInlineTypeParams
@@ -2039,18 +2039,18 @@ encodeTermMultiline = def "encodeTermMultiline" $
   "cx" ~> "env" ~> "term" ~>
     -- Define the default/fallback logic that handles non-case-statement terms
     "dfltLogic" <~
-      ("fs" <<= (analyzePythonFunction @@ var "cx" @@ var "env" @@ var "term") $
+      ("fs" <<~ (analyzePythonFunction @@ var "cx" @@ var "env" @@ var "term") $
         "params" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_params @@ var "fs") $
         "bindings" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_bindings @@ var "fs") $
         "innerBody" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_body @@ var "fs") $
         "env2" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_environment @@ var "fs") $
         Logic.ifElse (Lists.null $ var "bindings")
           -- No bindings: encode inline and wrap in return
-          ("expr" <<= (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
+          ("expr" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "term") $
             right $ list [PyUtils.returnSingle @@ var "expr"])
           -- Has bindings: encode bindings as defs, then recurse on body
-          ("bindingStmts" <<= (Eithers.mapList (encodeBindingAs @@ var "cx" @@ var "env2") (var "bindings")) $
-            "bodyStmts" <<= (encodeTermMultiline @@ var "cx" @@ var "env2" @@ var "innerBody") $
+          ("bindingStmts" <<~ (Eithers.mapList (encodeBindingAs @@ var "cx" @@ var "env2") (var "bindings")) $
+            "bodyStmts" <<~ (encodeTermMultiline @@ var "cx" @@ var "env2" @@ var "innerBody") $
             right $ Lists.concat2 (var "bindingStmts") (var "bodyStmts"))) $
     "gathered" <~ (CoderUtils.gatherApplications @@ var "term") $
     "args" <~ Pairs.first (var "gathered") $
@@ -2068,12 +2068,12 @@ encodeTermMultiline = def "encodeTermMultiline" $
                     "tname" <~ (Core.caseStatementTypeName $ var "cs") $
                     "dflt" <~ (Core.caseStatementDefault $ var "cs") $
                     "cases_" <~ (Core.caseStatementCases $ var "cs") $
-                    "rt" <<= (Schemas.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
+                    "rt" <<~ (Schemas.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
                     "isEnum" <~ (Schemas.isEnumRowType @@ var "rt") $
                     "isFull" <~ (isCasesFull @@ var "rt" @@ var "cases_") $
-                    "pyArg" <<= (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "arg") $
-                    "pyCases" <<= (Eithers.mapList (encodeCaseBlock @@ var "cx" @@ var "env" @@ var "tname" @@ var "rt" @@ var "isEnum" @@ ("e" ~> "t" ~> encodeTermMultiline @@ var "cx" @@ var "e" @@ var "t")) (deduplicateCaseVariables @@ var "cases_")) $
-                    "pyDflt" <<= (encodeDefaultCaseBlock @@ ("t" ~> encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "t") @@ var "isFull" @@ var "dflt" @@ var "tname") $
+                    "pyArg" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "arg") $
+                    "pyCases" <<~ (Eithers.mapList (encodeCaseBlock @@ var "cx" @@ var "env" @@ var "tname" @@ var "rt" @@ var "isEnum" @@ ("e" ~> "t" ~> encodeTermMultiline @@ var "cx" @@ var "e" @@ var "t")) (deduplicateCaseVariables @@ var "cases_")) $
+                    "pyDflt" <<~ (encodeDefaultCaseBlock @@ ("t" ~> encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "t") @@ var "isFull" @@ var "dflt" @@ var "tname") $
                     "subj" <~ (PyDsl.subjectExpressionSimple $ PyDsl.namedExpressionSimple $ var "pyArg") $
                     "matchStmt" <~ (PyDsl.statementCompound $ PyDsl.compoundStatementMatch $ Phantoms.record Py._MatchStatement [
                       Phantoms.field Py._MatchStatement_subject (var "subj"),
@@ -2092,7 +2092,7 @@ encodeFunction = def "encodeFunction" $
   "cx" ~> "env" ~> "f" ~>
     cases _Function (var "f") Nothing [
       _Function_lambda>>: "lam" ~>
-        "fs" <<= (analyzePythonFunction @@ var "cx" @@ var "env" @@ (Core.termFunction $ Core.functionLambda $ var "lam")) $
+        "fs" <<~ (analyzePythonFunction @@ var "cx" @@ var "env" @@ (Core.termFunction $ Core.functionLambda $ var "lam")) $
         "params" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_params @@ var "fs") $
         "bindings" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_bindings @@ var "fs") $
         "innerBody" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_body @@ var "fs") $
@@ -2108,12 +2108,12 @@ encodeFunction = def "encodeFunction" $
           PyHelpers._PythonEnvironment_skipCasts>>: project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_skipCasts @@ var "innerEnv0",
           PyHelpers._PythonEnvironment_inlineVariables>>: Sets.union (Sets.fromList (var "bindingNames"))
             (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_inlineVariables @@ var "innerEnv0")]) $
-        "pbody" <<= (encodeTermInline @@ var "cx" @@ var "innerEnv" @@ false @@ var "innerBody") $
+        "pbody" <<~ (encodeTermInline @@ var "cx" @@ var "innerEnv" @@ false @@ var "innerBody") $
         "pparams" <~ (Lists.map (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "innerEnv") (var "params")) $
         Logic.ifElse (Lists.null $ var "bindings")
           (right $ makeUncurriedLambda @@ var "pparams" @@ var "pbody")
           -- Has bindings: create walrus operator expressions
-          ("pbindingExprs" <<= (Eithers.mapList (encodeBindingAsAssignment @@ var "cx" @@ false @@ var "innerEnv") (var "bindings")) $
+          ("pbindingExprs" <<~ (Eithers.mapList (encodeBindingAsAssignment @@ var "cx" @@ false @@ var "innerEnv") (var "bindings")) $
             "pbindingStarExprs" <~ (Lists.map ("ne" ~> PyDsl.starNamedExpressionSimple (var "ne")) (var "pbindingExprs")) $
             "pbodyStarExpr" <~ (PyUtils.pyExpressionToPyStarNamedExpression @@ var "pbody") $
             "tupleElements" <~ (Lists.concat2 (var "pbindingStarExprs") (list [var "pbodyStarExpr"])) $
@@ -2148,7 +2148,7 @@ encodeTermAssignment :: TBinding (Context -> PyHelpers.PythonEnvironment
 encodeTermAssignment = def "encodeTermAssignment" $
   doc "Encode a term assignment to a Python statement" $
   "cx" ~> "env" ~> "name" ~> "term" ~> "ts" ~> "comment" ~>
-    "fs" <<= (analyzePythonFunction @@ var "cx" @@ var "env" @@ var "term") $
+    "fs" <<~ (analyzePythonFunction @@ var "cx" @@ var "env" @@ var "term") $
     "tparams" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_typeParams @@ var "fs") $
     "params" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_params @@ var "fs") $
     "bindings" <~ (Phantoms.project HydraTyping._FunctionStructure HydraTyping._FunctionStructure_bindings @@ var "fs") $
@@ -2162,10 +2162,10 @@ encodeTermAssignment = def "encodeTermAssignment" $
     "isTrivial" <~ (CoderUtils.isTrivialTerm @@ var "term") $
     Logic.ifElse (Logic.and (var "isComplex") (Logic.not (var "isTrivial")))
       -- Complex binding (non-trivial): use function definition
-      ("bindingStmts" <<= (Eithers.mapList (encodeBindingAs @@ var "cx" @@ var "env2") (var "bindings")) $
+      ("bindingStmts" <<~ (Eithers.mapList (encodeBindingAs @@ var "cx" @@ var "env2") (var "bindings")) $
         encodeFunctionDefinition @@ var "cx" @@ var "env2" @@ var "name" @@ var "tparams" @@ var "params" @@ var "body" @@ var "doms" @@ var "mcod" @@ var "comment" @@ var "bindingStmts")
       -- Simple binding: use assignment
-      ("bodyExpr" <<= (encodeTermInline @@ var "cx" @@ var "env2" @@ false @@ var "body") $
+      ("bodyExpr" <<~ (encodeTermInline @@ var "cx" @@ var "env2" @@ false @@ var "body") $
         "pyName" <~ (PyNames.encodeName @@ false @@ Util.caseConventionLowerSnake @@ var "env2" @@ var "name") $
         right $ PyUtils.annotatedStatement @@ var "comment" @@ (PyUtils.assignmentStatement @@ var "pyName" @@ var "bodyExpr"))
 
@@ -2331,11 +2331,11 @@ encodeApplication = def "encodeApplication" $
     "arity" <~ (Eithers.fromRight (var "termArity") $
       Eithers.map ("_r" ~> Arity.typeArity @@ Pairs.first (var "_r"))
         (Checking.typeOf @@ var "cx" @@ var "tc" @@ (Phantoms.list ([] :: [TTerm Type])) @@ var "fun")) $
-    "pargs" <<= (Eithers.mapList ("t" ~> encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "t") (var "args")) $
+    "pargs" <<~ (Eithers.mapList ("t" ~> encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "t") (var "args")) $
     "hargs" <~ (Lists.take (var "arity") (var "pargs")) $
     "rargs" <~ (Lists.drop (var "arity") (var "pargs")) $
     -- Apply args based on function type
-    "result" <<= (encodeApplicationInner @@ var "cx" @@ var "env" @@ var "fun" @@ var "hargs" @@ var "rargs") $
+    "result" <<~ (encodeApplicationInner @@ var "cx" @@ var "env" @@ var "fun" @@ var "hargs" @@ var "rargs") $
     "lhs" <~ (Pairs.first $ var "result") $
     "remainingRargs" <~ (Pairs.second $ var "result") $
     -- Fold remaining args into function calls
@@ -2362,7 +2362,7 @@ encodeApplicationInner = def "encodeApplicationInner" $
         (var "e")
         (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "e") @@ var "restArgs")) $
     -- Default case: encode function and apply
-    "defaultCase" <~ ("pfun" <<= (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "fun") $
+    "defaultCase" <~ ("pfun" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "fun") $
       right $ pair (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pfun") @@ var "hargs") (var "rargs")) $
     cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "fun") (Just $ var "defaultCase") [
       _Term_function>>: "f" ~>
@@ -2376,7 +2376,7 @@ encodeApplicationInner = def "encodeApplicationInner" $
                 right $ pair (var "withRest" @@ var "fieldExpr") (var "rargs"),
               -- Union elimination: encode as inline conditional chain (isinstance-based ternary)
               _Elimination_union>>: "cs" ~>
-                "inlineExpr" <<= (encodeUnionEliminationInline @@ var "cx" @@ var "env" @@ var "cs" @@ var "firstArg") $
+                "inlineExpr" <<~ (encodeUnionEliminationInline @@ var "cx" @@ var "env" @@ var "cs" @@ var "firstArg") $
                 right $ pair (var "withRest" @@ var "inlineExpr") (var "rargs"),
               -- Wrap elimination: obj.value
               _Elimination_wrap>>: constant $
@@ -2389,11 +2389,11 @@ encodeApplicationInner = def "encodeApplicationInner" $
           -- Primitive: encode variable with args (wrap lazy arguments for primitives like ifElse)
           _Function_primitive>>: "name" ~>
             "wrappedArgs" <~ (wrapLazyArguments @@ var "name" @@ var "hargs") $
-            "expr" <<= (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "wrappedArgs") $
+            "expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "wrappedArgs") $
             right $ pair (var "expr") (var "rargs"),
           -- Other functions: encode and apply
           _Function_lambda>>: constant $
-            "pfun" <<= (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "fun") $
+            "pfun" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "fun") $
             right $ pair (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pfun") @@ var "hargs") (var "rargs")],
       -- Variable: encode and apply
       _Term_variable>>: "name" ~>
@@ -2401,13 +2401,13 @@ encodeApplicationInner = def "encodeApplicationInner" $
         "allArgs" <~ (Lists.concat2 (var "hargs") (var "rargs")) $
         Maybes.maybe
           -- Not in graph elements: use encodeVariable
-          ("expr" <<= (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "hargs") $
+          ("expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "hargs") $
             right $ pair (var "expr") (var "rargs"))
           -- In graph elements: check arity
           ("el" ~>
             Maybes.maybe
               -- No type: use encodeVariable
-              ("expr" <<= (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "hargs") $
+              ("expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ var "hargs") $
                 right $ pair (var "expr") (var "rargs"))
               -- Has type: use arity
               ("ts" ~>
@@ -2416,7 +2416,7 @@ encodeApplicationInner = def "encodeApplicationInner" $
                 "consumedArgs" <~ (Lists.take (var "consumeCount") (var "allArgs")) $
                 "remainingArgs" <~ (Lists.drop (var "consumeCount") (var "allArgs")) $
                 Logic.ifElse (Lists.null $ var "consumedArgs")
-                  ("expr" <<= (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ (list ([] :: [TTerm Py.Expression]))) $
+                  ("expr" <<~ (encodeVariable @@ var "cx" @@ var "env" @@ var "name" @@ (list ([] :: [TTerm Py.Expression]))) $
                     right $ pair (var "expr") (var "rargs"))
                   (right $ pair
                     (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeName @@ true @@ Util.caseConventionLowerSnake @@ var "env" @@ var "name")) @@ var "consumedArgs")
@@ -2439,14 +2439,14 @@ encodeUnionEliminationInline = def "encodeUnionEliminationInline" $
     "mdefault" <~ (Core.caseStatementDefault $ var "cs") $
     "cases_" <~ (Core.caseStatementCases $ var "cs") $
     -- Get the row type for isEnum and isUnit checks
-    "rt" <<= (Schemas.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
+    "rt" <<~ (Schemas.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
     "isEnum" <~ (Schemas.isEnumRowType @@ var "rt") $
     -- Project .value from the argument for non-enum types
     "valueExpr" <~ (PyUtils.projectFromExpression @@ var "pyArg" @@ (PyDsl.name $ string "value")) $
     -- Build the isinstance function reference
     "isinstancePrimary" <~ (PyUtils.pyNameToPyPrimary @@ (PyDsl.name $ string "isinstance")) $
     -- Encode the default expression (used as final else)
-    "pyDefault" <<= (Maybes.maybe
+    "pyDefault" <<~ (Maybes.maybe
       -- No default: produce an unsupported expression as fallback
       (right $ unsupportedExpression @@ string "no matching case in inline union elimination")
       -- Has default: encode it inline (the default is a value, not a function to be applied)
@@ -2476,7 +2476,7 @@ encodeUnionEliminationInline = def "encodeUnionEliminationInline" $
           (PyUtils.functionCall @@ var "isinstancePrimary"
             @@ list [var "pyArg", PyUtils.pyNameToPyExpression @@ var "pyVariantName"])) $
         -- Encode the branch term and apply it
-        "pyBranch" <<= (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "fterm") $
+        "pyBranch" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "fterm") $
         "pyResult" <~ (Logic.ifElse (var "isEnum")
           -- Enum variant: the branch lambda expects nothing useful, just call with arg
           (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pyBranch") @@ list [var "pyArg"])
@@ -2487,7 +2487,7 @@ encodeUnionEliminationInline = def "encodeUnionEliminationInline" $
             (PyUtils.functionCall @@ (PyUtils.pyExpressionToPyPrimary @@ var "pyBranch") @@ list [var "valueExpr"]))) $
         right $ pair (var "isinstanceCheck") (var "pyResult")) $
     -- Encode all branches
-    "encodedBranches" <<= (Eithers.mapList (var "encodeBranch") (var "cases_")) $
+    "encodedBranches" <<~ (Eithers.mapList (var "encodeBranch") (var "cases_")) $
     -- Fold branches into a conditional chain from right to left:
     --   result_n if isinstance(arg, Tn) else ... else default
     -- Use foldl on reversed branches: foldl (\acc branch -> cond(branch, acc)) default (reverse branches)
@@ -2554,10 +2554,10 @@ encodeTermInline = def "encodeTermInline" $
       _Term_either>>: "et" ~>
         Eithers.either_
           ("t1" ~>
-            "pyexp" <<= (var "encode" @@ var "t1") $
+            "pyexp" <<~ (var "encode" @@ var "t1") $
             var "withCast" @@ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ PyDsl.name (string "Left")) @@ list [var "pyexp"]))
           ("t1" ~>
-            "pyexp" <<= (var "encode" @@ var "t1") $
+            "pyexp" <<~ (var "encode" @@ var "t1") $
             var "withCast" @@ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ PyDsl.name (string "Right")) @@ list [var "pyexp"]))
           (var "et"),
 
@@ -2573,8 +2573,8 @@ encodeTermInline = def "encodeTermInline" $
           (encodeTermInline @@ var "cx" @@ var "env" @@ false @@ var "body")
           (withLetInline @@ var "env" @@ var "lt" @@
             ("innerEnv" ~>
-              "pbindingExprs" <<= (Eithers.mapList (encodeBindingAsAssignment @@ var "cx" @@ false @@ var "innerEnv") (var "bindings")) $
-              "pbody" <<= (encodeTermInline @@ var "cx" @@ var "innerEnv" @@ false @@ var "body") $
+              "pbindingExprs" <<~ (Eithers.mapList (encodeBindingAsAssignment @@ var "cx" @@ false @@ var "innerEnv") (var "bindings")) $
+              "pbody" <<~ (encodeTermInline @@ var "cx" @@ var "innerEnv" @@ false @@ var "body") $
               "pbindingStarExprs" <~ (Lists.map ("ne" ~> PyDsl.starNamedExpressionSimple (var "ne")) (var "pbindingExprs")) $
               "pbodyStarExpr" <~ (PyUtils.pyExpressionToPyStarNamedExpression @@ var "pbody") $
               "tupleElements" <~ (Lists.concat2 (var "pbindingStarExprs") (list [var "pbodyStarExpr"])) $
@@ -2585,7 +2585,7 @@ encodeTermInline = def "encodeTermInline" $
 
       -- TermList - encode as tuple
       _Term_list>>: "terms" ~>
-        "pyExprs" <<= (Eithers.mapList (var "encode") (var "terms")) $
+        "pyExprs" <<~ (Eithers.mapList (var "encode") (var "terms")) $
         right $ PyUtils.pyAtomToPyExpression @@ PyDsl.atomTuple (PyDsl.tuple (Lists.map PyUtils.pyExpressionToPyStarNamedExpression (var "pyExprs"))),
 
       -- TermLiteral
@@ -2594,12 +2594,12 @@ encodeTermInline = def "encodeTermInline" $
 
       -- TermMap - encode as FrozenDict
       _Term_map>>: "m" ~>
-        "pairs" <<= (Eithers.mapList
+        "pairs" <<~ (Eithers.mapList
           ("kv" ~>
             "k" <~ (Pairs.first $ var "kv") $
             "v" <~ (Pairs.second $ var "kv") $
-            "pyK" <<= (var "encode" @@ var "k") $
-            "pyV" <<= (var "encode" @@ var "v") $
+            "pyK" <<~ (var "encode" @@ var "k") $
+            "pyV" <<~ (var "encode" @@ var "v") $
             right $ PyDsl.doubleStarredKvpairPair (PyDsl.kvpair (var "pyK") (var "pyV")))
           (Maps.toList $ var "m")) $
         right $ PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ PyDsl.name (string "FrozenDict"))
@@ -2610,7 +2610,7 @@ encodeTermInline = def "encodeTermInline" $
         Maybes.maybe
           (right $ PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ PyDsl.name (string "Nothing")) @@ list ([] :: [TTerm Py.Expression]))
           ("t1" ~>
-            "pyexp" <<= (var "encode" @@ var "t1") $
+            "pyexp" <<~ (var "encode" @@ var "t1") $
             var "withCast" @@ (PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ PyDsl.name (string "Just")) @@ list [var "pyexp"]))
           (var "mt"),
 
@@ -2618,8 +2618,8 @@ encodeTermInline = def "encodeTermInline" $
       _Term_pair>>: "p" ~>
         "t1" <~ (Pairs.first $ var "p") $
         "t2" <~ (Pairs.second $ var "p") $
-        "pyExpr1" <<= (var "encode" @@ var "t1") $
-        "pyExpr2" <<= (var "encode" @@ var "t2") $
+        "pyExpr1" <<~ (var "encode" @@ var "t1") $
+        "pyExpr2" <<~ (var "encode" @@ var "t2") $
         right $ PyUtils.pyAtomToPyExpression @@ PyDsl.atomTuple (PyDsl.tuple
           (list [PyUtils.pyExpressionToPyStarNamedExpression @@ var "pyExpr1", PyUtils.pyExpressionToPyStarNamedExpression @@ var "pyExpr2"])),
 
@@ -2627,19 +2627,19 @@ encodeTermInline = def "encodeTermInline" $
       _Term_record>>: "r" ~>
         "tname" <~ Core.recordTypeName (var "r") $
         "fields" <~ Core.recordFields (var "r") $
-        "pargs" <<= (Eithers.mapList ("fld" ~> var "encode" @@ Core.fieldTerm (var "fld")) (var "fields")) $
+        "pargs" <<~ (Eithers.mapList ("fld" ~> var "encode" @@ Core.fieldTerm (var "fld")) (var "fields")) $
         right $ PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeNameQualified @@ var "env" @@ var "tname")) @@ var "pargs",
 
       -- TermSet - encode as frozenset
       _Term_set>>: "s" ~>
-        "pyEls" <<= (Eithers.mapList (var "encode") (Sets.toList $ var "s")) $
+        "pyEls" <<~ (Eithers.mapList (var "encode") (Sets.toList $ var "s")) $
         right $ PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ PyDsl.name (string "frozenset"))
           @@ list [PyUtils.pyAtomToPyExpression @@ PyDsl.atomSet (PyDsl.set (Lists.map PyUtils.pyExpressionToPyStarNamedExpression (var "pyEls")))],
 
       -- TermTypeApplication - strip type applications and potentially cast
       _Term_typeApplication>>: "ta" ~>
         "body" <~ Core.typeApplicationTermBody (var "ta") $
-        "pybase" <<= (encodeTermInline @@ var "cx" @@ var "env" @@ true @@ (var "stripTypeApps" @@ var "body")) $
+        "pybase" <<~ (encodeTermInline @@ var "cx" @@ var "env" @@ true @@ (var "stripTypeApps" @@ var "body")) $
         var "withCast" @@ var "pybase",
 
       -- TermTypeLambda - descend into body with updated environment
@@ -2652,7 +2652,7 @@ encodeTermInline = def "encodeTermInline" $
       _Term_union>>: "inj" ~>
         "tname" <~ Core.injectionTypeName (var "inj") $
         "field" <~ Core.injectionField (var "inj") $
-        "rt" <<= (Schemas.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
+        "rt" <<~ (Schemas.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
         Logic.ifElse (Schemas.isEnumRowType @@ var "rt")
           -- Enum variant
           (right $ PyUtils.projectFromExpression
@@ -2666,9 +2666,9 @@ encodeTermInline = def "encodeTermInline" $
               false
               ("ft" ~> Schemas.isUnitType @@ (Rewriting.deannotateType @@ Core.fieldTypeType (var "ft")))
               (Lists.find ("ft" ~> Core.equalName_ (Core.fieldTypeName (var "ft")) (var "fname")) (var "ftypes"))) $
-            "args" <<= (Logic.ifElse (Logic.or (Schemas.isUnitTerm @@ Core.fieldTerm (var "field")) (var "isUnitVariant"))
+            "args" <<~ (Logic.ifElse (Logic.or (Schemas.isUnitTerm @@ Core.fieldTerm (var "field")) (var "isUnitVariant"))
               (right (list ([] :: [TTerm Py.Expression])))
-              ("parg" <<= (var "encode" @@ Core.fieldTerm (var "field")) $
+              ("parg" <<~ (var "encode" @@ Core.fieldTerm (var "field")) $
                 right $ list [var "parg"])) $
             -- Cast to union type - set usesCast flag
             -- Metadata for usesCast is now pre-computed in gatherMetadata
@@ -2690,7 +2690,7 @@ encodeTermInline = def "encodeTermInline" $
       _Term_wrap>>: "wrapped" ~>
         "tname" <~ Core.wrappedTermTypeName (var "wrapped") $
         "inner" <~ Core.wrappedTermBody (var "wrapped") $
-        "parg" <<= (var "encode" @@ var "inner") $
+        "parg" <<~ (var "encode" @@ var "inner") $
         right $ PyUtils.functionCall @@ (PyUtils.pyNameToPyPrimary @@ (PyNames.encodeNameQualified @@ var "env" @@ var "tname")) @@ list [var "parg"]]
 
 -- | Extend metadata based on a term (used during module encoding).
@@ -4210,7 +4210,7 @@ encodePythonModule = def "encodePythonModule" $
     "env0" <~ (initialEnvironment @@ var "namespaces0" @@ var "g") $
     "isTypeMod" <~ (isTypeModuleCheck @@ var "defs0") $
     withDefinitions @@ var "env0" @@ var "defs" @@ ("env" ~>
-      "defStmts" <<= (Eithers.map ("xs" ~> Lists.concat (var "xs")) (Eithers.mapList ("d" ~> encodeDefinition @@ var "cx" @@ var "env" @@ var "d") (var "defs"))) $
+      "defStmts" <<~ (Eithers.map ("xs" ~> Lists.concat (var "xs")) (Eithers.mapList ("d" ~> encodeDefinition @@ var "cx" @@ var "env" @@ var "d") (var "defs"))) $
       -- Adjust metadata: if not type module and useInlineTypeParams, clear usesTypeVar
       "meta2" <~ Logic.ifElse (Logic.and (Logic.not $ var "isTypeMod") (asTerm useInlineTypeParams))
         (setMetaUsesTypeVar @@ var "meta0" @@ false)
@@ -4245,7 +4245,7 @@ moduleToPython :: TBinding (Module -> [Definition] -> Context -> Graph -> Either
 moduleToPython = def "moduleToPython" $
   doc "Convert a Hydra module to Python source files" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>
-    "file" <<= (encodePythonModule @@ var "cx" @@ var "g" @@ var "mod" @@ var "defs") $
+    "file" <<~ (encodePythonModule @@ var "cx" @@ var "g" @@ var "mod" @@ var "defs") $
     "s" <~ (Serialization.printExpr @@ (Serialization.parenthesize @@ (PySerde.encodeModule @@ var "file"))) $
     "path" <~ (Names.namespaceToFilePath @@ Util.caseConventionLowerSnake @@ (wrap _FileExtension $ string "py") @@ (Module.moduleNamespace $ var "mod")) $
     right $ Maps.singleton (var "path") (var "s")

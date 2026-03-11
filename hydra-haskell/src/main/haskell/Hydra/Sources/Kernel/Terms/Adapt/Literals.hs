@@ -268,7 +268,7 @@ literalAdapter = define "literalAdapter" $
     "matchBoolean" <~ ("step'" ~> "cx" ~> "lit" ~> cases _Literal (var "lit")
       Nothing [
       _Literal_boolean>>: "bv" ~>
-        "iv" <<= Compute.coderEncode (var "step'") @@ var "cx" @@ (Core.integerValueUint8 (Logic.ifElse (var "bv") (uint8 1) (uint8 0))) $
+        "iv" <<~ Compute.coderEncode (var "step'") @@ var "cx" @@ (Core.integerValueUint8 (Logic.ifElse (var "bv") (uint8 1) (uint8 0))) $
         right (Core.literalInteger (var "iv"))]) $
     "matchInteger" <~ ("step'" ~> "cx" ~> "lit" ~>
       "forValue" <~ ("val" ~> cases _IntegerValue (var "val")
@@ -277,7 +277,7 @@ literalAdapter = define "literalAdapter" $
       cases _Literal (var "lit")
         Nothing [
         _Literal_integer>>: "iv" ~>
-          "val" <<= Compute.coderDecode (var "step'") @@ var "cx" @@ var "iv" $
+          "val" <<~ Compute.coderDecode (var "step'") @@ var "cx" @@ var "iv" $
           right $ var "forValue" @@ var "val"]) $
     "constraints" <~ Coders.languageConstraintsProjection (Coders.adapterContextLanguage (var "cx")) $
     "hasIntegers" <~ Logic.not (Sets.null (Coders.languageConstraintsIntegerTypes (var "constraints"))) $
@@ -287,14 +287,14 @@ literalAdapter = define "literalAdapter" $
         "step'" <~ Compute.adapterCoder (var "adapter") $
         "step" <~ Compute.coder (var "matchBoolean" @@ var "step'") (var "matchInteger" @@ var "step'") $
         right (list [Compute.adapter false (var "t") (Core.literalTypeInteger (Compute.adapterTarget (var "adapter"))) (var "step")])) $
-      "adapter" <<= integerAdapter @@ var "cx" @@ Core.integerTypeUint8 $
+      "adapter" <<~ integerAdapter @@ var "cx" @@ Core.integerTypeUint8 $
       var "withAdapter" @@ var "adapter") $
     "withStrings" <~ (
       "encode" <~ ("cx" ~> "lit" ~>
-        "b" <<= ExtractCore.booleanLiteral @@ var "cx" @@ var "lit" $
+        "b" <<~ ExtractCore.booleanLiteral @@ var "cx" @@ var "lit" $
         right (Core.literalString (Logic.ifElse (var "b") (string "true") (string "false")))) $
       "decode" <~ ("cx" ~> "lit" ~>
-        "s" <<= ExtractCore.stringLiteral @@ var "cx" @@ var "lit" $
+        "s" <<~ ExtractCore.stringLiteral @@ var "cx" @@ var "lit" $
         Logic.ifElse (Equality.equal (var "s") (string "true"))
           (right (Core.literalBoolean true))
           (Logic.ifElse (Equality.equal (var "s") (string "false"))
@@ -312,7 +312,7 @@ literalAdapter = define "literalAdapter" $
           (Just (Ctx.failInContext (Error.otherError (string "expected floating-point literal, found " ++ (ShowCore.literal @@ var "l"))) (var "cx"))) [
           _Literal_float>>: "fv" ~> Eithers.map (unaryFunction Core.literalFloat) (
             AdaptUtils.encodeDecode @@ var "dir" @@ (Compute.adapterCoder (var "adapter")) @@ var "cx" @@ var "fv")]) $
-        "adapter" <<= floatAdapter @@ var "cx" @@ var "ft" $
+        "adapter" <<~ floatAdapter @@ var "cx" @@ var "ft" $
         "step" <~ AdaptUtils.bidirectional @@ (var "adapt" @@ var "adapter") $
         right (list [Compute.adapter (Compute.adapterIsLossy (var "adapter")) (var "t") (Core.literalTypeFloat (Compute.adapterTarget (var "adapter"))) (var "step")])) $
       "constraints" <~ Coders.languageConstraintsProjection (Coders.adapterContextLanguage (var "cx")) $
@@ -326,7 +326,7 @@ literalAdapter = define "literalAdapter" $
           (Just (Ctx.failInContext (Error.otherError (string "expected integer literal, found " ++ (ShowCore.literal @@ var "lit"))) (var "cx"))) [
           _Literal_integer>>: "iv" ~> Eithers.map (unaryFunction Core.literalInteger) (
             AdaptUtils.encodeDecode @@ var "dir" @@ (Compute.adapterCoder (var "adapter")) @@ var "cx" @@ var "iv")]) $
-        "adapter" <<= integerAdapter @@ var "cx" @@ var "it" $
+        "adapter" <<~ integerAdapter @@ var "cx" @@ var "it" $
         "step" <~ AdaptUtils.bidirectional @@ (var "adapt" @@ var "adapter") $
         right (list [Compute.adapter (Compute.adapterIsLossy (var "adapter")) (var "t") (Core.literalTypeInteger (Compute.adapterTarget (var "adapter"))) (var "step")])) $
       "constraints" <~ Coders.languageConstraintsProjection (Coders.adapterContextLanguage (var "cx")) $

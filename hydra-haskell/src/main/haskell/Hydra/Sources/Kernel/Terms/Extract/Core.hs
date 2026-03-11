@@ -154,8 +154,8 @@ bigfloat :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext Othe
 bigfloat = define "bigfloat" $
   doc "Extract an arbitrary-precision floating-point value from a term" $
   "cx" ~> "graph" ~> "t" ~>
-  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
-  "f" <<= floatLiteral @@ var "cx" @@ var "l" $
+  "l" <<~ literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "f" <<~ floatLiteral @@ var "cx" @@ var "l" $
   bigfloatValue @@ var "cx" @@ var "f"
 
 bigfloatValue :: TBinding (Context -> FloatValue -> Prelude.Either (InContext OtherError) Double)
@@ -169,8 +169,8 @@ bigint :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherE
 bigint = define "bigint" $
   doc "Extract an arbitrary-precision integer value from a term" $
   "cx" ~> "graph" ~> "t" ~>
-  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
-  "i" <<= integerLiteral @@ var "cx" @@ var "l" $
+  "l" <<~ literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "i" <<~ integerLiteral @@ var "cx" @@ var "l" $
   bigintValue @@ var "cx" @@ var "i"
 
 bigintValue :: TBinding (Context -> IntegerValue -> Prelude.Either (InContext OtherError) Integer)
@@ -184,7 +184,7 @@ binary :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherE
 binary = define "binary" $
   doc "Extract a binary data value from a term" $
   "cx" ~> "graph" ~> "t" ~>
-  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "l" <<~ literal @@ var "cx" @@ var "graph" @@ var "t" $
   binaryLiteral @@ var "cx" @@ var "l"
 
 binaryLiteral :: TBinding (Context -> Literal -> Prelude.Either (InContext OtherError) String)
@@ -198,7 +198,7 @@ boolean :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext Other
 boolean = define "boolean" $
   doc "Extract a boolean value from a term" $
   "cx" ~> "graph" ~> "t" ~>
-  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "l" <<~ literal @@ var "cx" @@ var "graph" @@ var "t" $
   booleanLiteral @@ var "cx" @@ var "l"
 
 booleanLiteral :: TBinding (Context -> Literal -> Prelude.Either (InContext OtherError) Bool)
@@ -214,7 +214,7 @@ caseField = define "caseField" $
   doc "Extract a specific case handler from a case statement term" $
   "cx" ~> "name" ~> "n" ~> "graph" ~> "term" ~>
   "fieldName" <~ Core.name (var "n") $
-  "cs" <<= cases @@ var "cx" @@ var "name" @@ var "graph" @@ var "term" $
+  "cs" <<~ cases @@ var "cx" @@ var "name" @@ var "graph" @@ var "term" $
   "matching" <~ Lists.filter
     ("f" ~> Core.equalName_ (Core.fieldName (var "f")) (var "fieldName"))
     (Core.caseStatementCases (var "cs")) $
@@ -227,7 +227,7 @@ cases :: TBinding (Context -> Name -> Graph -> Term -> Prelude.Either (InContext
 cases = define "cases" $
   doc "Extract case statement from a term" $
   "cx" ~> "name" ~> "graph" ~> "term0" ~>
-  "term" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
+  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
   Phantoms.cases _Term (var "term")
     (Just (unexpected (var "cx") (Phantoms.string "case statement") (ShowCore.term @@ var "term"))) [
     _Term_function>>: "function" ~> Phantoms.cases _Function (var "function")
@@ -252,7 +252,7 @@ field = define "field" $
   Logic.ifElse (Lists.null (var "matchingFields"))
     (unexpected (var "cx") (Phantoms.string "field " ++ (Core.unName (var "fname"))) (Phantoms.string "no matching field"))
     (Logic.ifElse (Equality.equal (Lists.length (var "matchingFields")) $ Phantoms.int32 1)
-      ("stripped" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ (Core.fieldTerm (Lists.head (var "matchingFields"))) $
+      ("stripped" <<~ Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ (Core.fieldTerm (Lists.head (var "matchingFields"))) $
        var "mapping" @@ var "stripped")
       (unexpected (var "cx") (Phantoms.string "single field") (Phantoms.string "multiple fields named " ++ (Core.unName (var "fname")))))
 
@@ -260,8 +260,8 @@ float32 :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext Other
 float32 = define "float32" $
   doc "Extract a 32-bit floating-point value from a term" $
   "cx" ~> "graph" ~> "t" ~>
-  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
-  "f" <<= floatLiteral @@ var "cx" @@ var "l" $
+  "l" <<~ literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "f" <<~ floatLiteral @@ var "cx" @@ var "l" $
   float32Value @@ var "cx" @@ var "f"
 
 float32Value :: TBinding (Context -> FloatValue -> Prelude.Either (InContext OtherError) Float)
@@ -275,8 +275,8 @@ float64 :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext Other
 float64 = define "float64" $
   doc "Extract a 64-bit floating-point value from a term" $
   "cx" ~> "graph" ~> "t" ~>
-  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
-  "f" <<= floatLiteral @@ var "cx" @@ var "l" $
+  "l" <<~ literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "f" <<~ floatLiteral @@ var "cx" @@ var "l" $
   float64Value @@ var "cx" @@ var "f"
 
 float64Value :: TBinding (Context -> FloatValue -> Prelude.Either (InContext OtherError) Double)
@@ -297,14 +297,14 @@ floatValue :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext Ot
 floatValue = define "floatValue" $
   doc "Extract a float value from a term" $
   "cx" ~> "graph" ~> "t" ~>
-  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "l" <<~ literal @@ var "cx" @@ var "graph" @@ var "t" $
   floatLiteral @@ var "cx" @@ var "l"
 
 eitherTerm :: TBinding (Context -> (Term -> Prelude.Either (InContext OtherError) x) -> (Term -> Prelude.Either (InContext OtherError) y) -> Graph -> Term -> Prelude.Either (InContext OtherError) (Either x y))
 eitherTerm = define "eitherTerm" $
   doc "Extract an either value from a term, applying functions to the left and right values" $
   "cx" ~> "leftFun" ~> "rightFun" ~> "graph" ~> "term0" ~>
-  "term" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
+  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
   Phantoms.cases _Term (var "term")
     (Just (unexpected (var "cx")
       (Phantoms.string "either value")
@@ -337,7 +337,7 @@ injection :: TBinding (Context -> Name -> Graph -> Term -> Prelude.Either (InCon
 injection = define "injection" $
   doc "Extract a field from a union term" $
   "cx" ~> "expected" ~> "graph" ~> "term0" ~>
-  "term" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
+  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
   Phantoms.cases _Term (var "term")
     (Just (unexpected (var "cx") (Phantoms.string "injection") (ShowCore.term @@ var "term"))) [
     _Term_union>>: "injection" ~>
@@ -351,8 +351,8 @@ int16 :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherEr
 int16 = define "int16" $
   doc "Extract a 16-bit signed integer value from a term" $
   "cx" ~> "graph" ~> "t" ~>
-  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
-  "i" <<= integerLiteral @@ var "cx" @@ var "l" $
+  "l" <<~ literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "i" <<~ integerLiteral @@ var "cx" @@ var "l" $
   int16Value @@ var "cx" @@ var "i"
 
 int16Value :: TBinding (Context -> IntegerValue -> Prelude.Either (InContext OtherError) I.Int16)
@@ -366,8 +366,8 @@ int32 :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherEr
 int32 = define "int32" $
   doc "Extract a 32-bit signed integer value from a term" $
   "cx" ~> "graph" ~> "t" ~>
-  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
-  "i" <<= integerLiteral @@ var "cx" @@ var "l" $
+  "l" <<~ literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "i" <<~ integerLiteral @@ var "cx" @@ var "l" $
   int32Value @@ var "cx" @@ var "i"
 
 int32Value :: TBinding (Context -> IntegerValue -> Prelude.Either (InContext OtherError) Int)
@@ -381,8 +381,8 @@ int64 :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherEr
 int64 = define "int64" $
   doc "Extract a 64-bit signed integer value from a term" $
   "cx" ~> "graph" ~> "t" ~>
-  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
-  "i" <<= integerLiteral @@ var "cx" @@ var "l" $
+  "l" <<~ literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "i" <<~ integerLiteral @@ var "cx" @@ var "l" $
   int64Value @@ var "cx" @@ var "i"
 
 int64Value :: TBinding (Context -> IntegerValue -> Prelude.Either (InContext OtherError) I.Int64)
@@ -396,8 +396,8 @@ int8 :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherErr
 int8 = define "int8" $
   doc "Extract an 8-bit signed integer value from a term" $
   "cx" ~> "graph" ~> "t" ~>
-  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
-  "i" <<= integerLiteral @@ var "cx" @@ var "l" $
+  "l" <<~ literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "i" <<~ integerLiteral @@ var "cx" @@ var "l" $
   int8Value @@ var "cx" @@ var "i"
 
 int8Value :: TBinding (Context -> IntegerValue -> Prelude.Either (InContext OtherError) I.Int8)
@@ -418,7 +418,7 @@ integerValue :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext 
 integerValue = define "integerValue" $
   doc "Extract an integer value from a term" $
   "cx" ~> "graph" ~> "t" ~>
-  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "l" <<~ literal @@ var "cx" @@ var "graph" @@ var "t" $
   integerLiteral @@ var "cx" @@ var "l"
 
 lambdaBody :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) Term)
@@ -430,7 +430,7 @@ lambda :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherE
 lambda = define "lambda" $
   doc "Extract a lambda from a term" $
   "cx" ~> "graph" ~> "term0" ~>
-  "term" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
+  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
   Phantoms.cases _Term (var "term")
     (Just (unexpected (var "cx") (Phantoms.string "lambda") (ShowCore.term @@ var "term"))) [
     _Term_function>>: "function" ~> Phantoms.cases _Function (var "function")
@@ -443,7 +443,7 @@ letBinding = define "letBinding" $
   doc "Extract a binding with the given name from a let term" $
   "cx" ~> "n" ~> "graph" ~> "term" ~>
   "name" <~ Core.name (var "n") $
-  "letExpr" <<= let_ @@ var "cx" @@ var "graph" @@ var "term" $
+  "letExpr" <<~ let_ @@ var "cx" @@ var "graph" @@ var "term" $
   "matchingBindings" <~ Lists.filter
     ("b" ~> Core.equalName_ (Core.bindingName (var "b")) (var "name"))
     (Core.letBindings (var "letExpr")) $
@@ -457,7 +457,7 @@ let_ :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherErr
 let_ = define "let" $
   doc "Extract a let expression from a term" $
   "cx" ~> "graph" ~> "term0" ~>
-  "term" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
+  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
   Phantoms.cases _Term (var "term")
     (Just (unexpected (var "cx") (Phantoms.string "let term") (ShowCore.term @@ var "term"))) [
     _Term_let>>: "lt" ~> right (var "lt")]
@@ -466,7 +466,7 @@ list :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherErr
 list = define "list" $
   doc "Extract a list of terms from a term" $
   "cx" ~> "graph" ~> "term" ~>
-  "stripped" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term" $
+  "stripped" <<~ Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term" $
   Phantoms.cases _Term (var "stripped")
     (Just (unexpected (var "cx") (Phantoms.string "list") (ShowCore.term @@ var "stripped"))) [
     _Term_list>>: "l" ~> right (var "l")]
@@ -475,7 +475,7 @@ listHead :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext Othe
 listHead = define "listHead" $
   doc "Extract the first element of a list term" $
   "cx" ~> "graph" ~> "term" ~>
-  "l" <<= list @@ var "cx" @@ var "graph" @@ var "term" $
+  "l" <<~ list @@ var "cx" @@ var "graph" @@ var "term" $
   Logic.ifElse (Lists.null (var "l"))
     (Ctx.failInContext (Error.otherError (Phantoms.string "empty list")) (var "cx"))
     (right (Lists.head (var "l")))
@@ -484,7 +484,7 @@ listOf :: TBinding (Context -> (Term -> Prelude.Either (InContext OtherError) x)
 listOf = define "listOf" $
   doc "Extract a list of values from a term, mapping a function over each element" $
   "cx" ~> "f" ~> "graph" ~> "term" ~>
-  "els" <<= list @@ var "cx" @@ var "graph" @@ var "term" $
+  "els" <<~ list @@ var "cx" @@ var "graph" @@ var "term" $
   Eithers.mapList (var "f") (var "els")
 
 listType :: TBinding (Context -> Type -> Prelude.Either (InContext OtherError) Type)
@@ -500,7 +500,7 @@ literal :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext Other
 literal = define "literal" $
   doc "Extract a literal value from a term" $
   "cx" ~> "graph" ~> "term0" ~>
-  "term" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
+  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
   Phantoms.cases _Term (var "term")
     (Just (unexpected (var "cx") (Phantoms.string "literal") (ShowCore.term @@ var "term"))) [
     _Term_literal>>: "lit" ~> right (var "lit")]
@@ -512,10 +512,10 @@ map = define "map" $
   "pair" <~ ("kvPair" ~>
     "kterm" <~ Pairs.first (var "kvPair") $
     "vterm" <~ Pairs.second (var "kvPair") $
-    "kval" <<= var "fk" @@ var "kterm" $
-    "vval" <<= var "fv" @@ var "vterm" $
+    "kval" <<~ var "fk" @@ var "kterm" $
+    "vval" <<~ var "fv" @@ var "vterm" $
     right (Phantoms.pair (var "kval") (var "vval"))) $
-  "term" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
+  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
   Phantoms.cases _Term (var "term")
     (Just (unexpected (var "cx")
       (Phantoms.string "map")
@@ -547,7 +547,7 @@ maybeTerm :: TBinding (Context -> (Term -> Prelude.Either (InContext OtherError)
 maybeTerm = define "maybeTerm" $
   doc "Extract an optional value from a term, applying a function to the value if present" $
   "cx" ~> "f" ~> "graph" ~> "term0" ~>
-  "term" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
+  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
   Phantoms.cases _Term (var "term")
     (Just (unexpected (var "cx")
       (Phantoms.string "maybe value")
@@ -570,14 +570,14 @@ pair :: TBinding (Context -> (Term -> Prelude.Either (InContext OtherError) k) -
 pair = define "pair" $
   doc "Extract a pair of values from a term, applying functions to each component" $
   "cx" ~> "kf" ~> "vf" ~> "graph" ~> "term0" ~>
-  "term" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
+  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
   Phantoms.cases _Term (var "term")
     (Just (unexpected (var "cx")
       (Phantoms.string "pair")
       (ShowCore.term @@ var "term"))) [
     _Term_pair>>: "p" ~>
-      "kVal" <<= var "kf" @@ (Pairs.first $ var "p") $
-      "vVal" <<= var "vf" @@ (Pairs.second $ var "p") $
+      "kVal" <<~ var "kf" @@ (Pairs.first $ var "p") $
+      "vVal" <<~ var "vf" @@ (Pairs.second $ var "p") $
       right (Phantoms.pair (var "kVal") (var "vVal"))]
 
 -- TODO: nonstandard; move me
@@ -585,7 +585,7 @@ record :: TBinding (Context -> Name -> Graph -> Term -> Prelude.Either (InContex
 record = define "record" $
   doc "Extract a record's fields from a term" $
   "cx" ~> "expected" ~> "graph" ~> "term0" ~>
-  "record" <<= termRecord @@ var "cx" @@ var "graph" @@ var "term0" $
+  "record" <<~ termRecord @@ var "cx" @@ var "graph" @@ var "term0" $
   Logic.ifElse (Equality.equal (Core.recordTypeName (var "record")) (var "expected"))
     (right (Core.recordFields (var "record")))
     (unexpected (var "cx")
@@ -611,7 +611,7 @@ set :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherErro
 set = define "set" $
   doc "Extract a set of terms from a term" $
   "cx" ~> "graph" ~> "term" ~>
-  "stripped" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term" $
+  "stripped" <<~ Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term" $
   Phantoms.cases _Term (var "stripped")
     (Just (unexpected (var "cx") (Phantoms.string "set") (ShowCore.term @@ var "stripped"))) [
     _Term_set>>: "s" ~> right (var "s")]
@@ -620,7 +620,7 @@ setOf :: TBinding (Context -> (Term -> Prelude.Either (InContext OtherError) x) 
 setOf = define "setOf" $
   doc "Extract a set of values from a term, mapping a function over each element" $
   "cx" ~> "f" ~> "graph" ~> "term" ~>
-  "els" <<= set @@ var "cx" @@ var "graph" @@ var "term" $
+  "els" <<~ set @@ var "cx" @@ var "graph" @@ var "term" $
   Eithers.mapSet (var "f") (var "els")
 
 setType :: TBinding (Context -> Type -> Prelude.Either (InContext OtherError) Type)
@@ -636,7 +636,7 @@ string :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherE
 string = define "string" $
   doc "Extract a string value from a term" $
   "cx" ~> "graph" ~> "t" ~>
-  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "l" <<~ literal @@ var "cx" @@ var "graph" @@ var "t" $
   stringLiteral @@ var "cx" @@ var "l"
 
 stringLiteral :: TBinding (Context -> Literal -> Prelude.Either (InContext OtherError) String)
@@ -650,7 +650,7 @@ termRecord :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext Ot
 termRecord = define "termRecord" $
   doc "Extract a record from a term" $
   "cx" ~> "graph" ~> "term0" ~>
-  "term" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
+  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
   Phantoms.cases _Term (var "term")
     (Just (unexpected (var "cx") (Phantoms.string "record") (ShowCore.term @@ var "term"))) [
     _Term_record>>: "record" ~> right (var "record")]
@@ -659,8 +659,8 @@ uint16 :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherE
 uint16 = define "uint16" $
   doc "Extract a 16-bit unsigned integer value from a term" $
   "cx" ~> "graph" ~> "t" ~>
-  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
-  "i" <<= integerLiteral @@ var "cx" @@ var "l" $
+  "l" <<~ literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "i" <<~ integerLiteral @@ var "cx" @@ var "l" $
   uint16Value @@ var "cx" @@ var "i"
 
 uint16Value :: TBinding (Context -> IntegerValue -> Prelude.Either (InContext OtherError) Int)
@@ -674,8 +674,8 @@ uint32 :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherE
 uint32 = define "uint32" $
   doc "Extract a 32-bit unsigned integer value from a term" $
   "cx" ~> "graph" ~> "t" ~>
-  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
-  "i" <<= integerLiteral @@ var "cx" @@ var "l" $
+  "l" <<~ literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "i" <<~ integerLiteral @@ var "cx" @@ var "l" $
   uint32Value @@ var "cx" @@ var "i"
 
 uint32Value :: TBinding (Context -> IntegerValue -> Prelude.Either (InContext OtherError) I.Int64)
@@ -689,8 +689,8 @@ uint64 :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherE
 uint64 = define "uint64" $
   doc "Extract a 64-bit unsigned integer value from a term" $
   "cx" ~> "graph" ~> "t" ~>
-  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
-  "i" <<= integerLiteral @@ var "cx" @@ var "l" $
+  "l" <<~ literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "i" <<~ integerLiteral @@ var "cx" @@ var "l" $
   uint64Value @@ var "cx" @@ var "i"
 
 uint64Value :: TBinding (Context -> IntegerValue -> Prelude.Either (InContext OtherError) Integer)
@@ -704,8 +704,8 @@ uint8 :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherEr
 uint8 = define "uint8" $
   doc "Extract an 8-bit unsigned integer value from a term" $
   "cx" ~> "graph" ~> "t" ~>
-  "l" <<= literal @@ var "cx" @@ var "graph" @@ var "t" $
-  "i" <<= integerLiteral @@ var "cx" @@ var "l" $
+  "l" <<~ literal @@ var "cx" @@ var "graph" @@ var "t" $
+  "i" <<~ integerLiteral @@ var "cx" @@ var "l" $
   uint8Value @@ var "cx" @@ var "i"
 
 uint8Value :: TBinding (Context -> IntegerValue -> Prelude.Either (InContext OtherError) I.Int16)
@@ -741,8 +741,8 @@ unitVariant :: TBinding (Context -> Name -> Graph -> Term -> Prelude.Either (InC
 unitVariant = define "unitVariant" $
   doc "Extract a unit variant (a variant with an empty record value) from a union term" $
   "cx" ~> "tname" ~> "graph" ~> "term" ~>
-  "field" <<= injection @@ var "cx" @@ var "tname" @@ var "graph" @@ var "term" $
-  "ignored" <<= unit @@ var "cx" @@ (Core.fieldTerm (var "field")) $
+  "field" <<~ injection @@ var "cx" @@ var "tname" @@ var "graph" @@ var "term" $
+  "ignored" <<~ unit @@ var "cx" @@ (Core.fieldTerm (var "field")) $
   right (Core.fieldName (var "field"))
 
 -- TODO: nonstandard; move me
@@ -750,7 +750,7 @@ wrap :: TBinding (Context -> Name -> Graph -> Term -> Prelude.Either (InContext 
 wrap = define "wrap" $
   doc "Extract the wrapped value from a wrapped term" $
   "cx" ~> "expected" ~> "graph" ~> "term0" ~>
-  "term" <<= Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
+  "term" <<~ Lexical.stripAndDereferenceTerm @@ var "cx" @@ var "graph" @@ var "term0" $
   Phantoms.cases _Term (var "term")
     (Just (unexpected (var "cx")
       (Phantoms.string "wrap(" ++ (Core.unName (var "expected")) ++ Phantoms.string ")")

@@ -375,23 +375,23 @@ encodeType = def "encodeType" $
         Eithers.map (lambda "enc" $ rustApply1 @@ string "BTreeSet" @@ var "enc")
           (encodeType @@ var "cx" @@ var "g" @@ var "inner"),
       _Type_map>>: lambda "mt" $
-        "kt" <<= (encodeType @@ var "cx" @@ var "g" @@ Core.mapTypeKeys (var "mt")) $
-        "vt" <<= (encodeType @@ var "cx" @@ var "g" @@ Core.mapTypeValues (var "mt")) $
+        "kt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.mapTypeKeys (var "mt")) $
+        "vt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.mapTypeValues (var "mt")) $
           right (rustApply2 @@ string "BTreeMap" @@ var "kt" @@ var "vt"),
       _Type_maybe>>: lambda "inner" $
         Eithers.map (lambda "enc" $ rustApply1 @@ string "Option" @@ var "enc")
           (encodeType @@ var "cx" @@ var "g" @@ var "inner"),
       _Type_either>>: lambda "et" $
-        "lt" <<= (encodeType @@ var "cx" @@ var "g" @@ Core.eitherTypeLeft (var "et")) $
-        "rt" <<= (encodeType @@ var "cx" @@ var "g" @@ Core.eitherTypeRight (var "et")) $
+        "lt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.eitherTypeLeft (var "et")) $
+        "rt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.eitherTypeRight (var "et")) $
           right (rustApply2 @@ string "Either" @@ var "lt" @@ var "rt"),
       _Type_pair>>: lambda "pt" $
-        "ft" <<= (encodeType @@ var "cx" @@ var "g" @@ Core.pairTypeFirst (var "pt")) $
-        "st" <<= (encodeType @@ var "cx" @@ var "g" @@ Core.pairTypeSecond (var "pt")) $
+        "ft" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.pairTypeFirst (var "pt")) $
+        "st" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.pairTypeSecond (var "pt")) $
           right (inject R._Type R._Type_tuple $ list [var "ft", var "st"]),
       _Type_function>>: lambda "ft" $
-        "dom" <<= (encodeType @@ var "cx" @@ var "g" @@ Core.functionTypeDomain (var "ft")) $
-        "cod" <<= (encodeType @@ var "cx" @@ var "g" @@ Core.functionTypeCodomain (var "ft")) $
+        "dom" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.functionTypeDomain (var "ft")) $
+        "cod" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.functionTypeCodomain (var "ft")) $
           right (rustApply1 @@ string "Box"
             @@ (inject R._Type R._Type_dynTrait $ list [
               inject R._TypeParamBound R._TypeParamBound_trait $
@@ -429,16 +429,16 @@ encodeTerm = def "encodeTerm" $
     [_Term_annotated>>: lambda "at" $
        encodeTerm @@ var "cx" @@ var "g" @@ Core.annotatedTermBody (var "at"),
      _Term_application>>: lambda "app" $
-       "fun" <<= (encodeTerm @@ var "cx" @@ var "g" @@ Core.applicationFunction (var "app")) $
-       "arg" <<= (encodeTerm @@ var "cx" @@ var "g" @@ Core.applicationArgument (var "app")) $
+       "fun" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ Core.applicationFunction (var "app")) $
+       "arg" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ Core.applicationArgument (var "app")) $
          right (rustCall @@ var "fun" @@ list [var "arg"]),
      _Term_either>>: lambda "e" $
        Eithers.either_
          (lambda "l" $
-           "sl" <<= (encodeTerm @@ var "cx" @@ var "g" @@ var "l") $
+           "sl" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "l") $
              right (rustCall @@ (rustExprPath @@ string "Left") @@ list [var "sl"]))
          (lambda "r" $
-           "sr" <<= (encodeTerm @@ var "cx" @@ var "g" @@ var "r") $
+           "sr" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "r") $
              right (rustCall @@ (rustExprPath @@ string "Right") @@ list [var "sr"]))
          (var "e"),
      _Term_function>>: lambda "fun" $
@@ -446,26 +446,26 @@ encodeTerm = def "encodeTerm" $
      _Term_let>>: lambda "lt" $
        "bindings" <~ Core.letBindings (var "lt") $
        "body" <~ Core.letBody (var "lt") $
-       "stmts" <<= (Eithers.mapList
+       "stmts" <<~ (Eithers.mapList
          (lambda "b" $
            "bname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.bindingName (var "b"))) $
-           "bval" <<= (encodeTerm @@ var "cx" @@ var "g" @@ Core.bindingTerm (var "b")) $
+           "bval" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ Core.bindingTerm (var "b")) $
              right (rustLetStmt @@ var "bname" @@ var "bval"))
          (var "bindings")) $
-       "bodyExpr" <<= (encodeTerm @@ var "cx" @@ var "g" @@ var "body") $
+       "bodyExpr" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "body") $
          right (rustBlock @@ var "stmts" @@ var "bodyExpr"),
      _Term_list>>: lambda "els" $
-       "sels" <<= (Eithers.mapList (encodeTerm @@ var "cx" @@ var "g") (var "els")) $
+       "sels" <<~ (Eithers.mapList (encodeTerm @@ var "cx" @@ var "g") (var "els")) $
          right (rustCall @@ (rustExprPath @@ string "Vec::from") @@
            list [inject R._Expression R._Expression_array $
              inject R._ArrayExpr R._ArrayExpr_elements (var "sels")]),
      _Term_literal>>: lambda "lit" $
        right (encodeLiteral @@ var "lit"),
      _Term_map>>: lambda "m" $
-       "pairs" <<= (Eithers.mapList
+       "pairs" <<~ (Eithers.mapList
          (lambda "entry" $
-           "k" <<= (encodeTerm @@ var "cx" @@ var "g" @@ Pairs.first (var "entry")) $
-           "v" <<= (encodeTerm @@ var "cx" @@ var "g" @@ Pairs.second (var "entry")) $
+           "k" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ Pairs.first (var "entry")) $
+           "v" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ Pairs.second (var "entry")) $
              right (inject R._Expression R._Expression_tuple $ list [var "k", var "v"]))
          (Maps.toList (var "m"))) $
          right (rustCall @@ (rustExprPath @@ string "BTreeMap::from") @@
@@ -475,19 +475,19 @@ encodeTerm = def "encodeTerm" $
        Maybes.cases (var "mt")
          (right (rustExprPath @@ string "None"))
          (lambda "val" $
-           "sval" <<= (encodeTerm @@ var "cx" @@ var "g" @@ var "val") $
+           "sval" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "val") $
              right (rustCall @@ (rustExprPath @@ string "Some") @@ list [var "sval"])),
      _Term_pair>>: lambda "p" $
-       "f" <<= (encodeTerm @@ var "cx" @@ var "g" @@ Pairs.first (var "p")) $
-       "s" <<= (encodeTerm @@ var "cx" @@ var "g" @@ Pairs.second (var "p")) $
+       "f" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ Pairs.first (var "p")) $
+       "s" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ Pairs.second (var "p")) $
          right (inject R._Expression R._Expression_tuple $ list [var "f", var "s"]),
      _Term_record>>: lambda "rec" $
        "rname" <~ Core.recordTypeName (var "rec") $
        "fields" <~ Core.recordFields (var "rec") $
-       "sfields" <<= (Eithers.mapList
+       "sfields" <<~ (Eithers.mapList
          (lambda "f" $
            "fname" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.fieldName (var "f"))) $
-           "fval" <<= (encodeTerm @@ var "cx" @@ var "g" @@ Core.fieldTerm (var "f")) $
+           "fval" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ Core.fieldTerm (var "f")) $
              right (record R._FieldValue [
                R._FieldValue_name>>: var "fname",
                R._FieldValue_value>>: just (var "fval")]))
@@ -504,7 +504,7 @@ encodeTerm = def "encodeTerm" $
              R._StructExpr_fields>>: var "sfields",
              R._StructExpr_rest>>: nothing]),
      _Term_set>>: lambda "s" $
-       "sels" <<= (Eithers.mapList (encodeTerm @@ var "cx" @@ var "g") (Sets.toList (var "s"))) $
+       "sels" <<~ (Eithers.mapList (encodeTerm @@ var "cx" @@ var "g") (Sets.toList (var "s"))) $
          right (rustCall @@ (rustExprPath @@ string "BTreeSet::from") @@
            list [inject R._Expression R._Expression_array $
              inject R._ArrayExpr R._ArrayExpr_elements (var "sels")]),
@@ -519,7 +519,7 @@ encodeTerm = def "encodeTerm" $
          _Term_record>>: lambda "rt" $ Lists.null (Core.recordFields (var "rt"))]) $
        Logic.ifElse (var "isUnit")
          (right (rustExprPath @@ Strings.cat2 (Strings.cat2 (var "tname") (string "::")) (var "fname")))
-         ("sval" <<= (encodeTerm @@ var "cx" @@ var "g" @@ var "fterm") $
+         ("sval" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "fterm") $
            right (rustCall @@ (rustExprPath @@ Strings.cat2 (Strings.cat2 (var "tname") (string "::")) (var "fname")) @@ list [var "sval"])),
      _Term_unit>>: constant $
        right (inject R._Expression R._Expression_tuple $ list ([] :: [TTerm R.Expression])),
@@ -527,7 +527,7 @@ encodeTerm = def "encodeTerm" $
        right (rustExprPath @@ (Formatting.convertCaseCamelToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ RustLanguageSource.rustReservedWords @@ Core.unName (var "name")))),
      _Term_wrap>>: lambda "wt" $
        "tname" <~ (Formatting.capitalize @@ (Names.localNameOf @@ Core.wrappedTermTypeName (var "wt"))) $
-       "inner" <<= (encodeTerm @@ var "cx" @@ var "g" @@ Core.wrappedTermBody (var "wt")) $
+       "inner" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ Core.wrappedTermBody (var "wt")) $
          right (rustCall @@ (rustExprPath @@ var "tname") @@ list [var "inner"])]
 
 -- =============================================================================
@@ -541,7 +541,7 @@ encodeFunction = def "encodeFunction" $
     cases _Function (var "fun") Nothing [
       _Function_lambda>>: lambda "lam" $
         "param" <~ (Formatting.convertCaseCamelToLowerSnake @@ Core.unName (Core.lambdaParameter (var "lam"))) $
-        "body" <<= (encodeTerm @@ var "cx" @@ var "g" @@ Core.lambdaBody (var "lam")) $
+        "body" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ Core.lambdaBody (var "lam")) $
           right (rustClosure @@ list [var "param"] @@ var "body"),
       _Function_primitive>>: lambda "name" $
         right (rustExprPath @@ Core.unName (var "name")),
@@ -568,7 +568,7 @@ encodeElimination = def "encodeElimination" $
                 R._FieldAccessExpr_object>>: rustExprPath @@ string "v",
                 R._FieldAccessExpr_field>>: var "fname"])))
           (lambda "arg" $
-            "sarg" <<= (encodeTerm @@ var "cx" @@ var "g" @@ var "arg") $
+            "sarg" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "arg") $
               right (inject R._Expression R._Expression_fieldAccess $
                 record R._FieldAccessExpr [
                   R._FieldAccessExpr_object>>: var "sarg",
@@ -577,11 +577,11 @@ encodeElimination = def "encodeElimination" $
         "tname" <~ (Formatting.capitalize @@ (Names.localNameOf @@ Core.caseStatementTypeName (var "cs"))) $
         "caseFields" <~ Core.caseStatementCases (var "cs") $
         "defCase" <~ Core.caseStatementDefault (var "cs") $
-        "arms" <<= (Eithers.mapList
+        "arms" <<~ (Eithers.mapList
           (lambda "cf" $
             "cfname" <~ (Formatting.capitalize @@ Core.unName (Core.fieldName (var "cf"))) $
             "cfterm" <~ Core.fieldTerm (var "cf") $
-            "armBody" <<= (encodeTerm @@ var "cx" @@ var "g" @@ (Core.termApplication (Core.application (var "cfterm") (Core.termVariable (wrap _Name (string "v")))))) $
+            "armBody" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ (Core.termApplication (Core.application (var "cfterm") (Core.termVariable (wrap _Name (string "v")))))) $
               right (record R._MatchArm [
                 R._MatchArm_pattern>>:
                   inject R._Pattern R._Pattern_tupleStruct $
@@ -603,10 +603,10 @@ encodeElimination = def "encodeElimination" $
                 R._MatchArm_body>>: var "armBody"]))
           (var "caseFields")) $
         -- Add default arm if present
-        "allArms" <<= (Maybes.cases (var "defCase")
+        "allArms" <<~ (Maybes.cases (var "defCase")
           (right (var "arms"))
           (lambda "dt" $
-            "defBody" <<= (encodeTerm @@ var "cx" @@ var "g" @@ (Core.termApplication (Core.application (var "dt") (Core.termVariable (wrap _Name (string "v")))))) $
+            "defBody" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ (Core.termApplication (Core.application (var "dt") (Core.termVariable (wrap _Name (string "v")))))) $
             right (Lists.concat2 (var "arms") (list [
               record R._MatchArm [
                 R._MatchArm_pattern>>: inject R._Pattern R._Pattern_wildcard unit,
@@ -620,7 +620,7 @@ encodeElimination = def "encodeElimination" $
                 R._MatchExpr_scrutinee>>: rustExprPath @@ string "v",
                 R._MatchExpr_arms>>: var "allArms"])))
           (lambda "arg" $
-            "sarg" <<= (encodeTerm @@ var "cx" @@ var "g" @@ var "arg") $
+            "sarg" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "arg") $
               right (inject R._Expression R._Expression_match $
                 record R._MatchExpr [
                   R._MatchExpr_scrutinee>>: var "sarg",
@@ -634,7 +634,7 @@ encodeElimination = def "encodeElimination" $
                 R._TupleIndexExpr_tuple>>: rustExprPath @@ string "v",
                 R._TupleIndexExpr_index>>: int32 0])))
           (lambda "arg" $
-            "sarg" <<= (encodeTerm @@ var "cx" @@ var "g" @@ var "arg") $
+            "sarg" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "arg") $
               right (inject R._Expression R._Expression_tupleIndex $
                 record R._TupleIndexExpr [
                   R._TupleIndexExpr_tuple>>: var "sarg",
@@ -650,7 +650,7 @@ encodeStructField = def "encodeStructField" $
   "cx" ~> "g" ~> lambda "ft" $
     "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
     "ftyp" <~ Core.fieldTypeType (var "ft") $
-    "sftyp" <<= (encodeType @@ var "cx" @@ var "g" @@ var "ftyp") $
+    "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "ftyp") $
       right (record R._StructField [
         R._StructField_name>>: Formatting.convertCaseCamelToLowerSnake @@ (Formatting.sanitizeWithUnderscores @@ RustLanguageSource.rustReservedWords @@ var "fname"),
         R._StructField_type>>: var "sftyp",
@@ -681,13 +681,13 @@ encodeEnumVariant = def "encodeEnumVariant" $
       -- Non-unit variant: check if it's a record (struct variant) or other (tuple variant)
       (cases _Type (var "dtyp") (Just $
           -- Default: tuple variant with single element
-          "sftyp" <<= (encodeType @@ var "cx" @@ var "g" @@ var "ftyp") $
+          "sftyp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "ftyp") $
             right (record R._EnumVariant [
               R._EnumVariant_name>>: Formatting.capitalize @@ var "fname",
               R._EnumVariant_body>>: inject R._EnumVariantBody R._EnumVariantBody_tuple $ list [var "sftyp"],
               R._EnumVariant_doc>>: nothing]))
         [_Type_record>>: lambda "rt" $
-          "sfields" <<= (Eithers.mapList (encodeStructField @@ var "cx" @@ var "g") (Core.rowTypeFields (var "rt"))) $
+          "sfields" <<~ (Eithers.mapList (encodeStructField @@ var "cx" @@ var "g") (Core.rowTypeFields (var "rt"))) $
             right (record R._EnumVariant [
               R._EnumVariant_name>>: Formatting.capitalize @@ var "fname",
               R._EnumVariant_body>>: inject R._EnumVariantBody R._EnumVariantBody_struct (var "sfields"),
@@ -714,9 +714,9 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
         R._GenericParam_bounds>>: list ([] :: [TTerm R.TypeParamBound])])
       (var "freeVars")) $
     "dtyp" <~ (Rewriting.deannotateType @@ var "typ") $
-    "item" <<= (cases _Type (var "dtyp") (Just $
+    "item" <<~ (cases _Type (var "dtyp") (Just $
         -- Fallback: type alias
-        "styp" <<= (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
+        "styp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
           right (inject R._Item R._Item_typeAlias $
             record R._TypeAlias [
               R._TypeAlias_name>>: var "lname",
@@ -725,7 +725,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
               R._TypeAlias_public>>: boolean True,
               R._TypeAlias_doc>>: nothing]))
       [_Type_record>>: lambda "rt" $
-        "sfields" <<= (Eithers.mapList (encodeStructField @@ var "cx" @@ var "g") (Core.rowTypeFields (var "rt"))) $
+        "sfields" <<~ (Eithers.mapList (encodeStructField @@ var "cx" @@ var "g") (Core.rowTypeFields (var "rt"))) $
           right (inject R._Item R._Item_struct $
             record R._StructDef [
               R._StructDef_name>>: var "lname",
@@ -736,7 +736,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
               R._StructDef_public>>: boolean True,
               R._StructDef_doc>>: nothing]),
       _Type_union>>: lambda "rt" $
-        "variants" <<= (Eithers.mapList (encodeEnumVariant @@ var "cx" @@ var "g") (Core.rowTypeFields (var "rt"))) $
+        "variants" <<~ (Eithers.mapList (encodeEnumVariant @@ var "cx" @@ var "g") (Core.rowTypeFields (var "rt"))) $
           right (inject R._Item R._Item_enum $
             record R._EnumDef [
               R._EnumDef_name>>: var "lname",
@@ -747,7 +747,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
               R._EnumDef_public>>: boolean True,
               R._EnumDef_doc>>: nothing]),
       _Type_wrap>>: lambda "wt" $
-        "styp" <<= (encodeType @@ var "cx" @@ var "g" @@ Core.wrappedTypeBody (var "wt")) $
+        "styp" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.wrappedTypeBody (var "wt")) $
           right (inject R._Item R._Item_struct $
             record R._StructDef [
               R._StructDef_name>>: var "lname",
@@ -778,8 +778,8 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "tscheme" <~ Module.termDefinitionType (var "tdef") $
     "lname" <~ (Formatting.convertCaseCamelToLowerSnake @@ (Names.localNameOf @@ var "name")) $
     "typ" <~ Core.typeSchemeType (var "tscheme") $
-    "body" <<= (encodeTerm @@ var "cx" @@ var "g" @@ var "term") $
-    "retType" <<= (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
+    "body" <<~ (encodeTerm @@ var "cx" @@ var "g" @@ var "term") $
+    "retType" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
       right (record R._ItemWithComments [
         R._ItemWithComments_doc>>: nothing,
         R._ItemWithComments_visibility>>: inject R._Visibility R._Visibility_public unit,
@@ -810,8 +810,8 @@ moduleToRust = def "moduleToRust" $
     "partitioned" <~ (Schemas.partitionDefinitions @@ var "defs") $
     "typeDefs" <~ Pairs.first (var "partitioned") $
     "termDefs" <~ Pairs.second (var "partitioned") $
-    "typeItems" <<= (Eithers.mapList (encodeTypeDefinition @@ var "cx" @@ var "g") (var "typeDefs")) $
-    "termItems" <<= (Eithers.mapList (encodeTermDefinition @@ var "cx" @@ var "g") (var "termDefs")) $
+    "typeItems" <<~ (Eithers.mapList (encodeTypeDefinition @@ var "cx" @@ var "g") (var "typeDefs")) $
+    "termItems" <<~ (Eithers.mapList (encodeTermDefinition @@ var "cx" @@ var "g") (var "termDefs")) $
     "allItems" <~ Lists.concat2 (var "typeItems") (var "termItems") $
     "crate" <~ (record R._Crate [R._Crate_items>>: var "allItems"]) $
     "code" <~ (SerializationSource.printExpr @@ (SerializationSource.parenthesize @@ (RustSerdeSource.crateToExpr @@ var "crate"))) $

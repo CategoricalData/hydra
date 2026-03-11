@@ -102,7 +102,7 @@ chooseAdapter = define "chooseAdapter" $
   "alts" ~> "supported" ~> "show" ~> "describe" ~> "typ" ~>
   Logic.ifElse (var "supported" @@ var "typ")
     (right (Compute.adapter false (var "typ") (var "typ") idCoder))
-    ("raw" <<= var "alts" @@ var "typ" $
+    ("raw" <<~ var "alts" @@ var "typ" $
      "candidates" <~ Lists.filter ("adapter" ~> var "supported" @@ Compute.adapterTarget (var "adapter")) (var "raw") $
      Logic.ifElse (Lists.null (var "candidates"))
        (left (Strings.cat (list [
@@ -125,8 +125,8 @@ composeCoders = define "composeCoders" $
   doc "Compose two coders" $
   "c1" ~> "c2" ~>
   Compute.coder
-    ("cx" ~> "a" ~> "b1" <<= Compute.coderEncode (var "c1") @@ var "cx" @@ var "a" $ Compute.coderEncode (var "c2") @@ var "cx" @@ var "b1")
-    ("cx" ~> "c" ~> "b2" <<= Compute.coderDecode (var "c2") @@ var "cx" @@ var "c" $ Compute.coderDecode (var "c1") @@ var "cx" @@ var "b2")
+    ("cx" ~> "a" ~> "b1" <<~ Compute.coderEncode (var "c1") @@ var "cx" @@ var "a" $ Compute.coderEncode (var "c2") @@ var "cx" @@ var "b1")
+    ("cx" ~> "c" ~> "b2" <<~ Compute.coderDecode (var "c2") @@ var "cx" @@ var "c" $ Compute.coderDecode (var "c1") @@ var "cx" @@ var "b2")
 
 encodeDecode :: TBinding (CoderDirection -> Coder x x -> Context -> x -> Either (InContext OtherError) x)
 encodeDecode = define "encodeDecode" $

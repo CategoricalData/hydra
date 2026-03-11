@@ -77,7 +77,7 @@ map_ = define "map" $
   doc "Interpreter-friendly map for Set terms." $
   "cx" ~> "g" ~>
   "fun" ~> "setTerm" ~>
-  "elements" <<= (ExtractCore.set @@ var "cx" @@ var "g" @@ var "setTerm") $
+  "elements" <<~ (ExtractCore.set @@ var "cx" @@ var "g" @@ var "setTerm") $
   -- Build: fromList (map fun (toList elements))
   right $ Core.termApplication $ Core.application
     (Core.termFunction $ Core.functionPrimitive $ encodedName _sets_fromList)

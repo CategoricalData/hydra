@@ -35,9 +35,9 @@ infixl 1 <~
 (<~) :: String -> TTerm a -> TTerm b -> TTerm b
 name <~ value = let1 name value
 
-infixl 1 <<=
-(<<=) :: AsTerm t (Either e a) => String -> t -> TTerm (Either e b) -> TTerm (Either e b)
-name <<= def = eitherBind name (asTerm def)
+infixl 1 <<~
+(<<~) :: AsTerm t (Either e a) => String -> t -> TTerm (Either e b) -> TTerm (Either e b)
+name <<~ def = eitherBind name (asTerm def)
 
 -- | Function composition operator: f <.> g creates a function that applies g then f
 -- Example: toString <.> increment

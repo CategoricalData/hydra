@@ -872,7 +872,7 @@ getFunctionType :: TBinding (M.Map Name Term -> Context -> Graph -> Either (InCo
 getFunctionType = def "getFunctionType" $
   lambda "ann" $
     "cx" ~> "g" ~>
-    "mt" <<= (getTypeE (var "cx") (var "g") (var "ann")) $
+    "mt" <<~ (getTypeE (var "cx") (var "g") (var "ann")) $
     Maybes.cases (var "mt")
       (Ctx.failInContext (Error.otherError $ string "type annotation is required for function and elimination terms in Java") (var "cx"))
       (lambda "t" $ cases _Type (var "t")
@@ -1223,7 +1223,7 @@ classifyDataReference :: TBinding (Name -> Context -> Graph -> Either (InContext
 classifyDataReference = def "classifyDataReference" $
   lambda "name" $
     "cx" ~> "g" ~>
-    "mel" <<= right (Lexical.dereferenceElement @@ var "g" @@ var "name") $
+    "mel" <<~ right (Lexical.dereferenceElement @@ var "g" @@ var "name") $
     Maybes.cases (var "mel")
       -- Not found: treat as local variable
       (right $ inject JavaHelpers._JavaSymbolClass JavaHelpers._JavaSymbolClass_localVariable unit)
@@ -1247,16 +1247,16 @@ encodeType = def "encodeType" $
     cases _Type (Rewriting.deannotateType @@ var "t")
       (Just $ Ctx.failInContext (Error.otherError $ Strings.cat2 (string "can't encode unsupported type in Java: ") (ShowCore.type_ @@ var "t")) (var "cx")) [
       _Type_application>>: lambda "at" $
-        "jlhs" <<= (encodeType @@ var "aliases" @@ var "boundVars" @@ (Core.applicationTypeFunction (var "at")) @@ var "cx" @@ var "g") $
-        "jrhs" <<= (Eithers.bind
+        "jlhs" <<~ (encodeType @@ var "aliases" @@ var "boundVars" @@ (Core.applicationTypeFunction (var "at")) @@ var "cx" @@ var "g") $
+        "jrhs" <<~ (Eithers.bind
           (encodeType @@ var "aliases" @@ var "boundVars" @@ (Core.applicationTypeArgument (var "at")) @@ var "cx" @@ var "g")
           (lambda "jt_" $ JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt_" @@ var "cx")) $
         JavaUtilsSource.addJavaTypeParameter @@ var "jrhs" @@ var "jlhs" @@ var "cx",
       _Type_function>>: lambda "ft" $
-        "jdom" <<= (Eithers.bind
+        "jdom" <<~ (Eithers.bind
           (encodeType @@ var "aliases" @@ var "boundVars" @@ (Core.functionTypeDomain (var "ft")) @@ var "cx" @@ var "g")
           (lambda "jt_" $ JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt_" @@ var "cx")) $
-        "jcod" <<= (Eithers.bind
+        "jcod" <<~ (Eithers.bind
           (encodeType @@ var "aliases" @@ var "boundVars" @@ (Core.functionTypeCodomain (var "ft")) @@ var "cx" @@ var "g")
           (lambda "jt_" $ JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt_" @@ var "cx")) $
         right (JavaUtilsSource.javaRefType
@@ -1264,15 +1264,15 @@ encodeType = def "encodeType" $
           @@ asTerm JavaNamesSource.javaUtilFunctionPackageName
           @@ string "Function"),
       _Type_forall>>: lambda "fa" $
-        "jbody" <<= (encodeType @@ var "aliases"
+        "jbody" <<~ (encodeType @@ var "aliases"
           @@ (Sets.insert (Core.forallTypeParameter (var "fa")) (var "boundVars"))
           @@ (Core.forallTypeBody (var "fa")) @@ var "cx" @@ var "g") $
         JavaUtilsSource.addJavaTypeParameter
           @@ (JavaUtilsSource.javaTypeVariable @@ (unwrap _Name @@ Core.forallTypeParameter (var "fa")))
           @@ var "jbody" @@ var "cx",
       _Type_list>>: lambda "et" $
-        "jet" <<= (encodeType @@ var "aliases" @@ var "boundVars" @@ var "et" @@ var "cx" @@ var "g") $
-        "rt" <<= (Eithers.bind (right (var "jet")) (lambda "jt_" $ JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt_" @@ var "cx")) $
+        "jet" <<~ (encodeType @@ var "aliases" @@ var "boundVars" @@ var "et" @@ var "cx" @@ var "g") $
+        "rt" <<~ (Eithers.bind (right (var "jet")) (lambda "jt_" $ JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt_" @@ var "cx")) $
         right (JavaUtilsSource.javaRefType
           @@ list [var "rt"]
           @@ asTerm JavaNamesSource.javaUtilPackageName
@@ -1280,10 +1280,10 @@ encodeType = def "encodeType" $
       _Type_literal>>: lambda "lt" $
         encodeLiteralType @@ var "lt" @@ var "cx" @@ var "g",
       _Type_either>>: lambda "et" $
-        "jlt" <<= (Eithers.bind
+        "jlt" <<~ (Eithers.bind
           (encodeType @@ var "aliases" @@ var "boundVars" @@ (project _EitherType _EitherType_left @@ var "et") @@ var "cx" @@ var "g")
           (lambda "jt_" $ JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt_" @@ var "cx")) $
-        "jrt" <<= (Eithers.bind
+        "jrt" <<~ (Eithers.bind
           (encodeType @@ var "aliases" @@ var "boundVars" @@ (project _EitherType _EitherType_right @@ var "et") @@ var "cx" @@ var "g")
           (lambda "jt_" $ JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt_" @@ var "cx")) $
         right (JavaUtilsSource.javaRefType
@@ -1291,10 +1291,10 @@ encodeType = def "encodeType" $
           @@ asTerm JavaNamesSource.hydraUtilPackageName
           @@ string "Either"),
       _Type_map>>: lambda "mt" $
-        "jkt" <<= (Eithers.bind
+        "jkt" <<~ (Eithers.bind
           (encodeType @@ var "aliases" @@ var "boundVars" @@ (Core.mapTypeKeys (var "mt")) @@ var "cx" @@ var "g")
           (lambda "jt_" $ JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt_" @@ var "cx")) $
-        "jvt" <<= (Eithers.bind
+        "jvt" <<~ (Eithers.bind
           (encodeType @@ var "aliases" @@ var "boundVars" @@ (Core.mapTypeValues (var "mt")) @@ var "cx" @@ var "g")
           (lambda "jt_" $ JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt_" @@ var "cx")) $
         right (JavaUtilsSource.javaRefType
@@ -1302,10 +1302,10 @@ encodeType = def "encodeType" $
           @@ asTerm JavaNamesSource.javaUtilPackageName
           @@ string "Map"),
       _Type_pair>>: lambda "pt" $
-        "jfirst" <<= (Eithers.bind
+        "jfirst" <<~ (Eithers.bind
           (encodeType @@ var "aliases" @@ var "boundVars" @@ (project _PairType _PairType_first @@ var "pt") @@ var "cx" @@ var "g")
           (lambda "jt_" $ JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt_" @@ var "cx")) $
-        "jsecond" <<= (Eithers.bind
+        "jsecond" <<~ (Eithers.bind
           (encodeType @@ var "aliases" @@ var "boundVars" @@ (project _PairType _PairType_second @@ var "pt") @@ var "cx" @@ var "g")
           (lambda "jt_" $ JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt_" @@ var "cx")) $
         right (JavaUtilsSource.javaRefType
@@ -1332,7 +1332,7 @@ encodeType = def "encodeType" $
               @@ Core.rowTypeTypeName (var "rt")
               @@ nothing))),
       _Type_maybe>>: lambda "ot" $
-        "jot" <<= (Eithers.bind
+        "jot" <<~ (Eithers.bind
           (encodeType @@ var "aliases" @@ var "boundVars" @@ var "ot" @@ var "cx" @@ var "g")
           (lambda "jt_" $ JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt_" @@ var "cx")) $
         right (JavaUtilsSource.javaRefType
@@ -1340,7 +1340,7 @@ encodeType = def "encodeType" $
           @@ asTerm JavaNamesSource.hydraUtilPackageName
           @@ string "Maybe"),
       _Type_set>>: lambda "st" $
-        "jst" <<= (Eithers.bind
+        "jst" <<~ (Eithers.bind
           (encodeType @@ var "aliases" @@ var "boundVars" @@ var "st" @@ var "cx" @@ var "g")
           (lambda "jt_" $ JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt_" @@ var "cx")) $
         right (JavaUtilsSource.javaRefType
@@ -1357,7 +1357,7 @@ encodeType = def "encodeType" $
         -- Apply type variable substitution
         "name" <~ Maybes.fromMaybe (var "name0") (Maps.lookup (var "name0") (var "typeVarSubst")) $
         -- Check if it's a typedef that should be resolved
-        "resolved" <<= (encodeType_resolveIfTypedef @@ var "aliases" @@ var "boundVars" @@ var "inScopeTypeParams" @@ var "name" @@ var "cx" @@ var "g") $
+        "resolved" <<~ (encodeType_resolveIfTypedef @@ var "aliases" @@ var "boundVars" @@ var "inScopeTypeParams" @@ var "name" @@ var "cx" @@ var "g") $
         Maybes.cases (var "resolved")
           -- Not a typedef: determine reference kind
           (right $
@@ -1421,7 +1421,7 @@ javaTypeArgumentsForNamedType :: TBinding (Name -> Context -> Graph -> Either (I
 javaTypeArgumentsForNamedType = def "javaTypeArgumentsForNamedType" $
   lambda "tname" $
     "cx" ~> "g" ~>
-    "typ" <<= (Schemas.requireType @@ var "cx" @@ var "g" @@ var "tname") $
+    "typ" <<~ (Schemas.requireType @@ var "cx" @@ var "g" @@ var "tname") $
     right $ Lists.map (lambda "tp_" $ JavaUtilsSource.typeParameterToTypeArgument @@ var "tp_")
       (javaTypeParametersForType @@ var "typ")
 
@@ -1545,7 +1545,7 @@ fieldTypeToFormalParam :: TBinding (JavaHelpers.Aliases -> FieldType -> Context 
 fieldTypeToFormalParam = def "fieldTypeToFormalParam" $
   lambda "aliases" $ lambda "ft" $
     "cx" ~> "g" ~>
-    "jt" <<= (encodeType @@ var "aliases" @@ Sets.empty @@ (Core.fieldTypeType (var "ft")) @@ var "cx" @@ var "g") $
+    "jt" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ (Core.fieldTypeType (var "ft")) @@ var "cx" @@ var "g") $
     right (JavaUtilsSource.javaTypeToJavaFormalParameter @@ var "jt" @@ Core.fieldTypeName (var "ft"))
 
 -- =============================================================================
@@ -1569,8 +1569,8 @@ applyCastIfSafe = def "applyCastIfSafe" $
       (Logic.or (Sets.null (var "javaTypeVars"))
         (Sets.null (Sets.difference (var "javaTypeVars") (var "trusted")))) $
     Logic.ifElse (var "isSafe")
-      ("jtype" <<= (encodeType @@ var "aliases" @@ Sets.empty @@ var "castType" @@ var "cx" @@ var "g") $
-       "rt" <<= (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jtype" @@ var "cx") $
+      ("jtype" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "castType" @@ var "cx" @@ var "g") $
+       "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jtype" @@ var "cx") $
        right (JavaUtilsSource.javaCastExpressionToJavaExpression @@
          (JavaUtilsSource.javaCastExpression @@ var "rt" @@
            (JavaUtilsSource.javaExpressionToJavaUnaryExpression @@ var "expr"))))
@@ -1607,7 +1607,7 @@ encodeVariable_hoistedLambdaCase = def "encodeVariable_hoistedLambdaCase" $
         var "paramExprs")) $
     "lam" <~ encodeVariable_buildCurried @@ var "paramNames" @@ var "call" $
     -- Try to cast to the function's curried type
-    "mel" <<= right (Lexical.dereferenceElement @@ var "g" @@ var "name") $
+    "mel" <<~ right (Lexical.dereferenceElement @@ var "g" @@ var "name") $
     Maybes.cases (var "mel")
       (right (var "lam"))
       (lambda "el" $
@@ -1615,8 +1615,8 @@ encodeVariable_hoistedLambdaCase = def "encodeVariable_hoistedLambdaCase" $
           (right (var "lam"))
           (lambda "ts" $
             "typ" <~ Core.typeSchemeType (var "ts") $
-            "jtype" <<= (encodeType @@ var "aliases" @@ Sets.empty @@ var "typ" @@ var "cx" @@ var "g") $
-            "rt" <<= (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jtype" @@ var "cx") $
+            "jtype" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "typ" @@ var "cx" @@ var "g") $
+            "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jtype" @@ var "cx") $
             right (JavaUtilsSource.javaCastExpressionToJavaExpression @@
               (JavaUtilsSource.javaCastExpression @@ var "rt" @@
                 (JavaUtilsSource.javaExpressionToJavaUnaryExpression @@ var "lam")))))
@@ -1672,7 +1672,7 @@ encodeVariable = def "encodeVariable" $
               (Logic.ifElse (Sets.member (var "name") (project JavaHelpers._Aliases JavaHelpers._Aliases_inScopeJavaVars @@ var "aliases"))
                 (right (JavaUtilsSource.javaIdentifierToJavaExpression @@ (elementJavaIdentifier @@ boolean False @@ boolean False @@ var "aliases" @@ var "resolvedName")))
               -- Classify and encode
-              ("cls" <<= (classifyDataReference @@ var "name" @@ var "cx" @@ var "g") $
+              ("cls" <<~ (classifyDataReference @@ var "name" @@ var "cx" @@ var "g") $
                cases JavaHelpers._JavaSymbolClass (var "cls") Nothing [
                  JavaHelpers._JavaSymbolClass_hoistedLambda>>: "arity" ~>
                    encodeVariable_hoistedLambdaCase @@ var "aliases" @@ var "name" @@ var "arity" @@ var "cx" @@ var "g",
@@ -1700,22 +1700,22 @@ encodeNullaryConstant_typeArgsFromReturnType = def "encodeNullaryConstant_typeAr
     cases _Type (Rewriting.deannotateType @@ var "t")
       (Just $ right (list ([] :: [TTerm Java.TypeArgument]))) [
       _Type_set>>: "st" ~>
-        "jst" <<= (encodeType @@ var "aliases" @@ Sets.empty @@ var "st" @@ var "cx" @@ var "g") $
-        "rt" <<= (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jst" @@ var "cx") $
+        "jst" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "st" @@ var "cx" @@ var "g") $
+        "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jst" @@ var "cx") $
         right (list [JavaDsl.typeArgumentReference (var "rt")]),
       _Type_list>>: "lt_" ~>
-        "jlt" <<= (encodeType @@ var "aliases" @@ Sets.empty @@ var "lt_" @@ var "cx" @@ var "g") $
-        "rt" <<= (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jlt" @@ var "cx") $
+        "jlt" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "lt_" @@ var "cx" @@ var "g") $
+        "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jlt" @@ var "cx") $
         right (list [JavaDsl.typeArgumentReference (var "rt")]),
       _Type_maybe>>: "mt" ~>
-        "jmt" <<= (encodeType @@ var "aliases" @@ Sets.empty @@ var "mt" @@ var "cx" @@ var "g") $
-        "rt" <<= (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jmt" @@ var "cx") $
+        "jmt" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "mt" @@ var "cx" @@ var "g") $
+        "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jmt" @@ var "cx") $
         right (list [JavaDsl.typeArgumentReference (var "rt")]),
       _Type_map>>: "mp" ~>
-        "jkt" <<= (encodeType @@ var "aliases" @@ Sets.empty @@ (project _MapType _MapType_keys @@ var "mp") @@ var "cx" @@ var "g") $
-        "rk" <<= (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jkt" @@ var "cx") $
-        "jvt" <<= (encodeType @@ var "aliases" @@ Sets.empty @@ (project _MapType _MapType_values @@ var "mp") @@ var "cx" @@ var "g") $
-        "rv" <<= (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jvt" @@ var "cx") $
+        "jkt" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ (project _MapType _MapType_keys @@ var "mp") @@ var "cx" @@ var "g") $
+        "rk" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jkt" @@ var "cx") $
+        "jvt" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ (project _MapType _MapType_values @@ var "mp") @@ var "cx" @@ var "g") $
+        "rv" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jvt" @@ var "cx") $
         right (list [JavaDsl.typeArgumentReference (var "rk"), JavaDsl.typeArgumentReference (var "rv")])]
 
 -- | Encode a nullary constant function as a Java expression
@@ -1727,7 +1727,7 @@ encodeNullaryConstant = def "encodeNullaryConstant" $
     cases _Function (var "fun")
       (Just $ Ctx.failInContext (Error.otherError $ Strings.cat2 (string "unexpected ") (Strings.cat2 (string "nullary function") (Strings.cat2 (string " in ") (ShowCore.function @@ var "fun")))) (var "cx")) [
       _Function_primitive>>: "name" ~>
-        "targs" <<= (encodeNullaryConstant_typeArgsFromReturnType @@ var "aliases" @@ var "typ" @@ var "cx" @@ var "g") $
+        "targs" <<~ (encodeNullaryConstant_typeArgsFromReturnType @@ var "aliases" @@ var "typ" @@ var "cx" @@ var "g") $
         Logic.ifElse (Lists.null (var "targs"))
           -- Simple call without type arguments
           ("header" <~ (inject Java._MethodInvocation_Header Java._MethodInvocation_Header_simple
@@ -2596,7 +2596,7 @@ filterPhantomTypeArgs :: TBinding (Name -> [Type] -> Context -> Graph -> Either 
 filterPhantomTypeArgs = def "filterPhantomTypeArgs" $
   lambda "calleeName" $ lambda "allTypeArgs" $
     "cx" ~> "g" ~>
-    "mel" <<= right (Lexical.dereferenceElement @@ var "g" @@ var "calleeName") $
+    "mel" <<~ right (Lexical.dereferenceElement @@ var "g" @@ var "calleeName") $
     Maybes.cases (var "mel")
       (right (var "allTypeArgs"))
       (lambda "el" $
@@ -2698,7 +2698,7 @@ correctTypeAppsWithArgs = def "correctTypeAppsWithArgs" $
     "irSubst" <~ Maps.fromList (Lists.zip (var "schemeVars") (var "fallbackTypeApps")) $
     "peeled" <~ peelDomainTypes @@ Lists.length (var "args") @@ var "schemeType" $
     "schemeDoms" <~ Pairs.first (var "peeled") $
-    "mArgTypes" <<= Eithers.mapList
+    "mArgTypes" <<~ Eithers.mapList
       (lambda "arg" $
         getTypeE (var "cx") (var "g") ((Annotations.termAnnotationInternal @@ var "arg")))
       (var "args") $
@@ -2722,7 +2722,7 @@ correctTypeApps :: TBinding (Graph -> Name -> [Term] -> [Type] -> Context -> Gra
 correctTypeApps = def "correctTypeApps" $
   lambda "gr" $ lambda "name" $ lambda "args" $ lambda "fallbackTypeApps" $
     "cx" ~> "g" ~>
-    "mel" <<= right (Lexical.dereferenceElement @@ var "g" @@ var "name") $
+    "mel" <<~ right (Lexical.dereferenceElement @@ var "g" @@ var "name") $
     Maybes.cases (var "mel")
       (right (var "fallbackTypeApps"))
       (lambda "el" $
@@ -3186,7 +3186,7 @@ recordMemberVar = def "recordMemberVar" $
                    inject Java._FieldModifier Java._FieldModifier_final unit],
     "fname">: Core.fieldTypeName (var "ft"),
     "ftype">: Core.fieldTypeType (var "ft")] $
-    "jt" <<= (encodeType @@ var "aliases" @@ Sets.empty @@ var "ftype" @@ var "cx" @@ var "g") $
+    "jt" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "ftype" @@ var "cx" @@ var "g") $
     right (JavaUtilsSource.javaMemberField @@ var "mods" @@ var "jt"
       @@ (JavaUtilsSource.fieldNameToJavaVariableDeclarator @@ var "fname"))
 
@@ -3209,7 +3209,7 @@ recordWithMethod = def "recordWithMethod" $
       (JavaUtilsSource.javaReturnStatement @@ just
         (JavaUtilsSource.javaConstructorCall @@ (JavaUtilsSource.javaConstructorName @@ var "consId" @@ nothing)
           @@ var "fieldArgs" @@ nothing))] $
-    "param" <<= (fieldTypeToFormalParam @@ var "aliases" @@ var "field" @@ var "cx" @@ var "g") $
+    "param" <<~ (fieldTypeToFormalParam @@ var "aliases" @@ var "field" @@ var "cx" @@ var "g") $
     right (JavaUtilsSource.methodDeclaration @@ var "mods" @@ list ([] :: [TTerm Java.TypeParameter])
       @@ var "anns" @@ var "methodName" @@ list [var "param"] @@ var "result"
       @@ just (list [var "returnStmt"]))
@@ -3223,7 +3223,7 @@ recordConstructor = def "recordConstructor" $
     "assignStmts">: Lists.map
       (lambda "f" $ JavaDsl.blockStatementStatement (JavaUtilsSource.toAssignStmt @@ Core.fieldTypeName (var "f")))
       (var "fields")] $
-    "params" <<= (Eithers.mapList (lambda "f" $ fieldTypeToFormalParam @@ var "aliases" @@ var "f" @@ var "cx" @@ var "g") (var "fields")) $
+    "params" <<~ (Eithers.mapList (lambda "f" $ fieldTypeToFormalParam @@ var "aliases" @@ var "f" @@ var "cx" @@ var "g") (var "fields")) $
     right (JavaUtilsSource.makeConstructor @@ var "aliases" @@ var "elName" @@ false @@ var "params" @@ var "assignStmts")
 
 -- | Build an equality clause for a single field in the equals() method.
@@ -3413,8 +3413,8 @@ constantDecl = def "constantDecl" $
     "env" <~ (record JavaHelpers._JavaEnvironment [
       JavaHelpers._JavaEnvironment_aliases>>: var "aliases",
       JavaHelpers._JavaEnvironment_graph>>: var "g"]) $
-    "jt" <<= (encodeType @@ var "aliases" @@ Sets.empty @@ (Core.typeVariable (Core.name (string "hydra.core.Name"))) @@ var "cx" @@ var "g") $
-    "arg" <<= (encodeTerm @@ var "env" @@ (Core.termLiteral (Core.literalString (unwrap _Name @@ var "name"))) @@ var "cx" @@ var "g") $
+    "jt" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ (Core.typeVariable (Core.name (string "hydra.core.Name"))) @@ var "cx" @@ var "g") $
+    "arg" <<~ (encodeTerm @@ var "env" @@ (Core.termLiteral (Core.literalString (unwrap _Name @@ var "name"))) @@ var "cx" @@ var "g") $
     "init" <~ (inject Java._VariableInitializer Java._VariableInitializer_expression
       (JavaUtilsSource.javaConstructorCall @@ (JavaUtilsSource.javaConstructorName @@ var "nameName" @@ nothing)
         @@ list [var "arg"] @@ nothing)) $
@@ -3452,17 +3452,17 @@ declarationForRecordType' :: TBinding (Bool -> Bool -> JavaHelpers.Aliases -> [J
 declarationForRecordType' = def "declarationForRecordType'" $
   lambda "isInner" $ lambda "isSer" $ lambda "aliases" $ lambda "tparams" $ lambda "elName" $ lambda "parentName" $ lambda "fields" $
     "cx" ~> "g" ~>
-    "memberVars" <<= (Eithers.mapList (lambda "f" $ recordMemberVar @@ var "aliases" @@ var "f" @@ var "cx" @@ var "g") (var "fields")) $
-    "memberVars'" <<= (Eithers.mapList (lambda "p" $ addComment @@ (Pairs.first (var "p")) @@ (Pairs.second (var "p")) @@ var "cx" @@ var "g")
+    "memberVars" <<~ (Eithers.mapList (lambda "f" $ recordMemberVar @@ var "aliases" @@ var "f" @@ var "cx" @@ var "g") (var "fields")) $
+    "memberVars'" <<~ (Eithers.mapList (lambda "p" $ addComment @@ (Pairs.first (var "p")) @@ (Pairs.second (var "p")) @@ var "cx" @@ var "g")
       (Lists.zip (var "memberVars") (var "fields"))) $
-    "withMethods" <<= (Logic.ifElse (Equality.gt (Lists.length (var "fields")) (int32 1))
+    "withMethods" <<~ (Logic.ifElse (Equality.gt (Lists.length (var "fields")) (int32 1))
       (Eithers.mapList (lambda "f" $ recordWithMethod @@ var "aliases" @@ var "elName" @@ var "fields" @@ var "f" @@ var "cx" @@ var "g") (var "fields"))
       (right (list ([] :: [TTerm Java.ClassBodyDeclaration])))) $
-    "cons" <<= (recordConstructor @@ var "aliases" @@ var "elName" @@ var "fields" @@ var "cx" @@ var "g") $
-    "tn" <<= (Logic.ifElse (var "isInner")
+    "cons" <<~ (recordConstructor @@ var "aliases" @@ var "elName" @@ var "fields" @@ var "cx" @@ var "g") $
+    "tn" <<~ (Logic.ifElse (var "isInner")
       (right (list ([] :: [TTerm Java.ClassBodyDeclarationWithComments])))
-      ("d" <<= (constantDeclForTypeName @@ var "aliases" @@ var "elName" @@ var "cx" @@ var "g") $
-        "dfields" <<= (Eithers.mapList (lambda "f" $ constantDeclForFieldType @@ var "aliases" @@ var "f" @@ var "cx" @@ var "g") (var "fields")) $
+      ("d" <<~ (constantDeclForTypeName @@ var "aliases" @@ var "elName" @@ var "cx" @@ var "g") $
+        "dfields" <<~ (Eithers.mapList (lambda "f" $ constantDeclForFieldType @@ var "aliases" @@ var "f" @@ var "cx" @@ var "g") (var "fields")) $
         right (Lists.cons (var "d") (var "dfields")))) $
     "comparableMethods" <~ (Maybes.cases (var "parentName")
       (Logic.ifElse (Logic.and (Logic.not (var "isInner")) (var "isSer"))
@@ -3497,7 +3497,7 @@ takeTypeArgs = def "takeTypeArgs" $
     Logic.ifElse (Equality.lt (Lists.length (var "tyapps")) (var "n"))
       (Ctx.failInContext (Error.otherError $ Strings.cat (list [string "needed type arguments for ", var "label", string ", found too few"])) (var "cx"))
       (Eithers.mapList (lambda "jt" $
-        "rt" <<= (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt" @@ var "cx") $
+        "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt" @@ var "cx") $
         right (JavaDsl.typeArgumentReference (var "rt")))
         (Lists.take (var "n") (var "tyapps")))
 
@@ -3553,17 +3553,17 @@ encodeTermInternal = def "encodeTermInternal" $
 
       -- TermEither: left or right
       _Term_either>>: lambda "et" $
-        "targs" <<= (takeTypeArgs @@ string "either" @@ int32 2 @@ var "tyapps" @@ var "cx" @@ var "g") $
+        "targs" <<~ (takeTypeArgs @@ string "either" @@ int32 2 @@ var "tyapps" @@ var "cx" @@ var "g") $
         Eithers.either_
           (lambda "term1" $
-            "expr" <<= (var "encode" @@ var "term1") $
+            "expr" <<~ (var "encode" @@ var "term1") $
             right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
               (JavaUtilsSource.methodInvocationStaticWithTypeArgs
                 @@ JavaDsl.identifier (string "hydra.util.Either")
                 @@ JavaDsl.identifier (string "left")
                 @@ var "targs" @@ list [var "expr"])))
           (lambda "term1" $
-            "expr" <<= (var "encode" @@ var "term1") $
+            "expr" <<~ (var "encode" @@ var "term1") $
             right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
               (JavaUtilsSource.methodInvocationStaticWithTypeArgs
                 @@ JavaDsl.identifier (string "hydra.util.Either")
@@ -3574,8 +3574,8 @@ encodeTermInternal = def "encodeTermInternal" $
       -- TermFunction: encode function with type from annotations
       _Term_function>>: lambda "f" $
         ("combinedAnns" <~ Lists.foldl (lambda "acc" $ lambda "m" $ Maps.union (var "acc") (var "m")) Maps.empty (var "anns") $
-        "mt" <<= (getTypeE (var "cx") (var "g") (var "combinedAnns")) $
-        "typ" <<= (Maybes.cases (var "mt")
+        "mt" <<~ (getTypeE (var "cx") (var "g") (var "combinedAnns")) $
+        "typ" <<~ (Maybes.cases (var "mt")
           (Maybes.cases (tryInferFunctionType @@ var "f")
             (CoderUtils.typeOfTerm @@ var "cx" @@ var "g" @@ var "term")
             (lambda "inferredType" $ right (var "inferredType")))
@@ -3591,10 +3591,10 @@ encodeTermInternal = def "encodeTermInternal" $
         "body" <~ Core.letBody (var "lt") $
         Logic.ifElse (Lists.null (var "bindings"))
           (encodeTermInternal @@ var "env" @@ var "anns" @@ list ([] :: [TTerm Java.Type]) @@ var "body" @@ var "cx" @@ var "g")
-          ("bindResult" <<= (bindingsToStatements @@ var "env" @@ var "bindings" @@ var "cx" @@ var "g") $
+          ("bindResult" <<~ (bindingsToStatements @@ var "env" @@ var "bindings" @@ var "cx" @@ var "g") $
             "bindingStmts" <~ Pairs.first (var "bindResult") $
             "env2" <~ Pairs.second (var "bindResult") $
-            "jbody" <<= (encodeTermInternal @@ var "env2" @@ var "anns" @@ list ([] :: [TTerm Java.Type]) @@ var "body" @@ var "cx" @@ var "g") $
+            "jbody" <<~ (encodeTermInternal @@ var "env2" @@ var "anns" @@ list ([] :: [TTerm Java.Type]) @@ var "body" @@ var "cx" @@ var "g") $
             "returnSt" <~ JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "jbody")) $
             "block" <~ (wrap Java._Block (Lists.concat2 (var "bindingStmts") (list [var "returnSt"]))) $
             "nullaryLambda" <~ JavaDsl.expressionLambda
@@ -3604,12 +3604,12 @@ encodeTermInternal = def "encodeTermInternal" $
             "combinedAnns" <~ Lists.foldl (lambda "acc" $ lambda "m" $ Maps.union (var "acc") (var "m")) Maps.empty (var "anns") $
             "g2" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_graph @@ var "env2") $
             "aliases2" <~ (project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_aliases @@ var "env2") $
-            "mt" <<= (getTypeE (var "cx") (var "g") (var "combinedAnns")) $
-            "letType" <<= (Maybes.cases (var "mt")
+            "mt" <<~ (getTypeE (var "cx") (var "g") (var "combinedAnns")) $
+            "letType" <<~ (Maybes.cases (var "mt")
               (CoderUtils.typeOfTerm @@ var "cx" @@ var "g2" @@ var "body")
               (lambda "t" $ right (var "t"))) $
-            "jLetType" <<= (encodeType @@ var "aliases2" @@ Sets.empty @@ var "letType" @@ var "cx" @@ var "g") $
-            "rt" <<= (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jLetType" @@ var "cx") $
+            "jLetType" <<~ (encodeType @@ var "aliases2" @@ Sets.empty @@ var "letType" @@ var "cx" @@ var "g") $
+            "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jLetType" @@ var "cx") $
             "supplierRt" <~ JavaDsl.referenceTypeClassOrInterface
               (JavaDsl.classOrInterfaceTypeClass
                 (JavaUtilsSource.javaClassType @@ list [var "rt"] @@ asTerm JavaNamesSource.javaUtilFunctionPackageName @@ string "Supplier")) $
@@ -3621,8 +3621,8 @@ encodeTermInternal = def "encodeTermInternal" $
 
       -- TermList: List.of(elements)
       _Term_list>>: lambda "els" $
-        "jels" <<= (Eithers.mapList (var "encode") (var "els")) $
-        "targs" <<= (Logic.ifElse (Lists.null (var "jels"))
+        "jels" <<~ (Eithers.mapList (var "encode") (var "els")) $
+        "targs" <<~ (Logic.ifElse (Lists.null (var "jels"))
           (takeTypeArgs @@ string "list" @@ int32 1 @@ var "tyapps" @@ var "cx" @@ var "g")
           (right (list ([] :: [TTerm Java.TypeArgument])))) $
         right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
@@ -3637,8 +3637,8 @@ encodeTermInternal = def "encodeTermInternal" $
 
       -- TermMap: Map.ofEntries(Map.entry(k,v), ...)
       _Term_map>>: lambda "m" $
-        "jkeys" <<= (Eithers.mapList (var "encode") (Maps.keys (var "m"))) $
-        "jvals" <<= (Eithers.mapList (var "encode") (Maps.elems (var "m"))) $
+        "jkeys" <<~ (Eithers.mapList (var "encode") (Maps.keys (var "m"))) $
+        "jvals" <<~ (Eithers.mapList (var "encode") (Maps.elems (var "m"))) $
         "pairExprs" <~ Lists.map
           (lambda "kv" $ JavaUtilsSource.javaMethodInvocationToJavaExpression @@
             (JavaUtilsSource.methodInvocationStatic
@@ -3646,7 +3646,7 @@ encodeTermInternal = def "encodeTermInternal" $
               @@ JavaDsl.identifier (string "entry")
               @@ list [Pairs.first (var "kv"), Pairs.second (var "kv")]))
           (Lists.zip (var "jkeys") (var "jvals")) $
-        "targs" <<= (Logic.ifElse (Maps.null (var "m"))
+        "targs" <<~ (Logic.ifElse (Maps.null (var "m"))
           (takeTypeArgs @@ string "map" @@ int32 2 @@ var "tyapps" @@ var "cx" @@ var "g")
           (right (list ([] :: [TTerm Java.TypeArgument])))) $
         right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
@@ -3658,14 +3658,14 @@ encodeTermInternal = def "encodeTermInternal" $
       -- TermMaybe: Maybe.nothing() or Maybe.just(x)
       _Term_maybe>>: lambda "mt" $
         Maybes.cases (var "mt")
-          ("targs" <<= (takeTypeArgs @@ string "maybe" @@ int32 1 @@ var "tyapps" @@ var "cx" @@ var "g") $
+          ("targs" <<~ (takeTypeArgs @@ string "maybe" @@ int32 1 @@ var "tyapps" @@ var "cx" @@ var "g") $
             right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
               (JavaUtilsSource.methodInvocationStaticWithTypeArgs
                 @@ JavaDsl.identifier (string "hydra.util.Maybe")
                 @@ JavaDsl.identifier (string "nothing")
                 @@ var "targs" @@ list ([] :: [TTerm Java.Expression]))))
           (lambda "term1" $
-            "expr" <<= (var "encode" @@ var "term1") $
+            "expr" <<~ (var "encode" @@ var "term1") $
             right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
               (JavaUtilsSource.methodInvocationStatic
                 @@ JavaDsl.identifier (string "hydra.util.Maybe")
@@ -3674,11 +3674,11 @@ encodeTermInternal = def "encodeTermInternal" $
 
       -- TermPair: new Pair(t1, t2)
       _Term_pair>>: lambda "p" $
-        "jterm1" <<= (var "encode" @@ Pairs.first (var "p")) $
-        "jterm2" <<= (var "encode" @@ Pairs.second (var "p")) $
-        "mtargs" <<= (Logic.ifElse (Lists.null (var "tyapps"))
+        "jterm1" <<~ (var "encode" @@ Pairs.first (var "p")) $
+        "jterm2" <<~ (var "encode" @@ Pairs.second (var "p")) $
+        "mtargs" <<~ (Logic.ifElse (Lists.null (var "tyapps"))
           (right nothing)
-          ("rts" <<= (Eithers.mapList (lambda "jt" $ JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt" @@ var "cx") (var "tyapps")) $
+          ("rts" <<~ (Eithers.mapList (lambda "jt" $ JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt" @@ var "cx") (var "tyapps")) $
             right (just (JavaDsl.typeArgumentsOrDiamondArguments
               (Lists.map (lambda "rt" $ JavaDsl.typeArgumentReference (var "rt")) (var "rts")))))) $
         right (JavaUtilsSource.javaConstructorCall
@@ -3692,23 +3692,23 @@ encodeTermInternal = def "encodeTermInternal" $
       -- (e.g. Coder<Graph, Graph, Term, Value>) but no TermTypeApplication wrappers in the term.
       _Term_record>>: lambda "rec" $
         "recName" <~ Core.recordTypeName (var "rec") $
-        "fieldExprs" <<= (Eithers.mapList (lambda "fld" $ var "encode" @@ Core.fieldTerm (var "fld")) (Core.recordFields (var "rec"))) $
+        "fieldExprs" <<~ (Eithers.mapList (lambda "fld" $ var "encode" @@ Core.fieldTerm (var "fld")) (Core.recordFields (var "rec"))) $
         "consId" <~ (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ var "recName") $
-        "mtargs" <<= (Logic.ifElse (Logic.not (Lists.null (var "tyapps")))
-          ("rts" <<= (Eithers.mapList (lambda "jt" $ JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt" @@ var "cx") (var "tyapps")) $
+        "mtargs" <<~ (Logic.ifElse (Logic.not (Lists.null (var "tyapps")))
+          ("rts" <<~ (Eithers.mapList (lambda "jt" $ JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt" @@ var "cx") (var "tyapps")) $
             right (just (JavaDsl.typeArgumentsOrDiamondArguments
               (Lists.map (lambda "rt" $ JavaDsl.typeArgumentReference (var "rt")) (var "rts")))))
           -- tyapps is empty: try to extract type args from annotation
           ("combinedAnns" <~ Lists.foldl (lambda "acc" $ lambda "m" $ Maps.union (var "acc") (var "m")) Maps.empty (var "anns") $
-           "mtyp" <<= (getTypeE (var "cx") (var "g") (var "combinedAnns")) $
+           "mtyp" <<~ (getTypeE (var "cx") (var "g") (var "combinedAnns")) $
            Maybes.cases (var "mtyp")
              (right nothing)
              (lambda "annTyp" $
                "typeArgs" <~ (extractTypeApplicationArgs @@ (Rewriting.deannotateType @@ var "annTyp")) $
                Logic.ifElse (Lists.null (var "typeArgs"))
                  (right nothing)
-                 ("jTypeArgs" <<= (Eithers.mapList (lambda "t" $
-                   "jt" <<= (encodeType @@ var "aliases" @@ Sets.empty @@ var "t" @@ var "cx" @@ var "g") $
+                 ("jTypeArgs" <<~ (Eithers.mapList (lambda "t" $
+                   "jt" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "t" @@ var "cx" @@ var "g") $
                    JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt" @@ var "cx") (var "typeArgs")) $
                   right (just (JavaDsl.typeArgumentsOrDiamondArguments
                     (Lists.map (lambda "rt" $ JavaDsl.typeArgumentReference (var "rt")) (var "jTypeArgs")))))))) $
@@ -3719,9 +3719,9 @@ encodeTermInternal = def "encodeTermInternal" $
       -- TermSet: Stream.of(...).collect(Collectors.toSet()) or Set.of()
       _Term_set>>: lambda "s" $
         "slist" <~ Sets.toList (var "s") $
-        "jels" <<= (Eithers.mapList (var "encode") (var "slist")) $
+        "jels" <<~ (Eithers.mapList (var "encode") (var "slist")) $
         Logic.ifElse (Sets.null (var "s"))
-          ("targs" <<= (takeTypeArgs @@ string "set" @@ int32 1 @@ var "tyapps" @@ var "cx" @@ var "g") $
+          ("targs" <<~ (takeTypeArgs @@ string "set" @@ int32 1 @@ var "tyapps" @@ var "cx" @@ var "g") $
             right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
               (JavaUtilsSource.methodInvocationStaticWithTypeArgs
                 @@ JavaDsl.identifier (string "java.util.Set")
@@ -3745,7 +3745,7 @@ encodeTermInternal = def "encodeTermInternal" $
       _Term_typeLambda>>: lambda "tl" $
         withTypeLambda @@ var "env" @@ var "tl" @@ (lambda "env2" $
           "combinedAnns" <~ Lists.foldl (lambda "acc" $ lambda "m" $ Maps.union (var "acc") (var "m")) Maps.empty (var "anns") $
-          "mtyp" <<= (getTypeE (var "cx") (var "g") (var "combinedAnns")) $
+          "mtyp" <<~ (getTypeE (var "cx") (var "g") (var "combinedAnns")) $
           "annotatedBody" <~ (Maybes.cases (var "mtyp")
             (Core.typeLambdaBody (var "tl"))
             (lambda "t" $ cases _Type (var "t") (Just $ Core.typeLambdaBody (var "tl")) [
@@ -3763,10 +3763,10 @@ encodeTermInternal = def "encodeTermInternal" $
         "injFieldTerm" <~ Core.fieldTerm (var "injField") $
         "typeId" <~ JavaDsl.unIdentifier (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ var "injTypeName") $
         "consId" <~ JavaDsl.identifier (Strings.cat (list [var "typeId", string ".", JavaUtilsSource.sanitizeJavaName @@ (Formatting.capitalize @@ (unwrap _Name @@ var "injFieldName"))])) $
-        "fieldIsUnit" <<= (isFieldUnitType @@ var "injTypeName" @@ var "injFieldName" @@ var "cx" @@ var "g") $
-        "args" <<= (Logic.ifElse (Logic.or (Schemas.isUnitTerm @@ (Rewriting.deannotateTerm @@ var "injFieldTerm")) (var "fieldIsUnit"))
+        "fieldIsUnit" <<~ (isFieldUnitType @@ var "injTypeName" @@ var "injFieldName" @@ var "cx" @@ var "g") $
+        "args" <<~ (Logic.ifElse (Logic.or (Schemas.isUnitTerm @@ (Rewriting.deannotateTerm @@ var "injFieldTerm")) (var "fieldIsUnit"))
           (right (list ([] :: [TTerm Java.Expression])))
-          ("ex" <<= (var "encode" @@ var "injFieldTerm") $
+          ("ex" <<~ (var "encode" @@ var "injFieldTerm") $
             right (list [var "ex"]))) $
         right (JavaUtilsSource.javaConstructorCall
           @@ (JavaUtilsSource.javaConstructorName @@ var "consId" @@ nothing)
@@ -3782,7 +3782,7 @@ encodeTermInternal = def "encodeTermInternal" $
 
       -- TermWrap: new WrapperType(arg)
       _Term_wrap>>: lambda "wt" $
-        "jarg" <<= (var "encode" @@ Core.wrappedTermBody (var "wt")) $
+        "jarg" <<~ (var "encode" @@ Core.wrappedTermBody (var "wt")) $
         right (JavaUtilsSource.javaConstructorCall
           @@ (JavaUtilsSource.javaConstructorName @@ (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ Core.wrappedTermTypeName (var "wt")) @@ nothing)
           @@ list [var "jarg"] @@ nothing),
@@ -3791,10 +3791,10 @@ encodeTermInternal = def "encodeTermInternal" $
       _Term_typeApplication>>: lambda "ta" $
         "atyp" <~ Core.typeApplicationTermType (var "ta") $
         "body" <~ Core.typeApplicationTermBody (var "ta") $
-        "jatyp" <<= (encodeType @@ var "aliases" @@ Sets.empty @@ var "atyp" @@ var "cx" @@ var "g") $
+        "jatyp" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "atyp" @@ var "cx" @@ var "g") $
         "combinedAnns" <~ Lists.foldl (lambda "acc" $ lambda "m" $ Maps.union (var "acc") (var "m")) Maps.empty (var "anns") $
-        "mtyp" <<= (getTypeE (var "cx") (var "g") (var "combinedAnns")) $
-        "typ" <<= (Maybes.cases (var "mtyp")
+        "mtyp" <<~ (getTypeE (var "cx") (var "g") (var "combinedAnns")) $
+        "typ" <<~ (Maybes.cases (var "mtyp")
           (CoderUtils.typeOfTerm @@ var "cx" @@ var "g" @@ var "term")
           (lambda "t" $ right (var "t"))) $
         -- Collect all nested type applications (preserving annotations)
@@ -3802,7 +3802,7 @@ encodeTermInternal = def "encodeTermInternal" $
         "innermostBody0" <~ Pairs.first (var "collected0") $
         "allTypeArgs0" <~ Pairs.second (var "collected0") $
         -- Correct the type for pair terms
-        "correctedTyp" <<= (correctCastType @@ var "innermostBody0" @@ var "allTypeArgs0" @@ var "typ" @@ var "cx" @@ var "g") $
+        "correctedTyp" <<~ (correctCastType @@ var "innermostBody0" @@ var "allTypeArgs0" @@ var "typ" @@ var "cx" @@ var "g") $
         -- Collect all nested type applications (stripping annotations)
         "collected" <~ (collectTypeApps @@ var "body" @@ list [var "atyp"]) $
         "innermostBody" <~ Pairs.first (var "collected") $
@@ -3812,7 +3812,7 @@ encodeTermInternal = def "encodeTermInternal" $
           (Just $ typeAppFallbackCast @@ var "env" @@ var "aliases" @@ var "anns" @@ var "tyapps"
             @@ var "jatyp" @@ var "body" @@ var "correctedTyp" @@ var "cx" @@ var "g") [
           _Term_variable>>: lambda "varName" $
-            "cls" <<= (classifyDataReference @@ var "varName" @@ var "cx" @@ var "g") $
+            "cls" <<~ (classifyDataReference @@ var "varName" @@ var "cx" @@ var "g") $
             typeAppNullaryOrHoisted @@ var "env" @@ var "aliases" @@ var "anns" @@ var "tyapps"
               @@ var "jatyp" @@ var "body" @@ var "correctedTyp" @@ var "varName"
               @@ var "cls" @@ var "allTypeArgs" @@ var "cx" @@ var "g"]]
@@ -3831,8 +3831,8 @@ annotateLambdaArgs = def "annotateLambdaArgs" $
     Logic.ifElse (Lists.null (var "tApps"))
       (right (var "argTerms"))
       -- Look up the type scheme from either elements or primitives
-      ("mts" <<= (
-        "mel" <<= right (Lexical.dereferenceElement @@ var "g" @@ var "cname") $
+      ("mts" <<~ (
+        "mel" <<~ right (Lexical.dereferenceElement @@ var "g" @@ var "cname") $
         Maybes.cases (var "mel")
           (right (Maybes.map
               (lambda "prim" $ Graph.primitiveType (var "prim"))
@@ -3883,8 +3883,8 @@ encodeApplication = def "encodeApplication" $
     "args" <~ Pairs.first (Pairs.second (var "gathered")) $
     "typeApps" <~ Pairs.second (Pairs.second (var "gathered")) $
     -- Get the function's arity from its type
-    "mfunTyp" <<= (getTypeE (var "cx") (var "g") (Annotations.termAnnotationInternal @@ var "fun")) $
-    "funTyp" <<= (Maybes.cases (var "mfunTyp")
+    "mfunTyp" <<~ (getTypeE (var "cx") (var "g") (Annotations.termAnnotationInternal @@ var "fun")) $
+    "funTyp" <<~ (Maybes.cases (var "mfunTyp")
       (CoderUtils.typeOfTerm @@ var "cx" @@ var "g" @@ var "fun")
       (lambda "t" $ right (var "t"))) $
     "arity" <~ (Arity.typeArity @@ var "funTyp") $
@@ -3898,7 +3898,7 @@ encodeApplication = def "encodeApplication" $
           _Function_primitive>>: lambda "n" $ just (var "n")],
       _Term_variable>>: lambda "n" $ just (var "n")]) $
     -- Annotate lambda args if we have a callee name
-    "annotatedArgs" <<= (Maybes.cases (var "calleeName")
+    "annotatedArgs" <<~ (Maybes.cases (var "calleeName")
       (right (var "args"))
       (lambda "cname" $ annotateLambdaArgs @@ var "cname" @@ var "typeApps" @@ var "args" @@ var "cx" @@ var "g")) $
     -- Dispatch based on the deannotated function form
@@ -3912,9 +3912,9 @@ encodeApplication = def "encodeApplication" $
           _Function_primitive>>: lambda "name" $
             "hargs" <~ Lists.take (var "arity") (var "annotatedArgs") $
             "rargs" <~ Lists.drop (var "arity") (var "annotatedArgs") $
-            "initialCall" <<= (functionCall @@ var "env" @@ true @@ var "name" @@ var "hargs" @@ (list ([] :: [TTerm Type])) @@ var "cx" @@ var "g") $
+            "initialCall" <<~ (functionCall @@ var "env" @@ true @@ var "name" @@ var "hargs" @@ (list ([] :: [TTerm Type])) @@ var "cx" @@ var "g") $
             Eithers.foldl (lambda "acc" $ lambda "h" $
-              "jarg" <<= (encodeTerm @@ var "env" @@ var "h" @@ var "cx" @@ var "g") $
+              "jarg" <<~ (encodeTerm @@ var "env" @@ var "h" @@ var "cx" @@ var "g") $
               right (applyJavaArg @@ var "acc" @@ var "jarg"))
               (var "initialCall") (var "rargs")],
       _Term_variable>>: lambda "name" $
@@ -3926,7 +3926,7 @@ encodeApplication = def "encodeApplication" $
           (encodeApplication_fallback @@ var "env" @@ var "aliases" @@ var "g" @@ var "typeApps"
             @@ (Core.applicationFunction (var "app")) @@ (Core.applicationArgument (var "app")) @@ var "cx" @@ var "g")
           -- Normal variable application
-          ("symClass" <<= (classifyDataReference @@ var "name" @@ var "cx" @@ var "g") $
+          ("symClass" <<~ (classifyDataReference @@ var "name" @@ var "cx" @@ var "g") $
             "methodArity" <~ (cases JavaHelpers._JavaSymbolClass (var "symClass")
               (Just $ var "arity") [
               JavaHelpers._JavaSymbolClass_hoistedLambda>>: lambda "n" $ var "n"]) $
@@ -3944,14 +3944,14 @@ encodeApplication = def "encodeApplication" $
                     (var "typeApps")
                     (list ([] :: [TTerm Type]))))) $
             -- Correct the type application ordering
-            "safeTypeApps" <<= (Logic.ifElse (Lists.null (var "filteredTypeApps"))
+            "safeTypeApps" <<~ (Logic.ifElse (Lists.null (var "filteredTypeApps"))
               (right (list ([] :: [TTerm Type])))
               (correctTypeApps @@ var "g" @@ var "name" @@ var "hargs" @@ var "filteredTypeApps" @@ var "cx" @@ var "g")) $
             -- Filter phantom type args
-            "finalTypeApps" <<= (filterPhantomTypeArgs @@ var "name" @@ var "safeTypeApps" @@ var "cx" @@ var "g") $
-            "initialCall" <<= (functionCall @@ var "env" @@ false @@ var "name" @@ var "hargs" @@ var "finalTypeApps" @@ var "cx" @@ var "g") $
+            "finalTypeApps" <<~ (filterPhantomTypeArgs @@ var "name" @@ var "safeTypeApps" @@ var "cx" @@ var "g") $
+            "initialCall" <<~ (functionCall @@ var "env" @@ false @@ var "name" @@ var "hargs" @@ var "finalTypeApps" @@ var "cx" @@ var "g") $
             Eithers.foldl (lambda "acc" $ lambda "h" $
-              "jarg" <<= (encodeTerm @@ var "env" @@ var "h" @@ var "cx" @@ var "g") $
+              "jarg" <<~ (encodeTerm @@ var "env" @@ var "h" @@ var "cx" @@ var "g") $
               right (applyJavaArg @@ var "acc" @@ var "jarg"))
               (var "initialCall") (var "rargs"))]
 
@@ -3960,15 +3960,15 @@ encodeApplication_fallback :: TBinding (JavaHelpers.JavaEnvironment -> JavaHelpe
 encodeApplication_fallback = def "encodeApplication_fallback" $
   lambda "env" $ lambda "aliases" $ lambda "gr" $ lambda "typeApps" $ lambda "lhs" $ lambda "rhs" $
     "cx" ~> "g" ~>
-    ("mt" <<= (getTypeE (var "cx") (var "g") (Annotations.termAnnotationInternal @@ var "lhs")) $
-    "t" <<= (Maybes.cases (var "mt")
+    ("mt" <<~ (getTypeE (var "cx") (var "g") (Annotations.termAnnotationInternal @@ var "lhs")) $
+    "t" <<~ (Maybes.cases (var "mt")
       (CoderUtils.typeOfTerm @@ var "cx" @@ var "g" @@ var "lhs")
       (lambda "typ" $ right (var "typ"))) $
     cases _Type (Rewriting.deannotateTypeParameters @@ (Rewriting.deannotateType @@ var "t"))
       (Just $
         -- Non-function type: encode as generic .apply() call
-        "jfun" <<= (encodeTerm @@ var "env" @@ var "lhs" @@ var "cx" @@ var "g") $
-        "jarg" <<= (encodeTerm @@ var "env" @@ var "rhs" @@ var "cx" @@ var "g") $
+        "jfun" <<~ (encodeTerm @@ var "env" @@ var "lhs" @@ var "cx" @@ var "g") $
+        "jarg" <<~ (encodeTerm @@ var "env" @@ var "rhs" @@ var "cx" @@ var "g") $
         right (applyJavaArg @@ var "jfun" @@ var "jarg")) [
       _Type_function>>: lambda "ft" $
         "dom" <~ Core.functionTypeDomain (var "ft") $
@@ -3976,25 +3976,25 @@ encodeApplication_fallback = def "encodeApplication_fallback" $
         cases _Term (Rewriting.deannotateTerm @@ var "lhs")
           (Just $
             -- defaultExpression: apply using .apply()
-            "jfun" <<= (encodeTerm @@ var "env" @@ var "lhs" @@ var "cx" @@ var "g") $
-            "jarg" <<= (encodeTerm @@ var "env" @@ var "rhs" @@ var "cx" @@ var "g") $
+            "jfun" <<~ (encodeTerm @@ var "env" @@ var "lhs" @@ var "cx" @@ var "g") $
+            "jarg" <<~ (encodeTerm @@ var "env" @@ var "rhs" @@ var "cx" @@ var "g") $
             right (applyJavaArg @@ var "jfun" @@ var "jarg")) [
           _Term_function>>: lambda "f" $
             cases _Function (var "f")
               (Just $
                 -- defaultExpression
-                "jfun" <<= (encodeTerm @@ var "env" @@ var "lhs" @@ var "cx" @@ var "g") $
-                "jarg" <<= (encodeTerm @@ var "env" @@ var "rhs" @@ var "cx" @@ var "g") $
+                "jfun" <<~ (encodeTerm @@ var "env" @@ var "lhs" @@ var "cx" @@ var "g") $
+                "jarg" <<~ (encodeTerm @@ var "env" @@ var "rhs" @@ var "cx" @@ var "g") $
                 right (applyJavaArg @@ var "jfun" @@ var "jarg")) [
               _Function_elimination>>: lambda "e" $
-                "jarg" <<= (encodeTerm @@ var "env" @@ var "rhs" @@ var "cx" @@ var "g") $
+                "jarg" <<~ (encodeTerm @@ var "env" @@ var "rhs" @@ var "cx" @@ var "g") $
                 -- If dom has no type args, try to get a richer type from the argument
-                "enrichedDom" <<= (Logic.ifElse
+                "enrichedDom" <<~ (Logic.ifElse
                   (Logic.not (Lists.null (javaTypeArgumentsForType @@ var "dom")))
                   (right (var "dom"))
-                  ("mrt" <<= (getTypeE (var "cx") (var "g") (Annotations.termAnnotationInternal @@ var "rhs")) $
+                  ("mrt" <<~ (getTypeE (var "cx") (var "g") (Annotations.termAnnotationInternal @@ var "rhs")) $
                     Maybes.cases (var "mrt")
-                      ("rt" <<= (CoderUtils.typeOfTerm @@ var "cx" @@ var "g" @@ var "rhs") $
+                      ("rt" <<~ (CoderUtils.typeOfTerm @@ var "cx" @@ var "g" @@ var "rhs") $
                         right (Logic.ifElse (Logic.not (Lists.null (javaTypeArgumentsForType @@ var "rt")))
                           (var "rt")
                           (var "dom")))
@@ -4058,8 +4058,8 @@ domTypeArgs = def "domTypeArgs" $
     "args" <~ (extractTypeApplicationArgs @@ (Rewriting.deannotateType @@ var "d")) $
     Logic.ifElse (Logic.not (Lists.null (var "args")))
       (Eithers.mapList (lambda "t" $
-        "jt" <<= (encodeType @@ var "aliases" @@ Sets.empty @@ var "t" @@ var "cx" @@ var "g") $
-        "rt" <<= (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt" @@ var "cx") $
+        "jt" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "t" @@ var "cx" @@ var "g") $
+        "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt" @@ var "cx") $
         right (JavaDsl.typeArgumentReference (var "rt")))
         (var "args"))
       (right (javaTypeArgumentsForType @@ var "d"))
@@ -4074,15 +4074,15 @@ otherwiseBranch = def "otherwiseBranch" $
     "anns" <~ list [asTerm JavaUtilsSource.overrideAnnotation] $
     "param" <~ (JavaUtilsSource.javaTypeToJavaFormalParameter @@ var "jdom" @@ wrap _Name (string "instance")) $
     "result" <~ (JavaDsl.resultType (JavaDsl.unannType (var "jcod"))) $
-    "fs" <<= (analyzeJavaFunction @@ var "env" @@ var "d" @@ var "cx" @@ var "g") $
+    "fs" <<~ (analyzeJavaFunction @@ var "env" @@ var "d" @@ var "cx" @@ var "g") $
     "bindings" <~ (project _FunctionStructure _FunctionStructure_bindings @@ var "fs") $
     "rawBody" <~ (project _FunctionStructure _FunctionStructure_body @@ var "fs") $
     "innerBody" <~ (annotateBodyWithCod @@ var "cod" @@ var "rawBody") $
     "env2" <~ (project _FunctionStructure _FunctionStructure_environment @@ var "fs") $
-    "bindResult" <<= (bindingsToStatements @@ var "env2" @@ var "bindings" @@ var "cx" @@ var "g") $
+    "bindResult" <<~ (bindingsToStatements @@ var "env2" @@ var "bindings" @@ var "cx" @@ var "g") $
     "bindingStmts" <~ Pairs.first (var "bindResult") $
     "env3" <~ Pairs.second (var "bindResult") $
-    "jret" <<= (encodeTerm @@ var "env3" @@ var "innerBody" @@ var "cx" @@ var "g") $
+    "jret" <<~ (encodeTerm @@ var "env3" @@ var "innerBody" @@ var "cx" @@ var "g") $
     "returnStmt" <~ (JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "jret"))) $
     "allStmts" <~ Lists.concat2 (var "bindingStmts") (list [var "returnStmt"]) $
     right (noComment @@ (JavaUtilsSource.methodDeclaration @@ var "mods" @@ list ([] :: [TTerm Java.TypeParameter]) @@ var "anns"
@@ -4110,14 +4110,14 @@ visitBranch = def "visitBranch" $
               "lambdaParam" <~ Core.lambdaParameter (var "lam") $
               "body" <~ Core.lambdaBody (var "lam") $
               "env3" <~ (insertBranchVar @@ var "lambdaParam" @@ var "env2") $
-              "fs" <<= (analyzeJavaFunction @@ var "env3" @@ var "body" @@ var "cx" @@ var "g") $
+              "fs" <<~ (analyzeJavaFunction @@ var "env3" @@ var "body" @@ var "cx" @@ var "g") $
               "bindings" <~ (project _FunctionStructure _FunctionStructure_bindings @@ var "fs") $
               "innerBody" <~ (project _FunctionStructure _FunctionStructure_body @@ var "fs") $
               "env4" <~ (project _FunctionStructure _FunctionStructure_environment @@ var "fs") $
-              "bindResult" <<= (bindingsToStatements @@ var "env4" @@ var "bindings" @@ var "cx" @@ var "g") $
+              "bindResult" <<~ (bindingsToStatements @@ var "env4" @@ var "bindings" @@ var "cx" @@ var "g") $
               "bindingStmts" <~ Pairs.first (var "bindResult") $
               "env5" <~ Pairs.second (var "bindResult") $
-              "jret" <<= (encodeTerm @@ var "env5" @@ var "innerBody" @@ var "cx" @@ var "g") $
+              "jret" <<~ (encodeTerm @@ var "env5" @@ var "innerBody" @@ var "cx" @@ var "g") $
               "param" <~ (JavaUtilsSource.javaTypeToJavaFormalParameter @@ var "jdom" @@ var "lambdaParam") $
               "returnStmt" <~ (JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "jret"))) $
               "allStmts" <~ Lists.concat2 (var "bindingStmts") (list [var "returnStmt"]) $
@@ -4136,8 +4136,8 @@ encodeElimination = def "encodeElimination" $
       -- EliminationRecord: field projection
       _Elimination_record>>: lambda "proj" $
         "fname" <~ (Core.projectionField (var "proj")) $
-        "jdom0" <<= (encodeType @@ var "aliases" @@ Sets.empty @@ var "dom" @@ var "cx" @@ var "g") $
-        "jdomr" <<= (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jdom0" @@ var "cx") $
+        "jdom0" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "dom" @@ var "cx" @@ var "g") $
+        "jdomr" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jdom0" @@ var "cx") $
         Maybes.cases (var "marg")
           -- No arg: generate lambda for projection
           ("projVar" <~ wrap _Name (string "projected") $
@@ -4172,16 +4172,16 @@ encodeElimination = def "encodeElimination" $
           (lambda "jarg" $
             "prim" <~ (JavaUtilsSource.javaExpressionToJavaPrimary @@ var "jarg") $
             "consId" <~ (innerClassRef @@ var "aliases" @@ var "tname" @@ asTerm JavaNamesSource.partialVisitorName) $
-            "jcod" <<= (encodeType @@ var "aliases" @@ Sets.empty @@ var "cod" @@ var "cx" @@ var "g") $
-            "rt" <<= (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jcod" @@ var "cx") $
-            "domArgs" <<= (domTypeArgs @@ var "aliases" @@ var "dom" @@ var "cx" @@ var "g") $
+            "jcod" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "cod" @@ var "cx" @@ var "g") $
+            "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jcod" @@ var "cx") $
+            "domArgs" <<~ (domTypeArgs @@ var "aliases" @@ var "dom" @@ var "cx" @@ var "g") $
             "targs" <~ (typeArgsOrDiamond @@ (Lists.concat2 (var "domArgs") (list [JavaDsl.typeArgumentReference (var "rt")]))) $
-            "otherwiseBranches" <<= (Maybes.cases (var "def_")
+            "otherwiseBranches" <<~ (Maybes.cases (var "def_")
               (right (list ([] :: [TTerm Java.ClassBodyDeclarationWithComments])))
               (lambda "d" $
-                "b" <<= (otherwiseBranch @@ var "env" @@ var "aliases" @@ var "dom" @@ var "cod" @@ var "tname" @@ var "jcod" @@ var "domArgs" @@ var "d" @@ var "cx" @@ var "g") $
+                "b" <<~ (otherwiseBranch @@ var "env" @@ var "aliases" @@ var "dom" @@ var "cod" @@ var "tname" @@ var "jcod" @@ var "domArgs" @@ var "d" @@ var "cx" @@ var "g") $
                 right (list [var "b"]))) $
-            "visitBranches" <<= (Eithers.mapList (lambda "f" $ visitBranch @@ var "env" @@ var "aliases" @@ var "dom" @@ var "tname" @@ var "jcod" @@ var "domArgs" @@ var "f" @@ var "cx" @@ var "g") (var "fields")) $
+            "visitBranches" <<~ (Eithers.mapList (lambda "f" $ visitBranch @@ var "env" @@ var "aliases" @@ var "dom" @@ var "tname" @@ var "jcod" @@ var "domArgs" @@ var "f" @@ var "cx" @@ var "g") (var "fields")) $
             "body" <~ wrap Java._ClassBody (Lists.concat2 (var "otherwiseBranches") (var "visitBranches")) $
             "visitor" <~ (JavaUtilsSource.javaConstructorCall @@ (JavaUtilsSource.javaConstructorName @@ var "consId" @@ just (var "targs")) @@ list ([] :: [TTerm Java.Expression]) @@ just (var "body")) $
             right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
@@ -4235,14 +4235,14 @@ encodeFunction = def "encodeFunction" $
           cases _Term (Rewriting.deannotateTerm @@ var "body")
             (Just $
               -- Body is not a lambda: analyze and encode normally
-              "fs" <<= (analyzeJavaFunction @@ var "env2" @@ var "body" @@ var "cx" @@ var "g") $
+              "fs" <<~ (analyzeJavaFunction @@ var "env2" @@ var "body" @@ var "cx" @@ var "g") $
               "bindings" <~ (project _FunctionStructure _FunctionStructure_bindings @@ var "fs") $
               "innerBody" <~ (project _FunctionStructure _FunctionStructure_body @@ var "fs") $
               "env3" <~ (project _FunctionStructure _FunctionStructure_environment @@ var "fs") $
-              "bindResult" <<= (bindingsToStatements @@ var "env3" @@ var "bindings" @@ var "cx" @@ var "g") $
+              "bindResult" <<~ (bindingsToStatements @@ var "env3" @@ var "bindings" @@ var "cx" @@ var "g") $
               "bindingStmts" <~ Pairs.first (var "bindResult") $
               "env4" <~ Pairs.second (var "bindResult") $
-              "jbody" <<= (encodeTerm @@ var "env4" @@ var "innerBody" @@ var "cx" @@ var "g") $
+              "jbody" <<~ (encodeTerm @@ var "env4" @@ var "innerBody" @@ var "cx" @@ var "g") $
               "lam1" <~ (Logic.ifElse (Lists.null (var "bindings"))
                 (JavaUtilsSource.javaLambda @@ var "lambdaVar" @@ var "jbody")
                 ("returnSt" <~ (JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "jbody"))) $
@@ -4257,14 +4257,14 @@ encodeFunction = def "encodeFunction" $
               cases _Function (var "f2")
                 (Just $
                   -- Not a lambda — fall through to the default case above
-                  "fs" <<= (analyzeJavaFunction @@ var "env2" @@ var "body" @@ var "cx" @@ var "g") $
+                  "fs" <<~ (analyzeJavaFunction @@ var "env2" @@ var "body" @@ var "cx" @@ var "g") $
                   "bindings" <~ (project _FunctionStructure _FunctionStructure_bindings @@ var "fs") $
                   "innerBody" <~ (project _FunctionStructure _FunctionStructure_body @@ var "fs") $
                   "env3" <~ (project _FunctionStructure _FunctionStructure_environment @@ var "fs") $
-                  "bindResult" <<= (bindingsToStatements @@ var "env3" @@ var "bindings" @@ var "cx" @@ var "g") $
+                  "bindResult" <<~ (bindingsToStatements @@ var "env3" @@ var "bindings" @@ var "cx" @@ var "g") $
                   "bindingStmts" <~ Pairs.first (var "bindResult") $
                   "env4" <~ Pairs.second (var "bindResult") $
-                  "jbody" <<= (encodeTerm @@ var "env4" @@ var "innerBody" @@ var "cx" @@ var "g") $
+                  "jbody" <<~ (encodeTerm @@ var "env4" @@ var "innerBody" @@ var "cx" @@ var "g") $
                   "lam1" <~ (Logic.ifElse (Lists.null (var "bindings"))
                     (JavaUtilsSource.javaLambda @@ var "lambdaVar" @@ var "jbody")
                     ("returnSt" <~ (JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "jbody"))) $
@@ -4281,7 +4281,7 @@ encodeFunction = def "encodeFunction" $
                     _Type_function>>: lambda "ft" $
                       "dom2" <~ Core.functionTypeDomain (var "ft") $
                       "cod2" <~ Core.functionTypeCodomain (var "ft") $
-                      "innerJavaLambda" <<= (encodeFunction @@ var "env2" @@ var "dom2" @@ var "cod2"
+                      "innerJavaLambda" <<~ (encodeFunction @@ var "env2" @@ var "dom2" @@ var "cod2"
                         @@ (inject _Function _Function_lambda (var "innerLam")) @@ var "cx" @@ var "g") $
                       "lam1" <~ (JavaUtilsSource.javaLambda @@ var "lambdaVar" @@ var "innerJavaLambda") $
                       applyCastIfSafe @@ var "aliases" @@ (inject _Type _Type_function (record _FunctionType [
@@ -4313,10 +4313,10 @@ encodeFunction = def "encodeFunction" $
             "call" <~ (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
               (JavaUtilsSource.methodInvocationStatic @@ var "classId" @@ JavaDsl.identifier (asTerm JavaNamesSource.applyMethodName) @@ var "paramExprs")) $
             "curried" <~ (buildCurriedLambda @@ var "paramNames" @@ var "call") $
-            "jtype" <<= (encodeType @@ var "aliases" @@ Sets.empty @@ (inject _Type _Type_function (record _FunctionType [
+            "jtype" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ (inject _Type _Type_function (record _FunctionType [
               _FunctionType_domain>>: var "dom",
               _FunctionType_codomain>>: var "cod"])) @@ var "cx" @@ var "g") $
-            "rt" <<= (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jtype" @@ var "cx") $
+            "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jtype" @@ var "cx") $
             right (JavaUtilsSource.javaCastExpressionToJavaExpression @@
               (JavaUtilsSource.javaCastExpression @@ var "rt" @@ (JavaUtilsSource.javaExpressionToJavaUnaryExpression @@ var "curried"))))]
 
@@ -4329,13 +4329,13 @@ functionCall = def "functionCall" $
     "isLambdaBound" <~ (isLambdaBoundIn @@ var "name"
       @@ (project JavaHelpers._Aliases JavaHelpers._Aliases_lambdaVars @@ var "aliases")) $
     -- Encode arguments and generate method invocation
-    ("jargs0" <<= (Eithers.mapList (lambda "arg" $ encodeTerm @@ var "env" @@ var "arg" @@ var "cx" @@ var "g") (var "args")) $
+    ("jargs0" <<~ (Eithers.mapList (lambda "arg" $ encodeTerm @@ var "env" @@ var "arg" @@ var "cx" @@ var "g") (var "args")) $
         "wrapResult" <~ (wrapLazyArguments @@ var "name" @@ var "jargs0") $
         "jargs" <~ Pairs.first (var "wrapResult") $
         "mMethodOverride" <~ Pairs.second (var "wrapResult") $
         Logic.ifElse (Logic.or (isLocalVariable @@ var "name") (var "isLambdaBound"))
           -- Local/lambda-bound: apply arguments one at a time via .apply()
-          ("baseExpr" <<= (encodeVariable @@ var "env" @@ var "name" @@ var "cx" @@ var "g") $
+          ("baseExpr" <<~ (encodeVariable @@ var "env" @@ var "name" @@ var "cx" @@ var "g") $
             right (Lists.foldl (lambda "acc" $ lambda "jarg" $ applyJavaArg @@ var "acc" @@ var "jarg")
               (var "baseExpr") (var "jargs")))
           -- Module-level functions: call with all args directly
@@ -4372,9 +4372,9 @@ functionCall = def "functionCall" $
                         (JavaDsl.unIdentifier (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ (Names.unqualifyName @@ (Module.qualifiedName (just (var "ns_")) (Formatting.capitalize @@ var "localName")))))
                         (Strings.cat2 (string ".") (asTerm JavaNamesSource.applyMethodName)))))
                       (JavaDsl.identifier (JavaUtilsSource.sanitizeJavaName @@ var "localName"))) $
-                    "jTypeArgs" <<= (Eithers.mapList (lambda "t" $
-                      "jt" <<= (encodeType @@ var "aliases" @@ Sets.empty @@ var "t" @@ var "cx" @@ var "g") $
-                      "rt" <<= (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt" @@ var "cx") $
+                    "jTypeArgs" <<~ (Eithers.mapList (lambda "t" $
+                      "jt" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "t" @@ var "cx" @@ var "g") $
+                      "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt" @@ var "cx") $
                       right (JavaDsl.typeArgumentReference (var "rt")))
                       (var "typeApps")) $
                     right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
@@ -4388,14 +4388,14 @@ toDeclInit = def "toDeclInit" $
     Logic.ifElse (Sets.member (var "name") (var "recursiveVars"))
       ("binding" <~ Lists.head (Lists.filter (lambda "b" $ Equality.equal (Core.bindingName (var "b")) (var "name")) (var "flatBindings")) $
         "value" <~ Core.bindingTerm (var "binding") $
-        "typ" <<= Maybes.cases (Core.bindingType (var "binding"))
+        "typ" <<~ Maybes.cases (Core.bindingType (var "binding"))
           (CoderUtils.typeOfTerm @@ var "cx" @@ var "gExt" @@ var "value")
           (lambda "ts" $ right (Core.typeSchemeType (var "ts"))) $
-        "jtype" <<= (encodeType @@ var "aliasesExt" @@ Sets.empty @@ var "typ" @@ var "cx" @@ var "g") $
+        "jtype" <<~ (encodeType @@ var "aliasesExt" @@ Sets.empty @@ var "typ" @@ var "cx" @@ var "g") $
         "id" <~ (JavaUtilsSource.variableToJavaIdentifier @@ var "name") $
         "arid" <~ (JavaDsl.identifier (string "java.util.concurrent.atomic.AtomicReference")) $
         "aid" <~ (JavaDsl.annotatedIdentifier (list ([] :: [TTerm Java.Annotation])) (var "arid")) $
-        "rt" <<= (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jtype" @@ var "cx") $
+        "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jtype" @@ var "cx") $
         "targs" <~ (typeArgsOrDiamond @@ list [JavaDsl.typeArgumentReference (var "rt")]) $
         "ci" <~ record Java._ClassOrInterfaceTypeToInstantiate [
           Java._ClassOrInterfaceTypeToInstantiate_identifiers>>: list [var "aid"],
@@ -4413,15 +4413,15 @@ toDeclStatement = def "toDeclStatement" $
     "cx" ~> "g" ~>
     "binding" <~ Lists.head (Lists.filter (lambda "b" $ Equality.equal (Core.bindingName (var "b")) (var "name")) (var "flatBindings")) $
     "value" <~ Core.bindingTerm (var "binding") $
-    "typ" <<= Maybes.cases (Core.bindingType (var "binding"))
+    "typ" <<~ Maybes.cases (Core.bindingType (var "binding"))
       (CoderUtils.typeOfTerm @@ var "cx" @@ var "gExt" @@ var "value")
       (lambda "ts" $ right (Core.typeSchemeType (var "ts"))) $
-    "jtype" <<= (encodeType @@ var "aliasesExt" @@ Sets.empty @@ var "typ" @@ var "cx" @@ var "g") $
+    "jtype" <<~ (encodeType @@ var "aliasesExt" @@ Sets.empty @@ var "typ" @@ var "cx" @@ var "g") $
     "id" <~ (JavaUtilsSource.variableToJavaIdentifier @@ var "name") $
     "annotatedValue" <~ (Annotations.setTermAnnotation @@ asTerm Constants.key_type
       @@ just (encodeTypeAsTerm @@ var "typ")
       @@ var "value") $
-    "rhs" <<= (encodeTerm @@ var "envExt" @@ var "annotatedValue" @@ var "cx" @@ var "g") $
+    "rhs" <<~ (encodeTerm @@ var "envExt" @@ var "annotatedValue" @@ var "cx" @@ var "g") $
     Logic.ifElse (Sets.member (var "name") (var "recursiveVars"))
       -- Recursive: call .set() on AtomicReference
       (right (JavaDsl.blockStatementStatement (JavaUtilsSource.javaMethodInvocationToJavaStatement @@
@@ -4430,7 +4430,7 @@ toDeclStatement = def "toDeclStatement" $
           @@ JavaDsl.identifier (asTerm JavaNamesSource.setMethodName) @@ list [var "rhs"]))))
       (Logic.ifElse (Sets.member (var "name") (var "thunkedVars"))
         -- Thunked: wrap in Lazy<T>
-        ("rt" <<= (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jtype" @@ var "cx") $
+        ("rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jtype" @@ var "cx") $
           "lazyType" <~ (JavaUtilsSource.javaRefType @@ list [var "rt"] @@ asTerm JavaNamesSource.hydraUtilPackageName @@ string "Lazy") $
           "lambdaBody" <~ inject Java._LambdaBody Java._LambdaBody_expression (var "rhs") $
           "supplierLambda" <~ (JavaDsl.expressionLambda (JavaDsl.lambdaExpression
@@ -4535,11 +4535,11 @@ bindingsToStatements = def "bindingsToStatements" $
     -- Generate statements
     Logic.ifElse (Lists.null (var "bindings"))
       (right (pair (list ([] :: [TTerm Java.BlockStatement])) (var "envExtended")))
-      ("groups" <<= (Eithers.mapList
+      ("groups" <<~ (Eithers.mapList
         (lambda "names" $
           -- For each group: generate init statements (for recursive vars) and decl statements
-          "inits" <<= (Eithers.mapList (lambda "n" $ toDeclInit @@ var "aliasesExtended" @@ var "gExtended" @@ var "recursiveVars" @@ var "flatBindings" @@ var "n" @@ var "cx" @@ var "g") (var "names")) $
-          "decls" <<= (Eithers.mapList (lambda "n" $ toDeclStatement @@ var "envExtended" @@ var "aliasesExtended" @@ var "gExtended" @@ var "recursiveVars" @@ var "thunkedVars" @@ var "flatBindings" @@ var "n" @@ var "cx" @@ var "g") (var "names")) $
+          "inits" <<~ (Eithers.mapList (lambda "n" $ toDeclInit @@ var "aliasesExtended" @@ var "gExtended" @@ var "recursiveVars" @@ var "flatBindings" @@ var "n" @@ var "cx" @@ var "g") (var "names")) $
+          "decls" <<~ (Eithers.mapList (lambda "n" $ toDeclStatement @@ var "envExtended" @@ var "aliasesExtended" @@ var "gExtended" @@ var "recursiveVars" @@ var "thunkedVars" @@ var "flatBindings" @@ var "n" @@ var "cx" @@ var "g") (var "names")) $
           right (Lists.concat2 (Maybes.cat (var "inits")) (var "decls")))
         (var "sorted")) $
         right (pair (Lists.concat (var "groups")) (var "envExtended")))
@@ -4609,14 +4609,14 @@ declarationForUnionType = def "declarationForUnionType" $
   lambda "isSer" $ lambda "aliases" $ lambda "tparams" $ lambda "elName" $ lambda "fields" $
     "cx" ~> "g" ~>
     -- Generate variant subclasses
-    "variantClasses" <<= (Eithers.mapList (lambda "ft" $
+    "variantClasses" <<~ (Eithers.mapList (lambda "ft" $
       "fname" <~ (project _FieldType _FieldType_name @@ var "ft") $
       "ftype" <~ (project _FieldType _FieldType_type @@ var "ft") $
       "rfields" <~ Logic.ifElse (Schemas.isUnitType @@ (Rewriting.deannotateType @@ var "ftype"))
         (list ([] :: [TTerm FieldType]))
         (list [Core.fieldType (wrap _Name (string "value")) (Rewriting.deannotateType @@ var "ftype")]) $
       "varName" <~ (JavaUtilsSource.variantClassName @@ false @@ var "elName" @@ var "fname") $
-      "innerDecl" <<= (declarationForRecordType' @@ true @@ var "isSer" @@ var "aliases" @@ (list ([] :: [TTerm Java.TypeParameter]))
+      "innerDecl" <<~ (declarationForRecordType' @@ true @@ var "isSer" @@ var "aliases" @@ (list ([] :: [TTerm Java.TypeParameter]))
         @@ var "varName" @@ (Logic.ifElse (var "isSer") (just (var "elName")) nothing) @@ var "rfields" @@ var "cx" @@ var "g") $
       right (augmentVariantClass @@ var "aliases" @@ var "tparams" @@ var "elName" @@ var "innerDecl"))
       (var "fields")) $
@@ -4625,7 +4625,7 @@ declarationForUnionType = def "declarationForUnionType" $
       (lambda "vc" $ inject Java._ClassBodyDeclaration Java._ClassBodyDeclaration_classMember
         (inject Java._ClassMemberDeclaration Java._ClassMemberDeclaration_class (var "vc")))
       (var "variantClasses") $
-    "variantDecls'" <<= (Eithers.mapList
+    "variantDecls'" <<~ (Eithers.mapList
       (lambda "pair" $ addComment @@ (Pairs.first (var "pair")) @@ (Pairs.second (var "pair")) @@ var "cx" @@ var "g")
       (Lists.zip (var "variantDecls") (var "fields"))) $
     -- Build other declarations
@@ -4702,8 +4702,8 @@ declarationForUnionType = def "declarationForUnionType" $
         Java._NormalInterfaceDeclaration_extends>>: list [wrap Java._InterfaceType (var "visitorClassType")],
         Java._NormalInterfaceDeclaration_body>>: var "pvBody"])) $
     -- Build constant declarations
-    "tn0" <<= (constantDeclForTypeName @@ var "aliases" @@ var "elName" @@ var "cx" @@ var "g") $
-    "tn1" <<= (Eithers.mapList (lambda "ft" $ constantDeclForFieldType @@ var "aliases" @@ var "ft" @@ var "cx" @@ var "g") (var "fields")) $
+    "tn0" <<~ (constantDeclForTypeName @@ var "aliases" @@ var "elName" @@ var "cx" @@ var "g") $
+    "tn1" <<~ (Eithers.mapList (lambda "ft" $ constantDeclForFieldType @@ var "aliases" @@ var "ft" @@ var "cx" @@ var "g") (var "fields")) $
     "tn" <~ list [var "tn0"] `Lists.concat2` var "tn1" $
     "otherDecls" <~ Lists.map (lambda "d" $ noComment @@ var "d")
       (list [var "privateConst", var "acceptDecl", var "visitor", var "partialVisitor"]) $
@@ -4726,9 +4726,9 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
         (wrap Java._SingleTypeImportDeclaration
           (JavaUtilsSource.javaTypeName @@ (JavaDsl.identifier (string "java.io.Serializable"))))])
       (list ([] :: [TTerm Java.ImportDeclaration])) $
-    "decl" <<= (toClassDecl @@ false @@ var "serializable" @@ var "aliases"
+    "decl" <<~ (toClassDecl @@ false @@ var "serializable" @@ var "aliases"
       @@ (list ([] :: [TTerm Java.TypeParameter])) @@ var "name" @@ var "typ" @@ var "cx" @@ var "g") $
-    "comment" <<= (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ") $
+    "comment" <<~ (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ") $
     "tdecl" <~ record Java._TypeDeclarationWithComments [
       Java._TypeDeclarationWithComments_value>>: inject Java._TypeDeclaration Java._TypeDeclaration_class (var "decl"),
       Java._TypeDeclarationWithComments_comments>>: var "comment"] $
@@ -4791,9 +4791,9 @@ typeAppFallbackCast = def "typeAppFallbackCast" $
       "cx" ~> "g" ~>
       "annotatedBody" <~ (Annotations.setTermAnnotation @@ asTerm Constants.key_type
         @@ just (encodeTypeAsTerm @@ var "typ") @@ var "body") $
-      "jbody" <<= (encodeTermInternal @@ var "env" @@ var "anns" @@ (Lists.cons (var "jatyp") (var "tyapps")) @@ var "annotatedBody" @@ var "cx" @@ var "g") $
-      "jtype" <<= (encodeType @@ var "aliases" @@ Sets.empty @@ var "typ" @@ var "cx" @@ var "g") $
-      "rt" <<= (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jtype" @@ var "cx") $
+      "jbody" <<~ (encodeTermInternal @@ var "env" @@ var "anns" @@ (Lists.cons (var "jatyp") (var "tyapps")) @@ var "annotatedBody" @@ var "cx" @@ var "g") $
+      "jtype" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "typ" @@ var "cx" @@ var "g") $
+      "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jtype" @@ var "cx") $
       right (JavaUtilsSource.javaCastExpressionToJavaExpression @@
         (JavaUtilsSource.javaCastExpression @@ var "rt" @@ (JavaUtilsSource.javaExpressionToJavaUnaryExpression @@ var "jbody")))
 
@@ -4820,10 +4820,10 @@ typeAppNullaryOrHoisted = def "typeAppNullaryOrHoisted" $
                 "classId" <~ (JavaUtilsSource.nameToJavaName @@ var "aliases"
                   @@ (Names.unqualifyName @@ Module.qualifiedName (just (var "ns_")) (elementsClassName @@ var "ns_"))) $
                 "methodId" <~ JavaDsl.identifier (JavaUtilsSource.sanitizeJavaName @@ var "localName") $
-                "filteredTypeArgs" <<= (filterPhantomTypeArgs @@ var "varName" @@ var "allTypeArgs" @@ var "cx" @@ var "g") $
-                "jTypeArgs" <<= (Eithers.mapList (lambda "t" $
-                  "jt" <<= (encodeType @@ var "aliases" @@ Sets.empty @@ var "t" @@ var "cx" @@ var "g") $
-                  "rt" <<= (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt" @@ var "cx") $
+                "filteredTypeArgs" <<~ (filterPhantomTypeArgs @@ var "varName" @@ var "allTypeArgs" @@ var "cx" @@ var "g") $
+                "jTypeArgs" <<~ (Eithers.mapList (lambda "t" $
+                  "jt" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "t" @@ var "cx" @@ var "g") $
+                  "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt" @@ var "cx") $
                   right (inject Java._TypeArgument Java._TypeArgument_reference (var "rt")))
                   (var "filteredTypeArgs")) $
                 right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
@@ -4837,10 +4837,10 @@ typeAppNullaryOrHoisted = def "typeAppNullaryOrHoisted" $
                 "classId" <~ (JavaUtilsSource.nameToJavaName @@ var "aliases"
                   @@ (Names.unqualifyName @@ Module.qualifiedName (just (var "ns_")) (elementsClassName @@ var "ns_"))) $
                 "methodId" <~ JavaDsl.identifier (JavaUtilsSource.sanitizeJavaName @@ var "localName") $
-                "filteredTypeArgs" <<= (filterPhantomTypeArgs @@ var "varName" @@ var "allTypeArgs" @@ var "cx" @@ var "g") $
-                "jTypeArgs" <<= (Eithers.mapList (lambda "t" $
-                  "jt" <<= (encodeType @@ var "aliases" @@ Sets.empty @@ var "t" @@ var "cx" @@ var "g") $
-                  "rt" <<= (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt" @@ var "cx") $
+                "filteredTypeArgs" <<~ (filterPhantomTypeArgs @@ var "varName" @@ var "allTypeArgs" @@ var "cx" @@ var "g") $
+                "jTypeArgs" <<~ (Eithers.mapList (lambda "t" $
+                  "jt" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "t" @@ var "cx" @@ var "g") $
+                  "rt" <<~ (JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt" @@ var "cx") $
                   right (inject Java._TypeArgument Java._TypeArgument_reference (var "rt")))
                   (var "filteredTypeArgs")) $
                 "paramNames" <~ Lists.map (lambda "i" $ Core.name (Strings.cat2 (string "p") (Literals.showInt32 (var "i"))))
@@ -5014,7 +5014,7 @@ encodeTermTCO = def "encodeTermTCO" $
             _Term_variable>>: "n" ~> Equality.equal (var "n") (Pairs.first (var "pair"))]))
           (Lists.zip (var "paramNames") (var "gatherArgs")) $
         "changedParams" <~ Lists.map (unaryFunction Pairs.first) (var "changePairs") $
-        "jChangedArgs" <<= Eithers.mapList ("pair" ~> encodeTerm @@ var "env" @@ (Pairs.second (var "pair")) @@ var "cx" @@ var "g")
+        "jChangedArgs" <<~ Eithers.mapList ("pair" ~> encodeTerm @@ var "env" @@ (Pairs.second (var "pair")) @@ var "cx" @@ var "g")
           (var "changePairs") $
         "assignments" <~ (Lists.map ("pair" ~>
           "paramName" <~ (Pairs.first $ var "pair") $
@@ -5043,15 +5043,15 @@ encodeTermTCO = def "encodeTermTCO" $
           ("arg" <~ (Lists.head $ var "args2") $
             cases _Term (Rewriting.deannotateAndDetypeTerm @@ var "body2") (Just $
               -- Default: not a case statement, encode as return
-              "expr" <<= (encodeTerm @@ var "env" @@ var "term" @@ var "cx" @@ var "g") $
+              "expr" <<~ (encodeTerm @@ var "env" @@ var "term" @@ var "cx" @@ var "g") $
               right $ list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "expr"))]) [
               _Term_function>>: "f" ~>
                 cases _Function (var "f") (Just $
-                  "expr" <<= (encodeTerm @@ var "env" @@ var "term" @@ var "cx" @@ var "g") $
+                  "expr" <<~ (encodeTerm @@ var "env" @@ var "term" @@ var "cx" @@ var "g") $
                   right $ list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "expr"))]) [
                   _Function_elimination>>: "e" ~>
                     cases _Elimination (var "e") (Just $
-                      "expr" <<= (encodeTerm @@ var "env" @@ var "term" @@ var "cx" @@ var "g") $
+                      "expr" <<~ (encodeTerm @@ var "env" @@ var "term" @@ var "cx" @@ var "g") $
                       right $ list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "expr"))]) [
                       _Elimination_union>>: "cs" ~>
                         -- Case statement: generate if/instanceof chain
@@ -5059,11 +5059,11 @@ encodeTermTCO = def "encodeTermTCO" $
                         "tname" <~ (Core.caseStatementTypeName $ var "cs") $
                         "dflt" <~ (Core.caseStatementDefault $ var "cs") $
                         "cases_" <~ (Core.caseStatementCases $ var "cs") $
-                        "domArgs" <<= (domTypeArgs @@ var "aliases" @@ (Schemas.nominalApplication @@ var "tname" @@ list ([] :: [TTerm Type])) @@ var "cx" @@ var "g") $
+                        "domArgs" <<~ (domTypeArgs @@ var "aliases" @@ (Schemas.nominalApplication @@ var "tname" @@ list ([] :: [TTerm Type])) @@ var "cx" @@ var "g") $
                         -- Encode the argument (the value being matched) and cache in a local variable
                         -- so that complex expressions (e.g. deannotateType(t_tco)) are computed once,
                         -- not duplicated across every instanceof check and cast.
-                        "jArgRaw" <<= (encodeTerm @@ var "env" @@ var "arg" @@ var "cx" @@ var "g") $
+                        "jArgRaw" <<~ (encodeTerm @@ var "env" @@ var "arg" @@ var "cx" @@ var "g") $
                         "depthSuffix" <~ Logic.ifElse (Equality.equal (var "tcoDepth") (int32 0))
                           (string "")
                           (Literals.showInt32 (var "tcoDepth")) $
@@ -5072,7 +5072,7 @@ encodeTermTCO = def "encodeTermTCO" $
                         "matchDecl" <~ (JavaUtilsSource.varDeclarationStatement @@ var "matchVarId" @@ var "jArgRaw") $
                         "jArg" <~ (JavaUtilsSource.javaIdentifierToJavaExpression @@ var "matchVarId") $
                         -- Generate if/instanceof blocks for each case branch
-                        "ifBlocks" <<= (Eithers.mapList ("field" ~>
+                        "ifBlocks" <<~ (Eithers.mapList ("field" ~>
                           "fieldName" <~ (Core.fieldName (var "field")) $
                           -- Build the variant reference type for instanceof
                           "variantRefType" <~ (JavaUtilsSource.nameToJavaReferenceType @@ var "aliases" @@ true @@ var "domArgs"
@@ -5097,18 +5097,18 @@ encodeTermTCO = def "encodeTermTCO" $
                                   "localDecl" <~ (JavaUtilsSource.varDeclarationStatement @@ var "varId" @@ var "castExpr") $
                                   -- Check if this branch body is a self-tail-call
                                   "isBranchTailCall" <~ (CoderUtils.isTailRecursiveInTailPosition @@ var "funcName" @@ var "branchBody") $
-                                  "bodyStmts" <<= (Logic.ifElse (var "isBranchTailCall")
+                                  "bodyStmts" <<~ (Logic.ifElse (var "isBranchTailCall")
                                     -- Self-call: emit assignment + continue via encodeTermTCO
                                     (encodeTermTCO @@ var "env3" @@ var "funcName" @@ var "paramNames" @@ var "tcoVarRenames" @@ (Math.add (var "tcoDepth") (int32 1)) @@ var "branchBody" @@ var "cx" @@ var "g")
                                     -- Not a self-call: use normal encoding with analyzeJavaFunction
-                                    ("fs" <<= (analyzeJavaFunction @@ var "env3" @@ var "branchBody" @@ var "cx" @@ var "g") $
+                                    ("fs" <<~ (analyzeJavaFunction @@ var "env3" @@ var "branchBody" @@ var "cx" @@ var "g") $
                                       "bindings" <~ (project _FunctionStructure _FunctionStructure_bindings @@ var "fs") $
                                       "innerBody" <~ (project _FunctionStructure _FunctionStructure_body @@ var "fs") $
                                       "env4" <~ (project _FunctionStructure _FunctionStructure_environment @@ var "fs") $
-                                      "bindResult" <<= (bindingsToStatements @@ var "env4" @@ var "bindings" @@ var "cx" @@ var "g") $
+                                      "bindResult" <<~ (bindingsToStatements @@ var "env4" @@ var "bindings" @@ var "cx" @@ var "g") $
                                       "bindingStmts" <~ Pairs.first (var "bindResult") $
                                       "env5" <~ Pairs.second (var "bindResult") $
-                                      "jret" <<= (encodeTerm @@ var "env5" @@ var "innerBody" @@ var "cx" @@ var "g") $
+                                      "jret" <<~ (encodeTerm @@ var "env5" @@ var "innerBody" @@ var "cx" @@ var "g") $
                                       "returnStmt" <~ (JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "jret"))) $
                                       right $ Lists.concat2 (var "bindingStmts") (list [var "returnStmt"]))) $
                                   -- Build: if (arg instanceof VariantType) { VariantType v = (VariantType) arg; stmts... }
@@ -5126,27 +5126,27 @@ encodeTermTCO = def "encodeTermTCO" $
                                     (JavaDsl.statementIfThen (JavaDsl.ifThenStatement (var "condExpr") (var "ifBody"))))]])
                           (var "cases_")) $
                         -- Default: return the expression (or the arg for otherwise)
-                        "defaultStmt" <<= (Maybes.cases (var "dflt")
+                        "defaultStmt" <<~ (Maybes.cases (var "dflt")
                           -- No default: return the argument unchanged
                           (right $ list [JavaDsl.blockStatementStatement
                             (JavaUtilsSource.javaReturnStatement @@ just (var "jArg"))])
                           ("d" ~>
                             -- Default is a value to return, not a function to apply to the argument
-                            "dExpr" <<= (encodeTerm @@ var "env" @@ var "d" @@ var "cx" @@ var "g") $
+                            "dExpr" <<~ (encodeTerm @@ var "env" @@ var "d" @@ var "cx" @@ var "g") $
                             right $ list [JavaDsl.blockStatementStatement
                               (JavaUtilsSource.javaReturnStatement @@ just (var "dExpr"))])) $
                         right $ Lists.concat (list [list [var "matchDecl"], var "ifBlocks", var "defaultStmt"])]]])
           -- Not a single-arg application: fall back to normal return
-          ("expr" <<= (encodeTerm @@ var "env" @@ var "term" @@ var "cx" @@ var "g") $
+          ("expr" <<~ (encodeTerm @@ var "env" @@ var "term" @@ var "cx" @@ var "g") $
             right $ list [JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "expr"))])) [
         -- Let-expression: encode bindings as statements, then recurse on body
         _Term_let>>: "lt" ~>
           "letBindings" <~ Core.letBindings (var "lt") $
           "letBody" <~ Core.letBody (var "lt") $
-          "bindResult" <<= (bindingsToStatements @@ var "env" @@ var "letBindings" @@ var "cx" @@ var "g") $
+          "bindResult" <<~ (bindingsToStatements @@ var "env" @@ var "letBindings" @@ var "cx" @@ var "g") $
           "letStmts" <~ Pairs.first (var "bindResult") $
           "envAfterLet" <~ Pairs.second (var "bindResult") $
-          "tcoBodyStmts" <<= (encodeTermTCO @@ var "envAfterLet" @@ var "funcName" @@ var "paramNames" @@ var "tcoVarRenames" @@ var "tcoDepth" @@ var "letBody" @@ var "cx" @@ var "g") $
+          "tcoBodyStmts" <<~ (encodeTermTCO @@ var "envAfterLet" @@ var "funcName" @@ var "paramNames" @@ var "tcoVarRenames" @@ var "tcoDepth" @@ var "letBody" @@ var "cx" @@ var "g") $
           right $ Lists.concat2 (var "letStmts") (var "tcoBodyStmts")])
 
 -- | Encode a term definition as a Java interface method declaration.
@@ -5161,7 +5161,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "ts" <~ (project _TermDefinition _TermDefinition_type @@ var "tdef") $
     -- Unshadow variables
     ("term" <~ (Rewriting.unshadowVariables @@ var "term0") $
-      "fs" <<= (analyzeJavaFunction @@ var "env" @@ var "term" @@ var "cx" @@ var "g") $
+      "fs" <<~ (analyzeJavaFunction @@ var "env" @@ var "term" @@ var "cx" @@ var "g") $
       -- Get type parameters from scheme
       "schemeVars" <~ Lists.filter (lambda "v" $ isSimpleName @@ var "v") (Core.typeSchemeVariables (var "ts")) $
       "termVars" <~ (project _FunctionStructure _FunctionStructure_typeParams @@ var "fs") $
@@ -5181,7 +5181,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
       "cod" <~ Pairs.second (var "peelResult") $
       "schemeVarSet" <~ Sets.fromList (var "tparams") $
       -- Build type variable substitution from annotations
-      "typeVarSubst" <<= Logic.ifElse (Lists.null (var "tparams"))
+      "typeVarSubst" <<~ Logic.ifElse (Lists.null (var "tparams"))
         (right (Maps.empty))
         (buildSubstFromAnnotations @@ var "schemeVarSet" @@ var "term" @@ var "cx" @@ var "g") $
       -- Fix over-generalized type variables
@@ -5240,22 +5240,22 @@ encodeTermDefinition = def "encodeTermDefinition" $
         JavaHelpers._JavaEnvironment_graph>>:
           project JavaHelpers._JavaEnvironment JavaHelpers._JavaEnvironment_graph @@ var "env2"]) $
       -- Convert bindings to statements
-      "bindResult" <<= (bindingsToStatements @@ var "env2WithTypeParams" @@ var "bindings" @@ var "cx" @@ var "g") $
+      "bindResult" <<~ (bindingsToStatements @@ var "env2WithTypeParams" @@ var "bindings" @@ var "cx" @@ var "g") $
       "bindingStmts" <~ Pairs.first (var "bindResult") $
       "env3" <~ Pairs.second (var "bindResult") $
       -- Apply overgen subst to body annotations
-      "body'" <<= Logic.ifElse (Maps.null (var "overgenSubst"))
+      "body'" <<~ Logic.ifElse (Maps.null (var "overgenSubst"))
         (right (var "body"))
         (applyOvergenSubstToTermAnnotations @@ var "overgenSubst" @@ var "body" @@ var "cx" @@ var "g") $
       -- Annotate the body with its expected type using propagateTypesInAppChain
       "annotatedBody" <~ (propagateTypesInAppChain @@ var "fixedCod" @@ var "fixedCod" @@ var "body'") $
       -- Generate method declaration
-      "jformalParams" <<= (Eithers.mapList
+      "jformalParams" <<~ (Eithers.mapList
         (lambda "pair" $
-          "jdom" <<= (encodeType @@ var "aliases2" @@ Sets.empty @@ (Pairs.first (var "pair")) @@ var "cx" @@ var "g") $
+          "jdom" <<~ (encodeType @@ var "aliases2" @@ Sets.empty @@ (Pairs.first (var "pair")) @@ var "cx" @@ var "g") $
           right (JavaUtilsSource.javaTypeToJavaFormalParameter @@ var "jdom" @@ Pairs.second (var "pair")))
         (Lists.zip (var "fixedDoms") (var "params"))) $
-      "jcod" <<= (encodeType @@ var "aliases2" @@ Sets.empty @@ var "fixedCod" @@ var "cx" @@ var "g") $
+      "jcod" <<~ (encodeType @@ var "aliases2" @@ Sets.empty @@ var "fixedCod" @@ var "cx" @@ var "g") $
       "result" <~ (JavaUtilsSource.javaTypeToJavaResult @@ var "jcod") $
       "mods" <~ list [inject Java._InterfaceMethodModifier Java._InterfaceMethodModifier_static unit] $
       "jname" <~ (JavaUtilsSource.sanitizeJavaName @@ (Formatting.decapitalize @@ (Names.localNameOf @@ var "name"))) $
@@ -5265,7 +5265,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
       --     (Logic.not $ Lists.null (var "params"))
       --     (CoderUtils.isSelfTailRecursive @@ var "name" @@ var "body")) $
       "isTCO" <~ boolean False $
-      "methodBody" <<= (Logic.ifElse (var "isTCO")
+      "methodBody" <<~ (Logic.ifElse (var "isTCO")
         -- TCO path: wrap body in while(true) loop
         -- Note: bindingStmts (let-binding prefixes) go INSIDE the while loop so they are
         -- re-evaluated each iteration when parameters change via reassignment + continue.
@@ -5287,7 +5287,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
           "tcoBody" <~ Logic.ifElse (Lists.null (var "bindings"))
             (var "annotatedBody")
             (Core.termLet (Core.let_ (var "bindings") (var "annotatedBody"))) $
-          "tcoStmts" <<= (encodeTermTCO @@ var "env2WithTypeParams" @@ var "name" @@ var "params" @@ var "tcoVarRenames" @@ int32 0 @@ var "tcoBody" @@ var "cx" @@ var "g") $
+          "tcoStmts" <<~ (encodeTermTCO @@ var "env2WithTypeParams" @@ var "name" @@ var "params" @@ var "tcoVarRenames" @@ int32 0 @@ var "tcoBody" @@ var "cx" @@ var "g") $
           "whileBodyStmts" <~ Lists.concat2 (var "snapshotDecls") (var "tcoStmts") $
           "whileBodyBlock" <~ (JavaDsl.statementWithoutTrailing (JavaDsl.stmtBlock (JavaDsl.block (var "whileBodyStmts")))) $
           "noCond" <~ (nothing :: TTerm (Maybe Java.Expression)) $
@@ -5297,7 +5297,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
               Java._WhileStatement_body>>: var "whileBodyBlock"]))) $
           right $ list [var "whileStmt"])
         -- Normal path: encode body as expression with return
-        ("jbody" <<= (encodeTerm @@ var "env3" @@ var "annotatedBody" @@ var "cx" @@ var "g") $
+        ("jbody" <<~ (encodeTerm @@ var "env3" @@ var "annotatedBody" @@ var "cx" @@ var "g") $
           "returnSt" <~ (JavaDsl.blockStatementStatement (JavaUtilsSource.javaReturnStatement @@ just (var "jbody"))) $
           right $ Lists.concat2 (var "bindingStmts") (list [var "returnSt"]))) $
       right (JavaUtilsSource.interfaceMethodDeclaration @@ var "mods" @@ var "jparams"
@@ -5322,10 +5322,10 @@ encodeDefinitions = def "encodeDefinitions" $
       "typ" <~ (project _TypeDefinition _TypeDefinition_type @@ var "td") $
       isSerializableJavaType @@ (var "typ"))
       (var "typeDefs") $
-    "typeUnits" <<= (Eithers.mapList (lambda "td" $ encodeTypeDefinition @@ var "pkg" @@ var "aliases" @@ var "td" @@ var "cx" @@ var "g") (var "nonTypedefDefs")) $
-    "termUnits" <<= Logic.ifElse (Lists.null (var "termDefs"))
+    "typeUnits" <<~ (Eithers.mapList (lambda "td" $ encodeTypeDefinition @@ var "pkg" @@ var "aliases" @@ var "td" @@ var "cx" @@ var "g") (var "nonTypedefDefs")) $
+    "termUnits" <<~ Logic.ifElse (Lists.null (var "termDefs"))
       (right (list ([] :: [TTerm (Name, Java.CompilationUnit)])))
-      ("dataMembers" <<= (Eithers.mapList (lambda "td" $ encodeTermDefinition @@ var "env" @@ var "td" @@ var "cx" @@ var "g") (var "termDefs")) $
+      ("dataMembers" <<~ (Eithers.mapList (lambda "td" $ encodeTermDefinition @@ var "env" @@ var "td" @@ var "cx" @@ var "g") (var "termDefs")) $
         right (list [constructElementsInterface @@ var "mod" @@ var "dataMembers"])) $
     right (Maps.fromList (Lists.concat2 (var "typeUnits") (var "termUnits")))
 
@@ -5334,7 +5334,7 @@ moduleToJava :: TBinding (Module -> [Definition] -> Context -> Graph -> Either (
 moduleToJava = def "moduleToJava" $
   lambda "mod" $ lambda "defs" $
     "cx" ~> "g" ~>
-    ("units" <<= (encodeDefinitions @@ var "mod" @@ var "defs" @@ var "cx" @@ var "g") $
+    ("units" <<~ (encodeDefinitions @@ var "mod" @@ var "defs" @@ var "cx" @@ var "g") $
       right (Maps.fromList (Lists.map
         (lambda "entry" $
           "name" <~ Pairs.first (var "entry") $
