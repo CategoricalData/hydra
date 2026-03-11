@@ -135,7 +135,7 @@ public class Bootstrap {
         List<Module> coderMods = new ArrayList<>();
         if (includeCoders) {
             System.out.println("Step 2: Loading hydra-ext coder modules from JSON...");
-            List<Namespace> coderNamespaces = Generation.readManifestField(extJsonDir, "hydraCoderModules");
+            List<Namespace> coderNamespaces = Generation.readManifestField(extJsonDir, "hydraBootstrapCoderModules");
             // Filter out modules already loaded as part of kernel
             Set<String> kernelNsSet = new HashSet<>();
             for (Namespace ns : allKernelNamespaces) {

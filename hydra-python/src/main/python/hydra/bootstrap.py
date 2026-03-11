@@ -120,7 +120,7 @@ def main():
     coder_mods = []
     if args.include_coders:
         print("Step 2: Loading hydra-ext coder modules from JSON...", flush=True)
-        coder_namespaces = read_manifest_field(args.ext_json_dir, "hydraCoderModules")
+        coder_namespaces = read_manifest_field(args.ext_json_dir, "hydraBootstrapCoderModules")
         # Filter out modules already loaded as part of kernel
         kernel_ns_set = {ns.value for ns in all_kernel_namespaces}
         ext_coder_namespaces = [ns for ns in coder_namespaces if ns.value not in kernel_ns_set]

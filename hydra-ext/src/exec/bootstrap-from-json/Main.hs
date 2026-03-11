@@ -203,7 +203,7 @@ main = do
   coderMods <- if optIncludeCoders opts
     then do
       putStrLn "Step 2: Loading hydra-ext coder modules from JSON..."
-      coderNamespaces <- readManifestField extJsonDir "hydraCoderModules"
+      coderNamespaces <- readManifestField extJsonDir "hydraBootstrapCoderModules"
       -- Filter out haskell coder modules (already loaded as part of mainModules)
       let kernelNsSet = fmap unNamespace allKernelNamespaces
           (_, extCoderNamespaces) = partition (\ns -> unNamespace ns `elem` kernelNsSet) coderNamespaces
