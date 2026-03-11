@@ -483,5 +483,5 @@ To add a new test module:
 ## See Also
 
 - [Testing Wiki](https://github.com/CategoricalData/hydra/wiki/Testing) - Overview of Hydra's testing approach
-- [Implementation Wiki](https://github.com/CategoricalData/hydra/blob/main/docs/src/implementation.md) - Details on the DSL system
+- [Implementation Wiki](https://github.com/CategoricalData/hydra/blob/main/docs/implementation.md) - Details on the DSL system
 - [Test Suite Source](https://github.com/CategoricalData/hydra/tree/main/hydra-haskell/src/main/haskell/Hydra/Sources/Test)

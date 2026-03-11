@@ -53,10 +53,10 @@ and the original design document [here](https://bit.ly/hydra-design-doc).
 ## Documentation
 
 - **[Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts)** - Core concepts, type system, and design principles
-- **[Implementation](https://github.com/CategoricalData/hydra/blob/main/docs/src/implementation.md)** - Detailed implementation guide
-- **[DSL Guide](https://github.com/CategoricalData/hydra/blob/main/docs/src/dsl-guide.md)** - Domain-specific languages for Hydra
+- **[Implementation](https://github.com/CategoricalData/hydra/blob/main/docs/implementation.md)** - Detailed implementation guide
+- **[DSL Guide](https://github.com/CategoricalData/hydra/blob/main/docs/dsl-guide.md)** - Domain-specific languages for Hydra
 - **[Testing](https://github.com/CategoricalData/hydra/wiki/Testing)** - Common test suite across implementations
-- **[Developer Recipes](https://github.com/CategoricalData/hydra/blob/main/docs/src/recipes/index.md)** - Step-by-step guides for common tasks
+- **[Developer Recipes](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/index.md)** - Step-by-step guides for common tasks
 - **[CHANGELOG](CHANGELOG.md)** - Detailed history of changes
 
 ## Releases

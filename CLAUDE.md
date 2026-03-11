@@ -76,33 +76,33 @@ This section links to every major document in the project with a brief descripti
 | Document | Path | Description |
 |----------|------|-------------|
 | Hydra lexicon | [docs/hydra-lexicon.txt](docs/hydra-lexicon.txt) | **The single most important LLM reference.** Complete listing of all kernel types, terms, and ~180+ primitive function signatures. Auto-generated from the kernel graph |
-| Promoting code | [docs/src/recipes/promoting-code.md](docs/src/recipes/promoting-code.md) | Detailed guide for converting raw Haskell to Hydra DSL modules. DSL translation reference, tips, checklist |
-| Documentation style guide | [docs/src/documentation-style-guide.md](docs/src/documentation-style-guide.md) | Writing conventions for Hydra docs: sentence case headings, 120 char line length, active voice, backtick formatting rules, file naming |
+| Promoting code | [docs/recipes/promoting-code.md](docs/recipes/promoting-code.md) | Detailed guide for converting raw Haskell to Hydra DSL modules. DSL translation reference, tips, checklist |
+| Documentation style guide | [docs/documentation-style-guide.md](docs/documentation-style-guide.md) | Writing conventions for Hydra docs: sentence case headings, 120 char line length, active voice, backtick formatting rules, file naming |
 | GitHub Pages index | [docs/index.html](docs/index.html) | HTML landing page for https://categoricaldata.github.io/hydra/ |
 
-### docs/src/ -- guides and architecture
+### docs/ -- guides and architecture
 
 | Document | Path | Description |
 |----------|------|-------------|
 | This document | [CLAUDE.md](CLAUDE.md) | LLM orientation guide (this document) |
-| Demos | [docs/src/demos.md](docs/src/demos.md) | Overview of all four demos: GenPG, Bootstrapping, Avro-to-property-graphs, Metered evaluation |
-| Test suite architecture | [docs/src/test-suite-architecture.md](docs/src/test-suite-architecture.md) | How the common test suite is structured. TestGraph shared types, module-based organization, meta-level vs term-level DSLs, test case types (checking, inference, evaluation, formatting) |
+| Demos | [docs/demos.md](docs/demos.md) | Overview of all four demos: GenPG, Bootstrapping, Avro-to-property-graphs, Metered evaluation |
+| Test suite architecture | [docs/test-suite-architecture.md](docs/test-suite-architecture.md) | How the common test suite is structured. TestGraph shared types, module-based organization, meta-level vs term-level DSLs, test case types (checking, inference, evaluation, formatting) |
 
-### docs/src/recipes/ -- step-by-step developer guides
+### docs/recipes/ -- step-by-step developer guides
 
 | Recipe | Path | Description |
 |--------|------|-------------|
-| Recipe index | [docs/src/recipes/index.md](docs/src/recipes/index.md) | Table of contents for all recipes, organized by category |
-| Adding primitives | [docs/src/recipes/adding-primitives.md](docs/src/recipes/adding-primitives.md) | Add new primitive functions across all 3 implementations. File-by-file checklist. Covers `prim1`/`prim2`/`prim2Eval` registration, eval elements for higher-order primitives, DSL wrappers, tests |
-| Extending Hydra Core | [docs/src/recipes/extending-hydra-core.md](docs/src/recipes/extending-hydra-core.md) | Add new type/term constructors (e.g., Either). The most complex recipe. 12+ steps covering the bootstrap problem, manual patching of generated files, inference, checking, rewriting, encoding/decoding. Also covers adding fields to existing records |
-| Extending tests | [docs/src/recipes/extending-tests.md](docs/src/recipes/extending-tests.md) | Add tests to the common test suite. Choosing test modules, writing test cases with `checkWithType`/`inferWithType`/`primCase`, meta-level vs term-level DSL differences |
-| JSON kernel | [docs/src/recipes/json-kernel.md](docs/src/recipes/json-kernel.md) | Export Hydra modules to JSON for language-agnostic access. `update-json-kernel.sh`, `update-json-main.sh`, `update-json-test.sh`, and `verify-json-kernel.sh`. JSON encoding format details |
-| LLM-assisted development | [docs/src/recipes/llm-assisted-development.md](docs/src/recipes/llm-assisted-development.md) | Guidelines for using LLMs with Hydra. Lexicon reference, how to regenerate it, property graph generation demo with video walkthroughs |
-| New implementation | [docs/src/recipes/new-implementation.md](docs/src/recipes/new-implementation.md) | 10-step guide for implementing Hydra in a new language: syntax model, language constraints, coder, serializer, primitives, test runner, DSLs |
-| Promoting code | [docs/src/recipes/promoting-code.md](docs/src/recipes/promoting-code.md) | Convert raw Haskell to Hydra DSL modules. Incremental hybrid approach. DSL construct mapping (`<~` for let, `match` for cases, `project` for fields). Common pitfalls with lambdas in higher-order functions |
-| Refactoring namespaces | [docs/src/recipes/refactoring-namespaces.md](docs/src/recipes/refactoring-namespaces.md) | Rename/move a Hydra namespace. 5-phase process across hydra-haskell, hydra-ext, hydra-python, hydra-java. Orphan file cleanup, decoder/encoder module moves |
-| Refactoring | [docs/src/recipes/refactoring.md](docs/src/recipes/refactoring.md) | Create, rename, move, delete kernel elements and modules. Detailed examples: creating `hydra.hoisting`, changing `Graph.elements` from Map to List |
-| Syncing Python | [docs/src/recipes/syncing-python.md](docs/src/recipes/syncing-python.md) | Regenerate Python from Haskell. 4 artifact categories, `sync-python.sh` script. Troubleshooting generation errors |
+| Recipe index | [docs/recipes/index.md](docs/recipes/index.md) | Table of contents for all recipes, organized by category |
+| Adding primitives | [docs/recipes/adding-primitives.md](docs/recipes/adding-primitives.md) | Add new primitive functions across all 3 implementations. File-by-file checklist. Covers `prim1`/`prim2`/`prim2Eval` registration, eval elements for higher-order primitives, DSL wrappers, tests |
+| Extending Hydra Core | [docs/recipes/extending-hydra-core.md](docs/recipes/extending-hydra-core.md) | Add new type/term constructors (e.g., Either). The most complex recipe. 12+ steps covering the bootstrap problem, manual patching of generated files, inference, checking, rewriting, encoding/decoding. Also covers adding fields to existing records |
+| Extending tests | [docs/recipes/extending-tests.md](docs/recipes/extending-tests.md) | Add tests to the common test suite. Choosing test modules, writing test cases with `checkWithType`/`inferWithType`/`primCase`, meta-level vs term-level DSL differences |
+| JSON kernel | [docs/recipes/json-kernel.md](docs/recipes/json-kernel.md) | Export Hydra modules to JSON for language-agnostic access. `update-json-kernel.sh`, `update-json-main.sh`, `update-json-test.sh`, and `verify-json-kernel.sh`. JSON encoding format details |
+| LLM-assisted development | [docs/recipes/llm-assisted-development.md](docs/recipes/llm-assisted-development.md) | Guidelines for using LLMs with Hydra. Lexicon reference, how to regenerate it, property graph generation demo with video walkthroughs |
+| New implementation | [docs/recipes/new-implementation.md](docs/recipes/new-implementation.md) | 10-step guide for implementing Hydra in a new language: syntax model, language constraints, coder, serializer, primitives, test runner, DSLs |
+| Promoting code | [docs/recipes/promoting-code.md](docs/recipes/promoting-code.md) | Convert raw Haskell to Hydra DSL modules. Incremental hybrid approach. DSL construct mapping (`<~` for let, `match` for cases, `project` for fields). Common pitfalls with lambdas in higher-order functions |
+| Refactoring namespaces | [docs/recipes/refactoring-namespaces.md](docs/recipes/refactoring-namespaces.md) | Rename/move a Hydra namespace. 5-phase process across hydra-haskell, hydra-ext, hydra-python, hydra-java. Orphan file cleanup, decoder/encoder module moves |
+| Refactoring | [docs/recipes/refactoring.md](docs/recipes/refactoring.md) | Create, rename, move, delete kernel elements and modules. Detailed examples: creating `hydra.hoisting`, changing `Graph.elements` from Map to List |
+| Syncing Python | [docs/recipes/syncing-python.md](docs/recipes/syncing-python.md) | Regenerate Python from Haskell. 4 artifact categories, `sync-python.sh` script. Troubleshooting generation errors |
 
 ### Wiki (GitHub wiki -- separate repository)
 
@@ -113,10 +113,10 @@ but these web links are the canonical references:
 |------|-----|-------------|
 | Home | https://github.com/CategoricalData/hydra/wiki | Navigation hub linking to all wiki pages |
 | Concepts | https://github.com/CategoricalData/hydra/wiki/Concepts | Core concepts: Type, Term, Element, Graph, Module, Flow monad, primitives, coders, adapters. Type system (System F with HM inference). 7 design principles. Algebraic Property Graphs |
-| DSL guide (Haskell) | https://github.com/CategoricalData/hydra/blob/main/docs/src/dsl-guide.md | Comprehensive Haskell DSL reference. 4 DSL variants (direct, phantom-typed, meta, generated). Operators, precedence, import conventions. Library DSLs. Common errors |
-| DSL guide (Java) | https://github.com/CategoricalData/hydra/blob/main/docs/src/dsl-guide-java.md | Java DSL: `hydra.dsl.Types`, `hydra.dsl.Terms`. Visitor pattern for unions. Flow monad usage. Primitive function packages |
-| DSL guide (Python) | https://github.com/CategoricalData/hydra/blob/main/docs/src/dsl-guide-python.md | Python DSL: `hydra.dsl.types`, `hydra.dsl.terms`. Pattern matching via `match`/`isinstance`. `FrozenDict` for maps. Trailing underscores on reserved words |
-| Implementation | https://github.com/CategoricalData/hydra/blob/main/docs/src/implementation.md | Detailed architecture guide. 21 kernel type modules, DSL system (3 levels, 34+ files), ~180+ primitive functions with `prim`/`primEval` registration. Cross-language coder architecture. Bootstrap process. Extension points |
+| DSL guide (Haskell) | https://github.com/CategoricalData/hydra/blob/main/docs/dsl-guide.md | Comprehensive Haskell DSL reference. 4 DSL variants (direct, phantom-typed, meta, generated). Operators, precedence, import conventions. Library DSLs. Common errors |
+| DSL guide (Java) | https://github.com/CategoricalData/hydra/blob/main/docs/dsl-guide-java.md | Java DSL: `hydra.dsl.Types`, `hydra.dsl.Terms`. Visitor pattern for unions. Flow monad usage. Primitive function packages |
+| DSL guide (Python) | https://github.com/CategoricalData/hydra/blob/main/docs/dsl-guide-python.md | Python DSL: `hydra.dsl.types`, `hydra.dsl.terms`. Pattern matching via `match`/`isinstance`. `FrozenDict` for maps. Trailing underscores on reserved words |
+| Implementation | https://github.com/CategoricalData/hydra/blob/main/docs/implementation.md | Detailed architecture guide. 21 kernel type modules, DSL system (3 levels, 34+ files), ~180+ primitive functions with `prim`/`primEval` registration. Cross-language coder architecture. Bootstrap process. Extension points |
 | Code organization | https://github.com/CategoricalData/hydra/wiki/Code-organization | The `src/main/` vs `src/gen-main/` pattern explained per implementation. What goes where. Never edit generated files |
 | Testing | https://github.com/CategoricalData/hydra/wiki/Testing | Common test suite (`hydra.test.testSuite`). Kernel tests vs generation tests. Test categories (primitives, inference, checking, formatting). Per-language test runners. TestGenerator abstraction |
 | Benchmarking | https://github.com/CategoricalData/hydra/wiki/Benchmarking | Performance measurement across implementations. Python benchmark tool with CSV output. `hydra_path` for cross-language comparison. Known slow tests |
@@ -173,7 +173,7 @@ Language coders live in `hydra-ext/src/main/haskell/Hydra/Ext/Staging/`.
 
 ## Demos
 
-Four demos live under `hydra-ext/`. See [docs/src/demos.md](docs/src/demos.md) for descriptions and links
+Four demos live under `hydra-ext/`. See [docs/demos.md](docs/demos.md) for descriptions and links
 to the individual demo READMEs.
 
 - **GenPG** -- CSV to GraphSON property graphs (Haskell, Python, Java; with LLM-assisted workflow)
@@ -369,7 +369,7 @@ import qualified Hydra.Dsl.Meta.Lib.Logic as Logic
 
 ### Promoting code (raw Haskell -> DSL)
 
-This is a frequent task. See [promoting-code.md](docs/src/recipes/promoting-code.md) for a detailed guide. Key points:
+This is a frequent task. See [promoting-code.md](docs/recipes/promoting-code.md) for a detailed guide. Key points:
 
 - Only pure code can be promoted (no I/O).
 - Use `<~` for let bindings, `match` for pattern matching, `project` for field access.
@@ -379,7 +379,7 @@ This is a frequent task. See [promoting-code.md](docs/src/recipes/promoting-code
 
 ### Adding primitives
 
-See [adding-primitives.md](docs/src/recipes/adding-primitives.md). Must touch 6+ files
+See [adding-primitives.md](docs/recipes/adding-primitives.md). Must touch 6+ files
 per primitive across all three implementations. Checklist:
 
 1. Haskell: `Hydra/Lib/<Library>.hs`, `Hydra/Sources/Libraries.hs`, `Hydra/Dsl/Lib/<Library>.hs`
@@ -419,14 +419,14 @@ for a good example using the `hydra.dsl.Terms` helpers (`wrap`, `unwrap`,
 
 ### Extending Hydra Core
 
-See [extending-hydra-core.md](docs/src/recipes/extending-hydra-core.md). This is the most
+See [extending-hydra-core.md](docs/recipes/extending-hydra-core.md). This is the most
 complex operation due to the bootstrap problem. The code generator must understand
 new constructors to generate itself. Requires manual patching of generated files
 as an intermediate step.
 
 ### Refactoring
 
-See [refactoring.md](docs/src/recipes/refactoring.md). When changing fundamental types,
+See [refactoring.md](docs/recipes/refactoring.md). When changing fundamental types,
 update generated files (`gen-main`) FIRST so the project compiles, then update
 source files.
 
@@ -525,8 +525,8 @@ When starting a new session, consider:
 1. Check `git status` and recent commits for context on what's being worked on.
 2. If the task involves the kernel DSL, read the Hydra lexicon
    (`docs/hydra-lexicon.txt`) for the complete API surface.
-3. If promoting code, read [promoting-code.md](docs/src/recipes/promoting-code.md).
+3. If promoting code, read [promoting-code.md](docs/recipes/promoting-code.md).
 4. If modifying kernel types/terms, read
-   [extending-hydra-core.md](docs/src/recipes/extending-hydra-core.md).
-5. If adding primitives, read [adding-primitives.md](docs/src/recipes/adding-primitives.md).
+   [extending-hydra-core.md](docs/recipes/extending-hydra-core.md).
+5. If adding primitives, read [adding-primitives.md](docs/recipes/adding-primitives.md).
 6. After any DSL changes: rebuild Haskell, then sync Java and Python.

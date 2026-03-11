@@ -19,7 +19,7 @@ You can compile the Scala code with `sbt compile` and run it with `sbt run`, whi
 
 Hydra is an open-source project, and we welcome contributors! If you're interested in helping complete the Scala implementation, here are some resources to get started:
 
-- **[Creating a new Hydra implementation](https://github.com/CategoricalData/hydra/blob/main/docs/src/recipes/new-implementation.md)** - Step-by-step guide for implementing Hydra in a new language
+- **[Creating a new Hydra implementation](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/new-implementation.md)** - Step-by-step guide for implementing Hydra in a new language
 - **[LambdaGraph Discord](https://bit.ly/lg-discord)** - Join the community to ask questions and discuss development
 - **[Main README](https://github.com/CategoricalData/hydra)** - Project overview and architecture
 
