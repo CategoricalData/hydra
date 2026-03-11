@@ -1,7 +1,7 @@
 module Hydra.Ext.Staging.Shacl.Coder where
 
 import Hydra.Kernel
-import Hydra.Ext.Staging.Rdf.Utils
+import Hydra.Ext.Rdf.Utils
 import qualified Hydra.Ext.Org.W3.Rdf.Syntax as Rdf
 import qualified Hydra.Ext.Org.W3.Shacl.Model as Shacl
 import qualified Hydra.Decode.Core as DecodeCore

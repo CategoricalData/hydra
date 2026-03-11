@@ -1,4 +1,4 @@
-module Hydra.Ext.Sources.Protobuf.Language (protobufLanguageModule, protobufLanguage) where
+module Hydra.Ext.Sources.Json.Schema.Coder where
 
 -- Standard imports for term-level sources outside of the kernel
 import Hydra.Kernel
@@ -88,88 +88,105 @@ import qualified Data.Map                                  as M
 import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
+-- Additional imports
+import qualified Hydra.Ext.Org.Json.Schema as JS
+import qualified Hydra.Json.Model as JM
+import qualified Hydra.Ext.Sources.Json.Schema as JsonSchema
+import qualified Hydra.Ext.Sources.Json.Schema.Serde as JsonSchemaSerde
+import qualified Hydra.Sources.CoderUtils as CoderUtils
 
-protobufLanguageDefinition :: String -> TTerm a -> TBinding a
-protobufLanguageDefinition = definitionInModule protobufLanguageModule
+-- Phantom type for JsonSchemaOptions (was previously in Staging module)
+data JsonSchemaOptions
 
-protobufLanguageModule :: Module
-protobufLanguageModule = Module (Namespace "hydra.ext.protobuf.language")
-  [toBinding protobufLanguage, toBinding protobufReservedWords]
-  [Lexical.ns, Rewriting.ns]
-  KernelTypes.kernelTypesNamespaces $
-  Just "Language constraints for Protobuf v3"
 
-protobufLanguage :: TBinding Language
-protobufLanguage = protobufLanguageDefinition "protobufLanguage" $
-  doc "Language constraints for Protocol Buffers v3" $ lets [
-  "eliminationVariants">: Sets.empty,
-  "literalVariants">: Sets.fromList $ list [
-    Variants.literalVariantBinary,
-    Variants.literalVariantBoolean,
-    Variants.literalVariantFloat,
-    Variants.literalVariantInteger,
-    Variants.literalVariantString],
-  "floatTypes">: Sets.fromList $ list [
-    Core.floatTypeFloat32,
-    Core.floatTypeFloat64],
-  "functionVariants">: Sets.empty,
-  "integerTypes">: Sets.fromList $ list [
-    Core.integerTypeInt32,
-    Core.integerTypeInt64,
-    Core.integerTypeUint32,
-    Core.integerTypeUint64],
-  "termVariants">: Sets.fromList $ list [
-    Variants.termVariantEither,
-    Variants.termVariantList,
-    Variants.termVariantLiteral,
-    Variants.termVariantMap,
-    Variants.termVariantMaybe,
-    Variants.termVariantPair,
-    Variants.termVariantRecord,
-    Variants.termVariantSet,
-    Variants.termVariantUnion,
-    Variants.termVariantUnit,
-    Variants.termVariantWrap],
-  "typeVariants">: Sets.fromList $ list [
-    Variants.typeVariantAnnotated,
-    Variants.typeVariantEither,
-    Variants.typeVariantList,
-    Variants.typeVariantLiteral,
-    Variants.typeVariantMap,
-    Variants.typeVariantMaybe,
-    Variants.typeVariantPair,
-    Variants.typeVariantRecord,
-    Variants.typeVariantSet,
-    Variants.typeVariantUnion,
-    Variants.typeVariantUnit,
-    Variants.typeVariantVariable,
-    Variants.typeVariantWrap],
-  "typePredicate">: "typ" ~> cases _Type (var "typ")
-    (Just true) [
-    _Type_map>>: "mt" ~> lets [
-      "valuesType">: Core.mapTypeValues $ var "mt",
-      "stripped">: Rewriting.deannotateType @@ var "valuesType"] $
-      cases _Type (var "stripped")
-        (Just true) [
-        _Type_maybe>>: constant false]]] $
-  Coders.language
-    (Coders.languageName $ string "hydra.ext.protobuf")
-    (Coders.languageConstraints
-      (var "eliminationVariants")
-      (var "literalVariants")
-      (var "floatTypes")
-      (var "functionVariants")
-      (var "integerTypes")
-      (var "termVariants")
-      (var "typeVariants")
-      (var "typePredicate"))
+define :: String -> TTerm a -> TBinding a
+define = definitionInModule module_
 
-protobufReservedWords :: TBinding (S.Set String)
-protobufReservedWords = protobufLanguageDefinition "protobufReservedWords" $
-  doc "A set of reserved words in Protobuf" $ lets [
-  "fieldNames">:
-    doc "See: http://google.github.io/proto-lens/reserved-names.html" $
-    list $ string <$> [
-      "case", "class", "data", "default", "deriving", "do", "else", "foreign", "if", "import", "in", "infix", "infixl",
-      "infixr", "instance", "let", "mdo", "module", "newtype", "of", "pattern", "proc", "rec", "then", "type", "where"]] $
-  Sets.fromList $ Lists.concat $ list [var "fieldNames"]
+jsonSchemaPhantomNs :: Namespace
+jsonSchemaPhantomNs = Namespace "hydra.ext.org.json.schema"
+
+jsonModelNs :: Namespace
+jsonModelNs = Namespace "hydra.json.model"
+
+ns :: Namespace
+ns = Namespace "hydra.ext.json.schema.coder"
+
+module_ :: Module
+module_ = Module ns elements
+    [Formatting.ns, Names.ns, AdaptTerms.ns, Rewriting.ns, Annotations.ns, Constants.ns, Schemas.ns, Reflect.ns, JsonSchemaSerde.ns, moduleNamespace CoderUtils.module_]
+    (moduleNamespace JsonSchema.module_:jsonModelNs:KernelTypes.kernelTypesNamespaces) $
+    Just "JSON Schema code generator: converts Hydra modules to JSON Schema documents"
+  where
+    elements = [
+      toBinding moduleToJsonSchema,
+      toBinding constructModule,
+      toBinding encodeField,
+      toBinding encodeName,
+      toBinding encodeNamedType,
+      toBinding encodeType,
+      toBinding isRequiredField,
+      toBinding referenceRestriction]
+
+
+-- | Result type alias
+type Result a = Either (InContext OtherError) a
+
+
+moduleToJsonSchema :: TBinding (JsonSchemaOptions -> Module -> [Definition] -> Context -> Graph -> Result (M.Map FilePath String))
+moduleToJsonSchema = define "moduleToJsonSchema" $
+  doc "Convert a Hydra module to a map of JSON Schema documents" $
+  lambda "opts" $ lambda "mod" $ lambda "defs" $ lambda "cx" $ lambda "g" $
+    var "hydra.ext.json.schema.coder.moduleToJsonSchema" @@ var "opts" @@ var "mod" @@ var "defs" @@ var "cx" @@ var "g"
+
+constructModule :: TBinding (Context -> Graph -> JsonSchemaOptions -> Module -> [TypeDefinition] -> Result (M.Map FilePath JS.Document))
+constructModule = define "constructModule" $
+  doc "Construct JSON Schema documents from type definitions" $
+  lambda "cx" $ lambda "g" $ lambda "opts" $ lambda "mod" $ lambda "typeDefs" $
+    var "hydra.ext.json.schema.coder.constructModule" @@ var "cx" @@ var "g" @@ var "opts" @@ var "mod" @@ var "typeDefs"
+
+encodeField :: TBinding (Context -> Graph -> FieldType -> Result (JS.Keyword, JS.Schema))
+encodeField = define "encodeField" $
+  doc "Encode a field type as a JSON Schema keyword-schema pair" $
+  lambda "cx" $ lambda "g" $ lambda "ft" $ lets [
+    "name">: project _FieldType _FieldType_name @@ var "ft",
+    "typ">: project _FieldType _FieldType_type @@ var "ft"] $
+    Eithers.map
+      (lambda "res" $ pair (wrap JS._Keyword (Core.unName $ var "name")) (wrap JS._Schema (var "res")))
+      (encodeType @@ var "cx" @@ var "g" @@ false @@ var "typ")
+
+encodeName :: TBinding (Name -> String)
+encodeName = define "encodeName" $
+  doc "Encode a Hydra name as a safe identifier string, replacing non-alphanumeric characters with underscores" $
+  lambda "name" $
+    Formatting.nonAlnumToUnderscores @@ Core.unName (var "name")
+
+encodeNamedType :: TBinding (Context -> Graph -> Name -> Type -> Result [JS.Restriction])
+encodeNamedType = define "encodeNamedType" $
+  doc "Encode a named type as a list of JSON Schema restrictions with a title" $
+  lambda "cx" $ lambda "g" $ lambda "name" $ lambda "typ" $
+    Eithers.map
+      (lambda "res" $ Lists.concat $ list [
+        list [inject JS._Restriction JS._Restriction_title (Core.unName $ var "name")],
+        var "res"])
+      (encodeType @@ var "cx" @@ var "g" @@ false @@ (Rewriting.deannotateType @@ var "typ"))
+
+encodeType :: TBinding (Context -> Graph -> Bool -> Type -> Result [JS.Restriction])
+encodeType = define "encodeType" $
+  doc "Encode a Hydra type as a list of JSON Schema restrictions" $
+  lambda "cx" $ lambda "g" $ lambda "optional" $ lambda "typ" $
+    var "hydra.ext.json.schema.coder.encodeType" @@ var "cx" @@ var "g" @@ var "optional" @@ var "typ"
+
+isRequiredField :: TBinding (FieldType -> Bool)
+isRequiredField = define "isRequiredField" $
+  doc "Determine whether a field is required (i.e., not optional/Maybe)" $
+  lambda "ft" $ lets [
+    "typ">: project _FieldType _FieldType_type @@ var "ft"] $
+    cases _Type (Rewriting.deannotateType @@ var "typ") (Just true) [
+      _Type_maybe>>: constant false]
+
+referenceRestriction :: TBinding (Name -> JS.Restriction)
+referenceRestriction = define "referenceRestriction" $
+  doc "Create a JSON Schema reference restriction for a named type" $
+  lambda "name" $
+    inject JS._Restriction JS._Restriction_reference
+      (wrap JS._SchemaReference (Strings.cat $ list [string "#/$defs/", encodeName @@ var "name"]))

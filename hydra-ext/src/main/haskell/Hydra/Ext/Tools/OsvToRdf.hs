@@ -13,9 +13,9 @@ import Hydra.Generation
 import Hydra.Formatting
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Ext.Staging.Shacl.Coder as Shacl
-import Hydra.Ext.Staging.Rdf.Serde
+import Hydra.Ext.Rdf.Serde
 import Hydra.Workflow
-import qualified Hydra.Ext.Staging.Rdf.Utils as RdfUt
+import qualified Hydra.Ext.Rdf.Utils as RdfUt
 
 import qualified Hydra.Ext.Sources.Other.Osv as OsvSource
 import qualified Hydra.Ext.Dev.Osv.Schema as Osv
