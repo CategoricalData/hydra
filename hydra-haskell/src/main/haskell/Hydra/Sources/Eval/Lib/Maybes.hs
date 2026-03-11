@@ -160,7 +160,7 @@ mapMaybe_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Oth
 mapMaybe_ = define "mapMaybe" $
   doc "Interpreter-friendly mapMaybe for List terms." $
   "cx" ~> "g" ~> "funTerm" ~> "listTerm" ~>
-  "elements" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
+  "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
   -- Build: cat (map funTerm elements) - cat filters out Nothings and unwraps Justs
   right $ Core.termApplication $ Core.application
     (Core.termFunction $ Core.functionPrimitive $ wrap _Name $ string "hydra.lib.maybes.cat")

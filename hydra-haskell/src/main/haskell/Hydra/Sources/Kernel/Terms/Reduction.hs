@@ -123,7 +123,7 @@ betaReduceType = define "betaReduceType" $
     "rhs" <~ Core.applicationTypeArgument (var "app") $
     cases _Type (var "lhs") Nothing [
       _Type_annotated>>: "at" ~>
-        "a" <<= var "reduceApp" @@ (Core.applicationType
+        "a" <<~ var "reduceApp" @@ (Core.applicationType
           (Core.annotatedTypeBody $ var "at")
           (var "rhs")) $
         right $ Core.typeAnnotated $ Core.annotatedType (var "a") (Core.annotatedTypeAnnotation $ var "at"),
@@ -133,13 +133,13 @@ betaReduceType = define "betaReduceType" $
           @@ var "rhs"
           @@ (Core.forallTypeBody $ var "ft")),
       _Type_variable>>: "name" ~>
-        "t'" <<= Schemas.requireType @@ var "cx" @@ var "graph" @@ var "name" $
+        "t'" <<~ Schemas.requireType @@ var "cx" @@ var "graph" @@ var "name" $
         betaReduceType @@ var "cx" @@ var "graph" @@ (Core.typeApplication $ Core.applicationType (var "t'") (var "rhs"))]) $
   "mapExpr" <~ ("recurse" ~> "t" ~>
     "findApp" <~ ("r" ~> cases _Type (var "r")
       (Just $ right $ var "r") [
       _Type_application>>: "a" ~> var "reduceApp" @@ var "a"]) $
-    "r" <<= var "recurse" @@ var "t" $
+    "r" <<~ var "recurse" @@ var "t" $
     var "findApp" @@ var "r") $
   Rewriting.rewriteTypeM @@ var "mapExpr" @@ var "typ"
 
@@ -582,16 +582,16 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
     "rewriteSpine" <~ ("term" ~> cases _Term (var "term")
       (Just $ var "rewrite" @@ false @@ false @@ list ([] :: [TTerm Type]) @@ var "recurse" @@ var "tx" @@ var "term") [
       _Term_annotated>>: "at" ~>
-        "body" <<= var "rewriteSpine" @@ Core.annotatedTermBody (var "at") $
+        "body" <<~ var "rewriteSpine" @@ Core.annotatedTermBody (var "at") $
         "ann" <~ Core.annotatedTermAnnotation (var "at") $
         right (Core.termAnnotated $ Core.annotatedTerm (var "body") (var "ann")),
       _Term_application>>: "a" ~>
         "l" <~ Logic.ifElse false (list [Core.typeLiteral Core.literalTypeString]) (list ([] :: [TTerm Type])) $ -- TODO: hack for type checking
-        "lhs" <<= var "rewriteSpine" @@ Core.applicationFunction (var "a") $
-        "rhs" <<= var "rewrite" @@ true @@ false @@ var "l" @@ var "recurse" @@ var "tx" @@ Core.applicationArgument (var "a") $
+        "lhs" <<~ var "rewriteSpine" @@ Core.applicationFunction (var "a") $
+        "rhs" <<~ var "rewrite" @@ true @@ false @@ var "l" @@ var "recurse" @@ var "tx" @@ Core.applicationArgument (var "a") $
         right (Core.termApplication $ Core.application (var "lhs") (var "rhs")),
       _Term_typeApplication>>: "tat" ~>
-        "body" <<= var "rewriteSpine" @@ Core.typeApplicationTermBody (var "tat") $
+        "body" <<~ var "rewriteSpine" @@ Core.typeApplicationTermBody (var "tat") $
         "typ" <~ Core.typeApplicationTermType (var "tat") $
         right (Core.termTypeApplication $ Core.typeApplicationTerm (var "body") (var "typ"))]) $
 
@@ -649,7 +649,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
       (var "term") (var "typeArgs")) $
 
     "forceExpansion" <~ ("t" ~>
-      "typCx" <<= Checking.typeOf @@ var "cx" @@ var "tx" @@ list ([] :: [TTerm Type]) @@ var "t" $
+      "typCx" <<~ Checking.typeOf @@ var "cx" @@ var "tx" @@ list ([] :: [TTerm Type]) @@ var "t" $
       "arity" <~ Arity.typeArity @@ Pairs.first (var "typCx") $
       right $ var "padn" @@ var "arity" @@ (var "unwind" @@ var "t")) $
 
@@ -658,7 +658,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
       (var "recurse" @@ var "tx" @@ (var "unwind" @@ var "term"))) $
 
     "forCase" <~ ("f" ~>
-      "r" <<= var "rewrite" @@ false @@ true @@ list ([] :: [TTerm Type]) @@ var "recurse" @@ var "tx" @@ Core.fieldTerm (var "f") $
+      "r" <<~ var "rewrite" @@ false @@ true @@ list ([] :: [TTerm Type]) @@ var "recurse" @@ var "tx" @@ Core.fieldTerm (var "f") $
       right $ Core.fieldWithTerm (var "r") (var "f")) $
 
     -- Forcing case statement branches is intended for Python, where we cannot accept a branch which is simply
@@ -668,8 +668,8 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
       "tname" <~ Core.caseStatementTypeName (var "cs") $
       "dflt" <~ Core.caseStatementDefault (var "cs") $
       "cases" <~ Core.caseStatementCases (var "cs") $
-      "rdflt" <<= Eithers.mapMaybe (var "rewrite" @@ false @@ false @@ list ([] :: [TTerm Type]) @@ var "recurse" @@ var "tx") (var "dflt") $
-      "rcases" <<= Eithers.mapList (var "forCase") (var "cases") $
+      "rdflt" <<~ Eithers.mapMaybe (var "rewrite" @@ false @@ false @@ list ([] :: [TTerm Type]) @@ var "recurse" @@ var "tx") (var "dflt") $
+      "rcases" <<~ Eithers.mapList (var "forCase") (var "cases") $
       right $ Core.termFunction $ Core.functionElimination $ Core.eliminationUnion $
         Core.caseStatement (var "tname") (var "rdflt") (var "rcases")) $
 
@@ -677,7 +677,7 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
       "checkBase" <~ ("elm" ~> cases _Elimination (var "elm")
         (Just $ var "recurse" @@ var "tx" @@ var "term") [
         _Elimination_union>>: "cs" ~> var "forCaseStatement" @@ var "cs"]) $
-      "base" <<= Eithers.map (var "unwind") (var "checkBase" @@ var "elm") $
+      "base" <<~ Eithers.map (var "unwind") (var "checkBase" @@ var "elm") $
       right $ Logic.ifElse (Logic.or (var "topLevel") (var "forced"))
         (var "padn" @@ int32 1 @@ var "base")
         (var "base")) $
@@ -687,9 +687,9 @@ etaExpandTypedTerm = define "etaExpandTypedTerm" $
       _Term_application>>: "a" ~>
         "lhs" <~ Core.applicationFunction (var "a") $
         "rhs" <~ Core.applicationArgument (var "a") $
-        "rhs2" <<= var "rewrite" @@ true @@ false @@ list ([] :: [TTerm Type]) @@ var "recurse" @@ var "tx" @@ var "rhs" $
-        "lhsarity" <<= var "arityOf" @@ var "tx" @@ var "lhs" $
-        "lhs2" <<= var "rewriteSpine" @@ var "lhs" $
+        "rhs2" <<~ var "rewrite" @@ true @@ false @@ list ([] :: [TTerm Type]) @@ var "recurse" @@ var "tx" @@ var "rhs" $
+        "lhsarity" <<~ var "arityOf" @@ var "tx" @@ var "lhs" $
+        "lhs2" <<~ var "rewriteSpine" @@ var "lhs" $
         "a2" <~ Core.termApplication (Core.application (var "lhs2") (var "rhs2")) $
         right $ Logic.ifElse (Equality.gt (var "lhsarity") (int32 1))
           (var "padn" @@ (Math.sub (var "lhsarity") (int32 1)) @@ var "a2")
@@ -786,7 +786,7 @@ reduceTerm = define "reduceTerm" $
   "applyElimination" <~ ("elm" ~> "reducedArg" ~>
     cases _Elimination (var "elm") Nothing [
       _Elimination_record>>: "proj" ~>
-        "fields" <<= ExtractCore.record @@ var "cx" @@ (Core.projectionTypeName $ var "proj") @@ var "graph" @@ (Rewriting.deannotateTerm @@ var "reducedArg") $
+        "fields" <<~ ExtractCore.record @@ var "cx" @@ (Core.projectionTypeName $ var "proj") @@ var "graph" @@ (Rewriting.deannotateTerm @@ var "reducedArg") $
         "matchingFields" <~ Lists.filter
           ("f" ~> Equality.equal (Core.fieldName $ var "f") (Core.projectionField $ var "proj"))
           (var "fields") $
@@ -800,7 +800,7 @@ reduceTerm = define "reduceTerm" $
             string " record"])) (var "cx"))
           (right $ Core.fieldTerm $ Lists.head $ var "matchingFields"),
       _Elimination_union>>: "cs" ~>
-        "field" <<= ExtractCore.injection @@ var "cx" @@ (Core.caseStatementTypeName $ var "cs") @@ var "graph" @@ var "reducedArg" $
+        "field" <<~ ExtractCore.injection @@ var "cx" @@ (Core.caseStatementTypeName $ var "cs") @@ var "graph" @@ var "reducedArg" $
         "matchingFields" <~ Lists.filter
           ("f" ~> Equality.equal (Core.fieldName $ var "f") (Core.fieldName $ var "field"))
           (Core.caseStatementCases $ var "cs") $
@@ -823,26 +823,26 @@ reduceTerm = define "reduceTerm" $
     "forElimination" <~ ("elm" ~> "args" ~>
       "arg" <~ Lists.head (var "args") $
       "remainingArgs" <~ Lists.tail (var "args") $
-      "reducedArg" <<= var "reduceArg" @@ var "eager" @@ (Rewriting.deannotateTerm @@ var "arg") $
-      "reducedResult" <<= Eithers.bind (var "applyElimination" @@ var "elm" @@ var "reducedArg") (var "reduce" @@ var "eager") $
+      "reducedArg" <<~ var "reduceArg" @@ var "eager" @@ (Rewriting.deannotateTerm @@ var "arg") $
+      "reducedResult" <<~ Eithers.bind (var "applyElimination" @@ var "elm" @@ var "reducedArg") (var "reduce" @@ var "eager") $
       var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs") $
     "forLambda" <~ ("l" ~> "args" ~>
       "param" <~ Core.lambdaParameter (var "l") $
       "body" <~ Core.lambdaBody (var "l") $
       "arg" <~ Lists.head (var "args") $
       "remainingArgs" <~ Lists.tail (var "args") $
-      "reducedArg" <<= var "reduce" @@ var "eager" @@ (Rewriting.deannotateTerm @@ var "arg") $
-      "reducedResult" <<= var "reduce" @@ var "eager"
+      "reducedArg" <<~ var "reduce" @@ var "eager" @@ (Rewriting.deannotateTerm @@ var "arg") $
+      "reducedResult" <<~ var "reduce" @@ var "eager"
         @@ (Rewriting.replaceFreeTermVariable @@ var "param" @@ var "reducedArg" @@ var "body") $
       var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs") $
     "forPrimitive" <~ ("prim" ~> "arity" ~> "args" ~>
       "argList" <~ Lists.take (var "arity") (var "args") $
       "remainingArgs" <~ Lists.drop (var "arity") (var "args") $
-      "reducedArgs" <<= Eithers.mapList (var "reduceArg" @@ var "eager") (var "argList") $
+      "reducedArgs" <<~ Eithers.mapList (var "reduceArg" @@ var "eager") (var "argList") $
       -- Strip annotations from reduced args so primitives can extract values properly
       "strippedArgs" <~ Lists.map Rewriting.deannotateTerm (var "reducedArgs") $
-      "primResult" <<= Eithers.bimap (var "mapErrorToOtherError") ("x" ~> var "x") (Graph.primitiveImplementation (var "prim") @@ var "cx" @@ var "graph" @@ var "strippedArgs") $
-      "reducedResult" <<= var "reduce" @@ var "eager" @@ var "primResult" $
+      "primResult" <<~ Eithers.bimap (var "mapErrorToOtherError") ("x" ~> var "x") (Graph.primitiveImplementation (var "prim") @@ var "cx" @@ var "graph" @@ var "strippedArgs") $
+      "reducedResult" <<~ var "reduce" @@ var "eager" @@ var "primResult" $
       var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs") $
     cases _Term (var "stripped")
       (Just $ right $ var "applyToArguments" @@ var "original" @@ var "args") [
@@ -859,7 +859,7 @@ reduceTerm = define "reduceTerm" $
               (right $ var "original")
               (var "forLambda" @@ var "l" @@ var "args"),
           _Function_primitive>>: "name" ~>
-            "prim" <<= Lexical.requirePrimitive @@ var "cx" @@ var "graph" @@ var "name" $
+            "prim" <<~ Lexical.requirePrimitive @@ var "cx" @@ var "graph" @@ var "name" $
             "arity" <~ Arity.primitiveArity @@ var "prim" $
             Logic.ifElse (Equality.gt (var "arity") (Lists.length $ var "args"))
               (right $ var "applyToArguments" @@ var "original" @@ var "args")
@@ -902,10 +902,10 @@ reduceTerm = define "reduceTerm" $
         "substituteAll" <~ ("bs" ~> "term" ~>
           Lists.foldl (var "substituteBinding") (var "term") (var "bs")) $
         "expandedBody" <~ var "substituteAll" @@ var "expandedBindings" @@ var "body" $
-        "reducedBody" <<= var "reduce" @@ var "eager" @@ var "expandedBody" $
+        "reducedBody" <<~ var "reduce" @@ var "eager" @@ var "expandedBody" $
         var "applyIfNullary" @@ var "eager" @@ var "reducedBody" @@ var "args"]) $
   "mapping" <~ ("recurse" ~> "mid" ~>
-    "inner" <<= Logic.ifElse (var "doRecurse" @@ var "eager" @@ var "mid")
+    "inner" <<~ Logic.ifElse (var "doRecurse" @@ var "eager" @@ var "mid")
       (var "recurse" @@ var "mid")
       (right $ var "mid") $
     var "applyIfNullary" @@ var "eager" @@ var "inner" @@ (list ([] :: [TTerm Term]))) $

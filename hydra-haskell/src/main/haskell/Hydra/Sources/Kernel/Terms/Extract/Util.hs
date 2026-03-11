@@ -81,7 +81,7 @@ comparison :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext Ot
 comparison = define "comparison" $
   doc "Extract a comparison from a term" $
   "cx" ~> "graph" ~> "term" ~>
-    "fname" <<= ExtractCore.unitVariant @@ var "cx" @@ Core.nameLift _Comparison @@ var "graph" @@ var "term" $
+    "fname" <<~ ExtractCore.unitVariant @@ var "cx" @@ Core.nameLift _Comparison @@ var "graph" @@ var "term" $
         Logic.ifElse (Equality.equal (Core.unName $ var "fname") (string $ unName _Comparison_equalTo))
           (right Graph.comparisonEqualTo)
           (Logic.ifElse (Equality.equal (Core.unName $ var "fname") (string $ unName _Comparison_lessThan))

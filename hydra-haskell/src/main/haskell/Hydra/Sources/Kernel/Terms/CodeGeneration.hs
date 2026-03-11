@@ -274,13 +274,13 @@ generateSourceFiles = define "generateSourceFiles" $
   "dataGraph" <~ Lexical.elementsToGraph @@ var "bsGraph" @@ var "schemaTypes2" @@ var "dataElements" $
 
   -- Generate type modules
-  "schemaFiles" <<= Logic.ifElse (Lists.null $ var "typeModulesToGenerate")
+  "schemaFiles" <<~ Logic.ifElse (Lists.null $ var "typeModulesToGenerate")
     (right (TTerm (Terms.list []) :: TTerm [(String, String)]))
     ("nameLists" <~ Lists.map
         ("m" ~> Lists.map ("e" ~> Core.bindingName $ var "e")
           (Lists.filter ("e" ~> Annotations.isNativeType @@ var "e") (Module.moduleElements $ var "m")))
         (var "typeModulesToGenerate") $
-      "schemaResult" <<= Eithers.bimap ("s" ~> Ctx.inContext (Error.otherError (var "s")) (var "cx")) ("r" ~> var "r")
+      "schemaResult" <<~ Eithers.bimap ("s" ~> Ctx.inContext (Error.otherError (var "s")) (var "cx")) ("r" ~> var "r")
         (AdaptSimple.schemaGraphToDefinitions @@ var "constraints" @@ var "schemaGraph" @@ var "nameLists" @@ var "cx") $
       "defLists" <~ Pairs.second (var "schemaResult") $
       "schemaGraphWithTypes" <~ Graph.graphWithSchemaTypes (var "schemaGraph") (var "schemaTypes2") $
@@ -293,10 +293,10 @@ generateSourceFiles = define "generateSourceFiles" $
         (Lists.zip (var "typeModulesToGenerate") (var "defLists"))) $
 
   -- Generate term modules
-  "termFiles" <<= Logic.ifElse (Lists.null $ var "termModulesToGenerate")
+  "termFiles" <<~ Logic.ifElse (Lists.null $ var "termModulesToGenerate")
     (right (TTerm (Terms.list []) :: TTerm [(String, String)]))
     ("namespaces" <~ Lists.map ("m" ~> Module.moduleNamespace (var "m")) (var "termModulesToGenerate") $
-      "dataResult" <<= Eithers.bimap ("s" ~> Ctx.inContext (Error.otherError (var "s")) (var "cx")) ("r" ~> var "r")
+      "dataResult" <<~ Eithers.bimap ("s" ~> Ctx.inContext (Error.otherError (var "s")) (var "cx")) ("r" ~> var "r")
         (AdaptSimple.dataGraphToDefinitions
           @@ var "constraints"
           @@ var "doInfer" @@ var "doExpand" @@ var "doHoistCaseStatements" @@ var "doHoistPolymorphicLetBindings"
@@ -350,7 +350,7 @@ formatTypeBinding :: TBinding (Graph -> Binding -> Prelude.Either DecodingError 
 formatTypeBinding = define "formatTypeBinding" $
   doc "Format a type binding for the lexicon" $
   "graph" ~> "binding" ~>
-  "typ" <<= decoderFor _Type @@ var "graph" @@ (Core.bindingTerm $ var "binding") $
+  "typ" <<~ decoderFor _Type @@ var "graph" @@ (Core.bindingTerm $ var "binding") $
   right $
     (string "  ") ++ Core.unName (Core.bindingName $ var "binding") ++ (string " = ") ++ (ShowCore.type_ @@ var "typ")
 
@@ -402,7 +402,7 @@ generateLexicon = define "generateLexicon" $
   "sortedPrimitives" <~ Lists.sortOn ("p" ~> Graph.primitiveName (var "p")) (var "primitives") $
   "sortedTypes" <~ Lists.sortOn ("b" ~> Core.bindingName (var "b")) (var "typeBindings") $
   "sortedTerms" <~ Lists.sortOn ("b" ~> Core.bindingName (var "b")) (var "termBindings") $
-  "typeLines" <<= Eithers.mapList ("b" ~> formatTypeBinding @@ var "graph" @@ var "b") (var "sortedTypes") $
+  "typeLines" <<~ Eithers.mapList ("b" ~> formatTypeBinding @@ var "graph" @@ var "b") (var "sortedTypes") $
   "termLines" <~ Lists.map ("b" ~> formatTermBinding @@ var "b") (var "sortedTerms") $
   "primitiveLines" <~ Lists.map ("p" ~> formatPrimitive @@ var "p") (var "sortedPrimitives") $
   right $
@@ -430,7 +430,7 @@ inferModules = define "inferModules" $
   "g0" <~ modulesToGraph @@ var "bsGraph" @@ var "universeMods" @@ var "universeMods" $
   "dataElements" <~ Lists.filter ("e" ~> Logic.not $ Annotations.isNativeType @@ var "e")
     (Lists.concat $ Lists.map ("m" ~> Module.moduleElements (var "m")) (var "universeMods")) $
-  "inferResultWithCx" <<= Inference.inferGraphTypes @@ var "cx" @@ var "dataElements" @@ var "g0" $
+  "inferResultWithCx" <<~ Inference.inferGraphTypes @@ var "cx" @@ var "dataElements" @@ var "g0" $
   "inferResult" <~ Pairs.first (var "inferResultWithCx") $
   "g1" <~ Pairs.first (var "inferResult") $
   "inferredElements" <~ Pairs.second (var "inferResult") $
@@ -490,7 +490,7 @@ inferAndGenerateLexicon = define "inferAndGenerateLexicon" $
   "g0" <~ modulesToGraph @@ var "bsGraph" @@ var "kernelModules" @@ var "kernelModules" $
   "dataElements" <~ Lists.filter ("e" ~> Logic.not $ Annotations.isNativeType @@ var "e")
     (Lists.concat $ Lists.map ("m" ~> Module.moduleElements (var "m")) (var "kernelModules")) $
-  "inferResultWithCx" <<= Eithers.bimap ("ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")) ("x" ~> var "x") (Inference.inferGraphTypes @@ var "cx" @@ var "dataElements" @@ var "g0") $
+  "inferResultWithCx" <<~ Eithers.bimap ("ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")) ("x" ~> var "x") (Inference.inferGraphTypes @@ var "cx" @@ var "dataElements" @@ var "g0") $
   "g1" <~ Pairs.first (Pairs.first $ var "inferResultWithCx") $
   Eithers.bimap Error.unDecodingError ("x" ~> var "x") (generateLexicon @@ var "g1")
 

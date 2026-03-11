@@ -144,7 +144,7 @@ debugIf :: TBinding (Context -> String -> String -> Prelude.Either (InContext Ot
 debugIf = define "debugIf" $
   doc "Debug if the debug ID matches (Either version)" $
   "cx" ~> "debugId" ~> "message" ~>
-  "mid" <<= getDebugId @@ var "cx" $
+  "mid" <<~ getDebugId @@ var "cx" $
   Logic.ifElse (Equality.equal (var "mid") (just $ var "debugId"))
     (Ctx.failInContext (Error.otherError (var "message")) (var "cx"))
     (right unit)
@@ -153,7 +153,7 @@ failOnFlag :: TBinding (Context -> Name -> String -> Prelude.Either (InContext O
 failOnFlag = define "failOnFlag" $
   doc "Fail if the given flag is set (Either version)" $
   "cx" ~> "flag" ~> "msg" ~>
-  "val" <<= hasFlag @@ var "cx" @@ var "flag" $
+  "val" <<~ hasFlag @@ var "cx" @@ var "flag" $
   Logic.ifElse (var "val")
     (Ctx.failInContext (Error.otherError (var "msg")) (var "cx"))
     (right unit)
@@ -237,7 +237,7 @@ getTypeClasses = define "getTypeClasses" $
     "byName" <~ Maps.fromList (list [
       pair (Core.nameLift _TypeClass_equality) Graph.typeClassEquality,
       pair (Core.nameLift _TypeClass_ordering) Graph.typeClassOrdering]) $
-    "fn" <<= ExtractCore.unitVariant @@ var "cx" @@ Core.nameLift _TypeClass @@ var "graph" @@ var "term" $
+    "fn" <<~ ExtractCore.unitVariant @@ var "cx" @@ Core.nameLift _TypeClass @@ var "graph" @@ var "term" $
     Maybes.maybe
       (Ctx.failInContext (Error.otherError (string "unexpected: expected type class, got " ++ (ShowCore.term @@ var "term"))) (var "cx"))
       (unaryFunction right)
@@ -449,5 +449,5 @@ whenFlag :: TBinding (Context -> Name -> Prelude.Either (InContext OtherError) a
 whenFlag = define "whenFlag" $
   doc "Execute different branches based on flag (Either version)" $
   "cx" ~> "flag" ~> "ethen" ~> "eelse" ~>
-  "b" <<= hasFlag @@ var "cx" @@ var "flag" $
+  "b" <<~ hasFlag @@ var "cx" @@ var "flag" $
   Logic.ifElse (var "b") (var "ethen") (var "eelse")

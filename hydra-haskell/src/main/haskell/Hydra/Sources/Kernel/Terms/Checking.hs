@@ -262,7 +262,7 @@ checkNominalApplication :: TBinding (Context -> Graph -> Name -> [Type] -> Prelu
 checkNominalApplication = define "checkNominalApplication" $
   doc "Check that a nominal type is applied to the correct number of type arguments (Either version)" $
   "cx" ~> "tx" ~> "tname" ~> "typeArgs" ~>
-  "result" <<= Schemas.requireSchemaType @@ var "cx" @@ (Graph.graphSchemaTypes $ var "tx") @@ var "tname" $
+  "result" <<~ Schemas.requireSchemaType @@ var "cx" @@ (Graph.graphSchemaTypes $ var "tx") @@ var "tname" $
   "schemaType" <~ Pairs.first (var "result") $
   "cx2" <~ Pairs.second (var "result") $
   "vars" <~ Core.typeSchemeVariables (var "schemaType") $
@@ -294,7 +294,7 @@ checkType = define "checkType" $
   "cx" ~> "tx" ~> "term" ~> "typ" ~>
   "vars" <~ Graph.graphTypeVariables (var "tx") $
   Logic.ifElse (Constants.debugInference)
-    ("t0" <<= (Eithers.map ("_p" ~> Pairs.first (var "_p")) (typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "term")) $
+    ("t0" <<~ (Eithers.map ("_p" ~> Pairs.first (var "_p")) (typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "term")) $
       Logic.ifElse (typesEffectivelyEqual @@ var "tx" @@ var "t0" @@ var "typ")
         (right unit)
         (Ctx.failInContext (Error.otherError $ Strings.cat $ list [
@@ -487,16 +487,16 @@ typeOfApplication = define "typeOfApplication" $
       "freshN" <~ Pairs.first (var "nameResult") $
       "cx1" <~ Pairs.second (var "nameResult") $
       right $ pair (Core.typeVariable $ var "freshN") (var "cx1")]) $
-  "result1" <<= typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "fun" $
+  "result1" <<~ typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "fun" $
   "tfun" <~ Pairs.first (var "result1") $
   "cx2" <~ Pairs.second (var "result1") $
-  "result2" <<= typeOf @@ var "cx2" @@ var "tx" @@ noTypeArgs @@ var "arg" $
+  "result2" <<~ typeOf @@ var "cx2" @@ var "tx" @@ noTypeArgs @@ var "arg" $
   "targ" <~ Pairs.first (var "result2") $
   "cx3" <~ Pairs.second (var "result2") $
-  "result3" <<= var "tryType" @@ var "cx3" @@ var "tfun" @@ var "targ" $
+  "result3" <<~ var "tryType" @@ var "cx3" @@ var "tfun" @@ var "targ" $
   "t" <~ Pairs.first (var "result3") $
   "cx4" <~ Pairs.second (var "result3") $
-  "applied" <<= applyTypeArgumentsToType @@ var "cx4" @@ var "tx" @@ var "typeArgs" @@ var "t" $
+  "applied" <<~ applyTypeArgumentsToType @@ var "cx4" @@ var "tx" @@ var "typeArgs" @@ var "t" $
   right $ pair (var "applied") (var "cx4")
 
 typeOfCaseStatement :: TBinding (Context -> Graph -> [Type] -> CaseStatement -> Prelude.Either (InContext OtherError) (Type, Context))
@@ -508,7 +508,7 @@ typeOfCaseStatement = define "typeOfCaseStatement" $
   "cases" <~ Core.caseStatementCases (var "cs") $
   "cterms" <~ Lists.map (unaryFunction Core.fieldTerm) (var "cases") $
   -- Type the default case if present
-  "dfltResult" <<= Eithers.mapMaybe ("e" ~> typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "e") (var "dflt") $
+  "dfltResult" <<~ Eithers.mapMaybe ("e" ~> typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "e") (var "dflt") $
   -- dfltResult :: Maybe (Type, Context)
   "tdflt" <~ Maybes.map (unaryFunction Pairs.first) (var "dfltResult") $
   "cx2" <~ Maybes.maybe (var "cx") (unaryFunction Pairs.second) (var "dfltResult") $
@@ -516,31 +516,31 @@ typeOfCaseStatement = define "typeOfCaseStatement" $
   "foldResult" <~ Lists.foldl
     ("acc" ~> "term" ~>
       -- acc is Either (InContext OtherError) ([Type], Context)
-      "accR" <<= var "acc" $
+      "accR" <<~ var "acc" $
       "types" <~ Pairs.first (var "accR") $
       "cxA" <~ Pairs.second (var "accR") $
-      "tResult" <<= typeOf @@ var "cxA" @@ var "tx" @@ noTypeArgs @@ var "term" $
+      "tResult" <<~ typeOf @@ var "cxA" @@ var "tx" @@ noTypeArgs @@ var "term" $
       "t" <~ Pairs.first (var "tResult") $
       "cxB" <~ Pairs.second (var "tResult") $
       right $ pair (Lists.concat2 (var "types") (Lists.pure $ var "t")) (var "cxB"))
     (right $ pair (list ([] :: [TTerm Type])) (var "cx2"))
     (var "cterms") $
-  "foldR" <<= var "foldResult" $
+  "foldR" <<~ var "foldResult" $
   "tcterms" <~ Pairs.first (var "foldR") $
   "cx3" <~ Pairs.second (var "foldR") $
   -- Extract function codomains
   "fcodsResult" <~ Lists.foldl
     ("acc" ~> "t" ~>
-      "accR" <<= var "acc" $
+      "accR" <<~ var "acc" $
       "cods" <~ Pairs.first (var "accR") $
-      "ft" <<= ExtractCore.functionType @@ var "cx3" @@ var "t" $
+      "ft" <<~ ExtractCore.functionType @@ var "cx3" @@ var "t" $
       right $ pair (Lists.concat2 (var "cods") (Lists.pure $ Core.functionTypeCodomain $ var "ft")) (var "cx3"))
     (right $ pair (list ([] :: [TTerm Type])) (var "cx3"))
     (var "tcterms") $
-  "fcodsR" <<= var "fcodsResult" $
+  "fcodsR" <<~ var "fcodsResult" $
   "fcods" <~ Pairs.first (var "fcodsR") $
   "cods" <~ Maybes.cat (Lists.cons (var "tdflt") $ Lists.map (unaryFunction Maybes.pure) (var "fcods")) $
-  "cod" <<= checkSameType @@ var "cx3" @@ var "tx" @@ (string "case branches") @@ var "cods" $
+  "cod" <<~ checkSameType @@ var "cx3" @@ var "tx" @@ (string "case branches") @@ var "cods" $
   right $ pair (Core.typeFunction $ Core.functionType
     (Schemas.nominalApplication @@ var "tname" @@ var "typeArgs")
     (var "cod")) (var "cx3")
@@ -553,12 +553,12 @@ typeOfEither = define "typeOfEither" $
   Logic.ifElse (Equality.equal (var "n") (int32 2))
     (Eithers.either_
       ("leftTerm" ~>
-        "result" <<= typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "leftTerm" $
+        "result" <<~ typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "leftTerm" $
         "leftType" <~ Pairs.first (var "result") $
         "cx2" <~ Pairs.second (var "result") $
         right $ pair (Core.typeEither $ Core.eitherType (var "leftType") (Lists.at (int32 1) $ var "typeArgs")) (var "cx2"))
       ("rightTerm" ~>
-        "result" <<= typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "rightTerm" $
+        "result" <<~ typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "rightTerm" $
         "rightType" <~ Pairs.first (var "result") $
         "cx2" <~ Pairs.second (var "result") $
         right $ pair (Core.typeEither $ Core.eitherType (Lists.at (int32 0) $ var "typeArgs") (var "rightType")) (var "cx2"))
@@ -573,13 +573,13 @@ typeOfInjection = define "typeOfInjection" $
   "field" <~ Core.injectionField (var "injection") $
   "fname" <~ Core.fieldName (var "field") $
   "fterm" <~ Core.fieldTerm (var "field") $
-  "schemaResult" <<= Schemas.requireSchemaType @@ var "cx" @@ (Graph.graphSchemaTypes $ var "tx") @@ var "tname" $
+  "schemaResult" <<~ Schemas.requireSchemaType @@ var "cx" @@ (Graph.graphSchemaTypes $ var "tx") @@ var "tname" $
   "schemaType" <~ Pairs.first (var "schemaResult") $
   "cx2" <~ Pairs.second (var "schemaResult") $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
   "sbody" <~ Core.typeSchemeType (var "schemaType") $
-  "sfields" <<= ExtractCore.unionType @@ var "cx2" @@ var "tname" @@ var "sbody" $
-  "ftyp" <<= Schemas.findFieldType @@ var "cx2" @@ var "fname" @@ var "sfields" $
+  "sfields" <<~ ExtractCore.unionType @@ var "cx2" @@ var "tname" @@ var "sbody" $
+  "ftyp" <<~ Schemas.findFieldType @@ var "cx2" @@ var "fname" @@ var "sfields" $
   right $ pair (Schemas.nominalApplication @@ var "tname" @@ var "typeArgs") (var "cx2")
 
 typeOfLambda :: TBinding (Context -> Graph -> [Type] -> Lambda -> Prelude.Either (InContext OtherError) (Type, Context))
@@ -589,17 +589,17 @@ typeOfLambda = define "typeOfLambda" $
   "v" <~ Core.lambdaParameter (var "l") $
   "mdom" <~ Core.lambdaDomain (var "l") $
   "body" <~ Core.lambdaBody (var "l") $
-  "tbodyResult" <<= optCases (var "mdom")
+  "tbodyResult" <<~ optCases (var "mdom")
     (Ctx.failInContext (Error.otherError $ string "untyped lambda") (var "cx"))
     ("dom" ~>
       "types2" <~ Maps.insert (var "v") (Rewriting.fTypeToTypeScheme @@ var "dom") (Graph.graphBoundTypes $ var "tx") $
-      "codResult" <<= typeOf @@ var "cx" @@ (Graph.graphWithBoundTypes (var "tx") $ var "types2") @@ noTypeArgs @@ var "body" $
+      "codResult" <<~ typeOf @@ var "cx" @@ (Graph.graphWithBoundTypes (var "tx") $ var "types2") @@ noTypeArgs @@ var "body" $
       "cod" <~ Pairs.first (var "codResult") $
       "cx2" <~ Pairs.second (var "codResult") $
       right $ pair (Core.typeFunction $ Core.functionType (var "dom") (var "cod")) (var "cx2")) $
   "tbody" <~ Pairs.first (var "tbodyResult") $
   "cx3" <~ Pairs.second (var "tbodyResult") $
-  "applied" <<= applyTypeArgumentsToType @@ var "cx3" @@ var "tx" @@ var "typeArgs" @@ var "tbody" $
+  "applied" <<~ applyTypeArgumentsToType @@ var "cx3" @@ var "tx" @@ var "typeArgs" @@ var "tbody" $
   right $ pair (var "applied") (var "cx3")
 
 typeOfLet :: TBinding (Context -> Graph -> [Type] -> Let -> Prelude.Either (InContext OtherError) (Type, Context))
@@ -619,23 +619,23 @@ typeOfLet = define "typeOfLet" $
   -- Get binding types, threading errors through the fold
   "btypesResult" <~ Lists.foldl
     ("acc" ~> "b" ~>
-      "accR" <<= var "acc" $
+      "accR" <<~ var "acc" $
       "types" <~ Pairs.first (var "accR") $
-      "btype" <<= var "bindingType" @@ var "b" $
+      "btype" <<~ var "bindingType" @@ var "b" $
       right $ pair (Lists.concat2 (var "types") (Lists.pure $ var "btype")) unit)
     (right $ pair (list ([] :: [TTerm Type])) unit)
     (var "bs") $
-  "btypesR" <<= var "btypesResult" $
+  "btypesR" <<~ var "btypesResult" $
   "btypes" <~ Pairs.first (var "btypesR") $
   -- Extended type context
   "tx2" <~ (Graph.graphWithBoundTypes (var "tx")
     (Maps.union
       (Maps.fromList $ Lists.zip (var "bnames") (Lists.map (Rewriting.fTypeToTypeScheme) $ var "btypes"))
       (Graph.graphBoundTypes $ var "tx"))) $
-  "tResult" <<= typeOf @@ var "cx" @@ var "tx2" @@ noTypeArgs @@ var "body" $
+  "tResult" <<~ typeOf @@ var "cx" @@ var "tx2" @@ noTypeArgs @@ var "body" $
   "t" <~ Pairs.first (var "tResult") $
   "cx2" <~ Pairs.second (var "tResult") $
-  "applied" <<= applyTypeArgumentsToType @@ var "cx2" @@ var "tx" @@ var "typeArgs" @@ var "t" $
+  "applied" <<~ applyTypeArgumentsToType @@ var "cx2" @@ var "tx" @@ var "typeArgs" @@ var "t" $
   right $ pair (var "applied") (var "cx2")
 
 typeOfList :: TBinding (Context -> Graph -> [Type] -> [Term] -> Prelude.Either (InContext OtherError) (Type, Context))
@@ -649,19 +649,19 @@ typeOfList = define "typeOfList" $
     -- Nonempty list: type all elements, threading context
     ("foldResult" <~ Lists.foldl
       ("acc" ~> "term" ~>
-        "accR" <<= var "acc" $
+        "accR" <<~ var "acc" $
         "types" <~ Pairs.first (var "accR") $
         "cxA" <~ Pairs.second (var "accR") $
-        "tResult" <<= typeOf @@ var "cxA" @@ var "tx" @@ noTypeArgs @@ var "term" $
+        "tResult" <<~ typeOf @@ var "cxA" @@ var "tx" @@ noTypeArgs @@ var "term" $
         "t" <~ Pairs.first (var "tResult") $
         "cxB" <~ Pairs.second (var "tResult") $
         right $ pair (Lists.concat2 (var "types") (Lists.pure $ var "t")) (var "cxB"))
       (right $ pair (list ([] :: [TTerm Type])) (var "cx"))
       (var "els") $
-    "foldR" <<= var "foldResult" $
+    "foldR" <<~ var "foldResult" $
     "eltypes" <~ Pairs.first (var "foldR") $
     "cx2" <~ Pairs.second (var "foldR") $
-    "unifiedType" <<= checkSameType @@ var "cx2" @@ var "tx" @@ (string "list elements") @@ var "eltypes" $
+    "unifiedType" <<~ checkSameType @@ var "cx2" @@ var "tx" @@ (string "list elements") @@ var "eltypes" $
     right $ pair (Core.typeList $ var "unifiedType") (var "cx2"))
 
 typeOfLiteral :: TBinding (Context -> Graph -> [Type] -> Literal -> Prelude.Either (InContext OtherError) (Type, Context))
@@ -669,7 +669,7 @@ typeOfLiteral = define "typeOfLiteral" $
   doc "Reconstruct the type of a literal (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "lit" ~>
   "t" <~ Core.typeLiteral (Reflect.literalType @@ var "lit") $
-  "applied" <<= applyTypeArgumentsToType @@ var "cx" @@ var "tx" @@ var "typeArgs" @@ var "t" $
+  "applied" <<~ applyTypeArgumentsToType @@ var "cx" @@ var "tx" @@ var "typeArgs" @@ var "t" $
   right $ pair (var "applied") (var "cx")
 
 typeOfMap :: TBinding (Context -> Graph -> [Type] -> M.Map Term Term -> Prelude.Either (InContext OtherError) (Type, Context))
@@ -687,36 +687,36 @@ typeOfMap = define "typeOfMap" $
     -- Fold over keys
     "keyFoldResult" <~ Lists.foldl
       ("acc" ~> "p" ~>
-        "accR" <<= var "acc" $
+        "accR" <<~ var "acc" $
         "types" <~ Pairs.first (var "accR") $
         "cxA" <~ Pairs.second (var "accR") $
-        "tResult" <<= typeOf @@ var "cxA" @@ var "tx" @@ noTypeArgs @@ (Pairs.first $ var "p") $
+        "tResult" <<~ typeOf @@ var "cxA" @@ var "tx" @@ noTypeArgs @@ (Pairs.first $ var "p") $
         "t" <~ Pairs.first (var "tResult") $
         "cxB" <~ Pairs.second (var "tResult") $
         right $ pair (Lists.concat2 (var "types") (Lists.pure $ var "t")) (var "cxB"))
       (right $ pair (list ([] :: [TTerm Type])) (var "cx"))
       (var "pairs") $
-    "keyFoldR" <<= var "keyFoldResult" $
+    "keyFoldR" <<~ var "keyFoldResult" $
     "keyTypes" <~ Pairs.first (var "keyFoldR") $
     "cx2" <~ Pairs.second (var "keyFoldR") $
-    "kt" <<= checkSameType @@ var "cx2" @@ var "tx" @@ (string "map keys") @@ var "keyTypes" $
+    "kt" <<~ checkSameType @@ var "cx2" @@ var "tx" @@ (string "map keys") @@ var "keyTypes" $
     -- Fold over values
     "valFoldResult" <~ Lists.foldl
       ("acc" ~> "p" ~>
-        "accR" <<= var "acc" $
+        "accR" <<~ var "acc" $
         "types" <~ Pairs.first (var "accR") $
         "cxA" <~ Pairs.second (var "accR") $
-        "tResult" <<= typeOf @@ var "cxA" @@ var "tx" @@ noTypeArgs @@ (Pairs.second $ var "p") $
+        "tResult" <<~ typeOf @@ var "cxA" @@ var "tx" @@ noTypeArgs @@ (Pairs.second $ var "p") $
         "t" <~ Pairs.first (var "tResult") $
         "cxB" <~ Pairs.second (var "tResult") $
         right $ pair (Lists.concat2 (var "types") (Lists.pure $ var "t")) (var "cxB"))
       (right $ pair (list ([] :: [TTerm Type])) (var "cx2"))
       (var "pairs") $
-    "valFoldR" <<= var "valFoldResult" $
+    "valFoldR" <<~ var "valFoldResult" $
     "valTypes" <~ Pairs.first (var "valFoldR") $
     "cx3" <~ Pairs.second (var "valFoldR") $
-    "vt" <<= checkSameType @@ var "cx3" @@ var "tx" @@ (string "map values") @@ var "valTypes" $
-    "applied" <<= applyTypeArgumentsToType @@ var "cx3" @@ var "tx" @@ var "typeArgs"
+    "vt" <<~ checkSameType @@ var "cx3" @@ var "tx" @@ (string "map values") @@ var "valTypes" $
+    "applied" <<~ applyTypeArgumentsToType @@ var "cx3" @@ var "tx" @@ var "typeArgs"
       @@ (Core.typeMap $ Core.mapType (var "kt") (var "vt")) $
     right $ pair (var "applied") (var "cx3"))
 
@@ -730,11 +730,11 @@ typeOfMaybe = define "typeOfMaybe" $
       (right $ pair (Core.typeMaybe $ Lists.head $ var "typeArgs") (var "cx"))
       (Ctx.failInContext (Error.otherError $ (string "optional type applied to ") ++ Literals.showInt32 (var "n") ++ (string " argument(s). Expected 1.")) (var "cx"))) $
   "forJust" <~ ("term" ~>
-    "tResult" <<= typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "term" $
+    "tResult" <<~ typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "term" $
     "termType" <~ Pairs.first (var "tResult") $
     "cx2" <~ Pairs.second (var "tResult") $
     "t" <~ Core.typeMaybe (var "termType") $
-    "applied" <<= applyTypeArgumentsToType @@ var "cx2" @@ var "tx" @@ var "typeArgs" @@ var "t" $
+    "applied" <<~ applyTypeArgumentsToType @@ var "cx2" @@ var "tx" @@ var "typeArgs" @@ var "t" $
     right $ pair (var "applied") (var "cx2")) $
   optCases (var "mt") (var "forNothing") (var "forJust")
 
@@ -746,10 +746,10 @@ typeOfPair = define "typeOfPair" $
   Logic.ifElse (Equality.equal (var "n") (int32 2))
     ("pairFst" <~ Pairs.first (var "p") $
     "pairSnd" <~ Pairs.second (var "p") $
-    "result1" <<= typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "pairFst" $
+    "result1" <<~ typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "pairFst" $
     "firstType" <~ Pairs.first (var "result1") $
     "cx2" <~ Pairs.second (var "result1") $
-    "result2" <<= typeOf @@ var "cx2" @@ var "tx" @@ noTypeArgs @@ var "pairSnd" $
+    "result2" <<~ typeOf @@ var "cx2" @@ var "tx" @@ noTypeArgs @@ var "pairSnd" $
     "secondType" <~ Pairs.first (var "result2") $
     "cx3" <~ Pairs.second (var "result2") $
     right $ pair (Core.typePair $ Core.pairType (var "firstType") (var "secondType")) (var "cx3"))
@@ -769,7 +769,7 @@ typeOfPrimitive = define "typeOfPrimitive" $
       "ts" <~ Pairs.first (var "instResult") $
       "cx2" <~ Pairs.second (var "instResult") $
       "t" <~ Rewriting.typeSchemeToFType @@ var "ts" $
-      "applied" <<= applyTypeArgumentsToType @@ var "cx2" @@ var "tx" @@ var "typeArgs" @@ var "t" $
+      "applied" <<~ applyTypeArgumentsToType @@ var "cx2" @@ var "tx" @@ var "typeArgs" @@ var "t" $
       right $ pair (var "applied") (var "cx2"))
     (var "rawTs")
 
@@ -779,13 +779,13 @@ typeOfProjection = define "typeOfProjection" $
   "cx" ~> "tx" ~> "typeArgs" ~> "p" ~>
   "tname" <~ Core.projectionTypeName (var "p") $
   "fname" <~ Core.projectionField (var "p") $
-  "schemaResult" <<= Schemas.requireSchemaType @@ var "cx" @@ (Graph.graphSchemaTypes $ var "tx") @@ var "tname" $
+  "schemaResult" <<~ Schemas.requireSchemaType @@ var "cx" @@ (Graph.graphSchemaTypes $ var "tx") @@ var "tname" $
   "schemaType" <~ Pairs.first (var "schemaResult") $
   "cx2" <~ Pairs.second (var "schemaResult") $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
   "sbody" <~ Core.typeSchemeType (var "schemaType") $
-  "sfields" <<= ExtractCore.recordType @@ var "cx2" @@ var "tname" @@ var "sbody" $
-  "ftyp" <<= Schemas.findFieldType @@ var "cx2" @@ var "fname" @@ var "sfields" $
+  "sfields" <<~ ExtractCore.recordType @@ var "cx2" @@ var "tname" @@ var "sbody" $
+  "ftyp" <<~ Schemas.findFieldType @@ var "cx2" @@ var "fname" @@ var "sfields" $
   "subst" <~ Typing.typeSubst (Maps.fromList $ Lists.zip (var "svars") (var "typeArgs")) $
   "sftyp" <~ Substitution.substInType @@ var "subst" @@ var "ftyp" $
   right $ pair (Core.typeFunction $ Core.functionType
@@ -801,16 +801,16 @@ typeOfRecord = define "typeOfRecord" $
   -- Type all field terms, threading context (for checking only)
   "foldResult" <~ Lists.foldl
     ("acc" ~> "term" ~>
-      "accR" <<= var "acc" $
+      "accR" <<~ var "acc" $
       "types" <~ Pairs.first (var "accR") $
       "cxA" <~ Pairs.second (var "accR") $
-      "tResult" <<= typeOf @@ var "cxA" @@ var "tx" @@ noTypeArgs @@ var "term" $
+      "tResult" <<~ typeOf @@ var "cxA" @@ var "tx" @@ noTypeArgs @@ var "term" $
       "t" <~ Pairs.first (var "tResult") $
       "cxB" <~ Pairs.second (var "tResult") $
       right $ pair (Lists.concat2 (var "types") (Lists.pure $ var "t")) (var "cxB"))
     (right $ pair (list ([] :: [TTerm Type])) (var "cx"))
     (Lists.map (unaryFunction Core.fieldTerm) (var "fields")) $
-  "foldR" <<= var "foldResult" $
+  "foldR" <<~ var "foldResult" $
   "cx2" <~ Pairs.second (var "foldR") $
   right $ pair (Schemas.nominalApplication @@ var "tname" @@ var "typeArgs") (var "cx2")
 
@@ -825,19 +825,19 @@ typeOfSet = define "typeOfSet" $
     -- Nonempty set: type all elements, threading context
     ("foldResult" <~ Lists.foldl
       ("acc" ~> "term" ~>
-        "accR" <<= var "acc" $
+        "accR" <<~ var "acc" $
         "types" <~ Pairs.first (var "accR") $
         "cxA" <~ Pairs.second (var "accR") $
-        "tResult" <<= typeOf @@ var "cxA" @@ var "tx" @@ noTypeArgs @@ var "term" $
+        "tResult" <<~ typeOf @@ var "cxA" @@ var "tx" @@ noTypeArgs @@ var "term" $
         "t" <~ Pairs.first (var "tResult") $
         "cxB" <~ Pairs.second (var "tResult") $
         right $ pair (Lists.concat2 (var "types") (Lists.pure $ var "t")) (var "cxB"))
       (right $ pair (list ([] :: [TTerm Type])) (var "cx"))
       (Sets.toList $ var "els") $
-    "foldR" <<= var "foldResult" $
+    "foldR" <<~ var "foldResult" $
     "eltypes" <~ Pairs.first (var "foldR") $
     "cx2" <~ Pairs.second (var "foldR") $
-    "unifiedType" <<= checkSameType @@ var "cx2" @@ var "tx" @@ (string "set elements") @@ var "eltypes" $
+    "unifiedType" <<~ checkSameType @@ var "cx2" @@ var "tx" @@ (string "set elements") @@ var "eltypes" $
     right $ pair (Core.typeSet $ var "unifiedType") (var "cx2"))
 
 typeOfTypeApplication :: TBinding (Context -> Graph -> [Type] -> TypeApplicationTerm -> Prelude.Either (InContext OtherError) (Type, Context))
@@ -856,10 +856,10 @@ typeOfTypeLambda = define "typeOfTypeLambda" $
   "body" <~ Core.typeLambdaBody (var "tl") $
   "vars" <~ Graph.graphTypeVariables (var "tx") $
   "tx2" <~ Graph.graphWithTypeVariables (var "tx") (Sets.insert (var "v") (var "vars")) $
-  "result1" <<= typeOf @@ var "cx" @@ var "tx2" @@ noTypeArgs @@ var "body" $
+  "result1" <<~ typeOf @@ var "cx" @@ var "tx2" @@ noTypeArgs @@ var "body" $
   "t1" <~ Pairs.first (var "result1") $
   "cx2" <~ Pairs.second (var "result1") $
-  "applied" <<= applyTypeArgumentsToType @@ var "cx2" @@ var "tx" @@ var "typeArgs"
+  "applied" <<~ applyTypeArgumentsToType @@ var "cx2" @@ var "tx" @@ var "typeArgs"
     @@ (Core.typeForall $ Core.forallType (var "v") (var "t1")) $
   right $ pair (var "applied") (var "cx2")
 
@@ -867,19 +867,19 @@ typeOfUnit :: TBinding (Context -> Graph -> [Type] -> Prelude.Either (InContext 
 typeOfUnit = define "typeOfUnit" $
   doc "Reconstruct the type of the unit term (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~>
-  "applied" <<= applyTypeArgumentsToType @@ var "cx" @@ var "tx" @@ var "typeArgs" @@ Core.typeUnit $
+  "applied" <<~ applyTypeArgumentsToType @@ var "cx" @@ var "tx" @@ var "typeArgs" @@ Core.typeUnit $
   right $ pair (var "applied") (var "cx")
 
 typeOfUnwrap :: TBinding (Context -> Graph -> [Type] -> Name -> Prelude.Either (InContext OtherError) (Type, Context))
 typeOfUnwrap = define "typeOfUnwrap" $
   doc "Reconstruct the type of an unwrap operation (Either/Context version)" $
   "cx" ~> "tx" ~> "typeArgs" ~> "tname" ~>
-  "schemaResult" <<= Schemas.requireSchemaType @@ var "cx" @@ (Graph.graphSchemaTypes $ var "tx") @@ var "tname" $
+  "schemaResult" <<~ Schemas.requireSchemaType @@ var "cx" @@ (Graph.graphSchemaTypes $ var "tx") @@ var "tname" $
   "schemaType" <~ Pairs.first (var "schemaResult") $
   "cx2" <~ Pairs.second (var "schemaResult") $
   "svars" <~ Core.typeSchemeVariables (var "schemaType") $
   "sbody" <~ Core.typeSchemeType (var "schemaType") $
-  "wrapped" <<= ExtractCore.wrappedType @@ var "cx2" @@ var "tname" @@ var "sbody" $
+  "wrapped" <<~ ExtractCore.wrappedType @@ var "cx2" @@ var "tname" @@ var "sbody" $
   "subst" <~ Typing.typeSubst (Maps.fromList $ Lists.zip (var "svars") (var "typeArgs")) $
   "swrapped" <~ Substitution.substInType @@ var "subst" @@ var "wrapped" $
   right $ pair (MetaTypes.function
@@ -904,7 +904,7 @@ typeOfVariable = define "typeOfVariable" $
         (pair (Rewriting.typeSchemeToFType @@ var "ts") (var "cx")) $
       "t" <~ Pairs.first (var "tResult") $
       "cx2" <~ Pairs.second (var "tResult") $
-      "applied" <<= applyTypeArgumentsToType @@ var "cx2" @@ var "tx" @@ var "typeArgs" @@ var "t" $
+      "applied" <<~ applyTypeArgumentsToType @@ var "cx2" @@ var "tx" @@ var "typeArgs" @@ var "t" $
       right $ pair (var "applied") (var "cx2"))
     (var "rawTypeScheme")
 
@@ -915,6 +915,6 @@ typeOfWrappedTerm = define "typeOfWrappedTerm" $
   "tname" <~ Core.wrappedTermTypeName (var "wt") $
   "body" <~ Core.wrappedTermBody (var "wt") $
   -- Type the body for checking purposes
-  "result" <<= typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "body" $
+  "result" <<~ typeOf @@ var "cx" @@ var "tx" @@ noTypeArgs @@ var "body" $
   "cx2" <~ Pairs.second (var "result") $
   right $ pair (Schemas.nominalApplication @@ var "tname" @@ var "typeArgs") (var "cx2")

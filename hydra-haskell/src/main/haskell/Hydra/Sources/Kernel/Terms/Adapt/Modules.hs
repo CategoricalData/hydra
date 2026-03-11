@@ -97,7 +97,7 @@ adaptTypeToLanguageAndEncode = define "adaptTypeToLanguageAndEncode" $
   doc "Given a target language, an encoding function, and a type, adapt and encode the type" $
   "lang" ~> "enc" ~> "cx" ~> "g" ~> "typ" ~>
   "dflt" <~ (
-    "adaptedType" <<= adaptTypeToLanguage @@ var "lang" @@ var "cx" @@ var "g" @@ var "typ" $
+    "adaptedType" <<~ adaptTypeToLanguage @@ var "lang" @@ var "cx" @@ var "g" @@ var "typ" $
     var "enc" @@ var "adaptedType") $
   cases _Type (Rewriting.deannotateType @@ var "typ")
     (Just $ var "dflt") [
@@ -131,9 +131,9 @@ transformModule = define "transformModule" $
   doc "Given a target language, a unidirectional last mile encoding, and an intermediate helper function, transform a given module into a target representation" $
   "lang" ~> "encodeTerm" ~> "createModule" ~> "cx" ~> "g" ~> "mod" ~>
   "els" <~ Module.moduleElements (var "mod") $
-  "tterms" <<= Eithers.mapList ("_el" ~> Eithers.bimap ("ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")) ("x" ~> var "x") (Schemas.elementAsTypeApplicationTerm @@ var "cx" @@ var "_el")) (var "els") $
+  "tterms" <<~ Eithers.mapList ("_el" ~> Eithers.bimap ("ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")) ("x" ~> var "x") (Schemas.elementAsTypeApplicationTerm @@ var "cx" @@ var "_el")) (var "els") $
   "types" <~ Lists.nub (Lists.map (unaryFunction Core.typeApplicationTermType) (var "tterms")) $
-  "cdrs" <<= Eithers.mapList (constructCoder @@ var "lang" @@ var "encodeTerm" @@ var "cx" @@ var "g") (var "types") $
+  "cdrs" <<~ Eithers.mapList (constructCoder @@ var "lang" @@ var "encodeTerm" @@ var "cx" @@ var "g") (var "types") $
   "coders" <~ Maps.fromList (Lists.zip (var "types") (var "cdrs")) $
   var "createModule" @@ var "mod" @@ var "coders" @@ (Lists.zip (var "els") (var "tterms"))
 
@@ -152,16 +152,16 @@ adaptedModuleDefinitions = define "adaptedModuleDefinitions" $
     "typ" <~ Core.typeApplicationTermType (var "tt") $
     "name" <~ Core.bindingName (var "el") $
     Logic.ifElse (Annotations.isNativeType @@ var "el")
-      ("coreTyp" <<= Eithers.bimap ("e" ~> Error.unDecodingError @@ var "e") ("x" ~> var "x") (decoderFor _Type @@ var "graph" @@ var "term") $
-       "adaptedTyp" <<= adaptTypeToLanguage @@ var "lang" @@ var "cx" @@ var "graph" @@ var "coreTyp" $
+      ("coreTyp" <<~ Eithers.bimap ("e" ~> Error.unDecodingError @@ var "e") ("x" ~> var "x") (decoderFor _Type @@ var "graph" @@ var "term") $
+       "adaptedTyp" <<~ adaptTypeToLanguage @@ var "lang" @@ var "cx" @@ var "graph" @@ var "coreTyp" $
        right $ Module.definitionType $ Module.typeDefinition (var "name") (var "adaptedTyp"))
       (Maybes.maybe
         (left $ Strings.cat2 (string "no adapter for element ") (unwrap _Name @@ var "name"))
         (lambda "adapter" (
-          "adapted" <<= Eithers.bimap ("ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")) ("x" ~> var "x") (Compute.coderEncode (Compute.adapterCoder $ var "adapter") @@ var "cx" @@ var "term") $
+          "adapted" <<~ Eithers.bimap ("ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")) ("x" ~> var "x") (Compute.coderEncode (Compute.adapterCoder $ var "adapter") @@ var "cx" @@ var "term") $
           right $ Module.definitionTerm $ Module.termDefinition (var "name") (var "adapted") (Schemas.typeToTypeScheme @@ (Compute.adapterTarget $ var "adapter"))))
         (Maps.lookup (var "typ") (var "adapters")))) $
-  "tterms" <<= Eithers.mapList ("_el" ~> Eithers.bimap ("ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")) ("x" ~> var "x") (Schemas.elementAsTypeApplicationTerm @@ var "cx" @@ var "_el")) (var "els") $
+  "tterms" <<~ Eithers.mapList ("_el" ~> Eithers.bimap ("ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")) ("x" ~> var "x") (Schemas.elementAsTypeApplicationTerm @@ var "cx" @@ var "_el")) (var "els") $
   "types" <~ Sets.toList (Sets.fromList (Lists.map (Rewriting.deannotateType <.> unaryFunction Core.typeApplicationTermType) (var "tterms"))) $
-  "adapters" <<= var "adaptersFor" @@ var "types" $
+  "adapters" <<~ var "adaptersFor" @@ var "types" $
   Eithers.mapList (var "classify" @@ var "adapters") (Lists.zip (var "els") (var "tterms"))

@@ -423,10 +423,10 @@ encodeModule :: TBinding (Context -> Graph -> Module -> Prelude.Either (InContex
 encodeModule = define "encodeModule" $
   doc "Transform a type module into an encoder module" $
   "cx" ~> "graph" ~> "mod" ~>
-    "typeBindings" <<= (filterTypeBindings @@ var "cx" @@ var "graph" @@ (Module.moduleElements (var "mod"))) $
+    "typeBindings" <<~ (filterTypeBindings @@ var "cx" @@ var "graph" @@ (Module.moduleElements (var "mod"))) $
     Logic.ifElse (Lists.null (var "typeBindings"))
       (right nothing)
-      ("encodedBindings" <<= Eithers.mapList ("b" ~>
+      ("encodedBindings" <<~ Eithers.mapList ("b" ~>
         Eithers.bimap
           ("ic" ~> Ctx.inContext (Error.otherError (Error.unDecodingError @@ Ctx.inContextObject (var "ic"))) (Ctx.inContextContext (var "ic")))
           ("x" ~> var "x")
@@ -591,7 +591,7 @@ isEncodableBinding :: TBinding (Context -> Graph -> Binding -> Prelude.Either (I
 isEncodableBinding = define "isEncodableBinding" $
   doc "Check if a binding is encodable (serializable type)" $
   "cx" ~> "graph" ~> "b" ~>
-    "serializable" <<= Schemas.isSerializableByName @@ var "cx" @@ var "graph" @@ (Core.bindingName (var "b")) $
+    "serializable" <<~ Schemas.isSerializableByName @@ var "cx" @@ var "graph" @@ (Core.bindingName (var "b")) $
     right (Logic.ifElse (var "serializable") (just (var "b")) nothing)
 
 -- | Check whether a type is the unit type

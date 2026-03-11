@@ -123,9 +123,9 @@ fieldAdapter = define "fieldAdapter" $
   "encdec" <~ ("ad" ~> "dir" ~> "cx" ~> "field" ~>
     "name" <~ Core.fieldName (var "field") $
     "term" <~ Core.fieldTerm (var "field") $
-    "newTerm" <<= AdaptUtils.encodeDecode @@ var "dir" @@ (Compute.adapterCoder (var "ad")) @@ var "cx" @@ var "term" $
+    "newTerm" <<~ AdaptUtils.encodeDecode @@ var "dir" @@ (Compute.adapterCoder (var "ad")) @@ var "cx" @@ var "term" $
     right $ Core.field (var "name") (var "newTerm")) $
-  "ad" <<= termAdapter @@ var "cx" @@ (Core.fieldTypeType (var "ftyp")) $
+  "ad" <<~ termAdapter @@ var "cx" @@ (Core.fieldTypeType (var "ftyp")) $
   right (Compute.adapter
     (Compute.adapterIsLossy (var "ad"))
     (var "ftyp")
@@ -142,7 +142,7 @@ forTypeReference = define "forTypeReference" $
       ("ad" ~> AdaptUtils.encodeDecode @@ var "dir" @@ (Compute.adapterCoder (var "ad")) @@ var "cx" @@ var "term")
       (Maps.lookup (var "name") (var "adapters0"))) $
   "forType" <~ ("cx2" ~> "adapters0" ~> "t" ~>
-    "actual" <<= termAdapter @@ var "cx2" @@ var "t" $
+    "actual" <<~ termAdapter @@ var "cx2" @@ var "t" $
     right (var "actual")) $
   "forMissingAdapter" <~ ("cx2" ~> "lossy" ~> "adapters0" ~> "placeholder" ~>
     "newAdapters" <~ Maps.insert (var "name") (var "placeholder") (var "adapters0") $
@@ -206,7 +206,7 @@ functionToUnion = define "functionToUnion" $
     "strippedTerm" <~ Rewriting.deannotateTerm @@ var "term" $
     Compute.coderEncode (Compute.adapterCoder (var "ad")) @@ var "cx" @@ (var "encTerm" @@ var "term" @@ var "strippedTerm")) $
   "readFromString" <~ ("cx" ~> "graph" ~> "term" ~>
-    "s" <<= ExtractCore.string @@ var "cx" @@ var "graph" @@ var "term" $
+    "s" <<~ ExtractCore.string @@ var "cx" @@ var "graph" @@ var "term" $
     Maybes.maybe
       (Ctx.failInContext (Error.otherError (Strings.cat2 (string "failed to parse term: ") (var "s"))) (var "cx"))
       (unaryFunction right)
@@ -216,17 +216,17 @@ functionToUnion = define "functionToUnion" $
     "forCases" <~ ("fterm" ~> var "readFromString" @@ var "cx" @@ var "graph" @@ var "fterm") $
     "forLambda" <~ ("fterm" ~> var "readFromString" @@ var "cx" @@ var "graph" @@ var "fterm") $
     "forWrapped" <~ ("fterm" ~>
-      "s" <<= ExtractCore.string @@ var "cx" @@ var "graph" @@ var "fterm" $
+      "s" <<~ ExtractCore.string @@ var "cx" @@ var "graph" @@ var "fterm" $
       right (MetaTerms.unwrap (Core.name (var "s")))) $
     "forPrimitive" <~ ("fterm" ~>
-      "s" <<= ExtractCore.string @@ var "cx" @@ var "graph" @@ var "fterm" $
+      "s" <<~ ExtractCore.string @@ var "cx" @@ var "graph" @@ var "fterm" $
       right (MetaTerms.primitiveLift (Core.name (var "s")))) $
     "forProjection" <~ ("fterm" ~> var "readFromString" @@ var "cx" @@ var "graph" @@ var "fterm") $
     "forVariable" <~ ("fterm" ~>
-      "s" <<= ExtractCore.string @@ var "cx" @@ var "graph" @@ var "fterm" $
+      "s" <<~ ExtractCore.string @@ var "cx" @@ var "graph" @@ var "fterm" $
       right (Core.termVariable (Core.name (var "s")))) $
-    "injTerm" <<= Compute.coderDecode (Compute.adapterCoder (var "ad")) @@ var "cx" @@ var "term" $
-    "field" <<= ExtractCore.injection @@ var "cx" @@ (functionProxyName) @@ var "graph" @@ var "injTerm" $
+    "injTerm" <<~ Compute.coderDecode (Compute.adapterCoder (var "ad")) @@ var "cx" @@ var "term" $
+    "field" <<~ ExtractCore.injection @@ var "cx" @@ (functionProxyName) @@ var "graph" @@ var "injTerm" $
     "fname" <~ Core.fieldName (var "field") $
     "fterm" <~ Core.fieldTerm (var "field") $
     Maybes.fromMaybe (var "notFound" @@ var "fname") (Maps.lookup (var "fname") (Maps.fromList (list [
@@ -242,7 +242,7 @@ functionToUnion = define "functionToUnion" $
       "dom" <~ Core.functionTypeDomain (var "ft") $
       "cod" <~ Core.functionTypeCodomain (var "ft") $
       "unionType" <~ (
-        "domAd" <<= termAdapter @@ var "cx" @@ var "dom" $
+        "domAd" <<~ termAdapter @@ var "cx" @@ var "dom" $
         right (Core.typeUnion (Core.rowType (functionProxyName) (list [
           Core.fieldType (Core.nameLift _Elimination_wrap) MetaTypes.string,
           Core.fieldType (Core.nameLift _Elimination_record) MetaTypes.string,
@@ -250,8 +250,8 @@ functionToUnion = define "functionToUnion" $
           Core.fieldType (Core.nameLift _Function_lambda) MetaTypes.string,
           Core.fieldType (Core.nameLift _Function_primitive) MetaTypes.string,
           Core.fieldType (Core.nameLift _Term_variable) MetaTypes.string])))) $
-      "ut" <<= var "unionType" $
-      "ad" <<= termAdapter @@ var "cx" @@ var "ut" $
+      "ut" <<~ var "unionType" $
+      "ad" <<~ termAdapter @@ var "cx" @@ var "ut" $
       "graph" <~ Coders.adapterContextGraph (var "cx") $
       right (Compute.adapter
         (Compute.adapterIsLossy (var "ad"))
@@ -266,7 +266,7 @@ lambdaToMonotype = define "lambdaToMonotype" $
     Nothing [
     _Type_forall>>: "ft" ~>
       "body" <~ Core.forallTypeBody (var "ft") $
-      "ad" <<= termAdapter @@ var "cx" @@ var "body" $
+      "ad" <<~ termAdapter @@ var "cx" @@ var "body" $
       right (Compute.adapter
         (Compute.adapterIsLossy (var "ad"))
         (var "t")
@@ -282,19 +282,19 @@ maybeToList = define "maybeToList" $
     _Term_maybe>>: "m" ~> Maybes.maybe
       (right (MetaTerms.list []))
       ("r" ~>
-        "encoded" <<= AdaptUtils.encodeDecode @@ Coders.coderDirectionEncode @@ (Compute.adapterCoder (var "ad")) @@ var "cx" @@ var "r" $
+        "encoded" <<~ AdaptUtils.encodeDecode @@ Coders.coderDirectionEncode @@ (Compute.adapterCoder (var "ad")) @@ var "cx" @@ var "r" $
         right (Core.termList (list [var "encoded"])))
       (var "m")]) $
   "decode" <~ ("ad" ~> "cx" ~> "term" ~> cases _Term (var "term")
     Nothing [
     _Term_list>>: "l" ~> Eithers.map (unaryFunction Core.termMaybe) (Logic.ifElse (Lists.null (var "l"))
       (right nothing)
-      ("decoded" <<= AdaptUtils.encodeDecode @@ Coders.coderDirectionDecode @@ (Compute.adapterCoder (var "ad")) @@ var "cx" @@ (Lists.head (var "l")) $
+      ("decoded" <<~ AdaptUtils.encodeDecode @@ Coders.coderDirectionDecode @@ (Compute.adapterCoder (var "ad")) @@ var "cx" @@ (Lists.head (var "l")) $
        right (just (var "decoded"))))]) $
   cases _Type (var "t")
     Nothing [
     _Type_maybe>>: "ot" ~>
-      "ad" <<= termAdapter @@ var "cx" @@ var "ot" $
+      "ad" <<~ termAdapter @@ var "cx" @@ var "ot" $
       right (Compute.adapter
         false
         (var "t")
@@ -308,8 +308,8 @@ passApplication = define "passApplication" $
   "forApplicationType" <~ ("at" ~>
     "lhs" <~ Core.applicationTypeFunction (var "at") $
     "rhs" <~ Core.applicationTypeArgument (var "at") $
-    "lhsAd" <<= termAdapter @@ var "cx" @@ var "lhs" $
-    "rhsAd" <<= termAdapter @@ var "cx" @@ var "rhs" $
+    "lhsAd" <<~ termAdapter @@ var "cx" @@ var "lhs" $
+    "rhsAd" <<~ termAdapter @@ var "cx" @@ var "rhs" $
     right (Compute.adapter
       (Logic.or (Compute.adapterIsLossy (var "lhsAd")) (Compute.adapterIsLossy (var "rhsAd")))
       (var "t")
@@ -327,8 +327,8 @@ passEither = define "passEither" $
   "forEitherType" <~ ("et" ~>
     "left" <~ Core.eitherTypeLeft (var "et") $
     "right" <~ Core.eitherTypeRight (var "et") $
-    "leftAd" <<= termAdapter @@ var "cx" @@ var "left" $
-    "rightAd" <<= termAdapter @@ var "cx" @@ var "right" $
+    "leftAd" <<~ termAdapter @@ var "cx" @@ var "left" $
+    "rightAd" <<~ termAdapter @@ var "cx" @@ var "right" $
     right (Compute.adapter
       (Logic.or (Compute.adapterIsLossy (var "leftAd")) (Compute.adapterIsLossy (var "rightAd")))
       (var "t")
@@ -346,7 +346,7 @@ passForall = define "passForall" $
   "forForallType" <~ ("ft" ~>
     "v" <~ Core.forallTypeParameter (var "ft") $
     "body" <~ Core.forallTypeBody (var "ft") $
-    "ad" <<= termAdapter @@ var "cx" @@ var "body" $
+    "ad" <<~ termAdapter @@ var "cx" @@ var "body" $
     right (Compute.adapter
       (Compute.adapterIsLossy (var "ad"))
       (var "t")
@@ -364,9 +364,9 @@ passFunction = define "passFunction" $
   "toCaseAds" <~ ("dom" ~> "cod" ~> cases _Type (Rewriting.deannotateType @@ var "dom")
     (Just (right Maps.empty)) [
     _Type_union >>: "rt" ~>
-      "pairs" <<= Eithers.mapList
+      "pairs" <<~ Eithers.mapList
         ("f" ~>
-          "ad" <<= fieldAdapter @@ var "cx" @@ Core.fieldType
+          "ad" <<~ fieldAdapter @@ var "cx" @@ Core.fieldType
             (Core.fieldTypeName (var "f"))
             (Core.typeFunction (Core.functionType
               (Core.fieldTypeType (var "f"))
@@ -388,10 +388,10 @@ passFunction = define "passFunction" $
       "n" <~ Core.caseStatementTypeName (var "cs") $
       "def" <~ Core.caseStatementDefault (var "cs") $
       "cases" <~ Core.caseStatementCases (var "cs") $
-      "rcases" <<= Eithers.mapList
+      "rcases" <<~ Eithers.mapList
         ("f" ~> AdaptUtils.encodeDecode @@ var "dir" @@ (var "getCoder" @@ var "caseAds" @@ Core.fieldName (var "f")) @@ var "cx" @@ var "f")
         (var "cases") $
-      "rdef" <<= Eithers.mapMaybe
+      "rdef" <<~ Eithers.mapMaybe
         ("d" ~> AdaptUtils.encodeDecode @@ var "dir" @@ Compute.adapterCoder (var "codAd") @@ var "cx" @@ var "d")
         (var "def") $
       right (Core.eliminationUnion (Core.caseStatement (var "n") (var "rdef") (var "rcases")))]) $
@@ -404,7 +404,7 @@ passFunction = define "passFunction" $
       "var" <~ Core.lambdaParameter (var "l") $
       "d" <~ Core.lambdaDomain (var "l") $
       "body" <~ Core.lambdaBody (var "l") $
-      "newBody" <<= AdaptUtils.encodeDecode @@ var "dir" @@ Compute.adapterCoder (var "codAd") @@ var "cx" @@ var "body" $
+      "newBody" <<~ AdaptUtils.encodeDecode @@ var "dir" @@ Compute.adapterCoder (var "codAd") @@ var "cx" @@ var "body" $
       right (Core.functionLambda (Core.lambda (var "var") (var "d") (var "newBody"))),
     _Function_primitive >>: "name" ~> right (Core.functionPrimitive (var "name"))]) $
   "encdec" <~ ("codAd" ~> "caseAds" ~> "dir" ~> "cx" ~> "term" ~> cases _Term (Rewriting.deannotateTerm @@ var "term")
@@ -414,10 +414,10 @@ passFunction = define "passFunction" $
   "forFunctionType" <~ ("ft" ~>
     "dom" <~ Core.functionTypeDomain (var "ft") $
     "cod" <~ Core.functionTypeCodomain (var "ft") $
-    "domAd" <<= termAdapter @@ var "cx" @@ var "dom" $
-    "codAd" <<= termAdapter @@ var "cx" @@ var "cod" $
-    "caseAds" <<= var "toCaseAds" @@ var "dom" @@ var "cod" $
-    "optionAd" <<= var "toOptionAd" @@ var "dom" @@ var "cod" $
+    "domAd" <<~ termAdapter @@ var "cx" @@ var "dom" $
+    "codAd" <<~ termAdapter @@ var "cx" @@ var "cod" $
+    "caseAds" <<~ var "toCaseAds" @@ var "dom" @@ var "cod" $
+    "optionAd" <<~ var "toOptionAd" @@ var "dom" @@ var "cod" $
     "lossy" <~ Logic.or
       (Compute.adapterIsLossy (var "codAd"))
       (Logic.ors (Lists.map ("pair" ~> Compute.adapterIsLossy (Pairs.second (var "pair"))) (Maps.toList (var "caseAds")))) $
@@ -435,10 +435,10 @@ passList = define "passList" $
   "encdec" <~ ("ad" ~> "dir" ~> "cx" ~> "term" ~> cases _Term (var "term")
     Nothing [
     _Term_list>>: "terms" ~>
-      "newTerms" <<= Eithers.mapList (AdaptUtils.encodeDecode @@ var "dir" @@ (Compute.adapterCoder (var "ad")) @@ var "cx") (var "terms") $
+      "newTerms" <<~ Eithers.mapList (AdaptUtils.encodeDecode @@ var "dir" @@ (Compute.adapterCoder (var "ad")) @@ var "cx") (var "terms") $
       right (Core.termList (var "newTerms"))]) $
   "forListType" <~ ("lt" ~>
-    "ad" <<= termAdapter @@ var "cx" @@ var "lt" $
+    "ad" <<~ termAdapter @@ var "cx" @@ var "lt" $
     right (Compute.adapter
       (Compute.adapterIsLossy (var "ad"))
       (var "t")
@@ -453,11 +453,11 @@ passLiteral = define "passLiteral" $
   doc "Pass through literal types with literal adaptation" $
   "cx" ~> "t" ~>
   "encdec" <~ ("graph" ~> "ad" ~> "dir" ~> "cx" ~> "term" ~>
-    "l" <<= ExtractCore.literal @@ var "cx" @@ var "graph" @@ var "term" $
-    "l2" <<= AdaptUtils.encodeDecode @@ var "dir" @@ (Compute.adapterCoder (var "ad")) @@ var "cx" @@ var "l" $
+    "l" <<~ ExtractCore.literal @@ var "cx" @@ var "graph" @@ var "term" $
+    "l2" <<~ AdaptUtils.encodeDecode @@ var "dir" @@ (Compute.adapterCoder (var "ad")) @@ var "cx" @@ var "l" $
     right $ Core.termLiteral $ var "l2") $
   "forLiteral" <~ ("lt" ~>
-    "ad" <<= AdaptLiterals.literalAdapter @@ var "cx" @@ var "lt" $
+    "ad" <<~ AdaptLiterals.literalAdapter @@ var "cx" @@ var "lt" $
     "step" <~ AdaptUtils.bidirectional @@ (var "encdec" @@ Coders.adapterContextGraph (var "cx") @@ var "ad") $
     right (Compute.adapter
       (Compute.adapterIsLossy (var "ad"))
@@ -475,20 +475,20 @@ passMap = define "passMap" $
   "encdec" <~ ("kad" ~> "vad" ~> "dir" ~> "cx" ~> "term" ~> cases _Term (var "term")
     Nothing [
     _Term_map>>: "m" ~>
-      "newPairs" <<= Eithers.mapList
+      "newPairs" <<~ Eithers.mapList
         ("pair" ~>
           "k" <~ Pairs.first (var "pair") $
           "v" <~ Pairs.second (var "pair") $
-          "newK" <<= AdaptUtils.encodeDecode @@ var "dir" @@ (Compute.adapterCoder (var "kad")) @@ var "cx" @@ var "k" $
-          "newV" <<= AdaptUtils.encodeDecode @@ var "dir" @@ (Compute.adapterCoder (var "vad")) @@ var "cx" @@ var "v" $
+          "newK" <<~ AdaptUtils.encodeDecode @@ var "dir" @@ (Compute.adapterCoder (var "kad")) @@ var "cx" @@ var "k" $
+          "newV" <<~ AdaptUtils.encodeDecode @@ var "dir" @@ (Compute.adapterCoder (var "vad")) @@ var "cx" @@ var "v" $
           right (pair (var "newK") (var "newV")))
         (Maps.toList (var "m")) $
       right (Core.termMap (Maps.fromList (var "newPairs")))]) $
   "forMapType" <~ ("mt" ~>
     "kt" <~ Core.mapTypeKeys (var "mt") $
     "vt" <~ Core.mapTypeValues (var "mt") $
-    "kad" <<= termAdapter @@ var "cx" @@ var "kt" $
-    "vad" <<= termAdapter @@ var "cx" @@ var "vt" $
+    "kad" <<~ termAdapter @@ var "cx" @@ var "kt" $
+    "vad" <<~ termAdapter @@ var "cx" @@ var "vt" $
     right (Compute.adapter
       (Logic.or (Compute.adapterIsLossy (var "kad")) (Compute.adapterIsLossy (var "vad")))
       (var "t")
@@ -503,13 +503,13 @@ passOptional = define "passOptional" $
   doc "Pass through optional types" $
   "cx" ~> "t" ~>
   "mapTerm" <~ ("graph" ~> "coder" ~> "dir" ~> "cx" ~> "term" ~>
-    "opt" <<= ExtractCore.maybeTerm @@ var "cx" @@ unaryFunction right @@ var "graph" @@ var "term" $
-    "newOpt" <<= Eithers.mapMaybe (AdaptUtils.encodeDecode @@ var "dir" @@ var "coder" @@ var "cx") (var "opt") $
+    "opt" <<~ ExtractCore.maybeTerm @@ var "cx" @@ unaryFunction right @@ var "graph" @@ var "term" $
+    "newOpt" <<~ Eithers.mapMaybe (AdaptUtils.encodeDecode @@ var "dir" @@ var "coder" @@ var "cx") (var "opt") $
     right (Core.termMaybe (var "newOpt"))) $
   cases _Type (var "t")
     Nothing [
     _Type_maybe>>: "ot" ~>
-      "adapter" <<= termAdapter @@ var "cx" @@ var "ot" $
+      "adapter" <<~ termAdapter @@ var "cx" @@ var "ot" $
       right (Compute.adapter
         (Compute.adapterIsLossy (var "adapter"))
         (var "t")
@@ -524,12 +524,12 @@ passRecord = define "passRecord" $
     Nothing [
     _Term_record>>: "rec" ~>
       "dfields" <~ Core.recordFields (var "rec") $
-      "newFields" <<= Eithers.mapList
+      "newFields" <<~ Eithers.mapList
         ("p" ~> AdaptUtils.encodeDecode @@ var "dir" @@ (Compute.adapterCoder (Pairs.first (var "p"))) @@ var "cx" @@ (Pairs.second (var "p")))
         (Lists.zip (var "adapters") (var "dfields")) $
       right (Core.termRecord (Core.record (Core.rowTypeTypeName (var "rt")) (var "newFields")))]) $
   "forRecordType" <~ ("rt" ~>
-    "adapters" <<= Eithers.mapList (fieldAdapter @@ var "cx") (Core.rowTypeFields (var "rt")) $
+    "adapters" <<~ Eithers.mapList (fieldAdapter @@ var "cx") (Core.rowTypeFields (var "rt")) $
     "lossy" <~ Logic.ors (Lists.map (unaryFunction Compute.adapterIsLossy) (var "adapters")) $
     "sfields'" <~ Lists.map (unaryFunction Compute.adapterTarget) (var "adapters") $
     right (Compute.adapter
@@ -548,12 +548,12 @@ passSet = define "passSet" $
   "encdec" <~ ("ad" ~> "dir" ~> "cx" ~> "term" ~> cases _Term (var "term")
     Nothing [
     _Term_set>>: "terms" ~>
-      "newTerms" <<= Eithers.mapList (AdaptUtils.encodeDecode @@ var "dir" @@ (Compute.adapterCoder (var "ad")) @@ var "cx") (Sets.toList (var "terms")) $
+      "newTerms" <<~ Eithers.mapList (AdaptUtils.encodeDecode @@ var "dir" @@ (Compute.adapterCoder (var "ad")) @@ var "cx") (Sets.toList (var "terms")) $
       right (Core.termSet (Sets.fromList (var "newTerms")))]) $
   cases _Type (var "t")
     Nothing [
     _Type_set>>: "st" ~>
-      "ad" <<= termAdapter @@ var "cx" @@ var "st" $
+      "ad" <<~ termAdapter @@ var "cx" @@ var "st" $
       right (Compute.adapter
         (Compute.adapterIsLossy (var "ad"))
         (var "t")
@@ -568,9 +568,9 @@ passUnion = define "passUnion" $
     _Type_union>>: "rt" ~>
       "sfields" <~ Core.rowTypeFields (var "rt") $
       "tname" <~ Core.rowTypeTypeName (var "rt") $
-      "adapters" <<= Eithers.mapList
+      "adapters" <<~ Eithers.mapList
         ("f" ~>
-          "ad" <<= fieldAdapter @@ var "cx" @@ var "f" $
+          "ad" <<~ fieldAdapter @@ var "cx" @@ var "f" $
           right (pair (Core.fieldTypeName (var "f")) (var "ad")))
         (var "sfields") $
       "adaptersMap" <~ Maps.fromList (var "adapters") $
@@ -601,10 +601,10 @@ passWrapped = define "passWrapped" $
       "tname" <~ Core.wrappedTypeTypeName (var "wt") $
       "ot" <~ Core.wrappedTypeBody (var "wt") $
       "mapTerm" <~ ("graph" ~> "coder" ~> "dir" ~> "cx" ~> "term" ~>
-        "unwrapped" <<= ExtractCore.wrap @@ var "cx" @@ var "tname" @@ var "graph" @@ var "term" $
-        "newTerm" <<= AdaptUtils.encodeDecode @@ var "dir" @@ var "coder" @@ var "cx" @@ var "unwrapped" $
+        "unwrapped" <<~ ExtractCore.wrap @@ var "cx" @@ var "tname" @@ var "graph" @@ var "term" $
+        "newTerm" <<~ AdaptUtils.encodeDecode @@ var "dir" @@ var "coder" @@ var "cx" @@ var "unwrapped" $
         right (Core.termWrap (Core.wrappedTerm (var "tname") (var "newTerm")))) $
-      "adapter" <<= termAdapter @@ var "cx" @@ var "ot" $
+      "adapter" <<~ termAdapter @@ var "cx" @@ var "ot" $
       right (Compute.adapter
         (Compute.adapterIsLossy (var "adapter"))
         (var "t")
@@ -622,10 +622,10 @@ setToList = define "setToList" $
     Nothing [
     _Term_list>>: "l" ~> right (Core.termSet (Sets.fromList (var "l")))]) $
   "decode" <~ ("ad" ~> "cx" ~> "term" ~>
-    "listTerm" <<= AdaptUtils.encodeDecode @@ Coders.coderDirectionDecode @@ (Compute.adapterCoder (var "ad")) @@ var "cx" @@ var "term" $
+    "listTerm" <<~ AdaptUtils.encodeDecode @@ Coders.coderDirectionDecode @@ (Compute.adapterCoder (var "ad")) @@ var "cx" @@ var "term" $
     var "forListTerm" @@ var "listTerm") $
   "forSetType" <~ ("st" ~>
-    "ad" <<= termAdapter @@ var "cx" @@ (MetaTypes.list (var "st")) $
+    "ad" <<~ termAdapter @@ var "cx" @@ (MetaTypes.list (var "st")) $
     right (Compute.adapter
       (Compute.adapterIsLossy (var "ad"))
       (var "t")
@@ -643,7 +643,7 @@ simplifyApplication = define "simplifyApplication" $
     AdaptUtils.encodeDecode @@ var "dir" @@ (Compute.adapterCoder (var "ad")) @@ var "cx" @@ var "term") $
   "forApplicationType" <~ ("at" ~>
     "lhs" <~ Core.applicationTypeFunction (var "at") $
-    "ad" <<= termAdapter @@ var "cx" @@ var "lhs" $
+    "ad" <<~ termAdapter @@ var "cx" @@ var "lhs" $
     right (Compute.adapter
       false
       (var "t")
@@ -690,7 +690,7 @@ unionToRecord = define "unionToRecord" $
     Nothing [
     _Term_record>>: "rec" ~>
       "fields" <~ Core.recordFields (var "rec") $
-      "resultField" <<=
+      "resultField" <<~
         (var "fromRecordFields"
           @@ var "cx"
           @@ var "term"
@@ -710,7 +710,7 @@ unionToRecord = define "unionToRecord" $
           (Equality.equal (var "fn'") (var "fn"))
           (just (var "term"))
           nothing))) $
-      "ad" <<= termAdapter @@ var "cx" @@ var "target" $
+      "ad" <<~ termAdapter @@ var "cx" @@ var "target" $
       "graph" <~ Coders.adapterContextGraph (var "cx") $
       right (Compute.adapter
         (Compute.adapterIsLossy (var "ad"))
@@ -718,13 +718,13 @@ unionToRecord = define "unionToRecord" $
         (Compute.adapterTarget (var "ad"))
         (Compute.coder
           ("cx" ~> "term'" ~>
-            "field" <<= ExtractCore.injection @@ var "cx" @@ (Core.rowTypeTypeName (var "rt")) @@ var "graph" @@ var "term'" $
+            "field" <<~ ExtractCore.injection @@ var "cx" @@ (Core.rowTypeTypeName (var "rt")) @@ var "graph" @@ var "term'" $
             "fn" <~ Core.fieldName (var "field") $
             "term" <~ Core.fieldTerm (var "field") $
             Compute.coderEncode (Compute.adapterCoder (var "ad")) @@ var "cx" @@
               (Core.termRecord (Core.record (var "nm") (Lists.map (var "toRecordField" @@ var "term" @@ var "fn") (var "sfields")))))
           ("cx" ~> "term" ~>
-            "recTerm" <<= Compute.coderDecode (Compute.adapterCoder (var "ad")) @@ var "cx" @@ var "term" $
+            "recTerm" <<~ Compute.coderDecode (Compute.adapterCoder (var "ad")) @@ var "cx" @@ var "term" $
             var "forRecTerm" @@ var "cx" @@ var "nm" @@ var "ad" @@ var "term" @@ var "recTerm")))]
 
 unionTypeToRecordType :: TBinding (RowType -> RowType)
@@ -746,12 +746,12 @@ wrapToUnwrapped = define "wrapToUnwrapped" $
       "tname" <~ Core.wrappedTypeTypeName (var "wt") $
       "typ" <~ Core.wrappedTypeBody (var "wt") $
       "encode" <~ ("graph" ~> "ad" ~> "cx" ~> "term" ~>
-        "unwrapped" <<= ExtractCore.wrap @@ var "cx" @@ var "tname" @@ var "graph" @@ var "term" $
+        "unwrapped" <<~ ExtractCore.wrap @@ var "cx" @@ var "tname" @@ var "graph" @@ var "term" $
         Compute.coderEncode (Compute.adapterCoder (var "ad")) @@ var "cx" @@ var "unwrapped") $
       "decode" <~ ("ad" ~> "cx" ~> "term" ~>
-        "decoded" <<= Compute.coderDecode (Compute.adapterCoder (var "ad")) @@ var "cx" @@ var "term" $
+        "decoded" <<~ Compute.coderDecode (Compute.adapterCoder (var "ad")) @@ var "cx" @@ var "term" $
         right (Core.termWrap (Core.wrappedTerm (var "tname") (var "decoded")))) $
-      "ad" <<= termAdapter @@ var "cx" @@ var "typ" $
+      "ad" <<~ termAdapter @@ var "cx" @@ var "typ" $
       right (Compute.adapter
         false
         (var "t")
@@ -824,7 +824,7 @@ termAdapter = define "termAdapter" $
   cases _Type (var "typ")
     (Just (var "dflt")) [
     _Type_annotated>>: "at" ~>
-      "ad" <<= termAdapter @@ var "cx" @@ Core.annotatedTypeBody (var "at") $
+      "ad" <<~ termAdapter @@ var "cx" @@ Core.annotatedTypeBody (var "at") $
       right (Compute.adapterWithTarget (var "ad")
         (Core.typeAnnotated (Core.annotatedType (Compute.adapterTarget (var "ad")) (Core.annotatedTypeAnnotation (var "at")))))]
 

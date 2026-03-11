@@ -133,8 +133,8 @@ jsonCoder = define "jsonCoder" $
   doc "Create a JSON coder for a given type" $
   "typ" ~> "cx" ~> "g" ~>
   "mkTermCoder" <~ ("t" ~> termCoder @@ var "t" @@ var "cx" @@ var "g") $
-  "adapter" <<= liftStringError (var "cx") (AdaptModules.languageAdapter @@ JsonLanguage.jsonLanguage @@ var "cx" @@ var "g" @@ var "typ") $
-  "coder" <<= var "mkTermCoder" @@ (Compute.adapterTarget $ var "adapter") $
+  "adapter" <<~ liftStringError (var "cx") (AdaptModules.languageAdapter @@ JsonLanguage.jsonLanguage @@ var "cx" @@ var "g" @@ var "typ") $
+  "coder" <<~ var "mkTermCoder" @@ (Compute.adapterTarget $ var "adapter") $
   right $ AdaptUtils.composeCoders @@ (Compute.adapterCoder $ var "adapter") @@ var "coder"
 
 literalJsonCoder :: TBinding (LiteralType -> Either (InContext OtherError) (Coder Literal Value))
@@ -163,24 +163,24 @@ literalJsonCoder = define "literalJsonCoder" $
   "encoded" <~ (cases _LiteralType (var "lt") Nothing [
     _LiteralType_boolean>>: constant $ Compute.coder
       ("cx" ~> "lit" ~>
-        "b" <<= ExtractCore.booleanLiteral @@ var "cx" @@ var "lit" $
+        "b" <<~ ExtractCore.booleanLiteral @@ var "cx" @@ var "lit" $
         right (Json.valueBoolean $ var "b"))
       (var "decodeBool"),
     _LiteralType_float>>: constant $ Compute.coder
       ("cx" ~> "lit" ~>
-        "f" <<= ExtractCore.floatLiteral @@ var "cx" @@ var "lit" $
-        "bf" <<= ExtractCore.bigfloatValue @@ var "cx" @@ var "f" $
+        "f" <<~ ExtractCore.floatLiteral @@ var "cx" @@ var "lit" $
+        "bf" <<~ ExtractCore.bigfloatValue @@ var "cx" @@ var "f" $
         right (Json.valueNumber $ var "bf"))
       (var "decodeFloat"),
     _LiteralType_integer>>: constant $ Compute.coder
       ("cx" ~> "lit" ~>
-        "i" <<= ExtractCore.integerLiteral @@ var "cx" @@ var "lit" $
-        "bi" <<= ExtractCore.bigintValue @@ var "cx" @@ var "i" $
+        "i" <<~ ExtractCore.integerLiteral @@ var "cx" @@ var "lit" $
+        "bi" <<~ ExtractCore.bigintValue @@ var "cx" @@ var "i" $
         right (Json.valueNumber $ Literals.bigintToBigfloat $ var "bi"))
       (var "decodeInteger"),
     _LiteralType_string>>: constant $ Compute.coder
       ("cx" ~> "lit" ~>
-        "s" <<= ExtractCore.stringLiteral @@ var "cx" @@ var "lit" $
+        "s" <<~ ExtractCore.stringLiteral @@ var "cx" @@ var "lit" $
         right (Json.valueString $ var "s"))
       (var "decodeString")]) $
   right $ var "encoded"
@@ -191,9 +191,9 @@ recordCoder = define "recordCoder" $
   "rt" ~> "cx" ~> "g" ~>
   "fields" <~ (Core.rowTypeFields $ var "rt") $
   "getCoder" <~ ("f" ~>
-    "coder" <<= termCoder @@ (Core.fieldTypeType $ var "f") @@ var "cx" @@ var "g" $
+    "coder" <<~ termCoder @@ (Core.fieldTypeType $ var "f") @@ var "cx" @@ var "g" $
     right $ pair (var "f") (var "coder")) $
-  "coders" <<= Eithers.mapList (var "getCoder") (var "fields") $
+  "coders" <<~ Eithers.mapList (var "getCoder") (var "fields") $
   right $ Compute.coder
     ("cx" ~> "term" ~> encodeRecord @@ var "coders" @@ var "cx" @@ var "g" @@ var "term")
     ("cx" ~> "val" ~> decodeRecord @@ var "rt" @@ var "coders" @@ var "cx" @@ var "val")
@@ -210,7 +210,7 @@ encodeRecord = define "encodeRecord" $
       _Term_maybe>>: "opt" ~> optCases (var "opt")
         (right nothing)
         ("v" ~>
-          "encoded" <<= Compute.coderEncode (var "coder'") @@ var "cx" @@ var "v" $
+          "encoded" <<~ Compute.coderEncode (var "coder'") @@ var "cx" @@ var "v" $
           right (just $ pair (Core.unName $ var "fname") (var "encoded")))]) $
   "matchTypeForMaybe" <~ ("ft" ~> "forMaybe" ~> "dflt" ~>
     cases _Type (Core.fieldTypeType $ var "ft")
@@ -225,16 +225,16 @@ encodeRecord = define "encodeRecord" $
     "fvalue" <~ (Core.fieldTerm $ var "field") $
     "forMaybe" <~ ("ot" ~>
       "dflt" <~ (
-        "encoded" <<= Compute.coderEncode (var "coder'") @@ var "cx" @@ var "fvalue" $
+        "encoded" <<~ Compute.coderEncode (var "coder'") @@ var "cx" @@ var "fvalue" $
         right (just $ pair (Core.unName $ var "fname") (var "encoded"))) $
       var "matchMaybeTerm" @@ var "fvalue" @@ var "coder'" @@ var "fname" @@ var "dflt") $
     "dflt" <~ (
-      "encoded" <<= Compute.coderEncode (var "coder'") @@ var "cx" @@ var "fvalue" $
+      "encoded" <<~ Compute.coderEncode (var "coder'") @@ var "cx" @@ var "fvalue" $
       right (just $ pair (Core.unName $ var "fname") (var "encoded"))) $
     var "matchTypeForMaybe" @@ var "ft" @@ var "forMaybe" @@ var "dflt") $
-  "record" <<= ExtractCore.termRecord @@ var "cx" @@ var "graph" @@ var "stripped" $
+  "record" <<~ ExtractCore.termRecord @@ var "cx" @@ var "graph" @@ var "stripped" $
   "fields" <~ (Core.recordFields $ var "record") $
-  "maybeFields" <<= Eithers.mapList (var "encodeField") (Lists.zip (var "coders") (var "fields")) $
+  "maybeFields" <<~ Eithers.mapList (var "encodeField") (Lists.zip (var "coders") (var "fields")) $
   right (Json.valueObject $ Maps.fromList $ Maybes.cat $ var "maybeFields")
 
 decodeRecord :: TBinding (RowType -> [(FieldType, Coder Term Value)] -> Context -> Value -> Either (InContext OtherError) Term)
@@ -249,9 +249,9 @@ decodeRecord = define "decodeRecord" $
       "fname" <~ (Core.fieldTypeName $ var "ft") $
       "defaultValue" <~ Json.valueNull $
       "jsonValue" <~ (Maybes.fromMaybe (var "defaultValue") $ Maps.lookup (Core.unName $ var "fname") (var "m")) $
-      "v" <<= Compute.coderDecode (var "coder'") @@ var "cx" @@ var "jsonValue" $
+      "v" <<~ Compute.coderDecode (var "coder'") @@ var "cx" @@ var "jsonValue" $
       right (Core.field (var "fname") (var "v"))) $
-    "fields" <<= Eithers.mapList (var "decodeField") (var "coders") $
+    "fields" <<~ Eithers.mapList (var "decodeField") (var "coders") $
     right (Core.termRecord $ Core.record (Core.rowTypeTypeName $ var "rt") (var "fields"))) $
   cases _Value (var "n")
     (Just $ Ctx.failInContext (Error.otherError (Strings.cat $ list [string "expected object, found: ", showValue @@ var "n"])) (var "cx")) [
@@ -271,13 +271,13 @@ termCoder = define "termCoder" $
     cases _Term (var "term")
       (Just $ Ctx.failInContext (Error.otherError (Strings.cat $ list [string "expected list term, found: ", ShowCore.term @@ var "term"])) (var "cx")) [
       _Term_list>>: "els" ~>
-        "encodedEls" <<= Eithers.mapList ("el" ~> Compute.coderEncode (var "lc") @@ var "cx" @@ var "el") (var "els") $
+        "encodedEls" <<~ Eithers.mapList ("el" ~> Compute.coderEncode (var "lc") @@ var "cx" @@ var "el") (var "els") $
         right (Json.valueArray $ var "encodedEls")]) $
   "decodeList" <~ ("lc" ~> "cx" ~> "n" ~>
     cases _Value (var "n")
       (Just $ Ctx.failInContext (Error.otherError (Strings.cat $ list [string "expected sequence, found: ", showValue @@ var "n"])) (var "cx")) [
       _Value_array>>: "nodes" ~>
-        "decodedNodes" <<= Eithers.mapList ("node" ~> Compute.coderDecode (var "lc") @@ var "cx" @@ var "node") (var "nodes") $
+        "decodedNodes" <<~ Eithers.mapList ("node" ~> Compute.coderDecode (var "lc") @@ var "cx" @@ var "node") (var "nodes") $
         right (Core.termList $ var "decodedNodes")]) $
   "matchLiteralString" <~ ("v" ~> "lit" ~>
     cases _Literal (var "lit")
@@ -294,12 +294,12 @@ termCoder = define "termCoder" $
       _Term_maybe>>: "maybeContents" ~>
         Logic.ifElse (Maybes.isNothing $ var "maybeContents")
           (right Json.valueNull)
-          ("encodedInner" <<= Compute.coderEncode (var "maybeElementCoder") @@ var "cx" @@ (Maybes.fromJust $ var "maybeContents") $
+          ("encodedInner" <<~ Compute.coderEncode (var "maybeElementCoder") @@ var "cx" @@ (Maybes.fromJust $ var "maybeContents") $
             right (var "encodedInner"))]) $
   "decodeMaybe" <~ ("maybeElementCoder" ~> "cx" ~> "jsonVal" ~>
     cases _Value (var "jsonVal")
       (Just $
-        "decodedInner" <<= Compute.coderDecode (var "maybeElementCoder") @@ var "cx" @@ var "jsonVal" $
+        "decodedInner" <<~ Compute.coderDecode (var "maybeElementCoder") @@ var "cx" @@ var "jsonVal" $
         right (Core.termMaybe $ just $ var "decodedInner")) [
       _Value_null>>: constant $ right (Core.termMaybe nothing)]) $
   "result" <~ (cases _Type (var "stripped")
@@ -307,22 +307,22 @@ termCoder = define "termCoder" $
       string "unsupported type in JSON: ",
       ShowCore.type_ @@ var "typ"])) (var "cx")) [
     _Type_literal>>: "at" ~>
-      "ac" <<= literalJsonCoder @@ var "at" $
+      "ac" <<~ literalJsonCoder @@ var "at" $
       right $ Compute.coder
         (var "encodeLiteral" @@ var "ac")
         ("cx" ~> "n" ~>
-          "lit" <<= Compute.coderDecode (var "ac") @@ var "cx" @@ var "n" $
+          "lit" <<~ Compute.coderDecode (var "ac") @@ var "cx" @@ var "n" $
           right (Core.termLiteral $ var "lit")),
     _Type_list>>: "lt" ~>
-      "lc" <<= termCoder @@ var "lt" @@ var "cx" @@ var "g" $
+      "lc" <<~ termCoder @@ var "lt" @@ var "cx" @@ var "g" $
       right $ Compute.coder
         (var "encodeList" @@ var "lc")
         (var "decodeList" @@ var "lc"),
     _Type_map>>: "mt" ~>
       "kt" <~ (Core.mapTypeKeys $ var "mt") $
       "vt" <~ (Core.mapTypeValues $ var "mt") $
-      "kc" <<= termCoder @@ var "kt" @@ var "cx" @@ var "g" $
-      "vc" <<= termCoder @@ var "vt" @@ var "cx" @@ var "g" $
+      "kc" <<~ termCoder @@ var "kt" @@ var "cx" @@ var "g" $
+      "vc" <<~ termCoder @@ var "vt" @@ var "cx" @@ var "g" $
       "isStringKey" <~ Equality.equal (Rewriting.deannotateType @@ var "kt") (Core.typeLiteral Core.literalTypeString) $
       "toString" <~ ("v" ~>
         Logic.ifElse (var "isStringKey")
@@ -334,28 +334,28 @@ termCoder = define "termCoder" $
       "encodeEntry" <~ ("cx" ~> "kv" ~>
         "k" <~ (Pairs.first $ var "kv") $
         "v" <~ (Pairs.second $ var "kv") $
-        "encodedV" <<= Compute.coderEncode (var "vc") @@ var "cx" @@ var "v" $
+        "encodedV" <<~ Compute.coderEncode (var "vc") @@ var "cx" @@ var "v" $
         right (pair (var "toString" @@ var "k") (var "encodedV"))) $
       "decodeEntry" <~ ("cx" ~> "kv" ~>
         "k" <~ (Pairs.first $ var "kv") $
         "v" <~ (Pairs.second $ var "kv") $
-        "decodedV" <<= Compute.coderDecode (var "vc") @@ var "cx" @@ var "v" $
+        "decodedV" <<~ Compute.coderDecode (var "vc") @@ var "cx" @@ var "v" $
         right (pair (var "fromString" @@ var "k") (var "decodedV"))) $
       right $ Compute.coder
         ("cx" ~> "term" ~>
           cases _Term (var "term")
             (Just $ Ctx.failInContext (Error.otherError (Strings.cat $ list [string "expected map term, found: ", ShowCore.term @@ var "term"])) (var "cx")) [
             _Term_map>>: "m" ~>
-              "entries" <<= Eithers.mapList ("entry" ~> var "encodeEntry" @@ var "cx" @@ var "entry") (Maps.toList $ var "m") $
+              "entries" <<~ Eithers.mapList ("entry" ~> var "encodeEntry" @@ var "cx" @@ var "entry") (Maps.toList $ var "m") $
               right (Json.valueObject $ Maps.fromList $ var "entries")])
         ("cx" ~> "n" ~>
           cases _Value (var "n")
             (Just $ Ctx.failInContext (Error.otherError (Strings.cat $ list [string "expected mapping, found: ", showValue @@ var "n"])) (var "cx")) [
             _Value_object>>: "m" ~>
-              "entries" <<= Eithers.mapList ("entry" ~> var "decodeEntry" @@ var "cx" @@ var "entry") (Maps.toList $ var "m") $
+              "entries" <<~ Eithers.mapList ("entry" ~> var "decodeEntry" @@ var "cx" @@ var "entry") (Maps.toList $ var "m") $
               right (Core.termMap $ Maps.fromList $ var "entries")]),
     _Type_maybe>>: "maybeElementType" ~>
-      "maybeElementCoder" <<= termCoder @@ var "maybeElementType" @@ var "cx" @@ var "g" $
+      "maybeElementCoder" <<~ termCoder @@ var "maybeElementType" @@ var "cx" @@ var "g" $
       right $ Compute.coder
         (var "encodeMaybe" @@ var "maybeElementCoder")
         (var "decodeMaybe" @@ var "maybeElementCoder"),
@@ -433,7 +433,7 @@ untypedTermToJson = define "untypedTermToJson" $
       _Literal_string>>: "s" ~> Json.valueString $ var "s"]) $
   "fieldToKeyval" <~ ("f" ~>
     "forTerm" <~ ("t" ~> var "matchTermMaybe" @@ var "forTerm" @@ var "t") $
-    "mjson" <<= var "forTerm" @@ (Core.fieldTerm $ var "f") $
+    "mjson" <<~ var "forTerm" @@ (Core.fieldTerm $ var "f") $
     right $ Maybes.map
       ("j" ~> pair (Core.unName $ Core.fieldName $ var "f") (var "j"))
       (var "mjson")) $
@@ -447,10 +447,10 @@ untypedTermToJson = define "untypedTermToJson" $
       "encodePair" <~ ("kv" ~>
         "k" <~ (Core.unName $ Pairs.first $ var "kv") $
         "v" <~ (Pairs.second $ var "kv") $
-        "json" <<= var "recurse" @@ var "v" $
+        "json" <<~ var "recurse" @@ var "v" $
         right $ pair (var "k") (var "json")) $
-      "json" <<= var "recurse" @@ var "term1" $
-      "pairs" <<= Eithers.mapList (var "encodePair") (Maps.toList $ var "ann") $
+      "json" <<~ var "recurse" @@ var "term1" $
+      "pairs" <<~ Eithers.mapList (var "encodePair") (Maps.toList $ var "ann") $
       right $ Json.valueObject $ Maps.fromList $ list [
         pair (string "term") (var "json"),
         pair (string "annotations") (Json.valueObject $ Maps.fromList $ var "pairs")],
@@ -471,7 +471,7 @@ untypedTermToJson = define "untypedTermToJson" $
           (Lists.map (var "fromBinding") (var "bindings"))),
         Core.field (Core.name $ string "environment") (var "env")],
     _Term_list>>: "terms" ~>
-      "jsonTerms" <<= Eithers.mapList (var "recurse") (var "terms") $
+      "jsonTerms" <<~ Eithers.mapList (var "recurse") (var "terms") $
       right $ Json.valueArray $ var "jsonTerms",
     _Term_literal>>: "lit" ~>
       right $ var "matchLiteral" @@ var "lit",
@@ -481,7 +481,7 @@ untypedTermToJson = define "untypedTermToJson" $
       (var "mt"),
     _Term_record>>: "r" ~>
       "fields" <~ (Core.recordFields $ var "r") $
-      "keyvals" <<= Eithers.mapList (var "fieldToKeyval") (var "fields") $
+      "keyvals" <<~ Eithers.mapList (var "fieldToKeyval") (var "fields") $
       right $ Json.valueObject $ Maps.fromList $ Maybes.cat $ var "keyvals",
     _Term_set>>: "vals" ~> var "recurse" @@ (Core.termList $ Sets.toList $ var "vals"),
     _Term_typeLambda>>: "ta" ~> var "asRecord" @@ list [
@@ -494,7 +494,7 @@ untypedTermToJson = define "untypedTermToJson" $
       "field" <~ (Core.injectionField $ var "i") $
       Logic.ifElse (Equality.equal (Core.fieldTerm $ var "field") Core.termUnit)
         (right $ Json.valueString $ Core.unName $ Core.fieldName $ var "field")
-        ("mkeyval" <<= var "fieldToKeyval" @@ var "field" $
+        ("mkeyval" <<~ var "fieldToKeyval" @@ var "field" $
           right $ Json.valueObject $ Maps.fromList $ Maybes.maybe
             (list ([] :: [TTerm (String, Value)]))
             ("keyval" ~> list [var "keyval"])

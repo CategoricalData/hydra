@@ -135,7 +135,7 @@ foldl_ = define "foldl" $
   doc "Interpreter-friendly foldl for Either." $
   "cx" ~> "g" ~>
   "funTerm" ~> "initTerm" ~> "listTerm" ~>
-  "elements" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
+  "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
   -- Fold: for each element, apply funTerm acc el, then bind to check Left/Right
   right $ Lists.foldl
     ("acc" ~> "el" ~>
@@ -178,7 +178,7 @@ mapList_ = define "mapList" $
   doc "Interpreter-friendly mapList for Either (traverse)." $
   "cx" ~> "g" ~>
   "funTerm" ~> "listTerm" ~>
-  "elements" <<= (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
+  "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
   -- Fold over reversed elements so that cons builds list in original order
   -- foldl (\acc el -> bind (f el) (\y -> map (cons y) acc)) (Right []) (reverse xs)
   right $ Lists.foldl
@@ -225,7 +225,7 @@ mapSet_ = define "mapSet" $
   doc "Interpreter-friendly mapSet for Either (traverse over Set)." $
   "cx" ~> "g" ~>
   "funTerm" ~> "setTerm" ~>
-  "elements" <<= (ExtractCore.set @@ var "cx" @@ var "g" @@ var "setTerm") $
+  "elements" <<~ (ExtractCore.set @@ var "cx" @@ var "g" @@ var "setTerm") $
   -- Convert set to list, apply mapList logic, convert back to set
   -- Fold over elements: foldl (\acc el -> either (\e -> Left e) (\y -> either (\e -> Left e) (\ys -> Right (cons y ys)) acc) (f el)) (Right []) elements
   -- Then wrap result in Set

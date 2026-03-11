@@ -292,7 +292,7 @@ matchUnion = define "matchUnion" $
         string "}, got ",
         (ShowCore.term @@ var "stripped")])) (var "cx"))) [
     _Term_variable>>: "name" ~>
-      "el" <<= requireElement @@ var "cx" @@ var "graph" @@ var "name" $
+      "el" <<~ requireElement @@ var "cx" @@ var "graph" @@ var "name" $
       matchUnion @@ var "cx" @@ var "graph" @@ var "tname" @@ var "pairs" @@ (Core.bindingTerm (var "el")),
     _Term_union>>: "injection" ~>
       "exp" <~ (

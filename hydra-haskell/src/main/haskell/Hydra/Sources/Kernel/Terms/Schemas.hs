@@ -797,7 +797,7 @@ schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
             ("decoded" ~> just (var "toTypeScheme" @@ list ([] :: [TTerm Name]) @@ var "decoded"))
             (var "decodeType" @@ Core.bindingTerm (var "el")))
           (right nothing)]) $
-    "mts" <<=  optCases (Core.bindingType (var "el"))
+    "mts" <<~  optCases (Core.bindingType (var "el"))
       (Eithers.map ("typ" ~> just $ Rewriting.fTypeToTypeScheme @@ var "typ") $ var "decodeType" @@ (Core.bindingTerm (var "el")))
       ("ts" ~> Logic.ifElse
         (Equality.equal (var "ts") (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable (Core.nameLift _TypeScheme)) Phantoms.nothing))
