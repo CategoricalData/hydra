@@ -1202,17 +1202,17 @@ hydra-haskell/
 ## Extending Hydra
 
 Hydra's modular architecture provides clear extension points for adding new functionality.
-For detailed step-by-step guides, see the [Developer Recipes](https://github.com/CategoricalData/hydra/blob/main/docs/src/recipes/index.md).
+For detailed step-by-step guides, see the [Developer Recipes](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/index.md).
 
 ### Key extension points
 
 **Primitive functions**: Add new standard library functions by defining native implementations in Haskell,
 registering them in `Sources/Libraries.hs`, and regenerating code for all target languages.
-See the [Adding primitives recipe](https://github.com/CategoricalData/hydra/blob/main/docs/src/recipes/adding-primitives.md).
+See the [Adding primitives recipe](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/adding-primitives.md).
 
 **Core types**: Extend the kernel type system by adding new type definitions to `Core.hs`, updating DSL constructors,
 and following the bootstrap process to regenerate the system.
-See the [Extending Hydra Core recipe](https://github.com/CategoricalData/hydra/blob/main/docs/src/recipes/extending-hydra-core.md).
+See the [Extending Hydra Core recipe](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/extending-hydra-core.md).
 
 **Target languages**: Add support for new programming languages by implementing a coder (term/type encoding),
 serializer (AST to text), and language constraint definitions in `hydra-ext/src/main/haskell/Hydra/Ext/Staging/`.

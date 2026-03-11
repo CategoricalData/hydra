@@ -34,11 +34,11 @@ uv sync
 For comprehensive documentation about Hydra's architecture and usage, see:
 
 - **[Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts)** - Core concepts and type system
-- **[Implementation](https://github.com/CategoricalData/hydra/blob/main/docs/src/implementation.md)** - Implementation guide
+- **[Implementation](https://github.com/CategoricalData/hydra/blob/main/docs/implementation.md)** - Implementation guide
 - **[Code Organization](https://github.com/CategoricalData/hydra/wiki/Code-organization)** - The src/main vs src/gen-main pattern
 - **[Testing](https://github.com/CategoricalData/hydra/wiki/Testing)** - Common test suite documentation
-- **[Developer Recipes](https://github.com/CategoricalData/hydra/blob/main/docs/src/recipes/index.md)** - Step-by-step guides
-- **[Syncing Hydra-Python](https://github.com/CategoricalData/hydra/blob/main/docs/src/recipes/syncing-python.md)** - Regenerating Python from Haskell
+- **[Developer Recipes](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/index.md)** - Step-by-step guides
+- **[Syncing Hydra-Python](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/syncing-python.md)** - Regenerating Python from Haskell
 
 ## Testing
 

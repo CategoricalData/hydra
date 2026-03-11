@@ -225,7 +225,7 @@ Major release completing Hydra-Python and Hydra-Java as self-hosting Hydra imple
 - Fixed outdated Code-organization.md (Python now uses src/gen-main pattern)
 - Fixed incorrect code paths in Implementation.md
 - Added Java section to Testing wiki
-- Comprehensive developer recipes in `docs/src/recipes/`
+- Comprehensive developer recipes in `docs/recipes/`
 - Documentation for tail-call optimization implementation
 - Added Haddock comments to Haskell primitives
 
@@ -507,7 +507,7 @@ This initial release contains the complete foundation of Hydra:
 ## Contributing
 
 We welcome contributions! Please see:
-- [Developer Recipes](https://github.com/CategoricalData/hydra/tree/main/docs/src/recipes)
+- [Developer Recipes](https://github.com/CategoricalData/hydra/tree/main/docs/recipes)
 - [LambdaGraph Discord](https://bit.ly/lg-discord)
 
 ## Release Process

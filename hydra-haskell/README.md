@@ -33,11 +33,11 @@ Haskell serves as the **bootstrapping implementation** - the DSL sources here ge
 For comprehensive documentation about Hydra's architecture, type system, and implementation details, see:
 
 - **[Concepts](https://github.com/CategoricalData/hydra/wiki/Concepts)** - Core concepts: Type, Term, Graph, Flow monad, primitives, coders
-- **[Implementation](https://github.com/CategoricalData/hydra/blob/main/docs/src/implementation.md)** - Detailed guide covering type modules, DSLs, primitives, coders, and the bootstrap process
-- **[DSL Guide](https://github.com/CategoricalData/hydra/blob/main/docs/src/dsl-guide.md)** - Comprehensive guide to Hydra's domain-specific languages
+- **[Implementation](https://github.com/CategoricalData/hydra/blob/main/docs/implementation.md)** - Detailed guide covering type modules, DSLs, primitives, coders, and the bootstrap process
+- **[DSL Guide](https://github.com/CategoricalData/hydra/blob/main/docs/dsl-guide.md)** - Comprehensive guide to Hydra's domain-specific languages
 - **[Code Organization](https://github.com/CategoricalData/hydra/wiki/Code-organization)** - The src/main vs src/gen-main pattern
 - **[Testing](https://github.com/CategoricalData/hydra/wiki/Testing)** - Common test suite and language-specific testing
-- **[Developer Recipes](https://github.com/CategoricalData/hydra/blob/main/docs/src/recipes/index.md)** - Step-by-step guides for extending Hydra
+- **[Developer Recipes](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/index.md)** - Step-by-step guides for extending Hydra
 
 This README focuses on practical instructions for building, testing, and generating code with Hydra-Haskell.
 
@@ -228,7 +228,7 @@ data Coder v1 v2 = Coder {
 
 **Adapters** also transform types, enabling schema evolution and language mapping.
 
-See the [Implementation wiki](https://github.com/CategoricalData/hydra/blob/main/docs/src/implementation.md#cross-language-compilation-coders) for details.
+See the [Implementation wiki](https://github.com/CategoricalData/hydra/blob/main/docs/implementation.md#cross-language-compilation-coders) for details.
 
 ### DSLs
 
@@ -265,7 +265,7 @@ import Hydra.Dsl.Meta.Lib.Strings as Strings
 example = Lists.map (Strings.toUpper) (list ["hello", "world"])
 ```
 
-See the [DSL system section](https://github.com/CategoricalData/hydra/blob/main/docs/src/implementation.md#dsl-system) in the Implementation wiki for comprehensive coverage.
+See the [DSL system section](https://github.com/CategoricalData/hydra/blob/main/docs/implementation.md#dsl-system) in the Implementation wiki for comprehensive coverage.
 
 ### JSON and YAML serialization
 
@@ -346,10 +346,10 @@ What remains hand-written:
 - `Hydra.Generation` - I/O and generation utilities
 - Test runners
 
-See the [Bootstrap process](https://github.com/CategoricalData/hydra/blob/main/docs/src/implementation.md#the-bootstrap-process) section for details on extending Hydra.
+See the [Bootstrap process](https://github.com/CategoricalData/hydra/blob/main/docs/implementation.md#the-bootstrap-process) section for details on extending Hydra.
 For example:
-- [Adding new primitive functions](https://github.com/CategoricalData/hydra/blob/main/docs/src/recipes/adding-primitives.md)
-- [Extending Hydra Core](https://github.com/CategoricalData/hydra/blob/main/docs/src/recipes/extending-hydra-core.md)
+- [Adding new primitive functions](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/adding-primitives.md)
+- [Extending Hydra Core](https://github.com/CategoricalData/hydra/blob/main/docs/recipes/extending-hydra-core.md)
 
 ## Troubleshooting
 
