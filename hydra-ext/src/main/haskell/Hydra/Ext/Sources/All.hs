@@ -17,20 +17,33 @@ import Hydra.Ext.Sources.Python.Language
 import Hydra.Ext.Sources.Shex.Syntax
 import Hydra.Ext.Sources.Sql.Ansi
 import Hydra.Ext.Sources.TypeScript.Language
+-- import qualified Hydra.Ext.Sources.Avro.Coder                  as AvroCoder  -- stack overflow during generation
+-- import qualified Hydra.Ext.Sources.Avro.Language               as AvroLanguage  -- stack overflow during generation
 import qualified Hydra.Ext.Sources.Avro.Schema                 as AvroSchema
+import qualified Hydra.Ext.Sources.Avro.SchemaJson             as AvroSchemaJson
+-- import qualified Hydra.Ext.Sources.Cpp.Coder                  as CppCoder  -- stack overflow during generation
+import qualified Hydra.Ext.Sources.Cpp.Environment             as CppEnvironment
+import qualified Hydra.Ext.Sources.Cpp.Names                  as CppNames
+import qualified Hydra.Ext.Sources.Cpp.Serde                  as CppSerde
 import qualified Hydra.Ext.Sources.Cpp.Syntax                  as CppSyntax
+import qualified Hydra.Ext.Sources.Cpp.Utils                   as CppUtils
 import qualified Hydra.Ext.Sources.Csharp.Syntax               as CsharpSyntax
 import qualified Hydra.Ext.Sources.Cypher.Features             as CypherFeatures
 import qualified Hydra.Ext.Sources.Cypher.OpenCypher           as OpenCypher
 import qualified Hydra.Ext.Sources.Delta.Parquet               as DeltaParquet
 import qualified Hydra.Ext.Sources.Demos.GenPG.Transform       as GenPGTransform
+-- import qualified Hydra.Ext.Sources.Graphql.Coder               as GraphqlCoder  -- stack overflow during generation
+-- import qualified Hydra.Ext.Sources.Graphql.Language             as GraphqlLanguage  -- stack overflow during generation
+-- import qualified Hydra.Ext.Sources.Graphql.Serde               as GraphqlSerde  -- stack overflow during generation
 import qualified Hydra.Ext.Sources.Go.Language                 as GoLanguage
 import qualified Hydra.Ext.Sources.Go.Serde                    as GoSerde
 import qualified Hydra.Ext.Sources.Go.Syntax                   as GoSyntax
 import qualified Hydra.Ext.Sources.Gql.OpenGql                 as OpenGql
 import qualified Hydra.Ext.Sources.Gql.PathAlgebra.Expressions as PathAlgebraExpressions
 import qualified Hydra.Ext.Sources.Gql.PathAlgebra.Syntax      as PathAlgebraSyntax
+import qualified Hydra.Ext.Sources.Graphviz.Coder              as GraphvizCoder
 import qualified Hydra.Ext.Sources.Graphviz.Dot                as Dot
+-- import qualified Hydra.Ext.Sources.Graphviz.Serde              as GraphvizSerde  -- stack overflow during generation
 import qualified Hydra.Ext.Sources.Java.Helpers                as JavaHelpers
 import qualified Hydra.Ext.Sources.Java.Language               as JavaLanguage
 import qualified Hydra.Ext.Sources.Java.Names                  as JavaNames
@@ -38,12 +51,15 @@ import qualified Hydra.Ext.Sources.Java.Serde                  as JavaSerde
 import qualified Hydra.Ext.Sources.Java.Syntax                 as JavaSyntax
 import qualified Hydra.Ext.Sources.Java.Utils                  as JavaUtils
 import qualified Hydra.Ext.Sources.Java.Coder                 as JavaCoder
+import qualified Hydra.Ext.Sources.Java.TestCodec              as JavaTestCodec
 import qualified Hydra.Ext.Sources.JavaScript.Language         as JavaScriptLanguage
 import qualified Hydra.Ext.Sources.JavaScript.Operators        as JavaScriptOperators
 import qualified Hydra.Ext.Sources.JavaScript.Serde            as JavaScriptSerde
 import qualified Hydra.Ext.Sources.JavaScript.Syntax           as JavaScriptSyntax
 import qualified Hydra.Ext.Sources.Json.Schema                 as JsonSchema
+import qualified Hydra.Ext.Sources.Json.Schema.Coder           as JsonSchemaCoder
 import qualified Hydra.Ext.Sources.Json.Schema.Language        as JsonSchemaLanguage
+import qualified Hydra.Ext.Sources.Json.Schema.Serde           as JsonSchemaSerde
 import qualified Hydra.Ext.Sources.Kusto.Kql                   as Kql
 import qualified Hydra.Ext.Sources.Other.Atlas                 as Atlas
 import qualified Hydra.Ext.Sources.Other.AzureDtld             as AzureDtld
@@ -54,34 +70,54 @@ import qualified Hydra.Ext.Sources.Other.Osv                   as Osv
 import qualified Hydra.Ext.Sources.Other.StacItems             as StacItems
 import qualified Hydra.Ext.Sources.Owl.Syntax                  as OwlSyntax
 import qualified Hydra.Ext.Sources.Parquet.Format              as ParquetFormat
+-- import qualified Hydra.Ext.Sources.Pegasus.Coder               as PegasusCoder  -- stack overflow during generation
+-- import qualified Hydra.Ext.Sources.Pegasus.Language             as PegasusLanguage  -- stack overflow during generation
 import qualified Hydra.Ext.Sources.Pegasus.Pdl                 as Pdl
+-- import qualified Hydra.Ext.Sources.Pegasus.Serde               as PegasusSerde  -- stack overflow during generation
+-- import qualified Hydra.Ext.Sources.Pg.Coder                    as PgCoder  -- stack overflow during generation
 import qualified Hydra.Ext.Sources.Pg.Graphson.Coder           as GraphsonCoder
 import qualified Hydra.Ext.Sources.Pg.Graphson.Construct       as GraphsonConstruct
 import qualified Hydra.Ext.Sources.Pg.Graphson.Syntax          as GraphsonSyntax
 import qualified Hydra.Ext.Sources.Pg.Graphson.Utils           as GraphsonUtils
 import qualified Hydra.Ext.Sources.Pg.Mapping                  as PgMapping
 import qualified Hydra.Ext.Sources.Pg.Model                    as PgModel
+-- import qualified Hydra.Ext.Sources.Pg.Printing                 as PgPrinting  -- stack overflow during generation
 import qualified Hydra.Ext.Sources.Pg.Query                    as PgQuery
+-- import qualified Hydra.Ext.Sources.Pg.TermsToElements          as PgTermsToElements  -- stack overflow during generation
+-- import qualified Hydra.Ext.Sources.Pg.Utils                    as PgUtils  -- stack overflow during generation
 import qualified Hydra.Ext.Sources.Pg.Validation               as PgValidation
 import qualified Hydra.Ext.Sources.Protobuf.Any                as ProtobufAny
 import qualified Hydra.Ext.Sources.Protobuf.Proto3             as Proto3
+-- import qualified Hydra.Ext.Sources.Protobuf.Coder              as ProtobufCoder  -- stack overflow during generation
+import qualified Hydra.Ext.Sources.Protobuf.Serde              as ProtobufSerde
 import qualified Hydra.Ext.Sources.Protobuf.SourceContext      as ProtobufSourceContext
 import qualified Hydra.Ext.Sources.Python.Coder                as PythonCoder
+import qualified Hydra.Ext.Sources.Python.TestCodec            as PythonTestCodec
 import qualified Hydra.Ext.Sources.Python.Helpers              as PythonHelpers
 import qualified Hydra.Ext.Sources.Python.Names                as PythonNames
 import qualified Hydra.Ext.Sources.Python.Serde                as PythonSerde
 import qualified Hydra.Ext.Sources.Python.Syntax               as PythonSyntax
 import qualified Hydra.Ext.Sources.Python.Utils                as PythonUtils
+import qualified Hydra.Ext.Sources.Rdf.Serde                   as RdfSerde
 import qualified Hydra.Ext.Sources.Rdf.Syntax                  as RdfSyntax
+import qualified Hydra.Ext.Sources.Rdf.Utils                   as RdfUtils
 import qualified Hydra.Ext.Sources.Rust.Coder                 as RustCoder
 import qualified Hydra.Ext.Sources.Rust.Language               as RustLanguage
 import qualified Hydra.Ext.Sources.Rust.Operators              as RustOperators
 import qualified Hydra.Ext.Sources.Rust.Serde                  as RustSerde
 import qualified Hydra.Ext.Sources.Rust.Syntax                 as RustSyntax
+-- import qualified Hydra.Ext.Sources.Scala.Coder                  as ScalaCoder  -- stack overflow during generation
+import qualified Hydra.Ext.Sources.Scala.Language               as ScalaLanguage
 import qualified Hydra.Ext.Sources.Scala.Meta                  as ScalaMeta
+-- import qualified Hydra.Ext.Sources.Scala.Prepare               as ScalaPrepare  -- stack overflow during generation
+-- import qualified Hydra.Ext.Sources.Scala.Serde                 as ScalaSerde  -- stack overflow during generation
+-- import qualified Hydra.Ext.Sources.Scala.Utils                 as ScalaUtils  -- stack overflow during generation
+-- import qualified Hydra.Ext.Sources.Shacl.Coder                as ShaclCoder  -- stack overflow during generation
+-- import qualified Hydra.Ext.Sources.Shacl.Language               as ShaclLanguage  -- stack overflow during generation
 import qualified Hydra.Ext.Sources.Shacl.Model                 as ShaclModel
 import qualified Hydra.Ext.Sources.Tinkerpop.Features          as TinkerpopFeatures
 import qualified Hydra.Ext.Sources.Tinkerpop.Gremlin           as Gremlin
+import qualified Hydra.Ext.Sources.Tinkerpop.Language          as TinkerpopLanguage
 import qualified Hydra.Ext.Sources.TypeScript.Model            as TypeScriptModel
 import qualified Hydra.Ext.Sources.Xml.Schema                  as XmlSchema
 import qualified Hydra.Ext.Sources.Yaml.Coder                  as YamlCoder
@@ -98,8 +134,12 @@ import qualified Data.List as L
 
 -- | Coder modules for the three bootstrap-relevant languages: Haskell, Java, and Python.
 --   Each list includes the coder itself plus its dependencies (helpers, names, serde, syntax, utils, language).
-hydraCoderModules :: [Module]
-hydraCoderModules = haskellModules ++ javaModules ++ pythonModules
+hydraBootstrapCoderModules :: [Module]
+hydraBootstrapCoderModules = haskellModules ++ javaModules ++ pythonModules
+
+-- | Essential hydra-ext modules: the Java and Python coder families.
+hydraExtEssentialModules :: [Module]
+hydraExtEssentialModules = javaModules ++ pythonModules
 
 hydraExtModules :: [Module]
 hydraExtModules = otherExtModules
@@ -116,6 +156,7 @@ hydraExtModules = otherExtModules
   ++ pythonModules
   ++ rdfModules
   ++ rustModules
+  ++ scalaModules
   ++ typescriptModules
   ++ yamlModules
 
@@ -135,28 +176,43 @@ hydraExtJavaModules = L.nub $ L.concat [pgModules, genpgModules, rdfModules]
 otherExtModules :: [Module]
 otherExtModules = [
   Atlas.module_,
+  -- AvroCoder.module_,  -- stack overflow during generation
+  -- AvroLanguage.avroLanguageModule,  -- stack overflow during generation
   AvroSchema.module_,
+  AvroSchemaJson.module_,
   AzureDtld.module_,
   Coq.module_,
   datalogSyntaxModule,
   DeltaParquet.module_,
   Dot.module_,
   GeoJson.module_,
+  -- GraphqlLanguage.graphqlLanguageModule,  -- stack overflow during generation
+  -- GraphqlCoder.module_,  -- stack overflow during generation
+  -- GraphqlSerde.module_,  -- stack overflow during generation
   graphqlSyntaxModule,
+  GraphvizCoder.module_,
+  -- GraphvizSerde.module_,  -- stack overflow during generation
   IanaRelations.module_,
   Kql.module_,
   Osv.module_,
   ParquetFormat.module_,
+  -- PegasusLanguage.pdlLanguageModule,  -- stack overflow during generation
+  -- PegasusCoder.module_,  -- stack overflow during generation
+  -- PegasusSerde.module_,  -- stack overflow during generation
   Pdl.module_,
-  ScalaMeta.module_,
   sqlModule,
   StacItems.module_,
   GenPGTransform.module_]
 
 cppModules :: [Module]
 cppModules = [
+  -- CppCoder.module_,  -- stack overflow during generation
+  CppEnvironment.module_,
   cppLanguageModule,
-  CppSyntax.module_]
+  CppNames.module_,
+  CppSerde.module_,
+  CppSyntax.module_,
+  CppUtils.module_]
 
 csharpModules :: [Module]
 csharpModules = [
@@ -201,7 +257,9 @@ javaScriptModules = [
 jsonSchemaModules :: [Module]
 jsonSchemaModules = [
   JsonSchema.module_,
-  JsonSchemaLanguage.module_]
+  JsonSchemaCoder.module_,
+  JsonSchemaLanguage.module_,
+  JsonSchemaSerde.module_]
 
 pgModules :: [Module]
 pgModules = [
@@ -212,17 +270,24 @@ pgModules = [
   EncodePgModel.module_,
   Gremlin.module_,
   OpenCypher.module_,
+  -- PgCoder.module_,  -- stack overflow during generation
   PgMapping.module_,
   PgModel.module_,
+  -- PgPrinting.module_,  -- stack overflow during generation
   PgQuery.module_,
+  -- PgTermsToElements.module_,  -- stack overflow during generation
+  -- PgUtils.module_,  -- stack overflow during generation
   PgValidation.module_,
-  TinkerpopFeatures.module_]
+  TinkerpopFeatures.module_,
+  TinkerpopLanguage.module_]
 
 protobufModules :: [Module]
 protobufModules = [
   Proto3.module_,
   ProtobufAny.module_,
+  -- ProtobufCoder.module_,  -- stack overflow during generation
   protobufLanguageModule,
+  ProtobufSerde.module_,
   ProtobufSourceContext.module_]
 
 pythonModules :: [Module]
@@ -238,7 +303,11 @@ pythonModules = [
 rdfModules :: [Module]
 rdfModules = [
   OwlSyntax.module_,
+  RdfSerde.module_,
   RdfSyntax.module_,
+  RdfUtils.module_,
+  -- ShaclCoder.module_,  -- stack overflow during generation
+  -- ShaclLanguage.shaclLanguageModule,  -- stack overflow during generation
   ShaclModel.module_,
   shexSyntaxModule,
   XmlSchema.module_]
@@ -250,6 +319,15 @@ rustModules = [
   RustOperators.module_,
   RustSerde.module_,
   RustSyntax.module_]
+
+scalaModules :: [Module]
+scalaModules = [
+  -- ScalaCoder.module_,  -- stack overflow during generation
+  ScalaLanguage.scalaLanguageModule,
+  ScalaMeta.module_]
+  -- ScalaPrepare.module_,  -- stack overflow during generation
+  -- ScalaSerde.module_,  -- stack overflow during generation
+  -- ScalaUtils.module_  -- stack overflow during generation
 
 typescriptModules :: [Module]
 typescriptModules = [
@@ -276,6 +354,28 @@ hydraExtDecodingModules = [
 hydraExtEncodingModules = [
   EncodePgMapping.module_,
   EncodePgModel.module_]
+
+-- | Test codec modules not yet generating properly into Haskell.
+experimentalTestCodecModules :: [Module]
+experimentalTestCodecModules = [
+  JavaTestCodec.module_,
+  PythonTestCodec.module_]
+
+-- | Modules recently promoted from staging to Sources DSL (#267).
+--   Verify these generate correctly into Haskell before merging into hydraExtModules.
+hydraExtRecentlyPromotedModules :: [Module]
+hydraExtRecentlyPromotedModules = [
+  AvroSchemaJson.module_,
+  CppNames.module_,
+  CppSerde.module_,
+  CppUtils.module_,
+  GraphvizCoder.module_,
+  JsonSchemaCoder.module_,
+  JsonSchemaSerde.module_,
+  ProtobufSerde.module_,
+  RdfSerde.module_,
+  RdfUtils.module_,
+  TinkerpopLanguage.module_]
 
 -- All hydra-ext modules for the GenPG demo
 genpgModules :: [Module]

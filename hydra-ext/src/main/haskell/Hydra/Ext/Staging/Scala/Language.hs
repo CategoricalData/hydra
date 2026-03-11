@@ -5,19 +5,27 @@ import Hydra.Kernel
 import qualified Data.Set as S
 
 
+-- Note: the canonical definition is now in Hydra.Ext.Sources.Scala.Language.
+-- This module is kept for backward compatibility.
+
 scalaLanguage :: Language
 scalaLanguage = Language (LanguageName "hydra.ext.scala") $ LanguageConstraints {
-  languageConstraintsEliminationVariants = S.fromList eliminationVariants,
+  languageConstraintsEliminationVariants = S.fromList [
+    EliminationVariantRecord,
+    EliminationVariantUnion,
+    EliminationVariantWrap],
   languageConstraintsLiteralVariants = S.fromList [
     LiteralVariantBoolean,
     LiteralVariantFloat,
     LiteralVariantInteger,
     LiteralVariantString],
   languageConstraintsFloatTypes = S.fromList [
-    -- Bigfloat is excluded for now
     FloatTypeFloat32,
     FloatTypeFloat64],
-  languageConstraintsFunctionVariants = S.fromList functionVariants,
+  languageConstraintsFunctionVariants = S.fromList [
+    FunctionVariantElimination,
+    FunctionVariantLambda,
+    FunctionVariantPrimitive],
   languageConstraintsIntegerTypes = S.fromList [
     IntegerTypeBigint,
     IntegerTypeInt16,

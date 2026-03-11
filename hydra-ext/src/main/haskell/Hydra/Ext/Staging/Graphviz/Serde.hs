@@ -1,3 +1,5 @@
+-- Note: the canonical definition is now in Hydra.Ext.Sources.Graphviz.Serde.
+-- This staging module is kept for backward compatibility.
 module Hydra.Ext.Staging.Graphviz.Serde where
 
 import Hydra.Kernel

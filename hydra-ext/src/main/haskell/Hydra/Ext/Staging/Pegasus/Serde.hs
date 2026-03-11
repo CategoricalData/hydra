@@ -1,3 +1,5 @@
+-- Note: the canonical definition is now in Hydra.Ext.Sources.Pegasus.Serde.
+-- This staging module is kept for backward compatibility.
 module Hydra.Ext.Staging.Pegasus.Serde where
 
 import Hydra.Kernel
