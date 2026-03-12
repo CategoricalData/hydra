@@ -8,11 +8,11 @@ package hydra.decode.variants;
 public interface Variants {
   static hydra.util.Either<hydra.error.DecodingError, hydra.variants.EliminationVariant> eliminationVariant(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.variants.EliminationVariant>>) (err -> (hydra.util.Either<hydra.error.DecodingError, hydra.variants.EliminationVariant>) ((hydra.util.Either<hydra.error.DecodingError, hydra.variants.EliminationVariant>) (hydra.util.Either.<hydra.error.DecodingError, hydra.variants.EliminationVariant>left(new hydra.error.DecodingError(err))))),
+      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.variants.EliminationVariant>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.variants.EliminationVariant>left(new hydra.error.DecodingError(err))),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.variants.EliminationVariant>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.variants.EliminationVariant> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.error.DecodingError, hydra.variants.EliminationVariant>) ((hydra.util.Either<hydra.error.DecodingError, hydra.variants.EliminationVariant>) (hydra.util.Either.<hydra.error.DecodingError, hydra.variants.EliminationVariant>left(new hydra.error.DecodingError("expected union of type hydra.variants.EliminationVariant"))));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.variants.EliminationVariant>left(new hydra.error.DecodingError("expected union of type hydra.variants.EliminationVariant"));
         }
         
         @Override
@@ -38,11 +38,11 @@ public interface Variants {
                 cx,
                 input)))))))));
           return hydra.lib.maybes.Maybe.applyLazy(
-            () -> (hydra.util.Either<hydra.error.DecodingError, hydra.variants.EliminationVariant>) ((hydra.util.Either<hydra.error.DecodingError, hydra.variants.EliminationVariant>) (hydra.util.Either.<hydra.error.DecodingError, hydra.variants.EliminationVariant>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.variants.EliminationVariant>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
               (fname).value,
               " in union type ",
-              (tname).value)))))),
+              (tname).value)))),
             (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.variants.EliminationVariant>>, hydra.util.Either<hydra.error.DecodingError, hydra.variants.EliminationVariant>>) (f -> (f).apply(fterm)),
             hydra.lib.maps.Lookup.apply(
               fname,
@@ -56,11 +56,11 @@ public interface Variants {
   
   static hydra.util.Either<hydra.error.DecodingError, hydra.variants.FunctionVariant> functionVariant(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.variants.FunctionVariant>>) (err -> (hydra.util.Either<hydra.error.DecodingError, hydra.variants.FunctionVariant>) ((hydra.util.Either<hydra.error.DecodingError, hydra.variants.FunctionVariant>) (hydra.util.Either.<hydra.error.DecodingError, hydra.variants.FunctionVariant>left(new hydra.error.DecodingError(err))))),
+      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.variants.FunctionVariant>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.variants.FunctionVariant>left(new hydra.error.DecodingError(err))),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.variants.FunctionVariant>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.variants.FunctionVariant> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.error.DecodingError, hydra.variants.FunctionVariant>) ((hydra.util.Either<hydra.error.DecodingError, hydra.variants.FunctionVariant>) (hydra.util.Either.<hydra.error.DecodingError, hydra.variants.FunctionVariant>left(new hydra.error.DecodingError("expected union of type hydra.variants.FunctionVariant"))));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.variants.FunctionVariant>left(new hydra.error.DecodingError("expected union of type hydra.variants.FunctionVariant"));
         }
         
         @Override
@@ -86,11 +86,11 @@ public interface Variants {
                 cx,
                 input)))))))));
           return hydra.lib.maybes.Maybe.applyLazy(
-            () -> (hydra.util.Either<hydra.error.DecodingError, hydra.variants.FunctionVariant>) ((hydra.util.Either<hydra.error.DecodingError, hydra.variants.FunctionVariant>) (hydra.util.Either.<hydra.error.DecodingError, hydra.variants.FunctionVariant>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.variants.FunctionVariant>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
               (fname).value,
               " in union type ",
-              (tname).value)))))),
+              (tname).value)))),
             (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.variants.FunctionVariant>>, hydra.util.Either<hydra.error.DecodingError, hydra.variants.FunctionVariant>>) (f -> (f).apply(fterm)),
             hydra.lib.maps.Lookup.apply(
               fname,
@@ -104,11 +104,11 @@ public interface Variants {
   
   static hydra.util.Either<hydra.error.DecodingError, hydra.variants.LiteralVariant> literalVariant(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.variants.LiteralVariant>>) (err -> (hydra.util.Either<hydra.error.DecodingError, hydra.variants.LiteralVariant>) ((hydra.util.Either<hydra.error.DecodingError, hydra.variants.LiteralVariant>) (hydra.util.Either.<hydra.error.DecodingError, hydra.variants.LiteralVariant>left(new hydra.error.DecodingError(err))))),
+      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.variants.LiteralVariant>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.variants.LiteralVariant>left(new hydra.error.DecodingError(err))),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.variants.LiteralVariant>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.variants.LiteralVariant> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.error.DecodingError, hydra.variants.LiteralVariant>) ((hydra.util.Either<hydra.error.DecodingError, hydra.variants.LiteralVariant>) (hydra.util.Either.<hydra.error.DecodingError, hydra.variants.LiteralVariant>left(new hydra.error.DecodingError("expected union of type hydra.variants.LiteralVariant"))));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.variants.LiteralVariant>left(new hydra.error.DecodingError("expected union of type hydra.variants.LiteralVariant"));
         }
         
         @Override
@@ -144,11 +144,11 @@ public interface Variants {
                 cx,
                 input)))))))));
           return hydra.lib.maybes.Maybe.applyLazy(
-            () -> (hydra.util.Either<hydra.error.DecodingError, hydra.variants.LiteralVariant>) ((hydra.util.Either<hydra.error.DecodingError, hydra.variants.LiteralVariant>) (hydra.util.Either.<hydra.error.DecodingError, hydra.variants.LiteralVariant>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.variants.LiteralVariant>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
               (fname).value,
               " in union type ",
-              (tname).value)))))),
+              (tname).value)))),
             (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.variants.LiteralVariant>>, hydra.util.Either<hydra.error.DecodingError, hydra.variants.LiteralVariant>>) (f -> (f).apply(fterm)),
             hydra.lib.maps.Lookup.apply(
               fname,
@@ -162,11 +162,11 @@ public interface Variants {
   
   static hydra.util.Either<hydra.error.DecodingError, hydra.variants.TermVariant> termVariant(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.variants.TermVariant>>) (err -> (hydra.util.Either<hydra.error.DecodingError, hydra.variants.TermVariant>) ((hydra.util.Either<hydra.error.DecodingError, hydra.variants.TermVariant>) (hydra.util.Either.<hydra.error.DecodingError, hydra.variants.TermVariant>left(new hydra.error.DecodingError(err))))),
+      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.variants.TermVariant>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.variants.TermVariant>left(new hydra.error.DecodingError(err))),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.variants.TermVariant>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.variants.TermVariant> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.error.DecodingError, hydra.variants.TermVariant>) ((hydra.util.Either<hydra.error.DecodingError, hydra.variants.TermVariant>) (hydra.util.Either.<hydra.error.DecodingError, hydra.variants.TermVariant>left(new hydra.error.DecodingError("expected union of type hydra.variants.TermVariant"))));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.variants.TermVariant>left(new hydra.error.DecodingError("expected union of type hydra.variants.TermVariant"));
         }
         
         @Override
@@ -267,11 +267,11 @@ public interface Variants {
                 cx,
                 input)))))))));
           return hydra.lib.maybes.Maybe.applyLazy(
-            () -> (hydra.util.Either<hydra.error.DecodingError, hydra.variants.TermVariant>) ((hydra.util.Either<hydra.error.DecodingError, hydra.variants.TermVariant>) (hydra.util.Either.<hydra.error.DecodingError, hydra.variants.TermVariant>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.variants.TermVariant>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
               (fname).value,
               " in union type ",
-              (tname).value)))))),
+              (tname).value)))),
             (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.variants.TermVariant>>, hydra.util.Either<hydra.error.DecodingError, hydra.variants.TermVariant>>) (f -> (f).apply(fterm)),
             hydra.lib.maps.Lookup.apply(
               fname,
@@ -285,11 +285,11 @@ public interface Variants {
   
   static hydra.util.Either<hydra.error.DecodingError, hydra.variants.TypeVariant> typeVariant(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.variants.TypeVariant>>) (err -> (hydra.util.Either<hydra.error.DecodingError, hydra.variants.TypeVariant>) ((hydra.util.Either<hydra.error.DecodingError, hydra.variants.TypeVariant>) (hydra.util.Either.<hydra.error.DecodingError, hydra.variants.TypeVariant>left(new hydra.error.DecodingError(err))))),
+      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.variants.TypeVariant>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.variants.TypeVariant>left(new hydra.error.DecodingError(err))),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.variants.TypeVariant>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.variants.TypeVariant> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.error.DecodingError, hydra.variants.TypeVariant>) ((hydra.util.Either<hydra.error.DecodingError, hydra.variants.TypeVariant>) (hydra.util.Either.<hydra.error.DecodingError, hydra.variants.TypeVariant>left(new hydra.error.DecodingError("expected union of type hydra.variants.TypeVariant"))));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.variants.TypeVariant>left(new hydra.error.DecodingError("expected union of type hydra.variants.TypeVariant"));
         }
         
         @Override
@@ -380,11 +380,11 @@ public interface Variants {
                 cx,
                 input)))))))));
           return hydra.lib.maybes.Maybe.applyLazy(
-            () -> (hydra.util.Either<hydra.error.DecodingError, hydra.variants.TypeVariant>) ((hydra.util.Either<hydra.error.DecodingError, hydra.variants.TypeVariant>) (hydra.util.Either.<hydra.error.DecodingError, hydra.variants.TypeVariant>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.variants.TypeVariant>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
               (fname).value,
               " in union type ",
-              (tname).value)))))),
+              (tname).value)))),
             (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.variants.TypeVariant>>, hydra.util.Either<hydra.error.DecodingError, hydra.variants.TypeVariant>>) (f -> (f).apply(fterm)),
             hydra.lib.maps.Lookup.apply(
               fname,

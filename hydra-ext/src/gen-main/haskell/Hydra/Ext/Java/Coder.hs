@@ -266,6 +266,16 @@ applySubstFull s t = ((\x -> case x of
     Core.forallTypeBody = (applySubstFull (Maps.delete (Core.forallTypeParameter v0) s) (Core.forallTypeBody v0))}))
   _ -> t) (Rewriting.deannotateType t))
 
+collectForallParams :: (Core.Type -> [Core.Name])
+collectForallParams t = ((\x -> case x of
+  Core.TypeForall v0 -> (Lists.cons (Core.forallTypeParameter v0) (collectForallParams (Core.forallTypeBody v0)))
+  _ -> []) (Rewriting.deannotateType t))
+
+stripForalls :: (Core.Type -> Core.Type)
+stripForalls t = ((\x -> case x of
+  Core.TypeForall v0 -> (stripForalls (Core.forallTypeBody v0))
+  _ -> t) (Rewriting.deannotateType t))
+
 collectTypeVars :: (Core.Type -> S.Set Core.Name)
 collectTypeVars typ = (collectTypeVars_go (Rewriting.deannotateType typ))
 
@@ -1693,9 +1703,21 @@ encodeTermInternal env anns tyapps term cx g0 =
   in ((\x -> case x of
     Core.TermAnnotated v0 -> (encodeTermInternal env (Lists.cons (Core.annotatedTermAnnotation v0) anns) tyapps (Core.annotatedTermBody v0) cx g)
     Core.TermApplication v0 -> (encodeApplication env v0 cx g)
-    Core.TermEither v0 -> (Eithers.bind (takeTypeArgs "either" 2 tyapps cx g) (\targs -> Eithers.either (\term1 -> Eithers.bind (encode term1) (\expr -> Right (Utils_.javaMethodInvocationToJavaExpression (Utils_.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.Either") (Syntax.Identifier "left") targs [
-      expr])))) (\term1 -> Eithers.bind (encode term1) (\expr -> Right (Utils_.javaMethodInvocationToJavaExpression (Utils_.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.Either") (Syntax.Identifier "right") targs [
-      expr])))) v0))
+    Core.TermEither v0 -> (Eithers.bind (takeTypeArgs "either" 2 tyapps cx g) (\targs ->  
+      let combinedAnns = (Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns)
+      in (Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
+        Context.inContextObject = (Error.OtherError (Error.unDecodingError _de)),
+        Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g combinedAnns)) (\mEitherType ->  
+        let branchTypes = (Maybes.bind mEitherType (\etyp -> (\x -> case x of
+                Core.TypeEither v1 -> (Just (Core.eitherTypeLeft v1, (Core.eitherTypeRight v1)))
+                _ -> Nothing) (Rewriting.deannotateType etyp)))
+        in  
+          let encodeWithType = (\branchType -> \t1 ->  
+                  let annotated = (Annotations.setTermAnnotation Constants.key_type (Just (Core__.type_ branchType)) t1)
+                  in (encodeTermInternal env anns [] annotated cx g))
+          in (Eithers.either (\term1 -> Eithers.bind (Maybes.cases branchTypes (encode term1) (\bt -> encodeWithType (Pairs.first bt) term1)) (\expr -> Right (Utils_.javaMethodInvocationToJavaExpression (Utils_.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.Either") (Syntax.Identifier "left") targs [
+            expr])))) (\term1 -> Eithers.bind (Maybes.cases branchTypes (encode term1) (\bt -> encodeWithType (Pairs.second bt) term1)) (\expr -> Right (Utils_.javaMethodInvocationToJavaExpression (Utils_.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.Either") (Syntax.Identifier "right") targs [
+            expr])))) v0)))))
     Core.TermFunction v0 ->  
       let combinedAnns = (Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns)
       in (Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
@@ -1748,15 +1770,41 @@ encodeTermInternal env anns tyapps term cx g0 =
       jterm2] Nothing)))))
     Core.TermRecord v0 ->  
       let recName = (Core.recordTypeName v0)
-      in (Eithers.bind (Eithers.mapList (\fld -> encode (Core.fieldTerm fld)) (Core.recordFields v0)) (\fieldExprs ->  
-        let consId = (Utils_.nameToJavaName aliases recName)
-        in (Eithers.bind (Logic.ifElse (Logic.not (Lists.null tyapps)) (Eithers.bind (Eithers.mapList (\jt -> Utils_.javaTypeToJavaReferenceType jt cx) tyapps) (\rts -> Right (Just (Syntax.TypeArgumentsOrDiamondArguments (Lists.map (\rt -> Syntax.TypeArgumentReference rt) rts))))) ( 
-          let combinedAnns = (Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns)
-          in (Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
-            Context.inContextObject = (Error.OtherError (Error.unDecodingError _de)),
-            Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g combinedAnns)) (\mtyp -> Maybes.cases mtyp (Right Nothing) (\annTyp ->  
-            let typeArgs = (extractTypeApplicationArgs (Rewriting.deannotateType annTyp))
-            in (Logic.ifElse (Lists.null typeArgs) (Right Nothing) (Eithers.bind (Eithers.mapList (\t -> Eithers.bind (encodeType aliases Sets.empty t cx g) (\jt -> Utils_.javaTypeToJavaReferenceType jt cx)) typeArgs) (\jTypeArgs -> Right (Just (Syntax.TypeArgumentsOrDiamondArguments (Lists.map (\rt -> Syntax.TypeArgumentReference rt) jTypeArgs))))))))))) (\mtargs -> Right (Utils_.javaConstructorCall (Utils_.javaConstructorName consId mtargs) fieldExprs Nothing)))))
+      in  
+        let mRecordType = (Eithers.either (\_ -> Nothing) (\t -> Just t) (Schemas.requireType cx g recName))
+        in  
+          let strippedRecTyp = (Maybes.map (\recTyp -> stripForalls (Rewriting.deannotateType recTyp)) mRecordType)
+          in  
+            let mFieldTypeMap = (Maybes.bind strippedRecTyp (\bodyTyp -> (\x -> case x of
+                    Core.TypeRecord v1 -> (Just (Maps.fromList (Lists.map (\ft -> (Core.fieldTypeName ft, (Core.fieldTypeType ft))) (Core.rowTypeFields v1))))
+                    _ -> Nothing) bodyTyp))
+            in  
+              let combinedAnnsRec = (Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns)
+              in (Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
+                Context.inContextObject = (Error.OtherError (Error.unDecodingError _de)),
+                Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g combinedAnnsRec)) (\mAnnotType ->  
+                let mTypeSubst = (Maybes.bind mAnnotType (\annTyp -> Maybes.bind mRecordType (\recTyp ->  
+                        let args = (extractTypeApplicationArgs (Rewriting.deannotateType annTyp))
+                        in  
+                          let params = (collectForallParams (Rewriting.deannotateType recTyp))
+                          in (Logic.ifElse (Logic.or (Lists.null args) (Logic.not (Equality.equal (Lists.length args) (Lists.length params)))) Nothing (Just (Maps.fromList (Lists.zip params args)))))))
+                in  
+                  let encodeField = (\fld -> Maybes.cases mFieldTypeMap (encode (Core.fieldTerm fld)) (\ftmap ->  
+                          let mftyp = (Maps.lookup (Core.fieldName fld) ftmap)
+                          in (Maybes.cases mftyp (encode (Core.fieldTerm fld)) (\ftyp ->  
+                            let resolvedType = (Maybes.cases mTypeSubst ftyp (\subst -> applySubstFull subst ftyp))
+                            in  
+                              let annotatedFieldTerm = (Annotations.setTermAnnotation Constants.key_type (Just (Core__.type_ resolvedType)) (Core.fieldTerm fld))
+                              in (encodeTermInternal env anns [] annotatedFieldTerm cx g)))))
+                  in (Eithers.bind (Eithers.mapList encodeField (Core.recordFields v0)) (\fieldExprs ->  
+                    let consId = (Utils_.nameToJavaName aliases recName)
+                    in (Eithers.bind (Logic.ifElse (Logic.not (Lists.null tyapps)) (Eithers.bind (Eithers.mapList (\jt -> Utils_.javaTypeToJavaReferenceType jt cx) tyapps) (\rts -> Right (Just (Syntax.TypeArgumentsOrDiamondArguments (Lists.map (\rt -> Syntax.TypeArgumentReference rt) rts))))) ( 
+                      let combinedAnns = (Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns)
+                      in (Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
+                        Context.inContextObject = (Error.OtherError (Error.unDecodingError _de)),
+                        Context.inContextContext = cx}) (\_a -> _a) (Annotations.getType g combinedAnns)) (\mtyp -> Maybes.cases mtyp (Right Nothing) (\annTyp ->  
+                        let typeArgs = (extractTypeApplicationArgs (Rewriting.deannotateType annTyp))
+                        in (Logic.ifElse (Lists.null typeArgs) (Right Nothing) (Eithers.bind (Eithers.mapList (\t -> Eithers.bind (encodeType aliases Sets.empty t cx g) (\jt -> Utils_.javaTypeToJavaReferenceType jt cx)) typeArgs) (\jTypeArgs -> Right (Just (Syntax.TypeArgumentsOrDiamondArguments (Lists.map (\rt -> Syntax.TypeArgumentReference rt) jTypeArgs))))))))))) (\mtargs -> Right (Utils_.javaConstructorCall (Utils_.javaConstructorName consId mtargs) fieldExprs Nothing)))))))
     Core.TermSet v0 ->  
       let slist = (Sets.toList v0)
       in (Eithers.bind (Eithers.mapList encode slist) (\jels -> Logic.ifElse (Sets.null v0) (Eithers.bind (takeTypeArgs "set" 1 tyapps cx g) (\targs -> Right (Utils_.javaMethodInvocationToJavaExpression (Utils_.methodInvocationStaticWithTypeArgs (Syntax.Identifier "java.util.Set") (Syntax.Identifier "of") targs [])))) ( 
@@ -1819,6 +1867,17 @@ encodeTermInternal env anns tyapps term cx g0 =
                       let allTypeArgs = (Pairs.second collected)
                       in ((\x -> case x of
                         Core.TermVariable v1 -> (Eithers.bind (classifyDataReference v1 cx g) (\cls -> typeAppNullaryOrHoisted env aliases anns tyapps jatyp body correctedTyp v1 cls allTypeArgs cx g))
+                        Core.TermEither v1 -> (Logic.ifElse (Equality.equal (Lists.length allTypeArgs) 2) ( 
+                          let eitherBranchTypes = (Lists.head allTypeArgs, (Lists.head (Lists.tail allTypeArgs)))
+                          in (Eithers.bind (Eithers.mapList (\t -> Eithers.bind (encodeType aliases Sets.empty t cx g) (\jt -> Utils_.javaTypeToJavaReferenceType jt cx)) allTypeArgs) (\jTypeArgs ->  
+                            let eitherTargs = (Lists.map (\rt -> Syntax.TypeArgumentReference rt) jTypeArgs)
+                            in  
+                              let encodeEitherBranch = (\branchType -> \t1 ->  
+                                      let annotated = (Annotations.setTermAnnotation Constants.key_type (Just (Core__.type_ branchType)) t1)
+                                      in (encodeTermInternal env anns [] annotated cx g))
+                              in (Eithers.either (\term1 -> Eithers.bind (encodeEitherBranch (Pairs.first eitherBranchTypes) term1) (\expr -> Right (Utils_.javaMethodInvocationToJavaExpression (Utils_.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.Either") (Syntax.Identifier "left") eitherTargs [
+                                expr])))) (\term1 -> Eithers.bind (encodeEitherBranch (Pairs.second eitherBranchTypes) term1) (\expr -> Right (Utils_.javaMethodInvocationToJavaExpression (Utils_.methodInvocationStaticWithTypeArgs (Syntax.Identifier "hydra.util.Either") (Syntax.Identifier "right") eitherTargs [
+                                expr])))) v1)))) (typeAppFallbackCast env aliases anns tyapps jatyp body correctedTyp cx g))
                         _ -> (typeAppFallbackCast env aliases anns tyapps jatyp body correctedTyp cx g)) innermostBody))))))))
     _ -> (Right (encodeLiteral (Core.LiteralString "Unimplemented term variant")))) term)
 

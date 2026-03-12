@@ -18,7 +18,7 @@ public class SortingTest {
 
         assertEquals(
 
-            (hydra.util.Either<T1, java.util.List<T0>>) ((hydra.util.Either<T1, java.util.List<T0>>) (hydra.util.Either.<T1, java.util.List<T0>>right((java.util.List<T0>) (java.util.List.<T0>of())))),
+            hydra.util.Either.<T1, java.util.List<T0>>right((java.util.List<T0>) (java.util.List.<T0>of())),
 
             hydra.sorting.Sorting.topologicalSort((java.util.List<hydra.util.Pair<T0, java.util.List<T0>>>) (java.util.List.<hydra.util.Pair<T0, java.util.List<T0>>>of())));
 
@@ -30,7 +30,7 @@ public class SortingTest {
 
         assertEquals(
 
-            (hydra.util.Either<T1, java.util.List<Integer>>) ((hydra.util.Either<T1, java.util.List<Integer>>) (hydra.util.Either.<T1, java.util.List<Integer>>right(java.util.List.of(1)))),
+            hydra.util.Either.<T1, java.util.List<Integer>>right(java.util.List.of(1)),
 
             hydra.sorting.Sorting.topologicalSort(java.util.List.of((hydra.util.Pair<Integer, java.util.List<Integer>>) ((hydra.util.Pair<Integer, java.util.List<Integer>>) (new hydra.util.Pair<Integer, java.util.List<Integer>>(1, (java.util.List<Integer>) (java.util.List.<Integer>of())))))));
 
@@ -42,10 +42,10 @@ public class SortingTest {
 
         assertEquals(
 
-            (hydra.util.Either<T1, java.util.List<Integer>>) ((hydra.util.Either<T1, java.util.List<Integer>>) (hydra.util.Either.<T1, java.util.List<Integer>>right(java.util.List.of(
+            hydra.util.Either.<T1, java.util.List<Integer>>right(java.util.List.of(
   1,
   2,
-  3)))),
+  3)),
 
             hydra.sorting.Sorting.topologicalSort(java.util.List.of(
   (hydra.util.Pair<Integer, java.util.List<Integer>>) ((hydra.util.Pair<Integer, java.util.List<Integer>>) (new hydra.util.Pair<Integer, java.util.List<Integer>>(3, (java.util.List<Integer>) (java.util.List.<Integer>of())))),
@@ -60,10 +60,10 @@ public class SortingTest {
 
         assertEquals(
 
-            (hydra.util.Either<T1, java.util.List<Integer>>) ((hydra.util.Either<T1, java.util.List<Integer>>) (hydra.util.Either.<T1, java.util.List<Integer>>right(java.util.List.of(
+            hydra.util.Either.<T1, java.util.List<Integer>>right(java.util.List.of(
   1,
   3,
-  2)))),
+  2)),
 
             hydra.sorting.Sorting.topologicalSort(java.util.List.of(
   (hydra.util.Pair<Integer, java.util.List<Integer>>) ((hydra.util.Pair<Integer, java.util.List<Integer>>) (new hydra.util.Pair<Integer, java.util.List<Integer>>(3, java.util.List.of(1)))),
@@ -78,13 +78,13 @@ public class SortingTest {
 
         assertEquals(
 
-            (hydra.util.Either<T1, java.util.List<Integer>>) ((hydra.util.Either<T1, java.util.List<Integer>>) (hydra.util.Either.<T1, java.util.List<Integer>>right(java.util.List.of(
+            hydra.util.Either.<T1, java.util.List<Integer>>right(java.util.List.of(
   5,
   1,
   2,
   6,
   4,
-  3)))),
+  3)),
 
             hydra.sorting.Sorting.topologicalSort(java.util.List.of(
   (hydra.util.Pair<Integer, java.util.List<Integer>>) ((hydra.util.Pair<Integer, java.util.List<Integer>>) (new hydra.util.Pair<Integer, java.util.List<Integer>>(3, java.util.List.of(
@@ -106,14 +106,14 @@ public class SortingTest {
 
         assertEquals(
 
-            (hydra.util.Either<T1, java.util.List<Integer>>) ((hydra.util.Either<T1, java.util.List<Integer>>) (hydra.util.Either.<T1, java.util.List<Integer>>right(java.util.List.of(
+            hydra.util.Either.<T1, java.util.List<Integer>>right(java.util.List.of(
   1,
   7,
   2,
   4,
   3,
   6,
-  5)))),
+  5)),
 
             hydra.sorting.Sorting.topologicalSort(java.util.List.of(
   (hydra.util.Pair<Integer, java.util.List<Integer>>) ((hydra.util.Pair<Integer, java.util.List<Integer>>) (new hydra.util.Pair<Integer, java.util.List<Integer>>(3, java.util.List.of(
@@ -136,12 +136,12 @@ public class SortingTest {
 
         assertEquals(
 
-            (hydra.util.Either<T1, java.util.List<Integer>>) ((hydra.util.Either<T1, java.util.List<Integer>>) (hydra.util.Either.<T1, java.util.List<Integer>>right(java.util.List.of(
+            hydra.util.Either.<T1, java.util.List<Integer>>right(java.util.List.of(
   5,
   2,
   3,
   4,
-  1)))),
+  1)),
 
             hydra.sorting.Sorting.topologicalSort(java.util.List.of(
   (hydra.util.Pair<Integer, java.util.List<Integer>>) ((hydra.util.Pair<Integer, java.util.List<Integer>>) (new hydra.util.Pair<Integer, java.util.List<Integer>>(1, java.util.List.of(
@@ -160,9 +160,9 @@ public class SortingTest {
 
         assertEquals(
 
-            (hydra.util.Either<java.util.List<java.util.List<Integer>>, T2>) ((hydra.util.Either<java.util.List<java.util.List<Integer>>, T2>) (hydra.util.Either.<java.util.List<java.util.List<Integer>>, T2>left(java.util.List.of(java.util.List.of(
+            hydra.util.Either.<java.util.List<java.util.List<Integer>>, T2>left(java.util.List.of(java.util.List.of(
   1,
-  2))))),
+  2))),
 
             hydra.sorting.Sorting.topologicalSort(java.util.List.of(
   (hydra.util.Pair<Integer, java.util.List<Integer>>) ((hydra.util.Pair<Integer, java.util.List<Integer>>) (new hydra.util.Pair<Integer, java.util.List<Integer>>(1, java.util.List.of(2)))),
@@ -176,9 +176,9 @@ public class SortingTest {
 
         assertEquals(
 
-            (hydra.util.Either<java.util.List<java.util.List<Integer>>, T2>) ((hydra.util.Either<java.util.List<java.util.List<Integer>>, T2>) (hydra.util.Either.<java.util.List<java.util.List<Integer>>, T2>left(java.util.List.of(java.util.List.of(
+            hydra.util.Either.<java.util.List<java.util.List<Integer>>, T2>left(java.util.List.of(java.util.List.of(
   2,
-  3))))),
+  3))),
 
             hydra.sorting.Sorting.topologicalSort(java.util.List.of(
   (hydra.util.Pair<Integer, java.util.List<Integer>>) ((hydra.util.Pair<Integer, java.util.List<Integer>>) (new hydra.util.Pair<Integer, java.util.List<Integer>>(1, java.util.List.of(3)))),

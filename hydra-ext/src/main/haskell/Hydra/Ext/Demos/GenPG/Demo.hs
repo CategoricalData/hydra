@@ -12,8 +12,7 @@ import Hydra.Ext.Dsl.Pg.Mappings
 import Hydra.Lib.Literals
 import Hydra.Pg.Graphson.Utils
 import qualified Hydra.Demos.Genpg.Transform as Transform
-import Hydra.Ext.Staging.Pg.Printing
-import Hydra.Ext.Staging.Pg.Utils
+import Hydra.Pg.Utils (lazyGraphToElements)
 import Hydra.Sources.Kernel.Types.Core
 import qualified Hydra.Json.Writer as JsonWriter
 import qualified Hydra.Pg.Model as Pg

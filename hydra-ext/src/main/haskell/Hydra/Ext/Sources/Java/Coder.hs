@@ -131,6 +131,8 @@ module_ = Module ns elements
       -- Type manipulation
       toBinding peelExpectedTypes,
       toBinding applySubstFull,
+      toBinding collectForallParams,
+      toBinding stripForalls,
       toBinding collectTypeVars,
       toBinding collectTypeVars_go,
       toBinding substituteTypeVarsWithTypes,
@@ -715,6 +717,23 @@ applySubstFull = def "applySubstFull" $
         (Core.forallTypeParameter (var "ft"))
         (applySubstFull @@ (Maps.delete (Core.forallTypeParameter (var "ft")) (var "s"))
           @@ Core.forallTypeBody (var "ft")))]
+
+-- | Collect forall-bound type parameter names from a type
+collectForallParams :: TBinding (Type -> [Name])
+collectForallParams = def "collectForallParams" $
+  lambda "t" $ cases _Type (Rewriting.deannotateType @@ var "t")
+    (Just $ list ([] :: [TTerm Name])) [
+    _Type_forall>>: lambda "fa" $
+      Lists.cons (Core.forallTypeParameter (var "fa"))
+        (collectForallParams @@ Core.forallTypeBody (var "fa"))]
+
+-- | Strip all forall wrappers from a type, returning the body
+stripForalls :: TBinding (Type -> Type)
+stripForalls = def "stripForalls" $
+  lambda "t" $ cases _Type (Rewriting.deannotateType @@ var "t")
+    (Just $ var "t") [
+    _Type_forall>>: lambda "fa" $
+      stripForalls @@ Core.forallTypeBody (var "fa")]
 
 -- | Collect all type variable names from a type
 collectTypeVars :: TBinding (Type -> S.Set Name)
@@ -3552,18 +3571,35 @@ encodeTermInternal = def "encodeTermInternal" $
         encodeApplication @@ var "env" @@ var "app" @@ var "cx" @@ var "g",
 
       -- TermEither: left or right
+      -- Extract the Either type from annotations so we can pass component types to inner terms.
+      -- Without this, inner lambdas lose their type context and type variables get concretized.
       _Term_either>>: lambda "et" $
         "targs" <<~ (takeTypeArgs @@ string "either" @@ int32 2 @@ var "tyapps" @@ var "cx" @@ var "g") $
+        "combinedAnns" <~ Lists.foldl (lambda "acc" $ lambda "m" $ Maps.union (var "acc") (var "m")) Maps.empty (var "anns") $
+        "mEitherType" <<~ (getTypeE (var "cx") (var "g") (var "combinedAnns")) $
+        "branchTypes" <~ (Maybes.bind (var "mEitherType") (lambda "etyp" $
+          cases _Type (Rewriting.deannotateType @@ var "etyp")
+            (Just nothing) [
+            _Type_either>>: lambda "et2" $
+              just (pair (Core.eitherTypeLeft (var "et2")) (Core.eitherTypeRight (var "et2")))])) $
+        "encodeWithType" <~ (lambda "branchType" $ lambda "t1" $
+          "annotated" <~ (Annotations.setTermAnnotation @@ asTerm Constants.key_type
+            @@ just (encodeTypeAsTerm @@ var "branchType") @@ var "t1") $
+          encodeTermInternal @@ var "env" @@ var "anns" @@ list ([] :: [TTerm Java.Type]) @@ var "annotated" @@ var "cx" @@ var "g") $
         Eithers.either_
           (lambda "term1" $
-            "expr" <<~ (var "encode" @@ var "term1") $
+            "expr" <<~ (Maybes.cases (var "branchTypes")
+              (var "encode" @@ var "term1")
+              (lambda "bt" $ var "encodeWithType" @@ Pairs.first (var "bt") @@ var "term1")) $
             right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
               (JavaUtilsSource.methodInvocationStaticWithTypeArgs
                 @@ JavaDsl.identifier (string "hydra.util.Either")
                 @@ JavaDsl.identifier (string "left")
                 @@ var "targs" @@ list [var "expr"])))
           (lambda "term1" $
-            "expr" <<~ (var "encode" @@ var "term1") $
+            "expr" <<~ (Maybes.cases (var "branchTypes")
+              (var "encode" @@ var "term1")
+              (lambda "bt" $ var "encodeWithType" @@ Pairs.second (var "bt") @@ var "term1")) $
             right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
               (JavaUtilsSource.methodInvocationStaticWithTypeArgs
                 @@ JavaDsl.identifier (string "hydra.util.Either")
@@ -3692,7 +3728,48 @@ encodeTermInternal = def "encodeTermInternal" $
       -- (e.g. Coder<Graph, Graph, Term, Value>) but no TermTypeApplication wrappers in the term.
       _Term_record>>: lambda "rec" $
         "recName" <~ Core.recordTypeName (var "rec") $
-        "fieldExprs" <<~ (Eithers.mapList (lambda "fld" $ var "encode" @@ Core.fieldTerm (var "fld")) (Core.recordFields (var "rec"))) $
+        -- Try to resolve the record type from the graph to get expected field types.
+        -- This allows us to annotate field terms with their expected types, preventing
+        -- type variable concretization in polymorphic lambdas (e.g. Coder encode/decode fields).
+        "mRecordType" <~ Eithers.either_ (constant nothing) ("t" ~> just (var "t"))
+          (Schemas.requireType @@ var "cx" @@ var "g" @@ var "recName") $
+        "strippedRecTyp" <~ Maybes.map (lambda "recTyp" $ stripForalls @@ (Rewriting.deannotateType @@ var "recTyp"))
+          (var "mRecordType") $
+        "mFieldTypeMap" <~ (Maybes.bind (var "strippedRecTyp") (lambda "bodyTyp" $
+          cases _Type (var "bodyTyp")
+            (Just nothing) [
+            _Type_record>>: lambda "rt" $
+              just (Maps.fromList (Lists.map
+                (lambda "ft" $ pair (Core.fieldTypeName (var "ft")) (Core.fieldTypeType (var "ft")))
+                (Core.rowTypeFields (var "rt"))))])) $
+        -- Build type variable substitution from the annotation type's type arguments
+        "combinedAnnsRec" <~ Lists.foldl (lambda "acc" $ lambda "m" $ Maps.union (var "acc") (var "m")) Maps.empty (var "anns") $
+        "mAnnotType" <<~ (getTypeE (var "cx") (var "g") (var "combinedAnnsRec")) $
+        "mTypeSubst" <~ (Maybes.bind (var "mAnnotType") (lambda "annTyp" $
+          Maybes.bind (var "mRecordType") (lambda "recTyp" $
+            -- Extract type args from annotation and type params from definition
+            "args" <~ (extractTypeApplicationArgs @@ (Rewriting.deannotateType @@ var "annTyp")) $
+            "params" <~ (collectForallParams @@ (Rewriting.deannotateType @@ var "recTyp")) $
+            Logic.ifElse (Logic.or (Lists.null (var "args")) (Logic.not (Equality.equal (Lists.length (var "args")) (Lists.length (var "params")))))
+              nothing
+              (just (Maps.fromList (Lists.zip (var "params") (var "args"))))))) $
+        "encodeField" <~ (lambda "fld" $
+          Maybes.cases (var "mFieldTypeMap")
+            (var "encode" @@ Core.fieldTerm (var "fld"))
+            (lambda "ftmap" $
+              "mftyp" <~ Maps.lookup (Core.fieldName (var "fld")) (var "ftmap") $
+              Maybes.cases (var "mftyp")
+                (var "encode" @@ Core.fieldTerm (var "fld"))
+                (lambda "ftyp" $
+                  -- Apply type substitution to the field type if available
+                  "resolvedType" <~ Maybes.cases (var "mTypeSubst")
+                    (var "ftyp")
+                    (lambda "subst" $ applySubstFull @@ var "subst" @@ var "ftyp") $
+                  -- Annotate the field term with the resolved type before encoding
+                  "annotatedFieldTerm" <~ (Annotations.setTermAnnotation @@ asTerm Constants.key_type
+                    @@ just (encodeTypeAsTerm @@ var "resolvedType") @@ Core.fieldTerm (var "fld")) $
+                  encodeTermInternal @@ var "env" @@ var "anns" @@ list ([] :: [TTerm Java.Type]) @@ var "annotatedFieldTerm" @@ var "cx" @@ var "g"))) $
+        "fieldExprs" <<~ (Eithers.mapList (var "encodeField") (Core.recordFields (var "rec"))) $
         "consId" <~ (JavaUtilsSource.nameToJavaName @@ var "aliases" @@ var "recName") $
         "mtargs" <<~ (Logic.ifElse (Logic.not (Lists.null (var "tyapps")))
           ("rts" <<~ (Eithers.mapList (lambda "jt" $ JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt" @@ var "cx") (var "tyapps")) $
@@ -3807,7 +3884,7 @@ encodeTermInternal = def "encodeTermInternal" $
         "collected" <~ (collectTypeApps @@ var "body" @@ list [var "atyp"]) $
         "innermostBody" <~ Pairs.first (var "collected") $
         "allTypeArgs" <~ Pairs.second (var "collected") $
-        -- Classify the innermost body if it's a variable
+        -- Classify the innermost body if it's a variable or an Either injection
         cases _Term (var "innermostBody")
           (Just $ typeAppFallbackCast @@ var "env" @@ var "aliases" @@ var "anns" @@ var "tyapps"
             @@ var "jatyp" @@ var "body" @@ var "correctedTyp" @@ var "cx" @@ var "g") [
@@ -3815,7 +3892,46 @@ encodeTermInternal = def "encodeTermInternal" $
             "cls" <<~ (classifyDataReference @@ var "varName" @@ var "cx" @@ var "g") $
             typeAppNullaryOrHoisted @@ var "env" @@ var "aliases" @@ var "anns" @@ var "tyapps"
               @@ var "jatyp" @@ var "body" @@ var "correctedTyp" @@ var "varName"
-              @@ var "cls" @@ var "allTypeArgs" @@ var "cx" @@ var "g"]]
+              @@ var "cls" @@ var "allTypeArgs" @@ var "cx" @@ var "g",
+          -- Either injections: pass branch types from the TypeApp type args
+          -- so inner lambdas don't lose their type variables
+          _Term_either>>: lambda "eitherTerm" $
+            Logic.ifElse (Equality.equal (Lists.length (var "allTypeArgs")) (int32 2))
+              -- We have exactly 2 type args: the Either type parameters
+              -- allTypeArgs order depends on collectTypeApps, which prepends: [outerType, innerType]
+              -- For Either<L,R>, TypeApp(typeR, TypeApp(typeL, Either(...))):
+              --   outer TypeApp has typeR (right branch type), inner has typeL (left branch type)
+              --   collectTypeApps starts with [atyp] and prepends, so allTypeArgs = [typeL, typeR]
+              ("eitherBranchTypes" <~ pair (Lists.head (var "allTypeArgs")) (Lists.head (Lists.tail (var "allTypeArgs"))) $
+                "jTypeArgs" <<~ (Eithers.mapList (lambda "t" $
+                  "jt" <<~ (encodeType @@ var "aliases" @@ Sets.empty @@ var "t" @@ var "cx" @@ var "g") $
+                  JavaUtilsSource.javaTypeToJavaReferenceType @@ var "jt" @@ var "cx") (var "allTypeArgs")) $
+                "eitherTargs" <~ Lists.map (lambda "rt" $ JavaDsl.typeArgumentReference (var "rt")) (var "jTypeArgs") $
+                "encodeEitherBranch" <~ (lambda "branchType" $ lambda "t1" $
+                  "annotated" <~ (Annotations.setTermAnnotation @@ asTerm Constants.key_type
+                    @@ just (encodeTypeAsTerm @@ var "branchType") @@ var "t1") $
+                  encodeTermInternal @@ var "env" @@ var "anns" @@ list ([] :: [TTerm Java.Type]) @@ var "annotated" @@ var "cx" @@ var "g") $
+                Eithers.either_
+                  (lambda "term1" $
+                    "expr" <<~ (var "encodeEitherBranch" @@ Pairs.first (var "eitherBranchTypes") @@ var "term1") $
+                    right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
+                      (JavaUtilsSource.methodInvocationStaticWithTypeArgs
+                        @@ JavaDsl.identifier (string "hydra.util.Either")
+                        @@ JavaDsl.identifier (string "left")
+                        @@ var "eitherTargs" @@ list [var "expr"])))
+                  (lambda "term1" $
+                    "expr" <<~ (var "encodeEitherBranch" @@ Pairs.second (var "eitherBranchTypes") @@ var "term1") $
+                    right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
+                      (JavaUtilsSource.methodInvocationStaticWithTypeArgs
+                        @@ JavaDsl.identifier (string "hydra.util.Either")
+                        @@ JavaDsl.identifier (string "right")
+                        @@ var "eitherTargs" @@ list [var "expr"])))
+                  (var "eitherTerm"))
+              -- Fallback if we don't have exactly 2 type args
+              (typeAppFallbackCast @@ var "env" @@ var "aliases" @@ var "anns" @@ var "tyapps"
+                @@ var "jatyp" @@ var "body" @@ var "correctedTyp" @@ var "cx" @@ var "g")
+          ]
+        ]
 
 -- =============================================================================
 -- Batch 24: encodeApplication and supporting functions

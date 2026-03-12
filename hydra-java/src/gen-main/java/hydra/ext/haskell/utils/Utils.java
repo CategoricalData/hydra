@@ -91,7 +91,7 @@ public interface Utils {
         hydra.module.Namespace ns = (mod).namespace;
         hydra.util.Pair<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName> focusPair = (toPair).apply(ns);
         hydra.util.Lazy<java.util.Map<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName>> resultMap = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(finalState.get()));
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>>right((hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>) (new hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>(focusPair, resultMap.get())))));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>>right((hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>) (new hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>(focusPair, resultMap.get())));
       }));
   }
   

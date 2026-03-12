@@ -55,6 +55,7 @@ import qualified Hydra.Ext.Sources.Scala.Meta as ScalaMeta
 import qualified Hydra.Ext.Sources.Scala.Language as ScalaLanguageSource
 import qualified Hydra.Ext.Sources.Scala.Utils as ScalaUtilsSource
 import qualified Hydra.Ext.Sources.Scala.Prepare as ScalaPrepareSource
+import qualified Hydra.Ext.Sources.Scala.Serde as ScalaSerdeSource
 
 
 def :: String -> TTerm a -> TBinding a
@@ -70,7 +71,7 @@ ns = Namespace "hydra.ext.scala.coder"
 
 module_ :: Module
 module_ = Module ns elements
-    [ScalaUtilsSource.ns, ScalaPrepareSource.ns, Formatting.ns, Names.ns, AdaptUtils.ns, AdaptModules.ns, Rewriting.ns, CoderUtils.ns, Schemas.ns, ShowCore.ns, Annotations.ns, Constants.ns,
+    [ScalaUtilsSource.ns, ScalaPrepareSource.ns, ScalaSerdeSource.ns, Formatting.ns, Names.ns, AdaptUtils.ns, AdaptModules.ns, Rewriting.ns, CoderUtils.ns, Schemas.ns, ShowCore.ns, Annotations.ns, Constants.ns,
       Inference.ns, Sorting.ns, Arity.ns, SerializationSource.ns, Reduction.ns]
     (ScalaMeta.ns:moduleNamespace ScalaLanguageSource.scalaLanguageModule:KernelTypes.kernelTypesNamespaces) $
     Just "Scala code generator: converts Hydra modules to Scala source code"
@@ -115,7 +116,7 @@ moduleToScala = def "moduleToScala" $
     Eithers.bind
       (asTerm constructModule @@ var "cx" @@ var "g" @@ var "mod" @@ var "defs")
       ("pkg" ~> lets [
-        "s">: SerializationSource.printExpr @@ (SerializationSource.parenthesize @@ (TTerm (TermVariable (Name "hydra.ext.scala.coder.writePkg")) @@ var "pkg"))] $
+        "s">: SerializationSource.printExpr @@ (SerializationSource.parenthesize @@ (TTerm (TermVariable (Name "hydra.ext.scala.serde.writePkg")) @@ var "pkg"))] $
         right (Maps.singleton
           (Names.namespaceToFilePath @@ Util.caseConventionCamel @@ wrap _FileExtension (string "scala") @@ Module.moduleNamespace (var "mod"))
           (var "s")))
@@ -350,17 +351,41 @@ encodeTermDefinition = def "encodeTermDefinition" $
     "name">: project _TermDefinition _TermDefinition_name @@ var "td",
     "term">: project _TermDefinition _TermDefinition_term @@ var "td",
     "typ">: project _TermDefinition _TermDefinition_type @@ var "td",
-    "lname">: Names.localNameOf @@ var "name"] $
+    "lname">: Names.localNameOf @@ var "name",
+    "typ'">: Core.typeSchemeType $ var "typ",
+    "toVal">: "ln" ~> "r" ~>
+      inject _Defn _Defn_val (record _Defn_Val [
+        _Defn_Val_mods>>: emptyList,
+        _Defn_Val_pats>>: list [inject _Pat _Pat_var (record _Pat_Var [
+          _Pat_Var_name>>: record _Data_Name [_Data_Name_value>>: wrap _PredefString (var "ln")]])],
+        _Defn_Val_decltpe>>: nothing,
+        _Defn_Val_rhs>>: var "r"])] $
     Eithers.bind
       (asTerm encodeTerm @@ var "cx" @@ var "g" @@ var "term")
       ("rhs" ~>
-        right (inject _Stat _Stat_defn (inject _Defn _Defn_val (
-          record _Defn_Val [
-            _Defn_Val_mods>>: emptyList,
-            _Defn_Val_pats>>: list [inject _Pat _Pat_var (record _Pat_Var [
-              _Pat_Var_name>>: record _Data_Name [_Data_Name_value>>: wrap _PredefString (var "lname")]])],
-            _Defn_Val_decltpe>>: nothing,
-            _Defn_Val_rhs>>: var "rhs"]))))
+        -- If the RHS is function data and the type is a function type, use def; otherwise use val
+        cases _Data (var "rhs") (Just $ right (inject _Stat _Stat_defn (var "toVal" @@ var "lname" @@ var "rhs"))) [
+          _Data_functionData>>: "fun" ~>
+            cases _Type (Rewriting.deannotateType @@ var "typ'") (Just $ right (inject _Stat _Stat_defn (var "toVal" @@ var "lname" @@ var "rhs"))) [
+              _Type_function>>: "ft" ~> lets [
+                "cod">: Core.functionTypeCodomain $ var "ft",
+                "freeTypeVars">: Sets.toList (Rewriting.freeVariablesInType @@ var "typ'"),
+                "tparams">: Lists.map (lambda "tv" $ ScalaUtilsSource.stparam @@ var "tv") (var "freeTypeVars")] $
+                Eithers.bind (asTerm encodeType @@ var "cx" @@ var "g" @@ var "cod")
+                  ("scod" ~>
+                    cases _Data_FunctionData (var "fun") (Just $ right (inject _Stat _Stat_defn (var "toVal" @@ var "lname" @@ var "rhs"))) [
+                      _Data_FunctionData_function>>: "f" ~> lets [
+                        "params">: project _Data_Function _Data_Function_params @@ var "f",
+                        "body">: project _Data_Function _Data_Function_body @@ var "f"] $
+                        right (inject _Stat _Stat_defn (inject _Defn _Defn_def (record _Defn_Def [
+                          _Defn_Def_mods>>: emptyList,
+                          _Defn_Def_name>>: record _Data_Name [_Data_Name_value>>: wrap _PredefString (var "lname")],
+                          _Defn_Def_tparams>>: var "tparams",
+                          _Defn_Def_paramss>>: list [var "params"],
+                          _Defn_Def_decltpe>>: just (var "scod"),
+                          _Defn_Def_body>>: var "body"])))
+                    ])
+              ]])
 
 encodeFunction :: TBinding (Context -> Graph -> M.Map Name Term -> Function -> Maybe Term -> Either (InContext OtherError) Scala.Data)
 encodeFunction = def "encodeFunction" $
@@ -466,11 +491,11 @@ applyVar = def "applyVar" $
       _Term_function>>: ("f" ~> cases _Function (var "f")
         (Just $ Core.termApplication (record _Application [_Application_function>>: var "fterm", _Application_argument>>: Core.termVariable (var "avar")])) [
           _Function_lambda>>: ("lam" ~> lets [
-            "v1">: project _Lambda _Lambda_parameter @@ var "lam",
-            "body">: project _Lambda _Lambda_body @@ var "lam"] $
-            Logic.ifElse (Rewriting.isFreeVariableInTerm @@ var "v1" @@ var "body")
-              (var "body")
-              (Rewriting.substituteVariable @@ var "v1" @@ var "avar" @@ var "body"))])]
+            "lamParam">: project _Lambda _Lambda_parameter @@ var "lam",
+            "lamBody">: project _Lambda _Lambda_body @@ var "lam"] $
+            Logic.ifElse (Rewriting.isFreeVariableInTerm @@ var "lamParam" @@ var "lamBody")
+              (var "lamBody")
+              (Rewriting.substituteVariable @@ var "lamParam" @@ var "avar" @@ var "lamBody"))])]
 
 encodeLiteral :: TBinding (Context -> Graph -> Literal -> Either (InContext OtherError) Scala.Lit)
 encodeLiteral = def "encodeLiteral" $
@@ -716,7 +741,10 @@ _Data = Scala._Data
 _Data_Apply = Scala._Data_Apply
 _Data_Assign = Scala._Data_Assign
 _Data_FunctionData = Scala._Data_FunctionData
+_Data_FunctionData_function = Scala._Data_FunctionData_function
 _Data_Function = Scala._Data_Function
+_Data_Function_params = Name "params"
+_Data_Function_body = Name "body"
 _Data_Match = Scala._Data_Match
 _Data_Match_expr = Name "expr"
 _Data_Match_cases = Name "cases"
@@ -807,6 +835,12 @@ _Defn_Class_tparams = Name "tparams"
 _Defn_Class_ctor = Name "ctor"
 _Defn_Class_template = Name "template"
 _Defn_Def = Scala._Defn_Def
+_Defn_Def_mods = Name "mods"
+_Defn_Def_name = Name "name"
+_Defn_Def_tparams = Name "tparams"
+_Defn_Def_paramss = Name "paramss"
+_Defn_Def_decltpe = Name "decltpe"
+_Defn_Def_body = Name "body"
 _Defn_Enum = Scala._Defn_Enum
 _Defn_Enum_mods = Name "mods"
 _Defn_Enum_name = Name "name"

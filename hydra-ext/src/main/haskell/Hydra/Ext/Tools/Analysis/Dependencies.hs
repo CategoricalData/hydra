@@ -54,7 +54,7 @@ import qualified Hydra.Pg.Model as PG
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Writer as JsonWriter
 import qualified Hydra.Error as Error
-import Hydra.Ext.Staging.Pg.Utils
+import Hydra.Pg.Utils (propertyGraphElements)
 import Hydra.Pg.Graphson.Utils
 
 import qualified Control.Monad as CM

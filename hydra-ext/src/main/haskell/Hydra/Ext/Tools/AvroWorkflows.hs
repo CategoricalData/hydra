@@ -26,8 +26,7 @@ import qualified Hydra.Json.Parser as JsonParser
 import Hydra.Ext.Staging.Avro.Coder
 import Hydra.Ext.Avro.SchemaJson hiding (Result)
 import Hydra.Pg.Graphson.Utils
-import Hydra.Ext.Staging.Pg.Coder
-import qualified Hydra.Ext.Staging.Shacl.Coder as Shacl
+import qualified Hydra.Ext.Shacl.Coder as Shacl
 import qualified Hydra.Ext.Org.W3.Rdf.Syntax as Rdf
 import qualified Hydra.Ext.Rdf.Utils as RdfUt
 import qualified Hydra.Pg.Model as PG
@@ -36,7 +35,7 @@ import Hydra.Ext.Rdf.Serde
 import Hydra.Sources.Kernel.Types.Core
 import Hydra.Pg.Graphson.Coder
 import Hydra.Pg.Graphson.Syntax as G
-import Hydra.Ext.Staging.Pg.Utils hiding (Result)
+import Hydra.Pg.Utils (defaultTinkerpopAnnotations, examplePgSchema)
 
 import qualified Control.Monad as CM
 import qualified Data.Either as E

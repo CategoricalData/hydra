@@ -174,8 +174,8 @@ public interface Sorting {
     hydra.util.Lazy<java.util.List<java.util.List<T0>>> withCycles = new hydra.util.Lazy<>(() -> hydra.sorting.Sorting.<T0>topologicalSort_withCycles(sccs.get()));
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(withCycles.get()),
-      () -> (hydra.util.Either<java.util.List<java.util.List<T0>>, java.util.List<T0>>) ((hydra.util.Either<java.util.List<java.util.List<T0>>, java.util.List<T0>>) (hydra.util.Either.<java.util.List<java.util.List<T0>>, java.util.List<T0>>right(hydra.lib.lists.Concat.apply(sccs.get())))),
-      () -> (hydra.util.Either<java.util.List<java.util.List<T0>>, java.util.List<T0>>) ((hydra.util.Either<java.util.List<java.util.List<T0>>, java.util.List<T0>>) (hydra.util.Either.<java.util.List<java.util.List<T0>>, java.util.List<T0>>left(withCycles.get()))));
+      () -> hydra.util.Either.<java.util.List<java.util.List<T0>>, java.util.List<T0>>right(hydra.lib.lists.Concat.apply(sccs.get())),
+      () -> hydra.util.Either.<java.util.List<java.util.List<T0>>, java.util.List<T0>>left(withCycles.get()));
   }
   
   static <T0> java.util.List<java.util.List<T0>> topologicalSort_sccs(java.util.List<hydra.util.Pair<T0, java.util.List<T0>>> pairs) {

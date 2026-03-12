@@ -432,7 +432,7 @@ public interface Utils {
   
   static hydra.ext.java.syntax.MethodInvocation methodInvocationStatic(hydra.ext.java.syntax.Identifier self, hydra.ext.java.syntax.Identifier methodName, java.util.List<hydra.ext.java.syntax.Expression> args) {
     return hydra.ext.java.utils.Utils.methodInvocation(
-      hydra.util.Maybe.just((hydra.util.Either<hydra.ext.java.syntax.ExpressionName, hydra.ext.java.syntax.Primary>) ((hydra.util.Either<hydra.ext.java.syntax.ExpressionName, hydra.ext.java.syntax.Primary>) (hydra.util.Either.<hydra.ext.java.syntax.ExpressionName, hydra.ext.java.syntax.Primary>left(hydra.ext.java.utils.Utils.javaIdentifierToJavaExpressionName(self))))),
+      hydra.util.Maybe.just(hydra.util.Either.<hydra.ext.java.syntax.ExpressionName, hydra.ext.java.syntax.Primary>left(hydra.ext.java.utils.Utils.javaIdentifierToJavaExpressionName(self))),
       methodName,
       args);
   }
@@ -783,7 +783,7 @@ public interface Utils {
         return ((rt).value).accept(new hydra.ext.java.syntax.ReferenceType.PartialVisitor<>() {
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type> visit(hydra.ext.java.syntax.ReferenceType.ClassOrInterface cit) {
-            return (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>right(new hydra.ext.java.syntax.Type.Reference(new hydra.ext.java.syntax.ReferenceType.Array(new hydra.ext.java.syntax.ArrayType(new hydra.ext.java.syntax.Dims(java.util.List.of((java.util.List<hydra.ext.java.syntax.Annotation>) (java.util.List.<hydra.ext.java.syntax.Annotation>of()))), new hydra.ext.java.syntax.ArrayType_Variant.ClassOrInterface((cit).value)))))));
+            return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>right(new hydra.ext.java.syntax.Type.Reference(new hydra.ext.java.syntax.ReferenceType.Array(new hydra.ext.java.syntax.ArrayType(new hydra.ext.java.syntax.Dims(java.util.List.of((java.util.List<hydra.ext.java.syntax.Annotation>) (java.util.List.<hydra.ext.java.syntax.Annotation>of()))), new hydra.ext.java.syntax.ArrayType_Variant.ClassOrInterface((cit).value)))));
           }
           
           @Override
@@ -793,19 +793,19 @@ public interface Utils {
               oldDims,
               java.util.List.of((java.util.List<hydra.ext.java.syntax.Annotation>) (java.util.List.<hydra.ext.java.syntax.Annotation>of())))));
             hydra.ext.java.syntax.ArrayType_Variant variant = ((at).value).variant;
-            return (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>right(new hydra.ext.java.syntax.Type.Reference(new hydra.ext.java.syntax.ReferenceType.Array(new hydra.ext.java.syntax.ArrayType(newDims.get(), variant))))));
+            return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>right(new hydra.ext.java.syntax.Type.Reference(new hydra.ext.java.syntax.ReferenceType.Array(new hydra.ext.java.syntax.ArrayType(newDims.get(), variant))));
           }
           
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type> visit(hydra.ext.java.syntax.ReferenceType.Variable ignored) {
-            return (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError("don't know how to make Java reference type into array type"), cx)))));
+            return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError("don't know how to make Java reference type into array type"), cx)));
           }
         });
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type> visit(hydra.ext.java.syntax.Type.Primitive ignored) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError("don't know how to make Java type into array type"), cx)))));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError("don't know how to make Java type into array type"), cx)));
       }
     });
   }
@@ -814,12 +814,12 @@ public interface Utils {
     return (t).accept(new hydra.ext.java.syntax.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.ReferenceType> visit(hydra.ext.java.syntax.Type.Reference rt) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.ReferenceType>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.ReferenceType>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.ReferenceType>right((rt).value)));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.ReferenceType>right((rt).value);
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.ReferenceType> visit(hydra.ext.java.syntax.Type.Primitive ignored) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.ReferenceType>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.ReferenceType>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.ReferenceType>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError("expected a Java reference type"), cx)))));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.ReferenceType>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError("expected a Java reference type"), cx)));
       }
     });
   }
@@ -869,33 +869,33 @@ public interface Utils {
                 java.util.List<hydra.ext.java.syntax.TypeArgument> args = ((ct).value).arguments;
                 hydra.ext.java.syntax.TypeIdentifier id = ((ct).value).identifier;
                 hydra.ext.java.syntax.ClassTypeQualifier qual = ((ct).value).qualifier;
-                return (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>right(new hydra.ext.java.syntax.Type.Reference(new hydra.ext.java.syntax.ReferenceType.ClassOrInterface(new hydra.ext.java.syntax.ClassOrInterfaceType.Class_(new hydra.ext.java.syntax.ClassType(anns, qual, id, hydra.lib.lists.Concat2.apply(
+                return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>right(new hydra.ext.java.syntax.Type.Reference(new hydra.ext.java.syntax.ReferenceType.ClassOrInterface(new hydra.ext.java.syntax.ClassOrInterfaceType.Class_(new hydra.ext.java.syntax.ClassType(anns, qual, id, hydra.lib.lists.Concat2.apply(
                   args,
-                  java.util.List.of(new hydra.ext.java.syntax.TypeArgument.Reference(rt))))))))));
+                  java.util.List.of(new hydra.ext.java.syntax.TypeArgument.Reference(rt))))))));
               }
               
               @Override
               public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type> visit(hydra.ext.java.syntax.ClassOrInterfaceType.Interface ignored) {
-                return (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError("expected a Java class type"), cx)))));
+                return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError("expected a Java class type"), cx)));
               }
             });
           }
           
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type> visit(hydra.ext.java.syntax.ReferenceType.Variable tv) {
-            return (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>right(hydra.ext.java.utils.Utils.javaTypeVariableToType((tv).value))));
+            return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>right(hydra.ext.java.utils.Utils.javaTypeVariableToType((tv).value));
           }
           
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type> visit(hydra.ext.java.syntax.ReferenceType.Array ignored) {
-            return (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError("expected a Java class or interface type, or a variable"), cx)))));
+            return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError("expected a Java class or interface type, or a variable"), cx)));
           }
         });
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type> visit(hydra.ext.java.syntax.Type.Primitive ignored) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError("expected a reference type"), cx)))));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.ext.java.syntax.Type>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError("expected a reference type"), cx)));
       }
     });
   }

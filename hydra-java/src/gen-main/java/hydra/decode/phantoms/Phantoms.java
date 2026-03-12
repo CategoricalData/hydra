@@ -8,11 +8,11 @@ package hydra.decode.phantoms;
 public interface Phantoms {
   static <T0, T1> hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>> tBinding(T0 a, hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>>>) (err -> (hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>>) ((hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>>) (hydra.util.Either.<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>>left(new hydra.error.DecodingError(err))))),
+      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>>left(new hydra.error.DecodingError(err))),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>>) ((hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>>) (hydra.util.Either.<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>>left(new hydra.error.DecodingError("expected record of type hydra.phantoms.TBinding"))));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>>left(new hydra.error.DecodingError("expected record of type hydra.phantoms.TBinding"));
         }
         
         @Override
@@ -35,7 +35,7 @@ public interface Phantoms {
                   v2))),
                 fieldMap,
                 cx),
-              (java.util.function.Function<hydra.phantoms.TTerm<T1>, hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>>>) (field_term -> (hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>>) ((hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>>) (hydra.util.Either.<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>>right((hydra.phantoms.TBinding<T1>) (new hydra.phantoms.TBinding<T1>(field_name, field_term)))))))));
+              (java.util.function.Function<hydra.phantoms.TTerm<T1>, hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>>>) (field_term -> hydra.util.Either.<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>>right((hydra.phantoms.TBinding<T1>) (new hydra.phantoms.TBinding<T1>(field_name, field_term)))))));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(
@@ -45,11 +45,11 @@ public interface Phantoms {
   
   static <T0, T1> hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TTerm<T1>> tTerm(T0 a, hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TTerm<T1>>>) (err -> (hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TTerm<T1>>) ((hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TTerm<T1>>) (hydra.util.Either.<hydra.error.DecodingError, hydra.phantoms.TTerm<T1>>left(new hydra.error.DecodingError(err))))),
+      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TTerm<T1>>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.phantoms.TTerm<T1>>left(new hydra.error.DecodingError(err))),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TTerm<T1>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TTerm<T1>> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TTerm<T1>>) ((hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TTerm<T1>>) (hydra.util.Either.<hydra.error.DecodingError, hydra.phantoms.TTerm<T1>>left(new hydra.error.DecodingError("expected wrapped type hydra.phantoms.TTerm"))));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.phantoms.TTerm<T1>>left(new hydra.error.DecodingError("expected wrapped type hydra.phantoms.TTerm"));
         }
         
         @Override

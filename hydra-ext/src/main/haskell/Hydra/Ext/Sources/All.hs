@@ -209,7 +209,7 @@ otherExtModules = [
 
 cppModules :: [Module]
 cppModules = [
-  -- CppCoder.module_,  -- TODO(#267): inference timeout
+  CppCoder.module_,
   CppEnvironment.module_,
   cppLanguageModule,
   CppNames.module_,
@@ -273,13 +273,13 @@ pgModules = [
   EncodePgModel.module_,
   Gremlin.module_,
   OpenCypher.module_,
-  -- PgCoder.module_,  -- TODO(#267): inference timeout
+  PgCoder.module_,
   PgMapping.module_,
   PgModel.module_,
   PgPrinting.module_,
   PgQuery.module_,
-  -- PgTermsToElements.module_,  -- TODO(#267): inference timeout
-  -- PgUtils.module_,  -- TODO(#267): inference timeout
+  PgTermsToElements.module_,
+  PgUtils.module_,
   PgValidation.module_,
   TinkerpopFeatures.module_,
   TinkerpopLanguage.module_]
@@ -310,7 +310,7 @@ rdfModules = [
   RdfSerde.module_,
   RdfSyntax.module_,
   RdfUtils.module_,
-  -- ShaclCoder.module_,  -- TODO(#267): inference timeout
+  ShaclCoder.module_,
   ShaclLanguage.shaclLanguageModule,
   ShaclModel.module_,
   shexSyntaxModule,
@@ -326,11 +326,11 @@ rustModules = [
 
 scalaModules :: [Module]
 scalaModules = [
-  -- ScalaCoder.module_,  -- TODO(#267): depends on ScalaSerde which has type unification error
+  ScalaCoder.module_,
   ScalaLanguage.scalaLanguageModule,
   ScalaMeta.module_,
   ScalaPrepare.module_,
-  -- ScalaSerde.module_,  -- TODO(#267): type unification error (Data_Name vs Name)
+  ScalaSerde.module_,
   ScalaUtils.module_]
 
 typescriptModules :: [Module]
@@ -372,6 +372,7 @@ hydraExtRecentlyPromotedModules = [
   AvroEnvironment.module_,
   AvroLanguage.avroLanguageModule,
   AvroSchemaJson.module_,
+  CppCoder.module_,
   CppEnvironment.module_,
   CppNames.module_,
   CppSerde.module_,
@@ -384,14 +385,20 @@ hydraExtRecentlyPromotedModules = [
   PegasusCoder.module_,
   PegasusLanguage.pdlLanguageModule,
   PegasusSerde.module_,
+  PgCoder.module_,
   PgPrinting.module_,
+  PgTermsToElements.module_,
+  PgUtils.module_,
   ProtobufCoder.module_,
   ProtobufEnvironment.module_,
   ProtobufSerde.module_,
   RdfSerde.module_,
   RdfUtils.module_,
+  ScalaCoder.module_,
   ScalaPrepare.module_,
+  ScalaSerde.module_,
   ScalaUtils.module_,
+  ShaclCoder.module_,
   ShaclLanguage.shaclLanguageModule,
   TinkerpopLanguage.module_]
 
