@@ -242,7 +242,7 @@
           "annotation": [
             {
               "@key": "description",
-              "@value": {"literal": {"string": "Shift-left assign operator (<<=)"}}}],
+              "@value": {"literal": {"string": "Shift-left assign operator ( <<~)"}}}],
           "body": {
             "application": {
               "argument": {
@@ -254,7 +254,7 @@
                   "argument": {"literal": {"integer": {"int32": 1}}},
                   "function": {
                     "application": {
-                      "argument": {"literal": {"string": "<<="}},
+                      "argument": {"literal": {"string": " <<~"}},
                       "function": {"variable": "hydra.serialization.op"}}}}}}}}},
       "type": [
         {

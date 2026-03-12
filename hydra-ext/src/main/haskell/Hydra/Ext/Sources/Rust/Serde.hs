@@ -1332,7 +1332,7 @@ compoundAssignExprToExpr = define "compoundAssignExprToExpr" $
       R._CompoundAssignOp_bitAndAssign>>: constant $ string "&=",
       R._CompoundAssignOp_bitOrAssign>>: constant $ string "|=",
       R._CompoundAssignOp_bitXorAssign>>: constant $ string "^=",
-      R._CompoundAssignOp_shlAssign>>: constant $ string "<<=",
+      R._CompoundAssignOp_shlAssign>>: constant $ string " <<~",
       R._CompoundAssignOp_shrAssign>>: constant $ string ">>="]] $
     Serialization.spaceSep @@ list [
       expressionToExpr @@ var "target",

@@ -113,17 +113,9 @@ module_ = Module ns elements
     elements = [
       toBinding moduleToPdl,
       toBinding constructModule,
-      toBinding typeToSchema,
-      toBinding toPair,
       toBinding moduleToPegasusSchemas,
       toBinding doc_,
       toBinding encodeType_,
-      toBinding encode,
-      toBinding encodeRecordField,
-      toBinding encodeUnionField,
-      toBinding encodeEnumField,
-      toBinding encodePossiblyOptionalType,
-      toBinding getAnns,
       toBinding importAliasesForModule,
       toBinding noAnnotations_,
       toBinding pdlNameForElement,
@@ -168,38 +160,38 @@ constructModule = def "constructModule" $
       -- Cycle found
       (lambda "cycle" $
         err (var "cx") (Strings.cat2 (string "types form a cycle (unsupported in PDL): [") (Strings.cat2 (Strings.intercalate (string ", ") (Lists.map (lambda "td" $ Core.unName (Module.typeDefinitionName (var "td"))) (var "cycle"))) (string "]"))))
+  where
+    typeToSchema :: TBinding (Context -> Graph -> M.Map Namespace String -> Module -> TypeDefinition -> Either (InContext OtherError) (PDL.NamedSchema, [PDL.QualifiedName]))
+    typeToSchema = def "typeToSchema" $
+      "cx" ~> "g" ~> "aliases" ~> "mod" ~> "typeDef" ~>
+        "typ" <~ Module.typeDefinitionType (var "typeDef") $
+        "res" <<~ (encodeType_ @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
+        "ptype" <~ (Eithers.either_
+          (lambda "schema" $ inject PDL._NamedSchemaType PDL._NamedSchemaType_typeref (var "schema"))
+          (lambda "t" $ var "t")
+          (var "res")) $
+        "descr" <<~ (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ") $
+        "anns" <~ (doc_ @@ var "descr") $
+        "qname" <~ (pdlNameForElement @@ var "aliases" @@ false @@ Module.typeDefinitionName (var "typeDef")) $
+        right (pair (record PDL._NamedSchema [
+          PDL._NamedSchema_qualifiedName>>: var "qname",
+          PDL._NamedSchema_type>>: var "ptype",
+          PDL._NamedSchema_annotations>>: var "anns"])
+          (list ([] :: [TTerm PDL.QualifiedName])))
 
-typeToSchema :: TBinding (Context -> Graph -> M.Map Namespace String -> Module -> TypeDefinition -> Either (InContext OtherError) (PDL.NamedSchema, [PDL.QualifiedName]))
-typeToSchema = def "typeToSchema" $
-  "cx" ~> "g" ~> "aliases" ~> "mod" ~> "typeDef" ~>
-    "typ" <~ Module.typeDefinitionType (var "typeDef") $
-    "res" <<~ (encodeType_ @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
-    "ptype" <~ (Eithers.either_
-      (lambda "schema" $ inject PDL._NamedSchemaType PDL._NamedSchemaType_typeref (var "schema"))
-      (lambda "t" $ var "t")
-      (var "res")) $
-    "descr" <<~ (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ") $
-    "anns" <~ (doc_ @@ var "descr") $
-    "qname" <~ (pdlNameForElement @@ var "aliases" @@ false @@ Module.typeDefinitionName (var "typeDef")) $
-    right (pair (record PDL._NamedSchema [
-      PDL._NamedSchema_qualifiedName>>: var "qname",
-      PDL._NamedSchema_type>>: var "ptype",
-      PDL._NamedSchema_annotations>>: var "anns"])
-      (list ([] :: [TTerm PDL.QualifiedName])))
-
-toPair :: TBinding (Module -> M.Map Namespace String -> (PDL.NamedSchema, [PDL.QualifiedName]) -> (FilePath, PDL.SchemaFile))
-toPair = def "toPair" $
-  "mod" ~> "aliases" ~> "schemaPair" ~>
-    "schema" <~ Pairs.first (var "schemaPair") $
-    "imports" <~ Pairs.second (var "schemaPair") $
-    "ns_" <~ (pdlNameForModule @@ var "mod") $
-    "local" <~ (unwrap PDL._Name @@ (project PDL._QualifiedName PDL._QualifiedName_name @@ (project PDL._NamedSchema PDL._NamedSchema_qualifiedName @@ var "schema"))) $
-    "path" <~ (Names.namespaceToFilePath @@ Util.caseConventionCamel @@ wrap _FileExtension (string "pdl") @@ (wrap _Namespace (Strings.cat2 (unwrap _Namespace @@ Module.moduleNamespace (var "mod")) (Strings.cat2 (string "/") (var "local"))))) $
-    pair (var "path") (record PDL._SchemaFile [
-      PDL._SchemaFile_namespace>>: var "ns_",
-      PDL._SchemaFile_package>>: nothing,
-      PDL._SchemaFile_imports>>: var "imports",
-      PDL._SchemaFile_schemas>>: list [var "schema"]])
+    toPair :: TBinding (Module -> M.Map Namespace String -> (PDL.NamedSchema, [PDL.QualifiedName]) -> (FilePath, PDL.SchemaFile))
+    toPair = def "toPair" $
+      "mod" ~> "aliases" ~> "schemaPair" ~>
+        "schema" <~ Pairs.first (var "schemaPair") $
+        "imports" <~ Pairs.second (var "schemaPair") $
+        "ns_" <~ (pdlNameForModule @@ var "mod") $
+        "local" <~ (unwrap PDL._Name @@ (project PDL._QualifiedName PDL._QualifiedName_name @@ (project PDL._NamedSchema PDL._NamedSchema_qualifiedName @@ var "schema"))) $
+        "path" <~ (Names.namespaceToFilePath @@ Util.caseConventionCamel @@ wrap _FileExtension (string "pdl") @@ (wrap _Namespace (Strings.cat2 (unwrap _Namespace @@ Module.moduleNamespace (var "mod")) (Strings.cat2 (string "/") (var "local"))))) $
+        pair (var "path") (record PDL._SchemaFile [
+          PDL._SchemaFile_namespace>>: var "ns_",
+          PDL._SchemaFile_package>>: nothing,
+          PDL._SchemaFile_imports>>: var "imports",
+          PDL._SchemaFile_schemas>>: list [var "schema"]])
 
 
 moduleToPegasusSchemas :: TBinding (Context -> Graph -> Module -> [Definition] -> Either (InContext OtherError) (M.Map FilePath PDL.SchemaFile))
@@ -315,9 +307,9 @@ encodeType_ = def "encodeType" $
           -- Union case
           ("members" <<~ (Eithers.mapList (encodeUnionField @@ var "cx" @@ var "g" @@ var "aliases") (Core.rowTypeFields (var "rt"))) $
            right (left (inject PDL._Schema PDL._Schema_union (wrap PDL._UnionSchema (var "members")))))]
-
-encode :: TBinding (Context -> Graph -> M.Map Namespace String -> Type -> Either (InContext OtherError) PDL.Schema)
-encode = def "encode" $
+  where
+    encode :: TBinding (Context -> Graph -> M.Map Namespace String -> Type -> Either (InContext OtherError) PDL.Schema)
+    encode = def "encode" $
       "cx" ~> "g" ~> "aliases" ~> "t" ~>
         cases _Type (Rewriting.deannotateType @@ var "t")
           (Just $
@@ -336,94 +328,94 @@ encode = def "encode" $
                  (lambda "_" $ err (var "cx") (Strings.cat2 (string "type resolved to an unsupported nested named schema: ") (ShowCore.type_ @@ var "t")))
                  (var "res"))]
 
-encodeRecordField :: TBinding (Context -> Graph -> M.Map Namespace String -> FieldType -> Either (InContext OtherError) PDL.RecordField)
-encodeRecordField = def "encodeRecordField" $
-  "cx" ~> "g" ~> "aliases" ~> "ft" ~>
-    "name" <~ Core.fieldTypeName (var "ft") $
-    "typ" <~ Core.fieldTypeType (var "ft") $
-    "anns" <<~ (getAnns @@ var "cx" @@ var "g" @@ var "typ") $
-    "optResult" <<~ (encodePossiblyOptionalType @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
-    "schema" <~ Pairs.first (var "optResult") $
-    "optional" <~ Pairs.second (var "optResult") $
-    right (record PDL._RecordField [
-      PDL._RecordField_name>>: wrap PDL._FieldName (Core.unName (var "name")),
-      PDL._RecordField_value>>: var "schema",
-      PDL._RecordField_optional>>: var "optional",
-      PDL._RecordField_default>>: nothing,
-      PDL._RecordField_annotations>>: var "anns"])
+    encodeRecordField :: TBinding (Context -> Graph -> M.Map Namespace String -> FieldType -> Either (InContext OtherError) PDL.RecordField)
+    encodeRecordField = def "encodeRecordField" $
+      "cx" ~> "g" ~> "aliases" ~> "ft" ~>
+        "name" <~ Core.fieldTypeName (var "ft") $
+        "typ" <~ Core.fieldTypeType (var "ft") $
+        "anns" <<~ (getAnns @@ var "cx" @@ var "g" @@ var "typ") $
+        "optResult" <<~ (encodePossiblyOptionalType @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
+        "schema" <~ Pairs.first (var "optResult") $
+        "optional" <~ Pairs.second (var "optResult") $
+        right (record PDL._RecordField [
+          PDL._RecordField_name>>: wrap PDL._FieldName (Core.unName (var "name")),
+          PDL._RecordField_value>>: var "schema",
+          PDL._RecordField_optional>>: var "optional",
+          PDL._RecordField_default>>: nothing,
+          PDL._RecordField_annotations>>: var "anns"])
 
-encodeUnionField :: TBinding (Context -> Graph -> M.Map Namespace String -> FieldType -> Either (InContext OtherError) PDL.UnionMember)
-encodeUnionField = def "encodeUnionField" $
-  "cx" ~> "g" ~> "aliases" ~> "ft" ~>
-    "name" <~ Core.fieldTypeName (var "ft") $
-    "typ" <~ Core.fieldTypeType (var "ft") $
-    "anns" <<~ (getAnns @@ var "cx" @@ var "g" @@ var "typ") $
-    "optResult" <<~ (encodePossiblyOptionalType @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
-    "s" <~ Pairs.first (var "optResult") $
-    "optional" <~ Pairs.second (var "optResult") $
-    "schema" <~ Logic.ifElse (var "optional")
-      (inject PDL._Schema PDL._Schema_union (wrap PDL._UnionSchema (Lists.map (lambda "ms" $ simpleUnionMember @@ var "ms") (list [inject PDL._Schema PDL._Schema_null (unit), var "s"]))))
-      (var "s") $
-    right (record PDL._UnionMember [
-      PDL._UnionMember_alias>>: just (wrap PDL._FieldName (Core.unName (var "name"))),
-      PDL._UnionMember_value>>: var "schema",
-      PDL._UnionMember_annotations>>: var "anns"])
+    encodeUnionField :: TBinding (Context -> Graph -> M.Map Namespace String -> FieldType -> Either (InContext OtherError) PDL.UnionMember)
+    encodeUnionField = def "encodeUnionField" $
+      "cx" ~> "g" ~> "aliases" ~> "ft" ~>
+        "name" <~ Core.fieldTypeName (var "ft") $
+        "typ" <~ Core.fieldTypeType (var "ft") $
+        "anns" <<~ (getAnns @@ var "cx" @@ var "g" @@ var "typ") $
+        "optResult" <<~ (encodePossiblyOptionalType @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
+        "s" <~ Pairs.first (var "optResult") $
+        "optional" <~ Pairs.second (var "optResult") $
+        "schema" <~ Logic.ifElse (var "optional")
+          (inject PDL._Schema PDL._Schema_union (wrap PDL._UnionSchema (Lists.map (lambda "ms" $ simpleUnionMember @@ var "ms") (list [inject PDL._Schema PDL._Schema_null (unit), var "s"]))))
+          (var "s") $
+        right (record PDL._UnionMember [
+          PDL._UnionMember_alias>>: just (wrap PDL._FieldName (Core.unName (var "name"))),
+          PDL._UnionMember_value>>: var "schema",
+          PDL._UnionMember_annotations>>: var "anns"])
 
-encodeEnumField :: TBinding (Context -> Graph -> FieldType -> Either (InContext OtherError) PDL.EnumField)
-encodeEnumField = def "encodeEnumField" $
-  "cx" ~> "g" ~> "ft" ~>
-    "name" <~ Core.fieldTypeName (var "ft") $
-    "typ" <~ Core.fieldTypeType (var "ft") $
-    "anns" <<~ (getAnns @@ var "cx" @@ var "g" @@ var "typ") $
-    right (record PDL._EnumField [
-      PDL._EnumField_name>>: wrap PDL._EnumFieldName (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionUpperSnake @@ Core.unName (var "name")),
-      PDL._EnumField_annotations>>: var "anns"])
+    encodeEnumField :: TBinding (Context -> Graph -> FieldType -> Either (InContext OtherError) PDL.EnumField)
+    encodeEnumField = def "encodeEnumField" $
+      "cx" ~> "g" ~> "ft" ~>
+        "name" <~ Core.fieldTypeName (var "ft") $
+        "typ" <~ Core.fieldTypeType (var "ft") $
+        "anns" <<~ (getAnns @@ var "cx" @@ var "g" @@ var "typ") $
+        right (record PDL._EnumField [
+          PDL._EnumField_name>>: wrap PDL._EnumFieldName (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionUpperSnake @@ Core.unName (var "name")),
+          PDL._EnumField_annotations>>: var "anns"])
 
-encodePossiblyOptionalType :: TBinding (Context -> Graph -> M.Map Namespace String -> Type -> Either (InContext OtherError) (PDL.Schema, Bool))
-encodePossiblyOptionalType = def "encodePossiblyOptionalType" $
-  "cx" ~> "g" ~> "aliases" ~> "typ" ~>
-    cases _Type (Rewriting.deannotateType @@ var "typ") Nothing [
-      _Type_maybe>>: lambda "ot" $
-        "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "ot") $
-        right (pair (var "t") true),
-      _Type_record>>: lambda "rt" $
-        "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
-        right (pair (var "t") false),
-      _Type_union>>: lambda "ut" $
-        "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
-        right (pair (var "t") false),
-      _Type_literal>>: lambda "lt" $
-        "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
-        right (pair (var "t") false),
-      _Type_list>>: lambda "lt" $
-        "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
-        right (pair (var "t") false),
-      _Type_map>>: lambda "mt" $
-        "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
-        right (pair (var "t") false),
-      _Type_set>>: lambda "st" $
-        "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
-        right (pair (var "t") false),
-      _Type_variable>>: lambda "name" $
-        "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
-        right (pair (var "t") false),
-      _Type_wrap>>: lambda "wt" $
-        "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
-        right (pair (var "t") false),
-      _Type_either>>: lambda "et" $
-        "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
-        right (pair (var "t") false),
-      _Type_pair>>: lambda "pt" $
-        "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
-        right (pair (var "t") false),
-      _Type_annotated>>: lambda "at" $
-        encodePossiblyOptionalType @@ var "cx" @@ var "g" @@ var "aliases" @@ Core.annotatedTypeBody (var "at")]
+    encodePossiblyOptionalType :: TBinding (Context -> Graph -> M.Map Namespace String -> Type -> Either (InContext OtherError) (PDL.Schema, Bool))
+    encodePossiblyOptionalType = def "encodePossiblyOptionalType" $
+      "cx" ~> "g" ~> "aliases" ~> "typ" ~>
+        cases _Type (Rewriting.deannotateType @@ var "typ") Nothing [
+          _Type_maybe>>: lambda "ot" $
+            "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "ot") $
+            right (pair (var "t") true),
+          _Type_record>>: lambda "rt" $
+            "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
+            right (pair (var "t") false),
+          _Type_union>>: lambda "ut" $
+            "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
+            right (pair (var "t") false),
+          _Type_literal>>: lambda "lt" $
+            "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
+            right (pair (var "t") false),
+          _Type_list>>: lambda "lt" $
+            "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
+            right (pair (var "t") false),
+          _Type_map>>: lambda "mt" $
+            "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
+            right (pair (var "t") false),
+          _Type_set>>: lambda "st" $
+            "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
+            right (pair (var "t") false),
+          _Type_variable>>: lambda "name" $
+            "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
+            right (pair (var "t") false),
+          _Type_wrap>>: lambda "wt" $
+            "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
+            right (pair (var "t") false),
+          _Type_either>>: lambda "et" $
+            "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
+            right (pair (var "t") false),
+          _Type_pair>>: lambda "pt" $
+            "t" <<~ (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ var "typ") $
+            right (pair (var "t") false),
+          _Type_annotated>>: lambda "at" $
+            encodePossiblyOptionalType @@ var "cx" @@ var "g" @@ var "aliases" @@ Core.annotatedTypeBody (var "at")]
 
-getAnns :: TBinding (Context -> Graph -> Type -> Either (InContext OtherError) PDL.Annotations)
-getAnns = def "getAnns" $
-  "cx" ~> "g" ~> "typ" ~>
-    "r" <<~ (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ") $
-    right (doc_ @@ var "r")
+    getAnns :: TBinding (Context -> Graph -> Type -> Either (InContext OtherError) PDL.Annotations)
+    getAnns = def "getAnns" $
+      "cx" ~> "g" ~> "typ" ~>
+        "r" <<~ (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ") $
+        right (doc_ @@ var "r")
 
 
 importAliasesForModule :: TBinding (Context -> Graph -> Module -> Either (InContext OtherError) (M.Map Namespace String))

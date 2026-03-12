@@ -115,13 +115,10 @@ jsonModelNs = Namespace "hydra.json.model"
 ns :: Namespace
 ns = Namespace "hydra.ext.avro.coder"
 
-avroEnvironmentNs :: Namespace
-avroEnvironmentNs = Namespace "hydra.ext.avro.environment"
-
 module_ :: Module
 module_ = Module ns elements
     [ExtractCore.ns, Rewriting.ns]
-    (avroEnvironmentNs:AvroSchema.ns:jsonModelNs:KernelTypes.kernelTypesNamespaces) $
+    (AvroSchema.ns:jsonModelNs:KernelTypes.kernelTypesNamespaces) $
     Just "Avro-to-Hydra adapter for converting Avro schemas and data to Hydra types and terms"
   where
     elements = [
@@ -226,7 +223,7 @@ avro_primaryKey = define "avro_primaryKey" $
 emptyAvroEnvironment :: TBinding StagingAvroCoder.AvroEnvironment
 emptyAvroEnvironment = define "emptyAvroEnvironment" $
   doc "An empty Avro environment with no named adapters, no namespace, and no elements" $
-  record (Name "hydra.ext.avro.environment.AvroEnvironment") [
+  record (Name "hydra.ext.avro.coder.AvroEnvironment") [
     (Name "namedAdapters")>>: Maps.empty,
     (Name "namespace")>>: nothing,
     (Name "elements")>>: Maps.empty]
@@ -283,7 +280,7 @@ encodeAnnotationValue = define "encodeAnnotationValue" $
       JM._Value_null>>: constant $
         MetaTerms.tuple ([] :: [TTerm Term]),
       JM._Value_number>>: lambda "d" $
-        MetaTerms.bigfloatLift (var "d"),
+        MetaTerms.float64Lift (var "d"),
       JM._Value_object>>: lambda "m" $
         MetaTerms.map (Maps.fromList (Lists.map
           (lambda "entry" $ lets [
@@ -362,13 +359,13 @@ jsonToStringE :: TBinding (Context -> JM.Value -> Result String)
 jsonToStringE = define "jsonToStringE" $
   doc "Convert a JSON value to a string, supporting booleans, strings, and numbers" $
   lambda "cx" $ lambda "v" $
-    cases JM._Value (var "v") (Just (unexpectedE @@ var "cx" @@ string "string, number, or boolean" @@ string "other")) [
+    cases JM._Value (var "v") (Just (unexpectedE @@ var "cx" @@ string "string, number, or boolean" @@ Literals.showString (var "v"))) [
       JM._Value_boolean>>: lambda "b" $
         right (Logic.ifElse (var "b") (string "true") (string "false")),
       JM._Value_string>>: lambda "s" $
         right (var "s"),
       JM._Value_number>>: lambda "d" $
-        right (Literals.showBigfloat (var "d"))]
+        right (Literals.showInt32 (var "d"))]
 
 showQname :: TBinding (StagingAvroCoder.AvroQualifiedName -> String)
 showQname = define "showQname" $

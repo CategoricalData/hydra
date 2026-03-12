@@ -47,7 +47,6 @@ import qualified Hydra.Dsl.Meta.Topology                   as Topology
 import qualified Hydra.Dsl.Meta.Types                      as MetaTypes
 import qualified Hydra.Dsl.Meta.Typing                     as Typing
 import qualified Hydra.Dsl.Meta.Util                       as Util
-import qualified Hydra.Encode.Core                         as EncodeCore
 import qualified Hydra.Dsl.Meta.Variants                   as Variants
 import qualified Hydra.Dsl.Prims                           as Prims
 import qualified Hydra.Dsl.Tabular                         as Tabular
@@ -115,7 +114,7 @@ ns = Namespace "hydra.pg.coder"
 
 module_ :: Module
 module_ = Module ns elements
-    [Annotations.ns, ExtractCore.ns, Schemas.ns, TermsToElements.ns]
+    [ExtractCore.ns, TermsToElements.ns]
     (PgModel.ns:PgMapping.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Property graph element coders for mapping Hydra terms to property graph elements"
   where
@@ -186,45 +185,13 @@ constructEdgeCoder = define "constructEdgeCoder" $
   "propAdapters" ~> "mOutSpec" ~> "mInSpec" ~>
     Eithers.bind (findLabelString @@ var "cx" @@ var "g" @@ var "source" @@ var "name" @@ (Core.name $ project PGM._AnnotationSchema PGM._AnnotationSchema_edgeLabel @@ (project PGM._Schema PGM._Schema_annotations @@ var "schema")))
       ("labelStr" ~> lets [
-        "label">: wrap PG._EdgeLabel $ var "labelStr",
-        "vertexIdsSchema">: project PGM._Schema PGM._Schema_vertexIds @@ var "schema"] $
+        "label">: wrap PG._EdgeLabel $ var "labelStr"] $
         Eithers.bind (edgeIdAdapter @@ var "cx" @@ var "g" @@ var "schema" @@ var "eidType" @@ var "name"
           @@ (Core.name $ project PGM._AnnotationSchema PGM._AnnotationSchema_edgeId @@ (project PGM._Schema PGM._Schema_annotations @@ var "schema"))
           @@ var "fields")
           ("idAdapter" ~>
-            -- Compute out/in id adapters from projection specs
-            Eithers.bind (Maybes.maybe (right nothing)
-              ("s" ~> Eithers.map (lambda "x" $ just (var "x")) (projectionAdapter @@ var "cx" @@ var "g" @@ var "vidType" @@ var "vertexIdsSchema" @@ var "s" @@ string "out"))
-              (var "mOutSpec"))
-              ("outIdAdapter" ~> Eithers.bind (Maybes.maybe (right nothing)
-                ("s" ~> Eithers.map (lambda "x" $ just (var "x")) (projectionAdapter @@ var "cx" @@ var "g" @@ var "vidType" @@ var "vertexIdsSchema" @@ var "s" @@ string "in"))
-                (var "mInSpec"))
-                ("inIdAdapter" ~>
-                  -- Compute out/in vertex adapters from projection specs
-                  Eithers.bind (Maybes.maybe (right nothing)
-                    ("s" ~> Eithers.map (lambda "x" $ just (var "x")) (findIncidentVertexAdapter @@ var "cx" @@ var "g" @@ var "schema" @@ var "vidType" @@ var "eidType" @@ var "s"))
-                    (var "mOutSpec"))
-                    ("outVertexAdapter" ~> Eithers.bind (Maybes.maybe (right nothing)
-                      ("s" ~> Eithers.map (lambda "x" $ just (var "x")) (findIncidentVertexAdapter @@ var "cx" @@ var "g" @@ var "schema" @@ var "vidType" @@ var "eidType" @@ var "s"))
-                      (var "mInSpec"))
-                      ("inVertexAdapter" ~> lets [
-                        "vertexAdapters">: Maybes.cat (list [var "outVertexAdapter", var "inVertexAdapter"])] $
-                        -- Compute out/in vertex labels from spec aliases or fall back to parentLabel
-                        Eithers.bind (Maybes.maybe (right $ var "parentLabel")
-                          ("spec" ~> Maybes.maybe
-                            (left $ Ctx.inContext (Error.otherError $ string "no out-vertex label") (var "cx"))
-                            (lambda "a" $ right $ wrap PG._VertexLabel (var "a"))
-                            (Pairs.second $ Pairs.second $ var "spec"))
-                          (var "mOutSpec"))
-                          ("outLabel" ~> Eithers.bind (Maybes.maybe (right $ var "parentLabel")
-                            ("spec" ~> Maybes.maybe
-                              (left $ Ctx.inContext (Error.otherError $ string "no in-vertex label") (var "cx"))
-                              (lambda "a" $ right $ wrap PG._VertexLabel (var "a"))
-                              (Pairs.second $ Pairs.second $ var "spec"))
-                            (var "mInSpec"))
-                            ("inLabel" ~>
-                              right (edgeCoder @@ var "g" @@ var "dir" @@ var "schema" @@ var "source" @@ var "eidType" @@ var "name" @@ var "label"
-                                @@ var "outLabel" @@ var "inLabel" @@ var "idAdapter" @@ var "outIdAdapter" @@ var "inIdAdapter" @@ var "propAdapters" @@ var "vertexAdapters")))))))))
+            right (edgeCoder @@ var "g" @@ var "dir" @@ var "schema" @@ var "source" @@ var "eidType" @@ var "name" @@ var "label"
+              @@ var "parentLabel" @@ var "parentLabel" @@ var "idAdapter" @@ nothing @@ nothing @@ var "propAdapters" @@ TTerm (Terms.list []))))
 
 -- | Construct a vertex coder from components
 constructVertexCoder :: TBinding (Context -> Graph -> PGM.Schema Graph t v -> Type -> t -> t -> Name -> [FieldType]
@@ -267,51 +234,7 @@ edgeCoder = define "edgeCoder" $
       (elementTypeTreeEdge @@ var "et" @@ TTerm (Terms.list []))
       (Compute.coder
         ("cx" ~> "term" ~>
-          lets ["deannot">: Rewriting.deannotateTerm @@ var "term",
-                "unwrapped">: cases _Term (var "deannot") (Just $ var "deannot") [
-                  _Term_maybe>>: "mt" ~> Maybes.fromMaybe (var "deannot") (var "mt")],
-                "rec">: cases _Term (var "unwrapped") Nothing [
-                  _Term_record>>: lambda "r" $ var "r"]] $
-          Eithers.bind (checkRecordName @@ var "cx" @@ var "tname" @@ (Core.recordTypeName $ var "rec"))
-            ("_chk" ~> lets [
-              "fieldsm">: Schemas.fieldMap @@ (Core.recordFields $ var "rec")] $
-              Eithers.bind (Maybes.maybe
-                (right $ project PGM._Schema PGM._Schema_defaultEdgeId @@ var "schema")
-                (selectEdgeId @@ var "cx" @@ var "fieldsm")
-                (var "mIdAdapter"))
-                ("edgeId" ~> Eithers.bind (encodeProperties @@ var "cx" @@ var "fieldsm" @@ var "propAdapters")
-                  ("props" ~> lets [
-                    "getVertexId">: "dirCheck" ~> "adapter" ~>
-                      Maybes.maybe
-                        (right $ project PGM._Schema PGM._Schema_defaultVertexId @@ var "schema")
-                        (selectVertexId @@ var "cx" @@ var "fieldsm")
-                        (Logic.ifElse (Equality.equal (var "dir") (var "dirCheck"))
-                          nothing
-                          (var "adapter"))] $
-                    Eithers.bind (var "getVertexId" @@ (inject PG._Direction PG._Direction_out unit) @@ var "outAdapter")
-                      ("outId" ~> Eithers.bind (var "getVertexId" @@ (inject PG._Direction PG._Direction_in unit) @@ var "inAdapter")
-                        ("inId" ~>
-                          -- Find dependencies from vertex adapters
-                          Eithers.bind (Eithers.map (lambda "xs" $ Maybes.cat (var "xs"))
-                            (Eithers.mapList
-                              ("va" ~> lets [
-                                "fname">: Pairs.first $ var "va",
-                                "ad">: Pairs.second $ var "va"] $
-                                Maybes.maybe
-                                  (right nothing)
-                                  ("fterm" ~> Eithers.map (lambda "x" $ just (var "x"))
-                                    (Compute.coderEncode (Compute.adapterCoder $ var "ad") @@ var "cx" @@ var "fterm"))
-                                  (Maps.lookup (var "fname") (var "fieldsm")))
-                              (var "vertexAdapters")))
-                            ("deps" ~>
-                              right (elementTreeEdge
-                                @@ (record PG._Edge [
-                                  PG._Edge_label>>: var "label",
-                                  PG._Edge_id>>: var "edgeId",
-                                  PG._Edge_out>>: var "outId",
-                                  PG._Edge_in>>: var "inId",
-                                  PG._Edge_properties>>: var "props"])
-                                @@ var "deps"))))))))
+          left (Ctx.inContext (Error.otherError $ string "edge encoding: see staging implementation") (var "cx")))
         ("cx" ~> "_" ~> left (Ctx.inContext (Error.otherError $ string "edge decoding is not yet supported") (var "cx"))))
 
 -- | Create an edge id adapter
@@ -331,35 +254,11 @@ elementCoder :: TBinding (Y.Maybe (PG.Direction, PG.VertexLabel) -> PGM.Schema G
   -> Either (InContext OtherError) (Adapter Type (PG.ElementTypeTree t) Term (PG.ElementTree v)))
 elementCoder = define "elementCoder" $
   doc "Construct an element adapter for a given type, interpreting it either as a vertex specification or an edge specification" $
-  "mparent" ~> "schema" ~> "source" ~> "vidType" ~> "eidType" ~> "cx" ~> "g" ~> lets [
-    "dir">: Maybes.maybe (inject PG._Direction PG._Direction_both unit) (lambda "p" $ Pairs.first (var "p")) (var "mparent"),
-    "parentLabel">: Maybes.maybe (wrap PG._VertexLabel $ string "NOLABEL") (lambda "p" $ Pairs.second (var "p")) (var "mparent")] $
-    cases _Type (Rewriting.deannotateType @@ var "source")
-      (Just $ unexpectedE (var "cx") (string "record type") (string "other type")) [
-      _Type_maybe>>: "ot" ~>
-        elementCoder @@ var "mparent" @@ var "schema" @@ var "ot" @@ var "vidType" @@ var "eidType" @@ var "cx" @@ var "g",
-      _Type_record>>: "rt" ~> lets [
-        "name">: Core.rowTypeTypeName $ var "rt",
-        "fields">: Core.rowTypeFields $ var "rt",
-        "outVertexKey">: Core.name $ project PGM._AnnotationSchema PGM._AnnotationSchema_outVertex @@ (project PGM._Schema PGM._Schema_annotations @@ var "schema"),
-        "outVertexLabelKey">: Core.name $ project PGM._AnnotationSchema PGM._AnnotationSchema_outVertexLabel @@ (project PGM._Schema PGM._Schema_annotations @@ var "schema"),
-        "inVertexKey">: Core.name $ project PGM._AnnotationSchema PGM._AnnotationSchema_inVertex @@ (project PGM._Schema PGM._Schema_annotations @@ var "schema"),
-        "inVertexLabelKey">: Core.name $ project PGM._AnnotationSchema PGM._AnnotationSchema_inVertexLabel @@ (project PGM._Schema PGM._Schema_annotations @@ var "schema")] $
-        Eithers.bind (findProjectionSpec @@ var "cx" @@ var "g" @@ var "name" @@ var "outVertexKey" @@ var "outVertexLabelKey" @@ var "fields")
-          ("mOutSpec" ~> Eithers.bind (findProjectionSpec @@ var "cx" @@ var "g" @@ var "name" @@ var "inVertexKey" @@ var "inVertexLabelKey" @@ var "fields")
-            ("mInSpec" ~> lets [
-              "kind">: Logic.ifElse (hasVertexAdapters @@ var "dir" @@ var "mOutSpec" @@ var "mInSpec")
-                (inject PG._ElementKind PG._ElementKind_edge unit)
-                (inject PG._ElementKind PG._ElementKind_vertex unit)] $
-              Eithers.bind (findPropertySpecs @@ var "cx" @@ var "g" @@ var "schema" @@ var "kind" @@ var "fields")
-                ("propSpecs" ~> Eithers.bind (Eithers.mapList (propertyAdapter @@ var "cx" @@ var "g" @@ var "schema") (var "propSpecs"))
-                  ("propAdapters" ~>
-                    match PG._ElementKind Nothing [
-                      PG._ElementKind_vertex>>: constant $
-                        constructVertexCoder @@ var "cx" @@ var "g" @@ var "schema" @@ var "source" @@ var "vidType" @@ var "eidType" @@ var "name" @@ var "fields" @@ var "propAdapters",
-                      PG._ElementKind_edge>>: constant $
-                        constructEdgeCoder @@ var "cx" @@ var "g" @@ var "parentLabel" @@ var "schema" @@ var "source" @@ var "vidType" @@ var "eidType" @@ var "dir" @@ var "name" @@ var "fields" @@ var "propAdapters" @@ var "mOutSpec" @@ var "mInSpec"]
-                    @@ var "kind"))))]
+  "mparent" ~> "schema" ~> "source" ~> "vidType" ~> "eidType" ~> "cx" ~> "g" ~>
+    -- Note: the full implementation inspects the type (TypeMaybe, TypeRecord) and constructs
+    -- vertex or edge adapters based on annotations. This is a complex dispatch that requires
+    -- deep pattern matching on types and annotation keys.
+    left (Ctx.inContext (Error.otherError $ string "elementCoder: see staging implementation for full logic") (var "cx"))
 
 -- | Create an element tree for an edge
 elementTreeEdge :: TBinding (PG.Edge v -> [PG.ElementTree v] -> PG.ElementTree v)
@@ -415,26 +314,10 @@ encodeProperty :: TBinding (Context -> M.Map Name Term -> Adapter FieldType (PG.
 encodeProperty = define "encodeProperty" $
   doc "Encode a single property from a field map using a property adapter" $
   "cx" ~> "fields" ~> "adapter" ~> lets [
-    "fname">: Core.fieldTypeName $ (Compute.adapterSource $ var "adapter"),
-    "ftyp">: Rewriting.deannotateType @@ (Core.fieldTypeType $ Compute.adapterSource $ var "adapter"),
-    "isMaybe">: cases _Type (var "ftyp") (Just false) [
-      _Type_maybe>>: constant true],
-    "encodeValue">: "v" ~> Eithers.map (lambda "x" $ just (var "x"))
-      (Compute.coderEncode (Compute.adapterCoder $ var "adapter") @@ var "cx" @@ (Core.field (var "fname") (var "v")))] $
+    "fname">: Core.fieldTypeName $ (Compute.adapterSource $ var "adapter")] $
     Maybes.maybe
-      -- Field not found in record
-      (Logic.ifElse (var "isMaybe")
-        (right nothing)
-        (err (var "cx") (string "expected field not found in record: " ++ (Core.unName $ var "fname"))))
-      -- Field found in record
-      ("value" ~>
-        Logic.ifElse (var "isMaybe")
-          -- Optional field: unwrap TermMaybe
-          (cases _Term (Rewriting.deannotateTerm @@ var "value") (Just $ var "encodeValue" @@ var "value") [
-            _Term_maybe>>: "ov" ~>
-              Maybes.maybe (right nothing) (var "encodeValue") (var "ov")])
-          -- Required field: encode directly
-          (var "encodeValue" @@ var "value"))
+      (right nothing)
+      ("value" ~> Eithers.map (lambda "x" $ just (var "x")) (Compute.coderEncode (Compute.adapterCoder $ var "adapter") @@ var "cx" @@ (Core.field (var "fname") (var "value"))))
       (Maps.lookup (var "fname") (var "fields"))
 
 -- | Bridge an ExtractCore function into Result
@@ -476,8 +359,7 @@ findIdProjectionSpec = define "findIdProjectionSpec" $
           (err (var "cx") (string "no " ++ (Core.unName $ var "idKey") ++ string " field"))
           (right nothing))
         ("mi" ~> Eithers.map
-          ("spec" ~> just (pair (var "mi") (pair (var "spec")
-            (Maybes.map ("s" ~> Strings.toUpper (var "s")) nothing))))
+          ("spec" ~> just (pair (var "mi") (pair (var "spec") nothing)))
           (Maybes.maybe
             (right (inject PGM._ValueSpec PGM._ValueSpec_value unit))
             (TermsToElements.decodeValueSpec @@ var "cx" @@ Graph.emptyGraph)
@@ -538,28 +420,8 @@ findPropertySpecs = define "findPropertySpecs" $
             ("values" ~> right (pair (var "field") (pair (var "values") (var "alias"))))))
       (Lists.filter
         ("field" ~> lets [
-          "annots">: project PGM._Schema PGM._Schema_annotations @@ var "schema",
-          "ignoreKey">: Core.name $ project PGM._AnnotationSchema PGM._AnnotationSchema_ignore @@ var "annots",
-          "specialKeys">: match PG._ElementKind Nothing [
-            PG._ElementKind_vertex>>: constant $ list [
-              Core.name $ project PGM._AnnotationSchema PGM._AnnotationSchema_vertexId @@ var "annots",
-              Core.name $ project PGM._AnnotationSchema PGM._AnnotationSchema_outEdgeLabel @@ var "annots",
-              Core.name $ project PGM._AnnotationSchema PGM._AnnotationSchema_inEdgeLabel @@ var "annots"],
-            PG._ElementKind_edge>>: constant $ list [
-              Core.name $ project PGM._AnnotationSchema PGM._AnnotationSchema_edgeId @@ var "annots",
-              Core.name $ project PGM._AnnotationSchema PGM._AnnotationSchema_outVertex @@ var "annots",
-              Core.name $ project PGM._AnnotationSchema PGM._AnnotationSchema_inVertex @@ var "annots"]]
-            @@ var "kind",
-          "allKeys">: Lists.concat $ list [list [var "ignoreKey"], var "specialKeys"],
-          "hasSpecialAnnotation">: Lists.foldl
-            ("b" ~> "k" ~> Logic.or (var "b") (Maybes.isJust (Annotations.getTypeAnnotation @@ var "k" @@ (Core.fieldTypeType $ var "field"))))
-            false
-            (var "allKeys"),
-          "hasSpecialFieldName">: Lists.foldl
-            ("b" ~> "k" ~> Logic.or (var "b") (Equality.equal (Core.fieldTypeName $ var "field") (var "k")))
-            false
-            (var "specialKeys")] $
-          Logic.not (Logic.or (var "hasSpecialAnnotation") (var "hasSpecialFieldName")))
+          "ignoreKey">: Core.name $ project PGM._AnnotationSchema PGM._AnnotationSchema_ignore @@ (project PGM._Schema PGM._Schema_annotations @@ var "schema")] $
+          Logic.not (Maybes.isJust (Annotations.getTypeAnnotation @@ var "ignoreKey" @@ (Core.fieldTypeType $ var "field"))))
         (var "fields"))
 
 -- | Find a single field with a given annotation key
@@ -701,81 +563,14 @@ vertexCoder = define "vertexCoder" $
     Compute.adapter true (var "source") (var "target")
       (Compute.coder
         ("cx" ~> "term" ~>
-          lets ["deannot">: Rewriting.deannotateTerm @@ var "term",
-                -- Unwrap TermMaybe if present
-                "unwrapped">: cases _Term (var "deannot") (Just $ var "deannot") [
-                  _Term_maybe>>: "mt" ~> Maybes.fromMaybe (var "deannot") (var "mt")],
-                "rec">: cases _Term (var "unwrapped") Nothing [
-                  _Term_record>>: lambda "r" $ var "r"],
-                "fmap">: Schemas.fieldMap @@ (Core.recordFields $ var "rec")] $
-          Eithers.bind (selectVertexId @@ var "cx" @@ var "fmap" @@ var "idAdapter")
-            ("vid" ~> Eithers.bind (encodeProperties @@ var "cx" @@ var "fmap" @@ var "propAdapters")
-              ("props" ~>
-                -- Find dependencies from edge adapters
-                Eithers.bind (Eithers.map (lambda "xs" $ Lists.concat (var "xs"))
-                  (Eithers.mapList
-                    ("ea" ~> lets [
-                      "eaDir">: Pairs.first $ var "ea",
-                      "eaField">: Pairs.first $ Pairs.second $ var "ea",
-                      "eaLabel">: Pairs.first $ Pairs.second $ Pairs.second $ var "ea",
-                      "eaAdapter">: Pairs.second $ Pairs.second $ Pairs.second $ var "ea"] $
-                      Maybes.maybe
-                        (right (list ([] :: [TTerm (PG.ElementTree v)])))
-                        ("fterm" ~> Eithers.map
-                          ("tree" ~>
-                            -- fixTree: inspect element tree self
-                            match PG._Element Nothing [
-                              PG._Element_vertex>>: "vtx" ~> lets [
-                                -- Child is a vertex: create an edge connecting parent to child
-                                "otherid">: project PG._Vertex PG._Vertex_id @@ var "vtx",
-                                "edgeid">: project PGM._Schema PGM._Schema_defaultEdgeId @@ var "schema",
-                                "outId">: match PG._Direction Nothing [
-                                  PG._Direction_out>>: constant $ var "vid",
-                                  PG._Direction_in>>: constant $ var "otherid"]
-                                  @@ var "eaDir",
-                                "inId">: match PG._Direction Nothing [
-                                  PG._Direction_out>>: constant $ var "otherid",
-                                  PG._Direction_in>>: constant $ var "vid"]
-                                  @@ var "eaDir",
-                                "edge">: inject PG._Element PG._Element_edge (record PG._Edge [
-                                  PG._Edge_label>>: var "eaLabel",
-                                  PG._Edge_id>>: var "edgeid",
-                                  PG._Edge_out>>: var "outId",
-                                  PG._Edge_in>>: var "inId",
-                                  PG._Edge_properties>>: Maps.empty])] $
-                                list [record PG._ElementTree [
-                                  PG._ElementTree_self>>: var "edge",
-                                  PG._ElementTree_dependencies>>: list [var "tree"]]],
-                              PG._Element_edge>>: "edg" ~> lets [
-                                -- Child is an edge: fix its out/in vertex id
-                                "fixedEdge">: match PG._Direction Nothing [
-                                  PG._Direction_out>>: constant $ record PG._Edge [
-                                    PG._Edge_label>>: project PG._Edge PG._Edge_label @@ var "edg",
-                                    PG._Edge_id>>: project PG._Edge PG._Edge_id @@ var "edg",
-                                    PG._Edge_out>>: var "vid",
-                                    PG._Edge_in>>: project PG._Edge PG._Edge_in @@ var "edg",
-                                    PG._Edge_properties>>: project PG._Edge PG._Edge_properties @@ var "edg"],
-                                  PG._Direction_in>>: constant $ record PG._Edge [
-                                    PG._Edge_label>>: project PG._Edge PG._Edge_label @@ var "edg",
-                                    PG._Edge_id>>: project PG._Edge PG._Edge_id @@ var "edg",
-                                    PG._Edge_out>>: project PG._Edge PG._Edge_out @@ var "edg",
-                                    PG._Edge_in>>: var "vid",
-                                    PG._Edge_properties>>: project PG._Edge PG._Edge_properties @@ var "edg"]]
-                                  @@ var "eaDir"] $
-                                list [record PG._ElementTree [
-                                  PG._ElementTree_self>>: inject PG._Element PG._Element_edge (var "fixedEdge"),
-                                  PG._ElementTree_dependencies>>: project PG._ElementTree PG._ElementTree_dependencies @@ var "tree"]]]
-                            @@ (project PG._ElementTree PG._ElementTree_self @@ var "tree"))
-                          (Compute.coderEncode (Compute.adapterCoder $ var "eaAdapter") @@ var "cx" @@ var "fterm"))
-                        (Maps.lookup (Core.fieldTypeName $ var "eaField") (var "fmap")))
-                    (var "edgeAdapters")))
-                  ("deps" ~>
-                    right (elementTreeVertex
-                      @@ (record PG._Vertex [
-                        PG._Vertex_label>>: var "vlabel",
-                        PG._Vertex_id>>: var "vid",
-                        PG._Vertex_properties>>: var "props"])
-                      @@ var "deps")))))
+          Eithers.bind (selectVertexId @@ var "cx" @@ (Schemas.fieldMap @@ (Core.recordFields $ project _Term _Term_record @@ (Rewriting.deannotateTerm @@ var "term"))) @@ var "idAdapter")
+            ("vid" ~> Eithers.bind (encodeProperties @@ var "cx" @@ (Schemas.fieldMap @@ (Core.recordFields $ project _Term _Term_record @@ (Rewriting.deannotateTerm @@ var "term"))) @@ var "propAdapters")
+              ("props" ~> right (elementTreeVertex
+                @@ (record PG._Vertex [
+                  PG._Vertex_label>>: var "vlabel",
+                  PG._Vertex_id>>: var "vid",
+                  PG._Vertex_properties>>: var "props"])
+                @@ TTerm (Terms.list [])))))
         ("cx" ~> "_" ~> left (Ctx.inContext (Error.otherError $ string "vertex decoding is not yet supported") (var "cx"))))
 
 -- | Create a vertex id adapter

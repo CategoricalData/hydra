@@ -386,7 +386,7 @@ def write_assignment(a: hydra.ext.java.syntax.Assignment) -> hydra.ast.Expr:
     lhs = a.lhs
     op = a.op
     rhs = a.expression
-    ctop = (lambda _: "=")(op) if op else (lambda _: "*=")(op) if op else (lambda _: "/=")(op) if op else (lambda _: "%=")(op) if op else (lambda _: "+=")(op) if op else (lambda _: "-=")(op) if op else (lambda _: "<<=")(op) if op else (lambda _: ">>=")(op) if op else (lambda _: ">>>=")(op) if op else (lambda _: "&=")(op) if op else (lambda _: "^=")(op) if op else (lambda _: "|=")(op) if op else hydra.dsl.python.unsupported("no matching case in inline union elimination")
+    ctop = (lambda _: "=")(op) if op else (lambda _: "*=")(op) if op else (lambda _: "/=")(op) if op else (lambda _: "%=")(op) if op else (lambda _: "+=")(op) if op else (lambda _: "-=")(op) if op else (lambda _: " <<~")(op) if op else (lambda _: ">>=")(op) if op else (lambda _: ">>>=")(op) if op else (lambda _: "&=")(op) if op else (lambda _: "^=")(op) if op else (lambda _: "|=")(op) if op else hydra.dsl.python.unsupported("no matching case in inline union elimination")
     return hydra.serialization.infix_ws(ctop, write_left_hand_side(lhs), write_expression(rhs))
 
 def write_assignment_expression(e: hydra.ext.java.syntax.AssignmentExpression) -> hydra.ast.Expr:

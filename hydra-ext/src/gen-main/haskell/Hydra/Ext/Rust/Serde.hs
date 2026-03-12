@@ -1017,7 +1017,7 @@ compoundAssignExprToExpr c =
               Syntax.CompoundAssignOpBitAndAssign -> "&="
               Syntax.CompoundAssignOpBitOrAssign -> "|="
               Syntax.CompoundAssignOpBitXorAssign -> "^="
-              Syntax.CompoundAssignOpShlAssign -> "<<="
+              Syntax.CompoundAssignOpShlAssign -> " <<~"
               Syntax.CompoundAssignOpShrAssign -> ">>=") op)
   in (Serialization.spaceSep [
     expressionToExpr target,

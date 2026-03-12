@@ -963,7 +963,7 @@ encodeAssignmentOperator = define "encodeAssignmentOperator" $
       Cpp._AssignmentOperator_multiplyAssign>>: constant $ Serialization.cst @@ string "*=",
       Cpp._AssignmentOperator_divideAssign>>: constant $ Serialization.cst @@ string "/=",
       Cpp._AssignmentOperator_moduloAssign>>: constant $ Serialization.cst @@ string "%=",
-      Cpp._AssignmentOperator_leftShiftAssign>>: constant $ Serialization.cst @@ string "<<=",
+      Cpp._AssignmentOperator_leftShiftAssign>>: constant $ Serialization.cst @@ string " <<~",
       Cpp._AssignmentOperator_rightShiftAssign>>: constant $ Serialization.cst @@ string ">>=",
       Cpp._AssignmentOperator_bitwiseAndAssign>>: constant $ Serialization.cst @@ string "&=",
       Cpp._AssignmentOperator_bitwiseXorAssign>>: constant $ Serialization.cst @@ string "^=",
