@@ -17,11 +17,12 @@ import Hydra.Ext.Sources.Python.Language
 import Hydra.Ext.Sources.Shex.Syntax
 import Hydra.Ext.Sources.Sql.Ansi
 import Hydra.Ext.Sources.TypeScript.Language
--- import qualified Hydra.Ext.Sources.Avro.Coder                  as AvroCoder  -- stack overflow during generation
--- import qualified Hydra.Ext.Sources.Avro.Language               as AvroLanguage  -- stack overflow during generation
+import qualified Hydra.Ext.Sources.Avro.Coder                  as AvroCoder
+import qualified Hydra.Ext.Sources.Avro.Environment             as AvroEnvironment
+import qualified Hydra.Ext.Sources.Avro.Language               as AvroLanguage
 import qualified Hydra.Ext.Sources.Avro.Schema                 as AvroSchema
 import qualified Hydra.Ext.Sources.Avro.SchemaJson             as AvroSchemaJson
--- import qualified Hydra.Ext.Sources.Cpp.Coder                  as CppCoder  -- stack overflow during generation
+import qualified Hydra.Ext.Sources.Cpp.Coder                  as CppCoder
 import qualified Hydra.Ext.Sources.Cpp.Environment             as CppEnvironment
 import qualified Hydra.Ext.Sources.Cpp.Names                  as CppNames
 import qualified Hydra.Ext.Sources.Cpp.Serde                  as CppSerde
@@ -32,9 +33,9 @@ import qualified Hydra.Ext.Sources.Cypher.Features             as CypherFeatures
 import qualified Hydra.Ext.Sources.Cypher.OpenCypher           as OpenCypher
 import qualified Hydra.Ext.Sources.Delta.Parquet               as DeltaParquet
 import qualified Hydra.Ext.Sources.Demos.GenPG.Transform       as GenPGTransform
--- import qualified Hydra.Ext.Sources.Graphql.Coder               as GraphqlCoder  -- stack overflow during generation
--- import qualified Hydra.Ext.Sources.Graphql.Language             as GraphqlLanguage  -- stack overflow during generation
--- import qualified Hydra.Ext.Sources.Graphql.Serde               as GraphqlSerde  -- stack overflow during generation
+import qualified Hydra.Ext.Sources.Graphql.Coder               as GraphqlCoder
+import qualified Hydra.Ext.Sources.Graphql.Language             as GraphqlLanguage
+import qualified Hydra.Ext.Sources.Graphql.Serde               as GraphqlSerde
 import qualified Hydra.Ext.Sources.Go.Language                 as GoLanguage
 import qualified Hydra.Ext.Sources.Go.Serde                    as GoSerde
 import qualified Hydra.Ext.Sources.Go.Syntax                   as GoSyntax
@@ -43,7 +44,7 @@ import qualified Hydra.Ext.Sources.Gql.PathAlgebra.Expressions as PathAlgebraExp
 import qualified Hydra.Ext.Sources.Gql.PathAlgebra.Syntax      as PathAlgebraSyntax
 import qualified Hydra.Ext.Sources.Graphviz.Coder              as GraphvizCoder
 import qualified Hydra.Ext.Sources.Graphviz.Dot                as Dot
--- import qualified Hydra.Ext.Sources.Graphviz.Serde              as GraphvizSerde  -- stack overflow during generation
+import qualified Hydra.Ext.Sources.Graphviz.Serde              as GraphvizSerde
 import qualified Hydra.Ext.Sources.Java.Helpers                as JavaHelpers
 import qualified Hydra.Ext.Sources.Java.Language               as JavaLanguage
 import qualified Hydra.Ext.Sources.Java.Names                  as JavaNames
@@ -70,25 +71,26 @@ import qualified Hydra.Ext.Sources.Other.Osv                   as Osv
 import qualified Hydra.Ext.Sources.Other.StacItems             as StacItems
 import qualified Hydra.Ext.Sources.Owl.Syntax                  as OwlSyntax
 import qualified Hydra.Ext.Sources.Parquet.Format              as ParquetFormat
--- import qualified Hydra.Ext.Sources.Pegasus.Coder               as PegasusCoder  -- stack overflow during generation
--- import qualified Hydra.Ext.Sources.Pegasus.Language             as PegasusLanguage  -- stack overflow during generation
+import qualified Hydra.Ext.Sources.Pegasus.Coder               as PegasusCoder
+import qualified Hydra.Ext.Sources.Pegasus.Language             as PegasusLanguage
 import qualified Hydra.Ext.Sources.Pegasus.Pdl                 as Pdl
--- import qualified Hydra.Ext.Sources.Pegasus.Serde               as PegasusSerde  -- stack overflow during generation
--- import qualified Hydra.Ext.Sources.Pg.Coder                    as PgCoder  -- stack overflow during generation
+import qualified Hydra.Ext.Sources.Pegasus.Serde               as PegasusSerde
+import qualified Hydra.Ext.Sources.Pg.Coder                    as PgCoder
 import qualified Hydra.Ext.Sources.Pg.Graphson.Coder           as GraphsonCoder
 import qualified Hydra.Ext.Sources.Pg.Graphson.Construct       as GraphsonConstruct
 import qualified Hydra.Ext.Sources.Pg.Graphson.Syntax          as GraphsonSyntax
 import qualified Hydra.Ext.Sources.Pg.Graphson.Utils           as GraphsonUtils
 import qualified Hydra.Ext.Sources.Pg.Mapping                  as PgMapping
 import qualified Hydra.Ext.Sources.Pg.Model                    as PgModel
--- import qualified Hydra.Ext.Sources.Pg.Printing                 as PgPrinting  -- stack overflow during generation
+import qualified Hydra.Ext.Sources.Pg.Printing                 as PgPrinting
 import qualified Hydra.Ext.Sources.Pg.Query                    as PgQuery
--- import qualified Hydra.Ext.Sources.Pg.TermsToElements          as PgTermsToElements  -- stack overflow during generation
--- import qualified Hydra.Ext.Sources.Pg.Utils                    as PgUtils  -- stack overflow during generation
+import qualified Hydra.Ext.Sources.Pg.TermsToElements          as PgTermsToElements
+import qualified Hydra.Ext.Sources.Pg.Utils                    as PgUtils
 import qualified Hydra.Ext.Sources.Pg.Validation               as PgValidation
 import qualified Hydra.Ext.Sources.Protobuf.Any                as ProtobufAny
 import qualified Hydra.Ext.Sources.Protobuf.Proto3             as Proto3
--- import qualified Hydra.Ext.Sources.Protobuf.Coder              as ProtobufCoder  -- stack overflow during generation
+import qualified Hydra.Ext.Sources.Protobuf.Coder              as ProtobufCoder
+import qualified Hydra.Ext.Sources.Protobuf.Environment        as ProtobufEnvironment
 import qualified Hydra.Ext.Sources.Protobuf.Serde              as ProtobufSerde
 import qualified Hydra.Ext.Sources.Protobuf.SourceContext      as ProtobufSourceContext
 import qualified Hydra.Ext.Sources.Python.Coder                as PythonCoder
@@ -106,14 +108,14 @@ import qualified Hydra.Ext.Sources.Rust.Language               as RustLanguage
 import qualified Hydra.Ext.Sources.Rust.Operators              as RustOperators
 import qualified Hydra.Ext.Sources.Rust.Serde                  as RustSerde
 import qualified Hydra.Ext.Sources.Rust.Syntax                 as RustSyntax
--- import qualified Hydra.Ext.Sources.Scala.Coder                  as ScalaCoder  -- stack overflow during generation
+import qualified Hydra.Ext.Sources.Scala.Coder                  as ScalaCoder
 import qualified Hydra.Ext.Sources.Scala.Language               as ScalaLanguage
 import qualified Hydra.Ext.Sources.Scala.Meta                  as ScalaMeta
--- import qualified Hydra.Ext.Sources.Scala.Prepare               as ScalaPrepare  -- stack overflow during generation
--- import qualified Hydra.Ext.Sources.Scala.Serde                 as ScalaSerde  -- stack overflow during generation
--- import qualified Hydra.Ext.Sources.Scala.Utils                 as ScalaUtils  -- stack overflow during generation
--- import qualified Hydra.Ext.Sources.Shacl.Coder                as ShaclCoder  -- stack overflow during generation
--- import qualified Hydra.Ext.Sources.Shacl.Language               as ShaclLanguage  -- stack overflow during generation
+import qualified Hydra.Ext.Sources.Scala.Prepare               as ScalaPrepare
+import qualified Hydra.Ext.Sources.Scala.Serde                 as ScalaSerde
+import qualified Hydra.Ext.Sources.Scala.Utils                 as ScalaUtils
+import qualified Hydra.Ext.Sources.Shacl.Coder                as ShaclCoder
+import qualified Hydra.Ext.Sources.Shacl.Language               as ShaclLanguage
 import qualified Hydra.Ext.Sources.Shacl.Model                 as ShaclModel
 import qualified Hydra.Ext.Sources.Tinkerpop.Features          as TinkerpopFeatures
 import qualified Hydra.Ext.Sources.Tinkerpop.Gremlin           as Gremlin
@@ -176,8 +178,9 @@ hydraExtJavaModules = L.nub $ L.concat [pgModules, genpgModules, rdfModules]
 otherExtModules :: [Module]
 otherExtModules = [
   Atlas.module_,
-  -- AvroCoder.module_,  -- stack overflow during generation
-  -- AvroLanguage.avroLanguageModule,  -- stack overflow during generation
+  AvroCoder.module_,
+  AvroEnvironment.module_,
+  AvroLanguage.avroLanguageModule,
   AvroSchema.module_,
   AvroSchemaJson.module_,
   AzureDtld.module_,
@@ -186,19 +189,19 @@ otherExtModules = [
   DeltaParquet.module_,
   Dot.module_,
   GeoJson.module_,
-  -- GraphqlLanguage.graphqlLanguageModule,  -- stack overflow during generation
-  -- GraphqlCoder.module_,  -- stack overflow during generation
-  -- GraphqlSerde.module_,  -- stack overflow during generation
+  GraphqlLanguage.graphqlLanguageModule,
+  -- GraphqlCoder.module_,  -- TODO(#267): blocked by grammar-to-type Placeholder bug in Description type
+  -- GraphqlSerde.module_,  -- TODO(#267): blocked by GraphqlCoder dependency
   graphqlSyntaxModule,
   GraphvizCoder.module_,
-  -- GraphvizSerde.module_,  -- stack overflow during generation
+  GraphvizSerde.module_,
   IanaRelations.module_,
   Kql.module_,
   Osv.module_,
   ParquetFormat.module_,
-  -- PegasusLanguage.pdlLanguageModule,  -- stack overflow during generation
-  -- PegasusCoder.module_,  -- stack overflow during generation
-  -- PegasusSerde.module_,  -- stack overflow during generation
+  PegasusLanguage.pdlLanguageModule,
+  PegasusCoder.module_,
+  PegasusSerde.module_,
   Pdl.module_,
   sqlModule,
   StacItems.module_,
@@ -206,7 +209,7 @@ otherExtModules = [
 
 cppModules :: [Module]
 cppModules = [
-  -- CppCoder.module_,  -- stack overflow during generation
+  -- CppCoder.module_,  -- TODO(#267): inference timeout
   CppEnvironment.module_,
   cppLanguageModule,
   CppNames.module_,
@@ -270,13 +273,13 @@ pgModules = [
   EncodePgModel.module_,
   Gremlin.module_,
   OpenCypher.module_,
-  -- PgCoder.module_,  -- stack overflow during generation
+  -- PgCoder.module_,  -- TODO(#267): inference timeout
   PgMapping.module_,
   PgModel.module_,
-  -- PgPrinting.module_,  -- stack overflow during generation
+  PgPrinting.module_,
   PgQuery.module_,
-  -- PgTermsToElements.module_,  -- stack overflow during generation
-  -- PgUtils.module_,  -- stack overflow during generation
+  -- PgTermsToElements.module_,  -- TODO(#267): inference timeout
+  -- PgUtils.module_,  -- TODO(#267): inference timeout
   PgValidation.module_,
   TinkerpopFeatures.module_,
   TinkerpopLanguage.module_]
@@ -285,7 +288,8 @@ protobufModules :: [Module]
 protobufModules = [
   Proto3.module_,
   ProtobufAny.module_,
-  -- ProtobufCoder.module_,  -- stack overflow during generation
+  ProtobufCoder.module_,
+  ProtobufEnvironment.module_,
   protobufLanguageModule,
   ProtobufSerde.module_,
   ProtobufSourceContext.module_]
@@ -306,8 +310,8 @@ rdfModules = [
   RdfSerde.module_,
   RdfSyntax.module_,
   RdfUtils.module_,
-  -- ShaclCoder.module_,  -- stack overflow during generation
-  -- ShaclLanguage.shaclLanguageModule,  -- stack overflow during generation
+  -- ShaclCoder.module_,  -- TODO(#267): inference timeout
+  ShaclLanguage.shaclLanguageModule,
   ShaclModel.module_,
   shexSyntaxModule,
   XmlSchema.module_]
@@ -322,12 +326,12 @@ rustModules = [
 
 scalaModules :: [Module]
 scalaModules = [
-  -- ScalaCoder.module_,  -- stack overflow during generation
+  -- ScalaCoder.module_,  -- TODO(#267): depends on ScalaSerde which has type unification error
   ScalaLanguage.scalaLanguageModule,
-  ScalaMeta.module_]
-  -- ScalaPrepare.module_,  -- stack overflow during generation
-  -- ScalaSerde.module_,  -- stack overflow during generation
-  -- ScalaUtils.module_  -- stack overflow during generation
+  ScalaMeta.module_,
+  ScalaPrepare.module_,
+  -- ScalaSerde.module_,  -- TODO(#267): type unification error (Data_Name vs Name)
+  ScalaUtils.module_]
 
 typescriptModules :: [Module]
 typescriptModules = [
@@ -361,20 +365,34 @@ experimentalTestCodecModules = [
   JavaTestCodec.module_,
   PythonTestCodec.module_]
 
--- | Modules recently promoted from staging to Sources DSL (#267).
---   Verify these generate correctly into Haskell before merging into hydraExtModules.
+-- | Modules promoted from staging to Sources DSL (#267) and generating correctly.
 hydraExtRecentlyPromotedModules :: [Module]
 hydraExtRecentlyPromotedModules = [
+  AvroCoder.module_,
+  AvroEnvironment.module_,
+  AvroLanguage.avroLanguageModule,
   AvroSchemaJson.module_,
+  CppEnvironment.module_,
   CppNames.module_,
   CppSerde.module_,
   CppUtils.module_,
+  GraphqlLanguage.graphqlLanguageModule,
   GraphvizCoder.module_,
+  GraphvizSerde.module_,
   JsonSchemaCoder.module_,
   JsonSchemaSerde.module_,
+  PegasusCoder.module_,
+  PegasusLanguage.pdlLanguageModule,
+  PegasusSerde.module_,
+  PgPrinting.module_,
+  ProtobufCoder.module_,
+  ProtobufEnvironment.module_,
   ProtobufSerde.module_,
   RdfSerde.module_,
   RdfUtils.module_,
+  ScalaPrepare.module_,
+  ScalaUtils.module_,
+  ShaclLanguage.shaclLanguageModule,
   TinkerpopLanguage.module_]
 
 -- All hydra-ext modules for the GenPG demo

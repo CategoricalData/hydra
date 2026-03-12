@@ -1,0 +1,1361 @@
+{
+  "description": ["Type preparation functions for Scala code generation"],
+  "elements": [
+    {
+      "name": "hydra.ext.scala.prepare.prepareLiteralType",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Prepare a literal type for Scala, substituting unsupported types"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "at"},
+                    "function": {
+                      "function": {
+                        "elimination": {
+                          "union": {
+                            "cases": [
+                              {
+                                "name": "binary",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "pair": {
+                                                  "@first": {
+                                                    "union": {
+                                                      "field": {"name": "string", "term": {"unit": {}}},
+                                                      "typeName": "hydra.core.LiteralType"}},
+                                                  "@second": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {
+                                                            "pair": {
+                                                              "@first": {
+                                                                "function": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "v"},
+                                                                        "function": {
+                                                                          "function": {
+                                                                            "elimination": {
+                                                                              "union": {
+                                                                                "cases": [
+                                                                                  {
+                                                                                    "name": "binary",
+                                                                                    "term": {
+                                                                                      "function": {
+                                                                                        "lambda": {
+                                                                                          "body": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "string",
+                                                                                                "term": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "b"},
+                                                                                                    "function": {"function": {"primitive": "hydra.lib.literals.binaryToString"}}}}},
+                                                                                              "typeName": "hydra.core.Literal"}},
+                                                                                          "domain": [{"literal": {"binary": {}}}],
+                                                                                          "parameter": "b"}}}}],
+                                                                                "default": [{"variable": "v"}],
+                                                                                "typeName": "hydra.core.Literal"}}}}}},
+                                                                    "domain": [{"variable": "hydra.core.Literal"}],
+                                                                    "parameter": "v"}}},
+                                                              "@second": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "list": [
+                                                                      {
+                                                                        "literal": {"string": "replace binary strings with character strings"}}]},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                                                                      "type": {"literal": {"string": {}}}}}}}}},
+                                                          "type": {
+                                                            "function": {
+                                                              "codomain": {"variable": "hydra.core.Literal"},
+                                                              "domain": {"variable": "hydra.core.Literal"}}}}},
+                                                      "type": {"set": {"literal": {"string": {}}}}}}}},
+                                              "type": {"variable": "hydra.core.LiteralType"}}},
+                                          "type": {
+                                            "pair": {
+                                              "first": {
+                                                "function": {
+                                                  "codomain": {"variable": "hydra.core.Literal"},
+                                                  "domain": {"variable": "hydra.core.Literal"}}},
+                                              "second": {"set": {"literal": {"string": {}}}}}}}},
+                                      "domain": [{"unit": {}}],
+                                      "parameter": "_"}}}},
+                              {
+                                "name": "float",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "let": {
+                                          "bindings": [
+                                            {
+                                              "name": "result",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "ft"},
+                                                  "function": {"variable": "hydra.ext.scala.prepare.prepareFloatType"}}},
+                                              "type": [
+                                                {
+                                                  "constraints": null,
+                                                  "type": {
+                                                    "pair": {
+                                                      "first": {"variable": "hydra.core.FloatType"},
+                                                      "second": {
+                                                        "pair": {
+                                                          "first": {
+                                                            "function": {
+                                                              "codomain": {"variable": "hydra.core.FloatValue"},
+                                                              "domain": {"variable": "hydra.core.FloatValue"}}},
+                                                          "second": {"set": {"literal": {"string": {}}}}}}}},
+                                                  "variables": []}]},
+                                            {
+                                              "name": "rtyp",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "result"},
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                          "type": {"variable": "hydra.core.FloatType"}}},
+                                                      "type": {
+                                                        "pair": {
+                                                          "first": {
+                                                            "function": {
+                                                              "codomain": {"variable": "hydra.core.FloatValue"},
+                                                              "domain": {"variable": "hydra.core.FloatValue"}}},
+                                                          "second": {"set": {"literal": {"string": {}}}}}}}}}},
+                                              "type": [
+                                                {
+                                                  "constraints": null,
+                                                  "type": {"variable": "hydra.core.FloatType"},
+                                                  "variables": []}]},
+                                            {
+                                              "name": "rep",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {
+                                                    "application": {
+                                                      "argument": {"variable": "result"},
+                                                      "function": {
+                                                        "typeApplication": {
+                                                          "body": {
+                                                            "typeApplication": {
+                                                              "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                              "type": {"variable": "hydra.core.FloatType"}}},
+                                                          "type": {
+                                                            "pair": {
+                                                              "first": {
+                                                                "function": {
+                                                                  "codomain": {"variable": "hydra.core.FloatValue"},
+                                                                  "domain": {"variable": "hydra.core.FloatValue"}}},
+                                                              "second": {"set": {"literal": {"string": {}}}}}}}}}},
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                          "type": {
+                                                            "function": {
+                                                              "codomain": {"variable": "hydra.core.FloatValue"},
+                                                              "domain": {"variable": "hydra.core.FloatValue"}}}}},
+                                                      "type": {"set": {"literal": {"string": {}}}}}}}},
+                                              "type": [
+                                                {
+                                                  "constraints": null,
+                                                  "type": {
+                                                    "function": {
+                                                      "codomain": {"variable": "hydra.core.FloatValue"},
+                                                      "domain": {"variable": "hydra.core.FloatValue"}}},
+                                                  "variables": []}]},
+                                            {
+                                              "name": "msgs",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {
+                                                    "application": {
+                                                      "argument": {"variable": "result"},
+                                                      "function": {
+                                                        "typeApplication": {
+                                                          "body": {
+                                                            "typeApplication": {
+                                                              "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                              "type": {"variable": "hydra.core.FloatType"}}},
+                                                          "type": {
+                                                            "pair": {
+                                                              "first": {
+                                                                "function": {
+                                                                  "codomain": {"variable": "hydra.core.FloatValue"},
+                                                                  "domain": {"variable": "hydra.core.FloatValue"}}},
+                                                              "second": {"set": {"literal": {"string": {}}}}}}}}}},
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                          "type": {
+                                                            "function": {
+                                                              "codomain": {"variable": "hydra.core.FloatValue"},
+                                                              "domain": {"variable": "hydra.core.FloatValue"}}}}},
+                                                      "type": {"set": {"literal": {"string": {}}}}}}}},
+                                              "type": [
+                                                {
+                                                  "constraints": null,
+                                                  "type": {"set": {"literal": {"string": {}}}},
+                                                  "variables": []}]}],
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "pair": {
+                                                      "@first": {
+                                                        "union": {
+                                                          "field": {"name": "float", "term": {"variable": "rtyp"}},
+                                                          "typeName": "hydra.core.LiteralType"}},
+                                                      "@second": {
+                                                        "typeApplication": {
+                                                          "body": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "pair": {
+                                                                  "@first": {
+                                                                    "function": {
+                                                                      "lambda": {
+                                                                        "body": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "v"},
+                                                                            "function": {
+                                                                              "function": {
+                                                                                "elimination": {
+                                                                                  "union": {
+                                                                                    "cases": [
+                                                                                      {
+                                                                                        "name": "float",
+                                                                                        "term": {
+                                                                                          "function": {
+                                                                                            "lambda": {
+                                                                                              "body": {
+                                                                                                "union": {
+                                                                                                  "field": {
+                                                                                                    "name": "float",
+                                                                                                    "term": {
+                                                                                                      "application": {"argument": {"variable": "fv"}, "function": {"variable": "rep"}}}},
+                                                                                                  "typeName": "hydra.core.Literal"}},
+                                                                                              "domain": [{"variable": "hydra.core.FloatValue"}],
+                                                                                              "parameter": "fv"}}}}],
+                                                                                    "default": [{"variable": "v"}],
+                                                                                    "typeName": "hydra.core.Literal"}}}}}},
+                                                                        "domain": [{"variable": "hydra.core.Literal"}],
+                                                                        "parameter": "v"}}},
+                                                                  "@second": {"variable": "msgs"}}},
+                                                              "type": {
+                                                                "function": {
+                                                                  "codomain": {"variable": "hydra.core.Literal"},
+                                                                  "domain": {"variable": "hydra.core.Literal"}}}}},
+                                                          "type": {"set": {"literal": {"string": {}}}}}}}},
+                                                  "type": {"variable": "hydra.core.LiteralType"}}},
+                                              "type": {
+                                                "pair": {
+                                                  "first": {
+                                                    "function": {
+                                                      "codomain": {"variable": "hydra.core.Literal"},
+                                                      "domain": {"variable": "hydra.core.Literal"}}},
+                                                  "second": {"set": {"literal": {"string": {}}}}}}}}}},
+                                      "domain": [{"variable": "hydra.core.FloatType"}],
+                                      "parameter": "ft"}}}},
+                              {
+                                "name": "integer",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "let": {
+                                          "bindings": [
+                                            {
+                                              "name": "result",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "it"},
+                                                  "function": {"variable": "hydra.ext.scala.prepare.prepareIntegerType"}}},
+                                              "type": [
+                                                {
+                                                  "constraints": null,
+                                                  "type": {
+                                                    "pair": {
+                                                      "first": {"variable": "hydra.core.IntegerType"},
+                                                      "second": {
+                                                        "pair": {
+                                                          "first": {
+                                                            "function": {
+                                                              "codomain": {"variable": "hydra.core.IntegerValue"},
+                                                              "domain": {"variable": "hydra.core.IntegerValue"}}},
+                                                          "second": {"set": {"literal": {"string": {}}}}}}}},
+                                                  "variables": []}]},
+                                            {
+                                              "name": "rtyp",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "result"},
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                          "type": {"variable": "hydra.core.IntegerType"}}},
+                                                      "type": {
+                                                        "pair": {
+                                                          "first": {
+                                                            "function": {
+                                                              "codomain": {"variable": "hydra.core.IntegerValue"},
+                                                              "domain": {"variable": "hydra.core.IntegerValue"}}},
+                                                          "second": {"set": {"literal": {"string": {}}}}}}}}}},
+                                              "type": [
+                                                {
+                                                  "constraints": null,
+                                                  "type": {"variable": "hydra.core.IntegerType"},
+                                                  "variables": []}]},
+                                            {
+                                              "name": "rep",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {
+                                                    "application": {
+                                                      "argument": {"variable": "result"},
+                                                      "function": {
+                                                        "typeApplication": {
+                                                          "body": {
+                                                            "typeApplication": {
+                                                              "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                              "type": {"variable": "hydra.core.IntegerType"}}},
+                                                          "type": {
+                                                            "pair": {
+                                                              "first": {
+                                                                "function": {
+                                                                  "codomain": {"variable": "hydra.core.IntegerValue"},
+                                                                  "domain": {"variable": "hydra.core.IntegerValue"}}},
+                                                              "second": {"set": {"literal": {"string": {}}}}}}}}}},
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                          "type": {
+                                                            "function": {
+                                                              "codomain": {"variable": "hydra.core.IntegerValue"},
+                                                              "domain": {"variable": "hydra.core.IntegerValue"}}}}},
+                                                      "type": {"set": {"literal": {"string": {}}}}}}}},
+                                              "type": [
+                                                {
+                                                  "constraints": null,
+                                                  "type": {
+                                                    "function": {
+                                                      "codomain": {"variable": "hydra.core.IntegerValue"},
+                                                      "domain": {"variable": "hydra.core.IntegerValue"}}},
+                                                  "variables": []}]},
+                                            {
+                                              "name": "msgs",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {
+                                                    "application": {
+                                                      "argument": {"variable": "result"},
+                                                      "function": {
+                                                        "typeApplication": {
+                                                          "body": {
+                                                            "typeApplication": {
+                                                              "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                              "type": {"variable": "hydra.core.IntegerType"}}},
+                                                          "type": {
+                                                            "pair": {
+                                                              "first": {
+                                                                "function": {
+                                                                  "codomain": {"variable": "hydra.core.IntegerValue"},
+                                                                  "domain": {"variable": "hydra.core.IntegerValue"}}},
+                                                              "second": {"set": {"literal": {"string": {}}}}}}}}}},
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                          "type": {
+                                                            "function": {
+                                                              "codomain": {"variable": "hydra.core.IntegerValue"},
+                                                              "domain": {"variable": "hydra.core.IntegerValue"}}}}},
+                                                      "type": {"set": {"literal": {"string": {}}}}}}}},
+                                              "type": [
+                                                {
+                                                  "constraints": null,
+                                                  "type": {"set": {"literal": {"string": {}}}},
+                                                  "variables": []}]}],
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "pair": {
+                                                      "@first": {
+                                                        "union": {
+                                                          "field": {"name": "integer", "term": {"variable": "rtyp"}},
+                                                          "typeName": "hydra.core.LiteralType"}},
+                                                      "@second": {
+                                                        "typeApplication": {
+                                                          "body": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "pair": {
+                                                                  "@first": {
+                                                                    "function": {
+                                                                      "lambda": {
+                                                                        "body": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "v"},
+                                                                            "function": {
+                                                                              "function": {
+                                                                                "elimination": {
+                                                                                  "union": {
+                                                                                    "cases": [
+                                                                                      {
+                                                                                        "name": "integer",
+                                                                                        "term": {
+                                                                                          "function": {
+                                                                                            "lambda": {
+                                                                                              "body": {
+                                                                                                "union": {
+                                                                                                  "field": {
+                                                                                                    "name": "integer",
+                                                                                                    "term": {
+                                                                                                      "application": {"argument": {"variable": "iv"}, "function": {"variable": "rep"}}}},
+                                                                                                  "typeName": "hydra.core.Literal"}},
+                                                                                              "domain": [{"variable": "hydra.core.IntegerValue"}],
+                                                                                              "parameter": "iv"}}}}],
+                                                                                    "default": [{"variable": "v"}],
+                                                                                    "typeName": "hydra.core.Literal"}}}}}},
+                                                                        "domain": [{"variable": "hydra.core.Literal"}],
+                                                                        "parameter": "v"}}},
+                                                                  "@second": {"variable": "msgs"}}},
+                                                              "type": {
+                                                                "function": {
+                                                                  "codomain": {"variable": "hydra.core.Literal"},
+                                                                  "domain": {"variable": "hydra.core.Literal"}}}}},
+                                                          "type": {"set": {"literal": {"string": {}}}}}}}},
+                                                  "type": {"variable": "hydra.core.LiteralType"}}},
+                                              "type": {
+                                                "pair": {
+                                                  "first": {
+                                                    "function": {
+                                                      "codomain": {"variable": "hydra.core.Literal"},
+                                                      "domain": {"variable": "hydra.core.Literal"}}},
+                                                  "second": {"set": {"literal": {"string": {}}}}}}}}}},
+                                      "domain": [{"variable": "hydra.core.IntegerType"}],
+                                      "parameter": "it"}}}}],
+                            "default": [
+                              {
+                                "application": {
+                                  "argument": {"variable": "at"},
+                                  "function": {
+                                    "typeApplication": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {"variable": "hydra.ext.scala.prepare.same"},
+                                              "type": {"variable": "hydra.core.LiteralType"}}},
+                                          "type": {"variable": "hydra.core.Literal"}}},
+                                      "type": {"literal": {"string": {}}}}}}}],
+                            "typeName": "hydra.core.LiteralType"}}}}}},
+                "domain": [{"variable": "hydra.core.LiteralType"}],
+                "parameter": "at"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "pair": {
+                  "first": {"variable": "hydra.core.LiteralType"},
+                  "second": {
+                    "pair": {
+                      "first": {
+                        "function": {
+                          "codomain": {"variable": "hydra.core.Literal"},
+                          "domain": {"variable": "hydra.core.Literal"}}},
+                      "second": {"set": {"literal": {"string": {}}}}}}}},
+              "domain": {"variable": "hydra.core.LiteralType"}}},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.scala.prepare.prepareFloatType",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Prepare a float type for Scala"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "ft"},
+                    "function": {
+                      "function": {
+                        "elimination": {
+                          "union": {
+                            "cases": [
+                              {
+                                "name": "bigfloat",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "pair": {
+                                                  "@first": {
+                                                    "union": {
+                                                      "field": {"name": "float64", "term": {"unit": {}}},
+                                                      "typeName": "hydra.core.FloatType"}},
+                                                  "@second": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {
+                                                            "pair": {
+                                                              "@first": {
+                                                                "function": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "v"},
+                                                                        "function": {
+                                                                          "function": {
+                                                                            "elimination": {
+                                                                              "union": {
+                                                                                "cases": [
+                                                                                  {
+                                                                                    "name": "bigfloat",
+                                                                                    "term": {
+                                                                                      "function": {
+                                                                                        "lambda": {
+                                                                                          "body": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "float64",
+                                                                                                "term": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "d"},
+                                                                                                    "function": {"function": {"primitive": "hydra.lib.literals.bigfloatToFloat64"}}}}},
+                                                                                              "typeName": "hydra.core.FloatValue"}},
+                                                                                          "domain": [{"literal": {"float": {"bigfloat": {}}}}],
+                                                                                          "parameter": "d"}}}}],
+                                                                                "default": [{"variable": "v"}],
+                                                                                "typeName": "hydra.core.FloatValue"}}}}}},
+                                                                    "domain": [{"variable": "hydra.core.FloatValue"}],
+                                                                    "parameter": "v"}}},
+                                                              "@second": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "list": [
+                                                                      {
+                                                                        "literal": {
+                                                                          "string": "replace arbitrary-precision floating-point numbers with 64-bit floating-point numbers (doubles)"}}]},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                                                                      "type": {"literal": {"string": {}}}}}}}}},
+                                                          "type": {
+                                                            "function": {
+                                                              "codomain": {"variable": "hydra.core.FloatValue"},
+                                                              "domain": {"variable": "hydra.core.FloatValue"}}}}},
+                                                      "type": {"set": {"literal": {"string": {}}}}}}}},
+                                              "type": {"variable": "hydra.core.FloatType"}}},
+                                          "type": {
+                                            "pair": {
+                                              "first": {
+                                                "function": {
+                                                  "codomain": {"variable": "hydra.core.FloatValue"},
+                                                  "domain": {"variable": "hydra.core.FloatValue"}}},
+                                              "second": {"set": {"literal": {"string": {}}}}}}}},
+                                      "domain": [{"unit": {}}],
+                                      "parameter": "_"}}}}],
+                            "default": [
+                              {
+                                "application": {
+                                  "argument": {"variable": "ft"},
+                                  "function": {
+                                    "typeApplication": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {"variable": "hydra.ext.scala.prepare.same"},
+                                              "type": {"variable": "hydra.core.FloatType"}}},
+                                          "type": {"variable": "hydra.core.FloatValue"}}},
+                                      "type": {"literal": {"string": {}}}}}}}],
+                            "typeName": "hydra.core.FloatType"}}}}}},
+                "domain": [{"variable": "hydra.core.FloatType"}],
+                "parameter": "ft"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "pair": {
+                  "first": {"variable": "hydra.core.FloatType"},
+                  "second": {
+                    "pair": {
+                      "first": {
+                        "function": {
+                          "codomain": {"variable": "hydra.core.FloatValue"},
+                          "domain": {"variable": "hydra.core.FloatValue"}}},
+                      "second": {"set": {"literal": {"string": {}}}}}}}},
+              "domain": {"variable": "hydra.core.FloatType"}}},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.scala.prepare.prepareIntegerType",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {"literal": {"string": "Prepare an integer type for Scala"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "it"},
+                    "function": {
+                      "function": {
+                        "elimination": {
+                          "union": {
+                            "cases": [
+                              {
+                                "name": "bigint",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "pair": {
+                                                  "@first": {
+                                                    "union": {
+                                                      "field": {"name": "int64", "term": {"unit": {}}},
+                                                      "typeName": "hydra.core.IntegerType"}},
+                                                  "@second": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {
+                                                            "pair": {
+                                                              "@first": {
+                                                                "function": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "v"},
+                                                                        "function": {
+                                                                          "function": {
+                                                                            "elimination": {
+                                                                              "union": {
+                                                                                "cases": [
+                                                                                  {
+                                                                                    "name": "bigint",
+                                                                                    "term": {
+                                                                                      "function": {
+                                                                                        "lambda": {
+                                                                                          "body": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "int64",
+                                                                                                "term": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "i"},
+                                                                                                    "function": {"function": {"primitive": "hydra.lib.literals.bigintToInt64"}}}}},
+                                                                                              "typeName": "hydra.core.IntegerValue"}},
+                                                                                          "domain": [{"literal": {"integer": {"bigint": {}}}}],
+                                                                                          "parameter": "i"}}}}],
+                                                                                "default": [{"variable": "v"}],
+                                                                                "typeName": "hydra.core.IntegerValue"}}}}}},
+                                                                    "domain": [{"variable": "hydra.core.IntegerValue"}],
+                                                                    "parameter": "v"}}},
+                                                              "@second": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "list": [
+                                                                      {
+                                                                        "literal": {
+                                                                          "string": "replace arbitrary-precision integers with 64-bit integers"}}]},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                                                                      "type": {"literal": {"string": {}}}}}}}}},
+                                                          "type": {
+                                                            "function": {
+                                                              "codomain": {"variable": "hydra.core.IntegerValue"},
+                                                              "domain": {"variable": "hydra.core.IntegerValue"}}}}},
+                                                      "type": {"set": {"literal": {"string": {}}}}}}}},
+                                              "type": {"variable": "hydra.core.IntegerType"}}},
+                                          "type": {
+                                            "pair": {
+                                              "first": {
+                                                "function": {
+                                                  "codomain": {"variable": "hydra.core.IntegerValue"},
+                                                  "domain": {"variable": "hydra.core.IntegerValue"}}},
+                                              "second": {"set": {"literal": {"string": {}}}}}}}},
+                                      "domain": [{"unit": {}}],
+                                      "parameter": "_"}}}},
+                              {
+                                "name": "uint8",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "pair": {
+                                                  "@first": {
+                                                    "union": {
+                                                      "field": {"name": "int8", "term": {"unit": {}}},
+                                                      "typeName": "hydra.core.IntegerType"}},
+                                                  "@second": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {
+                                                            "pair": {
+                                                              "@first": {
+                                                                "function": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "v"},
+                                                                        "function": {
+                                                                          "function": {
+                                                                            "elimination": {
+                                                                              "union": {
+                                                                                "cases": [
+                                                                                  {
+                                                                                    "name": "uint8",
+                                                                                    "term": {
+                                                                                      "function": {
+                                                                                        "lambda": {
+                                                                                          "body": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "int8",
+                                                                                                "term": {
+                                                                                                  "application": {
+                                                                                                    "argument": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "i"},
+                                                                                                        "function": {"function": {"primitive": "hydra.lib.literals.uint8ToBigint"}}}},
+                                                                                                    "function": {"function": {"primitive": "hydra.lib.literals.bigintToInt8"}}}}},
+                                                                                              "typeName": "hydra.core.IntegerValue"}},
+                                                                                          "domain": [{"literal": {"integer": {"uint8": {}}}}],
+                                                                                          "parameter": "i"}}}}],
+                                                                                "default": [{"variable": "v"}],
+                                                                                "typeName": "hydra.core.IntegerValue"}}}}}},
+                                                                    "domain": [{"variable": "hydra.core.IntegerValue"}],
+                                                                    "parameter": "v"}}},
+                                                              "@second": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "list": [
+                                                                      {
+                                                                        "literal": {
+                                                                          "string": "replace unsigned 8-bit integers with signed 8-bit integers"}}]},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                                                                      "type": {"literal": {"string": {}}}}}}}}},
+                                                          "type": {
+                                                            "function": {
+                                                              "codomain": {"variable": "hydra.core.IntegerValue"},
+                                                              "domain": {"variable": "hydra.core.IntegerValue"}}}}},
+                                                      "type": {"set": {"literal": {"string": {}}}}}}}},
+                                              "type": {"variable": "hydra.core.IntegerType"}}},
+                                          "type": {
+                                            "pair": {
+                                              "first": {
+                                                "function": {
+                                                  "codomain": {"variable": "hydra.core.IntegerValue"},
+                                                  "domain": {"variable": "hydra.core.IntegerValue"}}},
+                                              "second": {"set": {"literal": {"string": {}}}}}}}},
+                                      "domain": [{"unit": {}}],
+                                      "parameter": "_"}}}},
+                              {
+                                "name": "uint32",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "pair": {
+                                                  "@first": {
+                                                    "union": {
+                                                      "field": {"name": "int32", "term": {"unit": {}}},
+                                                      "typeName": "hydra.core.IntegerType"}},
+                                                  "@second": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {
+                                                            "pair": {
+                                                              "@first": {
+                                                                "function": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "v"},
+                                                                        "function": {
+                                                                          "function": {
+                                                                            "elimination": {
+                                                                              "union": {
+                                                                                "cases": [
+                                                                                  {
+                                                                                    "name": "uint32",
+                                                                                    "term": {
+                                                                                      "function": {
+                                                                                        "lambda": {
+                                                                                          "body": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "int32",
+                                                                                                "term": {
+                                                                                                  "application": {
+                                                                                                    "argument": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "i"},
+                                                                                                        "function": {"function": {"primitive": "hydra.lib.literals.uint32ToBigint"}}}},
+                                                                                                    "function": {"function": {"primitive": "hydra.lib.literals.bigintToInt32"}}}}},
+                                                                                              "typeName": "hydra.core.IntegerValue"}},
+                                                                                          "domain": [{"literal": {"integer": {"uint32": {}}}}],
+                                                                                          "parameter": "i"}}}}],
+                                                                                "default": [{"variable": "v"}],
+                                                                                "typeName": "hydra.core.IntegerValue"}}}}}},
+                                                                    "domain": [{"variable": "hydra.core.IntegerValue"}],
+                                                                    "parameter": "v"}}},
+                                                              "@second": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "list": [
+                                                                      {
+                                                                        "literal": {
+                                                                          "string": "replace unsigned 32-bit integers with signed 32-bit integers"}}]},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                                                                      "type": {"literal": {"string": {}}}}}}}}},
+                                                          "type": {
+                                                            "function": {
+                                                              "codomain": {"variable": "hydra.core.IntegerValue"},
+                                                              "domain": {"variable": "hydra.core.IntegerValue"}}}}},
+                                                      "type": {"set": {"literal": {"string": {}}}}}}}},
+                                              "type": {"variable": "hydra.core.IntegerType"}}},
+                                          "type": {
+                                            "pair": {
+                                              "first": {
+                                                "function": {
+                                                  "codomain": {"variable": "hydra.core.IntegerValue"},
+                                                  "domain": {"variable": "hydra.core.IntegerValue"}}},
+                                              "second": {"set": {"literal": {"string": {}}}}}}}},
+                                      "domain": [{"unit": {}}],
+                                      "parameter": "_"}}}},
+                              {
+                                "name": "uint64",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "pair": {
+                                                  "@first": {
+                                                    "union": {
+                                                      "field": {"name": "int64", "term": {"unit": {}}},
+                                                      "typeName": "hydra.core.IntegerType"}},
+                                                  "@second": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {
+                                                            "pair": {
+                                                              "@first": {
+                                                                "function": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "v"},
+                                                                        "function": {
+                                                                          "function": {
+                                                                            "elimination": {
+                                                                              "union": {
+                                                                                "cases": [
+                                                                                  {
+                                                                                    "name": "uint64",
+                                                                                    "term": {
+                                                                                      "function": {
+                                                                                        "lambda": {
+                                                                                          "body": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "int64",
+                                                                                                "term": {
+                                                                                                  "application": {
+                                                                                                    "argument": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "i"},
+                                                                                                        "function": {"function": {"primitive": "hydra.lib.literals.uint64ToBigint"}}}},
+                                                                                                    "function": {"function": {"primitive": "hydra.lib.literals.bigintToInt64"}}}}},
+                                                                                              "typeName": "hydra.core.IntegerValue"}},
+                                                                                          "domain": [{"literal": {"integer": {"uint64": {}}}}],
+                                                                                          "parameter": "i"}}}}],
+                                                                                "default": [{"variable": "v"}],
+                                                                                "typeName": "hydra.core.IntegerValue"}}}}}},
+                                                                    "domain": [{"variable": "hydra.core.IntegerValue"}],
+                                                                    "parameter": "v"}}},
+                                                              "@second": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "list": [
+                                                                      {
+                                                                        "literal": {
+                                                                          "string": "replace unsigned 64-bit integers with signed 64-bit integers"}}]},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                                                                      "type": {"literal": {"string": {}}}}}}}}},
+                                                          "type": {
+                                                            "function": {
+                                                              "codomain": {"variable": "hydra.core.IntegerValue"},
+                                                              "domain": {"variable": "hydra.core.IntegerValue"}}}}},
+                                                      "type": {"set": {"literal": {"string": {}}}}}}}},
+                                              "type": {"variable": "hydra.core.IntegerType"}}},
+                                          "type": {
+                                            "pair": {
+                                              "first": {
+                                                "function": {
+                                                  "codomain": {"variable": "hydra.core.IntegerValue"},
+                                                  "domain": {"variable": "hydra.core.IntegerValue"}}},
+                                              "second": {"set": {"literal": {"string": {}}}}}}}},
+                                      "domain": [{"unit": {}}],
+                                      "parameter": "_"}}}}],
+                            "default": [
+                              {
+                                "application": {
+                                  "argument": {"variable": "it"},
+                                  "function": {
+                                    "typeApplication": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {"variable": "hydra.ext.scala.prepare.same"},
+                                              "type": {"variable": "hydra.core.IntegerType"}}},
+                                          "type": {"variable": "hydra.core.IntegerValue"}}},
+                                      "type": {"literal": {"string": {}}}}}}}],
+                            "typeName": "hydra.core.IntegerType"}}}}}},
+                "domain": [{"variable": "hydra.core.IntegerType"}],
+                "parameter": "it"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "pair": {
+                  "first": {"variable": "hydra.core.IntegerType"},
+                  "second": {
+                    "pair": {
+                      "first": {
+                        "function": {
+                          "codomain": {"variable": "hydra.core.IntegerValue"},
+                          "domain": {"variable": "hydra.core.IntegerValue"}}},
+                      "second": {"set": {"literal": {"string": {}}}}}}}},
+              "domain": {"variable": "hydra.core.IntegerType"}}},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.scala.prepare.prepareType",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "Prepare a type for Scala code generation, substituting unsupported types"}}}],
+              "body": {
+                "function": {
+                  "lambda": {
+                    "body": {
+                      "function": {
+                        "lambda": {
+                          "body": {
+                            "application": {
+                              "argument": {
+                                "application": {
+                                  "argument": {"variable": "typ"},
+                                  "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                              "function": {
+                                "function": {
+                                  "elimination": {
+                                    "union": {
+                                      "cases": [
+                                        {
+                                          "name": "literal",
+                                          "term": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "let": {
+                                                    "bindings": [
+                                                      {
+                                                        "name": "result",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {"variable": "at"},
+                                                            "function": {"variable": "hydra.ext.scala.prepare.prepareLiteralType"}}},
+                                                        "type": [
+                                                          {
+                                                            "constraints": null,
+                                                            "type": {
+                                                              "pair": {
+                                                                "first": {"variable": "hydra.core.LiteralType"},
+                                                                "second": {
+                                                                  "pair": {
+                                                                    "first": {
+                                                                      "function": {
+                                                                        "codomain": {"variable": "hydra.core.Literal"},
+                                                                        "domain": {"variable": "hydra.core.Literal"}}},
+                                                                    "second": {"set": {"literal": {"string": {}}}}}}}},
+                                                            "variables": []}]},
+                                                      {
+                                                        "name": "rtyp",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {"variable": "result"},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                    "type": {"variable": "hydra.core.LiteralType"}}},
+                                                                "type": {
+                                                                  "pair": {
+                                                                    "first": {
+                                                                      "function": {
+                                                                        "codomain": {"variable": "hydra.core.Literal"},
+                                                                        "domain": {"variable": "hydra.core.Literal"}}},
+                                                                    "second": {"set": {"literal": {"string": {}}}}}}}}}},
+                                                        "type": [
+                                                          {
+                                                            "constraints": null,
+                                                            "type": {"variable": "hydra.core.LiteralType"},
+                                                            "variables": []}]},
+                                                      {
+                                                        "name": "rep",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "result"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                        "type": {"variable": "hydra.core.LiteralType"}}},
+                                                                    "type": {
+                                                                      "pair": {
+                                                                        "first": {
+                                                                          "function": {
+                                                                            "codomain": {"variable": "hydra.core.Literal"},
+                                                                            "domain": {"variable": "hydra.core.Literal"}}},
+                                                                        "second": {"set": {"literal": {"string": {}}}}}}}}}},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                    "type": {
+                                                                      "function": {
+                                                                        "codomain": {"variable": "hydra.core.Literal"},
+                                                                        "domain": {"variable": "hydra.core.Literal"}}}}},
+                                                                "type": {"set": {"literal": {"string": {}}}}}}}},
+                                                        "type": [
+                                                          {
+                                                            "constraints": null,
+                                                            "type": {
+                                                              "function": {
+                                                                "codomain": {"variable": "hydra.core.Literal"},
+                                                                "domain": {"variable": "hydra.core.Literal"}}},
+                                                            "variables": []}]},
+                                                      {
+                                                        "name": "msgs",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "result"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                        "type": {"variable": "hydra.core.LiteralType"}}},
+                                                                    "type": {
+                                                                      "pair": {
+                                                                        "first": {
+                                                                          "function": {
+                                                                            "codomain": {"variable": "hydra.core.Literal"},
+                                                                            "domain": {"variable": "hydra.core.Literal"}}},
+                                                                        "second": {"set": {"literal": {"string": {}}}}}}}}}},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                    "type": {
+                                                                      "function": {
+                                                                        "codomain": {"variable": "hydra.core.Literal"},
+                                                                        "domain": {"variable": "hydra.core.Literal"}}}}},
+                                                                "type": {"set": {"literal": {"string": {}}}}}}}},
+                                                        "type": [
+                                                          {
+                                                            "constraints": null,
+                                                            "type": {"set": {"literal": {"string": {}}}},
+                                                            "variables": []}]}],
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "pair": {
+                                                                "@first": {
+                                                                  "union": {
+                                                                    "field": {"name": "literal", "term": {"variable": "rtyp"}},
+                                                                    "typeName": "hydra.core.Type"}},
+                                                                "@second": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "pair": {
+                                                                            "@first": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "body": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "v"},
+                                                                                      "function": {
+                                                                                        "function": {
+                                                                                          "elimination": {
+                                                                                            "union": {
+                                                                                              "cases": [
+                                                                                                {
+                                                                                                  "name": "literal",
+                                                                                                  "term": {
+                                                                                                    "function": {
+                                                                                                      "lambda": {
+                                                                                                        "body": {
+                                                                                                          "union": {
+                                                                                                            "field": {
+                                                                                                              "name": "literal",
+                                                                                                              "term": {
+                                                                                                                "application": {"argument": {"variable": "av"}, "function": {"variable": "rep"}}}},
+                                                                                                            "typeName": "hydra.core.Term"}},
+                                                                                                        "domain": [{"variable": "hydra.core.Literal"}],
+                                                                                                        "parameter": "av"}}}}],
+                                                                                              "default": [{"variable": "v"}],
+                                                                                              "typeName": "hydra.core.Term"}}}}}},
+                                                                                  "domain": [{"variable": "hydra.core.Term"}],
+                                                                                  "parameter": "v"}}},
+                                                                            "@second": {"variable": "msgs"}}},
+                                                                        "type": {
+                                                                          "function": {
+                                                                            "codomain": {"variable": "hydra.core.Term"},
+                                                                            "domain": {"variable": "hydra.core.Term"}}}}},
+                                                                    "type": {"set": {"literal": {"string": {}}}}}}}},
+                                                            "type": {"variable": "hydra.core.Type"}}},
+                                                        "type": {
+                                                          "pair": {
+                                                            "first": {
+                                                              "function": {
+                                                                "codomain": {"variable": "hydra.core.Term"},
+                                                                "domain": {"variable": "hydra.core.Term"}}},
+                                                            "second": {"set": {"literal": {"string": {}}}}}}}}}},
+                                                "domain": [{"variable": "hydra.core.LiteralType"}],
+                                                "parameter": "at"}}}}],
+                                      "default": [
+                                        {
+                                          "application": {
+                                            "argument": {"variable": "typ"},
+                                            "function": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {"variable": "hydra.ext.scala.prepare.same"},
+                                                        "type": {"variable": "hydra.core.Type"}}},
+                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                "type": {"literal": {"string": {}}}}}}}],
+                                      "typeName": "hydra.core.Type"}}}}}},
+                          "domain": [{"variable": "hydra.core.Type"}],
+                          "parameter": "typ"}}},
+                    "domain": [{"variable": "t0"}],
+                    "parameter": "cx"}}}}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "pair": {
+                      "first": {"variable": "hydra.core.Type"},
+                      "second": {
+                        "pair": {
+                          "first": {
+                            "function": {
+                              "codomain": {"variable": "hydra.core.Term"},
+                              "domain": {"variable": "hydra.core.Term"}}},
+                          "second": {"set": {"literal": {"string": {}}}}}}}},
+                  "domain": {"variable": "hydra.core.Type"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0"]}]},
+    {
+      "name": "hydra.ext.scala.prepare.same",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "typeLambda": {
+              "body": {
+                "typeLambda": {
+                  "body": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "Return a type unchanged with identity transform and no messages"}}}],
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {
+                                      "pair": {
+                                        "@first": {"variable": "x"},
+                                        "@second": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "pair": {
+                                                    "@first": {
+                                                      "function": {
+                                                        "lambda": {
+                                                          "body": {"variable": "y"},
+                                                          "domain": [{"variable": "t1"}],
+                                                          "parameter": "y"}}},
+                                                    "@second": {
+                                                      "typeApplication": {
+                                                        "body": {"function": {"primitive": "hydra.lib.sets.empty"}},
+                                                        "type": {"variable": "t2"}}}}},
+                                                "type": {
+                                                  "function": {"codomain": {"variable": "t1"}, "domain": {"variable": "t1"}}}}},
+                                            "type": {"set": {"variable": "t2"}}}}}},
+                                    "type": {"variable": "t0"}}},
+                                "type": {
+                                  "pair": {
+                                    "first": {
+                                      "function": {"codomain": {"variable": "t1"}, "domain": {"variable": "t1"}}},
+                                    "second": {"set": {"variable": "t2"}}}}}},
+                            "domain": [{"variable": "t0"}],
+                            "parameter": "x"}}}}},
+                  "parameter": "t2"}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": [[{"@key": "t2", "@value": {"classes": ["ordering"]}}]],
+          "type": {
+            "function": {
+              "codomain": {
+                "pair": {
+                  "first": {"variable": "t0"},
+                  "second": {
+                    "pair": {
+                      "first": {
+                        "function": {"codomain": {"variable": "t1"}, "domain": {"variable": "t1"}}},
+                      "second": {"set": {"variable": "t2"}}}}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1", "t2"]}]}],
+  "namespace": "hydra.ext.scala.prepare",
+  "termDependencies": ["hydra.rewriting"],
+  "typeDependencies": [
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.compute",
+    "hydra.context",
+    "hydra.core",
+    "hydra.error",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json.model",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants",
+    "hydra.workflow"]}

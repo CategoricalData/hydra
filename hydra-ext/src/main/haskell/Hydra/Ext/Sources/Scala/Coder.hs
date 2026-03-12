@@ -78,11 +78,23 @@ module_ = Module ns elements
     elements = [
       toBinding moduleToScala,
       toBinding constructModule,
+      toBinding findImports,
+      toBinding toElImport,
+      toBinding toPrimImport,
+      toBinding encodeTypeDefinition,
       toBinding encodeFunction,
       toBinding encodeLiteral,
       toBinding encodeTerm,
       toBinding encodeType,
-      toBinding encodeUntypeApplicationTerm]
+      toBinding encodeUntypeApplicationTerm,
+      toBinding fieldToParam,
+      toBinding fieldToEnumCase,
+      toBinding typeParamToTypeVar,
+      toBinding encodeTermDefinition,
+      toBinding findSdom,
+      toBinding findDomain,
+      toBinding encodeCase,
+      toBinding applyVar]
 
 
 -- | Type alias for Result
@@ -473,7 +485,7 @@ encodeLiteral = def "encodeLiteral" $
         _IntegerValue_int16>>: ("i" ~> right (inject _Lit _Lit_short (var "i"))),
         _IntegerValue_int32>>: ("i" ~> right (inject _Lit _Lit_int (var "i"))),
         _IntegerValue_int64>>: ("i" ~> right (inject _Lit _Lit_long (var "i"))),
-        _IntegerValue_uint8>>: ("i" ~> right (inject _Lit _Lit_byte (var "i")))]),
+        _IntegerValue_uint8>>: ("i" ~> right (inject _Lit _Lit_byte (Literals.bigintToInt8 (Literals.uint8ToBigint (var "i")))))]),
       _Literal_string>>: ("s" ~> right (inject _Lit _Lit_string (var "s")))])
 
 encodeTerm :: TBinding (Context -> Graph -> Term -> Either (InContext OtherError) Scala.Data)

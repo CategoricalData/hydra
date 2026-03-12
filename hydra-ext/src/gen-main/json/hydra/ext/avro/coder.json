@@ -1,0 +1,2219 @@
+{
+  "description": [
+    "Avro-to-Hydra adapter for converting Avro schemas and data to Hydra types and terms"],
+  "elements": [
+    {
+      "name": "hydra.ext.avro.coder.avro_foreignKey",
+      "term": {"literal": {"string": "@foreignKey"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"literal": {"string": {}}},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.avro.coder.avro_primaryKey",
+      "term": {"literal": {"string": "@primaryKey"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"literal": {"string": {}}},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.avro.coder.emptyAvroEnvironment",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "An empty Avro environment with no named adapters, no namespace, and no elements"}}}],
+          "body": {
+            "record": {
+              "fields": [
+                {
+                  "name": "namedAdapters",
+                  "term": {
+                    "typeApplication": {
+                      "body": {
+                        "typeApplication": {
+                          "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
+                          "type": {"variable": "hydra.ext.avro.environment.AvroQualifiedName"}}},
+                      "type": {"literal": {"string": {}}}}}},
+                {
+                  "name": "namespace",
+                  "term": {
+                    "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                {
+                  "name": "elements",
+                  "term": {
+                    "typeApplication": {
+                      "body": {
+                        "typeApplication": {
+                          "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
+                          "type": {"variable": "hydra.core.Name"}}},
+                      "type": {"variable": "hydra.core.Binding"}}}}],
+              "typeName": "hydra.ext.avro.environment.AvroEnvironment"}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.ext.avro.environment.AvroEnvironment"},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.avro.coder.avroHydraAdapter",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "typeLambda": {
+              "body": {
+                "typeLambda": {
+                  "body": {
+                    "typeLambda": {
+                      "body": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {
+                                "literal": {
+                                  "string": "Create an adapter between Avro schemas and Hydra types/terms"}}}],
+                          "body": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
+                                              "application": {
+                                                "argument": {"variable": "env0"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "schema"},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {"variable": "cx"},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"variable": "hydra.ext.avro.coder.avroHydraAdapter"},
+                                                                        "type": {"variable": "t0"}}},
+                                                                    "type": {"variable": "t1"}}},
+                                                                "type": {"variable": "t2"}}},
+                                                            "type": {"variable": "t3"}}}}}}}}},
+                                            "domain": [{"variable": "t2"}],
+                                            "parameter": "env0"}}},
+                                      "domain": [{"variable": "t1"}],
+                                      "parameter": "schema"}}},
+                                "domain": [{"variable": "t0"}],
+                                "parameter": "cx"}}}}},
+                      "parameter": "t3"}},
+                  "parameter": "t2"}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {"codomain": {"variable": "t3"}, "domain": {"variable": "t2"}}},
+                  "domain": {"variable": "t1"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1", "t2", "t3"]}]},
+    {
+      "name": "hydra.ext.avro.coder.prepareFields",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "typeLambda": {
+              "body": {
+                "typeLambda": {
+                  "body": {
+                    "typeLambda": {
+                      "body": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {
+                                "literal": {"string": "Thread AvroEnvironment through preparing multiple fields"}}}],
+                          "body": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
+                                              "application": {
+                                                "argument": {"variable": "fields"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "env"},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {"variable": "cx"},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"variable": "hydra.ext.avro.coder.prepareFields"},
+                                                                        "type": {"variable": "t0"}}},
+                                                                    "type": {"variable": "t1"}}},
+                                                                "type": {"variable": "t2"}}},
+                                                            "type": {"variable": "t3"}}}}}}}}},
+                                            "domain": [{"variable": "t2"}],
+                                            "parameter": "fields"}}},
+                                      "domain": [{"variable": "t1"}],
+                                      "parameter": "env"}}},
+                                "domain": [{"variable": "t0"}],
+                                "parameter": "cx"}}}}},
+                      "parameter": "t3"}},
+                  "parameter": "t2"}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {"codomain": {"variable": "t3"}, "domain": {"variable": "t2"}}},
+                  "domain": {"variable": "t1"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1", "t2", "t3"]}]},
+    {
+      "name": "hydra.ext.avro.coder.prepareField",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "typeLambda": {
+              "body": {
+                "typeLambda": {
+                  "body": {
+                    "typeLambda": {
+                      "body": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {
+                                "literal": {
+                                  "string": "Prepare a single field, producing an adapter and updated environment"}}}],
+                          "body": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
+                                              "application": {
+                                                "argument": {"variable": "f"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "env"},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {"variable": "cx"},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"variable": "hydra.ext.avro.coder.prepareField"},
+                                                                        "type": {"variable": "t0"}}},
+                                                                    "type": {"variable": "t1"}}},
+                                                                "type": {"variable": "t2"}}},
+                                                            "type": {"variable": "t3"}}}}}}}}},
+                                            "domain": [{"variable": "t2"}],
+                                            "parameter": "f"}}},
+                                      "domain": [{"variable": "t1"}],
+                                      "parameter": "env"}}},
+                                "domain": [{"variable": "t0"}],
+                                "parameter": "cx"}}}}},
+                      "parameter": "t3"}},
+                  "parameter": "t2"}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {"codomain": {"variable": "t3"}, "domain": {"variable": "t2"}}},
+                  "domain": {"variable": "t1"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1", "t2", "t3"]}]},
+    {
+      "name": "hydra.ext.avro.coder.annotateAdapter",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "typeLambda": {
+              "body": {
+                "typeLambda": {
+                  "body": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "Annotate an adapter's target type with optional annotations"}}}],
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "application": {
+                                      "argument": {"variable": "ad"},
+                                      "function": {
+                                        "application": {
+                                          "argument": {"variable": "ann"},
+                                          "function": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "typeApplication": {
+                                                      "body": {"variable": "hydra.ext.avro.coder.annotateAdapter"},
+                                                      "type": {"variable": "t0"}}},
+                                                  "type": {"variable": "t1"}}},
+                                              "type": {"variable": "t2"}}}}}}},
+                                  "domain": [{"variable": "t1"}],
+                                  "parameter": "ad"}}},
+                            "domain": [{"variable": "t0"}],
+                            "parameter": "ann"}}}}},
+                  "parameter": "t2"}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {"codomain": {"variable": "t2"}, "domain": {"variable": "t1"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1", "t2"]}]},
+    {
+      "name": "hydra.ext.avro.coder.findAvroPrimaryKeyField",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "typeLambda": {
+              "body": {
+                "typeLambda": {
+                  "body": {
+                    "typeLambda": {
+                      "body": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {
+                                "literal": {"string": "Find the primary key field among a list of Avro fields"}}}],
+                          "body": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
+                                              "application": {
+                                                "argument": {"variable": "avroFields"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "qname"},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {"variable": "cx"},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"variable": "hydra.ext.avro.coder.findAvroPrimaryKeyField"},
+                                                                        "type": {"variable": "t0"}}},
+                                                                    "type": {"variable": "t1"}}},
+                                                                "type": {"variable": "t2"}}},
+                                                            "type": {"variable": "t3"}}}}}}}}},
+                                            "domain": [{"variable": "t2"}],
+                                            "parameter": "avroFields"}}},
+                                      "domain": [{"variable": "t1"}],
+                                      "parameter": "qname"}}},
+                                "domain": [{"variable": "t0"}],
+                                "parameter": "cx"}}}}},
+                      "parameter": "t3"}},
+                  "parameter": "t2"}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {"codomain": {"variable": "t3"}, "domain": {"variable": "t2"}}},
+                  "domain": {"variable": "t1"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1", "t2", "t3"]}]},
+    {
+      "name": "hydra.ext.avro.coder.avroNameToHydraName",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "typeLambda": {
+              "body": {
+                "annotated": {
+                  "annotation": [
+                    {
+                      "@key": "description",
+                      "@value": {
+                        "literal": {"string": "Convert an Avro qualified name to a Hydra name"}}}],
+                  "body": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "application": {
+                            "argument": {"variable": "qname"},
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {"variable": "hydra.ext.avro.coder.avroNameToHydraName"},
+                                    "type": {"variable": "t0"}}},
+                                "type": {"variable": "t1"}}}}},
+                        "domain": [{"variable": "t0"}],
+                        "parameter": "qname"}}}}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {"codomain": {"variable": "t1"}, "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1"]}]},
+    {
+      "name": "hydra.ext.avro.coder.encodeAnnotationValue",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Encode a JSON value as a Hydra term for annotation purposes"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {"variable": "v"},
+                    "function": {
+                      "function": {
+                        "elimination": {
+                          "union": {
+                            "cases": [
+                              {
+                                "name": "array",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "union": {
+                                          "field": {
+                                            "name": "list",
+                                            "term": {
+                                              "application": {
+                                                "argument": {"variable": "vals"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "hydra.ext.avro.coder.encodeAnnotationValue"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                            "type": {"variable": "hydra.json.model.Value"}}},
+                                                        "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                          "typeName": "hydra.core.Term"}},
+                                      "domain": [{"list": {"variable": "hydra.json.model.Value"}}],
+                                      "parameter": "vals"}}}},
+                              {
+                                "name": "boolean",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "union": {
+                                          "field": {
+                                            "name": "literal",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "boolean", "term": {"variable": "b"}},
+                                                "typeName": "hydra.core.Literal"}}},
+                                          "typeName": "hydra.core.Term"}},
+                                      "domain": [{"literal": {"boolean": {}}}],
+                                      "parameter": "b"}}}},
+                              {
+                                "name": "null",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "union": {
+                                          "field": {"name": "unit", "term": {"unit": {}}},
+                                          "typeName": "hydra.core.Term"}},
+                                      "domain": [{"unit": {}}],
+                                      "parameter": "_"}}}},
+                              {
+                                "name": "number",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "union": {
+                                          "field": {
+                                            "name": "literal",
+                                            "term": {
+                                              "union": {
+                                                "field": {
+                                                  "name": "float",
+                                                  "term": {
+                                                    "union": {
+                                                      "field": {"name": "bigfloat", "term": {"variable": "d"}},
+                                                      "typeName": "hydra.core.FloatValue"}}},
+                                                "typeName": "hydra.core.Literal"}}},
+                                          "typeName": "hydra.core.Term"}},
+                                      "domain": [{"literal": {"float": {"bigfloat": {}}}}],
+                                      "parameter": "d"}}}},
+                              {
+                                "name": "object",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "union": {
+                                          "field": {
+                                            "name": "map",
+                                            "term": {
+                                              "application": {
+                                                "argument": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "m"},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"function": {"primitive": "hydra.lib.maps.toList"}},
+                                                                "type": {"literal": {"string": {}}}}},
+                                                            "type": {"variable": "hydra.json.model.Value"}}}}},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "function": {
+                                                            "lambda": {
+                                                              "body": {
+                                                                "let": {
+                                                                  "bindings": [
+                                                                    {
+                                                                      "name": "k",
+                                                                      "term": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "entry"},
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                  "type": {"literal": {"string": {}}}}},
+                                                                              "type": {"variable": "hydra.json.model.Value"}}}}},
+                                                                      "type": [
+                                                                        {
+                                                                          "constraints": null,
+                                                                          "type": {"literal": {"string": {}}},
+                                                                          "variables": []}]},
+                                                                    {
+                                                                      "name": "v'",
+                                                                      "term": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "entry"},
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                  "type": {"literal": {"string": {}}}}},
+                                                                              "type": {"variable": "hydra.json.model.Value"}}}}},
+                                                                      "type": [
+                                                                        {
+                                                                          "constraints": null,
+                                                                          "type": {"variable": "hydra.json.model.Value"},
+                                                                          "variables": []}]}],
+                                                                  "body": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "pair": {
+                                                                              "@first": {
+                                                                                "union": {
+                                                                                  "field": {
+                                                                                    "name": "literal",
+                                                                                    "term": {
+                                                                                      "union": {
+                                                                                        "field": {"name": "string", "term": {"variable": "k"}},
+                                                                                        "typeName": "hydra.core.Literal"}}},
+                                                                                  "typeName": "hydra.core.Term"}},
+                                                                              "@second": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "v'"},
+                                                                                  "function": {"variable": "hydra.ext.avro.coder.encodeAnnotationValue"}}}}},
+                                                                          "type": {"variable": "hydra.core.Term"}}},
+                                                                      "type": {"variable": "hydra.core.Term"}}}}},
+                                                              "domain": [
+                                                                {
+                                                                  "pair": {
+                                                                    "first": {"literal": {"string": {}}},
+                                                                    "second": {"variable": "hydra.json.model.Value"}}}],
+                                                              "parameter": "entry"}}},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                "type": {
+                                                                  "pair": {
+                                                                    "first": {"literal": {"string": {}}},
+                                                                    "second": {"variable": "hydra.json.model.Value"}}}}},
+                                                            "type": {
+                                                              "pair": {
+                                                                "first": {"variable": "hydra.core.Term"},
+                                                                "second": {"variable": "hydra.core.Term"}}}}}}}}},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
+                                                        "type": {"variable": "hydra.core.Term"}}},
+                                                    "type": {"variable": "hydra.core.Term"}}}}}},
+                                          "typeName": "hydra.core.Term"}},
+                                      "domain": [
+                                        {
+                                          "map": {
+                                            "keys": {"literal": {"string": {}}},
+                                            "values": {"variable": "hydra.json.model.Value"}}}],
+                                      "parameter": "m"}}}},
+                              {
+                                "name": "string",
+                                "term": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "union": {
+                                          "field": {
+                                            "name": "literal",
+                                            "term": {
+                                              "union": {
+                                                "field": {"name": "string", "term": {"variable": "s"}},
+                                                "typeName": "hydra.core.Literal"}}},
+                                          "typeName": "hydra.core.Term"}},
+                                      "domain": [{"literal": {"string": {}}}],
+                                      "parameter": "s"}}}}],
+                            "default": null,
+                            "typeName": "hydra.json.model.Value"}}}}}},
+                "domain": [{"variable": "hydra.json.model.Value"}],
+                "parameter": "v"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.json.model.Value"}}},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.avro.coder.fieldAnnotationsToCore",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Extract field annotations and convert them to core Name/Term pairs"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {
+                      "application": {
+                        "argument": {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {"variable": "f"},
+                                "function": {
+                                  "function": {
+                                    "elimination": {
+                                      "record": {
+                                        "field": "annotations",
+                                        "typeName": "hydra.ext.org.apache.avro.schema.Field"}}}}}},
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {"function": {"primitive": "hydra.lib.maps.toList"}},
+                                    "type": {"literal": {"string": {}}}}},
+                                "type": {"variable": "hydra.json.model.Value"}}}}},
+                        "function": {
+                          "application": {
+                            "argument": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "let": {
+                                      "bindings": [
+                                        {
+                                          "name": "k",
+                                          "term": {
+                                            "application": {
+                                              "argument": {"variable": "entry"},
+                                              "function": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "typeApplication": {
+                                                      "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                      "type": {"literal": {"string": {}}}}},
+                                                  "type": {"variable": "hydra.json.model.Value"}}}}},
+                                          "type": [
+                                            {
+                                              "constraints": null,
+                                              "type": {"literal": {"string": {}}},
+                                              "variables": []}]},
+                                        {
+                                          "name": "v",
+                                          "term": {
+                                            "application": {
+                                              "argument": {"variable": "entry"},
+                                              "function": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "typeApplication": {
+                                                      "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                      "type": {"literal": {"string": {}}}}},
+                                                  "type": {"variable": "hydra.json.model.Value"}}}}},
+                                          "type": [
+                                            {
+                                              "constraints": null,
+                                              "type": {"variable": "hydra.json.model.Value"},
+                                              "variables": []}]}],
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "pair": {
+                                                  "@first": {"wrap": {"body": {"variable": "k"}, "typeName": "hydra.core.Name"}},
+                                                  "@second": {
+                                                    "application": {
+                                                      "argument": {"variable": "v"},
+                                                      "function": {"variable": "hydra.ext.avro.coder.encodeAnnotationValue"}}}}},
+                                              "type": {"variable": "hydra.core.Name"}}},
+                                          "type": {"variable": "hydra.core.Term"}}}}},
+                                  "domain": [
+                                    {
+                                      "pair": {
+                                        "first": {"literal": {"string": {}}},
+                                        "second": {"variable": "hydra.json.model.Value"}}}],
+                                  "parameter": "entry"}}},
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                    "type": {
+                                      "pair": {
+                                        "first": {"literal": {"string": {}}},
+                                        "second": {"variable": "hydra.json.model.Value"}}}}},
+                                "type": {
+                                  "pair": {
+                                    "first": {"variable": "hydra.core.Name"},
+                                    "second": {"variable": "hydra.core.Term"}}}}}}}}},
+                    "function": {
+                      "typeApplication": {
+                        "body": {
+                          "typeApplication": {
+                            "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
+                            "type": {"variable": "hydra.core.Name"}}},
+                        "type": {"variable": "hydra.core.Term"}}}}},
+                "domain": [{"variable": "hydra.ext.org.apache.avro.schema.Field"}],
+                "parameter": "f"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "map": {
+                  "keys": {"variable": "hydra.core.Name"},
+                  "values": {"variable": "hydra.core.Term"}}},
+              "domain": {"variable": "hydra.ext.org.apache.avro.schema.Field"}}},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.avro.coder.namedAnnotationsToCore",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Extract named type annotations and convert them to core Name/Term pairs"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "application": {
+                    "argument": {
+                      "application": {
+                        "argument": {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {"variable": "n"},
+                                "function": {
+                                  "function": {
+                                    "elimination": {
+                                      "record": {
+                                        "field": "annotations",
+                                        "typeName": "hydra.ext.org.apache.avro.schema.Named"}}}}}},
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {"function": {"primitive": "hydra.lib.maps.toList"}},
+                                    "type": {"literal": {"string": {}}}}},
+                                "type": {"variable": "hydra.json.model.Value"}}}}},
+                        "function": {
+                          "application": {
+                            "argument": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "let": {
+                                      "bindings": [
+                                        {
+                                          "name": "k",
+                                          "term": {
+                                            "application": {
+                                              "argument": {"variable": "entry"},
+                                              "function": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "typeApplication": {
+                                                      "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                      "type": {"literal": {"string": {}}}}},
+                                                  "type": {"variable": "hydra.json.model.Value"}}}}},
+                                          "type": [
+                                            {
+                                              "constraints": null,
+                                              "type": {"literal": {"string": {}}},
+                                              "variables": []}]},
+                                        {
+                                          "name": "v",
+                                          "term": {
+                                            "application": {
+                                              "argument": {"variable": "entry"},
+                                              "function": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "typeApplication": {
+                                                      "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                      "type": {"literal": {"string": {}}}}},
+                                                  "type": {"variable": "hydra.json.model.Value"}}}}},
+                                          "type": [
+                                            {
+                                              "constraints": null,
+                                              "type": {"variable": "hydra.json.model.Value"},
+                                              "variables": []}]}],
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "pair": {
+                                                  "@first": {"wrap": {"body": {"variable": "k"}, "typeName": "hydra.core.Name"}},
+                                                  "@second": {
+                                                    "application": {
+                                                      "argument": {"variable": "v"},
+                                                      "function": {"variable": "hydra.ext.avro.coder.encodeAnnotationValue"}}}}},
+                                              "type": {"variable": "hydra.core.Name"}}},
+                                          "type": {"variable": "hydra.core.Term"}}}}},
+                                  "domain": [
+                                    {
+                                      "pair": {
+                                        "first": {"literal": {"string": {}}},
+                                        "second": {"variable": "hydra.json.model.Value"}}}],
+                                  "parameter": "entry"}}},
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                    "type": {
+                                      "pair": {
+                                        "first": {"literal": {"string": {}}},
+                                        "second": {"variable": "hydra.json.model.Value"}}}}},
+                                "type": {
+                                  "pair": {
+                                    "first": {"variable": "hydra.core.Name"},
+                                    "second": {"variable": "hydra.core.Term"}}}}}}}}},
+                    "function": {
+                      "typeApplication": {
+                        "body": {
+                          "typeApplication": {
+                            "body": {"function": {"primitive": "hydra.lib.maps.fromList"}},
+                            "type": {"variable": "hydra.core.Name"}}},
+                        "type": {"variable": "hydra.core.Term"}}}}},
+                "domain": [{"variable": "hydra.ext.org.apache.avro.schema.Named"}],
+                "parameter": "n"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "map": {
+                  "keys": {"variable": "hydra.core.Name"},
+                  "values": {"variable": "hydra.core.Term"}}},
+              "domain": {"variable": "hydra.ext.org.apache.avro.schema.Named"}}},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.avro.coder.getAvroHydraAdapter",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "typeLambda": {
+              "body": {
+                "typeLambda": {
+                  "body": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "Look up an adapter by qualified name in the environment"}}}],
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "application": {
+                                      "argument": {"variable": "env"},
+                                      "function": {
+                                        "application": {
+                                          "argument": {"variable": "qname"},
+                                          "function": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "typeApplication": {
+                                                      "body": {"variable": "hydra.ext.avro.coder.getAvroHydraAdapter"},
+                                                      "type": {"variable": "t0"}}},
+                                                  "type": {"variable": "t1"}}},
+                                              "type": {"variable": "t2"}}}}}}},
+                                  "domain": [{"variable": "t1"}],
+                                  "parameter": "env"}}},
+                            "domain": [{"variable": "t0"}],
+                            "parameter": "qname"}}}}},
+                  "parameter": "t2"}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {"codomain": {"variable": "t2"}, "domain": {"variable": "t1"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1", "t2"]}]},
+    {
+      "name": "hydra.ext.avro.coder.foreignKeyE",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "typeLambda": {
+              "body": {
+                "typeLambda": {
+                  "body": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "Extract a foreign key annotation from a field, if present"}}}],
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "application": {
+                                      "argument": {"variable": "f"},
+                                      "function": {
+                                        "application": {
+                                          "argument": {"variable": "cx"},
+                                          "function": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "typeApplication": {
+                                                      "body": {"variable": "hydra.ext.avro.coder.foreignKeyE"},
+                                                      "type": {"variable": "t0"}}},
+                                                  "type": {"variable": "t1"}}},
+                                              "type": {"variable": "t2"}}}}}}},
+                                  "domain": [{"variable": "t1"}],
+                                  "parameter": "f"}}},
+                            "domain": [{"variable": "t0"}],
+                            "parameter": "cx"}}}}},
+                  "parameter": "t2"}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {"codomain": {"variable": "t2"}, "domain": {"variable": "t1"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1", "t2"]}]},
+    {
+      "name": "hydra.ext.avro.coder.patternToNameConstructor",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {"string": "Create a name constructor from a pattern string"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "wrap": {
+                          "body": {
+                            "application": {
+                              "argument": {
+                                "application": {
+                                  "argument": {"variable": "pat"},
+                                  "function": {
+                                    "application": {
+                                      "argument": {"literal": {"string": "${}"}},
+                                      "function": {"function": {"primitive": "hydra.lib.strings.splitOn"}}}}}},
+                              "function": {
+                                "application": {
+                                  "argument": {"variable": "s"},
+                                  "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}},
+                          "typeName": "hydra.core.Name"}},
+                      "domain": [{"literal": {"string": {}}}],
+                      "parameter": "s"}}},
+                "domain": [{"literal": {"string": {}}}],
+                "parameter": "pat"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.core.Name"},
+                  "domain": {"literal": {"string": {}}}}},
+              "domain": {"literal": {"string": {}}}}},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.avro.coder.primaryKeyE",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "typeLambda": {
+              "body": {
+                "typeLambda": {
+                  "body": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "Extract a primary key annotation from a field, if present"}}}],
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "application": {
+                                      "argument": {"variable": "f"},
+                                      "function": {
+                                        "application": {
+                                          "argument": {"variable": "cx"},
+                                          "function": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "typeApplication": {
+                                                      "body": {"variable": "hydra.ext.avro.coder.primaryKeyE"},
+                                                      "type": {"variable": "t0"}}},
+                                                  "type": {"variable": "t1"}}},
+                                              "type": {"variable": "t2"}}}}}}},
+                                  "domain": [{"variable": "t1"}],
+                                  "parameter": "f"}}},
+                            "domain": [{"variable": "t0"}],
+                            "parameter": "cx"}}}}},
+                  "parameter": "t2"}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {"codomain": {"variable": "t2"}, "domain": {"variable": "t1"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1", "t2"]}]},
+    {
+      "name": "hydra.ext.avro.coder.parseAvroName",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "typeLambda": {
+              "body": {
+                "typeLambda": {
+                  "body": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "Parse a dotted Avro name into a qualified name"}}}],
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "application": {
+                                      "argument": {"variable": "name"},
+                                      "function": {
+                                        "application": {
+                                          "argument": {"variable": "mns"},
+                                          "function": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "typeApplication": {
+                                                      "body": {"variable": "hydra.ext.avro.coder.parseAvroName"},
+                                                      "type": {"variable": "t0"}}},
+                                                  "type": {"variable": "t1"}}},
+                                              "type": {"variable": "t2"}}}}}}},
+                                  "domain": [{"variable": "t1"}],
+                                  "parameter": "name"}}},
+                            "domain": [{"variable": "t0"}],
+                            "parameter": "mns"}}}}},
+                  "parameter": "t2"}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {"codomain": {"variable": "t2"}, "domain": {"variable": "t1"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1", "t2"]}]},
+    {
+      "name": "hydra.ext.avro.coder.putAvroHydraAdapter",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "typeLambda": {
+              "body": {
+                "typeLambda": {
+                  "body": {
+                    "typeLambda": {
+                      "body": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {
+                                "literal": {"string": "Store an adapter in the environment by qualified name"}}}],
+                          "body": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
+                                              "application": {
+                                                "argument": {"variable": "env"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "ad"},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {"variable": "qname"},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"variable": "hydra.ext.avro.coder.putAvroHydraAdapter"},
+                                                                        "type": {"variable": "t0"}}},
+                                                                    "type": {"variable": "t1"}}},
+                                                                "type": {"variable": "t2"}}},
+                                                            "type": {"variable": "t3"}}}}}}}}},
+                                            "domain": [{"variable": "t2"}],
+                                            "parameter": "env"}}},
+                                      "domain": [{"variable": "t1"}],
+                                      "parameter": "ad"}}},
+                                "domain": [{"variable": "t0"}],
+                                "parameter": "qname"}}}}},
+                      "parameter": "t3"}},
+                  "parameter": "t2"}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {"codomain": {"variable": "t3"}, "domain": {"variable": "t2"}}},
+                  "domain": {"variable": "t1"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1", "t2", "t3"]}]},
+    {
+      "name": "hydra.ext.avro.coder.rewriteAvroSchemaM",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "typeLambda": {
+              "body": {
+                "typeLambda": {
+                  "body": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "Recursively rewrite an Avro schema using a monadic transformation function"}}}],
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "application": {
+                                      "argument": {"variable": "schema"},
+                                      "function": {
+                                        "application": {
+                                          "argument": {"variable": "f"},
+                                          "function": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "typeApplication": {
+                                                      "body": {"variable": "hydra.ext.avro.coder.rewriteAvroSchemaM"},
+                                                      "type": {"variable": "t0"}}},
+                                                  "type": {"variable": "t1"}}},
+                                              "type": {"variable": "t2"}}}}}}},
+                                  "domain": [{"variable": "t1"}],
+                                  "parameter": "schema"}}},
+                            "domain": [{"variable": "t0"}],
+                            "parameter": "f"}}}}},
+                  "parameter": "t2"}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {"codomain": {"variable": "t2"}, "domain": {"variable": "t1"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1", "t2"]}]},
+    {
+      "name": "hydra.ext.avro.coder.jsonToStringE",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Convert a JSON value to a string, supporting booleans, strings, and numbers"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "application": {
+                          "argument": {"variable": "v"},
+                          "function": {
+                            "function": {
+                              "elimination": {
+                                "union": {
+                                  "cases": [
+                                    {
+                                      "name": "boolean",
+                                      "term": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "either": {
+                                                        "@right": {
+                                                          "application": {
+                                                            "argument": {"literal": {"string": "false"}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"literal": {"string": "true"}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "b"},
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                        "type": {"literal": {"string": {}}}}}}}}}}}}},
+                                                    "type": {
+                                                      "application": {
+                                                        "argument": {"variable": "hydra.error.OtherError"},
+                                                        "function": {"variable": "hydra.context.InContext"}}}}},
+                                                "type": {"literal": {"string": {}}}}},
+                                            "domain": [{"literal": {"boolean": {}}}],
+                                            "parameter": "b"}}}},
+                                    {
+                                      "name": "string",
+                                      "term": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {"either": {"@right": {"variable": "s"}}},
+                                                    "type": {
+                                                      "application": {
+                                                        "argument": {"variable": "hydra.error.OtherError"},
+                                                        "function": {"variable": "hydra.context.InContext"}}}}},
+                                                "type": {"literal": {"string": {}}}}},
+                                            "domain": [{"literal": {"string": {}}}],
+                                            "parameter": "s"}}}},
+                                    {
+                                      "name": "number",
+                                      "term": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "either": {
+                                                        "@right": {
+                                                          "application": {
+                                                            "argument": {"variable": "d"},
+                                                            "function": {"function": {"primitive": "hydra.lib.literals.showBigfloat"}}}}}},
+                                                    "type": {
+                                                      "application": {
+                                                        "argument": {"variable": "hydra.error.OtherError"},
+                                                        "function": {"variable": "hydra.context.InContext"}}}}},
+                                                "type": {"literal": {"string": {}}}}},
+                                            "domain": [{"literal": {"float": {"bigfloat": {}}}}],
+                                            "parameter": "d"}}}}],
+                                  "default": [
+                                    {
+                                      "application": {
+                                        "argument": {"literal": {"string": "other"}},
+                                        "function": {
+                                          "application": {
+                                            "argument": {"literal": {"string": "string, number, or boolean"}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "cx"},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.ext.avro.coder.unexpectedE"},
+                                                    "type": {"literal": {"string": {}}}}}}}}}}}],
+                                  "typeName": "hydra.json.model.Value"}}}}}},
+                      "domain": [{"variable": "hydra.json.model.Value"}],
+                      "parameter": "v"}}},
+                "domain": [{"variable": "hydra.context.Context"}],
+                "parameter": "cx"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "either": {
+                      "left": {
+                        "application": {
+                          "argument": {"variable": "hydra.error.OtherError"},
+                          "function": {"variable": "hydra.context.InContext"}}},
+                      "right": {"literal": {"string": {}}}}},
+                  "domain": {"variable": "hydra.json.model.Value"}}},
+              "domain": {"variable": "hydra.context.Context"}}},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.avro.coder.showQname",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "typeLambda": {
+              "body": {
+                "annotated": {
+                  "annotation": [
+                    {
+                      "@key": "description",
+                      "@value": {
+                        "literal": {"string": "Convert an Avro qualified name to a display string"}}}],
+                  "body": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "application": {
+                            "argument": {"variable": "qname"},
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {"variable": "hydra.ext.avro.coder.showQname"},
+                                    "type": {"variable": "t0"}}},
+                                "type": {"variable": "t1"}}}}},
+                        "domain": [{"variable": "t0"}],
+                        "parameter": "qname"}}}}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {"codomain": {"variable": "t1"}, "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1"]}]},
+    {
+      "name": "hydra.ext.avro.coder.stringToTermE",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "typeLambda": {
+              "body": {
+                "typeLambda": {
+                  "body": {
+                    "typeLambda": {
+                      "body": {
+                        "annotated": {
+                          "annotation": [
+                            {
+                              "@key": "description",
+                              "@value": {
+                                "literal": {"string": "Parse a string into a term of the expected type"}}}],
+                          "body": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
+                                              "application": {
+                                                "argument": {"variable": "s"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "typ"},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {"variable": "cx"},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"variable": "hydra.ext.avro.coder.stringToTermE"},
+                                                                        "type": {"variable": "t0"}}},
+                                                                    "type": {"variable": "t1"}}},
+                                                                "type": {"variable": "t2"}}},
+                                                            "type": {"variable": "t3"}}}}}}}}},
+                                            "domain": [{"variable": "t2"}],
+                                            "parameter": "s"}}},
+                                      "domain": [{"variable": "t1"}],
+                                      "parameter": "typ"}}},
+                                "domain": [{"variable": "t0"}],
+                                "parameter": "cx"}}}}},
+                      "parameter": "t3"}},
+                  "parameter": "t2"}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {"codomain": {"variable": "t3"}, "domain": {"variable": "t2"}}},
+                  "domain": {"variable": "t1"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1", "t2", "t3"]}]},
+    {
+      "name": "hydra.ext.avro.coder.termToStringE",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "typeLambda": {
+              "body": {
+                "typeLambda": {
+                  "body": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {"string": "Convert a literal term to its string representation"}}}],
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "application": {
+                                      "argument": {"variable": "term"},
+                                      "function": {
+                                        "application": {
+                                          "argument": {"variable": "cx"},
+                                          "function": {
+                                            "typeApplication": {
+                                              "body": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "typeApplication": {
+                                                      "body": {"variable": "hydra.ext.avro.coder.termToStringE"},
+                                                      "type": {"variable": "t0"}}},
+                                                  "type": {"variable": "t1"}}},
+                                              "type": {"variable": "t2"}}}}}}},
+                                  "domain": [{"variable": "t1"}],
+                                  "parameter": "term"}}},
+                            "domain": [{"variable": "t0"}],
+                            "parameter": "cx"}}}}},
+                  "parameter": "t2"}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {"codomain": {"variable": "t2"}, "domain": {"variable": "t1"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1", "t2"]}]},
+    {
+      "name": "hydra.ext.avro.coder.err",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {"string": "Construct an error result with a message in context"}}}],
+              "body": {
+                "function": {
+                  "lambda": {
+                    "body": {
+                      "function": {
+                        "lambda": {
+                          "body": {
+                            "typeApplication": {
+                              "body": {
+                                "typeApplication": {
+                                  "body": {
+                                    "either": {
+                                      "@left": {
+                                        "typeApplication": {
+                                          "body": {
+                                            "record": {
+                                              "fields": [
+                                                {
+                                                  "name": "object",
+                                                  "term": {
+                                                    "wrap": {"body": {"variable": "msg"}, "typeName": "hydra.error.OtherError"}}},
+                                                {"name": "context", "term": {"variable": "cx"}}],
+                                              "typeName": "hydra.context.InContext"}},
+                                          "type": {"variable": "hydra.error.OtherError"}}}}},
+                                  "type": {
+                                    "application": {
+                                      "argument": {"variable": "hydra.error.OtherError"},
+                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                              "type": {"variable": "t0"}}},
+                          "domain": [{"literal": {"string": {}}}],
+                          "parameter": "msg"}}},
+                    "domain": [{"variable": "hydra.context.Context"}],
+                    "parameter": "cx"}}}}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "either": {
+                      "left": {
+                        "application": {
+                          "argument": {"variable": "hydra.error.OtherError"},
+                          "function": {"variable": "hydra.context.InContext"}}},
+                      "right": {"variable": "t0"}}},
+                  "domain": {"literal": {"string": {}}}}},
+              "domain": {"variable": "hydra.context.Context"}}},
+          "variables": ["t0"]}]},
+    {
+      "name": "hydra.ext.avro.coder.unexpectedE",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {"literal": {"string": "Construct an error for unexpected values"}}}],
+              "body": {
+                "function": {
+                  "lambda": {
+                    "body": {
+                      "function": {
+                        "lambda": {
+                          "body": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {
+                                          "list": [
+                                            {"literal": {"string": "Expected "}},
+                                            {"variable": "expected"},
+                                            {"literal": {"string": ", found: "}},
+                                            {"variable": "found"}]},
+                                        "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"variable": "cx"},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"variable": "hydra.ext.avro.coder.err"},
+                                            "type": {"variable": "t0"}}}}}}},
+                                "domain": [{"literal": {"string": {}}}],
+                                "parameter": "found"}}},
+                          "domain": [{"literal": {"string": {}}}],
+                          "parameter": "expected"}}},
+                    "domain": [{"variable": "hydra.context.Context"}],
+                    "parameter": "cx"}}}}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {
+                        "either": {
+                          "left": {
+                            "application": {
+                              "argument": {"variable": "hydra.error.OtherError"},
+                              "function": {"variable": "hydra.context.InContext"}}},
+                          "right": {"variable": "t0"}}},
+                      "domain": {"literal": {"string": {}}}}},
+                  "domain": {"literal": {"string": {}}}}},
+              "domain": {"variable": "hydra.context.Context"}}},
+          "variables": ["t0"]}]},
+    {
+      "name": "hydra.ext.avro.coder.expectArrayE",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "typeLambda": {
+              "body": {
+                "annotated": {
+                  "annotation": [
+                    {
+                      "@key": "description",
+                      "@value": {"literal": {"string": "Extract a JSON array or return an error"}}}],
+                  "body": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "function": {
+                            "lambda": {
+                              "body": {
+                                "application": {
+                                  "argument": {"variable": "value"},
+                                  "function": {
+                                    "function": {
+                                      "elimination": {
+                                        "union": {
+                                          "cases": [
+                                            {
+                                              "name": "array",
+                                              "term": {
+                                                "function": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"either": {"@right": {"variable": "v"}}},
+                                                            "type": {"variable": "t1"}}},
+                                                        "type": {"list": {"variable": "hydra.json.model.Value"}}}},
+                                                    "domain": [{"list": {"variable": "hydra.json.model.Value"}}],
+                                                    "parameter": "v"}}}}],
+                                          "default": null,
+                                          "typeName": "hydra.json.model.Value"}}}}}},
+                              "domain": [{"variable": "hydra.json.model.Value"}],
+                              "parameter": "value"}}},
+                        "domain": [{"variable": "t0"}],
+                        "parameter": "cx"}}}}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "either": {
+                      "left": {"variable": "t1"},
+                      "right": {"list": {"variable": "hydra.json.model.Value"}}}},
+                  "domain": {"variable": "hydra.json.model.Value"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1"]}]},
+    {
+      "name": "hydra.ext.avro.coder.expectObjectE",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "typeLambda": {
+              "body": {
+                "annotated": {
+                  "annotation": [
+                    {
+                      "@key": "description",
+                      "@value": {"literal": {"string": "Extract a JSON object or return an error"}}}],
+                  "body": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "function": {
+                            "lambda": {
+                              "body": {
+                                "application": {
+                                  "argument": {"variable": "value"},
+                                  "function": {
+                                    "function": {
+                                      "elimination": {
+                                        "union": {
+                                          "cases": [
+                                            {
+                                              "name": "object",
+                                              "term": {
+                                                "function": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"either": {"@right": {"variable": "v"}}},
+                                                            "type": {"variable": "t1"}}},
+                                                        "type": {
+                                                          "map": {
+                                                            "keys": {"literal": {"string": {}}},
+                                                            "values": {"variable": "hydra.json.model.Value"}}}}},
+                                                    "domain": [
+                                                      {
+                                                        "map": {
+                                                          "keys": {"literal": {"string": {}}},
+                                                          "values": {"variable": "hydra.json.model.Value"}}}],
+                                                    "parameter": "v"}}}}],
+                                          "default": null,
+                                          "typeName": "hydra.json.model.Value"}}}}}},
+                              "domain": [{"variable": "hydra.json.model.Value"}],
+                              "parameter": "value"}}},
+                        "domain": [{"variable": "t0"}],
+                        "parameter": "cx"}}}}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "either": {
+                      "left": {"variable": "t1"},
+                      "right": {
+                        "map": {
+                          "keys": {"literal": {"string": {}}},
+                          "values": {"variable": "hydra.json.model.Value"}}}}},
+                  "domain": {"variable": "hydra.json.model.Value"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1"]}]},
+    {
+      "name": "hydra.ext.avro.coder.expectStringE",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "typeLambda": {
+              "body": {
+                "annotated": {
+                  "annotation": [
+                    {
+                      "@key": "description",
+                      "@value": {"literal": {"string": "Extract a JSON string or return an error"}}}],
+                  "body": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "function": {
+                            "lambda": {
+                              "body": {
+                                "application": {
+                                  "argument": {"variable": "value"},
+                                  "function": {
+                                    "function": {
+                                      "elimination": {
+                                        "union": {
+                                          "cases": [
+                                            {
+                                              "name": "string",
+                                              "term": {
+                                                "function": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"either": {"@right": {"variable": "v"}}},
+                                                            "type": {"variable": "t1"}}},
+                                                        "type": {"literal": {"string": {}}}}},
+                                                    "domain": [{"literal": {"string": {}}}],
+                                                    "parameter": "v"}}}}],
+                                          "default": null,
+                                          "typeName": "hydra.json.model.Value"}}}}}},
+                              "domain": [{"variable": "hydra.json.model.Value"}],
+                              "parameter": "value"}}},
+                        "domain": [{"variable": "t0"}],
+                        "parameter": "cx"}}}}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "either": {"left": {"variable": "t1"}, "right": {"literal": {"string": {}}}}},
+                  "domain": {"variable": "hydra.json.model.Value"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1"]}]},
+    {
+      "name": "hydra.ext.avro.coder.requireStringE",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {"string": "Look up a required string attribute in a JSON object map"}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "application": {
+                                "argument": {
+                                  "application": {
+                                    "argument": {"variable": "m"},
+                                    "function": {
+                                      "application": {
+                                        "argument": {"variable": "fname"},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                "type": {"literal": {"string": {}}}}},
+                                            "type": {"variable": "hydra.json.model.Value"}}}}}}},
+                                "function": {
+                                  "application": {
+                                    "argument": {
+                                      "function": {
+                                        "lambda": {
+                                          "body": {
+                                            "application": {
+                                              "argument": {"variable": "v"},
+                                              "function": {
+                                                "application": {
+                                                  "argument": {"variable": "cx"},
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {"variable": "hydra.ext.avro.coder.expectStringE"},
+                                                          "type": {"variable": "hydra.context.Context"}}},
+                                                      "type": {
+                                                        "application": {
+                                                          "argument": {"variable": "hydra.error.OtherError"},
+                                                          "function": {"variable": "hydra.context.InContext"}}}}}}}}},
+                                          "domain": [{"variable": "hydra.json.model.Value"}],
+                                          "parameter": "v"}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {
+                                                  "list": [
+                                                    {"literal": {"string": "required attribute "}},
+                                                    {
+                                                      "application": {
+                                                        "argument": {"variable": "fname"},
+                                                        "function": {"function": {"primitive": "hydra.lib.literals.showString"}}}},
+                                                    {"literal": {"string": " not found"}}]},
+                                                "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {"variable": "cx"},
+                                                "function": {
+                                                  "typeApplication": {
+                                                    "body": {"variable": "hydra.ext.avro.coder.err"},
+                                                    "type": {"literal": {"string": {}}}}}}}}},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
+                                                "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                "type": {
+                                                  "either": {
+                                                    "left": {
+                                                      "application": {
+                                                        "argument": {"variable": "hydra.error.OtherError"},
+                                                        "function": {"variable": "hydra.context.InContext"}}},
+                                                    "right": {"literal": {"string": {}}}}}}},
+                                            "type": {"variable": "hydra.json.model.Value"}}}}}}}}},
+                            "domain": [
+                              {
+                                "map": {
+                                  "keys": {"literal": {"string": {}}},
+                                  "values": {"variable": "hydra.json.model.Value"}}}],
+                            "parameter": "m"}}},
+                      "domain": [{"literal": {"string": {}}}],
+                      "parameter": "fname"}}},
+                "domain": [{"variable": "hydra.context.Context"}],
+                "parameter": "cx"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {
+                        "either": {
+                          "left": {
+                            "application": {
+                              "argument": {"variable": "hydra.error.OtherError"},
+                              "function": {"variable": "hydra.context.InContext"}}},
+                          "right": {"literal": {"string": {}}}}},
+                      "domain": {
+                        "map": {
+                          "keys": {"literal": {"string": {}}},
+                          "values": {"variable": "hydra.json.model.Value"}}}}},
+                  "domain": {"literal": {"string": {}}}}},
+              "domain": {"variable": "hydra.context.Context"}}},
+          "variables": []}]},
+    {
+      "name": "hydra.ext.avro.coder.optStringE",
+      "term": {
+        "typeLambda": {
+          "body": {
+            "typeLambda": {
+              "body": {
+                "typeLambda": {
+                  "body": {
+                    "annotated": {
+                      "annotation": [
+                        {
+                          "@key": "description",
+                          "@value": {
+                            "literal": {
+                              "string": "Look up an optional string attribute in a JSON object map"}}}],
+                      "body": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "function": {
+                                      "lambda": {
+                                        "body": {
+                                          "application": {
+                                            "argument": {
+                                              "application": {
+                                                "argument": {"variable": "m"},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {"variable": "fname"},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"function": {"primitive": "hydra.lib.maps.lookup"}},
+                                                            "type": {"variable": "t1"}}},
+                                                        "type": {"variable": "hydra.json.model.Value"}}}}}}},
+                                            "function": {
+                                              "application": {
+                                                "argument": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "application": {
+                                                              "argument": {"variable": "v"},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {"variable": "cx"},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "typeApplication": {
+                                                                          "body": {"variable": "hydra.ext.avro.coder.expectStringE"},
+                                                                          "type": {"variable": "t0"}}},
+                                                                      "type": {"variable": "t2"}}}}}}},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "function": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "s"},
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {"function": {"primitive": "hydra.lib.maybes.pure"}},
+                                                                            "type": {"literal": {"string": {}}}}}}},
+                                                                    "domain": [{"literal": {"string": {}}}],
+                                                                    "parameter": "s"}}},
+                                                              "function": {
+                                                                "typeApplication": {
+                                                                  "body": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "typeApplication": {
+                                                                          "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
+                                                                          "type": {"literal": {"string": {}}}}},
+                                                                      "type": {"maybe": {"literal": {"string": {}}}}}},
+                                                                  "type": {"variable": "t2"}}}}}}},
+                                                      "domain": [{"variable": "hydra.json.model.Value"}],
+                                                      "parameter": "v"}}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "either": {
+                                                                "@right": {
+                                                                  "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}}},
+                                                            "type": {"variable": "t2"}}},
+                                                        "type": {"maybe": {"literal": {"string": {}}}}}},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {"function": {"primitive": "hydra.lib.maybes.maybe"}},
+                                                            "type": {
+                                                              "either": {
+                                                                "left": {"variable": "t2"},
+                                                                "right": {"maybe": {"literal": {"string": {}}}}}}}},
+                                                        "type": {"variable": "hydra.json.model.Value"}}}}}}}}},
+                                        "domain": [
+                                          {
+                                            "map": {
+                                              "keys": {"variable": "t1"},
+                                              "values": {"variable": "hydra.json.model.Value"}}}],
+                                        "parameter": "m"}}},
+                                  "domain": [{"variable": "t1"}],
+                                  "parameter": "fname"}}},
+                            "domain": [{"variable": "t0"}],
+                            "parameter": "cx"}}}}},
+                  "parameter": "t2"}},
+              "parameter": "t1"}},
+          "parameter": "t0"}},
+      "type": [
+        {
+          "constraints": [[{"@key": "t1", "@value": {"classes": ["ordering"]}}]],
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "function": {
+                      "codomain": {
+                        "either": {
+                          "left": {"variable": "t2"},
+                          "right": {"maybe": {"literal": {"string": {}}}}}},
+                      "domain": {
+                        "map": {
+                          "keys": {"variable": "t1"},
+                          "values": {"variable": "hydra.json.model.Value"}}}}},
+                  "domain": {"variable": "t1"}}},
+              "domain": {"variable": "t0"}}},
+          "variables": ["t0", "t1", "t2"]}]}],
+  "namespace": "hydra.ext.avro.coder",
+  "termDependencies": ["hydra.extract.core", "hydra.rewriting"],
+  "typeDependencies": [
+    "hydra.ext.avro.environment",
+    "hydra.ext.org.apache.avro.schema",
+    "hydra.json.model",
+    "hydra.accessors",
+    "hydra.ast",
+    "hydra.classes",
+    "hydra.coders",
+    "hydra.compute",
+    "hydra.context",
+    "hydra.core",
+    "hydra.error",
+    "hydra.grammar",
+    "hydra.graph",
+    "hydra.json.model",
+    "hydra.module",
+    "hydra.parsing",
+    "hydra.phantoms",
+    "hydra.query",
+    "hydra.relational",
+    "hydra.tabular",
+    "hydra.testing",
+    "hydra.topology",
+    "hydra.typing",
+    "hydra.util",
+    "hydra.variants",
+    "hydra.workflow"]}
