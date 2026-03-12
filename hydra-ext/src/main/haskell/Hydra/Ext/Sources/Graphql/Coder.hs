@@ -136,7 +136,7 @@ moduleToGraphql = define "moduleToGraphql" $
     "typeDefs">: Pairs.first (var "partitioned"),
     "prefixes">: findPrefixes @@ Module.moduleNamespace (var "mod") @@ var "typeDefs",
     "filePath">: Names.namespaceToFilePath @@ Util.caseConventionCamel @@ (wrap _FileExtension (string "graphql")) @@ Module.moduleNamespace (var "mod")] $
-    "gtdefs" <<= (Eithers.mapList (lambda "td" $ encodeTypeDefinition @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "td") (var "typeDefs")) $
+    "gtdefs" <<~ (Eithers.mapList (lambda "td" $ encodeTypeDefinition @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "td") (var "typeDefs")) $
     right (Maps.fromList $ Lists.pure $ pair (var "filePath")
       (Serialization.printExpr @@ (Serialization.parenthesize @@
         (GraphqlSerde.exprDocument @@ (wrap G._Document
@@ -182,7 +182,7 @@ descriptionFromType = define "descriptionFromType" $
 encodeEnumFieldType :: TBinding (Context -> Graph -> FieldType -> Either (InContext OtherError) G.EnumValueDefinition)
 encodeEnumFieldType = define "encodeEnumFieldType" $
   "cx" ~> "g" ~> lambda "ft" $
-    "desc" <<= (descriptionFromType @@ var "cx" @@ var "g" @@ (Core.fieldTypeType $ var "ft")) $
+    "desc" <<~ (descriptionFromType @@ var "cx" @@ var "g" @@ (Core.fieldTypeType $ var "ft")) $
     right (record G._EnumValueDefinition [
       G._EnumValueDefinition_Description>>: var "desc",
       G._EnumValueDefinition_EnumValue>>: (encodeEnumFieldName @@ (Core.fieldTypeName $ var "ft")),
@@ -202,8 +202,8 @@ encodeFieldName = define "encodeFieldName" $
 encodeFieldType :: TBinding (Context -> Graph -> M.Map Namespace String -> FieldType -> Either (InContext OtherError) G.FieldDefinition)
 encodeFieldType = define "encodeFieldType" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "ft" $
-    "gtype" <<= (encodeType @@ var "cx" @@ var "g" @@ var "prefixes" @@ (Core.fieldTypeType $ var "ft")) $
-    "desc" <<= (descriptionFromType @@ var "cx" @@ var "g" @@ (Core.fieldTypeType $ var "ft")) $
+    "gtype" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "prefixes" @@ (Core.fieldTypeType $ var "ft")) $
+    "desc" <<~ (descriptionFromType @@ var "cx" @@ var "g" @@ (Core.fieldTypeType $ var "ft")) $
     right (record G._FieldDefinition [
       G._FieldDefinition_Description>>: var "desc",
       G._FieldDefinition_Name>>: (encodeFieldName @@ (Core.fieldTypeName $ var "ft")),
@@ -239,8 +239,8 @@ encodeNamedType = define "encodeNamedType" $
     cases _Type (Rewriting.deannotateType @@ var "typ")
       (Just $ Ctx.failInContext (Error.otherError $ Strings.cat2 (string "Expected record or union type, found: ") (ShowCore.type_ @@ var "typ")) (var "cx")) [
       _Type_record>>: lambda "rt" $
-        "gfields" <<= (Eithers.mapList (lambda "f" $ encodeFieldType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "f") (Core.rowTypeFields (var "rt"))) $
-        "desc" <<= (descriptionFromType @@ var "cx" @@ var "g" @@ var "typ") $
+        "gfields" <<~ (Eithers.mapList (lambda "f" $ encodeFieldType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "f") (Core.rowTypeFields (var "rt"))) $
+        "desc" <<~ (descriptionFromType @@ var "cx" @@ var "g" @@ var "typ") $
         right (inject G._TypeDefinition G._TypeDefinition_object $ record G._ObjectTypeDefinition [
           G._ObjectTypeDefinition_Description>>: var "desc",
           G._ObjectTypeDefinition_Name>>: (encodeTypeName @@ var "prefixes" @@ var "name"),
@@ -248,8 +248,8 @@ encodeNamedType = define "encodeNamedType" $
           G._ObjectTypeDefinition_Directives>>: nothing,
           G._ObjectTypeDefinition_FieldsDefinition>>: just (wrap G._FieldsDefinition (var "gfields"))]),
       _Type_union>>: lambda "rt" $
-        "values" <<= (Eithers.mapList (lambda "f" $ encodeEnumFieldType @@ var "cx" @@ var "g" @@ var "f") (Core.rowTypeFields (var "rt"))) $
-        "desc" <<= (descriptionFromType @@ var "cx" @@ var "g" @@ var "typ") $
+        "values" <<~ (Eithers.mapList (lambda "f" $ encodeEnumFieldType @@ var "cx" @@ var "g" @@ var "f") (Core.rowTypeFields (var "rt"))) $
+        "desc" <<~ (descriptionFromType @@ var "cx" @@ var "g" @@ var "typ") $
         right (inject G._TypeDefinition G._TypeDefinition_enum $ record G._EnumTypeDefinition [
           G._EnumTypeDefinition_Description>>: var "desc",
           G._EnumTypeDefinition_Name>>: (encodeTypeName @@ var "prefixes" @@ var "name"),
