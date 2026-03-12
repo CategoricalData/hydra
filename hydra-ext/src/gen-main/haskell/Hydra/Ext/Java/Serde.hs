@@ -142,7 +142,7 @@ writeAssignment a =
               Syntax.AssignmentOperatorMod -> "%="
               Syntax.AssignmentOperatorPlus -> "+="
               Syntax.AssignmentOperatorMinus -> "-="
-              Syntax.AssignmentOperatorShiftLeft -> "<<="
+              Syntax.AssignmentOperatorShiftLeft -> " <<~"
               Syntax.AssignmentOperatorShiftRight -> ">>="
               Syntax.AssignmentOperatorShiftRightZeroFill -> ">>>="
               Syntax.AssignmentOperatorAnd -> "&="

@@ -1096,7 +1096,7 @@ assignmentOperatorToString = define "assignmentOperatorToString" $
       JS._AssignmentOperator_divideAssign>>: constant $ string "/=",
       JS._AssignmentOperator_moduloAssign>>: constant $ string "%=",
       JS._AssignmentOperator_exponentiateAssign>>: constant $ string "**=",
-      JS._AssignmentOperator_leftShiftAssign>>: constant $ string "<<=",
+      JS._AssignmentOperator_leftShiftAssign>>: constant $ string " <<~",
       JS._AssignmentOperator_rightShiftAssign>>: constant $ string ">>=",
       JS._AssignmentOperator_unsignedRightShiftAssign>>: constant $ string ">>>=",
       JS._AssignmentOperator_bitwiseAndAssign>>: constant $ string "&=",

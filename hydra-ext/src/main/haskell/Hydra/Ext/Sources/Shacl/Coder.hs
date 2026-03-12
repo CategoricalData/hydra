@@ -95,7 +95,6 @@ import qualified Hydra.Ext.Org.W3.Rdf.Syntax as Rdf
 import qualified Hydra.Ext.Org.W3.Shacl.Model as Shacl
 import qualified Hydra.Ext.Sources.Shacl.Model as ShaclModel
 import qualified Hydra.Ext.Sources.Rdf.Syntax as RdfSyntax
-import qualified Hydra.Ext.Sources.Rdf.Utils as RdfUtils
 
 
 define :: String -> TTerm a -> TBinding a
@@ -106,7 +105,7 @@ ns = Namespace "hydra.ext.shacl.coder"
 
 module_ :: Module
 module_ = Module ns elements
-    [Names.ns, Rewriting.ns, Annotations.ns, moduleNamespace DecodeCore.module_, ExtractCore.ns, Formatting.ns, Lexical.ns, RdfUtils.ns]
+    [Names.ns, Rewriting.ns, Annotations.ns, moduleNamespace DecodeCore.module_, ExtractCore.ns, Formatting.ns, Lexical.ns]
     (ShaclModel.ns:RdfSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "SHACL coder: converts Hydra types and terms to SHACL shapes and RDF descriptions"
   where
@@ -230,7 +229,7 @@ encodeFieldType = define "encodeFieldType" $
     "iri">: propertyIri @@ var "rname" @@ var "fname",
     "forType">: lambda "mn" $ lambda "mx" $ lambda "t" $
       cases _Type (Rewriting.deannotateType @@ var "t") (Just (var "forTypeDefault" @@ var "mn" @@ var "mx" @@ var "t")) [
-        _Type_maybe>>: lambda "ot" $ var "forType" @@ (just (bigint 0)) @@ var "mx" @@ var "ot",
+        _Type_maybe>>: lambda "ot" $ var "forType" @@ (just (int32 0)) @@ var "mx" @@ var "ot",
         _Type_set>>: lambda "st" $ var "forType" @@ var "mn" @@ nothing @@ var "st"],
     -- Default case: build property shape
     "forTypeDefault">: lambda "mn" $ lambda "mx" $ lambda "t" $
@@ -256,7 +255,7 @@ encodeFieldType = define "encodeFieldType" $
                 Shacl._PropertyShape_path>>: var "iri"]])
         (encodeType @@ var "t" @@ var "cx")] $
     -- Dispatch on the type: peel optional/set wrappers, then build shape
-    var "forType" @@ (just (bigint 1)) @@ (just (bigint 1)) @@ var "ftype"
+    var "forType" @@ (just (int32 1)) @@ (just (int32 1)) @@ var "ftype"
 
 -- | Encode a Hydra LiteralType as SHACL CommonProperties with a datatype constraint
 encodeLiteralType :: TBinding (LiteralType -> Shacl.CommonProperties)
@@ -457,7 +456,7 @@ encodeType = define "encodeType" $
                 (var "__props")))])
           (Eithers.mapList
             ("__pair" ~> encodeFieldType @@ var "rname" @@ (just (Pairs.first (var "__pair"))) @@ (Pairs.second (var "__pair")) @@ var "cx")
-            (Lists.zip (Lists.map ("__i" ~> Literals.int32ToBigint (var "__i")) (Math.range (int32 0) (Lists.length (var "fields")))) (var "fields"))),
+            (Lists.zip (Math.range (int32 0) (Lists.length (var "fields"))) (var "fields"))),
       _Type_set>>: lambda "_" $ var "any",
       _Type_union>>: lambda "rt" $ lets [
         "rname">: Core.rowTypeTypeName (var "rt"),

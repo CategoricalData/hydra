@@ -123,8 +123,7 @@ module_ = Module ns elements
       toBinding stapply2,
       toBinding stparam,
       toBinding stref,
-      toBinding svar,
-      toBinding scalaReservedWordsRef]
+      toBinding svar]
 
 
 nameOfType :: TBinding (Graph -> Type -> Y.Maybe Name)

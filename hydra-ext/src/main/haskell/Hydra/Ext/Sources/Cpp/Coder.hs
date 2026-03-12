@@ -1095,7 +1095,7 @@ serializeHeaderFile = def "serializeHeaderFile" $
 bindingNameToFilePath :: TBinding (Name -> FilePath)
 bindingNameToFilePath = def "bindingNameToFilePath" $
   lambda "name" $
-    AdaptUtils.nameToFilePath
+    CoderUtils.nameToFilePath
       @@ (inject _CaseConvention _CaseConvention_lowerSnake unit)
       @@ (inject _CaseConvention _CaseConvention_lowerSnake unit)
       @@ wrap _FileExtension (string "h")
