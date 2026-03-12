@@ -405,7 +405,7 @@ public class AnnotationsTest {
 
         assertEquals(
 
-            (hydra.util.Either<T1, hydra.util.Maybe<String>>) ((hydra.util.Either<T1, hydra.util.Maybe<String>>) (hydra.util.Either.<T1, hydra.util.Maybe<String>>right(hydra.util.Maybe.just("hello")))),
+            hydra.util.Either.<T1, hydra.util.Maybe<String>>right(hydra.util.Maybe.just("hello")),
 
             hydra.annotations.Annotations.getTermDescription(
   hydra.monads.Monads.emptyContext(),
@@ -422,7 +422,7 @@ public class AnnotationsTest {
 
         assertEquals(
 
-            (hydra.util.Either<T1, hydra.util.Maybe<String>>) ((hydra.util.Either<T1, hydra.util.Maybe<String>>) (hydra.util.Either.<T1, hydra.util.Maybe<String>>right(hydra.util.Maybe.just("")))),
+            hydra.util.Either.<T1, hydra.util.Maybe<String>>right(hydra.util.Maybe.just("")),
 
             hydra.annotations.Annotations.getTermDescription(
   hydra.monads.Monads.emptyContext(),
@@ -439,7 +439,7 @@ public class AnnotationsTest {
 
         assertEquals(
 
-            (hydra.util.Either<T1, hydra.util.Maybe<String>>) ((hydra.util.Either<T1, hydra.util.Maybe<String>>) (hydra.util.Either.<T1, hydra.util.Maybe<String>>right(hydra.util.Maybe.just("desc")))),
+            hydra.util.Either.<T1, hydra.util.Maybe<String>>right(hydra.util.Maybe.just("desc")),
 
             hydra.annotations.Annotations.getTermDescription(
   hydra.monads.Monads.emptyContext(),
@@ -456,7 +456,7 @@ public class AnnotationsTest {
 
         assertEquals(
 
-            (hydra.util.Either<T1, hydra.util.Maybe<T0>>) ((hydra.util.Either<T1, hydra.util.Maybe<T0>>) (hydra.util.Either.<T1, hydra.util.Maybe<T0>>right((hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing())))),
+            hydra.util.Either.<T1, hydra.util.Maybe<T0>>right((hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing())),
 
             hydra.annotations.Annotations.getTermDescription(
   hydra.monads.Monads.emptyContext(),
@@ -471,7 +471,7 @@ public class AnnotationsTest {
 
         assertEquals(
 
-            (hydra.util.Either<T1, hydra.util.Maybe<T0>>) ((hydra.util.Either<T1, hydra.util.Maybe<T0>>) (hydra.util.Either.<T1, hydra.util.Maybe<T0>>right((hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing())))),
+            hydra.util.Either.<T1, hydra.util.Maybe<T0>>right((hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing())),
 
             hydra.annotations.Annotations.getTermDescription(
   hydra.monads.Monads.emptyContext(),
@@ -486,7 +486,7 @@ public class AnnotationsTest {
 
         assertEquals(
 
-            (hydra.util.Either<T1, hydra.util.Maybe<T0>>) ((hydra.util.Either<T1, hydra.util.Maybe<T0>>) (hydra.util.Either.<T1, hydra.util.Maybe<T0>>right((hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing())))),
+            hydra.util.Either.<T1, hydra.util.Maybe<T0>>right((hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing())),
 
             hydra.annotations.Annotations.getTermDescription(
   hydra.monads.Monads.emptyContext(),

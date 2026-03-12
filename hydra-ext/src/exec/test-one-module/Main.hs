@@ -7,6 +7,7 @@ import qualified Hydra.Ext.Sources.Cpp.Names as CppNames
 import qualified Hydra.Ext.Sources.Cpp.Serde as CppSerde
 import qualified Hydra.Ext.Sources.Cpp.Utils as CppUtils
 import qualified Hydra.Ext.Sources.Graphql.Coder as GraphqlCoder
+import qualified Hydra.Ext.Sources.Graphql.Serde as GraphqlSerde
 import qualified Hydra.Ext.Sources.Graphviz.Coder as GraphvizCoder
 import qualified Hydra.Ext.Sources.Java.TestCodec as JavaTestCodec
 import qualified Hydra.Ext.Sources.Java.Coder as JavaCoder
@@ -46,6 +47,7 @@ main = do
     ["CppSerde"] -> go uni CppSerde.module_
     ["CppUtils"] -> go uni CppUtils.module_
     ["GraphqlCoder"] -> go uni GraphqlCoder.module_
+    ["GraphqlSerde"] -> go uni GraphqlSerde.module_
     ["GraphvizCoder"] -> go uni GraphvizCoder.module_
     ["JavaTestCodec"] -> go uni JavaTestCodec.module_
     ["JavaCoder"] -> go uni JavaCoder.module_

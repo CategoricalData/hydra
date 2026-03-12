@@ -111,7 +111,7 @@ ns = Namespace "hydra.pg.utils"
 
 module_ :: Module
 module_ = Module ns elements
-    [ExtractCore.ns, PgCoder.ns]
+    [ExtractCore.ns, PgCoder.ns, Schemas.ns]
     (PgModel.ns:PgMapping.ns:JsonModel.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Utility functions for property graph operations"
   where

@@ -17,17 +17,17 @@ public interface Helpers {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Either<T0, T1>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.util.Either<T0, T1>> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.error.DecodingError, hydra.util.Either<T0, T1>>) ((hydra.util.Either<hydra.error.DecodingError, hydra.util.Either<T0, T1>>) (hydra.util.Either.<hydra.error.DecodingError, hydra.util.Either<T0, T1>>left(new hydra.error.DecodingError("expected either value"))));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.util.Either<T0, T1>>left(new hydra.error.DecodingError("expected either value"));
         }
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.util.Either<T0, T1>> visit(hydra.core.Term.Either e) {
           return hydra.lib.eithers.Either.apply(
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Either<T0, T1>>>) (lv -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<T0, hydra.util.Either<T0, T1>>) (x -> (hydra.util.Either<T0, T1>) ((hydra.util.Either<T0, T1>) (hydra.util.Either.<T0, T1>left(x)))),
+              (java.util.function.Function<T0, hydra.util.Either<T0, T1>>) (x -> hydra.util.Either.<T0, T1>left(x)),
               ((leftDecoder).apply(g)).apply(lv))),
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Either<T0, T1>>>) (rv -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<T1, hydra.util.Either<T0, T1>>) (x -> (hydra.util.Either<T0, T1>) ((hydra.util.Either<T0, T1>) (hydra.util.Either.<T0, T1>right(x)))),
+              (java.util.function.Function<T1, hydra.util.Either<T0, T1>>) (x -> hydra.util.Either.<T0, T1>right(x)),
               ((rightDecoder).apply(g)).apply(rv))),
             (e).value);
         }
@@ -45,7 +45,7 @@ public interface Helpers {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<T0>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, java.util.List<T0>> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.error.DecodingError, java.util.List<T0>>) ((hydra.util.Either<hydra.error.DecodingError, java.util.List<T0>>) (hydra.util.Either.<hydra.error.DecodingError, java.util.List<T0>>left(new hydra.error.DecodingError("expected list"))));
+          return hydra.util.Either.<hydra.error.DecodingError, java.util.List<T0>>left(new hydra.error.DecodingError("expected list"));
         }
         
         @Override
@@ -68,7 +68,7 @@ public interface Helpers {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.Map<T0, T1>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, java.util.Map<T0, T1>> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.error.DecodingError, java.util.Map<T0, T1>>) ((hydra.util.Either<hydra.error.DecodingError, java.util.Map<T0, T1>>) (hydra.util.Either.<hydra.error.DecodingError, java.util.Map<T0, T1>>left(new hydra.error.DecodingError("expected map"))));
+          return hydra.util.Either.<hydra.error.DecodingError, java.util.Map<T0, T1>>left(new hydra.error.DecodingError("expected map"));
         }
         
         @Override
@@ -97,7 +97,7 @@ public interface Helpers {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Maybe<T0>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.util.Maybe<T0>> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.error.DecodingError, hydra.util.Maybe<T0>>) ((hydra.util.Either<hydra.error.DecodingError, hydra.util.Maybe<T0>>) (hydra.util.Either.<hydra.error.DecodingError, hydra.util.Maybe<T0>>left(new hydra.error.DecodingError("expected optional value"))));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.util.Maybe<T0>>left(new hydra.error.DecodingError("expected optional value"));
         }
         
         @Override
@@ -120,7 +120,7 @@ public interface Helpers {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Pair<T0, T1>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.util.Pair<T0, T1>> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.error.DecodingError, hydra.util.Pair<T0, T1>>) ((hydra.util.Either<hydra.error.DecodingError, hydra.util.Pair<T0, T1>>) (hydra.util.Either.<hydra.error.DecodingError, hydra.util.Pair<T0, T1>>left(new hydra.error.DecodingError("expected pair"))));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.util.Pair<T0, T1>>left(new hydra.error.DecodingError("expected pair"));
         }
         
         @Override
@@ -145,7 +145,7 @@ public interface Helpers {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.Set<T0>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, java.util.Set<T0>> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.error.DecodingError, java.util.Set<T0>>) ((hydra.util.Either<hydra.error.DecodingError, java.util.Set<T0>>) (hydra.util.Either.<hydra.error.DecodingError, java.util.Set<T0>>left(new hydra.error.DecodingError("expected set"))));
+          return hydra.util.Either.<hydra.error.DecodingError, java.util.Set<T0>>left(new hydra.error.DecodingError("expected set"));
         }
         
         @Override
@@ -170,12 +170,12 @@ public interface Helpers {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.lang.Void>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, java.lang.Void> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.error.DecodingError, java.lang.Void>) ((hydra.util.Either<hydra.error.DecodingError, java.lang.Void>) (hydra.util.Either.<hydra.error.DecodingError, java.lang.Void>left(new hydra.error.DecodingError("expected a unit value"))));
+          return hydra.util.Either.<hydra.error.DecodingError, java.lang.Void>left(new hydra.error.DecodingError("expected a unit value"));
         }
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, java.lang.Void> visit(hydra.core.Term.Unit ignored) {
-          return (hydra.util.Either<hydra.error.DecodingError, java.lang.Void>) ((hydra.util.Either<hydra.error.DecodingError, java.lang.Void>) (hydra.util.Either.<hydra.error.DecodingError, java.lang.Void>right(null)));
+          return hydra.util.Either.<hydra.error.DecodingError, java.lang.Void>right(null);
         }
       })));
   }
@@ -191,7 +191,7 @@ public interface Helpers {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, T0>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, T0> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.error.DecodingError, T0>) ((hydra.util.Either<hydra.error.DecodingError, T0>) (hydra.util.Either.<hydra.error.DecodingError, T0>left(new hydra.error.DecodingError("expected wrapped value"))));
+          return hydra.util.Either.<hydra.error.DecodingError, T0>left(new hydra.error.DecodingError("expected wrapped value"));
         }
         
         @Override
@@ -203,10 +203,10 @@ public interface Helpers {
   
   static <T0, T1, T2> hydra.util.Either<hydra.error.DecodingError, T2> requireField(String fieldName, java.util.function.Function<T0, java.util.function.Function<T1, hydra.util.Either<hydra.error.DecodingError, T2>>> decoder, java.util.Map<hydra.core.Name, T1> fieldMap, T0 g) {
     return hydra.lib.maybes.Maybe.applyLazy(
-      () -> (hydra.util.Either<hydra.error.DecodingError, T2>) ((hydra.util.Either<hydra.error.DecodingError, T2>) (hydra.util.Either.<hydra.error.DecodingError, T2>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+      () -> hydra.util.Either.<hydra.error.DecodingError, T2>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
         "missing field ",
         fieldName,
-        " in record")))))),
+        " in record")))),
       (java.util.function.Function<T1, hydra.util.Either<hydra.error.DecodingError, T2>>) (fieldTerm -> ((decoder).apply(g)).apply(fieldTerm)),
       hydra.lib.maps.Lookup.apply(
         new hydra.core.Name(fieldName),

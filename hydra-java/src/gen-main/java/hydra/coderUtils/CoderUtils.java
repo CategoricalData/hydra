@@ -657,7 +657,7 @@ public interface CoderUtils {
         cx,
         (getTC).apply(fEnv),
         bodyWithTapps.get())));
-    return (hydra.util.Either<T1, hydra.typing.FunctionStructure<T0>>) ((hydra.util.Either<T1, hydra.typing.FunctionStructure<T0>>) (hydra.util.Either.<T1, hydra.typing.FunctionStructure<T0>>right((hydra.typing.FunctionStructure<T0>) (new hydra.typing.FunctionStructure<T0>(hydra.lib.lists.Reverse.apply(tparams), hydra.lib.lists.Reverse.apply(args), bindings, bodyWithTapps.get(), hydra.lib.lists.Reverse.apply(doms), mcod.get(), fEnv)))));
+    return hydra.util.Either.<T1, hydra.typing.FunctionStructure<T0>>right((hydra.typing.FunctionStructure<T0>) (new hydra.typing.FunctionStructure<T0>(hydra.lib.lists.Reverse.apply(tparams), hydra.lib.lists.Reverse.apply(args), bindings, bodyWithTapps.get(), hydra.lib.lists.Reverse.apply(doms), mcod.get(), fEnv)));
   }
   
   static <T0, T1> hydra.util.Either<T1, hydra.typing.FunctionStructure<T0>> analyzeFunctionTermWith_gather(hydra.context.Context cx, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>> forBinding, java.util.function.Function<T0, hydra.graph.Graph> getTC, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, T0>> setTC, Boolean argMode, T0 gEnv, java.util.List<hydra.core.Name> tparams, java.util.List<hydra.core.Name> args, java.util.List<hydra.core.Binding> bindings, java.util.List<hydra.core.Type> doms, java.util.List<hydra.core.Type> tapps, hydra.core.Term t) {

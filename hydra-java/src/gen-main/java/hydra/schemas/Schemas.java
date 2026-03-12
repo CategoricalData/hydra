@@ -109,9 +109,9 @@ public interface Schemas {
                 hydra.decode.core.Core.term(
                   graph,
                   term)))),
-          () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, java.util.Set<hydra.core.Name>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, java.util.Set<hydra.core.Name>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, java.util.Set<hydra.core.Name>>right(hydra.lib.sets.Unions.apply(java.util.List.of(
+          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, java.util.Set<hydra.core.Name>>right(hydra.lib.sets.Unions.apply(java.util.List.of(
             dataNames,
-            schemaNames.get())))))));
+            schemaNames.get())))));
     });
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<java.util.List<java.util.Set<hydra.core.Name>>, java.util.Set<hydra.module.Namespace>>) (namesList -> hydra.lib.sets.FromList.apply(hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
@@ -129,7 +129,7 @@ public interface Schemas {
       graph,
       name);
     return hydra.lib.maybes.Maybe.applyLazy(
-      () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.Type>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.Type>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.Type>>right((hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing())))),
+      () -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.Type>>right((hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing())),
       (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.Type>>>) (el -> hydra.lib.eithers.Map.apply(
         (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.Type>>) (hydra.lib.maybes.Pure::apply),
         hydra.lib.eithers.Bimap.apply(
@@ -146,8 +146,8 @@ public interface Schemas {
   
   static hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.TypeApplicationTerm> elementAsTypeApplicationTerm(hydra.context.Context cx, hydra.core.Binding el) {
     return hydra.lib.maybes.Maybe.applyLazy(
-      () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.TypeApplicationTerm>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.TypeApplicationTerm>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.TypeApplicationTerm>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError("missing element type"), cx))))),
-      (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.TypeApplicationTerm>>) (ts -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.TypeApplicationTerm>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.TypeApplicationTerm>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.TypeApplicationTerm>right(new hydra.core.TypeApplicationTerm((el).term, (ts).type))))),
+      () -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.TypeApplicationTerm>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError("missing element type"), cx))),
+      (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.TypeApplicationTerm>>) (ts -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.TypeApplicationTerm>right(new hydra.core.TypeApplicationTerm((el).term, (ts).type))),
       (el).type);
   }
   
@@ -253,9 +253,9 @@ public interface Schemas {
     return (hydra.rewriting.Rewriting.deannotateType(t)).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, java.util.Map<hydra.core.Name, hydra.core.Type>> otherwise(hydra.core.Type instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, java.util.Map<hydra.core.Name, hydra.core.Type>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, java.util.Map<hydra.core.Name, hydra.core.Type>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, java.util.Map<hydra.core.Name, hydra.core.Type>>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat.apply(java.util.List.of(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, java.util.Map<hydra.core.Name, hydra.core.Type>>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat.apply(java.util.List.of(
           "expected record or union type but found ",
-          hydra.show.core.Core.type(t)))), cx)))));
+          hydra.show.core.Core.type(t)))), cx)));
       }
       
       @Override
@@ -268,12 +268,12 @@ public interface Schemas {
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, java.util.Map<hydra.core.Name, hydra.core.Type>> visit(hydra.core.Type.Record rt) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, java.util.Map<hydra.core.Name, hydra.core.Type>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, java.util.Map<hydra.core.Name, hydra.core.Type>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, java.util.Map<hydra.core.Name, hydra.core.Type>>right((toMap).apply(((rt).value).fields))));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, java.util.Map<hydra.core.Name, hydra.core.Type>>right((toMap).apply(((rt).value).fields));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, java.util.Map<hydra.core.Name, hydra.core.Type>> visit(hydra.core.Type.Union rt) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, java.util.Map<hydra.core.Name, hydra.core.Type>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, java.util.Map<hydra.core.Name, hydra.core.Type>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, java.util.Map<hydra.core.Name, hydra.core.Type>>right((toMap).apply(((rt).value).fields))));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, java.util.Map<hydra.core.Name, hydra.core.Type>>right((toMap).apply(((rt).value).fields));
       }
       
       @Override
@@ -309,17 +309,17 @@ public interface Schemas {
       fields));
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(matchingFields.get()),
-      () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+      () -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
         "No such field: ",
-        (fname).value)), cx))))),
+        (fname).value)), cx))),
       () -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.equality.Equal.apply(
           hydra.lib.lists.Length.apply(matchingFields.get()),
           1),
-        () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>right((hydra.lib.lists.Head.apply(matchingFields.get())).type))),
-        () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        () -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>right((hydra.lib.lists.Head.apply(matchingFields.get())).type),
+        () -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           "Multiple fields named ",
-          (fname).value)), cx)))))));
+          (fname).value)), cx)))));
   }
   
   static hydra.util.Pair<hydra.core.Name, hydra.context.Context> freshName(hydra.context.Context cx) {
@@ -834,19 +834,19 @@ public interface Schemas {
         graph,
         name),
       (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>) (t -> hydra.lib.maybes.Maybe.applyLazy(
-        () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, T0>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat.apply(java.util.List.of(
+        () -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, T0>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat.apply(java.util.List.of(
           (name).value,
           " does not resolve to a ",
           label,
           " type: ",
-          hydra.show.core.Core.type(t)))), cx))))),
-        (java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>) (x -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, T0>right(x)))),
+          hydra.show.core.Core.type(t)))), cx))),
+        (java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>) (x -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, T0>right(x)),
         (getter).apply((rawType.get()).apply(t)))));
   }
   
   static hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Pair<hydra.core.TypeScheme, hydra.context.Context>> requireSchemaType(hydra.context.Context cx, java.util.Map<hydra.core.Name, hydra.core.TypeScheme> types, hydra.core.Name tname) {
     return hydra.lib.maybes.Maybe.applyLazy(
-      () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Pair<hydra.core.TypeScheme, hydra.context.Context>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Pair<hydra.core.TypeScheme, hydra.context.Context>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Pair<hydra.core.TypeScheme, hydra.context.Context>>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat.apply(java.util.List.of(
+      () -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Pair<hydra.core.TypeScheme, hydra.context.Context>>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat.apply(java.util.List.of(
         "No such schema type: ",
         (tname).value,
         ". Available types are: ",
@@ -854,10 +854,10 @@ public interface Schemas {
           ", ",
           hydra.lib.lists.Map.apply(
             wrapped -> (wrapped).value,
-            hydra.lib.maps.Keys.apply(types)))))), cx))))),
-      (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Pair<hydra.core.TypeScheme, hydra.context.Context>>>) (ts -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Pair<hydra.core.TypeScheme, hydra.context.Context>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Pair<hydra.core.TypeScheme, hydra.context.Context>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Pair<hydra.core.TypeScheme, hydra.context.Context>>right(hydra.schemas.Schemas.instantiateTypeScheme(
+            hydra.lib.maps.Keys.apply(types)))))), cx))),
+      (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Pair<hydra.core.TypeScheme, hydra.context.Context>>>) (ts -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Pair<hydra.core.TypeScheme, hydra.context.Context>>right(hydra.schemas.Schemas.instantiateTypeScheme(
         cx,
-        hydra.rewriting.Rewriting.deannotateTypeSchemeRecursive(ts)))))),
+        hydra.rewriting.Rewriting.deannotateTypeSchemeRecursive(ts)))),
       hydra.lib.maps.Lookup.apply(
         tname,
         types));
@@ -866,14 +866,14 @@ public interface Schemas {
   static hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type> requireType(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Name name) {
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> hydra.lib.maybes.Maybe.applyLazy(
-        () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        () -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           "no such type: ",
-          (name).value)), cx))))),
-        (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>>) (ts -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>right(hydra.rewriting.Rewriting.typeSchemeToFType(ts))))),
+          (name).value)), cx))),
+        (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>>) (ts -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>right(hydra.rewriting.Rewriting.typeSchemeToFType(ts))),
         hydra.lib.maps.Lookup.apply(
           name,
           (graph).boundTypes)),
-      (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>>) (ts -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>right(hydra.rewriting.Rewriting.typeSchemeToFType(ts))))),
+      (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>>) (ts -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>right(hydra.rewriting.Rewriting.typeSchemeToFType(ts))),
       hydra.lib.maps.Lookup.apply(
         name,
         (graph).schemaTypes));
@@ -888,12 +888,12 @@ public interface Schemas {
         (rt).fields));
       return hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(matches.get()),
-        () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat.apply(java.util.List.of(
+        () -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat.apply(java.util.List.of(
           "no field \"",
           (fname).value,
           "\" in union type \"",
-          (tname).value))), cx))))),
-        () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>right((hydra.lib.lists.Head.apply(matches.get())).type))));
+          (tname).value))), cx))),
+        () -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type>right((hydra.lib.lists.Head.apply(matches.get())).type));
     });
     return hydra.lib.eithers.Bind.apply(
       hydra.schemas.Schemas.requireUnionType(
@@ -983,7 +983,7 @@ public interface Schemas {
       java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.TypeScheme>>> forTerm = (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.TypeScheme>>>) (term -> (term).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.TypeScheme>> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.TypeScheme>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.TypeScheme>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.TypeScheme>>right((hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing()))));
+          return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.TypeScheme>>right((hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing()));
         }
         
         @Override
@@ -995,7 +995,7 @@ public interface Schemas {
             () -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Maybe<hydra.core.TypeScheme>>) (hydra.lib.maybes.Pure::apply),
               (decodeTypeScheme).apply((el).term)),
-            () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.TypeScheme>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.TypeScheme>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.TypeScheme>>right((hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing())))));
+            () -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.TypeScheme>>right((hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing())));
         }
         
         @Override
@@ -1007,7 +1007,7 @@ public interface Schemas {
             () -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.TypeScheme>>) (decoded -> hydra.util.Maybe.just(((toTypeScheme.get()).apply((java.util.List<hydra.core.Name>) (java.util.List.<hydra.core.Name>of()))).apply(decoded))),
               (decodeType).apply((el).term)),
-            () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.TypeScheme>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.TypeScheme>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.TypeScheme>>right((hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing())))));
+            () -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.TypeScheme>>right((hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing())));
         }
       }));
       return hydra.lib.eithers.Bind.apply(
@@ -1031,9 +1031,9 @@ public interface Schemas {
                 (decodeType).apply((el).term)),
               () -> (forTerm).apply(hydra.rewriting.Rewriting.deannotateTerm((el).term))))),
           (el).type),
-        (java.util.function.Function<hydra.util.Maybe<hydra.core.TypeScheme>, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>>>) (mts -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>>right(hydra.lib.maybes.Map.apply(
+        (java.util.function.Function<hydra.util.Maybe<hydra.core.TypeScheme>, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>>>) (mts -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>>right(hydra.lib.maybes.Map.apply(
           (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>) (ts -> (hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>((el).name, ts)))),
-          mts))))));
+          mts))));
     });
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<java.util.List<hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>>, java.util.Map<hydra.core.Name, hydra.core.TypeScheme>>) (mpairs -> hydra.lib.maps.FromList.apply(hydra.lib.maybes.Cat.apply(mpairs))),
@@ -1103,7 +1103,7 @@ public interface Schemas {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Type>, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, java.util.Map<hydra.core.Name, hydra.core.Type>>>>> deps = new java.util.concurrent.atomic.AtomicReference<>();
     deps.set((java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Type>, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, java.util.Map<hydra.core.Name, hydra.core.Type>>>>) (seeds -> (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.Type>, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, java.util.Map<hydra.core.Name, hydra.core.Type>>>) (names -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.sets.Null.apply(seeds),
-      () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, java.util.Map<hydra.core.Name, hydra.core.Type>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, java.util.Map<hydra.core.Name, hydra.core.Type>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, java.util.Map<hydra.core.Name, hydra.core.Type>>right(names))),
+      () -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, java.util.Map<hydra.core.Name, hydra.core.Type>>right(names),
       () -> hydra.lib.eithers.Bind.apply(
         hydra.lib.eithers.MapList.apply(
           toPair,

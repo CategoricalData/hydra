@@ -12,7 +12,7 @@ import Hydra.Ext.Org.Json.Coder
 import Hydra.Generation
 import Hydra.Formatting
 import qualified Hydra.Json.Model as Json
-import qualified Hydra.Ext.Staging.Shacl.Coder as Shacl
+import qualified Hydra.Ext.Shacl.Coder as Shacl
 import Hydra.Ext.Rdf.Serde
 import Hydra.Workflow
 import qualified Hydra.Ext.Rdf.Utils as RdfUt

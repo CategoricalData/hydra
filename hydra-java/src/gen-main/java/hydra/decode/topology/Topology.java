@@ -23,11 +23,11 @@ public interface Topology {
   
   static hydra.util.Either<hydra.error.DecodingError, hydra.topology.TarjanState> tarjanState(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.topology.TarjanState>>) (err -> (hydra.util.Either<hydra.error.DecodingError, hydra.topology.TarjanState>) ((hydra.util.Either<hydra.error.DecodingError, hydra.topology.TarjanState>) (hydra.util.Either.<hydra.error.DecodingError, hydra.topology.TarjanState>left(new hydra.error.DecodingError(err))))),
+      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.topology.TarjanState>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.topology.TarjanState>left(new hydra.error.DecodingError(err))),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.topology.TarjanState>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.topology.TarjanState> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.error.DecodingError, hydra.topology.TarjanState>) ((hydra.util.Either<hydra.error.DecodingError, hydra.topology.TarjanState>) (hydra.util.Either.<hydra.error.DecodingError, hydra.topology.TarjanState>left(new hydra.error.DecodingError("expected record of type hydra.topology.TarjanState"))));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.topology.TarjanState>left(new hydra.error.DecodingError("expected record of type hydra.topology.TarjanState"));
         }
         
         @Override
@@ -37,11 +37,11 @@ public interface Topology {
             hydra.extract.helpers.Helpers.requireField(
               "counter",
               (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>>) (cx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>) (raw2 -> hydra.lib.eithers.Either.apply(
-                (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, Integer>>) (err -> (hydra.util.Either<hydra.error.DecodingError, Integer>) ((hydra.util.Either<hydra.error.DecodingError, Integer>) (hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError(err))))),
+                (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, Integer>>) (err -> hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError(err))),
                 (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
                   @Override
                   public hydra.util.Either<hydra.error.DecodingError, Integer> otherwise(hydra.core.Term instance) {
-                    return (hydra.util.Either<hydra.error.DecodingError, Integer>) ((hydra.util.Either<hydra.error.DecodingError, Integer>) (hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected literal"))));
+                    return hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected literal"));
                   }
                   
                   @Override
@@ -49,7 +49,7 @@ public interface Topology {
                     return ((v).value).accept(new hydra.core.Literal.PartialVisitor<>() {
                       @Override
                       public hydra.util.Either<hydra.error.DecodingError, Integer> otherwise(hydra.core.Literal instance) {
-                        return (hydra.util.Either<hydra.error.DecodingError, Integer>) ((hydra.util.Either<hydra.error.DecodingError, Integer>) (hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected int32 literal"))));
+                        return hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected int32 literal"));
                       }
                       
                       @Override
@@ -57,12 +57,12 @@ public interface Topology {
                         return ((v1).value).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
                           @Override
                           public hydra.util.Either<hydra.error.DecodingError, Integer> otherwise(hydra.core.IntegerValue instance) {
-                            return (hydra.util.Either<hydra.error.DecodingError, Integer>) ((hydra.util.Either<hydra.error.DecodingError, Integer>) (hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected int32 value"))));
+                            return hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected int32 value"));
                           }
                           
                           @Override
                           public hydra.util.Either<hydra.error.DecodingError, Integer> visit(hydra.core.IntegerValue.Int32 i) {
-                            return (hydra.util.Either<hydra.error.DecodingError, Integer>) ((hydra.util.Either<hydra.error.DecodingError, Integer>) (hydra.util.Either.<hydra.error.DecodingError, Integer>right((i).value)));
+                            return hydra.util.Either.<hydra.error.DecodingError, Integer>right((i).value);
                           }
                         });
                       }
@@ -82,11 +82,11 @@ public interface Topology {
                     p0,
                     p1)),
                   (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>>) (cx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>) (raw2 -> hydra.lib.eithers.Either.apply(
-                    (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, Integer>>) (err -> (hydra.util.Either<hydra.error.DecodingError, Integer>) ((hydra.util.Either<hydra.error.DecodingError, Integer>) (hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError(err))))),
+                    (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, Integer>>) (err -> hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError(err))),
                     (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
                       @Override
                       public hydra.util.Either<hydra.error.DecodingError, Integer> otherwise(hydra.core.Term instance) {
-                        return (hydra.util.Either<hydra.error.DecodingError, Integer>) ((hydra.util.Either<hydra.error.DecodingError, Integer>) (hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected literal"))));
+                        return hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected literal"));
                       }
                       
                       @Override
@@ -94,7 +94,7 @@ public interface Topology {
                         return ((v).value).accept(new hydra.core.Literal.PartialVisitor<>() {
                           @Override
                           public hydra.util.Either<hydra.error.DecodingError, Integer> otherwise(hydra.core.Literal instance) {
-                            return (hydra.util.Either<hydra.error.DecodingError, Integer>) ((hydra.util.Either<hydra.error.DecodingError, Integer>) (hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected int32 literal"))));
+                            return hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected int32 literal"));
                           }
                           
                           @Override
@@ -102,12 +102,12 @@ public interface Topology {
                             return ((v12).value).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
                               @Override
                               public hydra.util.Either<hydra.error.DecodingError, Integer> otherwise(hydra.core.IntegerValue instance) {
-                                return (hydra.util.Either<hydra.error.DecodingError, Integer>) ((hydra.util.Either<hydra.error.DecodingError, Integer>) (hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected int32 value"))));
+                                return hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected int32 value"));
                               }
                               
                               @Override
                               public hydra.util.Either<hydra.error.DecodingError, Integer> visit(hydra.core.IntegerValue.Int32 i) {
-                                return (hydra.util.Either<hydra.error.DecodingError, Integer>) ((hydra.util.Either<hydra.error.DecodingError, Integer>) (hydra.util.Either.<hydra.error.DecodingError, Integer>right((i).value)));
+                                return hydra.util.Either.<hydra.error.DecodingError, Integer>right((i).value);
                               }
                             });
                           }
@@ -129,11 +129,11 @@ public interface Topology {
                       p0,
                       p1)),
                     (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>>) (cx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>) (raw2 -> hydra.lib.eithers.Either.apply(
-                      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, Integer>>) (err -> (hydra.util.Either<hydra.error.DecodingError, Integer>) ((hydra.util.Either<hydra.error.DecodingError, Integer>) (hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError(err))))),
+                      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, Integer>>) (err -> hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError(err))),
                       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
                         @Override
                         public hydra.util.Either<hydra.error.DecodingError, Integer> otherwise(hydra.core.Term instance) {
-                          return (hydra.util.Either<hydra.error.DecodingError, Integer>) ((hydra.util.Either<hydra.error.DecodingError, Integer>) (hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected literal"))));
+                          return hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected literal"));
                         }
                         
                         @Override
@@ -141,7 +141,7 @@ public interface Topology {
                           return ((v).value).accept(new hydra.core.Literal.PartialVisitor<>() {
                             @Override
                             public hydra.util.Either<hydra.error.DecodingError, Integer> otherwise(hydra.core.Literal instance) {
-                              return (hydra.util.Either<hydra.error.DecodingError, Integer>) ((hydra.util.Either<hydra.error.DecodingError, Integer>) (hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected int32 literal"))));
+                              return hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected int32 literal"));
                             }
                             
                             @Override
@@ -149,12 +149,12 @@ public interface Topology {
                               return ((v12).value).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
                                 @Override
                                 public hydra.util.Either<hydra.error.DecodingError, Integer> otherwise(hydra.core.IntegerValue instance) {
-                                  return (hydra.util.Either<hydra.error.DecodingError, Integer>) ((hydra.util.Either<hydra.error.DecodingError, Integer>) (hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected int32 value"))));
+                                  return hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected int32 value"));
                                 }
                                 
                                 @Override
                                 public hydra.util.Either<hydra.error.DecodingError, Integer> visit(hydra.core.IntegerValue.Int32 i) {
-                                  return (hydra.util.Either<hydra.error.DecodingError, Integer>) ((hydra.util.Either<hydra.error.DecodingError, Integer>) (hydra.util.Either.<hydra.error.DecodingError, Integer>right((i).value)));
+                                  return hydra.util.Either.<hydra.error.DecodingError, Integer>right((i).value);
                                 }
                               });
                             }
@@ -204,7 +204,7 @@ public interface Topology {
                           v2))),
                         fieldMap,
                         cx),
-                      (java.util.function.Function<java.util.List<java.util.List<Integer>>, hydra.util.Either<hydra.error.DecodingError, hydra.topology.TarjanState>>) (field_sccs -> (hydra.util.Either<hydra.error.DecodingError, hydra.topology.TarjanState>) ((hydra.util.Either<hydra.error.DecodingError, hydra.topology.TarjanState>) (hydra.util.Either.<hydra.error.DecodingError, hydra.topology.TarjanState>right(new hydra.topology.TarjanState(field_counter, field_indices, field_lowLinks, field_stack, field_onStack, field_sccs))))))))))))))));
+                      (java.util.function.Function<java.util.List<java.util.List<Integer>>, hydra.util.Either<hydra.error.DecodingError, hydra.topology.TarjanState>>) (field_sccs -> hydra.util.Either.<hydra.error.DecodingError, hydra.topology.TarjanState>right(new hydra.topology.TarjanState(field_counter, field_indices, field_lowLinks, field_stack, field_onStack, field_sccs))))))))))))));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(
@@ -214,11 +214,11 @@ public interface Topology {
   
   static hydra.util.Either<hydra.error.DecodingError, Integer> vertex(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, Integer>>) (err -> (hydra.util.Either<hydra.error.DecodingError, Integer>) ((hydra.util.Either<hydra.error.DecodingError, Integer>) (hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError(err))))),
+      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, Integer>>) (err -> hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError(err))),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, Integer> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.error.DecodingError, Integer>) ((hydra.util.Either<hydra.error.DecodingError, Integer>) (hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected literal"))));
+          return hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected literal"));
         }
         
         @Override
@@ -226,7 +226,7 @@ public interface Topology {
           return ((v).value).accept(new hydra.core.Literal.PartialVisitor<>() {
             @Override
             public hydra.util.Either<hydra.error.DecodingError, Integer> otherwise(hydra.core.Literal instance) {
-              return (hydra.util.Either<hydra.error.DecodingError, Integer>) ((hydra.util.Either<hydra.error.DecodingError, Integer>) (hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected int32 literal"))));
+              return hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected int32 literal"));
             }
             
             @Override
@@ -234,12 +234,12 @@ public interface Topology {
               return ((v1).value).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
                 @Override
                 public hydra.util.Either<hydra.error.DecodingError, Integer> otherwise(hydra.core.IntegerValue instance) {
-                  return (hydra.util.Either<hydra.error.DecodingError, Integer>) ((hydra.util.Either<hydra.error.DecodingError, Integer>) (hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected int32 value"))));
+                  return hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected int32 value"));
                 }
                 
                 @Override
                 public hydra.util.Either<hydra.error.DecodingError, Integer> visit(hydra.core.IntegerValue.Int32 i) {
-                  return (hydra.util.Either<hydra.error.DecodingError, Integer>) ((hydra.util.Either<hydra.error.DecodingError, Integer>) (hydra.util.Either.<hydra.error.DecodingError, Integer>right((i).value)));
+                  return hydra.util.Either.<hydra.error.DecodingError, Integer>right((i).value);
                 }
               });
             }

@@ -45,6 +45,7 @@ import qualified Data.Set as S
 
 -- Additional imports for Cpp AST
 import qualified Hydra.Ext.Cpp.Syntax as Cpp
+import qualified Hydra.Ext.Sources.Cpp.Serde as CppSerde
 import qualified Hydra.Ext.Sources.Cpp.Syntax as CppSyntax
 import qualified Hydra.Ext.Sources.Cpp.Language as CppLanguageSource
 
@@ -63,6 +64,7 @@ ns = Namespace "hydra.ext.cpp.coder"
 module_ :: Module
 module_ = Module ns elements
     [moduleNamespace CppLanguageSource.cppLanguageModule,
+      CppSerde.ns,
       Formatting.ns, Names.ns, Rewriting.ns, Schemas.ns, Lexical.ns,
       ShowCore.ns, Annotations.ns, Sorting.ns, SerializationSource.ns,
       AdaptUtils.ns,

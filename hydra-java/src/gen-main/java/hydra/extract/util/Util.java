@@ -17,19 +17,19 @@ public interface Util {
         hydra.lib.equality.Equal.apply(
           (fname).value,
           "equalTo"),
-        () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Comparison>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Comparison>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Comparison>right(new hydra.util.Comparison.EqualTo()))),
+        () -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Comparison>right(new hydra.util.Comparison.EqualTo()),
         () -> hydra.lib.logic.IfElse.lazy(
           hydra.lib.equality.Equal.apply(
             (fname).value,
             "lessThan"),
-          () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Comparison>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Comparison>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Comparison>right(new hydra.util.Comparison.LessThan()))),
+          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Comparison>right(new hydra.util.Comparison.LessThan()),
           () -> hydra.lib.logic.IfElse.lazy(
             hydra.lib.equality.Equal.apply(
               (fname).value,
               "greaterThan"),
-            () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Comparison>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Comparison>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Comparison>right(new hydra.util.Comparison.GreaterThan()))),
-            () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Comparison>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Comparison>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Comparison>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+            () -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Comparison>right(new hydra.util.Comparison.GreaterThan()),
+            () -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Comparison>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
               "expected comparison but found ",
-              (fname).value)), cx))))))))));
+              (fname).value)), cx))))))));
   }
 }

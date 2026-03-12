@@ -19,7 +19,7 @@ import Hydra.Ext.Protobuf.Language (protobufLanguage)
 import Hydra.Ext.Python.Language
 import Hydra.Ext.Pegasus.Language (pdlLanguage)
 import Hydra.Ext.Scala.Language (scalaLanguage)
--- import Hydra.Ext.Staging.Cpp.Coder -- temporarily disabled; gen-main Cpp/Names and Cpp/Utils need regeneration first
+import Hydra.Ext.Cpp.Coder (moduleToCpp)
 import Hydra.Ext.Staging.Graphql.Coder
 import Hydra.Ext.Graphql.Language (graphqlLanguage)
 import Hydra.Ext.Java.Coder (moduleToJava)
@@ -29,7 +29,7 @@ import Hydra.Ext.Protobuf.Coder (moduleToProtobuf)
 import Hydra.Ext.Python.Coder (moduleToPython)
 import Hydra.Ext.Rust.Coder (moduleToRust)
 import Hydra.Ext.Rust.Language (rustLanguage)
-import Hydra.Ext.Staging.Scala.Coder
+import Hydra.Ext.Scala.Coder (moduleToScala)
 import Hydra.Ext.Staging.Yaml.Modules
 import Hydra.Ext.Org.Yaml.Language
 
@@ -72,9 +72,8 @@ writeExtManifestJson basePath = do
 -- First argument: output directory
 -- Second argument: universe modules (all modules for type/term resolution)
 -- Third argument: modules to transform and generate
--- writeCpp :: FP.FilePath -> [Module] -> [Module] -> IO Int
--- writeCpp = generateSources moduleToCpp cppLanguage True False False False
--- Note: temporarily disabled; gen-main Cpp/Names and Cpp/Utils need regeneration first
+writeCpp :: FP.FilePath -> [Module] -> [Module] -> IO Int
+writeCpp = generateSources moduleToCpp cppLanguage True False False False
 
 -- | Generate GraphQL source files from modules.
 -- First argument: output directory

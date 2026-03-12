@@ -18,14 +18,14 @@ public class EithersTest {
 
         assertEquals(
 
-            (hydra.util.Either<T0, Integer>) ((hydra.util.Either<T0, Integer>) (hydra.util.Either.<T0, Integer>right(2))),
+            hydra.util.Either.<T0, Integer>right(2),
 
             hydra.lib.eithers.Bind.apply(
-  (hydra.util.Either<Integer, String>) ((hydra.util.Either<Integer, String>) (hydra.util.Either.<Integer, String>right("ab"))),
+  hydra.util.Either.<Integer, String>right("ab"),
   (java.util.function.Function<String, hydra.util.Either<Integer, Integer>>) (s -> hydra.lib.logic.IfElse.lazy(
     hydra.lib.strings.Null.apply(s),
-    () -> (hydra.util.Either<Integer, Integer>) ((hydra.util.Either<Integer, Integer>) (hydra.util.Either.<Integer, Integer>left(0))),
-    () -> (hydra.util.Either<Integer, Integer>) ((hydra.util.Either<Integer, Integer>) (hydra.util.Either.<Integer, Integer>right(hydra.lib.strings.Length.apply(s))))))));
+    () -> hydra.util.Either.<Integer, Integer>left(0),
+    () -> hydra.util.Either.<Integer, Integer>right(hydra.lib.strings.Length.apply(s))))));
 
     }
 
@@ -35,14 +35,14 @@ public class EithersTest {
 
         assertEquals(
 
-            (hydra.util.Either<Integer, T0>) ((hydra.util.Either<Integer, T0>) (hydra.util.Either.<Integer, T0>left(0))),
+            hydra.util.Either.<Integer, T0>left(0),
 
             hydra.lib.eithers.Bind.apply(
-  (hydra.util.Either<Integer, String>) ((hydra.util.Either<Integer, String>) (hydra.util.Either.<Integer, String>right(""))),
+  hydra.util.Either.<Integer, String>right(""),
   (java.util.function.Function<String, hydra.util.Either<Integer, Integer>>) (s -> hydra.lib.logic.IfElse.lazy(
     hydra.lib.strings.Null.apply(s),
-    () -> (hydra.util.Either<Integer, Integer>) ((hydra.util.Either<Integer, Integer>) (hydra.util.Either.<Integer, Integer>left(0))),
-    () -> (hydra.util.Either<Integer, Integer>) ((hydra.util.Either<Integer, Integer>) (hydra.util.Either.<Integer, Integer>right(hydra.lib.strings.Length.apply(s))))))));
+    () -> hydra.util.Either.<Integer, Integer>left(0),
+    () -> hydra.util.Either.<Integer, Integer>right(hydra.lib.strings.Length.apply(s))))));
 
     }
 
@@ -52,14 +52,14 @@ public class EithersTest {
 
         assertEquals(
 
-            (hydra.util.Either<Integer, T0>) ((hydra.util.Either<Integer, T0>) (hydra.util.Either.<Integer, T0>left(42))),
+            hydra.util.Either.<Integer, T0>left(42),
 
             hydra.lib.eithers.Bind.apply(
-  (hydra.util.Either<Integer, String>) ((hydra.util.Either<Integer, String>) (hydra.util.Either.<Integer, String>left(42))),
+  hydra.util.Either.<Integer, String>left(42),
   (java.util.function.Function<String, hydra.util.Either<Integer, Integer>>) (s -> hydra.lib.logic.IfElse.lazy(
     hydra.lib.strings.Null.apply(s),
-    () -> (hydra.util.Either<Integer, Integer>) ((hydra.util.Either<Integer, Integer>) (hydra.util.Either.<Integer, Integer>left(0))),
-    () -> (hydra.util.Either<Integer, Integer>) ((hydra.util.Either<Integer, Integer>) (hydra.util.Either.<Integer, Integer>right(hydra.lib.strings.Length.apply(s))))))));
+    () -> hydra.util.Either.<Integer, Integer>left(0),
+    () -> hydra.util.Either.<Integer, Integer>right(hydra.lib.strings.Length.apply(s))))));
 
     }
 
@@ -71,14 +71,14 @@ public class EithersTest {
 
         assertEquals(
 
-            (hydra.util.Either<Integer, T0>) ((hydra.util.Either<Integer, T0>) (hydra.util.Either.<Integer, T0>left(10))),
+            hydra.util.Either.<Integer, T0>left(10),
 
             hydra.lib.eithers.Bimap.apply(
   (java.util.function.Function<Integer, Integer>) (x -> hydra.lib.math.Mul.apply(
     x,
     2)),
   (java.util.function.Function<String, Integer>) (s -> hydra.lib.strings.Length.apply(s)),
-  (hydra.util.Either<Integer, String>) ((hydra.util.Either<Integer, String>) (hydra.util.Either.<Integer, String>left(5)))));
+  hydra.util.Either.<Integer, String>left(5)));
 
     }
 
@@ -88,14 +88,14 @@ public class EithersTest {
 
         assertEquals(
 
-            (hydra.util.Either<T0, Integer>) ((hydra.util.Either<T0, Integer>) (hydra.util.Either.<T0, Integer>right(2))),
+            hydra.util.Either.<T0, Integer>right(2),
 
             hydra.lib.eithers.Bimap.apply(
   (java.util.function.Function<Integer, Integer>) (x -> hydra.lib.math.Mul.apply(
     x,
     2)),
   (java.util.function.Function<String, Integer>) (s -> hydra.lib.strings.Length.apply(s)),
-  (hydra.util.Either<Integer, String>) ((hydra.util.Either<Integer, String>) (hydra.util.Either.<Integer, String>right("ab")))));
+  hydra.util.Either.<Integer, String>right("ab")));
 
     }
 
@@ -109,7 +109,7 @@ public class EithersTest {
 
             true,
 
-            hydra.lib.eithers.IsLeft.apply((hydra.util.Either<Integer, T2>) ((hydra.util.Either<Integer, T2>) (hydra.util.Either.<Integer, T2>left(42)))));
+            hydra.lib.eithers.IsLeft.apply(hydra.util.Either.<Integer, T2>left(42)));
 
     }
 
@@ -121,7 +121,7 @@ public class EithersTest {
 
             false,
 
-            hydra.lib.eithers.IsLeft.apply((hydra.util.Either<T2, String>) ((hydra.util.Either<T2, String>) (hydra.util.Either.<T2, String>right("test")))));
+            hydra.lib.eithers.IsLeft.apply(hydra.util.Either.<T2, String>right("test")));
 
     }
 
@@ -135,7 +135,7 @@ public class EithersTest {
 
             true,
 
-            hydra.lib.eithers.IsRight.apply((hydra.util.Either<T2, String>) ((hydra.util.Either<T2, String>) (hydra.util.Either.<T2, String>right("test")))));
+            hydra.lib.eithers.IsRight.apply(hydra.util.Either.<T2, String>right("test")));
 
     }
 
@@ -147,7 +147,7 @@ public class EithersTest {
 
             false,
 
-            hydra.lib.eithers.IsRight.apply((hydra.util.Either<Integer, T2>) ((hydra.util.Either<Integer, T2>) (hydra.util.Either.<Integer, T2>left(42)))));
+            hydra.lib.eithers.IsRight.apply(hydra.util.Either.<Integer, T2>left(42)));
 
     }
 
@@ -163,7 +163,7 @@ public class EithersTest {
 
             hydra.lib.eithers.FromLeft.applyLazy(
   () -> 99,
-  (hydra.util.Either<Integer, T3>) ((hydra.util.Either<Integer, T3>) (hydra.util.Either.<Integer, T3>left(42)))));
+  hydra.util.Either.<Integer, T3>left(42)));
 
     }
 
@@ -177,7 +177,7 @@ public class EithersTest {
 
             hydra.lib.eithers.FromLeft.applyLazy(
   () -> 99,
-  (hydra.util.Either<Integer, String>) ((hydra.util.Either<Integer, String>) (hydra.util.Either.<Integer, String>right("test")))));
+  hydra.util.Either.<Integer, String>right("test")));
 
     }
 
@@ -193,7 +193,7 @@ public class EithersTest {
 
             hydra.lib.eithers.FromRight.applyLazy(
   () -> "default",
-  (hydra.util.Either<T3, String>) ((hydra.util.Either<T3, String>) (hydra.util.Either.<T3, String>right("test")))));
+  hydra.util.Either.<T3, String>right("test")));
 
     }
 
@@ -207,7 +207,7 @@ public class EithersTest {
 
             hydra.lib.eithers.FromRight.applyLazy(
   () -> "default",
-  (hydra.util.Either<Integer, String>) ((hydra.util.Either<Integer, String>) (hydra.util.Either.<Integer, String>left(42)))));
+  hydra.util.Either.<Integer, String>left(42)));
 
     }
 
@@ -226,7 +226,7 @@ public class EithersTest {
     x,
     2)),
   (java.util.function.Function<String, Integer>) (s -> hydra.lib.strings.Length.apply(s)),
-  (hydra.util.Either<Integer, String>) ((hydra.util.Either<Integer, String>) (hydra.util.Either.<Integer, String>left(5)))));
+  hydra.util.Either.<Integer, String>left(5)));
 
     }
 
@@ -243,7 +243,7 @@ public class EithersTest {
     x,
     2)),
   (java.util.function.Function<String, Integer>) (s -> hydra.lib.strings.Length.apply(s)),
-  (hydra.util.Either<Integer, String>) ((hydra.util.Either<Integer, String>) (hydra.util.Either.<Integer, String>right("ab")))));
+  hydra.util.Either.<Integer, String>right("ab")));
 
     }
 
@@ -260,10 +260,10 @@ public class EithersTest {
   2),
 
             hydra.lib.eithers.Lefts.apply(java.util.List.of(
-  (hydra.util.Either<Integer, String>) ((hydra.util.Either<Integer, String>) (hydra.util.Either.<Integer, String>left(1))),
-  (hydra.util.Either<Integer, String>) ((hydra.util.Either<Integer, String>) (hydra.util.Either.<Integer, String>right("a"))),
-  (hydra.util.Either<Integer, String>) ((hydra.util.Either<Integer, String>) (hydra.util.Either.<Integer, String>left(2))),
-  (hydra.util.Either<Integer, String>) ((hydra.util.Either<Integer, String>) (hydra.util.Either.<Integer, String>right("b"))))));
+  hydra.util.Either.<Integer, String>left(1),
+  hydra.util.Either.<Integer, String>right("a"),
+  hydra.util.Either.<Integer, String>left(2),
+  hydra.util.Either.<Integer, String>right("b"))));
 
     }
 
@@ -278,8 +278,8 @@ public class EithersTest {
   2),
 
             hydra.lib.eithers.Lefts.apply(java.util.List.of(
-  (hydra.util.Either<Integer, T4>) ((hydra.util.Either<Integer, T4>) (hydra.util.Either.<Integer, T4>left(1))),
-  (hydra.util.Either<Integer, T4>) ((hydra.util.Either<Integer, T4>) (hydra.util.Either.<Integer, T4>left(2))))));
+  hydra.util.Either.<Integer, T4>left(1),
+  hydra.util.Either.<Integer, T4>left(2))));
 
     }
 
@@ -292,8 +292,8 @@ public class EithersTest {
             (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.eithers.Lefts.apply(java.util.List.of(
-  (hydra.util.Either<T4, String>) ((hydra.util.Either<T4, String>) (hydra.util.Either.<T4, String>right("a"))),
-  (hydra.util.Either<T4, String>) ((hydra.util.Either<T4, String>) (hydra.util.Either.<T4, String>right("b"))))));
+  hydra.util.Either.<T4, String>right("a"),
+  hydra.util.Either.<T4, String>right("b"))));
 
     }
 
@@ -322,10 +322,10 @@ public class EithersTest {
   "b"),
 
             hydra.lib.eithers.Rights.apply(java.util.List.of(
-  (hydra.util.Either<Integer, String>) ((hydra.util.Either<Integer, String>) (hydra.util.Either.<Integer, String>left(1))),
-  (hydra.util.Either<Integer, String>) ((hydra.util.Either<Integer, String>) (hydra.util.Either.<Integer, String>right("a"))),
-  (hydra.util.Either<Integer, String>) ((hydra.util.Either<Integer, String>) (hydra.util.Either.<Integer, String>left(2))),
-  (hydra.util.Either<Integer, String>) ((hydra.util.Either<Integer, String>) (hydra.util.Either.<Integer, String>right("b"))))));
+  hydra.util.Either.<Integer, String>left(1),
+  hydra.util.Either.<Integer, String>right("a"),
+  hydra.util.Either.<Integer, String>left(2),
+  hydra.util.Either.<Integer, String>right("b"))));
 
     }
 
@@ -340,8 +340,8 @@ public class EithersTest {
   "b"),
 
             hydra.lib.eithers.Rights.apply(java.util.List.of(
-  (hydra.util.Either<T4, String>) ((hydra.util.Either<T4, String>) (hydra.util.Either.<T4, String>right("a"))),
-  (hydra.util.Either<T4, String>) ((hydra.util.Either<T4, String>) (hydra.util.Either.<T4, String>right("b"))))));
+  hydra.util.Either.<T4, String>right("a"),
+  hydra.util.Either.<T4, String>right("b"))));
 
     }
 
@@ -354,8 +354,8 @@ public class EithersTest {
             (java.util.List<T0>) (java.util.List.<T0>of()),
 
             hydra.lib.eithers.Rights.apply(java.util.List.of(
-  (hydra.util.Either<Integer, T4>) ((hydra.util.Either<Integer, T4>) (hydra.util.Either.<Integer, T4>left(1))),
-  (hydra.util.Either<Integer, T4>) ((hydra.util.Either<Integer, T4>) (hydra.util.Either.<Integer, T4>left(2))))));
+  hydra.util.Either.<Integer, T4>left(1),
+  hydra.util.Either.<Integer, T4>left(2))));
 
     }
 
@@ -386,10 +386,10 @@ public class EithersTest {
   "b")))),
 
             hydra.lib.eithers.PartitionEithers.apply(java.util.List.of(
-  (hydra.util.Either<Integer, String>) ((hydra.util.Either<Integer, String>) (hydra.util.Either.<Integer, String>left(1))),
-  (hydra.util.Either<Integer, String>) ((hydra.util.Either<Integer, String>) (hydra.util.Either.<Integer, String>right("a"))),
-  (hydra.util.Either<Integer, String>) ((hydra.util.Either<Integer, String>) (hydra.util.Either.<Integer, String>left(2))),
-  (hydra.util.Either<Integer, String>) ((hydra.util.Either<Integer, String>) (hydra.util.Either.<Integer, String>right("b"))))));
+  hydra.util.Either.<Integer, String>left(1),
+  hydra.util.Either.<Integer, String>right("a"),
+  hydra.util.Either.<Integer, String>left(2),
+  hydra.util.Either.<Integer, String>right("b"))));
 
     }
 
@@ -404,8 +404,8 @@ public class EithersTest {
   2), (java.util.List<T1>) (java.util.List.<T1>of())))),
 
             hydra.lib.eithers.PartitionEithers.apply(java.util.List.of(
-  (hydra.util.Either<Integer, T4>) ((hydra.util.Either<Integer, T4>) (hydra.util.Either.<Integer, T4>left(1))),
-  (hydra.util.Either<Integer, T4>) ((hydra.util.Either<Integer, T4>) (hydra.util.Either.<Integer, T4>left(2))))));
+  hydra.util.Either.<Integer, T4>left(1),
+  hydra.util.Either.<Integer, T4>left(2))));
 
     }
 
@@ -420,8 +420,8 @@ public class EithersTest {
   "b")))),
 
             hydra.lib.eithers.PartitionEithers.apply(java.util.List.of(
-  (hydra.util.Either<T4, String>) ((hydra.util.Either<T4, String>) (hydra.util.Either.<T4, String>right("a"))),
-  (hydra.util.Either<T4, String>) ((hydra.util.Either<T4, String>) (hydra.util.Either.<T4, String>right("b"))))));
+  hydra.util.Either.<T4, String>right("a"),
+  hydra.util.Either.<T4, String>right("b"))));
 
     }
 
@@ -445,13 +445,13 @@ public class EithersTest {
 
         assertEquals(
 
-            (hydra.util.Either<T0, Integer>) ((hydra.util.Either<T0, Integer>) (hydra.util.Either.<T0, Integer>right(10))),
+            hydra.util.Either.<T0, Integer>right(10),
 
             hydra.lib.eithers.Map.apply(
   (java.util.function.Function<Integer, Integer>) (x -> hydra.lib.math.Mul.apply(
     x,
     2)),
-  (hydra.util.Either<T7, Integer>) ((hydra.util.Either<T7, Integer>) (hydra.util.Either.<T7, Integer>right(5)))));
+  hydra.util.Either.<T7, Integer>right(5)));
 
     }
 
@@ -461,13 +461,13 @@ public class EithersTest {
 
         assertEquals(
 
-            (hydra.util.Either<Integer, T0>) ((hydra.util.Either<Integer, T0>) (hydra.util.Either.<Integer, T0>left(99))),
+            hydra.util.Either.<Integer, T0>left(99),
 
             hydra.lib.eithers.Map.apply(
   (java.util.function.Function<Integer, Integer>) (x -> hydra.lib.math.Mul.apply(
     x,
     2)),
-  (hydra.util.Either<Integer, Integer>) ((hydra.util.Either<Integer, Integer>) (hydra.util.Either.<Integer, Integer>left(99)))));
+  hydra.util.Either.<Integer, Integer>left(99)));
 
     }
 
@@ -479,20 +479,20 @@ public class EithersTest {
 
         assertEquals(
 
-            (hydra.util.Either<T1, java.util.List<Integer>>) ((hydra.util.Either<T1, java.util.List<Integer>>) (hydra.util.Either.<T1, java.util.List<Integer>>right(java.util.List.of(
+            hydra.util.Either.<T1, java.util.List<Integer>>right(java.util.List.of(
   2,
   4,
-  6)))),
+  6)),
 
             hydra.lib.eithers.MapList.apply(
   (java.util.function.Function<Integer, hydra.util.Either<String, Integer>>) (x -> hydra.lib.logic.IfElse.lazy(
     hydra.lib.equality.Equal.apply(
       x,
       0),
-    () -> (hydra.util.Either<String, Integer>) ((hydra.util.Either<String, Integer>) (hydra.util.Either.<String, Integer>left("zero"))),
-    () -> (hydra.util.Either<String, Integer>) ((hydra.util.Either<String, Integer>) (hydra.util.Either.<String, Integer>right(hydra.lib.math.Mul.apply(
+    () -> hydra.util.Either.<String, Integer>left("zero"),
+    () -> hydra.util.Either.<String, Integer>right(hydra.lib.math.Mul.apply(
       x,
-      2)))))),
+      2)))),
   java.util.List.of(
     1,
     2,
@@ -506,17 +506,17 @@ public class EithersTest {
 
         assertEquals(
 
-            (hydra.util.Either<String, T0>) ((hydra.util.Either<String, T0>) (hydra.util.Either.<String, T0>left("zero"))),
+            hydra.util.Either.<String, T0>left("zero"),
 
             hydra.lib.eithers.MapList.apply(
   (java.util.function.Function<Integer, hydra.util.Either<String, Integer>>) (x -> hydra.lib.logic.IfElse.lazy(
     hydra.lib.equality.Equal.apply(
       x,
       0),
-    () -> (hydra.util.Either<String, Integer>) ((hydra.util.Either<String, Integer>) (hydra.util.Either.<String, Integer>left("zero"))),
-    () -> (hydra.util.Either<String, Integer>) ((hydra.util.Either<String, Integer>) (hydra.util.Either.<String, Integer>right(hydra.lib.math.Mul.apply(
+    () -> hydra.util.Either.<String, Integer>left("zero"),
+    () -> hydra.util.Either.<String, Integer>right(hydra.lib.math.Mul.apply(
       x,
-      2)))))),
+      2)))),
   java.util.List.of(
     1,
     0,
@@ -530,17 +530,17 @@ public class EithersTest {
 
         assertEquals(
 
-            (hydra.util.Either<T1, java.util.List<T0>>) ((hydra.util.Either<T1, java.util.List<T0>>) (hydra.util.Either.<T1, java.util.List<T0>>right((java.util.List<T0>) (java.util.List.<T0>of())))),
+            hydra.util.Either.<T1, java.util.List<T0>>right((java.util.List<T0>) (java.util.List.<T0>of())),
 
             hydra.lib.eithers.MapList.apply(
   (java.util.function.Function<Integer, hydra.util.Either<String, Integer>>) (x -> hydra.lib.logic.IfElse.lazy(
     hydra.lib.equality.Equal.apply(
       x,
       0),
-    () -> (hydra.util.Either<String, Integer>) ((hydra.util.Either<String, Integer>) (hydra.util.Either.<String, Integer>left("zero"))),
-    () -> (hydra.util.Either<String, Integer>) ((hydra.util.Either<String, Integer>) (hydra.util.Either.<String, Integer>right(hydra.lib.math.Mul.apply(
+    () -> hydra.util.Either.<String, Integer>left("zero"),
+    () -> hydra.util.Either.<String, Integer>right(hydra.lib.math.Mul.apply(
       x,
-      2)))))),
+      2)))),
   (java.util.List<Integer>) (java.util.List.<Integer>of())));
 
     }
@@ -553,17 +553,17 @@ public class EithersTest {
 
         assertEquals(
 
-            (hydra.util.Either<T1, hydra.util.Maybe<Integer>>) ((hydra.util.Either<T1, hydra.util.Maybe<Integer>>) (hydra.util.Either.<T1, hydra.util.Maybe<Integer>>right(hydra.util.Maybe.just(10)))),
+            hydra.util.Either.<T1, hydra.util.Maybe<Integer>>right(hydra.util.Maybe.just(10)),
 
             hydra.lib.eithers.MapMaybe.apply(
   (java.util.function.Function<Integer, hydra.util.Either<String, Integer>>) (x -> hydra.lib.logic.IfElse.lazy(
     hydra.lib.equality.Equal.apply(
       x,
       0),
-    () -> (hydra.util.Either<String, Integer>) ((hydra.util.Either<String, Integer>) (hydra.util.Either.<String, Integer>left("zero"))),
-    () -> (hydra.util.Either<String, Integer>) ((hydra.util.Either<String, Integer>) (hydra.util.Either.<String, Integer>right(hydra.lib.math.Mul.apply(
+    () -> hydra.util.Either.<String, Integer>left("zero"),
+    () -> hydra.util.Either.<String, Integer>right(hydra.lib.math.Mul.apply(
       x,
-      2)))))),
+      2)))),
   hydra.util.Maybe.just(5)));
 
     }
@@ -574,17 +574,17 @@ public class EithersTest {
 
         assertEquals(
 
-            (hydra.util.Either<String, T0>) ((hydra.util.Either<String, T0>) (hydra.util.Either.<String, T0>left("zero"))),
+            hydra.util.Either.<String, T0>left("zero"),
 
             hydra.lib.eithers.MapMaybe.apply(
   (java.util.function.Function<Integer, hydra.util.Either<String, Integer>>) (x -> hydra.lib.logic.IfElse.lazy(
     hydra.lib.equality.Equal.apply(
       x,
       0),
-    () -> (hydra.util.Either<String, Integer>) ((hydra.util.Either<String, Integer>) (hydra.util.Either.<String, Integer>left("zero"))),
-    () -> (hydra.util.Either<String, Integer>) ((hydra.util.Either<String, Integer>) (hydra.util.Either.<String, Integer>right(hydra.lib.math.Mul.apply(
+    () -> hydra.util.Either.<String, Integer>left("zero"),
+    () -> hydra.util.Either.<String, Integer>right(hydra.lib.math.Mul.apply(
       x,
-      2)))))),
+      2)))),
   hydra.util.Maybe.just(0)));
 
     }
@@ -595,17 +595,17 @@ public class EithersTest {
 
         assertEquals(
 
-            (hydra.util.Either<T1, hydra.util.Maybe<T0>>) ((hydra.util.Either<T1, hydra.util.Maybe<T0>>) (hydra.util.Either.<T1, hydra.util.Maybe<T0>>right((hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing())))),
+            hydra.util.Either.<T1, hydra.util.Maybe<T0>>right((hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing())),
 
             hydra.lib.eithers.MapMaybe.apply(
   (java.util.function.Function<Integer, hydra.util.Either<String, Integer>>) (x -> hydra.lib.logic.IfElse.lazy(
     hydra.lib.equality.Equal.apply(
       x,
       0),
-    () -> (hydra.util.Either<String, Integer>) ((hydra.util.Either<String, Integer>) (hydra.util.Either.<String, Integer>left("zero"))),
-    () -> (hydra.util.Either<String, Integer>) ((hydra.util.Either<String, Integer>) (hydra.util.Either.<String, Integer>right(hydra.lib.math.Mul.apply(
+    () -> hydra.util.Either.<String, Integer>left("zero"),
+    () -> hydra.util.Either.<String, Integer>right(hydra.lib.math.Mul.apply(
       x,
-      2)))))),
+      2)))),
   (hydra.util.Maybe<Integer>) (hydra.util.Maybe.<Integer>nothing())));
 
     }

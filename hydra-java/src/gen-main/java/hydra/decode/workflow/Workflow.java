@@ -8,11 +8,11 @@ package hydra.decode.workflow;
 public interface Workflow {
   static hydra.util.Either<hydra.error.DecodingError, hydra.workflow.HydraSchemaSpec> hydraSchemaSpec(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.workflow.HydraSchemaSpec>>) (err -> (hydra.util.Either<hydra.error.DecodingError, hydra.workflow.HydraSchemaSpec>) ((hydra.util.Either<hydra.error.DecodingError, hydra.workflow.HydraSchemaSpec>) (hydra.util.Either.<hydra.error.DecodingError, hydra.workflow.HydraSchemaSpec>left(new hydra.error.DecodingError(err))))),
+      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.workflow.HydraSchemaSpec>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.workflow.HydraSchemaSpec>left(new hydra.error.DecodingError(err))),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.workflow.HydraSchemaSpec>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.workflow.HydraSchemaSpec> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.error.DecodingError, hydra.workflow.HydraSchemaSpec>) ((hydra.util.Either<hydra.error.DecodingError, hydra.workflow.HydraSchemaSpec>) (hydra.util.Either.<hydra.error.DecodingError, hydra.workflow.HydraSchemaSpec>left(new hydra.error.DecodingError("expected record of type hydra.workflow.HydraSchemaSpec"))));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.workflow.HydraSchemaSpec>left(new hydra.error.DecodingError("expected record of type hydra.workflow.HydraSchemaSpec"));
         }
         
         @Override
@@ -37,7 +37,7 @@ public interface Workflow {
                   p1)),
                 fieldMap,
                 cx),
-              (java.util.function.Function<hydra.core.Name, hydra.util.Either<hydra.error.DecodingError, hydra.workflow.HydraSchemaSpec>>) (field_typeName -> (hydra.util.Either<hydra.error.DecodingError, hydra.workflow.HydraSchemaSpec>) ((hydra.util.Either<hydra.error.DecodingError, hydra.workflow.HydraSchemaSpec>) (hydra.util.Either.<hydra.error.DecodingError, hydra.workflow.HydraSchemaSpec>right(new hydra.workflow.HydraSchemaSpec(field_modules, field_typeName))))))));
+              (java.util.function.Function<hydra.core.Name, hydra.util.Either<hydra.error.DecodingError, hydra.workflow.HydraSchemaSpec>>) (field_typeName -> hydra.util.Either.<hydra.error.DecodingError, hydra.workflow.HydraSchemaSpec>right(new hydra.workflow.HydraSchemaSpec(field_modules, field_typeName))))));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(
@@ -47,11 +47,11 @@ public interface Workflow {
   
   static hydra.util.Either<hydra.error.DecodingError, hydra.workflow.SchemaSpec> schemaSpec(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.workflow.SchemaSpec>>) (err -> (hydra.util.Either<hydra.error.DecodingError, hydra.workflow.SchemaSpec>) ((hydra.util.Either<hydra.error.DecodingError, hydra.workflow.SchemaSpec>) (hydra.util.Either.<hydra.error.DecodingError, hydra.workflow.SchemaSpec>left(new hydra.error.DecodingError(err))))),
+      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.workflow.SchemaSpec>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.workflow.SchemaSpec>left(new hydra.error.DecodingError(err))),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.workflow.SchemaSpec>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.workflow.SchemaSpec> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.error.DecodingError, hydra.workflow.SchemaSpec>) ((hydra.util.Either<hydra.error.DecodingError, hydra.workflow.SchemaSpec>) (hydra.util.Either.<hydra.error.DecodingError, hydra.workflow.SchemaSpec>left(new hydra.error.DecodingError("expected union of type hydra.workflow.SchemaSpec"))));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.workflow.SchemaSpec>left(new hydra.error.DecodingError("expected union of type hydra.workflow.SchemaSpec"));
         }
         
         @Override
@@ -69,11 +69,11 @@ public interface Workflow {
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.workflow.SchemaSpec>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.workflow.SchemaSpec>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.workflow.SchemaSpec>>>(new hydra.core.Name("file"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.workflow.SchemaSpec>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<String, hydra.workflow.SchemaSpec>) (t -> new hydra.workflow.SchemaSpec.File(t)),
               hydra.lib.eithers.Either.apply(
-                (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, String>>) (err -> (hydra.util.Either<hydra.error.DecodingError, String>) ((hydra.util.Either<hydra.error.DecodingError, String>) (hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError(err))))),
+                (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, String>>) (err -> hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError(err))),
                 (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, String>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
                   @Override
                   public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Term instance) {
-                    return (hydra.util.Either<hydra.error.DecodingError, String>) ((hydra.util.Either<hydra.error.DecodingError, String>) (hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected literal"))));
+                    return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected literal"));
                   }
                   
                   @Override
@@ -81,12 +81,12 @@ public interface Workflow {
                     return ((v).value).accept(new hydra.core.Literal.PartialVisitor<>() {
                       @Override
                       public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Literal instance) {
-                        return (hydra.util.Either<hydra.error.DecodingError, String>) ((hydra.util.Either<hydra.error.DecodingError, String>) (hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"))));
+                        return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"));
                       }
                       
                       @Override
                       public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Literal.String_ s) {
-                        return (hydra.util.Either<hydra.error.DecodingError, String>) ((hydra.util.Either<hydra.error.DecodingError, String>) (hydra.util.Either.<hydra.error.DecodingError, String>right((s).value)));
+                        return hydra.util.Either.<hydra.error.DecodingError, String>right((s).value);
                       }
                     });
                   }
@@ -100,11 +100,11 @@ public interface Workflow {
                 cx,
                 input)))))))));
           return hydra.lib.maybes.Maybe.applyLazy(
-            () -> (hydra.util.Either<hydra.error.DecodingError, hydra.workflow.SchemaSpec>) ((hydra.util.Either<hydra.error.DecodingError, hydra.workflow.SchemaSpec>) (hydra.util.Either.<hydra.error.DecodingError, hydra.workflow.SchemaSpec>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.workflow.SchemaSpec>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no such field ",
               (fname).value,
               " in union type ",
-              (tname).value)))))),
+              (tname).value)))),
             (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.workflow.SchemaSpec>>, hydra.util.Either<hydra.error.DecodingError, hydra.workflow.SchemaSpec>>) (f -> (f).apply(fterm)),
             hydra.lib.maps.Lookup.apply(
               fname,
@@ -118,11 +118,11 @@ public interface Workflow {
   
   static hydra.util.Either<hydra.error.DecodingError, hydra.workflow.TransformWorkflow> transformWorkflow(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.workflow.TransformWorkflow>>) (err -> (hydra.util.Either<hydra.error.DecodingError, hydra.workflow.TransformWorkflow>) ((hydra.util.Either<hydra.error.DecodingError, hydra.workflow.TransformWorkflow>) (hydra.util.Either.<hydra.error.DecodingError, hydra.workflow.TransformWorkflow>left(new hydra.error.DecodingError(err))))),
+      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.workflow.TransformWorkflow>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.workflow.TransformWorkflow>left(new hydra.error.DecodingError(err))),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.workflow.TransformWorkflow>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.workflow.TransformWorkflow> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.error.DecodingError, hydra.workflow.TransformWorkflow>) ((hydra.util.Either<hydra.error.DecodingError, hydra.workflow.TransformWorkflow>) (hydra.util.Either.<hydra.error.DecodingError, hydra.workflow.TransformWorkflow>left(new hydra.error.DecodingError("expected record of type hydra.workflow.TransformWorkflow"))));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.workflow.TransformWorkflow>left(new hydra.error.DecodingError("expected record of type hydra.workflow.TransformWorkflow"));
         }
         
         @Override
@@ -132,11 +132,11 @@ public interface Workflow {
             hydra.extract.helpers.Helpers.requireField(
               "name",
               (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, String>>>) (cx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, String>>) (raw2 -> hydra.lib.eithers.Either.apply(
-                (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, String>>) (err -> (hydra.util.Either<hydra.error.DecodingError, String>) ((hydra.util.Either<hydra.error.DecodingError, String>) (hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError(err))))),
+                (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, String>>) (err -> hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError(err))),
                 (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, String>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
                   @Override
                   public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Term instance) {
-                    return (hydra.util.Either<hydra.error.DecodingError, String>) ((hydra.util.Either<hydra.error.DecodingError, String>) (hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected literal"))));
+                    return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected literal"));
                   }
                   
                   @Override
@@ -144,12 +144,12 @@ public interface Workflow {
                     return ((v).value).accept(new hydra.core.Literal.PartialVisitor<>() {
                       @Override
                       public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Literal instance) {
-                        return (hydra.util.Either<hydra.error.DecodingError, String>) ((hydra.util.Either<hydra.error.DecodingError, String>) (hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"))));
+                        return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"));
                       }
                       
                       @Override
                       public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Literal.String_ s) {
-                        return (hydra.util.Either<hydra.error.DecodingError, String>) ((hydra.util.Either<hydra.error.DecodingError, String>) (hydra.util.Either.<hydra.error.DecodingError, String>right((s).value)));
+                        return hydra.util.Either.<hydra.error.DecodingError, String>right((s).value);
                       }
                     });
                   }
@@ -171,11 +171,11 @@ public interface Workflow {
                 hydra.extract.helpers.Helpers.requireField(
                   "srcDir",
                   (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, String>>>) (cx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, String>>) (raw2 -> hydra.lib.eithers.Either.apply(
-                    (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, String>>) (err -> (hydra.util.Either<hydra.error.DecodingError, String>) ((hydra.util.Either<hydra.error.DecodingError, String>) (hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError(err))))),
+                    (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, String>>) (err -> hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError(err))),
                     (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, String>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
                       @Override
                       public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Term instance) {
-                        return (hydra.util.Either<hydra.error.DecodingError, String>) ((hydra.util.Either<hydra.error.DecodingError, String>) (hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected literal"))));
+                        return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected literal"));
                       }
                       
                       @Override
@@ -183,12 +183,12 @@ public interface Workflow {
                         return ((v).value).accept(new hydra.core.Literal.PartialVisitor<>() {
                           @Override
                           public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Literal instance) {
-                            return (hydra.util.Either<hydra.error.DecodingError, String>) ((hydra.util.Either<hydra.error.DecodingError, String>) (hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"))));
+                            return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"));
                           }
                           
                           @Override
                           public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Literal.String_ s) {
-                            return (hydra.util.Either<hydra.error.DecodingError, String>) ((hydra.util.Either<hydra.error.DecodingError, String>) (hydra.util.Either.<hydra.error.DecodingError, String>right((s).value)));
+                            return hydra.util.Either.<hydra.error.DecodingError, String>right((s).value);
                           }
                         });
                       }
@@ -202,11 +202,11 @@ public interface Workflow {
                   hydra.extract.helpers.Helpers.requireField(
                     "destDir",
                     (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, String>>>) (cx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, String>>) (raw2 -> hydra.lib.eithers.Either.apply(
-                      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, String>>) (err -> (hydra.util.Either<hydra.error.DecodingError, String>) ((hydra.util.Either<hydra.error.DecodingError, String>) (hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError(err))))),
+                      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, String>>) (err -> hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError(err))),
                       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, String>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
                         @Override
                         public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Term instance) {
-                          return (hydra.util.Either<hydra.error.DecodingError, String>) ((hydra.util.Either<hydra.error.DecodingError, String>) (hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected literal"))));
+                          return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected literal"));
                         }
                         
                         @Override
@@ -214,12 +214,12 @@ public interface Workflow {
                           return ((v).value).accept(new hydra.core.Literal.PartialVisitor<>() {
                             @Override
                             public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Literal instance) {
-                              return (hydra.util.Either<hydra.error.DecodingError, String>) ((hydra.util.Either<hydra.error.DecodingError, String>) (hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"))));
+                              return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"));
                             }
                             
                             @Override
                             public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Literal.String_ s) {
-                              return (hydra.util.Either<hydra.error.DecodingError, String>) ((hydra.util.Either<hydra.error.DecodingError, String>) (hydra.util.Either.<hydra.error.DecodingError, String>right((s).value)));
+                              return hydra.util.Either.<hydra.error.DecodingError, String>right((s).value);
                             }
                           });
                         }
@@ -229,7 +229,7 @@ public interface Workflow {
                         raw2)))),
                     fieldMap,
                     cx),
-                  (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.workflow.TransformWorkflow>>) (field_destDir -> (hydra.util.Either<hydra.error.DecodingError, hydra.workflow.TransformWorkflow>) ((hydra.util.Either<hydra.error.DecodingError, hydra.workflow.TransformWorkflow>) (hydra.util.Either.<hydra.error.DecodingError, hydra.workflow.TransformWorkflow>right(new hydra.workflow.TransformWorkflow(field_name, field_schemaSpec, field_srcDir, field_destDir))))))))))));
+                  (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.workflow.TransformWorkflow>>) (field_destDir -> hydra.util.Either.<hydra.error.DecodingError, hydra.workflow.TransformWorkflow>right(new hydra.workflow.TransformWorkflow(field_name, field_schemaSpec, field_srcDir, field_destDir))))))))));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(

@@ -577,15 +577,15 @@ public interface Rewriting {
     java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>> afterRecurse = (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>) (tr -> (tr).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Either<String, hydra.core.Type> otherwise(hydra.core.Type instance) {
-        return (hydra.util.Either<String, hydra.core.Type>) ((hydra.util.Either<String, hydra.core.Type>) (hydra.util.Either.<String, hydra.core.Type>right(tr)));
+        return hydra.util.Either.<String, hydra.core.Type>right(tr);
       }
       
       @Override
       public hydra.util.Either<String, hydra.core.Type> visit(hydra.core.Type.Variable v) {
         return hydra.lib.maybes.Maybe.applyLazy(
-          () -> (hydra.util.Either<String, hydra.core.Type>) ((hydra.util.Either<String, hydra.core.Type>) (hydra.util.Either.<String, hydra.core.Type>left(hydra.lib.strings.Cat2.apply(
+          () -> hydra.util.Either.<String, hydra.core.Type>left(hydra.lib.strings.Cat2.apply(
             "No such type in schema: ",
-            ((v).value).value)))),
+            ((v).value).value)),
           (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>) (v1 -> ((hydra_rewriting_inlineType2).apply(schema)).apply(v1)),
           hydra.lib.maps.Lookup.apply(
             (v).value,
@@ -1235,14 +1235,14 @@ public interface Rewriting {
               l,
               recurse,
               val0));
-            return (hydra.util.Pair<T1, hydra.core.Term>) ((hydra.util.Pair<T1, hydra.core.Term>) (new hydra.util.Pair<T1, hydra.core.Term>(hydra.lib.pairs.First.apply(rl.get()), new hydra.core.Term.Either((hydra.util.Either<hydra.core.Term, hydra.core.Term>) ((hydra.util.Either<hydra.core.Term, hydra.core.Term>) (hydra.util.Either.<hydra.core.Term, hydra.core.Term>left(hydra.lib.pairs.Second.apply(rl.get()))))))));
+            return (hydra.util.Pair<T1, hydra.core.Term>) ((hydra.util.Pair<T1, hydra.core.Term>) (new hydra.util.Pair<T1, hydra.core.Term>(hydra.lib.pairs.First.apply(rl.get()), new hydra.core.Term.Either(hydra.util.Either.<hydra.core.Term, hydra.core.Term>left(hydra.lib.pairs.Second.apply(rl.get()))))));
           }),
           (java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>) (r -> {
             hydra.util.Lazy<hydra.util.Pair<T1, hydra.core.Term>> rr = new hydra.util.Lazy<>(() -> hydra.rewriting.Rewriting.<T1>rewriteAndFoldTerm_rr(
               r,
               recurse,
               val0));
-            return (hydra.util.Pair<T1, hydra.core.Term>) ((hydra.util.Pair<T1, hydra.core.Term>) (new hydra.util.Pair<T1, hydra.core.Term>(hydra.lib.pairs.First.apply(rr.get()), new hydra.core.Term.Either((hydra.util.Either<hydra.core.Term, hydra.core.Term>) ((hydra.util.Either<hydra.core.Term, hydra.core.Term>) (hydra.util.Either.<hydra.core.Term, hydra.core.Term>right(hydra.lib.pairs.Second.apply(rr.get()))))))));
+            return (hydra.util.Pair<T1, hydra.core.Term>) ((hydra.util.Pair<T1, hydra.core.Term>) (new hydra.util.Pair<T1, hydra.core.Term>(hydra.lib.pairs.First.apply(rr.get()), new hydra.core.Term.Either(hydra.util.Either.<hydra.core.Term, hydra.core.Term>right(hydra.lib.pairs.Second.apply(rr.get()))))));
           }),
           (e).value);
       }
@@ -1658,7 +1658,7 @@ public interface Rewriting {
               path,
               recurse,
               val0));
-            return (hydra.util.Pair<T1, hydra.core.Term>) ((hydra.util.Pair<T1, hydra.core.Term>) (new hydra.util.Pair<T1, hydra.core.Term>(hydra.lib.pairs.First.apply(rl.get()), new hydra.core.Term.Either((hydra.util.Either<hydra.core.Term, hydra.core.Term>) ((hydra.util.Either<hydra.core.Term, hydra.core.Term>) (hydra.util.Either.<hydra.core.Term, hydra.core.Term>left(hydra.lib.pairs.Second.apply(rl.get()))))))));
+            return (hydra.util.Pair<T1, hydra.core.Term>) ((hydra.util.Pair<T1, hydra.core.Term>) (new hydra.util.Pair<T1, hydra.core.Term>(hydra.lib.pairs.First.apply(rl.get()), new hydra.core.Term.Either(hydra.util.Either.<hydra.core.Term, hydra.core.Term>left(hydra.lib.pairs.Second.apply(rl.get()))))));
           }),
           (java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>) (r -> {
             hydra.util.Lazy<hydra.util.Pair<T1, hydra.core.Term>> rr = new hydra.util.Lazy<>(() -> hydra.rewriting.Rewriting.<T1>rewriteAndFoldTermWithPath_rr(
@@ -1666,7 +1666,7 @@ public interface Rewriting {
               r,
               recurse,
               val0));
-            return (hydra.util.Pair<T1, hydra.core.Term>) ((hydra.util.Pair<T1, hydra.core.Term>) (new hydra.util.Pair<T1, hydra.core.Term>(hydra.lib.pairs.First.apply(rr.get()), new hydra.core.Term.Either((hydra.util.Either<hydra.core.Term, hydra.core.Term>) ((hydra.util.Either<hydra.core.Term, hydra.core.Term>) (hydra.util.Either.<hydra.core.Term, hydra.core.Term>right(hydra.lib.pairs.Second.apply(rr.get()))))))));
+            return (hydra.util.Pair<T1, hydra.core.Term>) ((hydra.util.Pair<T1, hydra.core.Term>) (new hydra.util.Pair<T1, hydra.core.Term>(hydra.lib.pairs.First.apply(rr.get()), new hydra.core.Term.Either(hydra.util.Either.<hydra.core.Term, hydra.core.Term>right(hydra.lib.pairs.Second.apply(rr.get()))))));
           }),
           (e).value);
       }
@@ -2297,8 +2297,8 @@ public interface Rewriting {
         @Override
         public hydra.core.Term visit(hydra.core.Term.Either e) {
           return new hydra.core.Term.Either(hydra.lib.eithers.Either.apply(
-            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.core.Term, hydra.core.Term>>) (l -> (hydra.util.Either<hydra.core.Term, hydra.core.Term>) ((hydra.util.Either<hydra.core.Term, hydra.core.Term>) (hydra.util.Either.<hydra.core.Term, hydra.core.Term>left((recurse).apply(l))))),
-            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.core.Term, hydra.core.Term>>) (r -> (hydra.util.Either<hydra.core.Term, hydra.core.Term>) ((hydra.util.Either<hydra.core.Term, hydra.core.Term>) (hydra.util.Either.<hydra.core.Term, hydra.core.Term>right((recurse).apply(r))))),
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.core.Term, hydra.core.Term>>) (l -> hydra.util.Either.<hydra.core.Term, hydra.core.Term>left((recurse).apply(l))),
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.core.Term, hydra.core.Term>>) (r -> hydra.util.Either.<hydra.core.Term, hydra.core.Term>right((recurse).apply(r))),
             (e).value));
         }
         
@@ -2406,7 +2406,7 @@ public interface Rewriting {
       public hydra.util.Either<T1, hydra.core.Term> visit(hydra.core.Term.Annotated at) {
         return hydra.lib.eithers.Bind.apply(
           (recurse).apply(((at).value).body),
-          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (ex -> (hydra.util.Either<T1, hydra.core.Term>) ((hydra.util.Either<T1, hydra.core.Term>) (hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(ex, ((at).value).annotation)))))));
+          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (ex -> hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(ex, ((at).value).annotation)))));
       }
       
       @Override
@@ -2415,7 +2415,7 @@ public interface Rewriting {
           (recurse).apply(((app).value).function),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (lhs -> hydra.lib.eithers.Bind.apply(
             (recurse).apply(((app).value).argument),
-            (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (rhs -> (hydra.util.Either<T1, hydra.core.Term>) ((hydra.util.Either<T1, hydra.core.Term>) (hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Application(new hydra.core.Application(lhs, rhs)))))))));
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (rhs -> hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Application(new hydra.core.Application(lhs, rhs)))))));
       }
       
       @Override
@@ -2423,13 +2423,13 @@ public interface Rewriting {
         return hydra.lib.eithers.Bind.apply(
           hydra.lib.eithers.Either.apply(
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.util.Either<hydra.core.Term, hydra.core.Term>>>) (l -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.core.Term, hydra.core.Term>>) (x -> (hydra.util.Either<hydra.core.Term, hydra.core.Term>) ((hydra.util.Either<hydra.core.Term, hydra.core.Term>) (hydra.util.Either.<hydra.core.Term, hydra.core.Term>left(x)))),
+              (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.core.Term, hydra.core.Term>>) (x -> hydra.util.Either.<hydra.core.Term, hydra.core.Term>left(x)),
               (recurse).apply(l))),
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.util.Either<hydra.core.Term, hydra.core.Term>>>) (r -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.core.Term, hydra.core.Term>>) (x -> (hydra.util.Either<hydra.core.Term, hydra.core.Term>) ((hydra.util.Either<hydra.core.Term, hydra.core.Term>) (hydra.util.Either.<hydra.core.Term, hydra.core.Term>right(x)))),
+              (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.core.Term, hydra.core.Term>>) (x -> hydra.util.Either.<hydra.core.Term, hydra.core.Term>right(x)),
               (recurse).apply(r))),
             (e).value),
-          (java.util.function.Function<hydra.util.Either<hydra.core.Term, hydra.core.Term>, hydra.util.Either<T1, hydra.core.Term>>) (re -> (hydra.util.Either<T1, hydra.core.Term>) ((hydra.util.Either<T1, hydra.core.Term>) (hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Either(re))))));
+          (java.util.function.Function<hydra.util.Either<hydra.core.Term, hydra.core.Term>, hydra.util.Either<T1, hydra.core.Term>>) (re -> hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Either(re))));
       }
       
       @Override
@@ -2442,7 +2442,7 @@ public interface Rewriting {
               v1)),
             recurse,
             (fun).value),
-          (java.util.function.Function<hydra.core.Function, hydra.util.Either<T1, hydra.core.Term>>) (rfun -> (hydra.util.Either<T1, hydra.core.Term>) ((hydra.util.Either<T1, hydra.core.Term>) (hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Function(rfun))))));
+          (java.util.function.Function<hydra.core.Function, hydra.util.Either<T1, hydra.core.Term>>) (rfun -> hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Function(rfun))));
       }
       
       @Override
@@ -2457,7 +2457,7 @@ public interface Rewriting {
             bindings),
           (java.util.function.Function<java.util.List<hydra.core.Binding>, hydra.util.Either<T1, hydra.core.Term>>) (rbindings -> hydra.lib.eithers.Bind.apply(
             (recurse).apply(env),
-            (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (renv -> (hydra.util.Either<T1, hydra.core.Term>) ((hydra.util.Either<T1, hydra.core.Term>) (hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Let(new hydra.core.Let(rbindings, renv)))))))));
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (renv -> hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Let(new hydra.core.Let(rbindings, renv)))))));
       }
       
       @Override
@@ -2466,12 +2466,12 @@ public interface Rewriting {
           hydra.lib.eithers.MapList.apply(
             recurse,
             (els).value),
-          (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<T1, hydra.core.Term>>) (rels -> (hydra.util.Either<T1, hydra.core.Term>) ((hydra.util.Either<T1, hydra.core.Term>) (hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.List(rels))))));
+          (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<T1, hydra.core.Term>>) (rels -> hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.List(rels))));
       }
       
       @Override
       public hydra.util.Either<T1, hydra.core.Term> visit(hydra.core.Term.Literal v) {
-        return (hydra.util.Either<T1, hydra.core.Term>) ((hydra.util.Either<T1, hydra.core.Term>) (hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Literal((v).value))));
+        return hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Literal((v).value));
       }
       
       @Override
@@ -2482,7 +2482,7 @@ public interface Rewriting {
               recurse,
               v1)),
             hydra.lib.maps.ToList.apply((m).value)),
-          (java.util.function.Function<java.util.List<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>, hydra.util.Either<T1, hydra.core.Term>>) (pairs -> (hydra.util.Either<T1, hydra.core.Term>) ((hydra.util.Either<T1, hydra.core.Term>) (hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Map(hydra.lib.maps.FromList.apply(pairs)))))));
+          (java.util.function.Function<java.util.List<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>, hydra.util.Either<T1, hydra.core.Term>>) (pairs -> hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Map(hydra.lib.maps.FromList.apply(pairs)))));
       }
       
       @Override
@@ -2491,7 +2491,7 @@ public interface Rewriting {
           hydra.lib.eithers.MapMaybe.apply(
             recurse,
             (m).value),
-          (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, hydra.util.Either<T1, hydra.core.Term>>) (rm -> (hydra.util.Either<T1, hydra.core.Term>) ((hydra.util.Either<T1, hydra.core.Term>) (hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Maybe(rm))))));
+          (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, hydra.util.Either<T1, hydra.core.Term>>) (rm -> hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Maybe(rm))));
       }
       
       @Override
@@ -2500,7 +2500,7 @@ public interface Rewriting {
           (recurse).apply(hydra.lib.pairs.First.apply((p).value)),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (rf -> hydra.lib.eithers.Bind.apply(
             (recurse).apply(hydra.lib.pairs.Second.apply((p).value)),
-            (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (rs -> (hydra.util.Either<T1, hydra.core.Term>) ((hydra.util.Either<T1, hydra.core.Term>) (hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Pair((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(rf, rs)))))))))));
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (rs -> hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Pair((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(rf, rs)))))))));
       }
       
       @Override
@@ -2520,14 +2520,14 @@ public interface Rewriting {
           hydra.lib.eithers.MapList.apply(
             recurse,
             hydra.lib.sets.ToList.apply((s).value)),
-          (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<T1, hydra.core.Term>>) (rlist -> (hydra.util.Either<T1, hydra.core.Term>) ((hydra.util.Either<T1, hydra.core.Term>) (hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Set(hydra.lib.sets.FromList.apply(rlist)))))));
+          (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<T1, hydra.core.Term>>) (rlist -> hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Set(hydra.lib.sets.FromList.apply(rlist)))));
       }
       
       @Override
       public hydra.util.Either<T1, hydra.core.Term> visit(hydra.core.Term.TypeApplication tt) {
         return hydra.lib.eithers.Bind.apply(
           (recurse).apply(((tt).value).body),
-          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (t -> (hydra.util.Either<T1, hydra.core.Term>) ((hydra.util.Either<T1, hydra.core.Term>) (hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(t, ((tt).value).type)))))));
+          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (t -> hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(t, ((tt).value).type)))));
       }
       
       @Override
@@ -2536,7 +2536,7 @@ public interface Rewriting {
         hydra.core.Name v = ((tl).value).parameter;
         return hydra.lib.eithers.Bind.apply(
           (recurse).apply(body),
-          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (rbody -> (hydra.util.Either<T1, hydra.core.Term>) ((hydra.util.Either<T1, hydra.core.Term>) (hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda(v, rbody)))))));
+          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (rbody -> hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda(v, rbody)))));
       }
       
       @Override
@@ -2550,12 +2550,12 @@ public interface Rewriting {
       
       @Override
       public hydra.util.Either<T1, hydra.core.Term> visit(hydra.core.Term.Unit ignored) {
-        return (hydra.util.Either<T1, hydra.core.Term>) ((hydra.util.Either<T1, hydra.core.Term>) (hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Unit())));
+        return hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Unit());
       }
       
       @Override
       public hydra.util.Either<T1, hydra.core.Term> visit(hydra.core.Term.Variable v) {
-        return (hydra.util.Either<T1, hydra.core.Term>) ((hydra.util.Either<T1, hydra.core.Term>) (hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Variable((v).value))));
+        return hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Variable((v).value));
       }
       
       @Override
@@ -2564,7 +2564,7 @@ public interface Rewriting {
         hydra.core.Term t = ((wt).value).body;
         return hydra.lib.eithers.Bind.apply(
           (recurse).apply(t),
-          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (rt -> (hydra.util.Either<T1, hydra.core.Term>) ((hydra.util.Either<T1, hydra.core.Term>) (hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(name, rt)))))));
+          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (rt -> hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(name, rt)))));
       }
     });
   }
@@ -2580,7 +2580,7 @@ public interface Rewriting {
   static <T1> hydra.util.Either<T1, hydra.core.Field> rewriteTermM_forField(java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>> recurse, hydra.core.Field field) {
     return hydra.lib.eithers.Bind.apply(
       (recurse).apply((field).term),
-      (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Field>>) (t -> (hydra.util.Either<T1, hydra.core.Field>) ((hydra.util.Either<T1, hydra.core.Field>) (hydra.util.Either.<T1, hydra.core.Field>right(new hydra.core.Field((field).name, t))))));
+      (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Field>>) (t -> hydra.util.Either.<T1, hydra.core.Field>right(new hydra.core.Field((field).name, t))));
   }
   
   static <T1> hydra.util.Either<T1, hydra.util.Pair<hydra.core.Term, hydra.core.Term>> rewriteTermM_forPair(java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>> recurse, hydra.util.Pair<hydra.core.Term, hydra.core.Term> kv) {
@@ -2588,20 +2588,20 @@ public interface Rewriting {
       (recurse).apply(hydra.lib.pairs.First.apply(kv)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>) (k -> hydra.lib.eithers.Bind.apply(
         (recurse).apply(hydra.lib.pairs.Second.apply(kv)),
-        (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>) (v -> (hydra.util.Either<T1, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>) ((hydra.util.Either<T1, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>) (hydra.util.Either.<T1, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>right((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(k, v))))))))));
+        (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>) (v -> hydra.util.Either.<T1, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>right((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(k, v))))))));
   }
   
   static <T1> hydra.util.Either<T1, hydra.core.Binding> rewriteTermM_mapBinding(java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>> recurse, hydra.core.Binding b) {
     return hydra.lib.eithers.Bind.apply(
       (recurse).apply((b).term),
-      (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Binding>>) (v -> (hydra.util.Either<T1, hydra.core.Binding>) ((hydra.util.Either<T1, hydra.core.Binding>) (hydra.util.Either.<T1, hydra.core.Binding>right(new hydra.core.Binding((b).name, v, (b).type))))));
+      (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Binding>>) (v -> hydra.util.Either.<T1, hydra.core.Binding>right(new hydra.core.Binding((b).name, v, (b).type))));
   }
   
   static <T1> hydra.util.Either<T1, hydra.core.Function> rewriteTermM_forElm(java.util.function.Function<hydra.core.Field, hydra.util.Either<T1, hydra.core.Field>> forField, java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>> recurse, hydra.core.Elimination e) {
     return (e).accept(new hydra.core.Elimination.PartialVisitor<>() {
       @Override
       public hydra.util.Either<T1, hydra.core.Function> visit(hydra.core.Elimination.Record p) {
-        return (hydra.util.Either<T1, hydra.core.Function>) ((hydra.util.Either<T1, hydra.core.Function>) (hydra.util.Either.<T1, hydra.core.Function>right(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record((p).value)))));
+        return hydra.util.Either.<T1, hydra.core.Function>right(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record((p).value)));
       }
       
       @Override
@@ -2611,7 +2611,7 @@ public interface Rewriting {
         hydra.core.Name n = ((cs).value).typeName;
         return hydra.lib.eithers.Bind.apply(
           hydra.lib.maybes.Maybe.applyLazy(
-            () -> (hydra.util.Either<T1, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<T1, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<T1, hydra.util.Maybe<hydra.core.Term>>right((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing())))),
+            () -> hydra.util.Either.<T1, hydra.util.Maybe<hydra.core.Term>>right((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing())),
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.util.Maybe<hydra.core.Term>>>) (t -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maybes.Pure::apply),
               (recurse).apply(t))),
@@ -2625,7 +2625,7 @@ public interface Rewriting {
       
       @Override
       public hydra.util.Either<T1, hydra.core.Function> visit(hydra.core.Elimination.Wrap name) {
-        return (hydra.util.Either<T1, hydra.core.Function>) ((hydra.util.Either<T1, hydra.core.Function>) (hydra.util.Either.<T1, hydra.core.Function>right(new hydra.core.Function.Elimination(new hydra.core.Elimination.Wrap((name).value)))));
+        return hydra.util.Either.<T1, hydra.core.Function>right(new hydra.core.Function.Elimination(new hydra.core.Elimination.Wrap((name).value)));
       }
     });
   }
@@ -2644,12 +2644,12 @@ public interface Rewriting {
         hydra.core.Name v = ((l).value).parameter;
         return hydra.lib.eithers.Bind.apply(
           (recurse).apply(body),
-          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Function>>) (rbody -> (hydra.util.Either<T1, hydra.core.Function>) ((hydra.util.Either<T1, hydra.core.Function>) (hydra.util.Either.<T1, hydra.core.Function>right(new hydra.core.Function.Lambda(new hydra.core.Lambda(v, d, rbody)))))));
+          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Function>>) (rbody -> hydra.util.Either.<T1, hydra.core.Function>right(new hydra.core.Function.Lambda(new hydra.core.Lambda(v, d, rbody)))));
       }
       
       @Override
       public hydra.util.Either<T1, hydra.core.Function> visit(hydra.core.Function.Primitive name) {
-        return (hydra.util.Either<T1, hydra.core.Function>) ((hydra.util.Either<T1, hydra.core.Function>) (hydra.util.Either.<T1, hydra.core.Function>right(new hydra.core.Function.Primitive((name).value))));
+        return hydra.util.Either.<T1, hydra.core.Function>right(new hydra.core.Function.Primitive((name).value));
       }
     });
   }
@@ -2726,8 +2726,8 @@ public interface Rewriting {
       @Override
       public hydra.core.Term visit(hydra.core.Term.Either e) {
         return new hydra.core.Term.Either(hydra.lib.eithers.Either.apply(
-          (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.core.Term, hydra.core.Term>>) (l -> (hydra.util.Either<hydra.core.Term, hydra.core.Term>) ((hydra.util.Either<hydra.core.Term, hydra.core.Term>) (hydra.util.Either.<hydra.core.Term, hydra.core.Term>left((recurse).apply(l))))),
-          (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.core.Term, hydra.core.Term>>) (r -> (hydra.util.Either<hydra.core.Term, hydra.core.Term>) ((hydra.util.Either<hydra.core.Term, hydra.core.Term>) (hydra.util.Either.<hydra.core.Term, hydra.core.Term>right((recurse).apply(r))))),
+          (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.core.Term, hydra.core.Term>>) (l -> hydra.util.Either.<hydra.core.Term, hydra.core.Term>left((recurse).apply(l))),
+          (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.core.Term, hydra.core.Term>>) (r -> hydra.util.Either.<hydra.core.Term, hydra.core.Term>right((recurse).apply(r))),
           (e).value));
       }
       
@@ -2846,7 +2846,7 @@ public interface Rewriting {
       public hydra.util.Either<T3, hydra.core.Term> visit(hydra.core.Term.Annotated at) {
         return hydra.lib.eithers.Bind.apply(
           (recurse).apply(((at).value).body),
-          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>>) (ex -> (hydra.util.Either<T3, hydra.core.Term>) ((hydra.util.Either<T3, hydra.core.Term>) (hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(ex, ((at).value).annotation)))))));
+          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>>) (ex -> hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(ex, ((at).value).annotation)))));
       }
       
       @Override
@@ -2855,7 +2855,7 @@ public interface Rewriting {
           (recurse).apply(((app).value).function),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>>) (lhs -> hydra.lib.eithers.Bind.apply(
             (recurse).apply(((app).value).argument),
-            (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>>) (rhs -> (hydra.util.Either<T3, hydra.core.Term>) ((hydra.util.Either<T3, hydra.core.Term>) (hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Application(new hydra.core.Application(lhs, rhs)))))))));
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>>) (rhs -> hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Application(new hydra.core.Application(lhs, rhs)))))));
       }
       
       @Override
@@ -2863,13 +2863,13 @@ public interface Rewriting {
         return hydra.lib.eithers.Bind.apply(
           hydra.lib.eithers.Either.apply(
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.util.Either<hydra.core.Term, hydra.core.Term>>>) (l -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.core.Term, hydra.core.Term>>) (x -> (hydra.util.Either<hydra.core.Term, hydra.core.Term>) ((hydra.util.Either<hydra.core.Term, hydra.core.Term>) (hydra.util.Either.<hydra.core.Term, hydra.core.Term>left(x)))),
+              (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.core.Term, hydra.core.Term>>) (x -> hydra.util.Either.<hydra.core.Term, hydra.core.Term>left(x)),
               (recurse).apply(l))),
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.util.Either<hydra.core.Term, hydra.core.Term>>>) (r -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.core.Term, hydra.core.Term>>) (x -> (hydra.util.Either<hydra.core.Term, hydra.core.Term>) ((hydra.util.Either<hydra.core.Term, hydra.core.Term>) (hydra.util.Either.<hydra.core.Term, hydra.core.Term>right(x)))),
+              (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.core.Term, hydra.core.Term>>) (x -> hydra.util.Either.<hydra.core.Term, hydra.core.Term>right(x)),
               (recurse).apply(r))),
             (e).value),
-          (java.util.function.Function<hydra.util.Either<hydra.core.Term, hydra.core.Term>, hydra.util.Either<T3, hydra.core.Term>>) (re -> (hydra.util.Either<T3, hydra.core.Term>) ((hydra.util.Either<T3, hydra.core.Term>) (hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Either(re))))));
+          (java.util.function.Function<hydra.util.Either<hydra.core.Term, hydra.core.Term>, hydra.util.Either<T3, hydra.core.Term>>) (re -> hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Either(re))));
       }
       
       @Override
@@ -2882,7 +2882,7 @@ public interface Rewriting {
               v1)),
             recurse,
             (fun).value),
-          (java.util.function.Function<hydra.core.Function, hydra.util.Either<T3, hydra.core.Term>>) (rfun -> (hydra.util.Either<T3, hydra.core.Term>) ((hydra.util.Either<T3, hydra.core.Term>) (hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Function(rfun))))));
+          (java.util.function.Function<hydra.core.Function, hydra.util.Either<T3, hydra.core.Term>>) (rfun -> hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Function(rfun))));
       }
       
       @Override
@@ -2897,7 +2897,7 @@ public interface Rewriting {
             bindings),
           (java.util.function.Function<java.util.List<hydra.core.Binding>, hydra.util.Either<T3, hydra.core.Term>>) (rbindings -> hydra.lib.eithers.Bind.apply(
             (recurse).apply(body),
-            (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>>) (rbody -> (hydra.util.Either<T3, hydra.core.Term>) ((hydra.util.Either<T3, hydra.core.Term>) (hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Let(new hydra.core.Let(rbindings, rbody)))))))));
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>>) (rbody -> hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Let(new hydra.core.Let(rbindings, rbody)))))));
       }
       
       @Override
@@ -2906,12 +2906,12 @@ public interface Rewriting {
           hydra.lib.eithers.MapList.apply(
             recurse,
             (els).value),
-          (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<T3, hydra.core.Term>>) (rels -> (hydra.util.Either<T3, hydra.core.Term>) ((hydra.util.Either<T3, hydra.core.Term>) (hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.List(rels))))));
+          (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<T3, hydra.core.Term>>) (rels -> hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.List(rels))));
       }
       
       @Override
       public hydra.util.Either<T3, hydra.core.Term> visit(hydra.core.Term.Literal v) {
-        return (hydra.util.Either<T3, hydra.core.Term>) ((hydra.util.Either<T3, hydra.core.Term>) (hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Literal((v).value))));
+        return hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Literal((v).value));
       }
       
       @Override
@@ -2922,7 +2922,7 @@ public interface Rewriting {
               recurse,
               v1)),
             hydra.lib.maps.ToList.apply((m).value)),
-          (java.util.function.Function<java.util.List<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>, hydra.util.Either<T3, hydra.core.Term>>) (pairs -> (hydra.util.Either<T3, hydra.core.Term>) ((hydra.util.Either<T3, hydra.core.Term>) (hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Map(hydra.lib.maps.FromList.apply(pairs)))))));
+          (java.util.function.Function<java.util.List<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>, hydra.util.Either<T3, hydra.core.Term>>) (pairs -> hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Map(hydra.lib.maps.FromList.apply(pairs)))));
       }
       
       @Override
@@ -2931,7 +2931,7 @@ public interface Rewriting {
           hydra.lib.eithers.MapMaybe.apply(
             recurse,
             (m).value),
-          (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, hydra.util.Either<T3, hydra.core.Term>>) (rm -> (hydra.util.Either<T3, hydra.core.Term>) ((hydra.util.Either<T3, hydra.core.Term>) (hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Maybe(rm))))));
+          (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, hydra.util.Either<T3, hydra.core.Term>>) (rm -> hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Maybe(rm))));
       }
       
       @Override
@@ -2940,7 +2940,7 @@ public interface Rewriting {
           (recurse).apply(hydra.lib.pairs.First.apply((p).value)),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>>) (rfirst -> hydra.lib.eithers.Bind.apply(
             (recurse).apply(hydra.lib.pairs.Second.apply((p).value)),
-            (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>>) (rsecond -> (hydra.util.Either<T3, hydra.core.Term>) ((hydra.util.Either<T3, hydra.core.Term>) (hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Pair((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(rfirst, rsecond)))))))))));
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>>) (rsecond -> hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Pair((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(rfirst, rsecond)))))))));
       }
       
       @Override
@@ -2960,14 +2960,14 @@ public interface Rewriting {
           hydra.lib.eithers.MapList.apply(
             recurse,
             hydra.lib.sets.ToList.apply((s).value)),
-          (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<T3, hydra.core.Term>>) (rlist -> (hydra.util.Either<T3, hydra.core.Term>) ((hydra.util.Either<T3, hydra.core.Term>) (hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Set(hydra.lib.sets.FromList.apply(rlist)))))));
+          (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<T3, hydra.core.Term>>) (rlist -> hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Set(hydra.lib.sets.FromList.apply(rlist)))));
       }
       
       @Override
       public hydra.util.Either<T3, hydra.core.Term> visit(hydra.core.Term.TypeApplication tt) {
         return hydra.lib.eithers.Bind.apply(
           (recurse).apply(((tt).value).body),
-          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>>) (t -> (hydra.util.Either<T3, hydra.core.Term>) ((hydra.util.Either<T3, hydra.core.Term>) (hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(t, ((tt).value).type)))))));
+          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>>) (t -> hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(t, ((tt).value).type)))));
       }
       
       @Override
@@ -2976,7 +2976,7 @@ public interface Rewriting {
         hydra.core.Name v = ((tl).value).parameter;
         return hydra.lib.eithers.Bind.apply(
           (recurse).apply(body),
-          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>>) (rbody -> (hydra.util.Either<T3, hydra.core.Term>) ((hydra.util.Either<T3, hydra.core.Term>) (hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda(v, rbody)))))));
+          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>>) (rbody -> hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda(v, rbody)))));
       }
       
       @Override
@@ -2990,12 +2990,12 @@ public interface Rewriting {
       
       @Override
       public hydra.util.Either<T3, hydra.core.Term> visit(hydra.core.Term.Unit ignored) {
-        return (hydra.util.Either<T3, hydra.core.Term>) ((hydra.util.Either<T3, hydra.core.Term>) (hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Unit())));
+        return hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Unit());
       }
       
       @Override
       public hydra.util.Either<T3, hydra.core.Term> visit(hydra.core.Term.Variable v) {
-        return (hydra.util.Either<T3, hydra.core.Term>) ((hydra.util.Either<T3, hydra.core.Term>) (hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Variable((v).value))));
+        return hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Variable((v).value));
       }
       
       @Override
@@ -3004,7 +3004,7 @@ public interface Rewriting {
         hydra.core.Term t = ((wt).value).body;
         return hydra.lib.eithers.Bind.apply(
           (recurse).apply(t),
-          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>>) (rt -> (hydra.util.Either<T3, hydra.core.Term>) ((hydra.util.Either<T3, hydra.core.Term>) (hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(name, rt)))))));
+          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>>) (rt -> hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(name, rt)))));
       }
     });
   }
@@ -3026,7 +3026,7 @@ public interface Rewriting {
   static <T3> hydra.util.Either<T3, hydra.core.Field> rewriteTermWithContextM_forField(java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>> recurse, hydra.core.Field field) {
     return hydra.lib.eithers.Bind.apply(
       (recurse).apply((field).term),
-      (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Field>>) (t -> (hydra.util.Either<T3, hydra.core.Field>) ((hydra.util.Either<T3, hydra.core.Field>) (hydra.util.Either.<T3, hydra.core.Field>right(new hydra.core.Field((field).name, t))))));
+      (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Field>>) (t -> hydra.util.Either.<T3, hydra.core.Field>right(new hydra.core.Field((field).name, t))));
   }
   
   static <T3> hydra.util.Either<T3, hydra.util.Pair<hydra.core.Term, hydra.core.Term>> rewriteTermWithContextM_forPair(java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>> recurse, hydra.util.Pair<hydra.core.Term, hydra.core.Term> kv) {
@@ -3034,14 +3034,14 @@ public interface Rewriting {
       (recurse).apply(hydra.lib.pairs.First.apply(kv)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>) (k -> hydra.lib.eithers.Bind.apply(
         (recurse).apply(hydra.lib.pairs.Second.apply(kv)),
-        (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>) (v -> (hydra.util.Either<T3, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>) ((hydra.util.Either<T3, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>) (hydra.util.Either.<T3, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>right((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(k, v))))))))));
+        (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>) (v -> hydra.util.Either.<T3, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>right((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(k, v))))))));
   }
   
   static <T3> hydra.util.Either<T3, hydra.core.Function> rewriteTermWithContextM_forElimination(java.util.function.Function<hydra.core.Field, hydra.util.Either<T3, hydra.core.Field>> forField, java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>> recurse, hydra.core.Elimination e) {
     return (e).accept(new hydra.core.Elimination.PartialVisitor<>() {
       @Override
       public hydra.util.Either<T3, hydra.core.Function> visit(hydra.core.Elimination.Record p) {
-        return (hydra.util.Either<T3, hydra.core.Function>) ((hydra.util.Either<T3, hydra.core.Function>) (hydra.util.Either.<T3, hydra.core.Function>right(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record((p).value)))));
+        return hydra.util.Either.<T3, hydra.core.Function>right(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record((p).value)));
       }
       
       @Override
@@ -3051,7 +3051,7 @@ public interface Rewriting {
         hydra.core.Name n = ((cs).value).typeName;
         return hydra.lib.eithers.Bind.apply(
           hydra.lib.maybes.Maybe.applyLazy(
-            () -> (hydra.util.Either<T3, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.Either<T3, hydra.util.Maybe<hydra.core.Term>>) (hydra.util.Either.<T3, hydra.util.Maybe<hydra.core.Term>>right((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing())))),
+            () -> hydra.util.Either.<T3, hydra.util.Maybe<hydra.core.Term>>right((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing())),
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.util.Maybe<hydra.core.Term>>>) (t -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<hydra.core.Term, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maybes.Pure::apply),
               (recurse).apply(t))),
@@ -3065,7 +3065,7 @@ public interface Rewriting {
       
       @Override
       public hydra.util.Either<T3, hydra.core.Function> visit(hydra.core.Elimination.Wrap name) {
-        return (hydra.util.Either<T3, hydra.core.Function>) ((hydra.util.Either<T3, hydra.core.Function>) (hydra.util.Either.<T3, hydra.core.Function>right(new hydra.core.Function.Elimination(new hydra.core.Elimination.Wrap((name).value)))));
+        return hydra.util.Either.<T3, hydra.core.Function>right(new hydra.core.Function.Elimination(new hydra.core.Elimination.Wrap((name).value)));
       }
     });
   }
@@ -3084,12 +3084,12 @@ public interface Rewriting {
         hydra.core.Name v = ((l).value).parameter;
         return hydra.lib.eithers.Bind.apply(
           (recurse).apply(body),
-          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Function>>) (rbody -> (hydra.util.Either<T3, hydra.core.Function>) ((hydra.util.Either<T3, hydra.core.Function>) (hydra.util.Either.<T3, hydra.core.Function>right(new hydra.core.Function.Lambda(new hydra.core.Lambda(v, d, rbody)))))));
+          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Function>>) (rbody -> hydra.util.Either.<T3, hydra.core.Function>right(new hydra.core.Function.Lambda(new hydra.core.Lambda(v, d, rbody)))));
       }
       
       @Override
       public hydra.util.Either<T3, hydra.core.Function> visit(hydra.core.Function.Primitive name) {
-        return (hydra.util.Either<T3, hydra.core.Function>) ((hydra.util.Either<T3, hydra.core.Function>) (hydra.util.Either.<T3, hydra.core.Function>right(new hydra.core.Function.Primitive((name).value))));
+        return hydra.util.Either.<T3, hydra.core.Function>right(new hydra.core.Function.Primitive((name).value));
       }
     });
   }
@@ -3097,7 +3097,7 @@ public interface Rewriting {
   static <T3> hydra.util.Either<T3, hydra.core.Binding> rewriteTermWithContextM_mapBinding(java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>> recurse, hydra.core.Binding b) {
     return hydra.lib.eithers.Bind.apply(
       (recurse).apply((b).term),
-      (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Binding>>) (v -> (hydra.util.Either<T3, hydra.core.Binding>) ((hydra.util.Either<T3, hydra.core.Binding>) (hydra.util.Either.<T3, hydra.core.Binding>right(new hydra.core.Binding((b).name, v, (b).type))))));
+      (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Binding>>) (v -> hydra.util.Either.<T3, hydra.core.Binding>right(new hydra.core.Binding((b).name, v, (b).type))));
   }
   
   static hydra.core.Type rewriteType(java.util.function.Function<java.util.function.Function<hydra.core.Type, hydra.core.Type>, java.util.function.Function<hydra.core.Type, hydra.core.Type>> f, hydra.core.Type typ0) {
@@ -3206,7 +3206,7 @@ public interface Rewriting {
       public hydra.util.Either<T1, hydra.core.Type> visit(hydra.core.Type.Annotated at) {
         return hydra.lib.eithers.Bind.apply(
           (recurse).apply(((at).value).body),
-          (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (t -> (hydra.util.Either<T1, hydra.core.Type>) ((hydra.util.Either<T1, hydra.core.Type>) (hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(t, ((at).value).annotation)))))));
+          (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (t -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(t, ((at).value).annotation)))));
       }
       
       @Override
@@ -3215,7 +3215,7 @@ public interface Rewriting {
           (recurse).apply(((at).value).function),
           (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (lhs -> hydra.lib.eithers.Bind.apply(
             (recurse).apply(((at).value).argument),
-            (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (rhs -> (hydra.util.Either<T1, hydra.core.Type>) ((hydra.util.Either<T1, hydra.core.Type>) (hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Application(new hydra.core.ApplicationType(lhs, rhs)))))))));
+            (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (rhs -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Application(new hydra.core.ApplicationType(lhs, rhs)))))));
       }
       
       @Override
@@ -3224,7 +3224,7 @@ public interface Rewriting {
           (recurse).apply(((et).value).left),
           (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (left -> hydra.lib.eithers.Bind.apply(
             (recurse).apply(((et).value).right),
-            (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (right -> (hydra.util.Either<T1, hydra.core.Type>) ((hydra.util.Either<T1, hydra.core.Type>) (hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Either(new hydra.core.EitherType(left, right)))))))));
+            (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (right -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Either(new hydra.core.EitherType(left, right)))))));
       }
       
       @Override
@@ -3233,7 +3233,7 @@ public interface Rewriting {
           (recurse).apply(((pt).value).first),
           (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (pairFirst -> hydra.lib.eithers.Bind.apply(
             (recurse).apply(((pt).value).second),
-            (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (pairSecond -> (hydra.util.Either<T1, hydra.core.Type>) ((hydra.util.Either<T1, hydra.core.Type>) (hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Pair(new hydra.core.PairType(pairFirst, pairSecond)))))))));
+            (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (pairSecond -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Pair(new hydra.core.PairType(pairFirst, pairSecond)))))));
       }
       
       @Override
@@ -3242,26 +3242,26 @@ public interface Rewriting {
           (recurse).apply(((ft).value).domain),
           (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (dom -> hydra.lib.eithers.Bind.apply(
             (recurse).apply(((ft).value).codomain),
-            (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (cod -> (hydra.util.Either<T1, hydra.core.Type>) ((hydra.util.Either<T1, hydra.core.Type>) (hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Function(new hydra.core.FunctionType(dom, cod)))))))));
+            (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (cod -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Function(new hydra.core.FunctionType(dom, cod)))))));
       }
       
       @Override
       public hydra.util.Either<T1, hydra.core.Type> visit(hydra.core.Type.Forall ft) {
         return hydra.lib.eithers.Bind.apply(
           (recurse).apply(((ft).value).body),
-          (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (b -> (hydra.util.Either<T1, hydra.core.Type>) ((hydra.util.Either<T1, hydra.core.Type>) (hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Forall(new hydra.core.ForallType(((ft).value).parameter, b)))))));
+          (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (b -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Forall(new hydra.core.ForallType(((ft).value).parameter, b)))));
       }
       
       @Override
       public hydra.util.Either<T1, hydra.core.Type> visit(hydra.core.Type.List t) {
         return hydra.lib.eithers.Bind.apply(
           (recurse).apply((t).value),
-          (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (rt -> (hydra.util.Either<T1, hydra.core.Type>) ((hydra.util.Either<T1, hydra.core.Type>) (hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.List(rt))))));
+          (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (rt -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.List(rt))));
       }
       
       @Override
       public hydra.util.Either<T1, hydra.core.Type> visit(hydra.core.Type.Literal lt) {
-        return (hydra.util.Either<T1, hydra.core.Type>) ((hydra.util.Either<T1, hydra.core.Type>) (hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Literal((lt).value))));
+        return hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Literal((lt).value));
       }
       
       @Override
@@ -3270,14 +3270,14 @@ public interface Rewriting {
           (recurse).apply(((mt).value).keys),
           (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (kt -> hydra.lib.eithers.Bind.apply(
             (recurse).apply(((mt).value).values),
-            (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (vt -> (hydra.util.Either<T1, hydra.core.Type>) ((hydra.util.Either<T1, hydra.core.Type>) (hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Map(new hydra.core.MapType(kt, vt)))))))));
+            (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (vt -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Map(new hydra.core.MapType(kt, vt)))))));
       }
       
       @Override
       public hydra.util.Either<T1, hydra.core.Type> visit(hydra.core.Type.Maybe t) {
         return hydra.lib.eithers.Bind.apply(
           (recurse).apply((t).value),
-          (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (rt -> (hydra.util.Either<T1, hydra.core.Type>) ((hydra.util.Either<T1, hydra.core.Type>) (hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Maybe(rt))))));
+          (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (rt -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Maybe(rt))));
       }
       
       @Override
@@ -3290,14 +3290,14 @@ public interface Rewriting {
               recurse,
               v1)),
             fields),
-          (java.util.function.Function<java.util.List<hydra.core.FieldType>, hydra.util.Either<T1, hydra.core.Type>>) (rfields -> (hydra.util.Either<T1, hydra.core.Type>) ((hydra.util.Either<T1, hydra.core.Type>) (hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Record(new hydra.core.RowType(name, rfields)))))));
+          (java.util.function.Function<java.util.List<hydra.core.FieldType>, hydra.util.Either<T1, hydra.core.Type>>) (rfields -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Record(new hydra.core.RowType(name, rfields)))));
       }
       
       @Override
       public hydra.util.Either<T1, hydra.core.Type> visit(hydra.core.Type.Set t) {
         return hydra.lib.eithers.Bind.apply(
           (recurse).apply((t).value),
-          (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (rt -> (hydra.util.Either<T1, hydra.core.Type>) ((hydra.util.Either<T1, hydra.core.Type>) (hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Set(rt))))));
+          (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (rt -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Set(rt))));
       }
       
       @Override
@@ -3310,24 +3310,24 @@ public interface Rewriting {
               recurse,
               v1)),
             fields),
-          (java.util.function.Function<java.util.List<hydra.core.FieldType>, hydra.util.Either<T1, hydra.core.Type>>) (rfields -> (hydra.util.Either<T1, hydra.core.Type>) ((hydra.util.Either<T1, hydra.core.Type>) (hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Union(new hydra.core.RowType(name, rfields)))))));
+          (java.util.function.Function<java.util.List<hydra.core.FieldType>, hydra.util.Either<T1, hydra.core.Type>>) (rfields -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Union(new hydra.core.RowType(name, rfields)))));
       }
       
       @Override
       public hydra.util.Either<T1, hydra.core.Type> visit(hydra.core.Type.Unit ignored) {
-        return (hydra.util.Either<T1, hydra.core.Type>) ((hydra.util.Either<T1, hydra.core.Type>) (hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Unit())));
+        return hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Unit());
       }
       
       @Override
       public hydra.util.Either<T1, hydra.core.Type> visit(hydra.core.Type.Variable v) {
-        return (hydra.util.Either<T1, hydra.core.Type>) ((hydra.util.Either<T1, hydra.core.Type>) (hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Variable((v).value))));
+        return hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Variable((v).value));
       }
       
       @Override
       public hydra.util.Either<T1, hydra.core.Type> visit(hydra.core.Type.Wrap wt) {
         return hydra.lib.eithers.Bind.apply(
           (recurse).apply(((wt).value).body),
-          (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (t -> (hydra.util.Either<T1, hydra.core.Type>) ((hydra.util.Either<T1, hydra.core.Type>) (hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Wrap(new hydra.core.WrappedType(((wt).value).typeName, t)))))));
+          (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (t -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Wrap(new hydra.core.WrappedType(((wt).value).typeName, t)))));
       }
     });
   }
@@ -3343,13 +3343,13 @@ public interface Rewriting {
   static <T1> hydra.util.Either<T1, hydra.core.FieldType> rewriteTypeM_forField(java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>> recurse, hydra.core.FieldType f) {
     return hydra.lib.eithers.Bind.apply(
       (recurse).apply((f).type),
-      (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.FieldType>>) (t -> (hydra.util.Either<T1, hydra.core.FieldType>) ((hydra.util.Either<T1, hydra.core.FieldType>) (hydra.util.Either.<T1, hydra.core.FieldType>right(new hydra.core.FieldType((f).name, t))))));
+      (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.FieldType>>) (t -> hydra.util.Either.<T1, hydra.core.FieldType>right(new hydra.core.FieldType((f).name, t))));
   }
   
   static <T1> hydra.util.Either<T1, hydra.core.FieldType> rewriteTypeM_forField2(java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>> recurse, hydra.core.FieldType f) {
     return hydra.lib.eithers.Bind.apply(
       (recurse).apply((f).type),
-      (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.FieldType>>) (t -> (hydra.util.Either<T1, hydra.core.FieldType>) ((hydra.util.Either<T1, hydra.core.FieldType>) (hydra.util.Either.<T1, hydra.core.FieldType>right(new hydra.core.FieldType((f).name, t))))));
+      (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.FieldType>>) (t -> hydra.util.Either.<T1, hydra.core.FieldType>right(new hydra.core.FieldType((f).name, t))));
   }
   
   static hydra.core.Term simplifyTerm(hydra.core.Term term) {

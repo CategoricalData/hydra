@@ -14,7 +14,7 @@ public interface Encoding {
         hydra.decode.core.Core.type(
           graph,
           (b).term)),
-      (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.DecodingError>, hydra.core.Binding>>) (typ -> (hydra.util.Either<hydra.context.InContext<hydra.error.DecodingError>, hydra.core.Binding>) ((hydra.util.Either<hydra.context.InContext<hydra.error.DecodingError>, hydra.core.Binding>) (hydra.util.Either.<hydra.context.InContext<hydra.error.DecodingError>, hydra.core.Binding>right(new hydra.core.Binding(hydra.encoding.Encoding.encodeBindingName((b).name), hydra.encoding.Encoding.encodeType(typ), hydra.util.Maybe.just(hydra.encoding.Encoding.encoderTypeScheme(typ))))))));
+      (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.DecodingError>, hydra.core.Binding>>) (typ -> hydra.util.Either.<hydra.context.InContext<hydra.error.DecodingError>, hydra.core.Binding>right(new hydra.core.Binding(hydra.encoding.Encoding.encodeBindingName((b).name), hydra.encoding.Encoding.encodeType(typ), hydra.util.Maybe.just(hydra.encoding.Encoding.encoderTypeScheme(typ))))));
   }
   
   static hydra.core.Name encodeBindingName(hydra.core.Name n) {
@@ -506,7 +506,7 @@ public interface Encoding {
         (mod).elements),
       (java.util.function.Function<java.util.List<hydra.core.Binding>, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.module.Module>>>) (typeBindings -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(typeBindings),
-        () -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.module.Module>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.module.Module>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.module.Module>>right((hydra.util.Maybe<hydra.module.Module>) (hydra.util.Maybe.<hydra.module.Module>nothing())))),
+        () -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.module.Module>>right((hydra.util.Maybe<hydra.module.Module>) (hydra.util.Maybe.<hydra.module.Module>nothing())),
         () -> hydra.lib.eithers.Bind.apply(
           hydra.lib.eithers.MapList.apply(
             (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Binding>>) (b -> hydra.lib.eithers.Bimap.apply(
@@ -517,7 +517,7 @@ public interface Encoding {
                 graph,
                 b))),
             typeBindings),
-          (java.util.function.Function<java.util.List<hydra.core.Binding>, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.module.Module>>>) (encodedBindings -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.module.Module>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.module.Module>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.module.Module>>right(hydra.util.Maybe.just(new hydra.module.Module(hydra.encoding.Encoding.encodeNamespace((mod).namespace), encodedBindings, hydra.lib.lists.Nub.apply(hydra.lib.lists.Concat2.apply(
+          (java.util.function.Function<java.util.List<hydra.core.Binding>, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.module.Module>>>) (encodedBindings -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.module.Module>>right(hydra.util.Maybe.just(new hydra.module.Module(hydra.encoding.Encoding.encodeNamespace((mod).namespace), encodedBindings, hydra.lib.lists.Nub.apply(hydra.lib.lists.Concat2.apply(
             hydra.lib.lists.Map.apply(
               hydra.encoding.Encoding::encodeNamespace,
               (mod).typeDependencies),
@@ -525,7 +525,7 @@ public interface Encoding {
               hydra.encoding.Encoding::encodeNamespace,
               (mod).termDependencies))), java.util.List.of((mod).namespace), hydra.util.Maybe.just(hydra.lib.strings.Cat.apply(java.util.List.of(
             "Term encoders for ",
-            ((mod).namespace).value)))))))))))));
+            ((mod).namespace).value)))))))))));
   }
   
   static hydra.core.Term encodeName(hydra.core.Name n) {
@@ -679,10 +679,10 @@ public interface Encoding {
         cx,
         graph,
         (b).name),
-      (java.util.function.Function<Boolean, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.Binding>>>) (serializable -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.Binding>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.Binding>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.Binding>>right(hydra.lib.logic.IfElse.lazy(
+      (java.util.function.Function<Boolean, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.Binding>>>) (serializable -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.Binding>>right(hydra.lib.logic.IfElse.lazy(
         serializable,
         () -> hydra.util.Maybe.just(b),
-        () -> (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing())))))));
+        () -> (hydra.util.Maybe<hydra.core.Binding>) (hydra.util.Maybe.<hydra.core.Binding>nothing())))));
   }
   
   static Boolean isUnitType(hydra.core.Type v1) {

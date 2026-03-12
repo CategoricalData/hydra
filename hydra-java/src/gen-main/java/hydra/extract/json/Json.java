@@ -10,18 +10,18 @@ public interface Json {
     return (value).accept(new hydra.json.model.Value.PartialVisitor<>() {
       @Override
       public hydra.util.Either<String, java.util.List<hydra.json.model.Value>> otherwise(hydra.json.model.Value instance) {
-        return (hydra.util.Either<String, java.util.List<hydra.json.model.Value>>) ((hydra.util.Either<String, java.util.List<hydra.json.model.Value>>) (hydra.util.Either.<String, java.util.List<hydra.json.model.Value>>left(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<String, java.util.List<hydra.json.model.Value>>left(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             "expected ",
             "JSON array"),
           hydra.lib.strings.Cat2.apply(
             " but found ",
-            hydra.extract.json.Json.showValue(value))))));
+            hydra.extract.json.Json.showValue(value))));
       }
       
       @Override
       public hydra.util.Either<String, java.util.List<hydra.json.model.Value>> visit(hydra.json.model.Value.Array els) {
-        return (hydra.util.Either<String, java.util.List<hydra.json.model.Value>>) ((hydra.util.Either<String, java.util.List<hydra.json.model.Value>>) (hydra.util.Either.<String, java.util.List<hydra.json.model.Value>>right((els).value)));
+        return hydra.util.Either.<String, java.util.List<hydra.json.model.Value>>right((els).value);
       }
     });
   }
@@ -30,18 +30,18 @@ public interface Json {
     return (value).accept(new hydra.json.model.Value.PartialVisitor<>() {
       @Override
       public hydra.util.Either<String, java.math.BigDecimal> otherwise(hydra.json.model.Value instance) {
-        return (hydra.util.Either<String, java.math.BigDecimal>) ((hydra.util.Either<String, java.math.BigDecimal>) (hydra.util.Either.<String, java.math.BigDecimal>left(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<String, java.math.BigDecimal>left(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             "expected ",
             "JSON number"),
           hydra.lib.strings.Cat2.apply(
             " but found ",
-            hydra.extract.json.Json.showValue(value))))));
+            hydra.extract.json.Json.showValue(value))));
       }
       
       @Override
       public hydra.util.Either<String, java.math.BigDecimal> visit(hydra.json.model.Value.Number_ d) {
-        return (hydra.util.Either<String, java.math.BigDecimal>) ((hydra.util.Either<String, java.math.BigDecimal>) (hydra.util.Either.<String, java.math.BigDecimal>right((d).value)));
+        return hydra.util.Either.<String, java.math.BigDecimal>right((d).value);
       }
     });
   }
@@ -50,18 +50,18 @@ public interface Json {
     return (value).accept(new hydra.json.model.Value.PartialVisitor<>() {
       @Override
       public hydra.util.Either<String, java.util.Map<String, hydra.json.model.Value>> otherwise(hydra.json.model.Value instance) {
-        return (hydra.util.Either<String, java.util.Map<String, hydra.json.model.Value>>) ((hydra.util.Either<String, java.util.Map<String, hydra.json.model.Value>>) (hydra.util.Either.<String, java.util.Map<String, hydra.json.model.Value>>left(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<String, java.util.Map<String, hydra.json.model.Value>>left(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             "expected ",
             "JSON object"),
           hydra.lib.strings.Cat2.apply(
             " but found ",
-            hydra.extract.json.Json.showValue(value))))));
+            hydra.extract.json.Json.showValue(value))));
       }
       
       @Override
       public hydra.util.Either<String, java.util.Map<String, hydra.json.model.Value>> visit(hydra.json.model.Value.Object_ m) {
-        return (hydra.util.Either<String, java.util.Map<String, hydra.json.model.Value>>) ((hydra.util.Either<String, java.util.Map<String, hydra.json.model.Value>>) (hydra.util.Either.<String, java.util.Map<String, hydra.json.model.Value>>right((m).value)));
+        return hydra.util.Either.<String, java.util.Map<String, hydra.json.model.Value>>right((m).value);
       }
     });
   }
@@ -70,18 +70,18 @@ public interface Json {
     return (value).accept(new hydra.json.model.Value.PartialVisitor<>() {
       @Override
       public hydra.util.Either<String, String> otherwise(hydra.json.model.Value instance) {
-        return (hydra.util.Either<String, String>) ((hydra.util.Either<String, String>) (hydra.util.Either.<String, String>left(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<String, String>left(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             "expected ",
             "JSON string"),
           hydra.lib.strings.Cat2.apply(
             " but found ",
-            hydra.extract.json.Json.showValue(value))))));
+            hydra.extract.json.Json.showValue(value))));
       }
       
       @Override
       public hydra.util.Either<String, String> visit(hydra.json.model.Value.String_ s) {
-        return (hydra.util.Either<String, String>) ((hydra.util.Either<String, String>) (hydra.util.Either.<String, String>right((s).value)));
+        return hydra.util.Either.<String, String>right((s).value);
       }
     });
   }
@@ -94,7 +94,7 @@ public interface Json {
   
   static <T0> hydra.util.Either<String, hydra.util.Maybe<java.util.List<hydra.json.model.Value>>> optArray(T0 fname, java.util.Map<T0, hydra.json.model.Value> m) {
     return hydra.lib.maybes.Maybe.applyLazy(
-      () -> (hydra.util.Either<String, hydra.util.Maybe<java.util.List<hydra.json.model.Value>>>) ((hydra.util.Either<String, hydra.util.Maybe<java.util.List<hydra.json.model.Value>>>) (hydra.util.Either.<String, hydra.util.Maybe<java.util.List<hydra.json.model.Value>>>right((hydra.util.Maybe<java.util.List<hydra.json.model.Value>>) (hydra.util.Maybe.<java.util.List<hydra.json.model.Value>>nothing())))),
+      () -> hydra.util.Either.<String, hydra.util.Maybe<java.util.List<hydra.json.model.Value>>>right((hydra.util.Maybe<java.util.List<hydra.json.model.Value>>) (hydra.util.Maybe.<java.util.List<hydra.json.model.Value>>nothing())),
       (java.util.function.Function<hydra.json.model.Value, hydra.util.Either<String, hydra.util.Maybe<java.util.List<hydra.json.model.Value>>>>) (a -> hydra.lib.eithers.Map.apply(
         (java.util.function.Function<java.util.List<hydra.json.model.Value>, hydra.util.Maybe<java.util.List<hydra.json.model.Value>>>) (x -> hydra.util.Maybe.just(x)),
         hydra.extract.json.Json.expectArray(a))),
@@ -105,7 +105,7 @@ public interface Json {
   
   static <T0> hydra.util.Either<String, hydra.util.Maybe<String>> optString(T0 fname, java.util.Map<T0, hydra.json.model.Value> m) {
     return hydra.lib.maybes.Maybe.applyLazy(
-      () -> (hydra.util.Either<String, hydra.util.Maybe<String>>) ((hydra.util.Either<String, hydra.util.Maybe<String>>) (hydra.util.Either.<String, hydra.util.Maybe<String>>right((hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing())))),
+      () -> hydra.util.Either.<String, hydra.util.Maybe<String>>right((hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing())),
       (java.util.function.Function<hydra.json.model.Value, hydra.util.Either<String, hydra.util.Maybe<String>>>) (s -> hydra.lib.eithers.Map.apply(
         (java.util.function.Function<String, hydra.util.Maybe<String>>) (x -> hydra.util.Maybe.just(x)),
         hydra.extract.json.Json.expectString(s))),
@@ -116,11 +116,11 @@ public interface Json {
   
   static <T0, T1> hydra.util.Either<String, T1> require(T0 fname, java.util.Map<T0, T1> m) {
     return hydra.lib.maybes.Maybe.applyLazy(
-      () -> (hydra.util.Either<String, T1>) ((hydra.util.Either<String, T1>) (hydra.util.Either.<String, T1>left(hydra.lib.strings.Cat.apply(java.util.List.of(
+      () -> hydra.util.Either.<String, T1>left(hydra.lib.strings.Cat.apply(java.util.List.of(
         "required attribute ",
         hydra.extract.json.Json.<T0>showValue(fname),
-        " not found"))))),
-      (java.util.function.Function<T1, hydra.util.Either<String, T1>>) (value -> (hydra.util.Either<String, T1>) ((hydra.util.Either<String, T1>) (hydra.util.Either.<String, T1>right(value)))),
+        " not found"))),
+      (java.util.function.Function<T1, hydra.util.Either<String, T1>>) (value -> hydra.util.Either.<String, T1>right(value)),
       hydra.lib.maps.Lookup.apply(
         fname,
         m));
