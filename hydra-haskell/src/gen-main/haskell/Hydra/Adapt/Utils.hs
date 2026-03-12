@@ -9,20 +9,15 @@ import qualified Hydra.Compute as Compute
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Error as Error
-import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Logic as Logic
-import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Module as Module
-import qualified Hydra.Names as Names
 import qualified Hydra.Reflect as Reflect
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core_
-import qualified Hydra.Util as Util
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -99,26 +94,6 @@ literalTypeIsSupported constraints lt =
           Core.LiteralTypeInteger v0 -> (integerTypeIsSupported constraints v0)
           _ -> True) lt)
   in (Logic.and (Sets.member (Reflect.literalTypeVariant lt) (Coders.languageConstraintsLiteralVariants constraints)) (isSupported lt))
-
--- | Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator
-nameToFilePath :: (Util.CaseConvention -> Util.CaseConvention -> Module.FileExtension -> Core.Name -> String)
-nameToFilePath nsConv localConv ext name =  
-  let qualName = (Names.qualifyName name)
-  in  
-    let ns = (Module.qualifiedNameNamespace qualName)
-    in  
-      let local = (Module.qualifiedNameLocal qualName)
-      in  
-        let nsToFilePath = (\ns -> Strings.intercalate "/" (Lists.map (\part -> Formatting.convertCase Util.CaseConventionCamel nsConv part) (Strings.splitOn "." (Module.unNamespace ns))))
-        in  
-          let prefix = (Maybes.maybe "" (\n -> Strings.cat2 (nsToFilePath n) "/") ns)
-          in  
-            let suffix = (Formatting.convertCase Util.CaseConventionPascal localConv local)
-            in (Strings.cat [
-              prefix,
-              suffix,
-              ".",
-              (Module.unFileExtension ext)])
 
 -- | Check if type is supported by language constraints
 typeIsSupported :: (Coders.LanguageConstraints -> Core.Type -> Bool)

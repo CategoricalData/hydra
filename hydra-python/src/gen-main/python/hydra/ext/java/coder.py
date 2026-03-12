@@ -8,7 +8,6 @@ from decimal import Decimal
 from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Just, Left, Maybe, Nothing, Right, frozenlist
 from typing import TypeVar, cast
-import hydra.adapt.utils
 import hydra.annotations
 import hydra.arity
 import hydra.coder_utils
@@ -612,7 +611,7 @@ def binding_name_to_file_path(name: hydra.core.Name) -> str:
     @lru_cache(1)
     def unq() -> hydra.core.Name:
         return hydra.names.unqualify_name(hydra.module.QualifiedName(ns_, sanitized()))
-    return hydra.adapt.utils.name_to_file_path(hydra.util.CaseConvention.CAMEL, hydra.util.CaseConvention.PASCAL, hydra.module.FileExtension("java"), unq())
+    return hydra.coder_utils.name_to_file_path(hydra.util.CaseConvention.CAMEL, hydra.util.CaseConvention.PASCAL, hydra.module.FileExtension("java"), unq())
 
 def fresh_java_name_go(base: hydra.core.Name, avoid: frozenset[hydra.core.Name], i: int) -> hydra.core.Name:
     @lru_cache(1)

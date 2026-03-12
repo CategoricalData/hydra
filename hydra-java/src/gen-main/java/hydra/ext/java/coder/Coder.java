@@ -41,7 +41,7 @@ public interface Coder {
       hydra.ext.java.language.Language.reservedWords(),
       local);
     hydra.core.Name unq = hydra.names.Names.unqualifyName(new hydra.module.QualifiedName(ns_, sanitized));
-    return hydra.adapt.utils.Utils.nameToFilePath(
+    return hydra.coderUtils.CoderUtils.nameToFilePath(
       new hydra.util.CaseConvention.Camel(),
       new hydra.util.CaseConvention.Pascal(),
       new hydra.module.FileExtension("java"),

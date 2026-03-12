@@ -6,6 +6,7 @@ module Hydra.Adapt.Terms where
 
 import qualified Hydra.Adapt.Literals as Literals
 import qualified Hydra.Adapt.Utils as Utils
+import qualified Hydra.CoderUtils as CoderUtils
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Context as Context
@@ -677,7 +678,7 @@ unionToRecord cx t =
           in  
             let sfields = (Core.rowTypeFields v0)
             in  
-              let target = (Core.TypeRecord (unionTypeToRecordType v0))
+              let target = (Core.TypeRecord (CoderUtils.unionTypeToRecordType v0))
               in  
                 let toRecordField = (\term -> \fn -> \f ->  
                         let fn_ = (Core.fieldTypeName f)
@@ -699,20 +700,6 @@ unionToRecord cx t =
                             Core.recordTypeName = nm,
                             Core.recordFields = (Lists.map (toRecordField term fn) sfields)}))))),
                       Compute.coderDecode = (\cx -> \term -> Eithers.bind (Compute.coderDecode (Compute.adapterCoder ad) cx term) (\recTerm -> forRecTerm cx nm ad term recTerm))}}))))) t)
-
--- | Convert a union row type to a record row type
-unionTypeToRecordType :: (Core.RowType -> Core.RowType)
-unionTypeToRecordType rt =  
-  let makeOptional = (\f ->  
-          let fn = (Core.fieldTypeName f)
-          in  
-            let ft = (Core.fieldTypeType f)
-            in Core.FieldType {
-              Core.fieldTypeName = fn,
-              Core.fieldTypeType = (Rewriting.mapBeneathTypeAnnotations (\x -> Core.TypeMaybe x) ft)})
-  in Core.RowType {
-    Core.rowTypeTypeName = (Core.rowTypeTypeName rt),
-    Core.rowTypeFields = (Lists.map makeOptional (Core.rowTypeFields rt))}
 
 -- | Convert unit terms to records
 unitToRecord :: (t0 -> t1 -> Either t2 (Compute.Adapter Core.Type Core.Type Core.Term Core.Term))

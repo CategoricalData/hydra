@@ -499,7 +499,22 @@ When refactoring types that are threaded through computations (e.g., as `Context
 These bugs don't cause compilation errors or even runtime exceptions — they produce subtly wrong output. The defense is to run the full test suite after every regeneration and investigate any new failures carefully, even if they seem unrelated to the change.
 
 ### Orphan Files
-When modules are moved or regenerated, old files may be left behind:
+When modules or elements are moved, renamed, or deleted, stale generated files may be left behind. The sync scripts generate new files but do not delete old ones.
+
+**Haskell**: One `.hs` file per module. If you rename module `hydra.foo` to `hydra.foo.bar`, delete the old `src/gen-main/haskell/Hydra/Foo.hs`.
+
+**Python**: One `.py` file (or `__init__.py` in a package directory) per module. If you rename or delete a module, delete the old `.py` file or package directory.
+
+**Java**: Java generates **one file per type** in addition to one file per module. For example, a module `hydra.foo` containing types `Bar` and `Baz` generates:
+- `hydra-java/src/gen-main/java/hydra/foo/Bar.java`
+- `hydra-java/src/gen-main/java/hydra/foo/Baz.java`
+- (plus files for any term-level definitions)
+
+When deleting or moving a module, you must delete the entire directory (e.g., `rm -rf hydra-java/src/gen-main/java/hydra/foo/`). When removing individual types or elements from a module, delete the corresponding `.java` files. Stale Java files will still compile and be on the classpath, potentially causing conflicts or confusion.
+
+**JSON**: One `.json` file per module in `src/gen-main/json/`. Delete stale `.json` files when modules are renamed or removed.
+
+Additional cases where orphan files appear:
 - After moving `Foo.hs` to `Foo/Bar.hs`, delete the old `Foo.hs`
 - After regenerating Python, delete old `.py` files that are now packages
 - After a type change causes a previously-generated class to no longer be generated (e.g., a type alias that was incorrectly generating a wrapper class), the stale file remains and must be deleted manually

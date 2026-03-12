@@ -17,7 +17,9 @@ import Hydra.Kernel hiding (
   isComplexVariable,
   isSimpleAssignment,
   isTrivialTerm,
-  normalizeComment)
+  nameToFilePath,
+  normalizeComment,
+  unionTypeToRecordType)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Annotations   as Annotations
 import qualified Hydra.Dsl.Meta.Ast           as Ast
@@ -72,6 +74,7 @@ import qualified Hydra.Sources.Kernel.Terms.Arity as Arity
 import qualified Hydra.Sources.Kernel.Terms.Checking as Checking
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
+import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
 
@@ -84,7 +87,7 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [Annotations.ns, Arity.ns, Checking.ns, Lexical.ns, Rewriting.ns, Schemas.ns]
+    [Annotations.ns, Arity.ns, Checking.ns, Formatting.ns, Lexical.ns, Names.ns, Rewriting.ns, Schemas.ns]
     kernelTypesNamespaces $
     Just "Common utilities for language coders, providing shared patterns for term decomposition and analysis."
   where
@@ -103,6 +106,9 @@ module_ = Module ns elements
      -- Tail-call optimization detection
      toBinding isSelfTailRecursive,
      toBinding isTailRecursiveInTailPosition,
+     -- Type transformation utilities
+     toBinding nameToFilePath,
+     toBinding unionTypeToRecordType,
      -- Context/graph utilities
      toBinding commentsFromElement,
      toBinding commentsFromFieldType,
@@ -461,6 +467,38 @@ isTailRecursiveInTailPosition = define "isTailRecursiveInTailPosition" $
           (Core.letBindings $ var "lt")) $
         Logic.and (var "bindingsOk")
           (isTailRecursiveInTailPosition @@ var "funcName" @@ (Core.letBody $ var "lt"))]
+
+
+--------------------------------------------------------------------------------
+-- Type transformation utilities
+--------------------------------------------------------------------------------
+
+nameToFilePath :: TBinding (CaseConvention -> CaseConvention -> FileExtension -> Name -> FilePath)
+nameToFilePath = define "nameToFilePath" $
+  doc "Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator" $
+  "nsConv" ~> "localConv" ~> "ext" ~> "name" ~>
+  "qualName" <~ Names.qualifyName @@ var "name" $
+  "ns" <~ Module.qualifiedNameNamespace (var "qualName") $
+  "local" <~ Module.qualifiedNameLocal (var "qualName") $
+  "nsToFilePath" <~ ("ns" ~>
+    Strings.intercalate (string "/") (Lists.map
+      ("part" ~> Formatting.convertCase @@ Util.caseConventionCamel @@ var "nsConv" @@ var "part")
+      (Strings.splitOn (string ".") (Module.unNamespace (var "ns"))))) $
+  "prefix" <~ Maybes.maybe (string "")
+    ("n" ~> Strings.cat2 (var "nsToFilePath" @@ var "n") (string "/"))
+    (var "ns") $
+  "suffix" <~ Formatting.convertCase @@ Util.caseConventionPascal @@ var "localConv" @@ var "local" $
+  Strings.cat (list [var "prefix", var "suffix", string ".", Module.unFileExtension (var "ext")])
+
+unionTypeToRecordType :: TBinding (RowType -> RowType)
+unionTypeToRecordType = define "unionTypeToRecordType" $
+  doc "Convert a union row type to a record row type" $
+  "rt" ~>
+  "makeOptional" <~ ("f" ~>
+    "fn" <~ Core.fieldTypeName (var "f") $
+    "ft" <~ Core.fieldTypeType (var "f") $
+    Core.fieldType (var "fn") (Rewriting.mapBeneathTypeAnnotations @@ unaryFunction Core.typeMaybe @@ var "ft")) $
+  Core.rowType (Core.rowTypeTypeName (var "rt")) (Lists.map (var "makeOptional") (Core.rowTypeFields (var "rt")))
 
 
 --------------------------------------------------------------------------------

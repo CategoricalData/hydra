@@ -6,7 +6,7 @@ import Hydra.Kernel hiding (
   fieldAdapter, forTypeReference, functionProxyName, functionProxyType, functionToUnion,
   lambdaToMonotype, maybeToList, passApplication, passEither, passForall, passFunction, passList,
   passLiteral, passMap, passOptional, passRecord, passSet, passUnion, passUnit, passWrapped,
-  setToList, simplifyApplication, unitToRecord, unionToRecord, unionTypeToRecordType, wrapToUnwrapped,
+  setToList, simplifyApplication, unitToRecord, unionToRecord, wrapToUnwrapped,
   termAdapter)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors    as Accessors
@@ -60,6 +60,7 @@ import qualified Data.Maybe                  as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Adapt.Literals as AdaptLiterals
 import qualified Hydra.Sources.Kernel.Terms.Adapt.Utils    as AdaptUtils
+import qualified Hydra.Sources.CoderUtils                  as CoderUtils
 import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core   as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Monads         as Monads
@@ -76,7 +77,7 @@ ns = Namespace "hydra.adapt.terms"
 
 module_ :: Module
 module_ = Module ns elements
-    [AdaptLiterals.ns, AdaptUtils.ns, Annotations.ns, ExtractCore.ns, Monads.ns,
+    [AdaptLiterals.ns, AdaptUtils.ns, CoderUtils.ns, Annotations.ns, ExtractCore.ns, Monads.ns,
       Reflect.ns, Rewriting.ns, Schemas.ns, ShowCore.ns]
     kernelTypesNamespaces $
     Just "Adapter framework for types and terms"
@@ -106,7 +107,6 @@ module_ = Module ns elements
       toBinding simplifyApplication,
       toBinding termAdapter,
       toBinding unionToRecord,
-      toBinding unionTypeToRecordType,
       toBinding unitToRecord,
       toBinding wrapToUnwrapped]
 
@@ -703,7 +703,7 @@ unionToRecord = define "unionToRecord" $
     _Type_union>>: "rt" ~>
       "nm" <~ Core.rowTypeTypeName (var "rt") $
       "sfields" <~ Core.rowTypeFields (var "rt") $
-      "target" <~ Core.typeRecord (unionTypeToRecordType @@ var "rt") $
+      "target" <~ Core.typeRecord (CoderUtils.unionTypeToRecordType @@ var "rt") $
       "toRecordField" <~ ("term" ~> "fn" ~> "f" ~>
         "fn'" <~ Core.fieldTypeName (var "f") $
         Core.field (var "fn'") (Core.termMaybe (Logic.ifElse
@@ -726,16 +726,6 @@ unionToRecord = define "unionToRecord" $
           ("cx" ~> "term" ~>
             "recTerm" <<~ Compute.coderDecode (Compute.adapterCoder (var "ad")) @@ var "cx" @@ var "term" $
             var "forRecTerm" @@ var "cx" @@ var "nm" @@ var "ad" @@ var "term" @@ var "recTerm")))]
-
-unionTypeToRecordType :: TBinding (RowType -> RowType)
-unionTypeToRecordType = define "unionTypeToRecordType" $
-  doc "Convert a union row type to a record row type" $
-  "rt" ~>
-  "makeOptional" <~ ("f" ~>
-    "fn" <~ Core.fieldTypeName (var "f") $
-    "ft" <~ Core.fieldTypeType (var "f") $
-    Core.fieldType (var "fn") (Rewriting.mapBeneathTypeAnnotations @@ unaryFunction Core.typeMaybe @@ var "ft")) $
-  Core.rowType (Core.rowTypeTypeName (var "rt")) (Lists.map (var "makeOptional") (Core.rowTypeFields (var "rt")))
 
 wrapToUnwrapped :: TBinding (AdapterContext -> Type -> Either String (SymmetricAdapter Type Term))
 wrapToUnwrapped = define "wrapToUnwrapped" $

@@ -120,37 +120,6 @@ public interface Utils {
       (isSupported).apply(lt));
   }
   
-  static String nameToFilePath(hydra.util.CaseConvention nsConv, hydra.util.CaseConvention localConv, hydra.module.FileExtension ext, hydra.core.Name name) {
-    hydra.module.QualifiedName qualName = hydra.names.Names.qualifyName(name);
-    String local = (qualName).local;
-    hydra.util.Maybe<hydra.module.Namespace> ns = (qualName).namespace;
-    java.util.function.Function<hydra.module.Namespace, String> nsToFilePath = (java.util.function.Function<hydra.module.Namespace, String>) (ns2 -> hydra.lib.strings.Intercalate.apply(
-      "/",
-      hydra.lib.lists.Map.apply(
-        (java.util.function.Function<String, String>) (part -> hydra.formatting.Formatting.convertCase(
-          new hydra.util.CaseConvention.Camel(),
-          nsConv,
-          part)),
-        hydra.lib.strings.SplitOn.apply(
-          ".",
-          (ns2).value))));
-    hydra.util.Lazy<String> prefix = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
-      () -> "",
-      (java.util.function.Function<hydra.module.Namespace, String>) (n -> hydra.lib.strings.Cat2.apply(
-        (nsToFilePath).apply(n),
-        "/")),
-      ns));
-    String suffix = hydra.formatting.Formatting.convertCase(
-      new hydra.util.CaseConvention.Pascal(),
-      localConv,
-      local);
-    return hydra.lib.strings.Cat.apply(java.util.List.of(
-      prefix.get(),
-      suffix,
-      ".",
-      (ext).value));
-  }
-  
   static Boolean typeIsSupported(hydra.coders.LanguageConstraints constraints, hydra.core.Type t) {
     hydra.core.Type base = hydra.rewriting.Rewriting.deannotateType(t);
     java.util.function.Function<hydra.core.Type, Boolean> isSupported = (java.util.function.Function<hydra.core.Type, Boolean>) (base2 -> (base2).accept(new hydra.core.Type.PartialVisitor<>() {

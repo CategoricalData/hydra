@@ -5,7 +5,7 @@ module Hydra.Sources.Kernel.Terms.Adapt.Utils where
 import Hydra.Kernel hiding (
   bidirectional, chooseAdapter, composeCoders, encodeDecode, floatTypeIsSupported,
   idAdapter, idCoder, integerTypeIsSupported, literalTypeIsSupported,
-  nameToFilePath, typeIsSupported, unidirectionalCoder)
+  typeIsSupported, unidirectionalCoder)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors    as Accessors
 import qualified Hydra.Dsl.Annotations       as Annotations
@@ -84,7 +84,6 @@ module_ = Module ns elements
      toBinding idCoder,
      toBinding integerTypeIsSupported,
      toBinding literalTypeIsSupported,
-     toBinding nameToFilePath,
      toBinding typeIsSupported,
      toBinding unidirectionalCoder]
 
@@ -170,23 +169,6 @@ literalTypeIsSupported = define "literalTypeIsSupported" $
   Logic.and
     (Sets.member (Reflect.literalTypeVariant @@ var "lt") (Coders.languageConstraintsLiteralVariants (var "constraints")))
     (var "isSupported" @@ var "lt")
-
-nameToFilePath :: TBinding (CaseConvention -> CaseConvention -> FileExtension -> Name -> FilePath)
-nameToFilePath = define "nameToFilePath" $
-  doc "Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator" $
-  "nsConv" ~> "localConv" ~> "ext" ~> "name" ~>
-  "qualName" <~ Names.qualifyName @@ var "name" $
-  "ns" <~ Module.qualifiedNameNamespace (var "qualName") $
-  "local" <~ Module.qualifiedNameLocal (var "qualName") $
-  "nsToFilePath" <~ ("ns" ~>
-    Strings.intercalate (string "/") (Lists.map
-      ("part" ~> Formatting.convertCase @@ Util.caseConventionCamel @@ var "nsConv" @@ var "part")
-      (Strings.splitOn (string ".") (Module.unNamespace (var "ns"))))) $
-  "prefix" <~ Maybes.maybe (string "")
-    ("n" ~> Strings.cat2 (var "nsToFilePath" @@ var "n") (string "/"))
-    (var "ns") $
-  "suffix" <~ Formatting.convertCase @@ Util.caseConventionPascal @@ var "localConv" @@ var "local" $
-  Strings.cat (list [var "prefix", var "suffix", string ".", Module.unFileExtension (var "ext")])
 
 typeIsSupported :: TBinding (LanguageConstraints -> Type -> Bool)
 typeIsSupported = define "typeIsSupported" $

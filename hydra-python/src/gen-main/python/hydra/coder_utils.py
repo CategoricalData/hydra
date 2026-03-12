@@ -24,9 +24,12 @@ import hydra.lib.maybes
 import hydra.lib.pairs
 import hydra.lib.sets
 import hydra.lib.strings
+import hydra.module
+import hydra.names
 import hydra.rewriting
 import hydra.schemas
 import hydra.typing
+import hydra.util
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
@@ -350,6 +353,24 @@ def is_trivial_term(t: hydra.core.Term):
         case _:
             return False
 
+def name_to_file_path(ns_conv: hydra.util.CaseConvention, local_conv: hydra.util.CaseConvention, ext: hydra.module.FileExtension, name: hydra.core.Name) -> str:
+    r"""Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator."""
+    
+    @lru_cache(1)
+    def qual_name() -> hydra.module.QualifiedName:
+        return hydra.names.qualify_name(name)
+    ns = qual_name().namespace
+    local = qual_name().local
+    def ns_to_file_path(ns2: hydra.module.Namespace) -> str:
+        return hydra.lib.strings.intercalate("/", hydra.lib.lists.map((lambda part: hydra.formatting.convert_case(hydra.util.CaseConvention.CAMEL, ns_conv, part)), hydra.lib.strings.split_on(".", ns2.value)))
+    @lru_cache(1)
+    def prefix() -> str:
+        return hydra.lib.maybes.maybe((lambda : ""), (lambda n: hydra.lib.strings.cat2(ns_to_file_path(n), "/")), ns)
+    @lru_cache(1)
+    def suffix() -> str:
+        return hydra.formatting.convert_case(hydra.util.CaseConvention.PASCAL, local_conv, local)
+    return hydra.lib.strings.cat((prefix(), suffix(), ".", ext.value))
+
 def normalize_comment(s: str) -> str:
     r"""Normalize a comment string for consistent output across coders."""
     
@@ -357,3 +378,12 @@ def normalize_comment(s: str) -> str:
     def stripped() -> str:
         return hydra.formatting.strip_leading_and_trailing_whitespace(s)
     return hydra.lib.logic.if_else(hydra.lib.strings.null(stripped()), (lambda : ""), (lambda : (last_idx := hydra.lib.math.sub(hydra.lib.strings.length(stripped()), 1), (last_char := hydra.lib.strings.char_at(last_idx, stripped()), hydra.lib.logic.if_else(hydra.lib.equality.equal(last_char, 46), (lambda : stripped()), (lambda : hydra.lib.strings.cat2(stripped(), "."))))[1])[1]))
+
+def union_type_to_record_type(rt: hydra.core.RowType) -> hydra.core.RowType:
+    r"""Convert a union row type to a record row type."""
+    
+    def make_optional(f: hydra.core.FieldType) -> hydra.core.FieldType:
+        fn = f.name
+        ft = f.type
+        return hydra.core.FieldType(fn, hydra.rewriting.map_beneath_type_annotations((lambda x: cast(hydra.core.Type, hydra.core.TypeMaybe(x))), ft))
+    return hydra.core.RowType(rt.type_name, hydra.lib.lists.map((lambda x1: make_optional(x1)), rt.fields))

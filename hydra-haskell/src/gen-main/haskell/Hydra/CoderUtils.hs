@@ -23,9 +23,12 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Module as Module
+import qualified Hydra.Names as Names
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Typing as Typing
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -219,6 +222,40 @@ isTailRecursiveInTailPosition funcName term =
       let bindingsOk = (Lists.foldl (\ok -> \b -> Logic.and ok (Rewriting.isFreeVariableInTerm funcName (Core.bindingTerm b))) True (Core.letBindings v0))
       in (Logic.and bindingsOk (isTailRecursiveInTailPosition funcName (Core.letBody v0)))
     _ -> (Rewriting.isFreeVariableInTerm funcName term)) stripped)
+
+-- | Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator
+nameToFilePath :: (Util.CaseConvention -> Util.CaseConvention -> Module.FileExtension -> Core.Name -> String)
+nameToFilePath nsConv localConv ext name =  
+  let qualName = (Names.qualifyName name)
+  in  
+    let ns = (Module.qualifiedNameNamespace qualName)
+    in  
+      let local = (Module.qualifiedNameLocal qualName)
+      in  
+        let nsToFilePath = (\ns -> Strings.intercalate "/" (Lists.map (\part -> Formatting.convertCase Util.CaseConventionCamel nsConv part) (Strings.splitOn "." (Module.unNamespace ns))))
+        in  
+          let prefix = (Maybes.maybe "" (\n -> Strings.cat2 (nsToFilePath n) "/") ns)
+          in  
+            let suffix = (Formatting.convertCase Util.CaseConventionPascal localConv local)
+            in (Strings.cat [
+              prefix,
+              suffix,
+              ".",
+              (Module.unFileExtension ext)])
+
+-- | Convert a union row type to a record row type
+unionTypeToRecordType :: (Core.RowType -> Core.RowType)
+unionTypeToRecordType rt =  
+  let makeOptional = (\f ->  
+          let fn = (Core.fieldTypeName f)
+          in  
+            let ft = (Core.fieldTypeType f)
+            in Core.FieldType {
+              Core.fieldTypeName = fn,
+              Core.fieldTypeType = (Rewriting.mapBeneathTypeAnnotations (\x -> Core.TypeMaybe x) ft)})
+  in Core.RowType {
+    Core.rowTypeTypeName = (Core.rowTypeTypeName rt),
+    Core.rowTypeFields = (Lists.map makeOptional (Core.rowTypeFields rt))}
 
 -- | Extract comments/description from a Binding
 commentsFromElement :: (Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Error.OtherError) (Maybe String))

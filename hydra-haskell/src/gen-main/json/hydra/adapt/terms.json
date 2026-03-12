@@ -15433,7 +15433,7 @@
                                                                               "term": {
                                                                                 "application": {
                                                                                   "argument": {"variable": "rt"},
-                                                                                  "function": {"variable": "hydra.adapt.terms.unionTypeToRecordType"}}}},
+                                                                                  "function": {"variable": "hydra.coderUtils.unionTypeToRecordType"}}}},
                                                                             "typeName": "hydra.core.Type"}},
                                                                         "type": [
                                                                           {
@@ -15970,132 +15970,6 @@
                                       "function": {"variable": "hydra.compute.Adapter"}}}}}}}}}}},
                   "domain": {"variable": "hydra.core.Type"}}},
               "domain": {"variable": "hydra.coders.AdapterContext"}}},
-          "variables": []}]},
-    {
-      "name": "hydra.adapt.terms.unionTypeToRecordType",
-      "term": {
-        "annotated": {
-          "annotation": [
-            {
-              "@key": "description",
-              "@value": {
-                "literal": {"string": "Convert a union row type to a record row type"}}}],
-          "body": {
-            "function": {
-              "lambda": {
-                "body": {
-                  "let": {
-                    "bindings": [
-                      {
-                        "name": "makeOptional",
-                        "term": {
-                          "function": {
-                            "lambda": {
-                              "body": {
-                                "let": {
-                                  "bindings": [
-                                    {
-                                      "name": "fn",
-                                      "term": {
-                                        "application": {
-                                          "argument": {"variable": "f"},
-                                          "function": {
-                                            "function": {
-                                              "elimination": {"record": {"field": "name", "typeName": "hydra.core.FieldType"}}}}}},
-                                      "type": [
-                                        {
-                                          "constraints": null,
-                                          "type": {"variable": "hydra.core.Name"},
-                                          "variables": []}]}],
-                                  "body": {
-                                    "let": {
-                                      "bindings": [
-                                        {
-                                          "name": "ft",
-                                          "term": {
-                                            "application": {
-                                              "argument": {"variable": "f"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {"record": {"field": "type", "typeName": "hydra.core.FieldType"}}}}}},
-                                          "type": [
-                                            {
-                                              "constraints": null,
-                                              "type": {"variable": "hydra.core.Type"},
-                                              "variables": []}]}],
-                                      "body": {
-                                        "record": {
-                                          "fields": [
-                                            {"name": "name", "term": {"variable": "fn"}},
-                                            {
-                                              "name": "type",
-                                              "term": {
-                                                "application": {
-                                                  "argument": {"variable": "ft"},
-                                                  "function": {
-                                                    "application": {
-                                                      "argument": {
-                                                        "function": {
-                                                          "lambda": {
-                                                            "body": {
-                                                              "union": {
-                                                                "field": {"name": "maybe", "term": {"variable": "x"}},
-                                                                "typeName": "hydra.core.Type"}},
-                                                            "domain": [{"variable": "hydra.core.Type"}],
-                                                            "parameter": "x"}}},
-                                                      "function": {"variable": "hydra.rewriting.mapBeneathTypeAnnotations"}}}}}}],
-                                          "typeName": "hydra.core.FieldType"}}}}}},
-                              "domain": [{"variable": "hydra.core.FieldType"}],
-                              "parameter": "f"}}},
-                        "type": [
-                          {
-                            "constraints": null,
-                            "type": {
-                              "function": {
-                                "codomain": {"variable": "hydra.core.FieldType"},
-                                "domain": {"variable": "hydra.core.FieldType"}}},
-                            "variables": []}]}],
-                    "body": {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "typeName",
-                            "term": {
-                              "application": {
-                                "argument": {"variable": "rt"},
-                                "function": {
-                                  "function": {
-                                    "elimination": {"record": {"field": "typeName", "typeName": "hydra.core.RowType"}}}}}}},
-                          {
-                            "name": "fields",
-                            "term": {
-                              "application": {
-                                "argument": {
-                                  "application": {
-                                    "argument": {"variable": "rt"},
-                                    "function": {
-                                      "function": {
-                                        "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
-                                "function": {
-                                  "application": {
-                                    "argument": {"variable": "makeOptional"},
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {
-                                          "typeApplication": {
-                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
-                                            "type": {"variable": "hydra.core.FieldType"}}},
-                                        "type": {"variable": "hydra.core.FieldType"}}}}}}}}],
-                        "typeName": "hydra.core.RowType"}}}},
-                "domain": [{"variable": "hydra.core.RowType"}],
-                "parameter": "rt"}}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {
-            "function": {
-              "codomain": {"variable": "hydra.core.RowType"},
-              "domain": {"variable": "hydra.core.RowType"}}},
           "variables": []}]},
     {
       "name": "hydra.adapt.terms.unitToRecord",
@@ -16870,6 +16744,7 @@
   "termDependencies": [
     "hydra.adapt.literals",
     "hydra.adapt.utils",
+    "hydra.coderUtils",
     "hydra.annotations",
     "hydra.extract.core",
     "hydra.monads",
