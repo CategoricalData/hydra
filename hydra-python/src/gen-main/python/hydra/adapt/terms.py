@@ -9,6 +9,7 @@ from hydra.dsl.python import Either, FrozenDict, Just, Left, Maybe, Nothing, Rig
 from typing import TypeVar, cast
 import hydra.adapt.literals
 import hydra.adapt.utils
+import hydra.coder_utils
 import hydra.coders
 import hydra.compute
 import hydra.context
@@ -55,15 +56,6 @@ def pass_unit(_cx: T0, _: T1) -> Either[T2, hydra.compute.Adapter[hydra.core.Typ
     r"""Pass through unit types."""
     
     return Right(hydra.compute.Adapter(False, cast(hydra.core.Type, hydra.core.TypeUnit()), cast(hydra.core.Type, hydra.core.TypeUnit()), hydra.compute.Coder((lambda _cx2, _2: Right(cast(hydra.core.Term, hydra.core.TermUnit()))), (lambda _cx2, _2: Right(cast(hydra.core.Term, hydra.core.TermUnit()))))))
-
-def union_type_to_record_type(rt: hydra.core.RowType) -> hydra.core.RowType:
-    r"""Convert a union row type to a record row type."""
-    
-    def make_optional(f: hydra.core.FieldType) -> hydra.core.FieldType:
-        fn = f.name
-        ft = f.type
-        return hydra.core.FieldType(fn, hydra.rewriting.map_beneath_type_annotations((lambda x: cast(hydra.core.Type, hydra.core.TypeMaybe(x))), ft))
-    return hydra.core.RowType(rt.type_name, hydra.lib.lists.map((lambda x1: make_optional(x1)), rt.fields))
 
 def unit_to_record(_cx: T0, _: T1) -> Either[T2, hydra.compute.Adapter[hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
     r"""Convert unit terms to records."""
@@ -637,7 +629,7 @@ def union_to_record(cx: hydra.coders.AdapterContext, t: hydra.core.Type) -> Eith
             sfields = rt.fields
             @lru_cache(1)
             def target() -> hydra.core.Type:
-                return cast(hydra.core.Type, hydra.core.TypeRecord(union_type_to_record_type(rt)))
+                return cast(hydra.core.Type, hydra.core.TypeRecord(hydra.coder_utils.union_type_to_record_type(rt)))
             def to_record_field(term: hydra.core.Term, fn: hydra.core.Name, f: hydra.core.FieldType) -> hydra.core.Field:
                 fn_ = f.name
                 return hydra.core.Field(fn_, cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.logic.if_else(hydra.lib.equality.equal(fn_, fn), (lambda : Just(term)), (lambda : Nothing())))))

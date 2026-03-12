@@ -1246,7 +1246,7 @@ public interface Terms {
       public hydra.util.Either<String, hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>> visit(hydra.core.Type.Union rt) {
         hydra.core.Name nm = ((rt).value).typeName;
         java.util.List<hydra.core.FieldType> sfields = ((rt).value).fields;
-        hydra.core.Type target = new hydra.core.Type.Record(hydra.adapt.terms.Terms.unionTypeToRecordType((rt).value));
+        hydra.core.Type target = new hydra.core.Type.Record(hydra.coderUtils.CoderUtils.unionTypeToRecordType((rt).value));
         java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.FieldType, hydra.core.Field>>> toRecordField = (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.FieldType, hydra.core.Field>>>) (term -> (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.FieldType, hydra.core.Field>>) (fn -> (java.util.function.Function<hydra.core.FieldType, hydra.core.Field>) (f -> {
           hydra.core.Name fn_ = (f).name;
           return new hydra.core.Field(fn_, new hydra.core.Term.Maybe(hydra.lib.logic.IfElse.lazy(
@@ -1326,19 +1326,6 @@ public interface Terms {
           (java.util.function.Function<hydra.core.Field, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>>) (resultField -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>right(new hydra.core.Term.Union(new hydra.core.Injection(nm, resultField)))));
       }
     });
-  }
-  
-  static hydra.core.RowType unionTypeToRecordType(hydra.core.RowType rt) {
-    java.util.function.Function<hydra.core.FieldType, hydra.core.FieldType> makeOptional = (java.util.function.Function<hydra.core.FieldType, hydra.core.FieldType>) (f -> {
-      hydra.core.Name fn = (f).name;
-      hydra.core.Type ft = (f).type;
-      return new hydra.core.FieldType(fn, hydra.rewriting.Rewriting.mapBeneathTypeAnnotations(
-        (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (x -> new hydra.core.Type.Maybe(x)),
-        ft));
-    });
-    return new hydra.core.RowType((rt).typeName, hydra.lib.lists.Map.apply(
-      makeOptional,
-      (rt).fields));
   }
   
   static <T0, T1, T2> hydra.util.Either<T2, hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>> unitToRecord(T0 _cx, T1 ignored) {

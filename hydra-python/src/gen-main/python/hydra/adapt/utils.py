@@ -12,20 +12,15 @@ import hydra.compute
 import hydra.context
 import hydra.core
 import hydra.error
-import hydra.formatting
 import hydra.lib.eithers
 import hydra.lib.lists
 import hydra.lib.literals
 import hydra.lib.logic
-import hydra.lib.maybes
 import hydra.lib.sets
 import hydra.lib.strings
-import hydra.module
-import hydra.names
 import hydra.reflect
 import hydra.rewriting
 import hydra.show.core
-import hydra.util
 import hydra.variants
 
 T0 = TypeVar("T0")
@@ -95,24 +90,6 @@ def literal_type_is_supported(constraints: hydra.coders.LanguageConstraints, lt:
             case _:
                 return True
     return hydra.lib.logic.and_(hydra.lib.sets.member(hydra.reflect.literal_type_variant(lt), constraints.literal_variants), is_supported(lt))
-
-def name_to_file_path(ns_conv: hydra.util.CaseConvention, local_conv: hydra.util.CaseConvention, ext: hydra.module.FileExtension, name: hydra.core.Name) -> str:
-    r"""Convert a name to file path, given case conventions for namespaces and local names, and assuming '/' as the file path separator."""
-    
-    @lru_cache(1)
-    def qual_name() -> hydra.module.QualifiedName:
-        return hydra.names.qualify_name(name)
-    ns = qual_name().namespace
-    local = qual_name().local
-    def ns_to_file_path(ns2: hydra.module.Namespace) -> str:
-        return hydra.lib.strings.intercalate("/", hydra.lib.lists.map((lambda part: hydra.formatting.convert_case(hydra.util.CaseConvention.CAMEL, ns_conv, part)), hydra.lib.strings.split_on(".", ns2.value)))
-    @lru_cache(1)
-    def prefix() -> str:
-        return hydra.lib.maybes.maybe((lambda : ""), (lambda n: hydra.lib.strings.cat2(ns_to_file_path(n), "/")), ns)
-    @lru_cache(1)
-    def suffix() -> str:
-        return hydra.formatting.convert_case(hydra.util.CaseConvention.PASCAL, local_conv, local)
-    return hydra.lib.strings.cat((prefix(), suffix(), ".", ext.value))
 
 def type_is_supported(constraints: hydra.coders.LanguageConstraints, t: hydra.core.Type) -> bool:
     r"""Check if type is supported by language constraints."""

@@ -6,7 +6,6 @@ import Hydra.Kernel
 import Hydra.Sources.Libraries
 import           Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Meta.Coders                     as Coders
 import qualified Hydra.Dsl.Meta.Compute                    as Compute
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
@@ -18,17 +17,15 @@ import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Maps                   as Maps
 import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
+import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Yaml                       as Yaml
 import qualified Hydra.Dsl.Terms                           as Terms
 import qualified Hydra.Dsl.Types                           as Types
-import qualified Hydra.Sources.Kernel.Terms.Adapt.Modules  as AdaptModules
-import qualified Hydra.Sources.Kernel.Terms.Adapt.Utils    as AdaptUtils
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core   as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Literals       as HydraLiterals
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
-import qualified Hydra.Ext.Sources.Yaml.Language           as YamlLanguage
 import           Prelude hiding ((++))
 import qualified Data.List                                 as L
 import qualified Data.Map                                  as M
@@ -36,10 +33,6 @@ import qualified Data.Set                                  as S
 
 import qualified Hydra.Ext.Org.Yaml.Model as YM
 
-
--- | Lift Either String to Either (InContext OtherError) using a context
-liftStringError :: TTerm Context -> TTerm (Either String a) -> TTerm (Either (InContext OtherError) a)
-liftStringError cx = Eithers.bimap ("_s" ~> Ctx.inContext (Error.otherError $ var "_s") cx) ("_x" ~> var "_x")
 
 ns :: Namespace
 ns = Namespace "hydra.ext.org.yaml.coder"
@@ -49,8 +42,7 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [AdaptModules.ns, AdaptUtils.ns,
-     ExtractCore.ns, HydraLiterals.ns, YamlLanguage.ns, Rewriting.ns]
+    [ExtractCore.ns, HydraLiterals.ns, Rewriting.ns]
     (KernelTypes.kernelTypesNamespaces L.++ [Namespace "hydra.ext.org.yaml.model"]) $
     Just "YAML encoding and decoding for Hydra terms"
   where
@@ -67,10 +59,7 @@ yamlCoder :: TBinding (Type -> Context -> Graph -> Either (InContext OtherError)
 yamlCoder = define "yamlCoder" $
   doc "Create a YAML coder for a given type" $
   "typ" ~> "cx" ~> "g" ~>
-  "mkTermCoder" <~ ("t" ~> termCoder @@ var "t" @@ var "cx" @@ var "g") $
-  "adapter" <<~ liftStringError (var "cx") (AdaptModules.languageAdapter @@ YamlLanguage.yamlLanguage @@ var "cx" @@ var "g" @@ var "typ") $
-  "coder" <<~ var "mkTermCoder" @@ (Compute.adapterTarget $ var "adapter") $
-  right $ AdaptUtils.composeCoders @@ (Compute.adapterCoder $ var "adapter") @@ var "coder"
+  termCoder @@ var "typ" @@ var "cx" @@ var "g"
 
 literalYamlCoder :: TBinding (LiteralType -> Either (InContext OtherError) (Coder Literal YM.Scalar))
 literalYamlCoder = define "literalYamlCoder" $
@@ -80,14 +69,14 @@ literalYamlCoder = define "literalYamlCoder" $
     cases YM._Scalar (var "s")
       (Just $ Ctx.failInContext (Error.otherError (Strings.cat $ list [string "expected boolean, found scalar"])) (var "cx")) [
       YM._Scalar_bool>>: "b" ~> right (Core.literalBoolean $ var "b")]) $
-  "decodeFloat" <~ ("cx" ~> "s" ~>
+  "decodeFloat" <~ ("ft" ~> "cx" ~> "s" ~>
     cases YM._Scalar (var "s")
       (Just $ Ctx.failInContext (Error.otherError (Strings.cat $ list [string "expected float, found scalar"])) (var "cx")) [
-      YM._Scalar_float>>: "f" ~> right (Core.literalFloat $ Core.floatValueBigfloat $ var "f")]) $
-  "decodeInteger" <~ ("cx" ~> "s" ~>
+      YM._Scalar_float>>: "f" ~> right (Core.literalFloat $ HydraLiterals.bigfloatToFloatValue @@ var "ft" @@ var "f")]) $
+  "decodeInteger" <~ ("it" ~> "cx" ~> "s" ~>
     cases YM._Scalar (var "s")
       (Just $ Ctx.failInContext (Error.otherError (Strings.cat $ list [string "expected integer, found scalar"])) (var "cx")) [
-      YM._Scalar_int>>: "i" ~> right (Core.literalInteger $ Core.integerValueBigint $ var "i")]) $
+      YM._Scalar_int>>: "i" ~> right (Core.literalInteger $ HydraLiterals.bigintToIntegerValue @@ var "it" @@ var "i")]) $
   "decodeString" <~ ("cx" ~> "s" ~>
     cases YM._Scalar (var "s")
       (Just $ Ctx.failInContext (Error.otherError (Strings.cat $ list [string "expected string, found scalar"])) (var "cx")) [
@@ -98,18 +87,16 @@ literalYamlCoder = define "literalYamlCoder" $
         "b" <<~ ExtractCore.booleanLiteral @@ var "cx" @@ var "lit" $
         right (Yaml.scalarBool $ var "b"))
       (var "decodeBool"),
-    _LiteralType_float>>: constant $ Compute.coder
+    _LiteralType_float>>: "ft" ~> Compute.coder
       ("cx" ~> "lit" ~>
         "f" <<~ ExtractCore.floatLiteral @@ var "cx" @@ var "lit" $
-        "bf" <<~ ExtractCore.bigfloatValue @@ var "cx" @@ var "f" $
-        right (Yaml.scalarFloat $ var "bf"))
-      (var "decodeFloat"),
-    _LiteralType_integer>>: constant $ Compute.coder
+        right (Yaml.scalarFloat $ HydraLiterals.floatValueToBigfloat @@ var "f"))
+      (var "decodeFloat" @@ var "ft"),
+    _LiteralType_integer>>: "it" ~> Compute.coder
       ("cx" ~> "lit" ~>
         "i" <<~ ExtractCore.integerLiteral @@ var "cx" @@ var "lit" $
-        "bi" <<~ ExtractCore.bigintValue @@ var "cx" @@ var "i" $
-        right (Yaml.scalarInt $ var "bi"))
-      (var "decodeInteger"),
+        right (Yaml.scalarInt $ HydraLiterals.integerValueToBigint @@ var "i"))
+      (var "decodeInteger" @@ var "it"),
     _LiteralType_string>>: constant $ Compute.coder
       ("cx" ~> "lit" ~>
         "s" <<~ ExtractCore.stringLiteral @@ var "cx" @@ var "lit" $
@@ -271,12 +258,100 @@ termCoder = define "termCoder" $
               "entries" <<~ Eithers.mapList ("entry" ~> var "decodeEntry" @@ var "cx" @@ var "entry") (Maps.toList $ var "m") $
               right (Core.termMap $ Maps.fromList $ var "entries")]),
     _Type_maybe>>: "maybeElementType" ~>
-      "maybeElementCoder" <<~ termCoder @@ var "maybeElementType" @@ var "cx" @@ var "g" $
-      right $ Compute.coder
-        (var "encodeMaybe" @@ var "maybeElementCoder")
-        (var "decodeMaybe" @@ var "maybeElementCoder"),
+      "isNestedMaybe" <~ (cases _Type (Rewriting.deannotateType @@ var "maybeElementType")
+        (Just false) [
+        _Type_maybe>>: constant true]) $
+      Logic.ifElse (var "isNestedMaybe")
+        -- Nested Maybe<Maybe<T>> uses list encoding to disambiguate Nothing from Just Nothing
+        ("listCoder" <<~ termCoder @@ (Core.typeList $ var "maybeElementType") @@ var "cx" @@ var "g" $
+          right $ Compute.coder
+            ("cx" ~> "maybeTerm" ~>
+              "strippedMaybeTerm" <~ (Rewriting.deannotateTerm @@ var "maybeTerm") $
+              cases _Term (var "strippedMaybeTerm")
+                (Just $ Ctx.failInContext (Error.otherError (Strings.cat $ list [string "expected optional term, found: ", ShowCore.term @@ var "maybeTerm"])) (var "cx")) [
+                _Term_maybe>>: "maybeContents" ~>
+                  Logic.ifElse (Maybes.isNothing $ var "maybeContents")
+                    (Compute.coderEncode (var "listCoder") @@ var "cx" @@ (Core.termList $ list ([] :: [TTerm Term])))
+                    (Compute.coderEncode (var "listCoder") @@ var "cx" @@ (Core.termList $ list [Maybes.fromJust $ var "maybeContents"]))])
+            ("cx" ~> "n" ~>
+              "listTerm" <<~ Compute.coderDecode (var "listCoder") @@ var "cx" @@ var "n" $
+              cases _Term (var "listTerm")
+                (Just $ Ctx.failInContext (Error.otherError (string "expected list term after decoding")) (var "cx")) [
+                _Term_list>>: "l" ~>
+                  Logic.ifElse (Lists.null $ var "l")
+                    (right (Core.termMaybe nothing))
+                    (right (Core.termMaybe $ just $ Lists.head $ var "l"))]))
+        -- Simple Maybe<T> (non-nested) uses null encoding
+        ("maybeElementCoder" <<~ termCoder @@ var "maybeElementType" @@ var "cx" @@ var "g" $
+          right $ Compute.coder
+            (var "encodeMaybe" @@ var "maybeElementCoder")
+            (var "decodeMaybe" @@ var "maybeElementCoder")),
     _Type_record>>: "rt" ~> recordCoder @@ var "rt" @@ var "cx" @@ var "g",
-    _Type_unit>>: constant $ right $ (var "hydra.ext.org.yaml.coder.unitCoder" :: TTerm (Coder Term YM.Node))]) $
+    _Type_set>>: "st" ~>
+      "lc" <<~ termCoder @@ var "st" @@ var "cx" @@ var "g" $
+      right $ Compute.coder
+        ("cx" ~> "term" ~>
+          cases _Term (var "term")
+            (Just $ Ctx.failInContext (Error.otherError (Strings.cat $ list [string "expected set term, found: ", ShowCore.term @@ var "term"])) (var "cx")) [
+            _Term_set>>: "s" ~>
+              var "encodeList" @@ var "lc" @@ var "cx" @@ (Core.termList $ Sets.toList $ var "s")])
+        ("cx" ~> "n" ~>
+          "listTerm" <<~ var "decodeList" @@ var "lc" @@ var "cx" @@ var "n" $
+          cases _Term (var "listTerm")
+            (Just $ Ctx.failInContext (Error.otherError (string "expected list term after decoding")) (var "cx")) [
+            _Term_list>>: "l" ~> right (Core.termSet $ Sets.fromList $ var "l")]),
+    _Type_union>>: "rt" ~>
+      "nm" <~ (Core.rowTypeTypeName $ var "rt") $
+      "sfields" <~ (Core.rowTypeFields $ var "rt") $
+      "fieldCoders" <<~ Eithers.mapList ("f" ~>
+        "fc" <<~ termCoder @@ (Core.fieldTypeType $ var "f") @@ var "cx" @@ var "g" $
+        right $ pair (Core.unName $ Core.fieldTypeName $ var "f") (var "fc")) (var "sfields") $
+      "coderMap" <~ (Maps.fromList $ var "fieldCoders") $
+      right $ Compute.coder
+        ("cx" ~> "term" ~>
+          "field" <<~ ExtractCore.injection @@ var "cx" @@ var "nm" @@ var "g" @@ var "term" $
+          "fn" <~ (Core.fieldName $ var "field") $
+          "fterm" <~ (Core.fieldTerm $ var "field") $
+          "fnStr" <~ (Core.unName $ var "fn") $
+          Maybes.maybe
+            (Ctx.failInContext (Error.otherError (Strings.cat $ list [string "no coder for union field: ", var "fnStr"])) (var "cx"))
+            ("cdr" ~>
+              "encodedVal" <<~ Compute.coderEncode (var "cdr") @@ var "cx" @@ var "fterm" $
+              right (Yaml.nodeMapping $ Maps.fromList $ list [pair (Yaml.nodeScalar $ Yaml.scalarStr $ var "fnStr") (var "encodedVal")]))
+            (Maps.lookup (var "fnStr") (var "coderMap")))
+        ("cx" ~> "n" ~>
+          cases YM._Node (var "n")
+            (Just $ Ctx.failInContext (Error.otherError (string "expected mapping for union")) (var "cx")) [
+            YM._Node_mapping>>: "m" ~>
+              "entries" <~ (Maps.toList $ var "m") $
+              Logic.ifElse (Lists.null $ var "entries")
+                (Ctx.failInContext (Error.otherError (string "empty mapping for union")) (var "cx"))
+                ("entry" <~ (Lists.head $ var "entries") $
+                 "keyNode" <~ (Pairs.first $ var "entry") $
+                 "valNode" <~ (Pairs.second $ var "entry") $
+                 cases YM._Node (var "keyNode")
+                   (Just $ Ctx.failInContext (Error.otherError (string "expected scalar key in union mapping")) (var "cx")) [
+                   YM._Node_scalar>>: "s" ~>
+                     cases YM._Scalar (var "s")
+                       (Just $ Ctx.failInContext (Error.otherError (string "expected string key in union mapping")) (var "cx")) [
+                       YM._Scalar_str>>: "fieldName" ~>
+                         Maybes.maybe
+                           (Ctx.failInContext (Error.otherError (Strings.cat $ list [string "unknown union field: ", var "fieldName"])) (var "cx"))
+                           ("cdr" ~>
+                             "decodedVal" <<~ Compute.coderDecode (var "cdr") @@ var "cx" @@ var "valNode" $
+                             right (Core.termUnion $ Core.injection (var "nm") (Core.field (Core.name $ var "fieldName") (var "decodedVal"))))
+                           (Maps.lookup (var "fieldName") (var "coderMap"))]])]),
+    _Type_unit>>: constant $ right $ (var "hydra.ext.org.yaml.coder.unitCoder" :: TTerm (Coder Term YM.Node)),
+    _Type_wrap>>: "wt" ~>
+      "tname" <~ (Core.wrappedTypeTypeName $ var "wt") $
+      "innerCoder" <<~ termCoder @@ (Core.wrappedTypeBody $ var "wt") @@ var "cx" @@ var "g" $
+      right $ Compute.coder
+        ("cx" ~> "term" ~>
+          "inner" <<~ ExtractCore.wrap @@ var "cx" @@ var "tname" @@ var "g" @@ var "term" $
+          Compute.coderEncode (var "innerCoder") @@ var "cx" @@ var "inner")
+        ("cx" ~> "n" ~>
+          "decoded" <<~ Compute.coderDecode (var "innerCoder") @@ var "cx" @@ var "n" $
+          right (Core.termWrap $ Core.wrappedTerm (var "tname") (var "decoded")))]) $
   var "result"
 
 unitCoder :: TBinding (Coder Term YM.Node)
