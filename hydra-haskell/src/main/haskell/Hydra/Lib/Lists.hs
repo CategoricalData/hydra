@@ -59,6 +59,10 @@ find = L.find
 foldl :: (b -> a -> b) -> b -> [a] -> b
 foldl = L.foldl
 
+-- | Fold a list from the right.
+foldr :: (a -> b -> b) -> b -> [a] -> b
+foldr = L.foldr
+
 -- | Group consecutive equal elements.
 group :: Eq a => [a] -> [[a]]
 group = L.group

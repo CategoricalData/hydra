@@ -68,6 +68,7 @@ allTests = define "allTests" $
       listsFilter,
       listsFind,
       listsFoldl,
+      listsFoldr,
       listsGroup,
       listsHead,
       listsInit,
@@ -207,7 +208,16 @@ allTests = define "allTests" $
         test "subtraction fold" (primitive _math_sub) 10 [1, 2, 3] 4]
         where
           test name op acc lst result = primCase name _lists_foldl [op, int32 acc, intList lst] (int32 result)
-  
+
+      listsFoldr = subgroup "foldr" [
+        test "subtraction fold right" (primitive _math_sub) 0 [1, 2, 3] 2,
+        test "empty list" (primitive _math_add) 5 [] 5,
+        test "single element" (primitive _math_add) 10 [5] 15,
+        test "sum with addition" (primitive _math_add) 0 [1, 2, 3, 4] 10,
+        test "subtraction vs foldl" (primitive _math_sub) 10 [1, 2, 3] (-8)]
+        where
+          test name op acc lst result = primCase name _lists_foldr [op, int32 acc, intList lst] (int32 result)
+
       listsGroup = subgroup "group" [
         test "consecutive duplicates" [1, 1, 2, 2, 2, 3, 1] [[1, 1], [2, 2, 2], [3], [1]],
         test "no duplicates" [1, 2, 3] [[1], [2], [3]],

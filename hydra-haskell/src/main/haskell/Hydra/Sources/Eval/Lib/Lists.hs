@@ -77,6 +77,7 @@ module_ = Module ns elements
       toBinding filter_,
       toBinding find_,
       toBinding foldl_,
+      toBinding foldr_,
       toBinding map_,
       toBinding partition_,
       toBinding sortOn_,
@@ -177,6 +178,22 @@ foldl_ = define "foldl" $
     ("acc" ~> "el" ~> Core.termApplication $ Core.application
       (Core.termApplication $ Core.application (var "funTerm") (var "acc"))
       (var "el"))
+    (var "initTerm")
+    (var "elements")
+
+-- | Interpreter-friendly right fold for List terms.
+-- Folds from the right: foldr f init [e1,e2,e3] = f e1 (f e2 (f e3 init))
+foldr_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext OtherError) Term)
+foldr_ = define "foldr" $
+  doc "Interpreter-friendly right fold for List terms." $
+  "cx" ~> "g" ~>
+  "funTerm" ~> "initTerm" ~> "listTerm" ~>
+  "elements" <<~ (ExtractCore.list @@ var "cx" @@ var "g" @@ var "listTerm") $
+  -- Build nested applications: f e1 (f e2 (f e3 init))
+  right $ Lists.foldr
+    ("el" ~> "acc" ~> Core.termApplication $ Core.application
+      (Core.termApplication $ Core.application (var "funTerm") (var "el"))
+      (var "acc"))
     (var "initTerm")
     (var "elements")
 

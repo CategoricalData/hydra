@@ -114,6 +114,7 @@ public class Libraries {
                 new hydra.lib.lists.Filter(),
                 new hydra.lib.lists.Find(),
                 new hydra.lib.lists.Foldl(),
+                new hydra.lib.lists.Foldr(),
                 new hydra.lib.lists.Group(),
                 new hydra.lib.lists.Head(),
                 new hydra.lib.lists.Init(),

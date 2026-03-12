@@ -1170,6 +1170,92 @@ allTests = Testing.TestGroup {
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
     Testing.TestGroup {
+      Testing.testGroupName = "foldr",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [],
+      Testing.testGroupCases = [
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "subtraction fold right",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.foldr"))),
+                  Core.applicationArgument = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.sub")))})),
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
+              Core.applicationArgument = (Core.TermList [
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
+            Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2)))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "empty list",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.foldr"))),
+                  Core.applicationArgument = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add")))})),
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))})),
+              Core.applicationArgument = (Core.TermList [])})),
+            Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5)))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "single element",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.foldr"))),
+                  Core.applicationArgument = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add")))})),
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))})),
+              Core.applicationArgument = (Core.TermList [
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 5))])})),
+            Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 15)))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "sum with addition",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.foldr"))),
+                  Core.applicationArgument = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.add")))})),
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0)))})),
+              Core.applicationArgument = (Core.TermList [
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3))),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 4)))])})),
+            Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "subtraction vs foldl",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermApplication (Core.Application {
+                Core.applicationFunction = (Core.TermApplication (Core.Application {
+                  Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.lists.foldr"))),
+                  Core.applicationArgument = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.math.sub")))})),
+                Core.applicationArgument = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 10)))})),
+              Core.applicationArgument = (Core.TermList [
+                Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 1)),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 2))),
+                (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 3)))])})),
+            Testing.evaluationTestCaseOutput = (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 (-8))))})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []}]},
+    Testing.TestGroup {
       Testing.testGroupName = "group",
       Testing.testGroupDescription = Nothing,
       Testing.testGroupSubgroups = [],

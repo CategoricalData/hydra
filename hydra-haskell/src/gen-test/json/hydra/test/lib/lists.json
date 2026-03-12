@@ -10777,6 +10777,863 @@
                       {
                         "record": {
                           "fields": [
+                            {"name": "name", "term": {"literal": {"string": "foldr"}}},
+                            {
+                              "name": "description",
+                              "term": {
+                                "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                            {
+                              "name": "subgroups",
+                              "term": {
+                                "typeApplication": {
+                                  "body": {"list": []},
+                                  "type": {"variable": "hydra.testing.TestGroup"}}}},
+                            {
+                              "name": "cases",
+                              "term": {
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"literal": {"string": "subtraction fold right"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "evaluation",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "evaluationStyle",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "eager", "term": {"unit": {}}},
+                                                            "typeName": "hydra.testing.EvaluationStyle"}}},
+                                                      {
+                                                        "name": "input",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "application",
+                                                              "term": {
+                                                                "record": {
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "function",
+                                                                      "term": {
+                                                                        "union": {
+                                                                          "field": {
+                                                                            "name": "application",
+                                                                            "term": {
+                                                                              "record": {
+                                                                                "fields": [
+                                                                                  {
+                                                                                    "name": "function",
+                                                                                    "term": {
+                                                                                      "union": {
+                                                                                        "field": {
+                                                                                          "name": "application",
+                                                                                          "term": {
+                                                                                            "record": {
+                                                                                              "fields": [
+                                                                                                {
+                                                                                                  "name": "function",
+                                                                                                  "term": {
+                                                                                                    "union": {
+                                                                                                      "field": {
+                                                                                                        "name": "function",
+                                                                                                        "term": {
+                                                                                                          "union": {
+                                                                                                            "field": {
+                                                                                                              "name": "primitive",
+                                                                                                              "term": {
+                                                                                                                "wrap": {
+                                                                                                                  "body": {"literal": {"string": "hydra.lib.lists.foldr"}},
+                                                                                                                  "typeName": "hydra.core.Name"}}},
+                                                                                                            "typeName": "hydra.core.Function"}}},
+                                                                                                      "typeName": "hydra.core.Term"}}},
+                                                                                                {
+                                                                                                  "name": "argument",
+                                                                                                  "term": {
+                                                                                                    "union": {
+                                                                                                      "field": {
+                                                                                                        "name": "function",
+                                                                                                        "term": {
+                                                                                                          "union": {
+                                                                                                            "field": {
+                                                                                                              "name": "primitive",
+                                                                                                              "term": {
+                                                                                                                "wrap": {
+                                                                                                                  "body": {"literal": {"string": "hydra.lib.math.sub"}},
+                                                                                                                  "typeName": "hydra.core.Name"}}},
+                                                                                                            "typeName": "hydra.core.Function"}}},
+                                                                                                      "typeName": "hydra.core.Term"}}}],
+                                                                                              "typeName": "hydra.core.Application"}}},
+                                                                                        "typeName": "hydra.core.Term"}}},
+                                                                                  {
+                                                                                    "name": "argument",
+                                                                                    "term": {
+                                                                                      "union": {
+                                                                                        "field": {
+                                                                                          "name": "literal",
+                                                                                          "term": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "integer",
+                                                                                                "term": {
+                                                                                                  "union": {
+                                                                                                    "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 0}}}},
+                                                                                                    "typeName": "hydra.core.IntegerValue"}}},
+                                                                                              "typeName": "hydra.core.Literal"}}},
+                                                                                        "typeName": "hydra.core.Term"}}}],
+                                                                                "typeName": "hydra.core.Application"}}},
+                                                                          "typeName": "hydra.core.Term"}}},
+                                                                    {
+                                                                      "name": "argument",
+                                                                      "term": {
+                                                                        "union": {
+                                                                          "field": {
+                                                                            "name": "list",
+                                                                            "term": {
+                                                                              "list": [
+                                                                                {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "literal",
+                                                                                      "term": {
+                                                                                        "union": {
+                                                                                          "field": {
+                                                                                            "name": "integer",
+                                                                                            "term": {
+                                                                                              "union": {
+                                                                                                "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 1}}}},
+                                                                                                "typeName": "hydra.core.IntegerValue"}}},
+                                                                                          "typeName": "hydra.core.Literal"}}},
+                                                                                    "typeName": "hydra.core.Term"}},
+                                                                                {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "literal",
+                                                                                      "term": {
+                                                                                        "union": {
+                                                                                          "field": {
+                                                                                            "name": "integer",
+                                                                                            "term": {
+                                                                                              "union": {
+                                                                                                "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 2}}}},
+                                                                                                "typeName": "hydra.core.IntegerValue"}}},
+                                                                                          "typeName": "hydra.core.Literal"}}},
+                                                                                    "typeName": "hydra.core.Term"}},
+                                                                                {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "literal",
+                                                                                      "term": {
+                                                                                        "union": {
+                                                                                          "field": {
+                                                                                            "name": "integer",
+                                                                                            "term": {
+                                                                                              "union": {
+                                                                                                "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 3}}}},
+                                                                                                "typeName": "hydra.core.IntegerValue"}}},
+                                                                                          "typeName": "hydra.core.Literal"}}},
+                                                                                    "typeName": "hydra.core.Term"}}]}},
+                                                                          "typeName": "hydra.core.Term"}}}],
+                                                                  "typeName": "hydra.core.Application"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "output",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 2}}}},
+                                                                        "typeName": "hydra.core.IntegerValue"}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}}],
+                                                    "typeName": "hydra.testing.EvaluationTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "empty list"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "evaluation",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "evaluationStyle",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "eager", "term": {"unit": {}}},
+                                                            "typeName": "hydra.testing.EvaluationStyle"}}},
+                                                      {
+                                                        "name": "input",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "application",
+                                                              "term": {
+                                                                "record": {
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "function",
+                                                                      "term": {
+                                                                        "union": {
+                                                                          "field": {
+                                                                            "name": "application",
+                                                                            "term": {
+                                                                              "record": {
+                                                                                "fields": [
+                                                                                  {
+                                                                                    "name": "function",
+                                                                                    "term": {
+                                                                                      "union": {
+                                                                                        "field": {
+                                                                                          "name": "application",
+                                                                                          "term": {
+                                                                                            "record": {
+                                                                                              "fields": [
+                                                                                                {
+                                                                                                  "name": "function",
+                                                                                                  "term": {
+                                                                                                    "union": {
+                                                                                                      "field": {
+                                                                                                        "name": "function",
+                                                                                                        "term": {
+                                                                                                          "union": {
+                                                                                                            "field": {
+                                                                                                              "name": "primitive",
+                                                                                                              "term": {
+                                                                                                                "wrap": {
+                                                                                                                  "body": {"literal": {"string": "hydra.lib.lists.foldr"}},
+                                                                                                                  "typeName": "hydra.core.Name"}}},
+                                                                                                            "typeName": "hydra.core.Function"}}},
+                                                                                                      "typeName": "hydra.core.Term"}}},
+                                                                                                {
+                                                                                                  "name": "argument",
+                                                                                                  "term": {
+                                                                                                    "union": {
+                                                                                                      "field": {
+                                                                                                        "name": "function",
+                                                                                                        "term": {
+                                                                                                          "union": {
+                                                                                                            "field": {
+                                                                                                              "name": "primitive",
+                                                                                                              "term": {
+                                                                                                                "wrap": {
+                                                                                                                  "body": {"literal": {"string": "hydra.lib.math.add"}},
+                                                                                                                  "typeName": "hydra.core.Name"}}},
+                                                                                                            "typeName": "hydra.core.Function"}}},
+                                                                                                      "typeName": "hydra.core.Term"}}}],
+                                                                                              "typeName": "hydra.core.Application"}}},
+                                                                                        "typeName": "hydra.core.Term"}}},
+                                                                                  {
+                                                                                    "name": "argument",
+                                                                                    "term": {
+                                                                                      "union": {
+                                                                                        "field": {
+                                                                                          "name": "literal",
+                                                                                          "term": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "integer",
+                                                                                                "term": {
+                                                                                                  "union": {
+                                                                                                    "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 5}}}},
+                                                                                                    "typeName": "hydra.core.IntegerValue"}}},
+                                                                                              "typeName": "hydra.core.Literal"}}},
+                                                                                        "typeName": "hydra.core.Term"}}}],
+                                                                                "typeName": "hydra.core.Application"}}},
+                                                                          "typeName": "hydra.core.Term"}}},
+                                                                    {
+                                                                      "name": "argument",
+                                                                      "term": {
+                                                                        "union": {
+                                                                          "field": {
+                                                                            "name": "list",
+                                                                            "term": {
+                                                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Term"}}}},
+                                                                          "typeName": "hydra.core.Term"}}}],
+                                                                  "typeName": "hydra.core.Application"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "output",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 5}}}},
+                                                                        "typeName": "hydra.core.IntegerValue"}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}}],
+                                                    "typeName": "hydra.testing.EvaluationTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "single element"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "evaluation",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "evaluationStyle",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "eager", "term": {"unit": {}}},
+                                                            "typeName": "hydra.testing.EvaluationStyle"}}},
+                                                      {
+                                                        "name": "input",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "application",
+                                                              "term": {
+                                                                "record": {
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "function",
+                                                                      "term": {
+                                                                        "union": {
+                                                                          "field": {
+                                                                            "name": "application",
+                                                                            "term": {
+                                                                              "record": {
+                                                                                "fields": [
+                                                                                  {
+                                                                                    "name": "function",
+                                                                                    "term": {
+                                                                                      "union": {
+                                                                                        "field": {
+                                                                                          "name": "application",
+                                                                                          "term": {
+                                                                                            "record": {
+                                                                                              "fields": [
+                                                                                                {
+                                                                                                  "name": "function",
+                                                                                                  "term": {
+                                                                                                    "union": {
+                                                                                                      "field": {
+                                                                                                        "name": "function",
+                                                                                                        "term": {
+                                                                                                          "union": {
+                                                                                                            "field": {
+                                                                                                              "name": "primitive",
+                                                                                                              "term": {
+                                                                                                                "wrap": {
+                                                                                                                  "body": {"literal": {"string": "hydra.lib.lists.foldr"}},
+                                                                                                                  "typeName": "hydra.core.Name"}}},
+                                                                                                            "typeName": "hydra.core.Function"}}},
+                                                                                                      "typeName": "hydra.core.Term"}}},
+                                                                                                {
+                                                                                                  "name": "argument",
+                                                                                                  "term": {
+                                                                                                    "union": {
+                                                                                                      "field": {
+                                                                                                        "name": "function",
+                                                                                                        "term": {
+                                                                                                          "union": {
+                                                                                                            "field": {
+                                                                                                              "name": "primitive",
+                                                                                                              "term": {
+                                                                                                                "wrap": {
+                                                                                                                  "body": {"literal": {"string": "hydra.lib.math.add"}},
+                                                                                                                  "typeName": "hydra.core.Name"}}},
+                                                                                                            "typeName": "hydra.core.Function"}}},
+                                                                                                      "typeName": "hydra.core.Term"}}}],
+                                                                                              "typeName": "hydra.core.Application"}}},
+                                                                                        "typeName": "hydra.core.Term"}}},
+                                                                                  {
+                                                                                    "name": "argument",
+                                                                                    "term": {
+                                                                                      "union": {
+                                                                                        "field": {
+                                                                                          "name": "literal",
+                                                                                          "term": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "integer",
+                                                                                                "term": {
+                                                                                                  "union": {
+                                                                                                    "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 10}}}},
+                                                                                                    "typeName": "hydra.core.IntegerValue"}}},
+                                                                                              "typeName": "hydra.core.Literal"}}},
+                                                                                        "typeName": "hydra.core.Term"}}}],
+                                                                                "typeName": "hydra.core.Application"}}},
+                                                                          "typeName": "hydra.core.Term"}}},
+                                                                    {
+                                                                      "name": "argument",
+                                                                      "term": {
+                                                                        "union": {
+                                                                          "field": {
+                                                                            "name": "list",
+                                                                            "term": {
+                                                                              "list": [
+                                                                                {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "literal",
+                                                                                      "term": {
+                                                                                        "union": {
+                                                                                          "field": {
+                                                                                            "name": "integer",
+                                                                                            "term": {
+                                                                                              "union": {
+                                                                                                "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 5}}}},
+                                                                                                "typeName": "hydra.core.IntegerValue"}}},
+                                                                                          "typeName": "hydra.core.Literal"}}},
+                                                                                    "typeName": "hydra.core.Term"}}]}},
+                                                                          "typeName": "hydra.core.Term"}}}],
+                                                                  "typeName": "hydra.core.Application"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "output",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 15}}}},
+                                                                        "typeName": "hydra.core.IntegerValue"}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}}],
+                                                    "typeName": "hydra.testing.EvaluationTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {"name": "name", "term": {"literal": {"string": "sum with addition"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "evaluation",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "evaluationStyle",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "eager", "term": {"unit": {}}},
+                                                            "typeName": "hydra.testing.EvaluationStyle"}}},
+                                                      {
+                                                        "name": "input",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "application",
+                                                              "term": {
+                                                                "record": {
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "function",
+                                                                      "term": {
+                                                                        "union": {
+                                                                          "field": {
+                                                                            "name": "application",
+                                                                            "term": {
+                                                                              "record": {
+                                                                                "fields": [
+                                                                                  {
+                                                                                    "name": "function",
+                                                                                    "term": {
+                                                                                      "union": {
+                                                                                        "field": {
+                                                                                          "name": "application",
+                                                                                          "term": {
+                                                                                            "record": {
+                                                                                              "fields": [
+                                                                                                {
+                                                                                                  "name": "function",
+                                                                                                  "term": {
+                                                                                                    "union": {
+                                                                                                      "field": {
+                                                                                                        "name": "function",
+                                                                                                        "term": {
+                                                                                                          "union": {
+                                                                                                            "field": {
+                                                                                                              "name": "primitive",
+                                                                                                              "term": {
+                                                                                                                "wrap": {
+                                                                                                                  "body": {"literal": {"string": "hydra.lib.lists.foldr"}},
+                                                                                                                  "typeName": "hydra.core.Name"}}},
+                                                                                                            "typeName": "hydra.core.Function"}}},
+                                                                                                      "typeName": "hydra.core.Term"}}},
+                                                                                                {
+                                                                                                  "name": "argument",
+                                                                                                  "term": {
+                                                                                                    "union": {
+                                                                                                      "field": {
+                                                                                                        "name": "function",
+                                                                                                        "term": {
+                                                                                                          "union": {
+                                                                                                            "field": {
+                                                                                                              "name": "primitive",
+                                                                                                              "term": {
+                                                                                                                "wrap": {
+                                                                                                                  "body": {"literal": {"string": "hydra.lib.math.add"}},
+                                                                                                                  "typeName": "hydra.core.Name"}}},
+                                                                                                            "typeName": "hydra.core.Function"}}},
+                                                                                                      "typeName": "hydra.core.Term"}}}],
+                                                                                              "typeName": "hydra.core.Application"}}},
+                                                                                        "typeName": "hydra.core.Term"}}},
+                                                                                  {
+                                                                                    "name": "argument",
+                                                                                    "term": {
+                                                                                      "union": {
+                                                                                        "field": {
+                                                                                          "name": "literal",
+                                                                                          "term": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "integer",
+                                                                                                "term": {
+                                                                                                  "union": {
+                                                                                                    "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 0}}}},
+                                                                                                    "typeName": "hydra.core.IntegerValue"}}},
+                                                                                              "typeName": "hydra.core.Literal"}}},
+                                                                                        "typeName": "hydra.core.Term"}}}],
+                                                                                "typeName": "hydra.core.Application"}}},
+                                                                          "typeName": "hydra.core.Term"}}},
+                                                                    {
+                                                                      "name": "argument",
+                                                                      "term": {
+                                                                        "union": {
+                                                                          "field": {
+                                                                            "name": "list",
+                                                                            "term": {
+                                                                              "list": [
+                                                                                {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "literal",
+                                                                                      "term": {
+                                                                                        "union": {
+                                                                                          "field": {
+                                                                                            "name": "integer",
+                                                                                            "term": {
+                                                                                              "union": {
+                                                                                                "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 1}}}},
+                                                                                                "typeName": "hydra.core.IntegerValue"}}},
+                                                                                          "typeName": "hydra.core.Literal"}}},
+                                                                                    "typeName": "hydra.core.Term"}},
+                                                                                {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "literal",
+                                                                                      "term": {
+                                                                                        "union": {
+                                                                                          "field": {
+                                                                                            "name": "integer",
+                                                                                            "term": {
+                                                                                              "union": {
+                                                                                                "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 2}}}},
+                                                                                                "typeName": "hydra.core.IntegerValue"}}},
+                                                                                          "typeName": "hydra.core.Literal"}}},
+                                                                                    "typeName": "hydra.core.Term"}},
+                                                                                {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "literal",
+                                                                                      "term": {
+                                                                                        "union": {
+                                                                                          "field": {
+                                                                                            "name": "integer",
+                                                                                            "term": {
+                                                                                              "union": {
+                                                                                                "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 3}}}},
+                                                                                                "typeName": "hydra.core.IntegerValue"}}},
+                                                                                          "typeName": "hydra.core.Literal"}}},
+                                                                                    "typeName": "hydra.core.Term"}},
+                                                                                {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "literal",
+                                                                                      "term": {
+                                                                                        "union": {
+                                                                                          "field": {
+                                                                                            "name": "integer",
+                                                                                            "term": {
+                                                                                              "union": {
+                                                                                                "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 4}}}},
+                                                                                                "typeName": "hydra.core.IntegerValue"}}},
+                                                                                          "typeName": "hydra.core.Literal"}}},
+                                                                                    "typeName": "hydra.core.Term"}}]}},
+                                                                          "typeName": "hydra.core.Term"}}}],
+                                                                  "typeName": "hydra.core.Application"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "output",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 10}}}},
+                                                                        "typeName": "hydra.core.IntegerValue"}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}}],
+                                                    "typeName": "hydra.testing.EvaluationTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {"literal": {"string": "subtraction vs foldl"}}},
+                                        {
+                                          "name": "case",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "evaluation",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "evaluationStyle",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {"name": "eager", "term": {"unit": {}}},
+                                                            "typeName": "hydra.testing.EvaluationStyle"}}},
+                                                      {
+                                                        "name": "input",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "application",
+                                                              "term": {
+                                                                "record": {
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "function",
+                                                                      "term": {
+                                                                        "union": {
+                                                                          "field": {
+                                                                            "name": "application",
+                                                                            "term": {
+                                                                              "record": {
+                                                                                "fields": [
+                                                                                  {
+                                                                                    "name": "function",
+                                                                                    "term": {
+                                                                                      "union": {
+                                                                                        "field": {
+                                                                                          "name": "application",
+                                                                                          "term": {
+                                                                                            "record": {
+                                                                                              "fields": [
+                                                                                                {
+                                                                                                  "name": "function",
+                                                                                                  "term": {
+                                                                                                    "union": {
+                                                                                                      "field": {
+                                                                                                        "name": "function",
+                                                                                                        "term": {
+                                                                                                          "union": {
+                                                                                                            "field": {
+                                                                                                              "name": "primitive",
+                                                                                                              "term": {
+                                                                                                                "wrap": {
+                                                                                                                  "body": {"literal": {"string": "hydra.lib.lists.foldr"}},
+                                                                                                                  "typeName": "hydra.core.Name"}}},
+                                                                                                            "typeName": "hydra.core.Function"}}},
+                                                                                                      "typeName": "hydra.core.Term"}}},
+                                                                                                {
+                                                                                                  "name": "argument",
+                                                                                                  "term": {
+                                                                                                    "union": {
+                                                                                                      "field": {
+                                                                                                        "name": "function",
+                                                                                                        "term": {
+                                                                                                          "union": {
+                                                                                                            "field": {
+                                                                                                              "name": "primitive",
+                                                                                                              "term": {
+                                                                                                                "wrap": {
+                                                                                                                  "body": {"literal": {"string": "hydra.lib.math.sub"}},
+                                                                                                                  "typeName": "hydra.core.Name"}}},
+                                                                                                            "typeName": "hydra.core.Function"}}},
+                                                                                                      "typeName": "hydra.core.Term"}}}],
+                                                                                              "typeName": "hydra.core.Application"}}},
+                                                                                        "typeName": "hydra.core.Term"}}},
+                                                                                  {
+                                                                                    "name": "argument",
+                                                                                    "term": {
+                                                                                      "union": {
+                                                                                        "field": {
+                                                                                          "name": "literal",
+                                                                                          "term": {
+                                                                                            "union": {
+                                                                                              "field": {
+                                                                                                "name": "integer",
+                                                                                                "term": {
+                                                                                                  "union": {
+                                                                                                    "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 10}}}},
+                                                                                                    "typeName": "hydra.core.IntegerValue"}}},
+                                                                                              "typeName": "hydra.core.Literal"}}},
+                                                                                        "typeName": "hydra.core.Term"}}}],
+                                                                                "typeName": "hydra.core.Application"}}},
+                                                                          "typeName": "hydra.core.Term"}}},
+                                                                    {
+                                                                      "name": "argument",
+                                                                      "term": {
+                                                                        "union": {
+                                                                          "field": {
+                                                                            "name": "list",
+                                                                            "term": {
+                                                                              "list": [
+                                                                                {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "literal",
+                                                                                      "term": {
+                                                                                        "union": {
+                                                                                          "field": {
+                                                                                            "name": "integer",
+                                                                                            "term": {
+                                                                                              "union": {
+                                                                                                "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 1}}}},
+                                                                                                "typeName": "hydra.core.IntegerValue"}}},
+                                                                                          "typeName": "hydra.core.Literal"}}},
+                                                                                    "typeName": "hydra.core.Term"}},
+                                                                                {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "literal",
+                                                                                      "term": {
+                                                                                        "union": {
+                                                                                          "field": {
+                                                                                            "name": "integer",
+                                                                                            "term": {
+                                                                                              "union": {
+                                                                                                "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 2}}}},
+                                                                                                "typeName": "hydra.core.IntegerValue"}}},
+                                                                                          "typeName": "hydra.core.Literal"}}},
+                                                                                    "typeName": "hydra.core.Term"}},
+                                                                                {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "literal",
+                                                                                      "term": {
+                                                                                        "union": {
+                                                                                          "field": {
+                                                                                            "name": "integer",
+                                                                                            "term": {
+                                                                                              "union": {
+                                                                                                "field": {"name": "int32", "term": {"literal": {"integer": {"int32": 3}}}},
+                                                                                                "typeName": "hydra.core.IntegerValue"}}},
+                                                                                          "typeName": "hydra.core.Literal"}}},
+                                                                                    "typeName": "hydra.core.Term"}}]}},
+                                                                          "typeName": "hydra.core.Term"}}}],
+                                                                  "typeName": "hydra.core.Application"}}},
+                                                            "typeName": "hydra.core.Term"}}},
+                                                      {
+                                                        "name": "output",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "integer",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {"name": "int32", "term": {"literal": {"integer": {"int32": -8}}}},
+                                                                        "typeName": "hydra.core.IntegerValue"}}},
+                                                                  "typeName": "hydra.core.Literal"}}},
+                                                            "typeName": "hydra.core.Term"}}}],
+                                                    "typeName": "hydra.testing.EvaluationTestCase"}}},
+                                              "typeName": "hydra.testing.TestCase"}}},
+                                        {
+                                          "name": "description",
+                                          "term": {
+                                            "typeApplication": {"body": {"maybe": null}, "type": {"literal": {"string": {}}}}}},
+                                        {
+                                          "name": "tags",
+                                          "term": {
+                                            "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.testing.Tag"}}}}],
+                                      "typeName": "hydra.testing.TestCaseWithMetadata"}}]}}],
+                          "typeName": "hydra.testing.TestGroup"}},
+                      {
+                        "record": {
+                          "fields": [
                             {"name": "name", "term": {"literal": {"string": "group"}}},
                             {
                               "name": "description",
