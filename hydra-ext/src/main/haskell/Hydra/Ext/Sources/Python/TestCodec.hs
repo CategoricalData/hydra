@@ -359,10 +359,10 @@ generatePythonTestGroupHierarchy = define "generatePythonTestGroupHierarchy" $
   lambda "g" $ lambda "namespaces_" $ lambda "codec" $ lambda "groupPath" $ lambda "testGroup" $ lets [
     "cases_">: project _TestGroup _TestGroup_cases @@ var "testGroup",
     "subgroups">: project _TestGroup _TestGroup_subgroups @@ var "testGroup"] $
-    "testCaseLines" <<= Eithers.mapList
+    "testCaseLines" <<~ Eithers.mapList
           (lambda "tc" $ generatePythonTestCase @@ var "g" @@ var "namespaces_" @@ var "codec" @@ var "groupPath" @@ var "tc")
           (var "cases_") $
-      "subgroupBlocks" <<= Eithers.mapList
+      "subgroupBlocks" <<~ Eithers.mapList
           (lambda "subgroup" $ lets [
             "groupName">: project _TestGroup _TestGroup_name @@ var "subgroup",
             "header">: Strings.cat2 (string "# ") (var "groupName")] $
@@ -398,8 +398,8 @@ generatePythonTestCase = define "generatePythonTestCase" $
           (var "name_")
           (Strings.intercalate (string "__") (Lists.concat2 (var "groupPath") (list [var "name_"]))),
         "formattedName">: project _TestCodec _TestCodec_formatTestName @@ var "codec" @@ var "fullName"] $
-        "inputCode" <<= (project _TestCodec _TestCodec_encodeTerm @@ var "codec" @@ var "input_" @@ var "g") $
-        "outputCode" <<= (project _TestCodec _TestCodec_encodeTerm @@ var "codec" @@ var "output_" @@ var "g") $
+        "inputCode" <<~ (project _TestCodec _TestCodec_encodeTerm @@ var "codec" @@ var "input_" @@ var "g") $
+        "outputCode" <<~ (project _TestCodec _TestCodec_encodeTerm @@ var "codec" @@ var "output_" @@ var "g") $
         right (list [
               Strings.cat (list [string "def ", var "formattedName", string "():"]),
               Strings.cat (list [string "    assert (", var "inputCode", string ") == (", var "outputCode", string ")"])])]
@@ -473,8 +473,8 @@ inferTestGroupTerms = define "inferTestGroupTerms" $
     "desc">: project _TestGroup _TestGroup_description @@ var "tg",
     "subgroups">: project _TestGroup _TestGroup_subgroups @@ var "tg",
     "cases_">: project _TestGroup _TestGroup_cases @@ var "tg"] $
-    "inferredSubgroups" <<= Eithers.mapList (lambda "sg" $ inferTestGroupTerms @@ var "g" @@ var "sg") (var "subgroups") $
-    "inferredCases" <<= Eithers.mapList (lambda "tc" $ inferTestCase @@ var "g" @@ var "tc") (var "cases_") $
+    "inferredSubgroups" <<~ Eithers.mapList (lambda "sg" $ inferTestGroupTerms @@ var "g" @@ var "sg") (var "subgroups") $
+    "inferredCases" <<~ Eithers.mapList (lambda "tc" $ inferTestCase @@ var "g" @@ var "tc") (var "cases_") $
     right (Testing.testGroup (var "name_") (var "desc") (var "inferredSubgroups") (var "inferredCases"))
 
 
@@ -494,8 +494,8 @@ inferTestCase = define "inferTestCase" $
         _TestCase_delegatedEvaluation>>: lambda "delCase" $ lets [
           "input_">: project _DelegatedEvaluationTestCase _DelegatedEvaluationTestCase_input @@ var "delCase",
           "output_">: project _DelegatedEvaluationTestCase _DelegatedEvaluationTestCase_output @@ var "delCase"] $
-          "inferredInput" <<= (inferTerm @@ var "g" @@ var "input_") $
-          "inferredOutput" <<= (inferTerm @@ var "g" @@ var "output_") $
+          "inferredInput" <<~ (inferTerm @@ var "g" @@ var "input_") $
+          "inferredOutput" <<~ (inferTerm @@ var "g" @@ var "output_") $
           right (inject _TestCase _TestCase_delegatedEvaluation
                 (record _DelegatedEvaluationTestCase [
                   _DelegatedEvaluationTestCase_input>>: var "inferredInput",

@@ -509,8 +509,8 @@ encodeType = def "encodeType" $
     [_Type_application>>: lambda "at" $
        encodeApplicationType @@ var "cx" @@ var "g" @@ var "at",
      _Type_either>>: lambda "et" $
-       "lt" <<= (encodeType @@ var "cx" @@ var "g" @@ Core.eitherTypeLeft (var "et")) $
-       "rt" <<= (encodeType @@ var "cx" @@ var "g" @@ Core.eitherTypeRight (var "et")) $
+       "lt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.eitherTypeLeft (var "et")) $
+       "rt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.eitherTypeRight (var "et")) $
          right (toConstType @@ (createTemplateType @@ string "std::variant" @@ list [var "lt", var "rt"])),
      _Type_function>>: lambda "ft" $
        encodeFunctionType @@ var "cx" @@ var "g" @@ var "ft",
@@ -520,8 +520,8 @@ encodeType = def "encodeType" $
        Eithers.map (lambda "enc" $ toConstType @@ (createTemplateType @@ string "std::vector" @@ list [var "enc"]))
          (encodeType @@ var "cx" @@ var "g" @@ var "et"),
      _Type_map>>: lambda "mt" $
-       "kt" <<= (encodeType @@ var "cx" @@ var "g" @@ Core.mapTypeKeys (var "mt")) $
-       "vt" <<= (encodeType @@ var "cx" @@ var "g" @@ Core.mapTypeValues (var "mt")) $
+       "kt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.mapTypeKeys (var "mt")) $
+       "vt" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.mapTypeValues (var "mt")) $
          right (toConstType @@ (createTemplateType @@ string "std::map" @@ list [var "kt", var "vt"])),
      _Type_literal>>: lambda "lt" $
        right (encodeLiteralType @@ var "lt"),
@@ -529,8 +529,8 @@ encodeType = def "encodeType" $
        Eithers.map (lambda "enc" $ toConstType @@ (createTemplateType @@ string "std::optional" @@ list [var "enc"]))
          (encodeType @@ var "cx" @@ var "g" @@ var "et"),
      _Type_pair>>: lambda "pt" $
-       "ft" <<= (encodeType @@ var "cx" @@ var "g" @@ Core.pairTypeFirst (var "pt")) $
-       "st" <<= (encodeType @@ var "cx" @@ var "g" @@ Core.pairTypeSecond (var "pt")) $
+       "ft" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.pairTypeFirst (var "pt")) $
+       "st" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.pairTypeSecond (var "pt")) $
          right (toConstType @@ (createTemplateType @@ string "std::pair" @@ list [var "ft", var "st"])),
      _Type_record>>: lambda "rt" $
        right (createTypeReference @@ (isStructType @@ var "t") @@ Core.rowTypeTypeName (var "rt")),
@@ -557,8 +557,8 @@ encodeForallType = def "encodeForallType" $
 encodeFunctionType :: TBinding (Context -> Graph -> FunctionType -> Either (InContext OtherError) Cpp.TypeExpression)
 encodeFunctionType = def "encodeFunctionType" $
   "cx" ~> "g" ~> lambda "ft" $
-    "dom" <<= (encodeType @@ var "cx" @@ var "g" @@ Core.functionTypeDomain (var "ft")) $
-    "cod" <<= (encodeType @@ var "cx" @@ var "g" @@ Core.functionTypeCodomain (var "ft")) $
+    "dom" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.functionTypeDomain (var "ft")) $
+    "cod" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.functionTypeCodomain (var "ft")) $
       right (inject Cpp._TypeExpression Cpp._TypeExpression_function $
         record Cpp._FunctionType [
           Cpp._FunctionType_returnType>>: var "cod",
@@ -573,15 +573,15 @@ encodeFunctionType = def "encodeFunctionType" $
 encodeApplicationType :: TBinding (Context -> Graph -> ApplicationType -> Either (InContext OtherError) Cpp.TypeExpression)
 encodeApplicationType = def "encodeApplicationType" $
   "cx" ~> "g" ~> lambda "at" $
-    "body" <<= (encodeType @@ var "cx" @@ var "g" @@ Core.applicationTypeFunction (var "at")) $
-    "arg" <<= (encodeType @@ var "cx" @@ var "g" @@ Core.applicationTypeArgument (var "at")) $
+    "body" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.applicationTypeFunction (var "at")) $
+    "arg" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.applicationTypeArgument (var "at")) $
       right (createTemplateType @@ string "TODO_template" @@ list [var "body", var "arg"])
 
 -- | Encode a type as a typedef / using declaration
 encodeTypeAlias :: TBinding (Context -> Graph -> Name -> Type -> Maybe String -> Either (InContext OtherError) Cpp.Declaration)
 encodeTypeAlias = def "encodeTypeAlias" $
   "cx" ~> "g" ~> lambda "name" $ lambda "typ" $ lambda "comment" $
-    "cppType" <<= (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
+    "cppType" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "typ") $
       right (inject Cpp._Declaration Cpp._Declaration_typedef $
         record Cpp._TypedefDeclaration [
           Cpp._TypedefDeclaration_name>>: className @@ var "name",
@@ -615,7 +615,7 @@ encodeFieldType = def "encodeFieldType" $
   lambda "isParameter" $ lambda "ft" $ "cx" ~> lambda "g" $
     "fname" <~ Core.fieldTypeName (var "ft") $
     "ftype" <~ Core.fieldTypeType (var "ft") $
-    "cppType" <<= (encodeType @@ var "cx" @@ var "g" @@ var "ftype") $
+    "cppType" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "ftype") $
       right (record Cpp._VariableDeclaration [
         Cpp._VariableDeclaration_type>>: just (var "cppType"),
         Cpp._VariableDeclaration_name>>: encodeFieldName @@ var "fname",
@@ -627,8 +627,8 @@ encodeRecordType :: TBinding (Context -> Graph -> Name -> RowType -> Maybe Strin
 encodeRecordType = def "encodeRecordType" $
   "cx" ~> "g" ~> lambda "name" $ lambda "rt" $ lambda "comment" $
     "tfields" <~ Core.rowTypeFields (var "rt") $
-    "cppFields" <<= (Eithers.mapList (lambda "f" $ encodeFieldType @@ boolean False @@ var "f" @@ var "cx" @@ var "g") (var "tfields")) $
-    "constructorParams" <<= (Eithers.mapList (lambda "f" $ encodeFieldType @@ boolean True @@ var "f" @@ var "cx" @@ var "g") (var "tfields")) $
+    "cppFields" <<~ (Eithers.mapList (lambda "f" $ encodeFieldType @@ boolean False @@ var "f" @@ var "cx" @@ var "g") (var "tfields")) $
+    "constructorParams" <<~ (Eithers.mapList (lambda "f" $ encodeFieldType @@ boolean True @@ var "f" @@ var "cx" @@ var "g") (var "tfields")) $
       let classDecl = cppClassDeclaration @@ (className @@ var "name") @@ list ([] :: [TTerm Cpp.BaseSpecifier]) @@
             (just (wrap Cpp._ClassBody (
               Lists.concat (list [
@@ -693,7 +693,7 @@ encodeEnumType = def "encodeEnumType" $
 encodeVariantType :: TBinding (Context -> Graph -> Name -> [FieldType] -> Maybe String -> Either (InContext OtherError) [Cpp.Declaration])
 encodeVariantType = def "encodeVariantType" $
   "cx" ~> "g" ~> lambda "name" $ lambda "variants" $ lambda "comment" $
-    "variantClasses" <<= (Eithers.mapList
+    "variantClasses" <<~ (Eithers.mapList
       (lambda "v" $ createVariantClass @@ var "cx" @@ var "g" @@ var "name" @@ var "name" @@ var "v")
       (var "variants")) $
       right (Lists.concat (list [
@@ -917,8 +917,8 @@ createVariantClass = def "createVariantClass" $
           Cpp._Parameter_defaultValue>>: nothing]])
         (encodeType @@ var "cx" @@ var "g" @@ (Rewriting.deannotateType @@ var "variantType")))
       (right (list ([] :: [TTerm Cpp.Parameter]))) $
-    "vFields" <<= (var "valueField") $
-    "vParams" <<= (var "constructorParams") $
+    "vFields" <<~ (var "valueField") $
+    "vParams" <<~ (var "constructorParams") $
     "initList" <~ Logic.ifElse (var "hasValue")
       (list [record Cpp._MemInitializer [
         Cpp._MemInitializer_name>>: string "value",
@@ -1193,7 +1193,7 @@ generateTypeFile = def "generateTypeFile" $
   lambda "ns" $ lambda "def_" $ "cx" ~> lambda "g" $
     "name" <~ Module.typeDefinitionName (var "def_") $
     "typ" <~ Module.typeDefinitionType (var "def_") $
-    "decls" <<= (encodeTypeDefinition @@ var "cx" @@ var "g" @@ var "name" @@ var "typ") $
+    "decls" <<~ (encodeTypeDefinition @@ var "cx" @@ var "g" @@ var "name" @@ var "typ") $
     "includes" <~ (findIncludes @@ boolean True @@ var "ns" @@ list [var "def_"]) $
       right (serializeHeaderFile @@ var "name" @@ var "includes"
         @@ list [namespaceDecl @@ var "ns" @@ var "decls"])
@@ -1202,7 +1202,7 @@ generateTypeFile = def "generateTypeFile" $
 generateTypeFiles :: TBinding (Namespace -> [TypeDefinition] -> Context -> Graph -> Either (InContext OtherError) [(FilePath, String)])
 generateTypeFiles = def "generateTypeFiles" $
   lambda "ns" $ lambda "defs" $ "cx" ~> lambda "g" $
-    "classFiles" <<= (Eithers.mapList
+    "classFiles" <<~ (Eithers.mapList
       (lambda "d" $ generateTypeFile @@ var "ns" @@ var "d" @@ var "cx" @@ var "g")
       (var "defs")) $
       right (var "classFiles")
@@ -1213,5 +1213,5 @@ moduleToCpp = def "moduleToCpp" $
   lambda "mod" $ lambda "defs" $ "cx" ~> lambda "g" $
     "ns" <~ Module.moduleNamespace (var "mod") $
     "typeDefs" <~ Pairs.first (Schemas.partitionDefinitions @@ var "defs") $
-    "typeFiles" <<= (generateTypeFiles @@ var "ns" @@ var "typeDefs" @@ var "cx" @@ var "g") $
+    "typeFiles" <<~ (generateTypeFiles @@ var "ns" @@ var "typeDefs" @@ var "cx" @@ var "g") $
       right (Maps.fromList (var "typeFiles"))

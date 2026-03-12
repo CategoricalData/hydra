@@ -2065,7 +2065,7 @@ leftHandSide = def "LeftHandSide" $ T.union [
 --  (one of)
 assignmentOperator :: Binding
 assignmentOperator = def "AssignmentOperator" $ T.enum [
---  =  *=  /=  %=  +=  -=  <<=  >>=  >>>=  &=  ^=  |=
+--  =  *=  /=  %=  +=  -=  <<~  >>=  >>>=  &=  ^=  |=
   "simple", "times", "div", "mod", "plus", "minus",
   "shiftLeft", "shiftRight", "shiftRightZeroFill", "and", "xor", "or"]
 

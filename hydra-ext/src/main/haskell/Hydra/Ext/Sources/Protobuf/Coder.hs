@@ -204,7 +204,7 @@ generateStructuralTypeMessage = def "generateStructuralTypeMessage" $
     "cx1">: Annotations.resetCount @@ asTerm key_proto_field_index @@ var "cx",
     "cx2">: Pairs.second (Annotations.nextCount @@ asTerm key_proto_field_index @@ var "cx1"),
     "makeField">: "cx0" ~> "fname" ~> "ftyp" ~>
-      "ft" <<= (asTerm encodeSimpleTypeForHelper @@ var "cx0" @@ var "localNs" @@ var "ftyp") $ lets [
+      "ft" <<~ (asTerm encodeSimpleTypeForHelper @@ var "cx0" @@ var "localNs" @@ var "ftyp") $ lets [
         "idxPair">: Annotations.nextCount @@ asTerm key_proto_field_index @@ var "cx0",
         "idx">: Pairs.first (var "idxPair"),
         "cx1_">: Pairs.second (var "idxPair")] $
@@ -220,10 +220,10 @@ generateStructuralTypeMessage = def "generateStructuralTypeMessage" $
       (Name "either")>>: "p" ~> lets [
         "lt">: Pairs.first (var "p"),
         "rt">: Pairs.second (var "p")] $
-        "leftResult" <<= (var "makeField" @@ var "cx2" @@ string "left" @@ var "lt") $
+        "leftResult" <<~ (var "makeField" @@ var "cx2" @@ string "left" @@ var "lt") $
         "leftField" <~ Pairs.first (var "leftResult") $
         "cx3" <~ Pairs.second (var "leftResult") $
-        "rightResult" <<= (var "makeField" @@ var "cx3" @@ string "right" @@ var "rt") $
+        "rightResult" <<~ (var "makeField" @@ var "cx3" @@ string "right" @@ var "rt") $
         "rightField" <~ Pairs.first (var "rightResult") $
         "cx4" <~ Pairs.second (var "rightResult") $
         right $ pair
@@ -236,10 +236,10 @@ generateStructuralTypeMessage = def "generateStructuralTypeMessage" $
       (Name "pair")>>: "p" ~> lets [
         "ft">: Pairs.first (var "p"),
         "st">: Pairs.second (var "p")] $
-        "firstResult" <<= (var "makeField" @@ var "cx2" @@ string "first" @@ var "ft") $
+        "firstResult" <<~ (var "makeField" @@ var "cx2" @@ string "first" @@ var "ft") $
         "firstField" <~ Pairs.first (var "firstResult") $
         "cx3" <~ Pairs.second (var "firstResult") $
-        "secondResult" <<= (var "makeField" @@ var "cx3" @@ string "second" @@ var "st") $
+        "secondResult" <<~ (var "makeField" @@ var "cx3" @@ string "second" @@ var "st") $
         "secondField" <~ Pairs.first (var "secondResult") $
         "cx4" <~ Pairs.second (var "secondResult") $
         right $ pair
@@ -309,7 +309,7 @@ moduleToProtobuf = def "moduleToProtobuf" $
     "ns_">: Module.moduleNamespace (var "mod"),
     "partitioned">: Schemas.partitionDefinitions @@ var "defs",
     "typeDefs">: Pairs.first (var "partitioned")] $
-    "pfile" <<= (asTerm constructModule @@ var "cx" @@ var "g" @@ var "mod" @@ var "typeDefs") $ lets [
+    "pfile" <<~ (asTerm constructModule @@ var "cx" @@ var "g" @@ var "mod" @@ var "typeDefs") $ lets [
       "content">: Serialization.printExpr @@ (Serialization.parenthesize @@ (ProtobufSerdeSource.writeProtoFile @@ var "pfile")),
       "path">: unwrap P3._FileReference @@ (asTerm namespaceToFileReference @@ var "ns_")] $
       right $ Maps.singleton (var "path") (var "content")
@@ -385,10 +385,10 @@ constructModule = def "constructModule" $
       (var "checkFields" @@ var "emptyCheckType" @@ var "checkFieldType_empty" @@ var "types")
       (list [wrap P3._FileReference (string "google/protobuf/empty.proto")])
       emptyList] $
-    "schemaImports" <<= (Schemas.moduleDependencyNamespaces @@ var "cx" @@ var "g" @@ true @@ false @@ false @@ false @@ var "mod") $
-    "definitions" <<= (Eithers.mapList (var "toDef") (var "typeDefs")) $ lets [
+    "schemaImports" <<~ (Schemas.moduleDependencyNamespaces @@ var "cx" @@ var "g" @@ true @@ false @@ false @@ false @@ var "mod") $
+    "definitions" <<~ (Eithers.mapList (var "toDef") (var "typeDefs")) $ lets [
       "schemaImportList">: Lists.map (lambda "n" $ asTerm namespaceToFileReference @@ var "n") (Sets.toList (var "schemaImports"))] $
-      "helperResult" <<= (asTerm mapAccumResult @@
+      "helperResult" <<~ (asTerm mapAccumResult @@
         ("cx0" ~> "ref" ~> asTerm generateStructuralTypeMessage @@ var "cx0" @@ var "g" @@ var "ns_" @@ var "ref") @@
         var "cx" @@
         (Sets.toList (var "structRefs"))) $ lets [
@@ -450,7 +450,7 @@ encodeDefinition = def "encodeDefinition" $
             ("ed" ~> inject P3._Definition P3._Definition_enum (var "ed"))
             (var "toEitherString" @@ (asTerm encodeEnumDefinition @@ var "cx0" @@ var "g" @@ var "options" @@ var "rt")))
           (var "encode" @@ var "cx0" @@ var "options" @@ (var "wrapAsRecordType" @@ (inject _Type _Type_union (var "rt"))))]] $
-    "options" <<= (var "toEitherString" @@ (asTerm findOptions @@ var "cx" @@ var "g" @@ var "typ")) $
+    "options" <<~ (var "toEitherString" @@ (asTerm findOptions @@ var "cx" @@ var "g" @@ var "typ")) $
     var "encode" @@ var "cx2" @@ var "options" @@ var "typ"
 
 -- =============================================================================
@@ -470,13 +470,13 @@ encodeEnumDefinition = def "encodeEnumDefinition" $
     "encodeEnumField">: "field" ~> "idx" ~> lets [
       "fname">: Core.fieldTypeName (var "field"),
       "ftype">: Core.fieldTypeType (var "field")] $
-      "opts" <<= (asTerm findOptions @@ var "cx" @@ var "g" @@ var "ftype") $
+      "opts" <<~ (asTerm findOptions @@ var "cx" @@ var "g" @@ var "ftype") $
       right $ record P3._EnumValue [
         P3._EnumValue_name>>: asTerm encodeEnumValueName @@ var "tname" @@ var "fname",
         P3._EnumValue_number>>: var "idx",
         P3._EnumValue_options>>: var "opts"],
     "indices">: Math.range (int32 1) (Lists.length (var "fields"))] $
-    "values" <<= (Eithers.mapList
+    "values" <<~ (Eithers.mapList
       ("p" ~> var "encodeEnumField" @@ (Pairs.first (var "p")) @@ (Pairs.second (var "p")))
       (Lists.zip (var "fields") (var "indices"))) $
     right $ record P3._EnumDefinition [
@@ -534,8 +534,8 @@ encodeFieldType = def "encodeFieldType" $
             ("st" ~> inject P3._FieldType P3._FieldType_repeated (var "st"))
             (var "encodeSimpleType_" @@ var "cx0" @@ var "g0" @@ var "ns0" @@ true @@ var "setType"),
         _Type_map>>: "mt" ~>
-          "kt" <<= (var "encodeSimpleType_" @@ var "cx0" @@ var "g0" @@ var "ns0" @@ false @@ (Core.mapTypeKeys (var "mt"))) $
-          "vt" <<= (var "encodeSimpleType_" @@ var "cx0" @@ var "g0" @@ var "ns0" @@ true @@ (Core.mapTypeValues (var "mt"))) $
+          "kt" <<~ (var "encodeSimpleType_" @@ var "cx0" @@ var "g0" @@ var "ns0" @@ false @@ (Core.mapTypeKeys (var "mt"))) $
+          "vt" <<~ (var "encodeSimpleType_" @@ var "cx0" @@ var "g0" @@ var "ns0" @@ true @@ (Core.mapTypeValues (var "mt"))) $
           right $ inject P3._FieldType P3._FieldType_map
             (record P3._MapType [
               P3._MapType_keys>>: var "kt",
@@ -547,7 +547,7 @@ encodeFieldType = def "encodeFieldType" $
               ("st" ~> inject P3._FieldType P3._FieldType_simple (var "st"))
               (asTerm encodeScalarTypeWrapped @@ var "cx0" @@ var "lt")],
         _Type_union>>: "rt" ~>
-          "pfields" <<= (asTerm mapAccumResult @@
+          "pfields" <<~ (asTerm mapAccumResult @@
             ("cx_" ~> "f" ~> asTerm encodeFieldType @@ var "cx_" @@ var "g0" @@ var "ns0" @@ var "f") @@
             var "cx0" @@
             (Core.rowTypeFields (var "rt"))) $ lets [
@@ -566,7 +566,7 @@ encodeFieldType = def "encodeFieldType" $
         _Type_unit>>: constant $ right (inject P3._SimpleType P3._SimpleType_reference (wrap P3._TypeName (string "google.protobuf.Empty"))),
         _Type_variable>>: "name" ~> Logic.ifElse (var "noms")
           (var "forNominal" @@ var "name")
-          ("el" <<= (Lexical.requireElement @@ var "cx0" @@ var "g0" @@ var "name") $ lets [
+          ("el" <<~ (Lexical.requireElement @@ var "cx0" @@ var "g0" @@ var "name") $ lets [
             "term">: Core.bindingTerm (var "el")] $
             Eithers.bind
               (Eithers.bimap
@@ -574,12 +574,12 @@ encodeFieldType = def "encodeFieldType" $
                 ("t" ~> var "t")
                 (decodeType @@ var "g0" @@ var "term"))
               ("resolvedTyp" ~> var "encodeSimpleType_" @@ var "cx0" @@ var "g0" @@ var "ns0" @@ var "noms" @@ var "resolvedTyp"))]] $
-    "options" <<= (asTerm findOptions @@ var "cx" @@ var "g" @@ var "ftype") $
-    "ft_" <<= (var "encodeType_" @@ var "cx" @@ var "g" @@ var "localNs" @@ var "ftype") $ lets [
+    "options" <<~ (asTerm findOptions @@ var "cx" @@ var "g" @@ var "ftype") $
+    "ft_" <<~ (var "encodeType_" @@ var "cx" @@ var "g" @@ var "localNs" @@ var "ftype") $ lets [
       "idxPair">: Annotations.nextCount @@ asTerm key_proto_field_index @@ var "cx",
       "idx">: Pairs.first (var "idxPair"),
       "cx1">: Pairs.second (var "idxPair")] $
-    "preserve" <<= (asTerm readBooleanAnnotation @@ var "cx" @@ var "g" @@ Constants.key_preserveFieldName @@ var "ftype") $
+    "preserve" <<~ (asTerm readBooleanAnnotation @@ var "cx" @@ var "g" @@ Constants.key_preserveFieldName @@ var "ftype") $
     right $ pair
       (record P3._Field [
         P3._Field_name>>: asTerm encodeFieldName @@ var "preserve" @@ var "fname",
@@ -600,7 +600,7 @@ encodeRecordType = def "encodeRecordType" $
   "cx" ~> "g" ~> "localNs" ~> "options" ~> "rt" ~> lets [
     "tname">: Core.rowTypeTypeName (var "rt"),
     "fields">: Core.rowTypeFields (var "rt")] $
-    "result" <<= (asTerm mapAccumResult @@
+    "result" <<~ (asTerm mapAccumResult @@
       ("cx_" ~> "f" ~> asTerm encodeFieldType @@ var "cx_" @@ var "g" @@ var "localNs" @@ var "f") @@
       var "cx" @@
       var "fields") $ lets [
@@ -712,8 +712,8 @@ findOptions :: TBinding (Context -> Graph -> Type -> Either (InContext OtherErro
 findOptions = def "findOptions" $
   doc "Find Protobuf options for a type (description and deprecated)" $
   "cx" ~> "g" ~> "typ" ~>
-    "mdesc" <<= (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ") $
-    "bdep" <<= (asTerm readBooleanAnnotation @@ var "cx" @@ var "g" @@ Constants.key_deprecated @@ var "typ") $ lets [
+    "mdesc" <<~ (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ") $
+    "bdep" <<~ (asTerm readBooleanAnnotation @@ var "cx" @@ var "g" @@ Constants.key_deprecated @@ var "typ") $ lets [
       "mdescAnn">: Maybes.map
         ("desc_" ~> record P3._Option [
           P3._Option_name>>: ProtobufSerdeSource.descriptionOptionName,
