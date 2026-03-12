@@ -18,6 +18,7 @@ import qualified Hydra.Ext.Sources.Pg.Printing as PgPrinting
 import qualified Hydra.Ext.Sources.Pg.TermsToElements as PgTermsToElements
 import qualified Hydra.Ext.Sources.Pg.Utils as PgUtils
 import qualified Hydra.Ext.Sources.Protobuf.Coder as ProtobufCoder
+import qualified Hydra.Ext.Sources.Protobuf.Environment as ProtobufEnvironment
 import qualified Hydra.Ext.Sources.Protobuf.Serde as ProtobufSerde
 import qualified Hydra.Ext.Sources.Python.TestCodec as PythonTestCodec
 import qualified Hydra.Ext.Sources.Rdf.Serde as RdfSerde
@@ -56,6 +57,7 @@ main = do
     ["PgTermsToElements"] -> go uni PgTermsToElements.module_
     ["PgUtils"] -> go uni PgUtils.module_
     ["ProtobufCoder"] -> go uni ProtobufCoder.module_
+    ["ProtobufEnvironment"] -> go uni ProtobufEnvironment.module_
     ["ProtobufSerde"] -> go uni ProtobufSerde.module_
     ["PythonTestCodec"] -> go uni PythonTestCodec.module_
     ["RdfSerde"] -> go uni RdfSerde.module_
