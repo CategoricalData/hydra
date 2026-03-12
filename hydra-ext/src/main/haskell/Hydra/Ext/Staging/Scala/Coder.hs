@@ -2,8 +2,8 @@ module Hydra.Ext.Staging.Scala.Coder (moduleToScala) where
 
 import Hydra.Kernel
 import Hydra.Dsl.Terms
-import Hydra.Ext.Staging.Scala.Language
-import Hydra.Ext.Staging.Scala.Utils
+import Hydra.Ext.Scala.Language
+import Hydra.Ext.Scala.Utils
 import Hydra.Ext.Staging.Scala.Serde
 import qualified Hydra.Dsl.Types as Types
 import qualified Hydra.Ext.Scala.Meta as Scala

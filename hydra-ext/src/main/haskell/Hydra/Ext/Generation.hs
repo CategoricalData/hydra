@@ -17,15 +17,15 @@ import Hydra.Ext.Java.Language
 import Hydra.Ext.Org.Json.Schema.Language (jsonSchemaLanguage)
 import Hydra.Ext.Protobuf.Language (protobufLanguage)
 import Hydra.Ext.Python.Language
-import Hydra.Ext.Staging.Pegasus.Language (pdlLanguage)
-import Hydra.Ext.Staging.Scala.Language (scalaLanguage)
+import Hydra.Ext.Pegasus.Language (pdlLanguage)
+import Hydra.Ext.Scala.Language (scalaLanguage)
 -- import Hydra.Ext.Staging.Cpp.Coder -- temporarily disabled; gen-main Cpp/Names and Cpp/Utils need regeneration first
 import Hydra.Ext.Staging.Graphql.Coder
-import Hydra.Ext.Staging.Graphql.Language (graphqlLanguage)
+import Hydra.Ext.Graphql.Language (graphqlLanguage)
 import Hydra.Ext.Java.Coder (moduleToJava)
 import Hydra.Ext.Json.Schema.Coder
-import Hydra.Ext.Staging.Pegasus.Coder
-import Hydra.Ext.Staging.Protobuf.Coder
+import Hydra.Ext.Pegasus.Coder (moduleToPdl)
+import Hydra.Ext.Protobuf.Coder (moduleToProtobuf)
 import Hydra.Ext.Python.Coder (moduleToPython)
 import Hydra.Ext.Rust.Coder (moduleToRust)
 import Hydra.Ext.Rust.Language (rustLanguage)

@@ -1,7 +1,7 @@
 module Hydra.Ext.Staging.Graphql.Coder (moduleToGraphql) where
 
 import Hydra.Kernel
-import Hydra.Ext.Staging.Graphql.Language
+import Hydra.Ext.Graphql.Language
 import Hydra.Ext.Staging.Graphql.Serde
 import qualified Hydra.Ext.Org.Graphql.Syntax as G
 import qualified Hydra.Dsl.Types as Types
