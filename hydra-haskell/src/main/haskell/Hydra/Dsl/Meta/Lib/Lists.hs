@@ -47,6 +47,9 @@ find = primitive2 _lists_find
 foldl :: AsTerm f (b -> a -> b) => f -> TTerm b -> TTerm [a] -> TTerm b
 foldl f = primitive3 _lists_foldl (asTerm f)
 
+foldr :: AsTerm f (a -> b -> b) => f -> TTerm b -> TTerm [a] -> TTerm b
+foldr f = primitive3 _lists_foldr (asTerm f)
+
 group :: Eq a => TTerm [a] -> TTerm [[a]]
 group = primitive1 _lists_group
 

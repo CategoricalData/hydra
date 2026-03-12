@@ -65,6 +65,7 @@ _lists_elem        = qname _hydra_lib_lists "elem" :: Name
 _lists_filter      = qname _hydra_lib_lists "filter" :: Name
 _lists_find        = qname _hydra_lib_lists "find" :: Name
 _lists_foldl       = qname _hydra_lib_lists "foldl" :: Name
+_lists_foldr       = qname _hydra_lib_lists "foldr" :: Name
 _lists_group       = qname _hydra_lib_lists "group" :: Name
 _lists_head        = qname _hydra_lib_lists "head" :: Name
 _lists_init        = qname _hydra_lib_lists "init" :: Name

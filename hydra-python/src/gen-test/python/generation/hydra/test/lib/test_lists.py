@@ -320,6 +320,28 @@ def test_foldl__subtraction_fold():
 
     assert (hydra.lib.lists.foldl(hydra.lib.math.sub, 10, (1, 2, 3))) == (4)
 
+# foldr
+
+def test_foldr__subtraction_fold_right():
+
+    assert (hydra.lib.lists.foldr(hydra.lib.math.sub, 0, (1, 2, 3))) == (2)
+
+def test_foldr__empty_list():
+
+    assert (hydra.lib.lists.foldr(hydra.lib.math.add, 5, ())) == (5)
+
+def test_foldr__single_element():
+
+    assert (hydra.lib.lists.foldr(hydra.lib.math.add, 10, (5,))) == (15)
+
+def test_foldr__sum_with_addition():
+
+    assert (hydra.lib.lists.foldr(hydra.lib.math.add, 0, (1, 2, 3, 4))) == (10)
+
+def test_foldr__subtraction_vs_foldl():
+
+    assert (hydra.lib.lists.foldr(hydra.lib.math.sub, 10, (1, 2, 3))) == (-8)
+
 # group
 
 def test_group__consecutive_duplicates():

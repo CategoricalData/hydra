@@ -157,6 +157,7 @@ hydraLibLists = standardLibrary _hydra_lib_lists [
     prim2     _lists_filter      Lists.filter        [_x]         (fun x_ boolean) (list x_) (list x_),
     prim2     _lists_find        Lists.find          [_x]         (fun x_ boolean) (list x_) (optional x_),
     prim3     _lists_foldl       Lists.foldl         [_y, _x]     (fun y_ (fun x_ y_)) y_ (list x_) y_,
+    prim3     _lists_foldr       Lists.foldr         [_x, _y]     (fun x_ (fun y_ y_)) y_ (list x_) y_,
     prim1     _lists_group       Lists.group         [_xEq]       (list x_) (list (list x_)),
     prim1     _lists_head        Lists.head          [_x]         (list x_) x_,
     prim1     _lists_init        Lists.init          [_x]         (list x_) (list x_),

@@ -83,6 +83,14 @@ def foldl(f: Callable[[B, A], B], initial: B, values: Sequence[A]) -> B:
     return reduce(f, values, initial)
 
 
+def foldr(f: Callable[[A, B], B], initial: B, values: Sequence[A]) -> B:
+    """Fold a list from the right."""
+    acc = initial
+    for v in reversed(values):
+        acc = f(v, acc)
+    return acc
+
+
 def group(values: Sequence[A]) -> frozenlist[frozenlist[A]]:
     """Group consecutive equal elements."""
     if not values:

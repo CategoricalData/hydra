@@ -265,6 +265,11 @@ def register_lists_primitives() -> dict[Name, Primitive]:
         qname(namespace, "foldl"), lambda f, init, xs: lists.foldl(lambda acc, el: f(acc)(el), init, xs), [_b, _a],
         fun(b, fun(a, b)), b, prims.list_(a), b
     )
+    # prim3: foldr :: (a -> b -> b) -> b -> [a] -> b
+    primitives[qname(namespace, "foldr")] = prims.prim3(
+        qname(namespace, "foldr"), lambda f, init, xs: lists.foldr(lambda el, acc: f(el)(acc), init, xs), [_a, _b],
+        fun(a, fun(b, b)), b, prims.list_(a), b
+    )
     # prim1: group :: Eq a => [a] -> [[a]]
     primitives[qname(namespace, "group")] = prims.prim1(
         qname(namespace, "group"), lists.group, [_aEq],

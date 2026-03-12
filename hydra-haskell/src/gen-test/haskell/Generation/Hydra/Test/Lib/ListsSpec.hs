@@ -445,6 +445,33 @@ spec = H.describe "hydra.lib.lists primitives" $ do
           2,
           3])
       (4)
+  H.describe "foldr" $ do
+    H.it "subtraction fold right" $ H.shouldBe
+      (Lists.foldr Math.sub 0 [
+          1,
+          2,
+          3])
+      (2)
+    H.it "empty list" $ H.shouldBe
+      (Lists.foldr Math.add 5 [])
+      (5)
+    H.it "single element" $ H.shouldBe
+      (Lists.foldr Math.add 10 [
+          5])
+      (15)
+    H.it "sum with addition" $ H.shouldBe
+      (Lists.foldr Math.add 0 [
+          1,
+          2,
+          3,
+          4])
+      (10)
+    H.it "subtraction vs foldl" $ H.shouldBe
+      (Lists.foldr Math.sub 10 [
+          1,
+          2,
+          3])
+      ((-8))
   H.describe "group" $ do
     H.it "consecutive duplicates" $ H.shouldBe
       (Lists.group [

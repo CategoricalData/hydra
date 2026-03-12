@@ -1134,6 +1134,103 @@ public class ListsTest {
 
     }
 
+    // foldr
+
+    @Test
+
+    public void testFoldrSubtractionFoldRight() {
+
+        assertEquals(
+
+            2,
+
+            hydra.lib.lists.Foldr.apply(
+  (java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (p0 -> p1 -> hydra.lib.math.Sub.apply(
+    p0,
+    p1)),
+  0,
+  java.util.List.of(
+    1,
+    2,
+    3)));
+
+    }
+
+    @Test
+
+    public void testFoldrEmptyList() {
+
+        assertEquals(
+
+            5,
+
+            hydra.lib.lists.Foldr.apply(
+  (java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (p0 -> p1 -> hydra.lib.math.Add.apply(
+    p0,
+    p1)),
+  5,
+  (java.util.List<Integer>) (java.util.List.<Integer>of())));
+
+    }
+
+    @Test
+
+    public void testFoldrSingleElement() {
+
+        assertEquals(
+
+            15,
+
+            hydra.lib.lists.Foldr.apply(
+  (java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (p0 -> p1 -> hydra.lib.math.Add.apply(
+    p0,
+    p1)),
+  10,
+  java.util.List.of(5)));
+
+    }
+
+    @Test
+
+    public void testFoldrSumWithAddition() {
+
+        assertEquals(
+
+            10,
+
+            hydra.lib.lists.Foldr.apply(
+  (java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (p0 -> p1 -> hydra.lib.math.Add.apply(
+    p0,
+    p1)),
+  0,
+  java.util.List.of(
+    1,
+    2,
+    3,
+    4)));
+
+    }
+
+    @Test
+
+    public void testFoldrSubtractionVsFoldl() {
+
+        assertEquals(
+
+            -8,
+
+            hydra.lib.lists.Foldr.apply(
+  (java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (p0 -> p1 -> hydra.lib.math.Sub.apply(
+    p0,
+    p1)),
+  10,
+  java.util.List.of(
+    1,
+    2,
+    3)));
+
+    }
+
     // group
 
     @Test
