@@ -26,8 +26,6 @@ import qualified Hydra.Dsl.Meta.Module                     as Module
 import qualified Hydra.Dsl.Meta.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
-import qualified Hydra.Sources.Kernel.Terms.Adapt.Modules  as AdaptModules
-import qualified Hydra.Sources.Kernel.Terms.Adapt.Utils    as AdaptUtils
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
 import qualified Hydra.Sources.CoderUtils                  as CoderUtils
@@ -82,7 +80,7 @@ ns = Namespace "hydra.ext.java.coder"
 
 module_ :: Module
 module_ = Module ns elements
-    [JavaUtilsSource.ns, JavaNamesSource.ns, JavaSerdeSource.ns, moduleNamespace JavaLanguageSource.module_, Formatting.ns, Names.ns, AdaptUtils.ns, AdaptModules.ns, Rewriting.ns, CoderUtils.ns, Lexical.ns, Schemas.ns, ShowCore.ns, Annotations.ns, Constants.ns,
+    [JavaUtilsSource.ns, JavaNamesSource.ns, JavaSerdeSource.ns, moduleNamespace JavaLanguageSource.module_, Formatting.ns, Names.ns, Rewriting.ns, CoderUtils.ns, Lexical.ns, Schemas.ns, ShowCore.ns, Annotations.ns, Constants.ns,
       Inference.ns, Sorting.ns, Arity.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, SerializationSource.ns]
     (JavaHelpersSource.ns:JavaSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Java code generator: converts Hydra modules to Java source code"

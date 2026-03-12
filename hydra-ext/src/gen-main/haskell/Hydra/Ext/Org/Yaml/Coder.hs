@@ -4,13 +4,10 @@
 
 module Hydra.Ext.Org.Yaml.Coder where
 
-import qualified Hydra.Adapt.Modules as Modules
-import qualified Hydra.Adapt.Utils as Utils
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Error as Error
-import qualified Hydra.Ext.Org.Yaml.Language as Language
 import qualified Hydra.Ext.Org.Yaml.Model as Model
 import qualified Hydra.Extract.Core as Core_
 import qualified Hydra.Graph as Graph
@@ -20,7 +17,9 @@ import qualified Hydra.Lib.Logic as Logic
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
+import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
+import qualified Hydra.Literals as Literals
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core__
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -32,11 +31,7 @@ import qualified Data.Set as S
 
 -- | Create a YAML coder for a given type
 yamlCoder :: (Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.OtherError) (Compute.Coder Core.Term Model.Node))
-yamlCoder typ cx g =  
-  let mkTermCoder = (\t -> termCoder t cx g)
-  in (Eithers.bind (Eithers.bimap (\_s -> Context.InContext {
-    Context.inContextObject = (Error.OtherError _s),
-    Context.inContextContext = cx}) (\_x -> _x) (Modules.languageAdapter Language.yamlLanguage cx g typ)) (\adapter -> Eithers.bind (mkTermCoder (Compute.adapterTarget adapter)) (\coder -> Right (Utils.composeCoders (Compute.adapterCoder adapter) coder))))
+yamlCoder typ cx g = (termCoder typ cx g)
 
 -- | Create a YAML coder for literal types
 literalYamlCoder :: (Core.LiteralType -> Either t0 (Compute.Coder Core.Literal Model.Scalar))
@@ -48,15 +43,15 @@ literalYamlCoder lt =
               "expected boolean, found scalar"])),
             Context.inContextContext = cx}))) s)
   in  
-    let decodeFloat = (\cx -> \s -> (\x -> case x of
-            Model.ScalarFloat v0 -> (Right (Core.LiteralFloat (Core.FloatValueBigfloat v0)))
+    let decodeFloat = (\ft -> \cx -> \s -> (\x -> case x of
+            Model.ScalarFloat v0 -> (Right (Core.LiteralFloat (Literals.bigfloatToFloatValue ft v0)))
             _ -> (Left (Context.InContext {
               Context.inContextObject = (Error.OtherError (Strings.cat [
                 "expected float, found scalar"])),
               Context.inContextContext = cx}))) s)
     in  
-      let decodeInteger = (\cx -> \s -> (\x -> case x of
-              Model.ScalarInt v0 -> (Right (Core.LiteralInteger (Core.IntegerValueBigint v0)))
+      let decodeInteger = (\it -> \cx -> \s -> (\x -> case x of
+              Model.ScalarInt v0 -> (Right (Core.LiteralInteger (Literals.bigintToIntegerValue it v0)))
               _ -> (Left (Context.InContext {
                 Context.inContextObject = (Error.OtherError (Strings.cat [
                   "expected integer, found scalar"])),
@@ -73,12 +68,12 @@ literalYamlCoder lt =
                   Core.LiteralTypeBoolean -> Compute.Coder {
                     Compute.coderEncode = (\cx -> \lit -> Eithers.bind (Core_.booleanLiteral cx lit) (\b -> Right (Model.ScalarBool b))),
                     Compute.coderDecode = decodeBool}
-                  Core.LiteralTypeFloat _ -> Compute.Coder {
-                    Compute.coderEncode = (\cx -> \lit -> Eithers.bind (Core_.floatLiteral cx lit) (\f -> Eithers.bind (Core_.bigfloatValue cx f) (\bf -> Right (Model.ScalarFloat bf)))),
-                    Compute.coderDecode = decodeFloat}
-                  Core.LiteralTypeInteger _ -> Compute.Coder {
-                    Compute.coderEncode = (\cx -> \lit -> Eithers.bind (Core_.integerLiteral cx lit) (\i -> Eithers.bind (Core_.bigintValue cx i) (\bi -> Right (Model.ScalarInt bi)))),
-                    Compute.coderDecode = decodeInteger}
+                  Core.LiteralTypeFloat v0 -> Compute.Coder {
+                    Compute.coderEncode = (\cx -> \lit -> Eithers.bind (Core_.floatLiteral cx lit) (\f -> Right (Model.ScalarFloat (Literals.floatValueToBigfloat f)))),
+                    Compute.coderDecode = (decodeFloat v0)}
+                  Core.LiteralTypeInteger v0 -> Compute.Coder {
+                    Compute.coderEncode = (\cx -> \lit -> Eithers.bind (Core_.integerLiteral cx lit) (\i -> Right (Model.ScalarInt (Literals.integerValueToBigint i)))),
+                    Compute.coderDecode = (decodeInteger v0)}
                   Core.LiteralTypeString -> Compute.Coder {
                     Compute.coderEncode = (\cx -> \lit -> Eithers.bind (Core_.stringLiteral cx lit) (\s -> Right (Model.ScalarStr s))),
                     Compute.coderDecode = decodeString}) lt)
@@ -231,11 +226,100 @@ termCoder typ cx g =
                                   _ -> (Left (Context.InContext {
                                     Context.inContextObject = (Error.OtherError "expected mapping"),
                                     Context.inContextContext = cx}))) n)})))))
-                      Core.TypeMaybe v0 -> (Eithers.bind (termCoder v0 cx g) (\maybeElementCoder -> Right (Compute.Coder {
-                        Compute.coderEncode = (encodeMaybe maybeElementCoder),
-                        Compute.coderDecode = (decodeMaybe maybeElementCoder)})))
+                      Core.TypeMaybe v0 ->  
+                        let isNestedMaybe = ((\x -> case x of
+                                Core.TypeMaybe _ -> True
+                                _ -> False) (Rewriting.deannotateType v0))
+                        in (Logic.ifElse isNestedMaybe (Eithers.bind (termCoder (Core.TypeList v0) cx g) (\listCoder -> Right (Compute.Coder {
+                          Compute.coderEncode = (\cx -> \maybeTerm ->  
+                            let strippedMaybeTerm = (Rewriting.deannotateTerm maybeTerm)
+                            in ((\x -> case x of
+                              Core.TermMaybe v1 -> (Logic.ifElse (Maybes.isNothing v1) (Compute.coderEncode listCoder cx (Core.TermList [])) (Compute.coderEncode listCoder cx (Core.TermList [
+                                Maybes.fromJust v1])))
+                              _ -> (Left (Context.InContext {
+                                Context.inContextObject = (Error.OtherError (Strings.cat [
+                                  "expected optional term, found: ",
+                                  (Core__.term maybeTerm)])),
+                                Context.inContextContext = cx}))) strippedMaybeTerm)),
+                          Compute.coderDecode = (\cx -> \n -> Eithers.bind (Compute.coderDecode listCoder cx n) (\listTerm -> (\x -> case x of
+                            Core.TermList v1 -> (Logic.ifElse (Lists.null v1) (Right (Core.TermMaybe Nothing)) (Right (Core.TermMaybe (Just (Lists.head v1)))))
+                            _ -> (Left (Context.InContext {
+                              Context.inContextObject = (Error.OtherError "expected list term after decoding"),
+                              Context.inContextContext = cx}))) listTerm))}))) (Eithers.bind (termCoder v0 cx g) (\maybeElementCoder -> Right (Compute.Coder {
+                          Compute.coderEncode = (encodeMaybe maybeElementCoder),
+                          Compute.coderDecode = (decodeMaybe maybeElementCoder)}))))
                       Core.TypeRecord v0 -> (recordCoder v0 cx g)
+                      Core.TypeSet v0 -> (Eithers.bind (termCoder v0 cx g) (\lc -> Right (Compute.Coder {
+                        Compute.coderEncode = (\cx -> \term -> (\x -> case x of
+                          Core.TermSet v1 -> (encodeList lc cx (Core.TermList (Sets.toList v1)))
+                          _ -> (Left (Context.InContext {
+                            Context.inContextObject = (Error.OtherError (Strings.cat [
+                              "expected set term, found: ",
+                              (Core__.term term)])),
+                            Context.inContextContext = cx}))) term),
+                        Compute.coderDecode = (\cx -> \n -> Eithers.bind (decodeList lc cx n) (\listTerm -> (\x -> case x of
+                          Core.TermList v1 -> (Right (Core.TermSet (Sets.fromList v1)))
+                          _ -> (Left (Context.InContext {
+                            Context.inContextObject = (Error.OtherError "expected list term after decoding"),
+                            Context.inContextContext = cx}))) listTerm))})))
+                      Core.TypeUnion v0 ->  
+                        let nm = (Core.rowTypeTypeName v0)
+                        in  
+                          let sfields = (Core.rowTypeFields v0)
+                          in (Eithers.bind (Eithers.mapList (\f -> Eithers.bind (termCoder (Core.fieldTypeType f) cx g) (\fc -> Right (Core.unName (Core.fieldTypeName f), fc))) sfields) (\fieldCoders ->  
+                            let coderMap = (Maps.fromList fieldCoders)
+                            in (Right (Compute.Coder {
+                              Compute.coderEncode = (\cx -> \term -> Eithers.bind (Core_.injection cx nm g term) (\field ->  
+                                let fn = (Core.fieldName field)
+                                in  
+                                  let fterm = (Core.fieldTerm field)
+                                  in  
+                                    let fnStr = (Core.unName fn)
+                                    in (Maybes.maybe (Left (Context.InContext {
+                                      Context.inContextObject = (Error.OtherError (Strings.cat [
+                                        "no coder for union field: ",
+                                        fnStr])),
+                                      Context.inContextContext = cx})) (\cdr -> Eithers.bind (Compute.coderEncode cdr cx fterm) (\encodedVal -> Right (Model.NodeMapping (Maps.fromList [
+                                      (Model.NodeScalar (Model.ScalarStr fnStr), encodedVal)])))) (Maps.lookup fnStr coderMap)))),
+                              Compute.coderDecode = (\cx -> \n -> (\x -> case x of
+                                Model.NodeMapping v1 ->  
+                                  let entries = (Maps.toList v1)
+                                  in (Logic.ifElse (Lists.null entries) (Left (Context.InContext {
+                                    Context.inContextObject = (Error.OtherError "empty mapping for union"),
+                                    Context.inContextContext = cx})) ( 
+                                    let entry = (Lists.head entries)
+                                    in  
+                                      let keyNode = (Pairs.first entry)
+                                      in  
+                                        let valNode = (Pairs.second entry)
+                                        in ((\x -> case x of
+                                          Model.NodeScalar v2 -> ((\x -> case x of
+                                            Model.ScalarStr v3 -> (Maybes.maybe (Left (Context.InContext {
+                                              Context.inContextObject = (Error.OtherError (Strings.cat [
+                                                "unknown union field: ",
+                                                v3])),
+                                              Context.inContextContext = cx})) (\cdr -> Eithers.bind (Compute.coderDecode cdr cx valNode) (\decodedVal -> Right (Core.TermUnion (Core.Injection {
+                                              Core.injectionTypeName = nm,
+                                              Core.injectionField = Core.Field {
+                                                Core.fieldName = (Core.Name v3),
+                                                Core.fieldTerm = decodedVal}})))) (Maps.lookup v3 coderMap))
+                                            _ -> (Left (Context.InContext {
+                                              Context.inContextObject = (Error.OtherError "expected string key in union mapping"),
+                                              Context.inContextContext = cx}))) v2)
+                                          _ -> (Left (Context.InContext {
+                                            Context.inContextObject = (Error.OtherError "expected scalar key in union mapping"),
+                                            Context.inContextContext = cx}))) keyNode)))
+                                _ -> (Left (Context.InContext {
+                                  Context.inContextObject = (Error.OtherError "expected mapping for union"),
+                                  Context.inContextContext = cx}))) n)}))))
                       Core.TypeUnit -> (Right unitCoder)
+                      Core.TypeWrap v0 ->  
+                        let tname = (Core.wrappedTypeTypeName v0)
+                        in (Eithers.bind (termCoder (Core.wrappedTypeBody v0) cx g) (\innerCoder -> Right (Compute.Coder {
+                          Compute.coderEncode = (\cx -> \term -> Eithers.bind (Core_.wrap cx tname g term) (\inner -> Compute.coderEncode innerCoder cx inner)),
+                          Compute.coderDecode = (\cx -> \n -> Eithers.bind (Compute.coderDecode innerCoder cx n) (\decoded -> Right (Core.TermWrap (Core.WrappedTerm {
+                            Core.wrappedTermTypeName = tname,
+                            Core.wrappedTermBody = decoded}))))})))
                       _ -> (Left (Context.InContext {
                         Context.inContextObject = (Error.OtherError (Strings.cat [
                           "unsupported type in YAML: ",
