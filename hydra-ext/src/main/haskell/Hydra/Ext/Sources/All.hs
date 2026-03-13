@@ -249,7 +249,8 @@ javaModules = [
   JavaSerde.module_,
   JavaSyntax.module_,
   JavaUtils.module_,
-  JavaCoder.module_]
+  JavaCoder.module_,
+  JavaTestCodec.module_]
 
 javaScriptModules :: [Module]
 javaScriptModules = [
@@ -303,7 +304,8 @@ pythonModules = [
   PythonSerde.module_,
   PythonSyntax.module_,
   PythonUtils.module_,
-  PythonCoder.module_]
+  PythonCoder.module_,
+  PythonTestCodec.module_]
 
 rdfModules :: [Module]
 rdfModules = [
@@ -360,12 +362,6 @@ hydraExtDecodingModules = [
 hydraExtEncodingModules = [
   EncodePgMapping.module_,
   EncodePgModel.module_]
-
--- | Test codec modules not yet generating properly into Haskell.
-experimentalTestCodecModules :: [Module]
-experimentalTestCodecModules = [
-  JavaTestCodec.module_,
-  PythonTestCodec.module_]
 
 -- | Modules promoted from staging to Sources DSL (#267) and generating correctly.
 hydraExtRecentlyPromotedModules :: [Module]
