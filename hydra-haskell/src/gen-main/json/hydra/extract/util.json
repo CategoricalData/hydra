@@ -254,7 +254,7 @@
               "domain": {"variable": "hydra.context.Context"}}},
           "variables": []}]}],
   "namespace": "hydra.extract.util",
-  "termDependencies": ["hydra.extract.core", "hydra.monads", "hydra.show.error"],
+  "termDependencies": ["hydra.extract.core", "hydra.show.error"],
   "typeDependencies": [
     "hydra.accessors",
     "hydra.ast",

@@ -54,7 +54,7 @@ public class MapKeys extends PrimitiveFunction {
                 java.util.LinkedHashMap<Term, Term> result = new java.util.LinkedHashMap<>();
                 for (java.util.Map.Entry<Term, Term> e : mp.entrySet()) {
                     Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                        hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(args.get(0), e.getKey()));
+                        hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), e.getKey()));
                     if (r.isLeft()) return (Either) r;
                     result.put(((Either.Right<InContext<Error_>, Term>) r).value, e.getValue());
                 }

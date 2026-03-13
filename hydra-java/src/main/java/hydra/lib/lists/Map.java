@@ -43,7 +43,7 @@ public class Map extends PrimitiveFunction {
                 List<Term> results = new ArrayList<>();
                 for (Term x : lst) {
                     Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                        hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(args.get(0), x));
+                        hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), x));
                     if (r.isLeft()) return (Either) r;
                     results.add(((Either.Right<InContext<Error_>, Term>) r).value);
                 }

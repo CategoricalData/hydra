@@ -10329,7 +10329,6 @@
           "variables": []}]}],
   "namespace": "hydra.extract.core",
   "termDependencies": [
-    "hydra.monads",
     "hydra.lexical",
     "hydra.rewriting",
     "hydra.show.core",

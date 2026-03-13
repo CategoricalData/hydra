@@ -55,7 +55,7 @@ public class Bind extends PrimitiveFunction {
                 }
                 Term val = arg.fromJust();
                 Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                    hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(args.get(1), val));
+                    hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(args.get(1), val));
                 if (r.isLeft()) return (Either) r;
                 Either<InContext<Error_>, Maybe<Term>> maybeResult = hydra.extract.core.Core.maybeTerm(cx,
                     t -> Either.right(t), graph, ((Either.Right<InContext<Error_>, Term>) r).value);

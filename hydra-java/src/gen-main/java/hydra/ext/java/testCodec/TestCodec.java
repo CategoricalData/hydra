@@ -8,7 +8,7 @@ package hydra.ext.java.testCodec;
 public interface TestCodec {
   static hydra.util.Either<String, String> termToJava(hydra.core.Term term, hydra.graph.Graph g) {
     return hydra.lib.eithers.Bimap.apply(
-      (java.util.function.Function<hydra.context.InContext<hydra.error.OtherError>, String>) (ic -> (((java.util.function.Function<hydra.context.InContext<hydra.error.OtherError>, hydra.error.OtherError>) (projected -> projected.object)).apply(ic)).value),
+      (java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, String>) (ic -> hydra.show.error.Error_.error(((java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, hydra.error.Error_>) (projected -> projected.object)).apply(ic))),
       (java.util.function.Function<hydra.ext.java.syntax.Expression, String>) (arg_ -> hydra.serialization.Serialization.printExpr(hydra.serialization.Serialization.parenthesize(hydra.ext.java.serde.Serde.writeExpression(arg_)))),
       hydra.ext.java.coder.Coder.encodeTerm(
         new hydra.ext.java.helpers.JavaEnvironment(new hydra.ext.java.helpers.Aliases(new hydra.module.Namespace("test"), (java.util.Map<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>) ((java.util.Map<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>) (hydra.lib.maps.Empty.<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())), g),
@@ -498,7 +498,7 @@ public interface TestCodec {
   
   static hydra.util.Either<String, hydra.core.Term> inferTerm(hydra.graph.Graph g, hydra.core.Term term) {
     return hydra.lib.eithers.Bimap.apply(
-      (java.util.function.Function<hydra.context.InContext<hydra.error.OtherError>, String>) (ic -> (((java.util.function.Function<hydra.context.InContext<hydra.error.OtherError>, hydra.error.OtherError>) (projected -> projected.object)).apply(ic)).value),
+      (java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, String>) (ic -> hydra.show.error.Error_.error(((java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, hydra.error.Error_>) (projected -> projected.object)).apply(ic))),
       (java.util.function.Function<hydra.typing.InferenceResult, hydra.core.Term>) (x -> (x).term),
       hydra.inference.Inference.inferInGraphContext(
         hydra.lexical.Lexical.emptyContext(),

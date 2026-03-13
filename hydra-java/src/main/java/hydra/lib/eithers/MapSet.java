@@ -48,7 +48,7 @@ public class MapSet extends PrimitiveFunction {
                 Set<Term> results = new HashSet<>();
                 for (Term element : items) {
                     Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                        hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(fn, element));
+                        hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(fn, element));
                     if (r.isLeft()) return (Either) r;
                     Either<InContext<Error_>, hydra.util.Either<Term, Term>> eitherResult =
                         hydra.extract.core.Core.eitherTerm(cx, t -> Either.right(t), t -> Either.right(t), graph,

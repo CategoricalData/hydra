@@ -45,7 +45,7 @@ public class SortOn extends PrimitiveFunction {
                 List<Term> keys = new ArrayList<>();
                 for (Term x : lst) {
                     Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                        hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(args.get(0), x));
+                        hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), x));
                     if (r.isLeft()) return (Either) r;
                     keys.add(((Either.Right<InContext<Error_>, Term>) r).value);
                 }

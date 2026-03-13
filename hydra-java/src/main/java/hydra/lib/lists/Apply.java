@@ -44,7 +44,7 @@ public class Apply extends PrimitiveFunction {
                     for (Term f : functions) {
                         for (Term a : arguments) {
                             Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                                hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(f, a));
+                                hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(f, a));
                             if (r.isLeft()) return (Either) r;
                             results.add(((Either.Right<InContext<Error_>, Term>) r).value);
                         }

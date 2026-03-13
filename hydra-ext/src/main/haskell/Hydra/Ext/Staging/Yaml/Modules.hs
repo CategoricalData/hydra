@@ -12,7 +12,7 @@ import qualified Data.Map as M
 
 
 -- | New simple adapter version that works with definitions directly
-moduleToYaml :: Module -> [Definition] -> Context -> Graph -> Either (InContext OtherError) (M.Map FilePath String)
+moduleToYaml :: Module -> [Definition] -> Context -> Graph -> Either (InContext Error) (M.Map FilePath String)
 moduleToYaml mod defs cx g = do
     let termDefs = [td | DefinitionTerm td <- defs]
     node <- constructModule mod termDefs cx g
@@ -20,7 +20,7 @@ moduleToYaml mod defs cx g = do
   where
     path = namespaceToFilePath CaseConventionCamel (FileExtension "yaml") $ moduleNamespace mod
 
-constructModule :: Module -> [TermDefinition] -> Context -> Graph -> Either (InContext OtherError) YM.Node
+constructModule :: Module -> [TermDefinition] -> Context -> Graph -> Either (InContext Error) YM.Node
 constructModule mod termDefs cx g = do
     keyvals <- mapM toYaml termDefs
     Right $ YM.NodeMapping $ M.fromList keyvals

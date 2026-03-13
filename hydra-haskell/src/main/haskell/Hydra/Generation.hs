@@ -16,7 +16,6 @@ import qualified Hydra.Decoding as Decoding
 import qualified Hydra.Encoding as Encoding
 import qualified Hydra.Error as Error
 import qualified Hydra.Show.Error as ShowError
-import qualified Hydra.Monads as Monads
 import qualified Hydra.Sources.All as Sources
 import qualified Hydra.Sources.Eval.Lib.All as EvalLib
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes

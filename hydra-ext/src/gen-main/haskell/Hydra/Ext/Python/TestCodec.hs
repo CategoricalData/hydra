@@ -8,7 +8,6 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Error as Error
 import qualified Hydra.Ext.Python.Coder as Coder
 import qualified Hydra.Ext.Python.Helpers as Helpers
 import qualified Hydra.Ext.Python.Names as Names
@@ -30,6 +29,7 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Serialization as Serialization
+import qualified Hydra.Show.Error as Error
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -69,7 +69,7 @@ emptyPythonModuleMetadata ns_ = Helpers.PythonModuleMetadata {
 
 -- | Convert a Hydra term to a Python expression string with a pre-built graph context
 termToPythonWithContext :: (Module.Namespaces Syntax.DottedName -> Graph.Graph -> Bool -> Core.Term -> t0 -> Either String String)
-termToPythonWithContext namespaces_ graph0 skipCasts term _g = (Eithers.bimap (\ic -> Error.unOtherError (Context.inContextObject ic)) (\arg_ -> Serialization.printExpr (Serde.encodeExpression arg_)) (Coder.encodeTermInline Lexical.emptyContext (Helpers.PythonEnvironment {
+termToPythonWithContext namespaces_ graph0 skipCasts term _g = (Eithers.bimap (\ic -> Error.error (Context.inContextObject ic)) (\arg_ -> Serialization.printExpr (Serde.encodeExpression arg_)) (Coder.encodeTermInline Lexical.emptyContext (Helpers.PythonEnvironment {
   Helpers.pythonEnvironmentNamespaces = namespaces_,
   Helpers.pythonEnvironmentBoundTypeVariables = ([], Maps.empty),
   Helpers.pythonEnvironmentGraph = graph0,
@@ -84,7 +84,7 @@ termToPython namespaces_ term g = (termToPythonWithContext namespaces_ g False t
 
 -- | Convert a Hydra type to a Python type expression string
 typeToPython :: (Module.Namespaces Syntax.DottedName -> Core.Type -> Graph.Graph -> Either String String)
-typeToPython namespaces_ typ g = (Eithers.bimap (\ic -> Error.unOtherError (Context.inContextObject ic)) (\arg_ -> Serialization.printExpr (Serde.encodeExpression arg_)) (Coder.encodeType (Helpers.PythonEnvironment {
+typeToPython namespaces_ typ g = (Eithers.bimap (\ic -> Error.error (Context.inContextObject ic)) (\arg_ -> Serialization.printExpr (Serde.encodeExpression arg_)) (Coder.encodeType (Helpers.PythonEnvironment {
   Helpers.pythonEnvironmentNamespaces = namespaces_,
   Helpers.pythonEnvironmentBoundTypeVariables = ([], Maps.empty),
   Helpers.pythonEnvironmentGraph = g,
@@ -297,4 +297,4 @@ inferTestCase g tcm =
 
 -- | Run type inference on a single term
 inferTerm :: (Graph.Graph -> Core.Term -> Either String Core.Term)
-inferTerm g term = (Eithers.bimap (\ic -> Error.unOtherError (Context.inContextObject ic)) (\x -> Typing.inferenceResultTerm x) (Inference.inferInGraphContext Lexical.emptyContext g term))
+inferTerm g term = (Eithers.bimap (\ic -> Error.error (Context.inContextObject ic)) (\x -> Typing.inferenceResultTerm x) (Inference.inferInGraphContext Lexical.emptyContext g term))
