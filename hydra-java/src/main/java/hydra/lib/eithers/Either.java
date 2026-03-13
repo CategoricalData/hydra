@@ -16,7 +16,7 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.var;
 import hydra.context.Context;
 import hydra.context.InContext;
-import hydra.error.OtherError;
+import hydra.error.Error_;
 
 /**
  * Eliminate an Either value by applying one of two functions.
@@ -39,7 +39,7 @@ public class Either extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, hydra.util.Either<InContext<OtherError>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, hydra.util.Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> {
             Term forLeft = args.get(0);
             Term forRight = args.get(1);

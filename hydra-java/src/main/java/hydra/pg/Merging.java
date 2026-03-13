@@ -180,11 +180,11 @@ public class Merging {
     private static <V> Either<String, V> applyCoderEncode(StatelessCoder<V, V> coder, V value) {
         hydra.context.Context cx = new hydra.context.Context(
             java.util.Collections.emptyList(), java.util.Collections.emptyList(), java.util.Collections.emptyMap());
-        hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, V> result = coder.encode.apply(cx).apply(value);
+        hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, V> result = coder.encode.apply(cx).apply(value);
         if (result.isRight()) {
-            return Either.right(((Either.Right<hydra.context.InContext<hydra.error.OtherError>, V>) result).value);
+            return Either.right(((Either.Right<hydra.context.InContext<hydra.error.Error_>, V>) result).value);
         } else {
-            return Either.left(((Either.Left<hydra.context.InContext<hydra.error.OtherError>, V>) result).value.object.value);
+            return Either.left(hydra.show.error.Error_.error(((Either.Left<hydra.context.InContext<hydra.error.Error_>, V>) result).value.object));
         }
     }
 
@@ -194,11 +194,11 @@ public class Merging {
     private static <V> Either<String, V> applyCoderDecode(StatelessCoder<V, V> coder, V value) {
         hydra.context.Context cx = new hydra.context.Context(
             java.util.Collections.emptyList(), java.util.Collections.emptyList(), java.util.Collections.emptyMap());
-        hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, V> result = coder.decode.apply(cx).apply(value);
+        hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, V> result = coder.decode.apply(cx).apply(value);
         if (result.isRight()) {
-            return Either.right(((Either.Right<hydra.context.InContext<hydra.error.OtherError>, V>) result).value);
+            return Either.right(((Either.Right<hydra.context.InContext<hydra.error.Error_>, V>) result).value);
         } else {
-            return Either.left(((Either.Left<hydra.context.InContext<hydra.error.OtherError>, V>) result).value.object.value);
+            return Either.left(hydra.show.error.Error_.error(((Either.Left<hydra.context.InContext<hydra.error.Error_>, V>) result).value.object));
         }
     }
 

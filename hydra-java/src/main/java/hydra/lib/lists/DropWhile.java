@@ -19,7 +19,7 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
 import hydra.context.InContext;
-import hydra.error.OtherError;
+import hydra.error.Error_;
 import hydra.util.Either;
 
 
@@ -37,18 +37,18 @@ public class DropWhile extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph ->
             hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(1)), lst -> {
                 int dropCount = 0;
                 for (Term x : lst) {
-                    Either<InContext<OtherError>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                        new hydra.context.Context(java.util.List.of(), java.util.List.of(), java.util.Map.of()), graph, true, Terms.apply(args.get(0), x));
+                    Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
+                        hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(args.get(0), x));
                     if (r.isLeft()) return (Either) r;
-                    Either<InContext<OtherError>, Boolean> b = hydra.extract.core.Core.boolean_(cx, graph,
-                        ((Either.Right<InContext<OtherError>, Term>) r).value);
+                    Either<InContext<Error_>, Boolean> b = hydra.extract.core.Core.boolean_(cx, graph,
+                        ((Either.Right<InContext<Error_>, Term>) r).value);
                     if (b.isLeft()) return (Either) b;
-                    if (!((Either.Right<InContext<OtherError>, Boolean>) b).value) break;
+                    if (!((Either.Right<InContext<Error_>, Boolean>) b).value) break;
                     dropCount++;
                 }
                 return Either.right(Terms.list(new ArrayList<>(lst.subList(dropCount, lst.size()))));

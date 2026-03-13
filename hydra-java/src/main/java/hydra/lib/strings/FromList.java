@@ -17,7 +17,7 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.string;
 import hydra.context.Context;
 import hydra.context.InContext;
-import hydra.error.OtherError;
+import hydra.error.Error_;
 import hydra.util.Either;
 
 /**
@@ -46,9 +46,9 @@ public class FromList extends PrimitiveFunction {
      * @return a function that transforms terms to a flow of graph and term
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> {
-            Either<InContext<OtherError>, List<Integer>> list = hydra.extract.core.Core.listOf(cx, t -> hydra.extract.core.Core.int32(cx, graph, t), graph, args.get(0));
+            Either<InContext<Error_>, List<Integer>> list = hydra.extract.core.Core.listOf(cx, t -> hydra.extract.core.Core.int32(cx, graph, t), graph, args.get(0));
             return hydra.lib.eithers.Map.apply(l -> Terms.string(FromList.apply(l)), list);
         };
     }

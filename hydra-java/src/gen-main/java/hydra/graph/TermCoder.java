@@ -24,14 +24,14 @@ public class TermCoder<A> implements Serializable, Comparable<TermCoder<A>> {
   /**
    * An encode function from terms to native values
    */
-  public final java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, A>>>> encode;
+  public final java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, A>>>> encode;
   
   /**
    * A decode function from native values to terms
    */
-  public final java.util.function.Function<hydra.context.Context, java.util.function.Function<A, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>>> decode;
+  public final java.util.function.Function<hydra.context.Context, java.util.function.Function<A, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>> decode;
   
-  public TermCoder (hydra.core.Type type, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, A>>>> encode, java.util.function.Function<hydra.context.Context, java.util.function.Function<A, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>>> decode) {
+  public TermCoder (hydra.core.Type type, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, A>>>> encode, java.util.function.Function<hydra.context.Context, java.util.function.Function<A, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>> decode) {
     this.type = type;
     this.encode = encode;
     this.decode = decode;
@@ -80,11 +80,11 @@ public class TermCoder<A> implements Serializable, Comparable<TermCoder<A>> {
     return new TermCoder(type, encode, decode);
   }
   
-  public TermCoder withEncode(java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, A>>>> encode) {
+  public TermCoder withEncode(java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, A>>>> encode) {
     return new TermCoder(type, encode, decode);
   }
   
-  public TermCoder withDecode(java.util.function.Function<hydra.context.Context, java.util.function.Function<A, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>>> decode) {
+  public TermCoder withDecode(java.util.function.Function<hydra.context.Context, java.util.function.Function<A, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>> decode) {
     return new TermCoder(type, encode, decode);
   }
 }

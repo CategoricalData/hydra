@@ -19,7 +19,7 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.map;
 import hydra.context.Context;
 import hydra.context.InContext;
-import hydra.error.OtherError;
+import hydra.error.Error_;
 import hydra.util.Either;
 
 
@@ -50,19 +50,19 @@ public class Bimap extends PrimitiveFunction {
      * @return the implementation function
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph ->
             hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(2)), mp -> {
                 java.util.LinkedHashMap<Term, Term> result = new java.util.LinkedHashMap<>();
                 for (Map.Entry<Term, Term> entry : mp.entrySet()) {
-                    Either<InContext<OtherError>, Term> kr = hydra.reduction.Reduction.reduceTerm(
-                        new hydra.context.Context(java.util.List.of(), java.util.List.of(), java.util.Map.of()), graph, true, Terms.apply(args.get(0), entry.getKey()));
+                    Either<InContext<Error_>, Term> kr = hydra.reduction.Reduction.reduceTerm(
+                        hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(args.get(0), entry.getKey()));
                     if (kr.isLeft()) return (Either) kr;
-                    Either<InContext<OtherError>, Term> vr = hydra.reduction.Reduction.reduceTerm(
-                        new hydra.context.Context(java.util.List.of(), java.util.List.of(), java.util.Map.of()), graph, true, Terms.apply(args.get(1), entry.getValue()));
+                    Either<InContext<Error_>, Term> vr = hydra.reduction.Reduction.reduceTerm(
+                        hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(args.get(1), entry.getValue()));
                     if (vr.isLeft()) return (Either) vr;
-                    result.put(((Either.Right<InContext<OtherError>, Term>) kr).value,
-                               ((Either.Right<InContext<OtherError>, Term>) vr).value);
+                    result.put(((Either.Right<InContext<Error_>, Term>) kr).value,
+                               ((Either.Right<InContext<Error_>, Term>) vr).value);
                 }
                 return Either.right(Terms.map(FromList.orderedMap(result)));
             });

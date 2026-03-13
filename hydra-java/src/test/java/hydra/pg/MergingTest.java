@@ -324,11 +324,11 @@ public class MergingTest extends PropertyGraphTestBase {
             java.util.Collections.emptyList(),
             java.util.Collections.emptyList(),
             java.util.Collections.emptyMap());
-        hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, B> result = coder.encode.apply(cx).apply(value);
+        hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, B> result = coder.encode.apply(cx).apply(value);
         if (result.isRight()) {
-            return Either.right(((Either.Right<hydra.context.InContext<hydra.error.OtherError>, B>) result).value);
+            return Either.right(((Either.Right<hydra.context.InContext<hydra.error.Error_>, B>) result).value);
         } else {
-            return Either.left(((Either.Left<hydra.context.InContext<hydra.error.OtherError>, B>) result).value.object.value);
+            return Either.left(hydra.show.error.Error_.error(((Either.Left<hydra.context.InContext<hydra.error.Error_>, B>) result).value.object));
         }
     }
 }

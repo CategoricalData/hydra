@@ -16,7 +16,7 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
 import hydra.context.InContext;
-import hydra.error.OtherError;
+import hydra.error.Error_;
 import hydra.util.Either;
 
 /**
@@ -46,7 +46,7 @@ public class Uint8ToBigint extends PrimitiveFunction {
      * @return a function that converts uint8 terms to bigint terms
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply(s -> Terms.bigint(apply(s)), hydra.extract.core.Core.uint8(cx, graph, args.get(0)));
     }
 

@@ -19,7 +19,7 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import hydra.context.Context;
 import hydra.context.InContext;
-import hydra.error.OtherError;
+import hydra.error.Error_;
 import hydra.util.Either;
 
 
@@ -38,16 +38,16 @@ public class SortOn extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph ->
             hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(1)), lst -> {
                 // Pre-compute all keys so we can short-circuit on error
                 List<Term> keys = new ArrayList<>();
                 for (Term x : lst) {
-                    Either<InContext<OtherError>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                        new hydra.context.Context(java.util.List.of(), java.util.List.of(), java.util.Map.of()), graph, true, Terms.apply(args.get(0), x));
+                    Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
+                        hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(args.get(0), x));
                     if (r.isLeft()) return (Either) r;
-                    keys.add(((Either.Right<InContext<OtherError>, Term>) r).value);
+                    keys.add(((Either.Right<InContext<Error_>, Term>) r).value);
                 }
                 // Build index pairs and sort by pre-computed key
                 List<Integer> indices = new ArrayList<>();

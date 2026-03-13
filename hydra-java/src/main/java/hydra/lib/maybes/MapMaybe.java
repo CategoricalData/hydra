@@ -19,7 +19,7 @@ import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
 import hydra.context.InContext;
-import hydra.error.OtherError;
+import hydra.error.Error_;
 import hydra.util.Either;
 
 
@@ -49,18 +49,18 @@ public class MapMaybe extends PrimitiveFunction {
      * @return a function that maps an optional-returning function over a list
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(1)), inputList -> {
                 Term f = args.get(0);
                 List<Term> results = new ArrayList<>();
                 for (Term item : inputList) {
-                    Either<InContext<OtherError>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                        new hydra.context.Context(java.util.List.of(), java.util.List.of(), java.util.Map.of()), graph, true, Terms.apply(f, item));
+                    Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
+                        hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(f, item));
                     if (r.isLeft()) return (Either) r;
-                    Either<InContext<OtherError>, Maybe<Term>> maybeResult = hydra.extract.core.Core.maybeTerm(cx,
-                        t -> Either.right(t), graph, ((Either.Right<InContext<OtherError>, Term>) r).value);
+                    Either<InContext<Error_>, Maybe<Term>> maybeResult = hydra.extract.core.Core.maybeTerm(cx,
+                        t -> Either.right(t), graph, ((Either.Right<InContext<Error_>, Term>) r).value);
                     if (maybeResult.isLeft()) return (Either) maybeResult;
-                    Maybe<Term> maybe = ((Either.Right<InContext<OtherError>, Maybe<Term>>) maybeResult).value;
+                    Maybe<Term> maybe = ((Either.Right<InContext<Error_>, Maybe<Term>>) maybeResult).value;
                     if (maybe.isJust()) {
                         results.add(maybe.fromJust());
                     }

@@ -18,7 +18,7 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.set;
 import hydra.context.Context;
 import hydra.context.InContext;
-import hydra.error.OtherError;
+import hydra.error.Error_;
 import hydra.util.Either;
 
 
@@ -48,7 +48,7 @@ public class IsEmpty extends PrimitiveFunction {
      * @return a function that transforms terms to a flow of graph and term
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply(arg -> Terms.boolean_(apply(arg)), hydra.extract.core.Core.set(cx, graph, args.get(0)));
     }
 

@@ -584,65 +584,21 @@ public interface CoderUtils {
     });
   }
   
-  static String nameToFilePath(hydra.util.CaseConvention nsConv, hydra.util.CaseConvention localConv, hydra.module.FileExtension ext, hydra.core.Name name) {
-    hydra.module.QualifiedName qualName = hydra.names.Names.qualifyName(name);
-    String local = (qualName).local;
-    hydra.util.Maybe<hydra.module.Namespace> ns = (qualName).namespace;
-    java.util.function.Function<hydra.module.Namespace, String> nsToFilePath = (java.util.function.Function<hydra.module.Namespace, String>) (ns2 -> hydra.lib.strings.Intercalate.apply(
-      "/",
-      hydra.lib.lists.Map.apply(
-        (java.util.function.Function<String, String>) (part -> hydra.formatting.Formatting.convertCase(
-          new hydra.util.CaseConvention.Camel(),
-          nsConv,
-          part)),
-        hydra.lib.strings.SplitOn.apply(
-          ".",
-          (ns2).value))));
-    hydra.util.Lazy<String> prefix = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
-      () -> "",
-      (java.util.function.Function<hydra.module.Namespace, String>) (n -> hydra.lib.strings.Cat2.apply(
-        (nsToFilePath).apply(n),
-        "/")),
-      ns));
-    String suffix = hydra.formatting.Formatting.convertCase(
-      new hydra.util.CaseConvention.Pascal(),
-      localConv,
-      local);
-    return hydra.lib.strings.Cat.apply(java.util.List.of(
-      prefix.get(),
-      suffix,
-      ".",
-      (ext).value));
-  }
-  
-  static hydra.core.RowType unionTypeToRecordType(hydra.core.RowType rt) {
-    java.util.function.Function<hydra.core.FieldType, hydra.core.FieldType> makeOptional = (java.util.function.Function<hydra.core.FieldType, hydra.core.FieldType>) (f -> {
-      hydra.core.Name fn = (f).name;
-      hydra.core.Type ft = (f).type;
-      return new hydra.core.FieldType(fn, hydra.rewriting.Rewriting.mapBeneathTypeAnnotations(
-        (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (x -> new hydra.core.Type.Maybe(x)),
-        ft));
-    });
-    return new hydra.core.RowType((rt).typeName, hydra.lib.lists.Map.apply(
-      makeOptional,
-      (rt).fields));
-  }
-  
-  static hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<String>> commentsFromElement(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Binding b) {
+  static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<String>> commentsFromElement(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Binding b) {
     return hydra.annotations.Annotations.getTermDescription(
       cx,
       g,
       (b).term);
   }
   
-  static hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<String>> commentsFromFieldType(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.FieldType ft) {
+  static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<String>> commentsFromFieldType(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.FieldType ft) {
     return hydra.annotations.Annotations.getTypeDescription(
       cx,
       g,
       (ft).type);
   }
   
-  static hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Type> typeOfTerm(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Term term) {
+  static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> typeOfTerm(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Term term) {
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.core.Type>) ((java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.core.Type>) (hydra.lib.pairs.First::apply)),
       hydra.checking.Checking.typeOf(
@@ -695,7 +651,7 @@ public interface CoderUtils {
       body,
       tapps));
     hydra.util.Lazy<hydra.util.Maybe<hydra.core.Type>> mcod = new hydra.util.Lazy<>(() -> hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.core.Type>>) (ignored -> (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing())),
+      (java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<hydra.core.Type>>) (ignored -> (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing())),
       (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.Type>>) (c -> hydra.util.Maybe.just(c)),
       hydra.coderUtils.CoderUtils.typeOfTerm(
         cx,

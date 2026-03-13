@@ -105,12 +105,12 @@ public class StatelessCoderTest extends HydraTestBase {
             java.util.Collections.emptyList(),
             java.util.Collections.emptyList(),
             java.util.Collections.emptyMap());
-        Either<hydra.context.InContext<hydra.error.OtherError>, V2> result =
+        Either<hydra.context.InContext<hydra.error.Error_>, V2> result =
             coder.encode.apply(cx).apply(value);
         if (result.isRight()) {
-            return Either.right(((Either.Right<hydra.context.InContext<hydra.error.OtherError>, V2>) result).value);
+            return Either.right(((Either.Right<hydra.context.InContext<hydra.error.Error_>, V2>) result).value);
         } else {
-            return Either.left(((Either.Left<hydra.context.InContext<hydra.error.OtherError>, V2>) result).value.object.value);
+            return Either.left(hydra.show.error.Error_.error(((Either.Left<hydra.context.InContext<hydra.error.Error_>, V2>) result).value.object));
         }
     }
 
@@ -122,12 +122,12 @@ public class StatelessCoderTest extends HydraTestBase {
             java.util.Collections.emptyList(),
             java.util.Collections.emptyList(),
             java.util.Collections.emptyMap());
-        Either<hydra.context.InContext<hydra.error.OtherError>, V1> result =
+        Either<hydra.context.InContext<hydra.error.Error_>, V1> result =
             coder.decode.apply(cx).apply(value);
         if (result.isRight()) {
-            return Either.right(((Either.Right<hydra.context.InContext<hydra.error.OtherError>, V1>) result).value);
+            return Either.right(((Either.Right<hydra.context.InContext<hydra.error.Error_>, V1>) result).value);
         } else {
-            return Either.left(((Either.Left<hydra.context.InContext<hydra.error.OtherError>, V1>) result).value.object.value);
+            return Either.left(hydra.show.error.Error_.error(((Either.Left<hydra.context.InContext<hydra.error.Error_>, V1>) result).value.object));
         }
     }
 }

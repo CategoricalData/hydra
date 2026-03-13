@@ -16,7 +16,7 @@ import static hydra.dsl.Types.string;
 import static hydra.dsl.Types.uint16;
 import hydra.context.Context;
 import hydra.context.InContext;
-import hydra.error.OtherError;
+import hydra.error.Error_;
 import hydra.util.Either;
 
 
@@ -46,7 +46,7 @@ public class ShowUint16 extends PrimitiveFunction {
      * @return a function that converts uint16 terms to string terms
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<Character, Term>) i -> Terms.string(apply(i)), hydra.extract.core.Core.uint16(cx, graph, args.get(0)));
     }
 

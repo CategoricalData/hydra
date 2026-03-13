@@ -6,7 +6,7 @@ import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.TypeScheme;
 import hydra.error.Error_;
-import hydra.error.OtherError;
+import hydra.error.Error_;
 import hydra.graph.Graph;
 import hydra.graph.Primitive;
 import hydra.util.Either;
@@ -36,7 +36,7 @@ public abstract class PrimitiveFunction {
      * Subclasses implement this with Either-based logic.
      * @return the function implementation
      */
-    protected abstract Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation();
+    protected abstract Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation();
 
     /**
      * The primitive function as a term.
@@ -51,17 +51,15 @@ public abstract class PrimitiveFunction {
      * @return the primitive function as a Hydra Primitive object
      */
     public Primitive toNative() {
-        Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> impl = implementation();
+        Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> impl = implementation();
         Function<Context, Function<Graph, Function<List<Term>, Either<InContext<Error_>, Term>>>> nativeImpl =
             cx -> graph -> args -> {
-                Either<InContext<OtherError>, Term> result = impl.apply(args).apply(cx).apply(graph);
+                Either<InContext<Error_>, Term> result = impl.apply(args).apply(cx).apply(graph);
                 if (result.isRight()) {
-                    return Either.right(((Either.Right<InContext<OtherError>, Term>) result).value);
+                    return Either.right(((Either.Right<InContext<Error_>, Term>) result).value);
                 } else {
-                    InContext<OtherError> ic = ((Either.Left<InContext<OtherError>, Term>) result).value;
-                    return Either.left(new InContext<>(
-                        new Error_.Other(ic.object),
-                        ic.context));
+                    InContext<Error_> ic = ((Either.Left<InContext<Error_>, Term>) result).value;
+                    return Either.left(ic);
                 }
             };
         return new Primitive(name(), type(), nativeImpl);

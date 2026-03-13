@@ -15,6 +15,7 @@ import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
 import hydra.context.InContext;
+import hydra.error.Error_;
 import hydra.error.OtherError;
 import hydra.util.Either;
 
@@ -45,8 +46,8 @@ public class FromJust extends PrimitiveFunction {
      * @return a function that extracts the value from Just or fails
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.maybeTerm(cx, t -> Either.right(t), graph, args.get(0)), opt -> opt.isJust() ? Either.right(opt.fromJust()) : Either.left(new InContext<>(new OtherError("fromJust: Nothing"), cx)));
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.maybeTerm(cx, t -> Either.right(t), graph, args.get(0)), opt -> opt.isJust() ? Either.right(opt.fromJust()) : Either.left(new InContext<>(new Error_.Other(new OtherError("fromJust: Nothing")), cx)));
     }
 
     /**
