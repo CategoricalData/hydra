@@ -193,3 +193,13 @@ def test_pure__wraps_integer():
 def test_pure__wraps_string():
 
     assert (hydra.lib.maybes.pure("hello")) == (Just("hello"))
+
+# toList
+
+def test_tolist__just_value():
+
+    assert (hydra.lib.maybes.to_list(Just(42))) == ((42,))
+
+def test_tolist__nothing():
+
+    assert (hydra.lib.maybes.to_list(Nothing())) == (())

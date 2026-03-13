@@ -5399,7 +5399,7 @@
                                                                                                                                                                                 "type": {"variable": "hydra.typing.TypeConstraint"}}}}}}},
                                                                                                                                                                     "function": {
                                                                                                                                                                       "typeApplication": {
-                                                                                                                                                                        "body": {"variable": "hydra.monads.maybeToList"},
+                                                                                                                                                                        "body": {"function": {"primitive": "hydra.lib.maybes.toList"}},
                                                                                                                                                                         "type": {"variable": "hydra.typing.TypeConstraint"}}}}},
                                                                                                                                                                 "type": [
                                                                                                                                                                   {
@@ -5644,7 +5644,7 @@
                                                                                                                                                                                                                                   "type": {"variable": "hydra.typing.TypeSubst"}}}}}}},
                                                                                                                                                                                                                       "function": {
                                                                                                                                                                                                                         "typeApplication": {
-                                                                                                                                                                                                                          "body": {"variable": "hydra.monads.maybeToList"},
+                                                                                                                                                                                                                          "body": {"function": {"primitive": "hydra.lib.maybes.toList"}},
                                                                                                                                                                                                                           "type": {"variable": "hydra.typing.TypeSubst"}}}}},
                                                                                                                                                                                                                   {"list": [{"variable": "isubst"}, {"variable": "subst"}]}]},
                                                                                                                                                                                                               "function": {
@@ -19342,7 +19342,6 @@
     "hydra.checking",
     "hydra.extract.core",
     "hydra.lexical",
-    "hydra.monads",
     "hydra.reflect",
     "hydra.rewriting",
     "hydra.schemas",

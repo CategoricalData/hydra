@@ -23,7 +23,6 @@ import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Monads as Monads
 import qualified Hydra.Reflect as Reflect
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
@@ -400,7 +399,7 @@ inferTypeOfCaseStatement fcx cx caseStmt =
                                         in  
                                           let caseMap = (Maps.fromList (Lists.map (\ft -> (Core.fieldTypeName ft, (Core.fieldTypeType ft))) sfields))
                                           in  
-                                            let dfltConstraints = (Monads.maybeToList (Maybes.map (\r -> Typing_.TypeConstraint {
+                                            let dfltConstraints = (Maybes.toList (Maybes.map (\r -> Typing_.TypeConstraint {
                                                     Typing_.typeConstraintLeft = cod,
                                                     Typing_.typeConstraintRight = (Substitution.substInType isubst (Typing_.inferenceResultType r)),
                                                     Typing_.typeConstraintComment = "match default"}) dfltResult))
@@ -423,7 +422,7 @@ inferTypeOfCaseStatement fcx cx caseStmt =
                                                       Core.fieldTerm = t}) fnames iterms)}))))) (Core.TypeFunction (Core.FunctionType {
                                                     Core.functionTypeDomain = (Schemas.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)),
                                                     Core.functionTypeCodomain = cod})) (Substitution.composeTypeSubstList (Lists.concat [
-                                                    Monads.maybeToList (Maybes.map Typing_.inferenceResultSubst dfltResult),
+                                                    Maybes.toList (Maybes.map Typing_.inferenceResultSubst dfltResult),
                                                     [
                                                       isubst,
                                                       subst]])) (Substitution.substInClassConstraints subst allElemConstraints)) (Lists.concat [

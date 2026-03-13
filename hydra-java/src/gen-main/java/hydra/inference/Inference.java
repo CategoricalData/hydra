@@ -515,7 +515,7 @@ public interface Inference {
                     fnames.get(),
                     itypes.get())));
                   hydra.util.Lazy<hydra.typing.TypeSubst> isubst = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(hydra.lib.pairs.Second.apply(hydra.lib.pairs.Second.apply(caseResults.get()))));
-                  hydra.util.Lazy<java.util.List<hydra.typing.TypeConstraint>> dfltConstraints = new hydra.util.Lazy<>(() -> hydra.monads.Monads.maybeToList(hydra.lib.maybes.Map.apply(
+                  hydra.util.Lazy<java.util.List<hydra.typing.TypeConstraint>> dfltConstraints = new hydra.util.Lazy<>(() -> hydra.lib.maybes.ToList.apply(hydra.lib.maybes.Map.apply(
                     (java.util.function.Function<hydra.typing.InferenceResult, hydra.typing.TypeConstraint>) (r -> new hydra.typing.TypeConstraint(cod, hydra.substitution.Substitution.substInType(
                       isubst.get(),
                       (r).type), "match default")),
@@ -542,7 +542,7 @@ public interface Inference {
                             (java.util.function.Function<hydra.core.Name, hydra.core.Type>) (x -> new hydra.core.Type.Variable(x)),
                             svars)), cod)),
                         hydra.substitution.Substitution.composeTypeSubstList(hydra.lib.lists.Concat.apply(java.util.List.of(
-                          hydra.monads.Monads.maybeToList(hydra.lib.maybes.Map.apply(
+                          hydra.lib.maybes.ToList.apply(hydra.lib.maybes.Map.apply(
                             projected -> projected.subst,
                             dfltResult)),
                           java.util.List.of(

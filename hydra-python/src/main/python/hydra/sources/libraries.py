@@ -751,6 +751,11 @@ def register_maybes_primitives() -> dict[Name, Primitive]:
         qname(namespace, "pure"), maybes.pure, [_a],
         a, prims.optional(a)
     )
+    # toList :: Maybe a -> [a]
+    primitives[qname(namespace, "toList")] = prims.prim1(
+        qname(namespace, "toList"), maybes.to_list, [_a],
+        prims.optional(a), prims.list_(a)
+    )
 
     return primitives
 

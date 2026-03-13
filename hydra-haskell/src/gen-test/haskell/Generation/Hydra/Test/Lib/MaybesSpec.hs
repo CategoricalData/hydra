@@ -143,3 +143,11 @@ spec = H.describe "hydra.lib.maybes primitives" $ do
     H.it "wraps string" $ H.shouldBe
       (Maybes.pure "hello")
       (Just "hello")
+  H.describe "toList" $ do
+    H.it "just value" $ H.shouldBe
+      (Maybes.toList (Just 42))
+      ([
+          42])
+    H.it "nothing" $ H.shouldBe
+      (Maybes.toList Nothing)
+      ([] :: [Int])

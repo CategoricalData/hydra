@@ -540,4 +540,30 @@ public class MaybesTest {
             hydra.lib.maybes.Pure.apply("hello"));
 
     }
+
+    // toList
+
+    @Test
+
+    public void testTolistJustValue() {
+
+        assertEquals(
+
+            java.util.List.of(42),
+
+            hydra.lib.maybes.ToList.apply(hydra.util.Maybe.just(42)));
+
+    }
+
+    @Test
+
+    public <T0, T1> void testTolistNothing() {
+
+        assertEquals(
+
+            (java.util.List<T0>) (java.util.List.<T0>of()),
+
+            hydra.lib.maybes.ToList.apply((hydra.util.Maybe<T1>) (hydra.util.Maybe.<T1>nothing())));
+
+    }
 }

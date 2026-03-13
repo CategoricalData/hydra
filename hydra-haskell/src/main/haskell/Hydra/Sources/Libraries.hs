@@ -331,7 +331,8 @@ hydraLibMaybes = standardLibrary _hydra_lib_maybes [
     prim2     _maybes_map       Maybes.map          [_x, _y]     (fun x_ y_) (optional x_) (optional y_),
     prim2     _maybes_mapMaybe  Maybes.mapMaybe     [_x, _y]     (fun x_ $ optional y_) (list x_) (list y_),
     prim3     _maybes_maybe     Maybes.maybe        [_y, _x]     y_ (fun x_ y_) (optional x_) y_,
-    prim1     _maybes_pure      Maybes.pure         [_x]         x_ (optional x_)]
+    prim1     _maybes_pure      Maybes.pure         [_x]         x_ (optional x_),
+    prim1     _maybes_toList    Maybes.toList       [_x]         (optional x_) (list x_)]
 
 hydraLibPairs :: Library
 hydraLibPairs = standardLibrary _hydra_lib_pairs [
