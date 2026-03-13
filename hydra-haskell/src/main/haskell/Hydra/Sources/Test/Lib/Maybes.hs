@@ -169,6 +169,13 @@ maybesCompose = subgroup "compose" [
     test name input expected = primCase name _maybes_compose [funF, funG, int32 input] (justInt32 expected)
     testFails name input = primCase name _maybes_compose [funF, funG, int32 input] nothingTerm
 
+maybesToList :: TTerm TestGroup
+maybesToList = subgroup "toList" [
+  test "just value" (justInt32 42) [42],
+  test "nothing" nothingTerm []]
+  where
+    test name x expected = primCase name _maybes_toList [x] (list $ fmap int32 expected)
+
 allTests :: TBinding TestGroup
 allTests = definitionInModule module_ "allTests" $
     Phantoms.doc "Test cases for hydra.lib.maybes primitives" $
@@ -185,4 +192,5 @@ allTests = definitionInModule module_ "allTests" $
       maybesMap,
       maybesMapMaybe,
       maybesMaybe,
-      maybesPure]
+      maybesPure,
+      maybesToList]

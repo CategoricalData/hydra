@@ -241,6 +241,7 @@ _maybes_map       = qname _hydra_lib_maybes "map" :: Name
 _maybes_mapMaybe  = qname _hydra_lib_maybes "mapMaybe" :: Name
 _maybes_maybe     = qname _hydra_lib_maybes "maybe" :: Name
 _maybes_pure      = qname _hydra_lib_maybes "pure" :: Name
+_maybes_toList    = qname _hydra_lib_maybes "toList" :: Name
 
 _hydra_lib_pairs :: Namespace
 _hydra_lib_pairs = Namespace "hydra.lib.pairs"

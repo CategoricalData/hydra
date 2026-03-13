@@ -78,7 +78,6 @@ import qualified Hydra.Sources.Kernel.Terms.Annotations  as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Checking     as Checking
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical      as Lexical
-import qualified Hydra.Sources.Kernel.Terms.Monads       as Monads
 import qualified Hydra.Sources.Kernel.Terms.Reflect      as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting    as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas      as Schemas
@@ -94,7 +93,7 @@ ns = Namespace "hydra.inference"
 
 module_ :: Module
 module_ = Module ns elements
-    [Annotations.ns, Checking.ns, ExtractCore.ns, Lexical.ns, Monads.ns, Reflect.ns,
+    [Annotations.ns, Checking.ns, ExtractCore.ns, Lexical.ns, Reflect.ns,
       Rewriting.ns, Schemas.ns, ShowCore.ns, ShowTyping.ns, Sorting.ns, Substitution.ns,
       Unification.ns]
     kernelTypesNamespaces $
@@ -567,7 +566,7 @@ inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
   "caseMap" <~ Maps.fromList (Lists.map
     ("ft" ~> pair (Core.fieldTypeName $ var "ft") (Core.fieldTypeType $ var "ft"))
     (var "sfields")) $
-  "dfltConstraints" <~ Monads.maybeToList @@ (Maybes.map
+  "dfltConstraints" <~ Maybes.toList (Maybes.map
     ("r" ~> Typing.typeConstraint (var "cod")
       (Substitution.substInType @@ var "isubst" @@ (Typing.inferenceResultType $ var "r"))
       (string "match default"))
@@ -594,7 +593,7 @@ inferTypeOfCaseStatement = define "inferTypeOfCaseStatement" $
           (var "cod"))
       @@ (Substitution.composeTypeSubstList
         @@ (Lists.concat $ list [
-          Monads.maybeToList @@ (Maybes.map (unaryFunction Typing.inferenceResultSubst) (var "dfltResult")),
+          Maybes.toList (Maybes.map (unaryFunction Typing.inferenceResultSubst) (var "dfltResult")),
           list [var "isubst", var "subst"]]))
       @@ (Substitution.substInClassConstraints @@ var "subst" @@ var "allElemConstraints"))
     @@ (Lists.concat $ list [var "dfltConstraints", var "caseConstraints"]) $

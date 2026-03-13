@@ -134,3 +134,12 @@ def pure(x: A) -> Maybe[A]:
     """Lift a value into the Maybe type."""
     return Just(x)
 
+
+def to_list(x: Maybe[A]) -> frozenlist[A]:
+    """Convert a Maybe to a list: Just x becomes [x], Nothing becomes []."""
+    match x:
+        case Just(val):
+            return (val,)
+        case Nothing():
+            return ()
+

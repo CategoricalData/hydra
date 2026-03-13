@@ -669,5 +669,31 @@ allTests = Testing.TestGroup {
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "hello"))})),
             Testing.evaluationTestCaseOutput = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralString "hello"))))})),
           Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []}]},
+    Testing.TestGroup {
+      Testing.testGroupName = "toList",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [],
+      Testing.testGroupCases = [
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "just value",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maybes.toList"))),
+              Core.applicationArgument = (Core.TermMaybe (Just (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))})),
+            Testing.evaluationTestCaseOutput = (Core.TermList [
+              Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42))])})),
+          Testing.testCaseWithMetadataDescription = Nothing,
+          Testing.testCaseWithMetadataTags = []},
+        Testing.TestCaseWithMetadata {
+          Testing.testCaseWithMetadataName = "nothing",
+          Testing.testCaseWithMetadataCase = (Testing.TestCaseEvaluation (Testing.EvaluationTestCase {
+            Testing.evaluationTestCaseEvaluationStyle = Testing.EvaluationStyleEager,
+            Testing.evaluationTestCaseInput = (Core.TermApplication (Core.Application {
+              Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maybes.toList"))),
+              Core.applicationArgument = (Core.TermMaybe Nothing)})),
+            Testing.evaluationTestCaseOutput = (Core.TermList [])})),
+          Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]}],
   Testing.testGroupCases = []}

@@ -58,3 +58,7 @@ maybe = Y.maybe
 -- | Lift a value into the Maybe type.
 pure :: a -> Y.Maybe a
 pure = Just
+
+-- | Convert a Maybe to a list: Just x becomes [x], Nothing becomes [].
+toList :: Y.Maybe a -> [a]
+toList = Y.maybeToList

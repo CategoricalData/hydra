@@ -49,3 +49,6 @@ maybe def f = primitive3 _maybes_maybe (asTerm def) (asTerm f)
 
 pure :: TTerm a -> TTerm (Maybe a)
 pure = primitive1 _maybes_pure
+
+toList :: TTerm (Maybe a) -> TTerm [a]
+toList = primitive1 _maybes_toList
