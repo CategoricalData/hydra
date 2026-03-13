@@ -13,7 +13,7 @@ public interface Utils {
   static <T0, T1> hydra.util.Either<String, hydra.compute.Adapter<T0, T0, T1, T1>> chooseAdapter(java.util.function.Function<T0, hydra.util.Either<String, java.util.List<hydra.compute.Adapter<T0, T0, T1, T1>>>> alts, java.util.function.Function<T0, Boolean> supported, java.util.function.Function<T0, String> show, java.util.function.Function<T0, String> describe, T0 typ) {
     return hydra.lib.logic.IfElse.lazy(
       (supported).apply(typ),
-      () -> (hydra.util.Either<String, hydra.compute.Adapter<T0, T0, T1, T1>>) ((hydra.util.Either<String, hydra.compute.Adapter<T0, T0, T1, T1>>) (hydra.util.Either.<String, hydra.compute.Adapter<T0, T0, T1, T1>>right((hydra.compute.Adapter<T0, T0, T1, T1>) ((hydra.compute.Adapter<T0, T0, T1, T1>) ((hydra.compute.Adapter<T0, T0, T1, T1>) ((hydra.compute.Adapter<T0, T0, T1, T1>) (new hydra.compute.Adapter<T0, T0, T1, T1>(false, typ, typ, hydra.adapt.utils.Utils.<T1>idCoder())))))))),
+      () -> hydra.util.Either.<String, hydra.compute.Adapter<T0, T0, T1, T1>>right((hydra.compute.Adapter<T0, T0, T1, T1>) ((hydra.compute.Adapter<T0, T0, T1, T1>) ((hydra.compute.Adapter<T0, T0, T1, T1>) ((hydra.compute.Adapter<T0, T0, T1, T1>) (new hydra.compute.Adapter<T0, T0, T1, T1>(false, typ, typ, hydra.adapt.utils.Utils.<T1>idCoder())))))),
       () -> hydra.lib.eithers.Bind.apply(
         (alts).apply(typ),
         (java.util.function.Function<java.util.List<hydra.compute.Adapter<T0, T0, T1, T1>>, hydra.util.Either<String, hydra.compute.Adapter<T0, T0, T1, T1>>>) (raw -> {
@@ -22,7 +22,7 @@ public interface Utils {
             supported));
           return hydra.lib.logic.IfElse.lazy(
             hydra.lib.lists.Null.apply(candidates.get()),
-            () -> (hydra.util.Either<String, hydra.compute.Adapter<T0, T0, T1, T1>>) ((hydra.util.Either<String, hydra.compute.Adapter<T0, T0, T1, T1>>) (hydra.util.Either.<String, hydra.compute.Adapter<T0, T0, T1, T1>>left(hydra.lib.strings.Cat.apply(java.util.List.of(
+            () -> hydra.util.Either.<String, hydra.compute.Adapter<T0, T0, T1, T1>>left(hydra.lib.strings.Cat.apply(java.util.List.of(
               "no adapters found for ",
               (describe).apply(typ),
               hydra.lib.logic.IfElse.lazy(
@@ -39,8 +39,8 @@ public interface Utils {
                       raw)),
                   ")"))),
               ". Original type: ",
-              (show).apply(typ)))))),
-            () -> (hydra.util.Either<String, hydra.compute.Adapter<T0, T0, T1, T1>>) ((hydra.util.Either<String, hydra.compute.Adapter<T0, T0, T1, T1>>) (hydra.util.Either.<String, hydra.compute.Adapter<T0, T0, T1, T1>>right(hydra.lib.lists.Head.apply(candidates.get())))));
+              (show).apply(typ)))),
+            () -> hydra.util.Either.<String, hydra.compute.Adapter<T0, T0, T1, T1>>right(hydra.lib.lists.Head.apply(candidates.get())));
         })));
   }
   
@@ -83,7 +83,7 @@ public interface Utils {
   }
   
   static <T0> hydra.compute.Coder<T0, T0> idCoder() {
-    return new hydra.compute.Coder<T0, T0>((java.util.function.Function<hydra.context.Context, java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>>>) (_cx -> (java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>>) (x -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, T0>right(x))))), (java.util.function.Function<hydra.context.Context, java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>>>) (_cx -> (java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>>) (x -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, T0>right(x))))));
+    return new hydra.compute.Coder<T0, T0>((java.util.function.Function<hydra.context.Context, java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>>>) (_cx -> (java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>>) (x -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, T0>right(x))), (java.util.function.Function<hydra.context.Context, java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>>>) (_cx -> (java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>>) (x -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, T0>right(x))));
   }
   
   static Boolean integerTypeIsSupported(hydra.coders.LanguageConstraints constraints, hydra.core.IntegerType it) {
@@ -289,6 +289,6 @@ public interface Utils {
   }
   
   static <T0, T1> hydra.compute.Coder<T0, T1> unidirectionalCoder(java.util.function.Function<hydra.context.Context, java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T1>>> m) {
-    return (hydra.compute.Coder<T0, T1>) ((hydra.compute.Coder<T0, T1>) (new hydra.compute.Coder<T0, T1>(m, (java.util.function.Function<hydra.context.Context, java.util.function.Function<T1, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>>>) (cx -> (java.util.function.Function<T1, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>>) (ignored -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, T0>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("inbound mapping is unsupported")), cx))))))))));
+    return (hydra.compute.Coder<T0, T1>) ((hydra.compute.Coder<T0, T1>) (new hydra.compute.Coder<T0, T1>(m, (java.util.function.Function<hydra.context.Context, java.util.function.Function<T1, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>>>) (cx -> (java.util.function.Function<T1, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>>) (ignored -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, T0>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("inbound mapping is unsupported")), cx))))))));
   }
 }

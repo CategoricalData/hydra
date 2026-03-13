@@ -198,7 +198,7 @@ encodeLiteralType lt = (Syntax.TypeExpressionBasic ((\x -> case x of
     _ -> Syntax.BasicTypeInt) v0)
   Core.LiteralTypeString -> Syntax.BasicTypeString) lt))
 
-encodeType :: (Context.Context -> t0 -> Core.Type -> Either (Context.InContext Error.OtherError) Syntax.TypeExpression)
+encodeType :: (Context.Context -> t0 -> Core.Type -> Either (Context.InContext Error.Error) Syntax.TypeExpression)
 encodeType cx g typ =  
   let t = (Rewriting.deannotateType typ)
   in ((\x -> case x of
@@ -227,13 +227,13 @@ encodeType cx g typ =
     Core.TypeWrap v0 -> (Right (createTypeReference (isStructType t) (Core.wrappedTypeTypeName v0)))
     Core.TypeUnit -> (Right (createTemplateType "std::tuple" []))
     _ -> (Left (Context.InContext {
-      Context.inContextObject = (Error.OtherError "Unsupported type"),
+      Context.inContextObject = (Error.ErrorOther (Error.OtherError "Unsupported type")),
       Context.inContextContext = cx}))) t)
 
-encodeForallType :: (Context.Context -> t0 -> Core.ForallType -> Either (Context.InContext Error.OtherError) Syntax.TypeExpression)
+encodeForallType :: (Context.Context -> t0 -> Core.ForallType -> Either (Context.InContext Error.Error) Syntax.TypeExpression)
 encodeForallType cx g lt = (encodeType cx g (Core.forallTypeBody lt))
 
-encodeFunctionType :: (Context.Context -> t0 -> Core.FunctionType -> Either (Context.InContext Error.OtherError) Syntax.TypeExpression)
+encodeFunctionType :: (Context.Context -> t0 -> Core.FunctionType -> Either (Context.InContext Error.Error) Syntax.TypeExpression)
 encodeFunctionType cx g ft = (Eithers.bind (encodeType cx g (Core.functionTypeDomain ft)) (\dom -> Eithers.bind (encodeType cx g (Core.functionTypeCodomain ft)) (\cod -> Right (Syntax.TypeExpressionFunction (Syntax.FunctionType {
   Syntax.functionTypeReturnType = cod,
   Syntax.functionTypeParameters = [
@@ -243,18 +243,18 @@ encodeFunctionType cx g ft = (Eithers.bind (encodeType cx g (Core.functionTypeDo
       Syntax.parameterUnnamed = False,
       Syntax.parameterDefaultValue = Nothing}]})))))
 
-encodeApplicationType :: (Context.Context -> t0 -> Core.ApplicationType -> Either (Context.InContext Error.OtherError) Syntax.TypeExpression)
+encodeApplicationType :: (Context.Context -> t0 -> Core.ApplicationType -> Either (Context.InContext Error.Error) Syntax.TypeExpression)
 encodeApplicationType cx g at = (Eithers.bind (encodeType cx g (Core.applicationTypeFunction at)) (\body -> Eithers.bind (encodeType cx g (Core.applicationTypeArgument at)) (\arg -> Right (createTemplateType "TODO_template" [
   body,
   arg]))))
 
-encodeTypeAlias :: (Context.Context -> t0 -> Core.Name -> Core.Type -> t1 -> Either (Context.InContext Error.OtherError) Syntax.Declaration)
+encodeTypeAlias :: (Context.Context -> t0 -> Core.Name -> Core.Type -> t1 -> Either (Context.InContext Error.Error) Syntax.Declaration)
 encodeTypeAlias cx g name typ comment = (Eithers.bind (encodeType cx g typ) (\cppType -> Right (Syntax.DeclarationTypedef (Syntax.TypedefDeclaration {
   Syntax.typedefDeclarationName = (className name),
   Syntax.typedefDeclarationType = cppType,
   Syntax.typedefDeclarationIsUsing = True}))))
 
-encodeTypeDefinition :: (Context.Context -> t0 -> Core.Name -> Core.Type -> Either (Context.InContext Error.OtherError) [Syntax.Declaration])
+encodeTypeDefinition :: (Context.Context -> t0 -> Core.Name -> Core.Type -> Either (Context.InContext Error.Error) [Syntax.Declaration])
 encodeTypeDefinition cx g name typ =  
   let t = (Rewriting.deannotateType typ)
   in ((\x -> case x of
@@ -263,10 +263,10 @@ encodeTypeDefinition cx g name typ =
     Core.TypeUnion v0 -> (encodeUnionType cx g name v0 Nothing)
     Core.TypeWrap v0 -> (encodeWrappedType cx g name (Core.wrappedTypeBody v0) Nothing)
     _ -> (Left (Context.InContext {
-      Context.inContextObject = (Error.OtherError (Strings.cat2 "unexpected type in definition: " (Core_.type_ typ))),
+      Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "unexpected type in definition: " (Core_.type_ typ)))),
       Context.inContextContext = cx}))) t)
 
-encodeFieldType :: (t0 -> Core.FieldType -> Context.Context -> t1 -> Either (Context.InContext Error.OtherError) Syntax.VariableDeclaration)
+encodeFieldType :: (t0 -> Core.FieldType -> Context.Context -> t1 -> Either (Context.InContext Error.Error) Syntax.VariableDeclaration)
 encodeFieldType isParameter ft cx g =  
   let fname = (Core.fieldTypeName ft)
   in  
@@ -277,7 +277,7 @@ encodeFieldType isParameter ft cx g =
       Syntax.variableDeclarationInitializer = Nothing,
       Syntax.variableDeclarationIsAuto = False})))
 
-encodeRecordType :: (Context.Context -> t0 -> Core.Name -> Core.RowType -> t1 -> Either (Context.InContext Error.OtherError) [Syntax.Declaration])
+encodeRecordType :: (Context.Context -> t0 -> Core.Name -> Core.RowType -> t1 -> Either (Context.InContext Error.Error) [Syntax.Declaration])
 encodeRecordType cx g name rt comment =  
   let tfields = (Core.rowTypeFields rt)
   in (Eithers.bind (Eithers.mapList (\f -> encodeFieldType False f cx g) tfields) (\cppFields -> Eithers.bind (Eithers.mapList (\f -> encodeFieldType True f cx g) tfields) (\constructorParams -> Right [
@@ -300,7 +300,7 @@ encodeRecordType cx g name rt comment =
           Syntax.constructorDeclarationBody = (createConstructorBody constructorParams)}))]]))),
     (createLessThanOperator name tfields)])))
 
-encodeUnionType :: (Context.Context -> t0 -> Core.Name -> Core.RowType -> t1 -> Either (Context.InContext Error.OtherError) [Syntax.Declaration])
+encodeUnionType :: (Context.Context -> t0 -> Core.Name -> Core.RowType -> t1 -> Either (Context.InContext Error.Error) [Syntax.Declaration])
 encodeUnionType cx g name rt comment = (Logic.ifElse (Schemas.isEnumRowType rt) (encodeEnumType cx g name (Core.rowTypeFields rt) comment) (encodeVariantType cx g name (Core.rowTypeFields rt) comment))
 
 encodeEnumType :: (t0 -> t1 -> Core.Name -> [Core.FieldType] -> t2 -> Either t3 [Syntax.Declaration])
@@ -311,7 +311,7 @@ encodeEnumType cx g name tfields comment = (Right [
     Syntax.variableDeclarationInitializer = Nothing,
     Syntax.variableDeclarationIsAuto = False}))) tfields)))])
 
-encodeVariantType :: (Context.Context -> t0 -> Core.Name -> [Core.FieldType] -> t1 -> Either (Context.InContext Error.OtherError) [Syntax.Declaration])
+encodeVariantType :: (Context.Context -> t0 -> Core.Name -> [Core.FieldType] -> t1 -> Either (Context.InContext Error.Error) [Syntax.Declaration])
 encodeVariantType cx g name variants comment = (Eithers.bind (Eithers.mapList (\v -> createVariantClass cx g name name v) variants) (\variantClasses -> Right (Lists.concat [
   generateForwardDeclarations name variants,
   [
@@ -324,7 +324,7 @@ encodeVariantType cx g name variants comment = (Eithers.bind (Eithers.mapList (\
   [
     createAcceptImplementation name variants]])))
 
-encodeWrappedType :: (Context.Context -> t0 -> Core.Name -> Core.Type -> t1 -> Either (Context.InContext Error.OtherError) [Syntax.Declaration])
+encodeWrappedType :: (Context.Context -> t0 -> Core.Name -> Core.Type -> t1 -> Either (Context.InContext Error.Error) [Syntax.Declaration])
 encodeWrappedType cx g name typ comment = (encodeRecordType cx g name (Core.RowType {
   Core.rowTypeTypeName = name,
   Core.rowTypeFields = [
@@ -438,7 +438,7 @@ createUnionBaseClass name variants = (cppClassDeclaration (className name) [] (J
         Syntax.FunctionSpecifierSuffixConst],
       Syntax.functionDeclarationBody = Syntax.FunctionBodyDeclaration}))})))])))
 
-createVariantClass :: (Context.Context -> t0 -> Core.Name -> Core.Name -> Core.FieldType -> Either (Context.InContext Error.OtherError) Syntax.Declaration)
+createVariantClass :: (Context.Context -> t0 -> Core.Name -> Core.Name -> Core.FieldType -> Either (Context.InContext Error.Error) Syntax.Declaration)
 createVariantClass cx g tname parentClass ft =  
   let fname = (Core.fieldTypeName ft)
   in  
@@ -593,7 +593,7 @@ isTemplateType typ =
       _ -> False) v0)
     _ -> False) t) (isStdContainerType typ))
 
-generateTypeFile :: (Module.Namespace -> Module.TypeDefinition -> Context.Context -> t0 -> Either (Context.InContext Error.OtherError) (String, String))
+generateTypeFile :: (Module.Namespace -> Module.TypeDefinition -> Context.Context -> t0 -> Either (Context.InContext Error.Error) (String, String))
 generateTypeFile ns def_ cx g =  
   let name = (Module.typeDefinitionName def_)
   in  
@@ -604,10 +604,10 @@ generateTypeFile ns def_ cx g =
       in (Right (serializeHeaderFile name includes [
         namespaceDecl ns decls]))))
 
-generateTypeFiles :: (Module.Namespace -> [Module.TypeDefinition] -> Context.Context -> t0 -> Either (Context.InContext Error.OtherError) [(String, String)])
+generateTypeFiles :: (Module.Namespace -> [Module.TypeDefinition] -> Context.Context -> t0 -> Either (Context.InContext Error.Error) [(String, String)])
 generateTypeFiles ns defs cx g = (Eithers.bind (Eithers.mapList (\d -> generateTypeFile ns d cx g) defs) (\classFiles -> Right classFiles))
 
-moduleToCpp :: (Module.Module -> [Module.Definition] -> Context.Context -> t0 -> Either (Context.InContext Error.OtherError) (M.Map String String))
+moduleToCpp :: (Module.Module -> [Module.Definition] -> Context.Context -> t0 -> Either (Context.InContext Error.Error) (M.Map String String))
 moduleToCpp mod defs cx g =  
   let ns = (Module.moduleNamespace mod)
   in  

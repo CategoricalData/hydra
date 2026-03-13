@@ -74,7 +74,7 @@ examplePgSchema = Mapping.Schema {
   Mapping.schemaDefaultEdgeId = "defaultEdgeId"}
 
 -- | Extract a string from a term using the empty graph
-expString :: (Context.Context -> Core.Term -> Either (Context.InContext Error.OtherError) String)
+expString :: (Context.Context -> Core.Term -> Either (Context.InContext Error.Error) String)
 expString cx term = (Core_.string cx (Graph.Graph {
   Graph.graphBoundTerms = Maps.empty,
   Graph.graphBoundTypes = Maps.empty,
@@ -90,7 +90,7 @@ lazyGraphToElements :: (Model_.LazyGraph t0 -> [Model_.Element t0])
 lazyGraphToElements lg = (Lists.concat2 (Lists.map (\x -> Model_.ElementVertex x) (Model_.lazyGraphVertices lg)) (Lists.map (\x -> Model_.ElementEdge x) (Model_.lazyGraphEdges lg)))
 
 -- | Convert a property graph element to JSON
-pgElementToJson :: (Mapping.Schema t0 t1 t2 -> Model_.Element t2 -> Context.Context -> Either (Context.InContext Error.OtherError) Model.Value)
+pgElementToJson :: (Mapping.Schema t0 t1 t2 -> Model_.Element t2 -> Context.Context -> Either (Context.InContext Error.Error) Model.Value)
 pgElementToJson schema el cx = ((\x -> case x of
   Model_.ElementVertex v0 -> (Eithers.bind (Compute.coderDecode (Mapping.schemaVertexIds schema) cx (Model_.vertexId v0)) (\term ->  
     let labelJson = (Model.ValueString (Model_.unVertexLabel (Model_.vertexLabel v0)))
@@ -114,7 +114,7 @@ pgElementToJson schema el cx = ((\x -> case x of
       in (Eithers.bind (Compute.coderDecode (Mapping.schemaPropertyValues schema) cx v) (\term -> Right (Model_.unPropertyKey key, (Model.ValueString (Core__.term term)))))) (Maps.toList pairs)))) (Model_.edgeProperties v0)))))))) el)
 
 -- | Convert a list of property graph elements to JSON
-pgElementsToJson :: (Mapping.Schema t0 t1 t2 -> [Model_.Element t2] -> Context.Context -> Either (Context.InContext Error.OtherError) Model.Value)
+pgElementsToJson :: (Mapping.Schema t0 t1 t2 -> [Model_.Element t2] -> Context.Context -> Either (Context.InContext Error.Error) Model.Value)
 pgElementsToJson schema els cx = (Eithers.map (\els_ -> Model.ValueArray els_) (Eithers.mapList (\el -> pgElementToJson schema el cx) els))
 
 -- | Get all elements from a property graph
@@ -122,7 +122,7 @@ propertyGraphElements :: Ord t0 => (Model_.Graph t0 -> [Model_.Element t0])
 propertyGraphElements g = (Lists.concat2 (Lists.map (\x -> Model_.ElementVertex x) (Maps.elems (Model_.graphVertices g))) (Lists.map (\x -> Model_.ElementEdge x) (Maps.elems (Model_.graphEdges g))))
 
 -- | Convert a type-annotated term to property graph elements
-typeApplicationTermToPropertyGraph :: (Mapping.Schema t0 t1 t2 -> Core.Type -> t1 -> t1 -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.OtherError) (Core.Term -> Context.Context -> Either (Context.InContext Error.OtherError) [Model_.Element t2]))
+typeApplicationTermToPropertyGraph :: (Mapping.Schema t0 t1 t2 -> Core.Type -> t1 -> t1 -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (Core.Term -> Context.Context -> Either (Context.InContext Error.Error) [Model_.Element t2]))
 typeApplicationTermToPropertyGraph schema typ vidType eidType cx g = (Eithers.bind (Coder.elementCoder Nothing schema typ vidType eidType cx g) (\adapter -> Right (\term -> \cx_ -> Eithers.map (\tree ->  
   let flattenTree = (\t -> Lists.cons (Model_.elementTreeSelf t) (Lists.concat (Lists.map flattenTree (Model_.elementTreeDependencies t))))
   in (flattenTree tree)) (Compute.coderEncode (Compute.adapterCoder adapter) cx_ term))))

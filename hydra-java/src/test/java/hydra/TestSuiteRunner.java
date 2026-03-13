@@ -356,13 +356,13 @@ public class TestSuiteRunner {
                                 apply(
                                     match("hydra.core.Term", Maybe.just(
                                         left(record("hydra.context.InContext",
-                                            field("object", wrap("hydra.error.Error_", string("Expected string literal"))),
+                                            field("object", inject("hydra.error.Error", field("other", wrap("hydra.error.OtherError", string("Expected string literal"))))),
                                             field("context", var("cx"))))),
                                         field("literal", lambda("lit",
                                             apply(
                                                 match("hydra.core.Literal", Maybe.just(
                                                     left(record("hydra.context.InContext",
-                                                        field("object", wrap("hydra.error.Error_", string("Expected string literal"))),
+                                                        field("object", inject("hydra.error.Error", field("other", wrap("hydra.error.OtherError", string("Expected string literal"))))),
                                                         field("context", var("cx"))))),
                                                     field("string", lambda("s", right(just(var("s")))))),
                                                 var("lit"))))),
@@ -1275,25 +1275,25 @@ public class TestSuiteRunner {
                 new FieldType(new Name("encode"), new Type.Unit()),
                 new FieldType(new Name("decode"), new Type.Unit())))));
 
-        // Coder: ∀v1.∀v2. {encode: Context -> v1 -> Either (InContext OtherError) v2, decode: Context -> v2 -> Either (InContext OtherError) v1}
+        // Coder: ∀v1.∀v2. {encode: Context -> v1 -> Either (InContext Error) v2, decode: Context -> v2 -> Either (InContext Error) v1}
         Name coderName = new Name("hydra.compute.Coder");
         Name contextName = new Name("hydra.context.Context");
         Name inContextName = new Name("hydra.context.InContext");
-        Name otherErrorName = new Name("hydra.error.Error");
-        // InContext OtherError = Application(InContext, OtherError)
-        Type inContextOtherError = new Type.Application(new ApplicationType(
+        Name errorName = new Name("hydra.error.Error");
+        // InContext Error = Application(InContext, Error)
+        Type inContextError = new Type.Application(new ApplicationType(
             new Type.Variable(inContextName),
-            new Type.Variable(otherErrorName)));
-        // Either (InContext OtherError) v — uses built-in Type.Either
+            new Type.Variable(errorName)));
+        // Either (InContext Error) v — uses built-in Type.Either
         java.util.function.Function<Type, Type> eitherInContextError = v ->
-            new Type.Either(new EitherType(inContextOtherError, v));
-        // encode: Context -> v1 -> Either (InContext OtherError) v2
+            new Type.Either(new EitherType(inContextError, v));
+        // encode: Context -> v1 -> Either (InContext Error) v2
         Type encodeType = new Type.Function(new FunctionType(
             new Type.Variable(contextName),
             new Type.Function(new FunctionType(
                 new Type.Variable(new Name("v1")),
                 eitherInContextError.apply(new Type.Variable(new Name("v2")))))));
-        // decode: Context -> v2 -> Either (InContext OtherError) v1
+        // decode: Context -> v2 -> Either (InContext Error) v1
         Type decodeType = new Type.Function(new FunctionType(
             new Type.Variable(contextName),
             new Type.Function(new FunctionType(
@@ -1323,10 +1323,14 @@ public class TestSuiteRunner {
                     new FieldType(new Name("object"), new Type.Variable(new Name("e"))),
                     new FieldType(new Name("context"), new Type.Variable(contextName))))))));
 
-        // OtherError: wrapper over string
+        // Error: union type with multiple error variants
+        Name otherErrorName = new Name("hydra.error.OtherError");
         types.put(otherErrorName,
             new Type.Wrap(new WrappedType(otherErrorName,
                 new Type.Literal(new LiteralType.String_()))));
+        types.put(errorName,
+            new Type.Union(new RowType(errorName, List.of(
+                new FieldType(new Name("other"), new Type.Variable(otherErrorName))))));
 
         // Type: the hydra.core.Type union — large recursive type
         Name typeName = new Name("hydra.core.Type");

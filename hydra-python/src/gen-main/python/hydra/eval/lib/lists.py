@@ -47,6 +47,11 @@ def foldl(cx: hydra.context.Context, g: hydra.graph.Graph, fun_term: hydra.core.
     
     return hydra.lib.eithers.bind(hydra.extract.core.list(cx, g, list_term), (lambda elements: Right(hydra.lib.lists.foldl((lambda acc, el: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, acc))), el)))), init_term, elements))))
 
+def foldr(cx: hydra.context.Context, g: hydra.graph.Graph, fun_term: hydra.core.Term, init_term: hydra.core.Term, list_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]:
+    r"""Interpreter-friendly right fold for List terms."""
+    
+    return hydra.lib.eithers.bind(hydra.extract.core.list(cx, g, list_term), (lambda elements: Right(hydra.lib.lists.foldr((lambda el, acc: cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(fun_term, el))), acc)))), init_term, elements))))
+
 def map(cx: hydra.context.Context, g: hydra.graph.Graph, fun_term: hydra.core.Term, list_term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]:
     r"""Interpreter-friendly map for List terms."""
     

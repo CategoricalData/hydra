@@ -25,18 +25,18 @@ public interface Core {
     return (v).accept(new hydra.core.FloatValue.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.math.BigDecimal> otherwise(hydra.core.FloatValue instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.math.BigDecimal>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.math.BigDecimal>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.math.BigDecimal>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.math.BigDecimal>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "bigfloat"),
             " but found "),
-          hydra.show.core.Core.float_(v)))), cx)))));
+          hydra.show.core.Core.float_(v)))), cx)));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.math.BigDecimal> visit(hydra.core.FloatValue.Bigfloat f) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.math.BigDecimal>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.math.BigDecimal>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.math.BigDecimal>right((f).value)));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.math.BigDecimal>right((f).value);
       }
     });
   }
@@ -60,18 +60,18 @@ public interface Core {
     return (v).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger> otherwise(hydra.core.IntegerValue instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "bigint"),
             " but found "),
-          hydra.show.core.Core.integer(v)))), cx)))));
+          hydra.show.core.Core.integer(v)))), cx)));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger> visit(hydra.core.IntegerValue.Bigint i) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger>right((i).value)));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger>right((i).value);
       }
     });
   }
@@ -91,18 +91,18 @@ public interface Core {
     return (v).accept(new hydra.core.Literal.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, byte[]> otherwise(hydra.core.Literal instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, byte[]>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, byte[]>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, byte[]>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, byte[]>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "binary"),
             " but found "),
-          hydra.show.core.Core.literal(v)))), cx)))));
+          hydra.show.core.Core.literal(v)))), cx)));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, byte[]> visit(hydra.core.Literal.Binary b) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, byte[]>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, byte[]>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, byte[]>right((b).value)));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, byte[]>right((b).value);
       }
     });
   }
@@ -122,18 +122,18 @@ public interface Core {
     return (v).accept(new hydra.core.Literal.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Boolean> otherwise(hydra.core.Literal instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Boolean>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Boolean>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Boolean>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Boolean>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "boolean"),
             " but found "),
-          hydra.show.core.Core.literal(v)))), cx)))));
+          hydra.show.core.Core.literal(v)))), cx)));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Boolean> visit(hydra.core.Literal.Boolean_ b) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Boolean>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Boolean>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Boolean>right((b).value)));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Boolean>right((b).value);
       }
     });
   }
@@ -154,8 +154,8 @@ public interface Core {
           (cs).cases));
         return hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(matching.get()),
-          () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("not enough cases")), cx))))),
-          () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>right(hydra.lib.lists.Head.apply(matching.get())))));
+          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("not enough cases")), cx))),
+          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>right(hydra.lib.lists.Head.apply(matching.get())));
       }));
   }
   
@@ -168,13 +168,13 @@ public interface Core {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement>>) (term -> (term).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+          return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               hydra.lib.strings.Cat2.apply(
                 "expected ",
                 "case statement"),
               " but found "),
-            hydra.show.core.Core.term(term)))), cx)))));
+            hydra.show.core.Core.term(term)))), cx)));
         }
         
         @Override
@@ -182,13 +182,13 @@ public interface Core {
           return ((function).value).accept(new hydra.core.Function.PartialVisitor<>() {
             @Override
             public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement> otherwise(hydra.core.Function instance) {
-              return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+              return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
                 hydra.lib.strings.Cat2.apply(
                   hydra.lib.strings.Cat2.apply(
                     "expected ",
                     "case statement"),
                   " but found "),
-                hydra.show.core.Core.term(term)))), cx)))));
+                hydra.show.core.Core.term(term)))), cx)));
             }
             
             @Override
@@ -196,13 +196,13 @@ public interface Core {
               return ((elimination).value).accept(new hydra.core.Elimination.PartialVisitor<>() {
                 @Override
                 public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement> otherwise(hydra.core.Elimination instance) {
-                  return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+                  return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
                     hydra.lib.strings.Cat2.apply(
                       hydra.lib.strings.Cat2.apply(
                         "expected ",
                         "case statement"),
                       " but found "),
-                    hydra.show.core.Core.term(term)))), cx)))));
+                    hydra.show.core.Core.term(term)))), cx)));
                 }
                 
                 @Override
@@ -211,8 +211,8 @@ public interface Core {
                     hydra.lib.equality.Equal.apply(
                       (((cs).value).typeName).value,
                       (name).value),
-                    () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement>right((cs).value))),
-                    () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+                    () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement>right((cs).value),
+                    () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
                       hydra.lib.strings.Cat2.apply(
                         hydra.lib.strings.Cat2.apply(
                           "expected ",
@@ -220,7 +220,7 @@ public interface Core {
                             "case statement for type ",
                             (name).value)),
                         " but found "),
-                      hydra.show.core.Core.term(term)))), cx))))));
+                      hydra.show.core.Core.term(term)))), cx))));
                 }
               });
             }
@@ -237,7 +237,7 @@ public interface Core {
       fields));
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(matchingFields.get()),
-      () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, T0>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+      () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, T0>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
         hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             "expected ",
@@ -245,7 +245,7 @@ public interface Core {
               "field ",
               (fname).value)),
           " but found "),
-        "no matching field"))), cx))))),
+        "no matching field"))), cx))),
       () -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.equality.Equal.apply(
           hydra.lib.lists.Length.apply(matchingFields.get()),
@@ -256,7 +256,7 @@ public interface Core {
             graph,
             (hydra.lib.lists.Head.apply(matchingFields.get())).term),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>>) (stripped -> (mapping).apply(stripped))),
-        () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, T0>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, T0>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
@@ -264,7 +264,7 @@ public interface Core {
             " but found "),
           hydra.lib.strings.Cat2.apply(
             "multiple fields named ",
-            (fname).value)))), cx)))))));
+            (fname).value)))), cx)))));
   }
   
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Float> float32(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Term t) {
@@ -286,18 +286,18 @@ public interface Core {
     return (v).accept(new hydra.core.FloatValue.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Float> otherwise(hydra.core.FloatValue instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Float>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Float>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Float>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Float>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "float32"),
             " but found "),
-          hydra.show.core.Core.float_(v)))), cx)))));
+          hydra.show.core.Core.float_(v)))), cx)));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Float> visit(hydra.core.FloatValue.Float32 f) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Float>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Float>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Float>right((f).value)));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Float>right((f).value);
       }
     });
   }
@@ -321,18 +321,18 @@ public interface Core {
     return (v).accept(new hydra.core.FloatValue.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Double> otherwise(hydra.core.FloatValue instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Double>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Double>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Double>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Double>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "float64"),
             " but found "),
-          hydra.show.core.Core.float_(v)))), cx)))));
+          hydra.show.core.Core.float_(v)))), cx)));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Double> visit(hydra.core.FloatValue.Float64 f) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Double>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Double>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Double>right((f).value)));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Double>right((f).value);
       }
     });
   }
@@ -341,18 +341,18 @@ public interface Core {
     return (lit).accept(new hydra.core.Literal.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.FloatValue> otherwise(hydra.core.Literal instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.FloatValue>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.FloatValue>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.FloatValue>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.FloatValue>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "floating-point value"),
             " but found "),
-          hydra.show.core.Core.literal(lit)))), cx)))));
+          hydra.show.core.Core.literal(lit)))), cx)));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.FloatValue> visit(hydra.core.Literal.Float_ v) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.FloatValue>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.FloatValue>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.FloatValue>right((v).value)));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.FloatValue>right((v).value);
       }
     });
   }
@@ -377,23 +377,23 @@ public interface Core {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Either<T0, T1>>>) (term -> (term).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Either<T0, T1>> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Either<T0, T1>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Either<T0, T1>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Either<T0, T1>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+          return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Either<T0, T1>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               hydra.lib.strings.Cat2.apply(
                 "expected ",
                 "either value"),
               " but found "),
-            hydra.show.core.Core.term(term)))), cx)))));
+            hydra.show.core.Core.term(term)))), cx)));
         }
         
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Either<T0, T1>> visit(hydra.core.Term.Either et) {
           return hydra.lib.eithers.Either.apply(
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Either<T0, T1>>>) (l -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<T0, hydra.util.Either<T0, T1>>) (x -> (hydra.util.Either<T0, T1>) ((hydra.util.Either<T0, T1>) (hydra.util.Either.<T0, T1>left(x)))),
+              (java.util.function.Function<T0, hydra.util.Either<T0, T1>>) (x -> hydra.util.Either.<T0, T1>left(x)),
               (leftFun).apply(l))),
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Either<T0, T1>>>) (r -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<T1, hydra.util.Either<T0, T1>>) (x -> (hydra.util.Either<T0, T1>) ((hydra.util.Either<T0, T1>) (hydra.util.Either.<T0, T1>right(x)))),
+              (java.util.function.Function<T1, hydra.util.Either<T0, T1>>) (x -> hydra.util.Either.<T0, T1>right(x)),
               (rightFun).apply(r))),
             (et).value);
         }
@@ -405,18 +405,18 @@ public interface Core {
     return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.EitherType> otherwise(hydra.core.Type instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.EitherType>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.EitherType>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.EitherType>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.EitherType>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "either type"),
             " but found "),
-          hydra.show.core.Core.type(typ)))), cx)))));
+          hydra.show.core.Core.type(typ)))), cx)));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.EitherType> visit(hydra.core.Type.Either et) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.EitherType>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.EitherType>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.EitherType>right((et).value)));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.EitherType>right((et).value);
       }
     });
   }
@@ -426,18 +426,18 @@ public interface Core {
     return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.FunctionType> otherwise(hydra.core.Type instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.FunctionType>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.FunctionType>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.FunctionType>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.FunctionType>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "function type"),
             " but found "),
-          hydra.show.core.Core.type(typ)))), cx)))));
+          hydra.show.core.Core.type(typ)))), cx)));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.FunctionType> visit(hydra.core.Type.Function ft) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.FunctionType>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.FunctionType>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.FunctionType>right((ft).value)));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.FunctionType>right((ft).value);
       }
     });
   }
@@ -451,13 +451,13 @@ public interface Core {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>>) (term -> (term).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+          return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               hydra.lib.strings.Cat2.apply(
                 "expected ",
                 "injection"),
               " but found "),
-            hydra.show.core.Core.term(term)))), cx)))));
+            hydra.show.core.Core.term(term)))), cx)));
         }
         
         @Override
@@ -466,8 +466,8 @@ public interface Core {
             hydra.lib.equality.Equal.apply(
               (((injection).value).typeName).value,
               (expected).value),
-            () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>right(((injection).value).field))),
-            () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+            () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>right(((injection).value).field),
+            () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
               hydra.lib.strings.Cat2.apply(
                 hydra.lib.strings.Cat2.apply(
                   "expected ",
@@ -475,7 +475,7 @@ public interface Core {
                     "injection of type ",
                     (expected).value)),
                 " but found "),
-              (((injection).value).typeName).value))), cx))))));
+              (((injection).value).typeName).value))), cx))));
         }
       })));
   }
@@ -499,18 +499,18 @@ public interface Core {
     return (v).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Short> otherwise(hydra.core.IntegerValue instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Short>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Short>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Short>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Short>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "int16"),
             " but found "),
-          hydra.show.core.Core.integer(v)))), cx)))));
+          hydra.show.core.Core.integer(v)))), cx)));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Short> visit(hydra.core.IntegerValue.Int16 i) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Short>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Short>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Short>right((i).value)));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Short>right((i).value);
       }
     });
   }
@@ -534,18 +534,18 @@ public interface Core {
     return (v).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Integer> otherwise(hydra.core.IntegerValue instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Integer>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Integer>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Integer>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Integer>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "int32"),
             " but found "),
-          hydra.show.core.Core.integer(v)))), cx)))));
+          hydra.show.core.Core.integer(v)))), cx)));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Integer> visit(hydra.core.IntegerValue.Int32 i) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Integer>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Integer>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Integer>right((i).value)));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Integer>right((i).value);
       }
     });
   }
@@ -569,18 +569,18 @@ public interface Core {
     return (v).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Long> otherwise(hydra.core.IntegerValue instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Long>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Long>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Long>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Long>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "int64"),
             " but found "),
-          hydra.show.core.Core.integer(v)))), cx)))));
+          hydra.show.core.Core.integer(v)))), cx)));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Long> visit(hydra.core.IntegerValue.Int64 i) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Long>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Long>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Long>right((i).value)));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Long>right((i).value);
       }
     });
   }
@@ -604,18 +604,18 @@ public interface Core {
     return (v).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Byte> otherwise(hydra.core.IntegerValue instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Byte>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Byte>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Byte>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Byte>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "int8"),
             " but found "),
-          hydra.show.core.Core.integer(v)))), cx)))));
+          hydra.show.core.Core.integer(v)))), cx)));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Byte> visit(hydra.core.IntegerValue.Int8 i) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Byte>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Byte>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Byte>right((i).value)));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Byte>right((i).value);
       }
     });
   }
@@ -624,18 +624,18 @@ public interface Core {
     return (lit).accept(new hydra.core.Literal.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.IntegerValue> otherwise(hydra.core.Literal instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.IntegerValue>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.IntegerValue>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.IntegerValue>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.IntegerValue>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "integer value"),
             " but found "),
-          hydra.show.core.Core.literal(lit)))), cx)))));
+          hydra.show.core.Core.literal(lit)))), cx)));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.IntegerValue> visit(hydra.core.Literal.Integer_ v) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.IntegerValue>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.IntegerValue>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.IntegerValue>right((v).value)));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.IntegerValue>right((v).value);
       }
     });
   }
@@ -669,13 +669,13 @@ public interface Core {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Lambda>>) (term -> (term).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Lambda> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Lambda>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Lambda>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Lambda>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+          return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Lambda>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               hydra.lib.strings.Cat2.apply(
                 "expected ",
                 "lambda"),
               " but found "),
-            hydra.show.core.Core.term(term)))), cx)))));
+            hydra.show.core.Core.term(term)))), cx)));
         }
         
         @Override
@@ -683,18 +683,18 @@ public interface Core {
           return ((function).value).accept(new hydra.core.Function.PartialVisitor<>() {
             @Override
             public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Lambda> otherwise(hydra.core.Function instance) {
-              return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Lambda>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Lambda>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Lambda>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+              return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Lambda>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
                 hydra.lib.strings.Cat2.apply(
                   hydra.lib.strings.Cat2.apply(
                     "expected ",
                     "lambda"),
                   " but found "),
-                hydra.show.core.Core.term(term)))), cx)))));
+                hydra.show.core.Core.term(term)))), cx)));
             }
             
             @Override
             public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Lambda> visit(hydra.core.Function.Lambda l) {
-              return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Lambda>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Lambda>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Lambda>right((l).value)));
+              return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Lambda>right((l).value);
             }
           });
         }
@@ -716,17 +716,17 @@ public interface Core {
           (letExpr).bindings));
         return hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(matchingBindings.get()),
-          () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
             "no such binding: ",
-            n))), cx))))),
+            n))), cx))),
           () -> hydra.lib.logic.IfElse.lazy(
             hydra.lib.equality.Equal.apply(
               hydra.lib.lists.Length.apply(matchingBindings.get()),
               1),
-            () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right((hydra.lib.lists.Head.apply(matchingBindings.get())).term))),
-            () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+            () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right((hydra.lib.lists.Head.apply(matchingBindings.get())).term),
+            () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
               "multiple bindings named ",
-              n))), cx)))))));
+              n))), cx)))));
       }));
   }
   
@@ -739,18 +739,18 @@ public interface Core {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Let>>) (term -> (term).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Let> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Let>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Let>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Let>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+          return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Let>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               hydra.lib.strings.Cat2.apply(
                 "expected ",
                 "let term"),
               " but found "),
-            hydra.show.core.Core.term(term)))), cx)))));
+            hydra.show.core.Core.term(term)))), cx)));
         }
         
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Let> visit(hydra.core.Term.Let lt) {
-          return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Let>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Let>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Let>right((lt).value)));
+          return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Let>right((lt).value);
         }
       })));
   }
@@ -764,18 +764,18 @@ public interface Core {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.Term>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.Term>> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.Term>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.Term>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.Term>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+          return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.Term>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               hydra.lib.strings.Cat2.apply(
                 "expected ",
                 "list"),
               " but found "),
-            hydra.show.core.Core.term(stripped)))), cx)))));
+            hydra.show.core.Core.term(stripped)))), cx)));
         }
         
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.Term>> visit(hydra.core.Term.List l) {
-          return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.Term>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.Term>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.Term>>right((l).value)));
+          return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.Term>>right((l).value);
         }
       })));
   }
@@ -788,8 +788,8 @@ public interface Core {
         term),
       (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (l -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(l),
-        () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("empty list")), cx))))),
-        () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(hydra.lib.lists.Head.apply(l)))))));
+        () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("empty list")), cx))),
+        () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(hydra.lib.lists.Head.apply(l)))));
   }
   
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<T0>> listOf(hydra.context.Context cx, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>> f, hydra.graph.Graph graph, hydra.core.Term term) {
@@ -808,18 +808,18 @@ public interface Core {
     return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> otherwise(hydra.core.Type instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "list type"),
             " but found "),
-          hydra.show.core.Core.type(typ)))), cx)))));
+          hydra.show.core.Core.type(typ)))), cx)));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> visit(hydra.core.Type.List t) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>right((t).value)));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>right((t).value);
       }
     });
   }
@@ -833,18 +833,18 @@ public interface Core {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Literal>>) (term -> (term).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Literal> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Literal>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Literal>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Literal>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+          return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Literal>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               hydra.lib.strings.Cat2.apply(
                 "expected ",
                 "literal"),
               " but found "),
-            hydra.show.core.Core.term(term)))), cx)))));
+            hydra.show.core.Core.term(term)))), cx)));
         }
         
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Literal> visit(hydra.core.Term.Literal lit) {
-          return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Literal>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Literal>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Literal>right((lit).value)));
+          return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Literal>right((lit).value);
         }
       })));
   }
@@ -858,13 +858,13 @@ public interface Core {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.Map<T0, T1>>>) (term -> (term).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.Map<T0, T1>> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.Map<T0, T1>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.Map<T0, T1>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.Map<T0, T1>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+          return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.Map<T0, T1>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               hydra.lib.strings.Cat2.apply(
                 "expected ",
                 "map"),
               " but found "),
-            hydra.show.core.Core.term(term)))), cx)))));
+            hydra.show.core.Core.term(term)))), cx)));
         }
         
         @Override
@@ -888,7 +888,7 @@ public interface Core {
       (fk).apply(kterm.get()),
       (java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<T0, T1>>>) (kval -> hydra.lib.eithers.Bind.apply(
         (fv).apply(vterm.get()),
-        (java.util.function.Function<T1, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<T0, T1>>>) (vval -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<T0, T1>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<T0, T1>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<T0, T1>>right((hydra.util.Pair<T0, T1>) ((hydra.util.Pair<T0, T1>) (new hydra.util.Pair<T0, T1>(kval, vval))))))))));
+        (java.util.function.Function<T1, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<T0, T1>>>) (vval -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<T0, T1>>right((hydra.util.Pair<T0, T1>) ((hydra.util.Pair<T0, T1>) (new hydra.util.Pair<T0, T1>(kval, vval))))))));
   }
   
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.MapType> mapType(hydra.context.Context cx, hydra.core.Type typ) {
@@ -896,18 +896,18 @@ public interface Core {
     return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.MapType> otherwise(hydra.core.Type instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.MapType>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.MapType>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.MapType>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.MapType>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "map type"),
             " but found "),
-          hydra.show.core.Core.type(typ)))), cx)))));
+          hydra.show.core.Core.type(typ)))), cx)));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.MapType> visit(hydra.core.Type.Map mt) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.MapType>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.MapType>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.MapType>right((mt).value)));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.MapType>right((mt).value);
       }
     });
   }
@@ -917,8 +917,8 @@ public interface Core {
       hydra.lib.equality.Equal.apply(
         hydra.lib.lists.Length.apply(args),
         n),
-      () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.lang.Void>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.lang.Void>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.lang.Void>right(null))),
-      () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.lang.Void>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.lang.Void>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.lang.Void>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+      () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.lang.Void>right(null),
+      () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.lang.Void>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
         hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             "expected ",
@@ -927,7 +927,7 @@ public interface Core {
               " arguments to primitive ",
               hydra.lib.literals.ShowString.apply((name).value)))),
           " but found "),
-        hydra.lib.literals.ShowInt32.apply(hydra.lib.lists.Length.apply(args))))), cx))))));
+        hydra.lib.literals.ShowInt32.apply(hydra.lib.lists.Length.apply(args))))), cx))));
   }
   
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<T0>> maybeTerm(hydra.context.Context cx, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>> f, hydra.graph.Graph graph, hydra.core.Term term0) {
@@ -939,19 +939,19 @@ public interface Core {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<T0>>>) (term -> (term).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<T0>> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<T0>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<T0>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<T0>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+          return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<T0>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               hydra.lib.strings.Cat2.apply(
                 "expected ",
                 "maybe value"),
               " but found "),
-            hydra.show.core.Core.term(term)))), cx)))));
+            hydra.show.core.Core.term(term)))), cx)));
         }
         
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<T0>> visit(hydra.core.Term.Maybe mt) {
           return hydra.lib.maybes.Maybe.applyLazy(
-            () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<T0>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<T0>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<T0>>right((hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing())))),
+            () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<T0>>right((hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing())),
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<T0>>>) (t -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<T0, hydra.util.Maybe<T0>>) (hydra.lib.maybes.Pure::apply),
               (f).apply(t))),
@@ -965,18 +965,18 @@ public interface Core {
     return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> otherwise(hydra.core.Type instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "maybe type"),
             " but found "),
-          hydra.show.core.Core.type(typ)))), cx)))));
+          hydra.show.core.Core.type(typ)))), cx)));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> visit(hydra.core.Type.Maybe t) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>right((t).value)));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>right((t).value);
       }
     });
   }
@@ -990,13 +990,13 @@ public interface Core {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<T0, T1>>>) (term -> (term).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<T0, T1>> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<T0, T1>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<T0, T1>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<T0, T1>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+          return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<T0, T1>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               hydra.lib.strings.Cat2.apply(
                 "expected ",
                 "pair"),
               " but found "),
-            hydra.show.core.Core.term(term)))), cx)))));
+            hydra.show.core.Core.term(term)))), cx)));
         }
         
         @Override
@@ -1005,7 +1005,7 @@ public interface Core {
             (kf).apply(hydra.lib.pairs.First.apply((p).value)),
             (java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<T0, T1>>>) (kVal -> hydra.lib.eithers.Bind.apply(
               (vf).apply(hydra.lib.pairs.Second.apply((p).value)),
-              (java.util.function.Function<T1, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<T0, T1>>>) (vVal -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<T0, T1>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<T0, T1>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<T0, T1>>right((hydra.util.Pair<T0, T1>) ((hydra.util.Pair<T0, T1>) (new hydra.util.Pair<T0, T1>(kVal, vVal))))))))));
+              (java.util.function.Function<T1, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<T0, T1>>>) (vVal -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<T0, T1>>right((hydra.util.Pair<T0, T1>) ((hydra.util.Pair<T0, T1>) (new hydra.util.Pair<T0, T1>(kVal, vVal))))))));
         }
       })));
   }
@@ -1020,8 +1020,8 @@ public interface Core {
         hydra.lib.equality.Equal.apply(
           (record).typeName,
           expected),
-        () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.Field>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.Field>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.Field>>right((record).fields))),
-        () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.Field>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.Field>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.Field>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.Field>>right((record).fields),
+        () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.Field>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
@@ -1029,7 +1029,7 @@ public interface Core {
                 "record of type ",
                 (expected).value)),
             " but found "),
-          ((record).typeName).value))), cx))))))));
+          ((record).typeName).value))), cx))))));
   }
   
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>> recordType(hydra.context.Context cx, hydra.core.Name ename, hydra.core.Type typ) {
@@ -1037,13 +1037,13 @@ public interface Core {
     return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>> otherwise(hydra.core.Type instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "record type"),
             " but found "),
-          hydra.show.core.Core.type(typ)))), cx)))));
+          hydra.show.core.Core.type(typ)))), cx)));
       }
       
       @Override
@@ -1052,8 +1052,8 @@ public interface Core {
           hydra.lib.equality.Equal.apply(
             (((rowType).value).typeName).value,
             (ename).value),
-          () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>>right(((rowType).value).fields))),
-          () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>>right(((rowType).value).fields),
+          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               hydra.lib.strings.Cat2.apply(
                 "expected ",
@@ -1063,7 +1063,7 @@ public interface Core {
               " but found "),
             hydra.lib.strings.Cat2.apply(
               "record of type ",
-              (((rowType).value).typeName).value)))), cx))))));
+              (((rowType).value).typeName).value)))), cx))));
       }
     });
   }
@@ -1077,18 +1077,18 @@ public interface Core {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.Set<hydra.core.Term>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.Set<hydra.core.Term>> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.Set<hydra.core.Term>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.Set<hydra.core.Term>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.Set<hydra.core.Term>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+          return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.Set<hydra.core.Term>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               hydra.lib.strings.Cat2.apply(
                 "expected ",
                 "set"),
               " but found "),
-            hydra.show.core.Core.term(stripped)))), cx)))));
+            hydra.show.core.Core.term(stripped)))), cx)));
         }
         
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.Set<hydra.core.Term>> visit(hydra.core.Term.Set s) {
-          return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.Set<hydra.core.Term>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.Set<hydra.core.Term>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.Set<hydra.core.Term>>right((s).value)));
+          return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.Set<hydra.core.Term>>right((s).value);
         }
       })));
   }
@@ -1109,18 +1109,18 @@ public interface Core {
     return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> otherwise(hydra.core.Type instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "set type"),
             " but found "),
-          hydra.show.core.Core.type(typ)))), cx)))));
+          hydra.show.core.Core.type(typ)))), cx)));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> visit(hydra.core.Type.Set t) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>right((t).value)));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>right((t).value);
       }
     });
   }
@@ -1140,18 +1140,18 @@ public interface Core {
     return (v).accept(new hydra.core.Literal.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, String> otherwise(hydra.core.Literal instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, String>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, String>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, String>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, String>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "string"),
             " but found "),
-          hydra.show.core.Core.literal(v)))), cx)))));
+          hydra.show.core.Core.literal(v)))), cx)));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, String> visit(hydra.core.Literal.String_ s) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, String>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, String>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, String>right((s).value)));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, String>right((s).value);
       }
     });
   }
@@ -1165,18 +1165,18 @@ public interface Core {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Record>>) (term -> (term).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Record> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Record>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Record>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Record>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+          return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Record>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               hydra.lib.strings.Cat2.apply(
                 "expected ",
                 "record"),
               " but found "),
-            hydra.show.core.Core.term(term)))), cx)))));
+            hydra.show.core.Core.term(term)))), cx)));
         }
         
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Record> visit(hydra.core.Term.Record record) {
-          return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Record>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Record>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Record>right((record).value)));
+          return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Record>right((record).value);
         }
       })));
   }
@@ -1200,18 +1200,18 @@ public interface Core {
     return (v).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Character> otherwise(hydra.core.IntegerValue instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Character>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Character>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Character>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Character>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "uint16"),
             " but found "),
-          hydra.show.core.Core.integer(v)))), cx)))));
+          hydra.show.core.Core.integer(v)))), cx)));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Character> visit(hydra.core.IntegerValue.Uint16 i) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Character>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Character>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Character>right((i).value)));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Character>right((i).value);
       }
     });
   }
@@ -1235,18 +1235,18 @@ public interface Core {
     return (v).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Long> otherwise(hydra.core.IntegerValue instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Long>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Long>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Long>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Long>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "uint32"),
             " but found "),
-          hydra.show.core.Core.integer(v)))), cx)))));
+          hydra.show.core.Core.integer(v)))), cx)));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Long> visit(hydra.core.IntegerValue.Uint32 i) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Long>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Long>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Long>right((i).value)));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Long>right((i).value);
       }
     });
   }
@@ -1270,18 +1270,18 @@ public interface Core {
     return (v).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger> otherwise(hydra.core.IntegerValue instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "uint64"),
             " but found "),
-          hydra.show.core.Core.integer(v)))), cx)))));
+          hydra.show.core.Core.integer(v)))), cx)));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger> visit(hydra.core.IntegerValue.Uint64 i) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger>right((i).value)));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.math.BigInteger>right((i).value);
       }
     });
   }
@@ -1305,18 +1305,18 @@ public interface Core {
     return (v).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Short> otherwise(hydra.core.IntegerValue instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Short>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Short>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Short>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Short>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "uint8"),
             " but found "),
-          hydra.show.core.Core.integer(v)))), cx)))));
+          hydra.show.core.Core.integer(v)))), cx)));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Short> visit(hydra.core.IntegerValue.Uint8 i) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Short>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Short>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Short>right((i).value)));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, Short>right((i).value);
       }
     });
   }
@@ -1326,13 +1326,13 @@ public interface Core {
     return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>> otherwise(hydra.core.Type instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "union type"),
             " but found "),
-          hydra.show.core.Core.type(typ)))), cx)))));
+          hydra.show.core.Core.type(typ)))), cx)));
       }
       
       @Override
@@ -1341,8 +1341,8 @@ public interface Core {
           hydra.lib.equality.Equal.apply(
             ((rowType).value).typeName,
             ename),
-          () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>>right(((rowType).value).fields))),
-          () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>>right(((rowType).value).fields),
+          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.FieldType>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               hydra.lib.strings.Cat2.apply(
                 "expected ",
@@ -1352,7 +1352,7 @@ public interface Core {
               " but found "),
             hydra.lib.strings.Cat2.apply(
               "union of type ",
-              (((rowType).value).typeName).value)))), cx))))));
+              (((rowType).value).typeName).value)))), cx))));
       }
     });
   }
@@ -1361,18 +1361,18 @@ public interface Core {
     return (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.lang.Void> otherwise(hydra.core.Term instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.lang.Void>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.lang.Void>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.lang.Void>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.lang.Void>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "unit"),
             " but found "),
-          hydra.show.core.Core.term(term)))), cx)))));
+          hydra.show.core.Core.term(term)))), cx)));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.lang.Void> visit(hydra.core.Term.Unit ignored) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.lang.Void>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.lang.Void>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.lang.Void>right(null)));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.lang.Void>right(null);
       }
     });
   }
@@ -1388,7 +1388,7 @@ public interface Core {
         hydra.extract.core.Core.unit(
           cx,
           (field).term),
-        (java.util.function.Function<java.lang.Void, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Name>>) (ignored -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Name>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Name>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Name>right((field).name)))))));
+        (java.util.function.Function<java.lang.Void, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Name>>) (ignored -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Name>right((field).name)))));
   }
   
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> wrap(hydra.context.Context cx, hydra.core.Name expected, hydra.graph.Graph graph, hydra.core.Term term0) {
@@ -1400,7 +1400,7 @@ public interface Core {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (term -> (term).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+          return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               hydra.lib.strings.Cat2.apply(
                 "expected ",
@@ -1410,7 +1410,7 @@ public interface Core {
                     (expected).value),
                   ")")),
               " but found "),
-            hydra.show.core.Core.term(term)))), cx)))));
+            hydra.show.core.Core.term(term)))), cx)));
         }
         
         @Override
@@ -1419,8 +1419,8 @@ public interface Core {
             hydra.lib.equality.Equal.apply(
               (((wrappedTerm).value).typeName).value,
               (expected).value),
-            () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(((wrappedTerm).value).body))),
-            () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+            () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(((wrappedTerm).value).body),
+            () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
               hydra.lib.strings.Cat2.apply(
                 hydra.lib.strings.Cat2.apply(
                   "expected ",
@@ -1428,7 +1428,7 @@ public interface Core {
                     "wrapper of type ",
                     (expected).value)),
                 " but found "),
-              (((wrappedTerm).value).typeName).value))), cx))))));
+              (((wrappedTerm).value).typeName).value))), cx))));
         }
       })));
   }
@@ -1438,13 +1438,13 @@ public interface Core {
     return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> otherwise(hydra.core.Type instance) {
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               "expected ",
               "wrapped type"),
             " but found "),
-          hydra.show.core.Core.type(typ)))), cx)))));
+          hydra.show.core.Core.type(typ)))), cx)));
       }
       
       @Override
@@ -1453,8 +1453,8 @@ public interface Core {
           hydra.lib.equality.Equal.apply(
             (((wrappedType).value).typeName).value,
             (ename).value),
-          () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>right(((wrappedType).value).body))),
-          () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
+          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>right(((wrappedType).value).body),
+          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               hydra.lib.strings.Cat2.apply(
                 "expected ",
@@ -1464,7 +1464,7 @@ public interface Core {
               " but found "),
             hydra.lib.strings.Cat2.apply(
               "wrapped type ",
-              (((wrappedType).value).typeName).value)))), cx))))));
+              (((wrappedType).value).typeName).value)))), cx))));
       }
     });
   }

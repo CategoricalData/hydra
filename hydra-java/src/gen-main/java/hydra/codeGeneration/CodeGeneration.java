@@ -179,7 +179,7 @@ public interface CodeGeneration {
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(typeModulesToGenerate.get()),
-        () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.util.Pair<T0, T1>>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.util.Pair<T0, T1>>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.util.Pair<T0, T1>>>right((java.util.List<hydra.util.Pair<T0, T1>>) (java.util.List.<hydra.util.Pair<T0, T1>>of())))),
+        () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.util.Pair<T0, T1>>>right((java.util.List<hydra.util.Pair<T0, T1>>) (java.util.List.<hydra.util.Pair<T0, T1>>of())),
         () -> ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.util.Pair<T0, T1>>>>) (() -> {
           hydra.util.Lazy<java.util.List<java.util.List<hydra.core.Name>>> nameLists = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
             (java.util.function.Function<hydra.module.Module, java.util.List<hydra.core.Name>>) (m -> hydra.lib.lists.Map.apply(
@@ -220,7 +220,7 @@ public interface CodeGeneration {
       (java.util.function.Function<java.util.List<hydra.util.Pair<T0, T1>>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.util.Pair<T0, T1>>>>) (schemaFiles -> hydra.lib.eithers.Bind.apply(
         hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(termModulesToGenerate.get()),
-          () -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.util.Pair<T0, T1>>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.util.Pair<T0, T1>>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.util.Pair<T0, T1>>>right((java.util.List<hydra.util.Pair<T0, T1>>) (java.util.List.<hydra.util.Pair<T0, T1>>of())))),
+          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.util.Pair<T0, T1>>>right((java.util.List<hydra.util.Pair<T0, T1>>) (java.util.List.<hydra.util.Pair<T0, T1>>of())),
           () -> ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.util.Pair<T0, T1>>>>) (() -> {
             hydra.util.Lazy<java.util.List<hydra.module.Namespace>> namespaces = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
               (java.util.function.Function<hydra.module.Module, hydra.module.Namespace>) (m -> (m).namespace),
@@ -269,9 +269,9 @@ public interface CodeGeneration {
                       defLists.get())));
               }));
           })).get()),
-        (java.util.function.Function<java.util.List<hydra.util.Pair<T0, T1>>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.util.Pair<T0, T1>>>>) (termFiles -> (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.util.Pair<T0, T1>>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.util.Pair<T0, T1>>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.util.Pair<T0, T1>>>right(hydra.lib.lists.Concat2.apply(
+        (java.util.function.Function<java.util.List<hydra.util.Pair<T0, T1>>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.util.Pair<T0, T1>>>>) (termFiles -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.util.Pair<T0, T1>>>right(hydra.lib.lists.Concat2.apply(
           schemaFiles,
-          termFiles))))))));
+          termFiles))))));
   }
   
   static String formatTermBinding(hydra.core.Binding binding) {
@@ -306,13 +306,13 @@ public interface CodeGeneration {
       hydra.decode.core.Core.type(
         graph,
         (binding).term),
-      (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.error.DecodingError, String>>) (typ -> (hydra.util.Either<hydra.error.DecodingError, String>) ((hydra.util.Either<hydra.error.DecodingError, String>) (hydra.util.Either.<hydra.error.DecodingError, String>right(hydra.lib.strings.Cat2.apply(
+      (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.error.DecodingError, String>>) (typ -> hydra.util.Either.<hydra.error.DecodingError, String>right(hydra.lib.strings.Cat2.apply(
         hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             "  ",
             ((binding).name).value),
           " = "),
-        hydra.show.core.Core.type(typ)))))));
+        hydra.show.core.Core.type(typ)))));
   }
   
   static java.util.Map<hydra.core.Name, hydra.core.Type> buildSchemaMap(hydra.graph.Graph g) {
@@ -370,7 +370,7 @@ public interface CodeGeneration {
         hydra.util.Lazy<java.util.List<String>> termLines = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
           (java.util.function.Function<hydra.core.Binding, String>) (b -> hydra.codeGeneration.CodeGeneration.formatTermBinding(b)),
           sortedTerms.get()));
-        return (hydra.util.Either<hydra.error.DecodingError, String>) ((hydra.util.Either<hydra.error.DecodingError, String>) (hydra.util.Either.<hydra.error.DecodingError, String>right(hydra.lib.strings.Cat2.apply(
+        return hydra.util.Either.<hydra.error.DecodingError, String>right(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
               hydra.lib.strings.Cat2.apply(
@@ -380,7 +380,7 @@ public interface CodeGeneration {
                 "\nTypes:\n"),
               hydra.lib.strings.Unlines.apply(typeLines)),
             "\nTerms:\n"),
-          hydra.lib.strings.Unlines.apply(termLines.get())))));
+          hydra.lib.strings.Unlines.apply(termLines.get())));
       }));
   }
   
@@ -423,9 +423,9 @@ public interface CodeGeneration {
                 (e).name)),
               inferredElements.get())),
             (m).elements)), (m).termDependencies, (m).typeDependencies, (m).description)));
-        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.module.Module>>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.module.Module>>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.module.Module>>right(hydra.lib.lists.Map.apply(
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.module.Module>>right(hydra.lib.lists.Map.apply(
           refreshModule,
-          targetMods))));
+          targetMods));
       }));
   }
   
@@ -582,13 +582,13 @@ public interface CodeGeneration {
     hydra.core.Type modType = new hydra.core.Type.Variable(new hydra.core.Name("hydra.module.Module"));
     java.util.Map<hydra.core.Name, hydra.core.Type> schemaMap = hydra.codeGeneration.CodeGeneration.buildSchemaMap(graph);
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<String, hydra.module.Module>>) (err -> (hydra.util.Either<String, hydra.module.Module>) ((hydra.util.Either<String, hydra.module.Module>) (hydra.util.Either.<String, hydra.module.Module>left(err)))),
+      (java.util.function.Function<String, hydra.util.Either<String, hydra.module.Module>>) (err -> hydra.util.Either.<String, hydra.module.Module>left(err)),
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<String, hydra.module.Module>>) (term -> hydra.lib.eithers.Either.apply(
-        (java.util.function.Function<hydra.error.DecodingError, hydra.util.Either<String, hydra.module.Module>>) (decErr -> (hydra.util.Either<String, hydra.module.Module>) ((hydra.util.Either<String, hydra.module.Module>) (hydra.util.Either.<String, hydra.module.Module>left((decErr).value)))),
-        (java.util.function.Function<hydra.module.Module, hydra.util.Either<String, hydra.module.Module>>) (mod -> (hydra.util.Either<String, hydra.module.Module>) ((hydra.util.Either<String, hydra.module.Module>) (hydra.util.Either.<String, hydra.module.Module>right(hydra.lib.logic.IfElse.lazy(
+        (java.util.function.Function<hydra.error.DecodingError, hydra.util.Either<String, hydra.module.Module>>) (decErr -> hydra.util.Either.<String, hydra.module.Module>left((decErr).value)),
+        (java.util.function.Function<hydra.module.Module, hydra.util.Either<String, hydra.module.Module>>) (mod -> hydra.util.Either.<String, hydra.module.Module>right(hydra.lib.logic.IfElse.lazy(
           doStripTypeSchemes,
           () -> hydra.codeGeneration.CodeGeneration.stripModuleTypeSchemes(mod),
-          () -> mod))))),
+          () -> mod))),
         hydra.decode.module.Module.module(
           graph,
           term))),

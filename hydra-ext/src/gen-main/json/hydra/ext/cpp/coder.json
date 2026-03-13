@@ -1576,7 +1576,7 @@
                                                                                           "function": {"variable": "hydra.ext.cpp.coder.toConstType"}}}}},
                                                                                   "type": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.error.OtherError"},
+                                                                                      "argument": {"variable": "hydra.error.Error"},
                                                                                       "function": {"variable": "hydra.context.InContext"}}}}},
                                                                               "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                                                           "domain": [{"variable": "hydra.ext.cpp.syntax.TypeExpression"}],
@@ -1610,7 +1610,7 @@
                                                                                     "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                     "type": {
                                                                                       "application": {
-                                                                                        "argument": {"variable": "hydra.error.OtherError"},
+                                                                                        "argument": {"variable": "hydra.error.Error"},
                                                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                 "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                                                             "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}}}}}},
@@ -1645,7 +1645,7 @@
                                                                           "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                           "type": {
                                                                             "application": {
-                                                                              "argument": {"variable": "hydra.error.OtherError"},
+                                                                              "argument": {"variable": "hydra.error.Error"},
                                                                               "function": {"variable": "hydra.context.InContext"}}}}},
                                                                       "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                                                   "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}}}}}},
@@ -1739,7 +1739,7 @@
                                                                       "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                                                   "type": {
                                                                     "application": {
-                                                                      "argument": {"variable": "hydra.error.OtherError"},
+                                                                      "argument": {"variable": "hydra.error.Error"},
                                                                       "function": {"variable": "hydra.context.InContext"}}}}}}}}},
                                                       "domain": [{"variable": "hydra.core.Type"}],
                                                       "parameter": "et"}}}},
@@ -1776,7 +1776,7 @@
                                                                                           "function": {"variable": "hydra.ext.cpp.coder.toConstType"}}}}},
                                                                                   "type": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.error.OtherError"},
+                                                                                      "argument": {"variable": "hydra.error.Error"},
                                                                                       "function": {"variable": "hydra.context.InContext"}}}}},
                                                                               "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                                                           "domain": [{"variable": "hydra.ext.cpp.syntax.TypeExpression"}],
@@ -1810,7 +1810,7 @@
                                                                                     "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                     "type": {
                                                                                       "application": {
-                                                                                        "argument": {"variable": "hydra.error.OtherError"},
+                                                                                        "argument": {"variable": "hydra.error.Error"},
                                                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                 "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                                                             "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}}}}}},
@@ -1845,7 +1845,7 @@
                                                                           "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                           "type": {
                                                                             "application": {
-                                                                              "argument": {"variable": "hydra.error.OtherError"},
+                                                                              "argument": {"variable": "hydra.error.Error"},
                                                                               "function": {"variable": "hydra.context.InContext"}}}}},
                                                                       "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                                                   "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}}}}}},
@@ -1868,7 +1868,7 @@
                                                                       "function": {"variable": "hydra.ext.cpp.coder.encodeLiteralType"}}}}},
                                                               "type": {
                                                                 "application": {
-                                                                  "argument": {"variable": "hydra.error.OtherError"},
+                                                                  "argument": {"variable": "hydra.error.Error"},
                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                           "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                                       "domain": [{"variable": "hydra.core.LiteralType"}],
@@ -1921,7 +1921,7 @@
                                                                       "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                                                   "type": {
                                                                     "application": {
-                                                                      "argument": {"variable": "hydra.error.OtherError"},
+                                                                      "argument": {"variable": "hydra.error.Error"},
                                                                       "function": {"variable": "hydra.context.InContext"}}}}}}}}},
                                                       "domain": [{"variable": "hydra.core.Type"}],
                                                       "parameter": "et"}}}},
@@ -1958,7 +1958,7 @@
                                                                                           "function": {"variable": "hydra.ext.cpp.coder.toConstType"}}}}},
                                                                                   "type": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.error.OtherError"},
+                                                                                      "argument": {"variable": "hydra.error.Error"},
                                                                                       "function": {"variable": "hydra.context.InContext"}}}}},
                                                                               "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                                                           "domain": [{"variable": "hydra.ext.cpp.syntax.TypeExpression"}],
@@ -1992,7 +1992,7 @@
                                                                                     "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                     "type": {
                                                                                       "application": {
-                                                                                        "argument": {"variable": "hydra.error.OtherError"},
+                                                                                        "argument": {"variable": "hydra.error.Error"},
                                                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                 "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                                                             "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}}}}}},
@@ -2027,7 +2027,7 @@
                                                                           "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                           "type": {
                                                                             "application": {
-                                                                              "argument": {"variable": "hydra.error.OtherError"},
+                                                                              "argument": {"variable": "hydra.error.Error"},
                                                                               "function": {"variable": "hydra.context.InContext"}}}}},
                                                                       "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                                                   "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}}}}}},
@@ -2061,7 +2061,7 @@
                                                                           "function": {"variable": "hydra.ext.cpp.coder.createTypeReference"}}}}}}},
                                                               "type": {
                                                                 "application": {
-                                                                  "argument": {"variable": "hydra.error.OtherError"},
+                                                                  "argument": {"variable": "hydra.error.Error"},
                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                           "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                                       "domain": [{"variable": "hydra.core.RowType"}],
@@ -2114,7 +2114,7 @@
                                                                       "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                                                   "type": {
                                                                     "application": {
-                                                                      "argument": {"variable": "hydra.error.OtherError"},
+                                                                      "argument": {"variable": "hydra.error.Error"},
                                                                       "function": {"variable": "hydra.context.InContext"}}}}}}}}},
                                                       "domain": [{"variable": "hydra.core.Type"}],
                                                       "parameter": "et"}}}},
@@ -2146,7 +2146,7 @@
                                                                           "function": {"variable": "hydra.ext.cpp.coder.createTypeReference"}}}}}}},
                                                               "type": {
                                                                 "application": {
-                                                                  "argument": {"variable": "hydra.error.OtherError"},
+                                                                  "argument": {"variable": "hydra.error.Error"},
                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                           "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                                       "domain": [{"variable": "hydra.core.RowType"}],
@@ -2181,7 +2181,7 @@
                                                                       "typeName": "hydra.ext.cpp.syntax.TypeExpression"}}}},
                                                               "type": {
                                                                 "application": {
-                                                                  "argument": {"variable": "hydra.error.OtherError"},
+                                                                  "argument": {"variable": "hydra.error.Error"},
                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                           "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                                       "domain": [{"variable": "hydra.core.Name"}],
@@ -2215,7 +2215,7 @@
                                                                           "function": {"variable": "hydra.ext.cpp.coder.createTypeReference"}}}}}}},
                                                               "type": {
                                                                 "application": {
-                                                                  "argument": {"variable": "hydra.error.OtherError"},
+                                                                  "argument": {"variable": "hydra.error.Error"},
                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                           "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                                       "domain": [{"variable": "hydra.core.WrappedType"}],
@@ -2243,7 +2243,7 @@
                                                                           "function": {"variable": "hydra.ext.cpp.coder.createTemplateType"}}}}}}},
                                                               "type": {
                                                                 "application": {
-                                                                  "argument": {"variable": "hydra.error.OtherError"},
+                                                                  "argument": {"variable": "hydra.error.Error"},
                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                           "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                                       "domain": [{"unit": {}}],
@@ -2263,15 +2263,20 @@
                                                                     {
                                                                       "name": "object",
                                                                       "term": {
-                                                                        "wrap": {
-                                                                          "body": {"literal": {"string": "Unsupported type"}},
-                                                                          "typeName": "hydra.error.OtherError"}}},
+                                                                        "union": {
+                                                                          "field": {
+                                                                            "name": "other",
+                                                                            "term": {
+                                                                              "wrap": {
+                                                                                "body": {"literal": {"string": "Unsupported type"}},
+                                                                                "typeName": "hydra.error.OtherError"}}},
+                                                                          "typeName": "hydra.error.Error"}}},
                                                                     {"name": "context", "term": {"variable": "cx"}}],
                                                                   "typeName": "hydra.context.InContext"}},
-                                                              "type": {"variable": "hydra.error.OtherError"}}}}},
+                                                              "type": {"variable": "hydra.error.Error"}}}}},
                                                       "type": {
                                                         "application": {
-                                                          "argument": {"variable": "hydra.error.OtherError"},
+                                                          "argument": {"variable": "hydra.error.Error"},
                                                           "function": {"variable": "hydra.context.InContext"}}}}},
                                                   "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}}],
                                             "typeName": "hydra.core.Type"}}}}}}}},
@@ -2295,7 +2300,7 @@
                         "either": {
                           "left": {
                             "application": {
-                              "argument": {"variable": "hydra.error.OtherError"},
+                              "argument": {"variable": "hydra.error.Error"},
                               "function": {"variable": "hydra.context.InContext"}}},
                           "right": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                       "domain": {"variable": "hydra.core.Type"}}},
@@ -2353,7 +2358,7 @@
                         "either": {
                           "left": {
                             "application": {
-                              "argument": {"variable": "hydra.error.OtherError"},
+                              "argument": {"variable": "hydra.error.Error"},
                               "function": {"variable": "hydra.context.InContext"}}},
                           "right": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                       "domain": {"variable": "hydra.core.ForallType"}}},
@@ -2418,7 +2423,7 @@
                                                                 "typeName": "hydra.ext.cpp.syntax.TypeExpression"}}}},
                                                         "type": {
                                                           "application": {
-                                                            "argument": {"variable": "hydra.error.OtherError"},
+                                                            "argument": {"variable": "hydra.error.Error"},
                                                             "function": {"variable": "hydra.context.InContext"}}}}},
                                                     "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                                 "domain": [{"variable": "hydra.ext.cpp.syntax.TypeExpression"}],
@@ -2453,7 +2458,7 @@
                                                           "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                           "type": {
                                                             "application": {
-                                                              "argument": {"variable": "hydra.error.OtherError"},
+                                                              "argument": {"variable": "hydra.error.Error"},
                                                               "function": {"variable": "hydra.context.InContext"}}}}},
                                                       "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                                   "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}}}}}},
@@ -2488,7 +2493,7 @@
                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                 "type": {
                                                   "application": {
-                                                    "argument": {"variable": "hydra.error.OtherError"},
+                                                    "argument": {"variable": "hydra.error.Error"},
                                                     "function": {"variable": "hydra.context.InContext"}}}}},
                                             "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                         "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}}}}}},
@@ -2512,7 +2517,7 @@
                         "either": {
                           "left": {
                             "application": {
-                              "argument": {"variable": "hydra.error.OtherError"},
+                              "argument": {"variable": "hydra.error.Error"},
                               "function": {"variable": "hydra.context.InContext"}}},
                           "right": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                       "domain": {"variable": "hydra.core.FunctionType"}}},
@@ -2557,7 +2562,7 @@
                                                                     "function": {"variable": "hydra.ext.cpp.coder.createTemplateType"}}}}}}},
                                                         "type": {
                                                           "application": {
-                                                            "argument": {"variable": "hydra.error.OtherError"},
+                                                            "argument": {"variable": "hydra.error.Error"},
                                                             "function": {"variable": "hydra.context.InContext"}}}}},
                                                     "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                                 "domain": [{"variable": "hydra.ext.cpp.syntax.TypeExpression"}],
@@ -2592,7 +2597,7 @@
                                                           "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                           "type": {
                                                             "application": {
-                                                              "argument": {"variable": "hydra.error.OtherError"},
+                                                              "argument": {"variable": "hydra.error.Error"},
                                                               "function": {"variable": "hydra.context.InContext"}}}}},
                                                       "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                                   "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}}}}}},
@@ -2628,7 +2633,7 @@
                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                 "type": {
                                                   "application": {
-                                                    "argument": {"variable": "hydra.error.OtherError"},
+                                                    "argument": {"variable": "hydra.error.Error"},
                                                     "function": {"variable": "hydra.context.InContext"}}}}},
                                             "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                         "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}}}}}},
@@ -2652,7 +2657,7 @@
                         "either": {
                           "left": {
                             "application": {
-                              "argument": {"variable": "hydra.error.OtherError"},
+                              "argument": {"variable": "hydra.error.Error"},
                               "function": {"variable": "hydra.context.InContext"}}},
                           "right": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                       "domain": {"variable": "hydra.core.ApplicationType"}}},
@@ -2710,7 +2715,7 @@
                                                                       "typeName": "hydra.ext.cpp.syntax.Declaration"}}}},
                                                               "type": {
                                                                 "application": {
-                                                                  "argument": {"variable": "hydra.error.OtherError"},
+                                                                  "argument": {"variable": "hydra.error.Error"},
                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                           "type": {"variable": "hydra.ext.cpp.syntax.Declaration"}}},
                                                       "domain": [{"variable": "hydra.ext.cpp.syntax.TypeExpression"}],
@@ -2739,7 +2744,7 @@
                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                 "type": {
                                                                   "application": {
-                                                                    "argument": {"variable": "hydra.error.OtherError"},
+                                                                    "argument": {"variable": "hydra.error.Error"},
                                                                     "function": {"variable": "hydra.context.InContext"}}}}},
                                                             "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                                         "type": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}}}}},
@@ -2772,7 +2777,7 @@
                                 "either": {
                                   "left": {
                                     "application": {
-                                      "argument": {"variable": "hydra.error.OtherError"},
+                                      "argument": {"variable": "hydra.error.Error"},
                                       "function": {"variable": "hydra.context.InContext"}}},
                                   "right": {"variable": "hydra.ext.cpp.syntax.Declaration"}}},
                               "domain": {"variable": "t1"}}},
@@ -2963,24 +2968,29 @@
                                                                                       {
                                                                                         "name": "object",
                                                                                         "term": {
-                                                                                          "wrap": {
-                                                                                            "body": {
-                                                                                              "application": {
-                                                                                                "argument": {
-                                                                                                  "application": {
-                                                                                                    "argument": {"variable": "typ"},
-                                                                                                    "function": {"variable": "hydra.show.core.type"}}},
-                                                                                                "function": {
-                                                                                                  "application": {
-                                                                                                    "argument": {"literal": {"string": "unexpected type in definition: "}},
-                                                                                                    "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                                                            "typeName": "hydra.error.OtherError"}}},
+                                                                                          "union": {
+                                                                                            "field": {
+                                                                                              "name": "other",
+                                                                                              "term": {
+                                                                                                "wrap": {
+                                                                                                  "body": {
+                                                                                                    "application": {
+                                                                                                      "argument": {
+                                                                                                        "application": {
+                                                                                                          "argument": {"variable": "typ"},
+                                                                                                          "function": {"variable": "hydra.show.core.type"}}},
+                                                                                                      "function": {
+                                                                                                        "application": {
+                                                                                                          "argument": {"literal": {"string": "unexpected type in definition: "}},
+                                                                                                          "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                                                                                  "typeName": "hydra.error.OtherError"}}},
+                                                                                            "typeName": "hydra.error.Error"}}},
                                                                                       {"name": "context", "term": {"variable": "cx"}}],
                                                                                     "typeName": "hydra.context.InContext"}},
-                                                                                "type": {"variable": "hydra.error.OtherError"}}}}},
+                                                                                "type": {"variable": "hydra.error.Error"}}}}},
                                                                         "type": {
                                                                           "application": {
-                                                                            "argument": {"variable": "hydra.error.OtherError"},
+                                                                            "argument": {"variable": "hydra.error.Error"},
                                                                             "function": {"variable": "hydra.context.InContext"}}}}},
                                                                     "type": {"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}}],
                                                               "typeName": "hydra.core.Type"}}}}}}}},
@@ -3011,7 +3021,7 @@
                             "either": {
                               "left": {
                                 "application": {
-                                  "argument": {"variable": "hydra.error.OtherError"},
+                                  "argument": {"variable": "hydra.error.Error"},
                                   "function": {"variable": "hydra.context.InContext"}}},
                               "right": {"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}},
                           "domain": {"variable": "hydra.core.Type"}}},
@@ -3100,7 +3110,7 @@
                                                                         "typeName": "hydra.ext.cpp.syntax.VariableDeclaration"}}}},
                                                                 "type": {
                                                                   "application": {
-                                                                    "argument": {"variable": "hydra.error.OtherError"},
+                                                                    "argument": {"variable": "hydra.error.Error"},
                                                                     "function": {"variable": "hydra.context.InContext"}}}}},
                                                             "type": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}},
                                                         "domain": [{"variable": "hydra.ext.cpp.syntax.TypeExpression"}],
@@ -3129,7 +3139,7 @@
                                                                   "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                   "type": {
                                                                     "application": {
-                                                                      "argument": {"variable": "hydra.error.OtherError"},
+                                                                      "argument": {"variable": "hydra.error.Error"},
                                                                       "function": {"variable": "hydra.context.InContext"}}}}},
                                                               "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
                                                           "type": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}}}}}}}}}},
@@ -3158,7 +3168,7 @@
                             "either": {
                               "left": {
                                 "application": {
-                                  "argument": {"variable": "hydra.error.OtherError"},
+                                  "argument": {"variable": "hydra.error.Error"},
                                   "function": {"variable": "hydra.context.InContext"}}},
                               "right": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}},
                           "domain": {"variable": "t1"}}},
@@ -3439,7 +3449,7 @@
                                                                                                 "type": {"list": {"variable": "hydra.core.FieldType"}}}}}}}}]}}},
                                                                             "type": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.error.OtherError"},
+                                                                                "argument": {"variable": "hydra.error.Error"},
                                                                                 "function": {"variable": "hydra.context.InContext"}}}}},
                                                                         "type": {"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}},
                                                                     "domain": [{"list": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}],
@@ -3486,7 +3496,7 @@
                                                                                   "type": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}},
                                                                               "type": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "hydra.error.OtherError"},
+                                                                                  "argument": {"variable": "hydra.error.Error"},
                                                                                   "function": {"variable": "hydra.context.InContext"}}}}}}}}},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -3497,7 +3507,7 @@
                                                                               "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                               "type": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "hydra.error.OtherError"},
+                                                                                  "argument": {"variable": "hydra.error.Error"},
                                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                                           "type": {"list": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}}},
                                                                       "type": {"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}}}}}},
@@ -3545,7 +3555,7 @@
                                                                         "type": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}},
                                                                     "type": {
                                                                       "application": {
-                                                                        "argument": {"variable": "hydra.error.OtherError"},
+                                                                        "argument": {"variable": "hydra.error.Error"},
                                                                         "function": {"variable": "hydra.context.InContext"}}}}}}}}},
                                                         "function": {
                                                           "typeApplication": {
@@ -3556,7 +3566,7 @@
                                                                     "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                     "type": {
                                                                       "application": {
-                                                                        "argument": {"variable": "hydra.error.OtherError"},
+                                                                        "argument": {"variable": "hydra.error.Error"},
                                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                                 "type": {"list": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}}},
                                                             "type": {"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}}}}}}}},
@@ -3589,7 +3599,7 @@
                                 "either": {
                                   "left": {
                                     "application": {
-                                      "argument": {"variable": "hydra.error.OtherError"},
+                                      "argument": {"variable": "hydra.error.Error"},
                                       "function": {"variable": "hydra.context.InContext"}}},
                                   "right": {"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}},
                               "domain": {"variable": "t1"}}},
@@ -3684,7 +3694,7 @@
                                                                                 "type": {"variable": "t1"}}},
                                                                             "type": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.error.OtherError"},
+                                                                                "argument": {"variable": "hydra.error.Error"},
                                                                                 "function": {"variable": "hydra.context.InContext"}}}}}}}}}}}}}}},
                                                     "function": {
                                                       "application": {
@@ -3699,7 +3709,7 @@
                                                               "either": {
                                                                 "left": {
                                                                   "application": {
-                                                                    "argument": {"variable": "hydra.error.OtherError"},
+                                                                    "argument": {"variable": "hydra.error.Error"},
                                                                     "function": {"variable": "hydra.context.InContext"}}},
                                                                 "right": {"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}}}}}}}}}},
                                             "domain": [{"variable": "t1"}],
@@ -3731,7 +3741,7 @@
                                 "either": {
                                   "left": {
                                     "application": {
-                                      "argument": {"variable": "hydra.error.OtherError"},
+                                      "argument": {"variable": "hydra.error.Error"},
                                       "function": {"variable": "hydra.context.InContext"}}},
                                   "right": {"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}},
                               "domain": {"variable": "t1"}}},
@@ -3970,7 +3980,7 @@
                                                                           "type": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}}}}},
                                                               "type": {
                                                                 "application": {
-                                                                  "argument": {"variable": "hydra.error.OtherError"},
+                                                                  "argument": {"variable": "hydra.error.Error"},
                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                           "type": {"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}},
                                                       "domain": [{"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}],
@@ -4017,7 +4027,7 @@
                                                                     "type": {"variable": "hydra.ext.cpp.syntax.Declaration"}}},
                                                                 "type": {
                                                                   "application": {
-                                                                    "argument": {"variable": "hydra.error.OtherError"},
+                                                                    "argument": {"variable": "hydra.error.Error"},
                                                                     "function": {"variable": "hydra.context.InContext"}}}}}}}}},
                                                     "function": {
                                                       "typeApplication": {
@@ -4028,7 +4038,7 @@
                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                 "type": {
                                                                   "application": {
-                                                                    "argument": {"variable": "hydra.error.OtherError"},
+                                                                    "argument": {"variable": "hydra.error.Error"},
                                                                     "function": {"variable": "hydra.context.InContext"}}}}},
                                                             "type": {"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}},
                                                         "type": {"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}}}}}},
@@ -4061,7 +4071,7 @@
                                 "either": {
                                   "left": {
                                     "application": {
-                                      "argument": {"variable": "hydra.error.OtherError"},
+                                      "argument": {"variable": "hydra.error.Error"},
                                       "function": {"variable": "hydra.context.InContext"}}},
                                   "right": {"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}},
                               "domain": {"variable": "t1"}}},
@@ -4161,7 +4171,7 @@
                                 "either": {
                                   "left": {
                                     "application": {
-                                      "argument": {"variable": "hydra.error.OtherError"},
+                                      "argument": {"variable": "hydra.error.Error"},
                                       "function": {"variable": "hydra.context.InContext"}}},
                                   "right": {"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}},
                               "domain": {"variable": "t1"}}},
@@ -5055,7 +5065,7 @@
                                                                                 "type": {"variable": "hydra.ext.cpp.syntax.MemberSpecification"}}}}},
                                                                         "type": {
                                                                           "application": {
-                                                                            "argument": {"variable": "hydra.error.OtherError"},
+                                                                            "argument": {"variable": "hydra.error.Error"},
                                                                             "function": {"variable": "hydra.context.InContext"}}}}},
                                                                     "type": {"list": {"variable": "hydra.ext.cpp.syntax.MemberSpecification"}}}},
                                                                 "function": {
@@ -5121,7 +5131,7 @@
                                                                                     "type": {"list": {"variable": "hydra.ext.cpp.syntax.MemberSpecification"}}}},
                                                                                 "type": {
                                                                                   "application": {
-                                                                                    "argument": {"variable": "hydra.error.OtherError"},
+                                                                                    "argument": {"variable": "hydra.error.Error"},
                                                                                     "function": {"variable": "hydra.context.InContext"}}}}}}}}},
                                                                     "function": {
                                                                       "application": {
@@ -5133,7 +5143,7 @@
                                                                               "either": {
                                                                                 "left": {
                                                                                   "application": {
-                                                                                    "argument": {"variable": "hydra.error.OtherError"},
+                                                                                    "argument": {"variable": "hydra.error.Error"},
                                                                                     "function": {"variable": "hydra.context.InContext"}}},
                                                                                 "right": {"list": {"variable": "hydra.ext.cpp.syntax.MemberSpecification"}}}}}}}}}}}},
                                                             "type": [
@@ -5143,7 +5153,7 @@
                                                                   "either": {
                                                                     "left": {
                                                                       "application": {
-                                                                        "argument": {"variable": "hydra.error.OtherError"},
+                                                                        "argument": {"variable": "hydra.error.Error"},
                                                                         "function": {"variable": "hydra.context.InContext"}}},
                                                                     "right": {"list": {"variable": "hydra.ext.cpp.syntax.MemberSpecification"}}}},
                                                                 "variables": []}]}],
@@ -5166,7 +5176,7 @@
                                                                                     "type": {"variable": "hydra.ext.cpp.syntax.Parameter"}}}}},
                                                                             "type": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.error.OtherError"},
+                                                                                "argument": {"variable": "hydra.error.Error"},
                                                                                 "function": {"variable": "hydra.context.InContext"}}}}},
                                                                         "type": {"list": {"variable": "hydra.ext.cpp.syntax.Parameter"}}}},
                                                                     "function": {
@@ -5222,7 +5232,7 @@
                                                                                         "type": {"list": {"variable": "hydra.ext.cpp.syntax.Parameter"}}}},
                                                                                     "type": {
                                                                                       "application": {
-                                                                                        "argument": {"variable": "hydra.error.OtherError"},
+                                                                                        "argument": {"variable": "hydra.error.Error"},
                                                                                         "function": {"variable": "hydra.context.InContext"}}}}}}}}},
                                                                         "function": {
                                                                           "application": {
@@ -5234,7 +5244,7 @@
                                                                                   "either": {
                                                                                     "left": {
                                                                                       "application": {
-                                                                                        "argument": {"variable": "hydra.error.OtherError"},
+                                                                                        "argument": {"variable": "hydra.error.Error"},
                                                                                         "function": {"variable": "hydra.context.InContext"}}},
                                                                                     "right": {"list": {"variable": "hydra.ext.cpp.syntax.Parameter"}}}}}}}}}}}},
                                                                 "type": [
@@ -5244,7 +5254,7 @@
                                                                       "either": {
                                                                         "left": {
                                                                           "application": {
-                                                                            "argument": {"variable": "hydra.error.OtherError"},
+                                                                            "argument": {"variable": "hydra.error.Error"},
                                                                             "function": {"variable": "hydra.context.InContext"}}},
                                                                         "right": {"list": {"variable": "hydra.ext.cpp.syntax.Parameter"}}}},
                                                                     "variables": []}]}],
@@ -5390,7 +5400,7 @@
                                                                                                             "function": {"variable": "hydra.ext.cpp.coder.cppClassDeclaration"}}}}}}}}},
                                                                                             "type": {
                                                                                               "application": {
-                                                                                                "argument": {"variable": "hydra.error.OtherError"},
+                                                                                                "argument": {"variable": "hydra.error.Error"},
                                                                                                 "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                         "type": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}}},
                                                                                 "domain": [{"list": {"variable": "hydra.ext.cpp.syntax.Parameter"}}],
@@ -5407,7 +5417,7 @@
                                                                                           "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                           "type": {
                                                                                             "application": {
-                                                                                              "argument": {"variable": "hydra.error.OtherError"},
+                                                                                              "argument": {"variable": "hydra.error.Error"},
                                                                                               "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                       "type": {"list": {"variable": "hydra.ext.cpp.syntax.Parameter"}}}},
                                                                                   "type": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}}}}},
@@ -5425,7 +5435,7 @@
                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                 "type": {
                                                                                   "application": {
-                                                                                    "argument": {"variable": "hydra.error.OtherError"},
+                                                                                    "argument": {"variable": "hydra.error.Error"},
                                                                                     "function": {"variable": "hydra.context.InContext"}}}}},
                                                                             "type": {"list": {"variable": "hydra.ext.cpp.syntax.MemberSpecification"}}}},
                                                                         "type": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}}}}}}}}}}}}}}},
@@ -5457,7 +5467,7 @@
                                 "either": {
                                   "left": {
                                     "application": {
-                                      "argument": {"variable": "hydra.error.OtherError"},
+                                      "argument": {"variable": "hydra.error.Error"},
                                       "function": {"variable": "hydra.context.InContext"}}},
                                   "right": {"variable": "hydra.ext.cpp.syntax.Declaration"}}},
                               "domain": {"variable": "hydra.core.FieldType"}}},
@@ -6773,7 +6783,7 @@
                                                                                 "function": {"variable": "hydra.ext.cpp.coder.serializeHeaderFile"}}}}}}}}},
                                                                 "type": {
                                                                   "application": {
-                                                                    "argument": {"variable": "hydra.error.OtherError"},
+                                                                    "argument": {"variable": "hydra.error.Error"},
                                                                     "function": {"variable": "hydra.context.InContext"}}}}},
                                                             "type": {
                                                               "pair": {
@@ -6808,7 +6818,7 @@
                                                               "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                               "type": {
                                                                 "application": {
-                                                                  "argument": {"variable": "hydra.error.OtherError"},
+                                                                  "argument": {"variable": "hydra.error.Error"},
                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                           "type": {"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}},
                                                       "type": {
@@ -6839,7 +6849,7 @@
                             "either": {
                               "left": {
                                 "application": {
-                                  "argument": {"variable": "hydra.error.OtherError"},
+                                  "argument": {"variable": "hydra.error.Error"},
                                   "function": {"variable": "hydra.context.InContext"}}},
                               "right": {
                                 "pair": {
@@ -6878,7 +6888,7 @@
                                                     "body": {"either": {"@right": {"variable": "classFiles"}}},
                                                     "type": {
                                                       "application": {
-                                                        "argument": {"variable": "hydra.error.OtherError"},
+                                                        "argument": {"variable": "hydra.error.Error"},
                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                 "type": {
                                                   "list": {
@@ -6934,7 +6944,7 @@
                                                               "second": {"literal": {"string": {}}}}}}},
                                                       "type": {
                                                         "application": {
-                                                          "argument": {"variable": "hydra.error.OtherError"},
+                                                          "argument": {"variable": "hydra.error.Error"},
                                                           "function": {"variable": "hydra.context.InContext"}}}}}}}}},
                                           "function": {
                                             "typeApplication": {
@@ -6945,7 +6955,7 @@
                                                       "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                       "type": {
                                                         "application": {
-                                                          "argument": {"variable": "hydra.error.OtherError"},
+                                                          "argument": {"variable": "hydra.error.Error"},
                                                           "function": {"variable": "hydra.context.InContext"}}}}},
                                                   "type": {
                                                     "list": {
@@ -6981,7 +6991,7 @@
                             "either": {
                               "left": {
                                 "application": {
-                                  "argument": {"variable": "hydra.error.OtherError"},
+                                  "argument": {"variable": "hydra.error.Error"},
                                   "function": {"variable": "hydra.context.InContext"}}},
                               "right": {
                                 "list": {
@@ -7071,7 +7081,7 @@
                                                                         "type": {"literal": {"string": {}}}}}}}}},
                                                             "type": {
                                                               "application": {
-                                                                "argument": {"variable": "hydra.error.OtherError"},
+                                                                "argument": {"variable": "hydra.error.Error"},
                                                                 "function": {"variable": "hydra.context.InContext"}}}}},
                                                         "type": {
                                                           "map": {
@@ -7111,7 +7121,7 @@
                                                               "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                               "type": {
                                                                 "application": {
-                                                                  "argument": {"variable": "hydra.error.OtherError"},
+                                                                  "argument": {"variable": "hydra.error.Error"},
                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                           "type": {
                                                             "list": {
@@ -7146,7 +7156,7 @@
                             "either": {
                               "left": {
                                 "application": {
-                                  "argument": {"variable": "hydra.error.OtherError"},
+                                  "argument": {"variable": "hydra.error.Error"},
                                   "function": {"variable": "hydra.context.InContext"}}},
                               "right": {
                                 "map": {
