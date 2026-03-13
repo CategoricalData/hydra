@@ -122,7 +122,6 @@ import qualified Hydra.Ext.Sources.Tinkerpop.Gremlin           as Gremlin
 import qualified Hydra.Ext.Sources.Tinkerpop.Language          as TinkerpopLanguage
 import qualified Hydra.Ext.Sources.TypeScript.Model            as TypeScriptModel
 import qualified Hydra.Ext.Sources.Xml.Schema                  as XmlSchema
-import qualified Hydra.Ext.Sources.Yaml.Coder                  as YamlCoder
 import qualified Hydra.Ext.Sources.Yaml.Language                as YamlLanguage
 
 import qualified Hydra.Sources.Decode.Pg.Mapping               as DecodePgMapping
@@ -340,8 +339,7 @@ typescriptModules = [
 
 yamlModules :: [Module]
 yamlModules = [
-  YamlLanguage.module_,
-  YamlCoder.module_]
+  YamlLanguage.module_]
 
 {-
   :set +m
