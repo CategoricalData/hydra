@@ -204,13 +204,6 @@ public interface Testing {
       new hydra.core.Field(new hydra.core.Name("output"), hydra.encode.core.Core.typeScheme((x).output)))));
   }
   
-  static hydra.core.Term jsonCoderTestCase(hydra.testing.JsonCoderTestCase x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.JsonCoderTestCase"), java.util.List.of(
-      new hydra.core.Field(new hydra.core.Name("type"), hydra.encode.core.Core.type((x).type)),
-      new hydra.core.Field(new hydra.core.Name("term"), hydra.encode.core.Core.term((x).term)),
-      new hydra.core.Field(new hydra.core.Name("json"), hydra.encode.json.model.Model.value((x).json)))));
-  }
-  
   static hydra.core.Term jsonDecodeTestCase(hydra.testing.JsonDecodeTestCase x) {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.testing.JsonDecodeTestCase"), java.util.List.of(
       new hydra.core.Field(new hydra.core.Name("type"), hydra.encode.core.Core.type((x).type)),
@@ -321,11 +314,6 @@ public interface Testing {
       @Override
       public hydra.core.Term visit(hydra.testing.TestCase.InferenceFailure y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TestCase"), new hydra.core.Field(new hydra.core.Name("inferenceFailure"), hydra.encode.testing.Testing.inferenceFailureTestCase((y).value))));
-      }
-      
-      @Override
-      public hydra.core.Term visit(hydra.testing.TestCase.JsonCoder y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.testing.TestCase"), new hydra.core.Field(new hydra.core.Name("jsonCoder"), hydra.encode.testing.Testing.jsonCoderTestCase((y).value))));
       }
       
       @Override

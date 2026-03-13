@@ -378,7 +378,6 @@ Miscellaneous tools include:
   * **Summaries**: creates textual summaries of a Hydra graph, e.g. for training an LLM
 * **AvroWorkflows**: transform Avro schemas and matching JSON data to one of multiple targets (RDF with SHACL, property graphs with schemas)
 * **Csv**: utilities for working with CSV data
-* **OsvToRdf**: transform [OSV](https://osv.dev) dumps to RDF
 * **PropertyGraphToRdf**: like the name
 * **Tabular**: utilities for working with tabular data
 

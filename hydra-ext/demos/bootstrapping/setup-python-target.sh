@@ -49,8 +49,8 @@ for d in lib dsl sources; do
 done
 
 # Copy ext modules from baseline.
-# Test infrastructure (e.g. test_suite_runner.py) imports hydra.ext.org.json.coder
-# and other ext modules. Copy all ext from baseline to ensure they're available.
+# Test infrastructure (e.g. test_suite_runner.py) imports ext modules.
+# Copy all ext from baseline to ensure they're available.
 echo "  Copying ext modules from baseline..."
 PY_GEN="$OUTPUT_DIR/src/gen-main/python"
 PY_BASELINE="$HYDRA_PYTHON_DIR/src/gen-main/python"

@@ -921,60 +921,11 @@ public class TestSuiteRunner {
             }
 
             @Override
-            public DynamicTest visit(TestCase.JsonCoder instance) {
-                JsonCoderTestCase tc = instance.value;
-                return withTimeout(name, () -> {
-                    Graph graph = getTestGraph();
-                    hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.compute.Coder<Term, hydra.json.model.Value>> coderResult =
-                        hydra.ext.org.json.coder.Coder.jsonCoder(tc.type, emptyContext(), graph);
-                    assertTrue(coderResult.isRight(),
-                        "Failed to create JSON coder: " + (coderResult.isLeft()
-                            ? ((hydra.util.Either.Left<hydra.context.InContext<hydra.error.OtherError>, hydra.compute.Coder<Term, hydra.json.model.Value>>) coderResult).value.object.value
-                            : ""));
-                    var coder = ((hydra.util.Either.Right<hydra.context.InContext<hydra.error.OtherError>, hydra.compute.Coder<Term, hydra.json.model.Value>>) coderResult).value;
-                    hydra.context.Context cx = emptyContext();
-
-                    // Encode and check
-                    var encodeResult = coder.encode.apply(cx).apply(tc.term);
-                    assertEitherRight(encodeResult, "JSON encode failed");
-                    hydra.json.model.Value encoded = eitherRight(encodeResult);
-                    if (!tc.json.equals(encoded)) {
-                        String expectedStr = hydra.json.writer.Writer.printJson(tc.json);
-                        String actualStr = hydra.json.writer.Writer.printJson(encoded);
-                        assertEquals(expectedStr, actualStr, "JSON encode mismatch (pretty-printed)");
-                        fail("JSON encode: pretty print matches but equals() fails"
-                            + "\nExpected class: " + tc.json.getClass().getSimpleName()
-                            + "\nActual class: " + encoded.getClass().getSimpleName());
-                    }
-
-                    // Roundtrip: encode then decode
-                    var decodeResult = coder.decode.apply(cx).apply(encoded);
-                    assertEitherRight(decodeResult, "JSON decode failed");
-                    Term decoded = eitherRight(decodeResult);
-                    if (!termsEqual(tc.term, decoded)) {
-                        assertEquals(
-                            hydra.show.core.Core.term(tc.term),
-                            hydra.show.core.Core.term(decoded),
-                            "JSON roundtrip term mismatch");
-                    }
-                });
-            }
-
-            @Override
             public DynamicTest visit(TestCase.JsonDecode instance) {
                 JsonDecodeTestCase tc = instance.value;
                 return withTimeout(name, () -> {
-                    Graph graph = getTestGraph();
-                    hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.compute.Coder<Term, hydra.json.model.Value>> coderResult =
-                        hydra.ext.org.json.coder.Coder.jsonCoder(tc.type, emptyContext(), graph);
-                    assertTrue(coderResult.isRight(),
-                        "Failed to create JSON coder: " + (coderResult.isLeft()
-                            ? ((hydra.util.Either.Left<hydra.context.InContext<hydra.error.OtherError>, hydra.compute.Coder<Term, hydra.json.model.Value>>) coderResult).value.object.value
-                            : ""));
-                    var coder = ((hydra.util.Either.Right<hydra.context.InContext<hydra.error.OtherError>, hydra.compute.Coder<Term, hydra.json.model.Value>>) coderResult).value;
-                    hydra.context.Context cx = emptyContext();
-
-                    var decodeResult = coder.decode.apply(cx).apply(tc.json);
+                    java.util.Map<hydra.core.Name, hydra.core.Type> emptyTypes = new java.util.HashMap<>();
+                    var decodeResult = hydra.json.decode.Decode.fromJson(emptyTypes, tc.type, tc.json);
 
                     tc.expected.accept(new hydra.util.Either.Visitor<>() {
                         @Override
@@ -997,31 +948,41 @@ public class TestSuiteRunner {
 
             @Override
             public DynamicTest visit(TestCase.JsonEncode instance) {
-                // Encode tests require type info we don't have in the test case
-                return withTimeout(name, () -> {});
+                JsonEncodeTestCase tc = instance.value;
+                return withTimeout(name, () -> {
+                    var encodeResult = hydra.json.encode.Encode.toJson(tc.term);
+
+                    tc.expected.accept(new hydra.util.Either.Visitor<>() {
+                        @Override
+                        public Object visit(hydra.util.Either.Left<String, hydra.json.model.Value> left) {
+                            // Expected failure
+                            assertTrue(encodeResult instanceof hydra.util.Either.Left,
+                                "Expected encode failure but succeeded");
+                            return null;
+                        }
+                        @Override
+                        public Object visit(hydra.util.Either.Right<String, hydra.json.model.Value> right) {
+                            // Expected success
+                            assertEitherRight(encodeResult, "JSON encode failed");
+                            assertEquals(right.value, eitherRight(encodeResult));
+                            return null;
+                        }
+                    });
+                });
             }
 
             @Override
             public DynamicTest visit(TestCase.JsonRoundtrip instance) {
                 JsonRoundtripTestCase tc = instance.value;
                 return withTimeout(name, () -> {
-                    Graph graph = getTestGraph();
-                    hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.compute.Coder<Term, hydra.json.model.Value>> coderResult =
-                        hydra.ext.org.json.coder.Coder.jsonCoder(tc.type, emptyContext(), graph);
-                    assertTrue(coderResult.isRight(),
-                        "Failed to create JSON coder: " + (coderResult.isLeft()
-                            ? ((hydra.util.Either.Left<hydra.context.InContext<hydra.error.OtherError>, hydra.compute.Coder<Term, hydra.json.model.Value>>) coderResult).value.object.value
-                            : ""));
-                    var coder = ((hydra.util.Either.Right<hydra.context.InContext<hydra.error.OtherError>, hydra.compute.Coder<Term, hydra.json.model.Value>>) coderResult).value;
-                    hydra.context.Context cx = emptyContext();
-
                     // Encode
-                    var encodeResult = coder.encode.apply(cx).apply(tc.term);
+                    var encodeResult = hydra.json.encode.Encode.toJson(tc.term);
                     assertEitherRight(encodeResult, "JSON encode failed");
                     hydra.json.model.Value encoded = eitherRight(encodeResult);
 
                     // Decode back
-                    var decodeResult = coder.decode.apply(cx).apply(encoded);
+                    java.util.Map<hydra.core.Name, hydra.core.Type> emptyTypes = new java.util.HashMap<>();
+                    var decodeResult = hydra.json.decode.Decode.fromJson(emptyTypes, tc.type, encoded);
                     assertEitherRight(decodeResult, "JSON decode failed");
                     Term decoded = eitherRight(decodeResult);
                     if (!termsEqual(tc.term, decoded)) {

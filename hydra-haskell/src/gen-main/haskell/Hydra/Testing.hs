@@ -402,25 +402,6 @@ _InferenceTestCase_input = (Core.Name "input")
 
 _InferenceTestCase_output = (Core.Name "output")
 
--- | A test case which encodes a Hydra term to JSON using a type-directed coder, and verifies that decoding produces the original term (round-trip)
-data JsonCoderTestCase = 
-  JsonCoderTestCase {
-    -- | The Hydra type that determines how the term is encoded/decoded
-    jsonCoderTestCaseType :: Core.Type,
-    -- | The Hydra term to encode
-    jsonCoderTestCaseTerm :: Core.Term,
-    -- | The expected JSON value
-    jsonCoderTestCaseJson :: Model.Value}
-  deriving (Eq, Ord, Read, Show)
-
-_JsonCoderTestCase = (Core.Name "hydra.testing.JsonCoderTestCase")
-
-_JsonCoderTestCase_type = (Core.Name "type")
-
-_JsonCoderTestCase_term = (Core.Name "term")
-
-_JsonCoderTestCase_json = (Core.Name "json")
-
 -- | A test case for the Either-based JSON decoder. Takes a type, input JSON, and expected result (Either String Term).
 data JsonDecodeTestCase = 
   JsonDecodeTestCase {
@@ -592,8 +573,6 @@ data TestCase =
   TestCaseInference InferenceTestCase |
   -- | A type inference failure test
   TestCaseInferenceFailure InferenceFailureTestCase |
-  -- | A JSON coder (round-trip) test
-  TestCaseJsonCoder JsonCoderTestCase |
   -- | A JSON decode test using Either-based decoder
   TestCaseJsonDecode JsonDecodeTestCase |
   -- | A JSON encode test using Either-based encoder
@@ -673,8 +652,6 @@ _TestCase_evaluation = (Core.Name "evaluation")
 _TestCase_inference = (Core.Name "inference")
 
 _TestCase_inferenceFailure = (Core.Name "inferenceFailure")
-
-_TestCase_jsonCoder = (Core.Name "jsonCoder")
 
 _TestCase_jsonDecode = (Core.Name "jsonDecode")
 

@@ -295,16 +295,6 @@ inferenceTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError er
       Testing.inferenceTestCaseOutput = field_output}))))
   _ -> (Left (Error.DecodingError "expected record of type hydra.testing.InferenceTestCase"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
-jsonCoderTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.JsonCoderTestCase)
-jsonCoderTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v0 ->  
-    let fieldMap = (Helpers.toFieldMap v0)
-    in (Eithers.bind (Helpers.requireField "type" Core_.type_ fieldMap cx) (\field_type -> Eithers.bind (Helpers.requireField "term" Core_.term fieldMap cx) (\field_term -> Eithers.bind (Helpers.requireField "json" Model.value fieldMap cx) (\field_json -> Right (Testing.JsonCoderTestCase {
-      Testing.jsonCoderTestCaseType = field_type,
-      Testing.jsonCoderTestCaseTerm = field_term,
-      Testing.jsonCoderTestCaseJson = field_json})))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.testing.JsonCoderTestCase"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
-
 jsonDecodeTestCase :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Testing.JsonDecodeTestCase)
 jsonDecodeTestCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v0 ->  
@@ -397,7 +387,6 @@ testCase cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\str
                 (Core.Name "evaluation", (\input -> Eithers.map (\t -> Testing.TestCaseEvaluation t) (evaluationTestCase cx input))),
                 (Core.Name "inference", (\input -> Eithers.map (\t -> Testing.TestCaseInference t) (inferenceTestCase cx input))),
                 (Core.Name "inferenceFailure", (\input -> Eithers.map (\t -> Testing.TestCaseInferenceFailure t) (inferenceFailureTestCase cx input))),
-                (Core.Name "jsonCoder", (\input -> Eithers.map (\t -> Testing.TestCaseJsonCoder t) (jsonCoderTestCase cx input))),
                 (Core.Name "jsonDecode", (\input -> Eithers.map (\t -> Testing.TestCaseJsonDecode t) (jsonDecodeTestCase cx input))),
                 (Core.Name "jsonEncode", (\input -> Eithers.map (\t -> Testing.TestCaseJsonEncode t) (jsonEncodeTestCase cx input))),
                 (Core.Name "jsonParser", (\input -> Eithers.map (\t -> Testing.TestCaseJsonParser t) (jsonParserTestCase cx input))),

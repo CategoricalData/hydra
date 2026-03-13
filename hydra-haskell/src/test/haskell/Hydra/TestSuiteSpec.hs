@@ -16,7 +16,8 @@ import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Dsl.Meta.Testing as Testing
 import qualified Hydra.Json.Writer as JsonWriter
 import qualified Hydra.Json.Parser as JsonParser
-import qualified Hydra.Ext.Org.Json.Coder as JsonCoder
+import qualified Hydra.Json.Decode as JsonDecode
+import qualified Hydra.Json.Encode as JsonEncode
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Sorting as Sorting
 import qualified Hydra.Serialization as Serialization
@@ -68,8 +69,6 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase
     TestCaseInference (InferenceTestCase input output) -> expectInferenceResult desc input output
     TestCaseInferenceFailure (InferenceFailureTestCase input) ->
       H.it "inference failure" $ expectInferenceFailure desc input
-    TestCaseJsonCoder (JsonCoderTestCase typ term expectedJson) ->
-      H.it "JSON coder" $ checkJsonCoder typ term expectedJson
     TestCaseJsonParser (ParserTestCase input expectedResult) ->
       H.it "JSON parser" $ H.shouldBe
         (JsonParser.parseJson input)
@@ -243,51 +242,37 @@ spec = do
         -- A dummy test to ensure afterAll_ fires
         H.it "benchmark finalize" $ True `H.shouldBe` True
 
--- | Check that the JSON coder correctly encodes a term to the expected JSON value
--- and that decoding and re-encoding produces the same term (round-trip)
-checkJsonCoder :: Type -> Term -> Json.Value -> H.Expectation
-checkJsonCoder typ term expectedJson = case JsonCoder.jsonCoder typ emptyContext testGraph of
-    Left ic -> HL.assertFailure (unOtherError $ inContextObject ic)
-    Right step -> do
-      shouldSucceedWith (mapInContextError $ coderEncode step testContext term) expectedJson
-      shouldSucceedWith (mapInContextError $ coderEncode step testContext term >>= coderDecode step testContext) term
-
 -- | Check that JSON decoding produces the expected result (Either String Term)
 checkJsonDecode :: Type -> Json.Value -> Either String Term -> H.Expectation
-checkJsonDecode typ json expected = case JsonCoder.jsonCoder typ emptyContext testGraph of
-    Left ic -> HL.assertFailure (unOtherError $ inContextObject ic)
-    Right step -> case expected of
-      Left errMsg -> case coderDecode step testContext json of
-        Left _ -> return ()  -- Expected failure, got failure
-        Right result -> HL.assertFailure $
-          "Expected decode failure with message containing '" ++ errMsg ++
-          "' but got success: " ++ show result
-      Right expectedTerm -> shouldSucceedWith (mapInContextError $ coderDecode step testContext json) expectedTerm
+checkJsonDecode typ json expected = case JsonDecode.fromJson M.empty typ json of
+    Left errMsg -> case expected of
+      Left _ -> return ()  -- Expected failure, got failure
+      Right _ -> HL.assertFailure ("JSON decode failed: " ++ errMsg)
+    Right result -> case expected of
+      Left errMsg -> HL.assertFailure $
+        "Expected decode failure with message containing '" ++ errMsg ++
+        "' but got success: " ++ show result
+      Right expectedTerm -> H.shouldBe result expectedTerm
 
 -- | Check that JSON encoding produces the expected result (Either String Value)
 checkJsonEncode :: Term -> Either String Json.Value -> H.Expectation
-checkJsonEncode term expected = case expected of
-    Left _ ->
-      -- For encode failures, we'd need a type to create a coder
-      -- Since the test case doesn't include a type, skip encoding-only failure tests for now
-      H.pendingWith "Encode failure tests require type information"
-    Right expectedJson ->
-      -- Without a type, we can't create a coder. This test case design may need revision.
-      H.pendingWith "Encode tests require type information to create coder"
+checkJsonEncode term expected = case JsonEncode.toJson term of
+    Left errMsg -> case expected of
+      Left _ -> return ()  -- Expected failure, got failure
+      Right _ -> HL.assertFailure ("JSON encode failed: " ++ errMsg)
+    Right result -> case expected of
+      Left errMsg -> HL.assertFailure $
+        "Expected encode failure with message containing '" ++ errMsg ++
+        "' but got success: " ++ show result
+      Right expectedJson -> H.shouldBe result expectedJson
 
 -- | Check that a term can be encoded to JSON and decoded back to the same term
 checkJsonRoundtrip :: Type -> Term -> H.Expectation
-checkJsonRoundtrip typ term = case JsonCoder.jsonCoder typ emptyContext testGraph of
-    Left ic -> HL.assertFailure (unOtherError $ inContextObject ic)
-    Right step -> do
-      -- Encode the term
-      case coderEncode step testContext term of
-        Left ic -> HL.assertFailure ("Failed to encode term to JSON: " ++ unOtherError (inContextObject ic))
-        Right json -> do
-          -- Decode it back
-          case coderDecode step testContext json of
-            Left ic -> HL.assertFailure ("Failed to decode JSON back to term: " ++ unOtherError (inContextObject ic))
-            Right decoded -> H.shouldBe decoded term
+checkJsonRoundtrip typ term = case JsonEncode.toJson term of
+    Left errMsg -> HL.assertFailure ("Failed to encode term to JSON: " ++ errMsg)
+    Right json -> case JsonDecode.fromJson M.empty typ json of
+      Left errMsg -> HL.assertFailure ("Failed to decode JSON back to term: " ++ errMsg)
+      Right decoded -> H.shouldBe decoded term
 
 -- | Run a fold operation over a term
 runFoldOperation :: Coders.TraversalOrder -> FoldOperation -> Term -> Term
