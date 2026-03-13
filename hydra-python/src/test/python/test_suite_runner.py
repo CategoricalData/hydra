@@ -150,7 +150,7 @@ def _load_bootstrap_type_schemes() -> FrozenDict:
     from hydra.rewriting import f_type_to_type_scheme
 
     result = {}
-    for name, typ in types_by_name.items():
+    for name, typ in types_by_name().items():
         result[name] = f_type_to_type_scheme(typ)
     return FrozenDict(result)
 
@@ -448,7 +448,7 @@ def run_inference_test(desc: str, test_case: hydra.testing.InferenceTestCase) ->
     graph = get_test_graph()
     cx = _empty_context()
 
-    # Infer the type — returns Either[InContext[OtherError], ((Term, TypeScheme), Context)]
+    # Infer the type — returns Either[InContext[Error], ((Term, TypeScheme), Context)]
     result = hydra.inference.infer_type_of(cx, graph, input_term)
 
     match result:

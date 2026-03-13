@@ -337,22 +337,22 @@ def literal_adapter(cx: hydra.coders.AdapterContext, lt: hydra.core.LiteralType)
             return hydra.lib.eithers.bind(integer_adapter(cx, hydra.core.IntegerType.UINT8), (lambda adapter: with_adapter(adapter)))
         @lru_cache(1)
         def with_strings() -> frozenlist[hydra.compute.Adapter[T0, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]:
-            def encode(cx2: hydra.context.Context, lit: hydra.core.Literal) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Literal]:
+            def encode(cx2: hydra.context.Context, lit: hydra.core.Literal) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Literal]:
                 return hydra.lib.eithers.bind(hydra.extract.core.boolean_literal(cx2, lit), (lambda b: Right(cast(hydra.core.Literal, hydra.core.LiteralString(hydra.lib.logic.if_else(b, (lambda : "true"), (lambda : "false")))))))
-            def decode(cx2: hydra.context.Context, lit: hydra.core.Literal) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Literal]:
-                return hydra.lib.eithers.bind(hydra.extract.core.string_literal(cx2, lit), (lambda s: hydra.lib.logic.if_else(hydra.lib.equality.equal(s, "true"), (lambda : Right(cast(hydra.core.Literal, hydra.core.LiteralBoolean(True)))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(s, "false"), (lambda : Right(cast(hydra.core.Literal, hydra.core.LiteralBoolean(False)))), (lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("expected boolean literal, found ", s)), cx2))))))))
+            def decode(cx2: hydra.context.Context, lit: hydra.core.Literal) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Literal]:
+                return hydra.lib.eithers.bind(hydra.extract.core.string_literal(cx2, lit), (lambda s: hydra.lib.logic.if_else(hydra.lib.equality.equal(s, "true"), (lambda : Right(cast(hydra.core.Literal, hydra.core.LiteralBoolean(True)))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(s, "false"), (lambda : Right(cast(hydra.core.Literal, hydra.core.LiteralBoolean(False)))), (lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2("expected boolean literal, found ", s)))), cx2))))))))
             return (hydra.compute.Adapter(False, t, cast(hydra.core.LiteralType, hydra.core.LiteralTypeString()), hydra.compute.Coder((lambda x1, x2: encode(x1, x2)), (lambda x1, x2: decode(x1, x2)))),)
         return hydra.lib.logic.if_else(has_integers(), (lambda : with_integers()), (lambda : hydra.lib.logic.if_else(has_strings(), (lambda : Right(with_strings())), (lambda : Left("no alternatives available for boolean encoding")))))
     def for_float(t: T0, ft: hydra.core.FloatType) -> Either[str, frozenlist[hydra.compute.Adapter[T0, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]]:
         @lru_cache(1)
         def with_floats() -> Either[str, frozenlist[hydra.compute.Adapter[T0, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]]:
-            def adapt(adapter: hydra.compute.Adapter[T1, T2, hydra.core.FloatValue, hydra.core.FloatValue], dir: hydra.coders.CoderDirection, cx2: hydra.context.Context, l: hydra.core.Literal) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Literal]:
+            def adapt(adapter: hydra.compute.Adapter[T1, T2, hydra.core.FloatValue, hydra.core.FloatValue], dir: hydra.coders.CoderDirection, cx2: hydra.context.Context, l: hydra.core.Literal) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Literal]:
                 match l:
                     case hydra.core.LiteralFloat(value=fv):
                         return hydra.lib.eithers.map((lambda x: cast(hydra.core.Literal, hydra.core.LiteralFloat(x))), hydra.adapt.utils.encode_decode(dir, adapter.coder, cx2, fv))
                     
                     case _:
-                        return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("expected floating-point literal, found ", hydra.show.core.literal(l))), cx2))
+                        return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2("expected floating-point literal, found ", hydra.show.core.literal(l))))), cx2))
             return hydra.lib.eithers.bind(float_adapter(cx, ft), (lambda adapter: (step := hydra.adapt.utils.bidirectional((lambda v1, v2, v3: adapt(adapter, v1, v2, v3))), Right((hydra.compute.Adapter(adapter.is_lossy, t, cast(hydra.core.LiteralType, hydra.core.LiteralTypeFloat(adapter.target)), step),)))[1]))
         constraints = cx.language.constraints
         @lru_cache(1)
@@ -362,13 +362,13 @@ def literal_adapter(cx: hydra.coders.AdapterContext, lt: hydra.core.LiteralType)
     def for_integer(t: T0, it: hydra.core.IntegerType) -> Either[str, frozenlist[hydra.compute.Adapter[T0, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]]:
         @lru_cache(1)
         def with_integers() -> Either[str, frozenlist[hydra.compute.Adapter[T0, hydra.core.LiteralType, hydra.core.Literal, hydra.core.Literal]]]:
-            def adapt(adapter: hydra.compute.Adapter[T1, T2, hydra.core.IntegerValue, hydra.core.IntegerValue], dir: hydra.coders.CoderDirection, cx2: hydra.context.Context, lit: hydra.core.Literal) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Literal]:
+            def adapt(adapter: hydra.compute.Adapter[T1, T2, hydra.core.IntegerValue, hydra.core.IntegerValue], dir: hydra.coders.CoderDirection, cx2: hydra.context.Context, lit: hydra.core.Literal) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Literal]:
                 match lit:
                     case hydra.core.LiteralInteger(value=iv):
                         return hydra.lib.eithers.map((lambda x: cast(hydra.core.Literal, hydra.core.LiteralInteger(x))), hydra.adapt.utils.encode_decode(dir, adapter.coder, cx2, iv))
                     
                     case _:
-                        return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("expected integer literal, found ", hydra.show.core.literal(lit))), cx2))
+                        return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2("expected integer literal, found ", hydra.show.core.literal(lit))))), cx2))
             return hydra.lib.eithers.bind(integer_adapter(cx, it), (lambda adapter: (step := hydra.adapt.utils.bidirectional((lambda v1, v2, v3: adapt(adapter, v1, v2, v3))), Right((hydra.compute.Adapter(adapter.is_lossy, t, cast(hydra.core.LiteralType, hydra.core.LiteralTypeInteger(adapter.target)), step),)))[1]))
         constraints = cx.language.constraints
         @lru_cache(1)

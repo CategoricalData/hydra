@@ -34,7 +34,7 @@ import hydra.util
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
 
-def type_of_term(cx: hydra.context.Context, g: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Type]:
+def type_of_term(cx: hydra.context.Context, g: hydra.graph.Graph, term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Type]:
     r"""Check the type of a term."""
     
     return hydra.lib.eithers.map((lambda x1: hydra.lib.pairs.first(x1)), hydra.checking.type_of(cx, g, (), term))
@@ -122,12 +122,12 @@ def analyze_function_term(cx: hydra.context.Context, get_t_c: Callable[[T0], hyd
     
     return analyze_function_term_with(cx, (lambda x1, x2: binding_metadata(x1, x2)), get_t_c, set_t_c, env, term)
 
-def comments_from_element(cx: hydra.context.Context, g: hydra.graph.Graph, b: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.error.OtherError], Maybe[str]]:
+def comments_from_element(cx: hydra.context.Context, g: hydra.graph.Graph, b: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.error.Error], Maybe[str]]:
     r"""Extract comments/description from a Binding."""
     
     return hydra.annotations.get_term_description(cx, g, b.term)
 
-def comments_from_field_type(cx: hydra.context.Context, g: hydra.graph.Graph, ft: hydra.core.FieldType) -> Either[hydra.context.InContext[hydra.error.OtherError], Maybe[str]]:
+def comments_from_field_type(cx: hydra.context.Context, g: hydra.graph.Graph, ft: hydra.core.FieldType) -> Either[hydra.context.InContext[hydra.error.Error], Maybe[str]]:
     r"""Extract comments/description from a FieldType."""
     
     return hydra.annotations.get_type_description(cx, g, ft.type)

@@ -50,7 +50,7 @@ T2 = TypeVar("T2")
 def encode_type(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], typ: hydra.core.Type, cx: hydra.context.Context, g: T0):
     r"""Encode a Hydra type as a Haskell type."""
     
-    def encode(t: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.ext.haskell.ast.Type]:
+    def encode(t: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.haskell.ast.Type]:
         return encode_type(namespaces, t, cx, g)
     def ref(name: hydra.core.Name) -> Either[T1, hydra.ext.haskell.ast.Type]:
         return Right(cast(hydra.ext.haskell.ast.Type, hydra.ext.haskell.ast.TypeVariable(hydra.ext.haskell.utils.element_reference(namespaces, name))))
@@ -88,7 +88,7 @@ def encode_type(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.Module
                 return Right(cast(hydra.ext.haskell.ast.Type, hydra.ext.haskell.ast.TypeVariable(hydra.ext.haskell.utils.raw_name("I.Int64"))))
             
             case _:
-                return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("unexpected integer type: ", hydra.show.core.integer_type(it))), cx))
+                return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2("unexpected integer type: ", hydra.show.core.integer_type(it))))), cx))
     def _hoist_body_3(lt, v1):
         match v1:
             case hydra.core.LiteralTypeBinary():
@@ -107,7 +107,7 @@ def encode_type(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.Module
                 return Right(cast(hydra.ext.haskell.ast.Type, hydra.ext.haskell.ast.TypeVariable(hydra.ext.haskell.utils.raw_name("String"))))
             
             case _:
-                return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("unexpected literal type: ", hydra.show.core.literal_type(lt))), cx))
+                return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2("unexpected literal type: ", hydra.show.core.literal_type(lt))))), cx))
     match hydra.rewriting.deannotate_type(typ):
         case hydra.core.TypeApplication(value=app):
             lhs = app.function
@@ -167,19 +167,19 @@ def encode_type(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.Module
             return ref(name)
         
         case _:
-            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("unexpected type: ", hydra.show.core.type(typ))), cx))
+            return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2("unexpected type: ", hydra.show.core.type(typ))))), cx))
 
-def adapt_type_to_haskell_and_encode(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], typ: hydra.core.Type, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.ext.haskell.ast.Type]:
+def adapt_type_to_haskell_and_encode(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], typ: hydra.core.Type, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.haskell.ast.Type]:
     r"""Adapt a Hydra type to Haskell's type system and encode it."""
     
-    def enc(t: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.ext.haskell.ast.Type]:
+    def enc(t: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.haskell.ast.Type]:
         return encode_type(namespaces, t, cx, g)
     match hydra.rewriting.deannotate_type(typ):
         case hydra.core.TypeVariable():
             return enc(typ)
         
         case _:
-            return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda _s: hydra.context.InContext(hydra.error.OtherError(_s), cx)), (lambda _x: _x), hydra.adapt.modules.adapt_type_to_language(hydra.ext.haskell.language.haskell_language(), cx, g, typ)), (lambda adapted_type: enc(adapted_type)))
+            return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda _s: hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(_s))), cx)), (lambda _x: _x), hydra.adapt.modules.adapt_type_to_language(hydra.ext.haskell.language.haskell_language(), cx, g, typ)), (lambda adapted_type: enc(adapted_type)))
 
 def constant_for_field_name(tname: hydra.core.Name, fname: hydra.core.Name) -> str:
     r"""Generate a constant name for a field (e.g., '_TypeName_fieldName')."""
@@ -253,7 +253,7 @@ def encode_literal(l: hydra.core.Literal, cx: hydra.context.Context):
             return Right(hydra.ext.haskell.utils.hslit(cast(hydra.ext.haskell.ast.Literal, hydra.ext.haskell.ast.LiteralString(s))))
         
         case _:
-            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("literal value ", hydra.show.core.literal(l))), cx))
+            return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2("literal value ", hydra.show.core.literal(l))))), cx))
 
 def encode_function(depth: int, namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], fun: hydra.core.Function, cx: hydra.context.Context, g: hydra.graph.Graph):
     def _hoist_hydra_ext_haskell_coder_encode_function_1(cx, depth, g, namespaces, v1):
@@ -271,7 +271,7 @@ def encode_function(depth: int, namespaces: hydra.module.Namespaces[hydra.ext.ha
                 def_ = stmt.default
                 fields = stmt.cases
                 @lru_cache(1)
-                def case_expr() -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.ext.haskell.ast.Expression]:
+                def case_expr() -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.haskell.ast.Expression]:
                     return hydra.lib.eithers.bind(hydra.schemas.require_union_type(cx, g, dn), (lambda rt: (to_field_map_entry := (lambda f: (f.name, f)), field_map := hydra.lib.maps.from_list(hydra.lib.lists.map((lambda x1: to_field_map_entry(x1)), rt.fields)), hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v12: to_alt(field_map, v12)), fields), (lambda ecases: hydra.lib.eithers.bind(hydra.lib.maybes.cases(def_, (lambda : Right(())), (lambda d: hydra.lib.eithers.bind(hydra.lib.eithers.map((lambda x: hydra.ext.haskell.ast.CaseRhs(x)), encode_term(depth, namespaces, d, cx, g)), (lambda cs: (lhs := cast(hydra.ext.haskell.ast.Pattern, hydra.ext.haskell.ast.PatternName(hydra.ext.haskell.utils.raw_name(hydra.constants.ignored_variable))), alt := hydra.ext.haskell.ast.Alternative(lhs, cs, Nothing()), Right((alt,)))[2])))), (lambda dcases: Right(cast(hydra.ext.haskell.ast.Expression, hydra.ext.haskell.ast.ExpressionCase(hydra.ext.haskell.ast.CaseExpression(hydra.ext.haskell.utils.hsvar("x"), hydra.lib.lists.concat2(ecases, dcases))))))))))[2]))
                 def to_alt(field_map: FrozenDict[hydra.core.Name, hydra.core.FieldType], field: hydra.core.Field):
                     fn = field.name
@@ -291,7 +291,7 @@ def encode_function(depth: int, namespaces: hydra.module.Namespaces[hydra.ext.ha
                     @lru_cache(1)
                     def hname() -> hydra.ext.haskell.ast.Name:
                         return hydra.ext.haskell.utils.union_field_reference(hydra.lib.sets.from_list(hydra.lib.maps.keys(g.bound_terms)), namespaces, dn, fn)
-                    return hydra.lib.eithers.bind(hydra.lib.maybes.cases(hydra.lib.maps.lookup(fn, field_map), (lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat(("field ", hydra.lib.literals.show_string(fn.value), " not found in ", hydra.lib.literals.show_string(dn.value)))), cx))), (lambda field_type: (ft := field_type.type, no_args := (), single_arg := (cast(hydra.ext.haskell.ast.Pattern, hydra.ext.haskell.ast.PatternName(hydra.ext.haskell.utils.raw_name(v1()))),), _hoist_body_1 := (lambda v12: (lambda _: Right(no_args))(v12) if isinstance(v12, hydra.core.TypeUnit) else Right(single_arg)), _hoist_body_1(hydra.rewriting.deannotate_type(ft)))[4])), (lambda args: (lhs := hydra.ext.haskell.utils.application_pattern(hname(), args), hydra.lib.eithers.bind(hydra.lib.eithers.map((lambda x: hydra.ext.haskell.ast.CaseRhs(x)), encode_term(hydra.lib.math.add(depth, 1), namespaces, rhs_term(), cx, g)), (lambda rhs: Right(hydra.ext.haskell.ast.Alternative(lhs, rhs, Nothing())))))[1]))
+                    return hydra.lib.eithers.bind(hydra.lib.maybes.cases(hydra.lib.maps.lookup(fn, field_map), (lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat(("field ", hydra.lib.literals.show_string(fn.value), " not found in ", hydra.lib.literals.show_string(dn.value)))))), cx))), (lambda field_type: (ft := field_type.type, no_args := (), single_arg := (cast(hydra.ext.haskell.ast.Pattern, hydra.ext.haskell.ast.PatternName(hydra.ext.haskell.utils.raw_name(v1()))),), _hoist_body_1 := (lambda v12: (lambda _: Right(no_args))(v12) if isinstance(v12, hydra.core.TypeUnit) else Right(single_arg)), _hoist_body_1(hydra.rewriting.deannotate_type(ft)))[4])), (lambda args: (lhs := hydra.ext.haskell.utils.application_pattern(hname(), args), hydra.lib.eithers.bind(hydra.lib.eithers.map((lambda x: hydra.ext.haskell.ast.CaseRhs(x)), encode_term(hydra.lib.math.add(depth, 1), namespaces, rhs_term(), cx, g)), (lambda rhs: Right(hydra.ext.haskell.ast.Alternative(lhs, rhs, Nothing())))))[1]))
                 return hydra.lib.eithers.map((lambda v12: hydra.ext.haskell.utils.hslambda(hydra.ext.haskell.utils.raw_name("x"), v12)), case_expr())
             
             case _:
@@ -314,13 +314,13 @@ def encode_function(depth: int, namespaces: hydra.module.Namespaces[hydra.ext.ha
 def encode_term(depth: int, namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], term: hydra.core.Term, cx: hydra.context.Context, g: hydra.graph.Graph):
     r"""Encode a Hydra term as a Haskell expression."""
     
-    def encode(t: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.ext.haskell.ast.Expression]:
+    def encode(t: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.haskell.ast.Expression]:
         return encode_term(depth, namespaces, t, cx, g)
-    def nonempty_map(m: FrozenDict[hydra.core.Term, hydra.core.Term]) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.ext.haskell.ast.Expression]:
+    def nonempty_map(m: FrozenDict[hydra.core.Term, hydra.core.Term]) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.haskell.ast.Expression]:
         @lru_cache(1)
         def lhs() -> hydra.ext.haskell.ast.Expression:
             return hydra.ext.haskell.utils.hsvar("M.fromList")
-        def encode_pair(pair: tuple[hydra.core.Term, hydra.core.Term]) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.ext.haskell.ast.Expression]:
+        def encode_pair(pair: tuple[hydra.core.Term, hydra.core.Term]) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.haskell.ast.Expression]:
             @lru_cache(1)
             def k() -> hydra.core.Term:
                 return hydra.lib.pairs.first(pair)
@@ -329,7 +329,7 @@ def encode_term(depth: int, namespaces: hydra.module.Namespaces[hydra.ext.haskel
                 return hydra.lib.pairs.second(pair)
             return hydra.lib.eithers.bind(encode(k()), (lambda hk: hydra.lib.eithers.bind(encode(v()), (lambda hv: Right(cast(hydra.ext.haskell.ast.Expression, hydra.ext.haskell.ast.ExpressionTuple((hk, hv))))))))
         return hydra.lib.eithers.bind(hydra.lib.eithers.map((lambda x: cast(hydra.ext.haskell.ast.Expression, hydra.ext.haskell.ast.ExpressionList(x))), hydra.lib.eithers.map_list((lambda x1: encode_pair(x1)), hydra.lib.maps.to_list(m))), (lambda rhs: Right(hydra.ext.haskell.utils.hsapp(lhs(), rhs))))
-    def nonempty_set(s: frozenset[hydra.core.Term]) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.ext.haskell.ast.Expression]:
+    def nonempty_set(s: frozenset[hydra.core.Term]) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.haskell.ast.Expression]:
         @lru_cache(1)
         def lhs() -> hydra.ext.haskell.ast.Expression:
             return hydra.ext.haskell.utils.hsvar("S.fromList")
@@ -349,7 +349,7 @@ def encode_term(depth: int, namespaces: hydra.module.Namespaces[hydra.ext.haskel
         case hydra.core.TermLet(value=let_term):
             bindings = let_term.bindings
             env = let_term.body
-            def encode_binding(binding: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.ext.haskell.ast.LocalBinding]:
+            def encode_binding(binding: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.haskell.ast.LocalBinding]:
                 name = binding.name
                 term_ = binding.term
                 @lru_cache(1)
@@ -376,7 +376,7 @@ def encode_term(depth: int, namespaces: hydra.module.Namespaces[hydra.ext.haskel
         case hydra.core.TermRecord(value=record):
             sname = record.type_name
             fields = record.fields
-            def to_field_update(field: hydra.core.Field) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.ext.haskell.ast.FieldUpdate]:
+            def to_field_update(field: hydra.core.Field) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.haskell.ast.FieldUpdate]:
                 fn = field.name
                 ft = field.term
                 @lru_cache(1)
@@ -408,7 +408,7 @@ def encode_term(depth: int, namespaces: hydra.module.Namespaces[hydra.ext.haskel
             def lhs() -> hydra.ext.haskell.ast.Expression:
                 return cast(hydra.ext.haskell.ast.Expression, hydra.ext.haskell.ast.ExpressionVariable(hydra.ext.haskell.utils.union_field_reference(hydra.lib.sets.from_list(hydra.lib.maps.keys(g.bound_terms)), namespaces, sname, fn)))
             @lru_cache(1)
-            def dflt() -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.ext.haskell.ast.Expression]:
+            def dflt() -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.haskell.ast.Expression]:
                 return hydra.lib.eithers.map((lambda v1: hydra.ext.haskell.utils.hsapp(lhs(), v1)), encode(ft))
             def _hoist_body_1(v1):
                 match v1:
@@ -434,7 +434,7 @@ def encode_term(depth: int, namespaces: hydra.module.Namespaces[hydra.ext.haskel
             return hydra.lib.eithers.bind(encode(term_), (lambda rhs: Right(hydra.ext.haskell.utils.hsapp(lhs(), rhs))))
         
         case _:
-            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("unexpected term: ", hydra.show.core.term(term))), cx))
+            return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2("unexpected term: ", hydra.show.core.term(term))))), cx))
 
 def find_ord_variables(typ: hydra.core.Type) -> frozenset[hydra.core.Name]:
     r"""Find type variables that require an Ord constraint (used in maps or sets)."""
@@ -468,7 +468,7 @@ def get_implicit_type_classes(typ: hydra.core.Type) -> FrozenDict[hydra.core.Nam
         return (name, hydra.lib.sets.from_list((hydra.classes.TypeClass.ORDERING,)))
     return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda x1: to_pair(x1)), hydra.lib.sets.to_list(find_ord_variables(typ))))
 
-def encode_type_with_class_assertions(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], explicit_classes: FrozenDict[hydra.core.Name, frozenset[hydra.classes.TypeClass]], typ: hydra.core.Type, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.ext.haskell.ast.Type]:
+def encode_type_with_class_assertions(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], explicit_classes: FrozenDict[hydra.core.Name, frozenset[hydra.classes.TypeClass]], typ: hydra.core.Type, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.haskell.ast.Type]:
     r"""Encode a Hydra type as a Haskell type with typeclass assertions."""
     
     @lru_cache(1)
@@ -530,7 +530,7 @@ def type_scheme_constraints_to_class_map(maybe_constraints: Maybe[FrozenDict[T0,
         return hydra.lib.logic.if_else(is_eq(), (lambda : Just(hydra.classes.TypeClass.EQUALITY)), (lambda : hydra.lib.logic.if_else(is_ord(), (lambda : Just(hydra.classes.TypeClass.ORDERING)), (lambda : Nothing()))))
     return hydra.lib.maybes.maybe((lambda : hydra.lib.maps.empty()), (lambda constraints: hydra.lib.maps.map((lambda meta: hydra.lib.sets.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda x1: name_to_type_class(x1)), hydra.lib.sets.to_list(meta.classes))))), constraints)), maybe_constraints)
 
-def to_data_declaration(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], def_: hydra.module.TermDefinition, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.ext.haskell.ast.DeclarationWithComments]:
+def to_data_declaration(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], def_: hydra.module.TermDefinition, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.haskell.ast.DeclarationWithComments]:
     r"""Convert a Hydra term definition to a Haskell declaration with comments."""
     
     name = def_.name
@@ -572,7 +572,7 @@ def to_data_declaration(namespaces: hydra.module.Namespaces[hydra.ext.haskell.as
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
-    def to_decl(comments: Maybe[str], hname_: hydra.ext.haskell.ast.Name, term_: hydra.core.Term, bindings: Maybe[hydra.ext.haskell.ast.LocalBindings]) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.ext.haskell.ast.DeclarationWithComments]:
+    def to_decl(comments: Maybe[str], hname_: hydra.ext.haskell.ast.Name, term_: hydra.core.Term, bindings: Maybe[hydra.ext.haskell.ast.LocalBindings]) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.haskell.ast.DeclarationWithComments]:
         match hydra.rewriting.deannotate_term(term_):
             case hydra.core.TermLet(value=let_term):
                 lbindings = let_term.bindings
@@ -623,7 +623,7 @@ def name_decls(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleN
         return (constant_for_field_name(name, fname), fname.value)
     return hydra.lib.logic.if_else(use_core_import, (lambda : hydra.lib.lists.cons(to_decl(hydra.core.Name("hydra.core.Name"), name_decl()), hydra.lib.lists.map((lambda v1: to_decl(hydra.core.Name("hydra.core.Name"), v1)), field_decls()))), (lambda : ()))
 
-def type_decl(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], name: hydra.core.Name, typ: hydra.core.Type, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.ext.haskell.ast.DeclarationWithComments]:
+def type_decl(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], name: hydra.core.Name, typ: hydra.core.Type, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.haskell.ast.DeclarationWithComments]:
     r"""Generate a Haskell declaration for a type definition constant."""
     
     def type_name(ns: hydra.module.Namespace, name_: hydra.core.Name) -> hydra.core.Name:
@@ -691,13 +691,13 @@ def to_type_declarations_from(namespaces: hydra.module.Namespaces[hydra.ext.hask
         return hydra.ext.haskell.utils.simple_name(lname())
     def decl_head(name: hydra.ext.haskell.ast.Name, vars_: frozenlist[hydra.core.Name]) -> hydra.ext.haskell.ast.DeclarationHead:
         return hydra.lib.logic.if_else(hydra.lib.lists.null(vars_), (lambda : cast(hydra.ext.haskell.ast.DeclarationHead, hydra.ext.haskell.ast.DeclarationHeadSimple(name))), (lambda : (h := hydra.lib.lists.head(vars_), rest := hydra.lib.lists.tail(vars_), hvar := hydra.ext.haskell.ast.Variable(hydra.ext.haskell.utils.simple_name(h.value)), cast(hydra.ext.haskell.ast.DeclarationHead, hydra.ext.haskell.ast.DeclarationHeadApplication(hydra.ext.haskell.ast.ApplicationDeclarationHead(decl_head(name, rest), hvar))))[3]))
-    def newtype_cons(tname: hydra.core.Name, typ_: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.ext.haskell.ast.ConstructorWithComments]:
+    def newtype_cons(tname: hydra.core.Name, typ_: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.haskell.ast.ConstructorWithComments]:
         @lru_cache(1)
         def hname0() -> hydra.ext.haskell.ast.Name:
             return hydra.ext.haskell.utils.simple_name(hydra.ext.haskell.utils.newtype_accessor_name(tname))
         return hydra.lib.eithers.bind(adapt_type_to_haskell_and_encode(namespaces, typ_, cx, g), (lambda htype: (hfield := hydra.ext.haskell.ast.FieldWithComments(hydra.ext.haskell.ast.Field(hname0(), htype), Nothing()), constructor_name := hydra.ext.haskell.utils.simple_name(hydra.names.local_name_of(tname)), Right(hydra.ext.haskell.ast.ConstructorWithComments(cast(hydra.ext.haskell.ast.Constructor, hydra.ext.haskell.ast.ConstructorRecord(hydra.ext.haskell.ast.RecordConstructor(constructor_name, (hfield,)))), Nothing())))[2]))
-    def record_cons(lname_: str, fields: frozenlist[hydra.core.FieldType]) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.ext.haskell.ast.ConstructorWithComments]:
-        def to_field(field_type: hydra.core.FieldType) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.ext.haskell.ast.FieldWithComments]:
+    def record_cons(lname_: str, fields: frozenlist[hydra.core.FieldType]) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.haskell.ast.ConstructorWithComments]:
+        def to_field(field_type: hydra.core.FieldType) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.haskell.ast.FieldWithComments]:
             fname = field_type.name
             ftype = field_type.type
             @lru_cache(1)
@@ -705,7 +705,7 @@ def to_type_declarations_from(namespaces: hydra.module.Namespaces[hydra.ext.hask
                 return hydra.ext.haskell.utils.simple_name(hydra.lib.strings.cat2(hydra.formatting.decapitalize(lname_), hydra.formatting.capitalize(fname.value)))
             return hydra.lib.eithers.bind(adapt_type_to_haskell_and_encode(namespaces, ftype, cx, g), (lambda htype: hydra.lib.eithers.bind(hydra.annotations.get_type_description(cx, g, ftype), (lambda comments: Right(hydra.ext.haskell.ast.FieldWithComments(hydra.ext.haskell.ast.Field(hname_(), htype), comments))))))
         return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda x1: to_field(x1)), fields), (lambda h_fields: Right(hydra.ext.haskell.ast.ConstructorWithComments(cast(hydra.ext.haskell.ast.Constructor, hydra.ext.haskell.ast.ConstructorRecord(hydra.ext.haskell.ast.RecordConstructor(hydra.ext.haskell.utils.simple_name(lname_), h_fields))), Nothing()))))
-    def union_cons(bound_names_: frozenset[hydra.core.Name], lname_: str, field_type: hydra.core.FieldType) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.ext.haskell.ast.ConstructorWithComments]:
+    def union_cons(bound_names_: frozenset[hydra.core.Name], lname_: str, field_type: hydra.core.FieldType) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.haskell.ast.ConstructorWithComments]:
         fname = field_type.name
         ftype = field_type.type
         def deconflict(name: str) -> str:
@@ -716,12 +716,12 @@ def to_type_declarations_from(namespaces: hydra.module.Namespaces[hydra.ext.hask
         return hydra.lib.eithers.bind(hydra.annotations.get_type_description(cx, g, ftype), (lambda comments: (nm := deconflict(hydra.lib.strings.cat2(hydra.formatting.capitalize(lname_), hydra.formatting.capitalize(fname.value))), hydra.lib.eithers.bind(hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.rewriting.deannotate_type(ftype), cast(hydra.core.Type, hydra.core.TypeUnit())), (lambda : Right(())), (lambda : hydra.lib.eithers.bind(adapt_type_to_haskell_and_encode(namespaces, ftype, cx, g), (lambda htype: Right((htype,)))))), (lambda type_list: Right(hydra.ext.haskell.ast.ConstructorWithComments(cast(hydra.ext.haskell.ast.Constructor, hydra.ext.haskell.ast.ConstructorOrdinary(hydra.ext.haskell.ast.OrdinaryConstructor(hydra.ext.haskell.utils.simple_name(nm), type_list))), comments)))))[1]))
     return hydra.lib.eithers.bind(hydra.schemas.is_serializable_by_name(cx, g, element_name), (lambda is_ser: (deriv := hydra.ext.haskell.ast.Deriving(hydra.lib.logic.if_else(is_ser, (lambda : hydra.lib.lists.map((lambda x1: hydra.ext.haskell.utils.raw_name(x1)), ("Eq", "Ord", "Read", "Show"))), (lambda : ()))), unpack_result := hydra.ext.haskell.utils.unpack_forall_type(typ), vars := hydra.lib.pairs.first(unpack_result), t_ := hydra.lib.pairs.second(unpack_result), hd := decl_head(hname(), hydra.lib.lists.reverse(vars)), _hoist_body_1 := (lambda v1: (lambda rt: hydra.lib.eithers.bind(record_cons(lname(), rt.fields), (lambda cons: Right(cast(hydra.ext.haskell.ast.Declaration, hydra.ext.haskell.ast.DeclarationData(hydra.ext.haskell.ast.DataDeclaration(hydra.ext.haskell.ast.DataOrNewtype.DATA, (), hd, (cons,), (deriv,))))))))(v1.value) if isinstance(v1, hydra.core.TypeRecord) else (lambda rt: hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v12: union_cons(hydra.lib.sets.from_list(hydra.lib.maps.keys(g.bound_terms)), lname(), v12)), rt.fields), (lambda cons: Right(cast(hydra.ext.haskell.ast.Declaration, hydra.ext.haskell.ast.DeclarationData(hydra.ext.haskell.ast.DataDeclaration(hydra.ext.haskell.ast.DataOrNewtype.DATA, (), hd, cons, (deriv,))))))))(v1.value) if isinstance(v1, hydra.core.TypeUnion) else (lambda wrapped: (wt := wrapped.body, hydra.lib.eithers.bind(newtype_cons(element_name, wt), (lambda cons: Right(cast(hydra.ext.haskell.ast.Declaration, hydra.ext.haskell.ast.DeclarationData(hydra.ext.haskell.ast.DataDeclaration(hydra.ext.haskell.ast.DataOrNewtype.NEWTYPE, (), hd, (cons,), (deriv,))))))))[1])(v1.value) if isinstance(v1, hydra.core.TypeWrap) else hydra.lib.eithers.bind(adapt_type_to_haskell_and_encode(namespaces, typ, cx, g), (lambda htype: Right(cast(hydra.ext.haskell.ast.Declaration, hydra.ext.haskell.ast.DeclarationType(hydra.ext.haskell.ast.TypeDeclaration(hd, htype))))))), hydra.lib.eithers.bind(_hoist_body_1(hydra.rewriting.deannotate_type(t_)), (lambda decl: hydra.lib.eithers.bind(hydra.annotations.get_type_description(cx, g, typ), (lambda comments: hydra.lib.eithers.bind(hydra.lib.logic.if_else(include_type_definitions, (lambda : hydra.lib.eithers.bind(type_decl(namespaces, element_name, typ, cx, g), (lambda decl_: Right((decl_,))))), (lambda : Right(()))), (lambda tdecls: (main_decl := hydra.ext.haskell.ast.DeclarationWithComments(decl, comments), name_decls_ := name_decls(namespaces, element_name, typ), Right(hydra.lib.lists.concat(((main_decl,), name_decls_, tdecls))))[2])))))))[6]))
 
-def construct_module(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], mod: hydra.module.Module, defs: frozenlist[hydra.module.Definition], cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.ext.haskell.ast.Module]:
+def construct_module(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], mod: hydra.module.Module, defs: frozenlist[hydra.module.Definition], cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.haskell.ast.Module]:
     r"""Construct a Haskell module from a Hydra module and its definitions."""
     
     def h(namespace: hydra.module.Namespace) -> str:
         return namespace.value
-    def create_declarations(def_: hydra.module.Definition) -> Either[hydra.context.InContext[hydra.error.OtherError], frozenlist[hydra.ext.haskell.ast.DeclarationWithComments]]:
+    def create_declarations(def_: hydra.module.Definition) -> Either[hydra.context.InContext[hydra.error.Error], frozenlist[hydra.ext.haskell.ast.DeclarationWithComments]]:
         match def_:
             case hydra.module.DefinitionType(value=type):
                 name = type.name
@@ -774,12 +774,12 @@ def construct_module(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.M
 # The key used to track Haskell variable depth in annotations.
 key_haskell_var = hydra.core.Name("haskellVar")
 
-def module_to_haskell_module(mod: hydra.module.Module, defs: frozenlist[hydra.module.Definition], cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.ext.haskell.ast.Module]:
+def module_to_haskell_module(mod: hydra.module.Module, defs: frozenlist[hydra.module.Definition], cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.haskell.ast.Module]:
     r"""Convert a Hydra module and definitions to a Haskell module AST."""
     
     return hydra.lib.eithers.bind(hydra.ext.haskell.utils.namespaces_for_module(mod, cx, g), (lambda namespaces: construct_module(namespaces, mod, defs, cx, g)))
 
-def module_to_haskell(mod: hydra.module.Module, defs: frozenlist[hydra.module.Definition], cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.OtherError], FrozenDict[str, str]]:
+def module_to_haskell(mod: hydra.module.Module, defs: frozenlist[hydra.module.Definition], cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.Error], FrozenDict[str, str]]:
     r"""Convert a Hydra module to Haskell source code as a filepath-to-content map."""
     
     return hydra.lib.eithers.bind(module_to_haskell_module(mod, defs, cx, g), (lambda hsmod: (s := hydra.serialization.print_expr(hydra.serialization.parenthesize(hydra.ext.haskell.serde.module_to_expr(hsmod))), filepath := hydra.names.namespace_to_file_path(hydra.util.CaseConvention.PASCAL, hydra.module.FileExtension("hs"), mod.namespace), Right(hydra.lib.maps.singleton(filepath, s)))[2]))

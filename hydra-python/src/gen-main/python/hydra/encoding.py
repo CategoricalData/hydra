@@ -426,20 +426,20 @@ def encode_namespace(ns: hydra.module.Namespace) -> hydra.module.Namespace:
     
     return hydra.module.Namespace(hydra.lib.strings.cat(("hydra.encode.", hydra.lib.strings.intercalate(".", hydra.lib.lists.tail(hydra.lib.strings.split_on(".", ns.value))))))
 
-def is_encodable_binding(cx: hydra.context.Context, graph: hydra.graph.Graph, b: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.error.OtherError], Maybe[hydra.core.Binding]]:
+def is_encodable_binding(cx: hydra.context.Context, graph: hydra.graph.Graph, b: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.error.Error], Maybe[hydra.core.Binding]]:
     r"""Check if a binding is encodable (serializable type)."""
     
     return hydra.lib.eithers.bind(hydra.schemas.is_serializable_by_name(cx, graph, b.name), (lambda serializable: Right(hydra.lib.logic.if_else(serializable, (lambda : Just(b)), (lambda : Nothing())))))
 
-def filter_type_bindings(cx: hydra.context.Context, graph: hydra.graph.Graph, bindings: frozenlist[hydra.core.Binding]) -> Either[hydra.context.InContext[hydra.error.OtherError], frozenlist[hydra.core.Binding]]:
+def filter_type_bindings(cx: hydra.context.Context, graph: hydra.graph.Graph, bindings: frozenlist[hydra.core.Binding]) -> Either[hydra.context.InContext[hydra.error.Error], frozenlist[hydra.core.Binding]]:
     r"""Filter bindings to only encodable type definitions."""
     
     return hydra.lib.eithers.map((lambda x1: hydra.lib.maybes.cat(x1)), hydra.lib.eithers.map_list((lambda v1: is_encodable_binding(cx, graph, v1)), hydra.lib.lists.filter((lambda x1: hydra.annotations.is_native_type(x1)), bindings)))
 
-def encode_module(cx: hydra.context.Context, graph: hydra.graph.Graph, mod: hydra.module.Module) -> Either[hydra.context.InContext[hydra.error.OtherError], Maybe[hydra.module.Module]]:
+def encode_module(cx: hydra.context.Context, graph: hydra.graph.Graph, mod: hydra.module.Module) -> Either[hydra.context.InContext[hydra.error.Error], Maybe[hydra.module.Module]]:
     r"""Transform a type module into an encoder module."""
     
-    return hydra.lib.eithers.bind(filter_type_bindings(cx, graph, mod.elements), (lambda type_bindings: hydra.lib.logic.if_else(hydra.lib.lists.null(type_bindings), (lambda : Right(Nothing())), (lambda : hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda b: hydra.lib.eithers.bimap((lambda ic: hydra.context.InContext(hydra.error.OtherError(ic.object.value), ic.context)), (lambda x: x), encode_binding(cx, graph, b))), type_bindings), (lambda encoded_bindings: Right(Just(hydra.module.Module(encode_namespace(mod.namespace), encoded_bindings, hydra.lib.lists.nub(hydra.lib.lists.concat2(hydra.lib.lists.map((lambda x1: encode_namespace(x1)), mod.type_dependencies), hydra.lib.lists.map((lambda x1: encode_namespace(x1)), mod.term_dependencies))), (mod.namespace,), Just(hydra.lib.strings.cat(("Term encoders for ", mod.namespace.value))))))))))))
+    return hydra.lib.eithers.bind(filter_type_bindings(cx, graph, mod.elements), (lambda type_bindings: hydra.lib.logic.if_else(hydra.lib.lists.null(type_bindings), (lambda : Right(Nothing())), (lambda : hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda b: hydra.lib.eithers.bimap((lambda ic: hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(ic.object.value))), ic.context)), (lambda x: x), encode_binding(cx, graph, b))), type_bindings), (lambda encoded_bindings: Right(Just(hydra.module.Module(encode_namespace(mod.namespace), encoded_bindings, hydra.lib.lists.nub(hydra.lib.lists.concat2(hydra.lib.lists.map((lambda x1: encode_namespace(x1)), mod.type_dependencies), hydra.lib.lists.map((lambda x1: encode_namespace(x1)), mod.term_dependencies))), (mod.namespace,), Just(hydra.lib.strings.cat(("Term encoders for ", mod.namespace.value))))))))))))
 
 def is_unit_type(v1: hydra.core.Type) -> bool:
     r"""Check whether a type is the unit type."""

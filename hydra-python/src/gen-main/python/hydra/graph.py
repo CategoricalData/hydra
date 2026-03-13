@@ -55,8 +55,8 @@ class TermCoder(Generic[A]):
     r"""A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms."""
     
     type: Annotated[hydra.core.Type, "The Hydra type of encoded terms"]
-    encode: Annotated[Callable[[hydra.context.Context, Graph, hydra.core.Term], Either[hydra.context.InContext[hydra.error.OtherError], A]], "An encode function from terms to native values"]
-    decode: Annotated[Callable[[hydra.context.Context, A], Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Term]], "A decode function from native values to terms"]
+    encode: Annotated[Callable[[hydra.context.Context, Graph, hydra.core.Term], Either[hydra.context.InContext[hydra.error.Error], A]], "An encode function from terms to native values"]
+    decode: Annotated[Callable[[hydra.context.Context, A], Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]], "A decode function from native values to terms"]
     
     TYPE_ = hydra.core.Name("hydra.graph.TermCoder")
     TYPE = hydra.core.Name("type")

@@ -45,7 +45,7 @@ def bootstrap_schema_map():
     from hydra.json.bootstrap import types_by_name
 
     result = {}
-    for name, typ in types_by_name.items():
+    for name, typ in types_by_name().items():
         ts = f_type_to_type_scheme(typ)
         result[name] = deannotate_type_recursive(ts.type)
     return FrozenDict(result)
@@ -75,9 +75,13 @@ def unwrap_either(result):
     """Unwrap an Either value, raising on Left."""
     match result:
         case Left(value=err):
-            # err may be an InContext wrapping an OtherError
-            if hasattr(err, 'object') and hasattr(err.object, 'value'):
-                raise RuntimeError(f"Error: {err.object.value}")
+            # err may be an InContext wrapping an Error
+            if hasattr(err, 'object'):
+                try:
+                    from hydra.show.error import error
+                    raise RuntimeError(f"Error: {error(err.object)}")
+                except ImportError:
+                    raise RuntimeError(f"Error: {err.object}")
             raise RuntimeError(f"Error: {err}")
         case Right(value=v):
             return v

@@ -100,10 +100,10 @@ def is_encoded_type(t: hydra.core.Term) -> bool:
             case _:
                 return False
 
-def dependency_namespaces(cx: hydra.context.Context, graph: hydra.graph.Graph, binds: bool, with_prims: bool, with_noms: bool, with_schema: bool, els: frozenlist[hydra.core.Binding]) -> Either[hydra.context.InContext[hydra.error.OtherError], frozenset[hydra.module.Namespace]]:
+def dependency_namespaces(cx: hydra.context.Context, graph: hydra.graph.Graph, binds: bool, with_prims: bool, with_noms: bool, with_schema: bool, els: frozenlist[hydra.core.Binding]) -> Either[hydra.context.InContext[hydra.error.Error], frozenset[hydra.module.Namespace]]:
     r"""Find dependency namespaces in all of a set of terms (Either version)."""
     
-    def dep_names(el: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.error.OtherError], frozenset[hydra.core.Name]]:
+    def dep_names(el: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.error.Error], frozenset[hydra.core.Name]]:
         term = el.term
         @lru_cache(1)
         def deannotated_term() -> hydra.core.Term:
@@ -114,23 +114,23 @@ def dependency_namespaces(cx: hydra.context.Context, graph: hydra.graph.Graph, b
         @lru_cache(1)
         def schema_names() -> frozenset[hydra.core.Name]:
             return hydra.lib.logic.if_else(with_schema, (lambda : hydra.lib.maybes.maybe((lambda : hydra.lib.sets.empty()), (lambda ts: hydra.rewriting.type_dependency_names(True, ts.type)), el.type)), (lambda : hydra.lib.sets.empty()))
-        return hydra.lib.logic.if_else(is_encoded_type(deannotated_term()), (lambda : hydra.lib.eithers.map((lambda typ: hydra.lib.sets.unions((data_names(), schema_names(), hydra.rewriting.type_dependency_names(True, typ)))), hydra.lib.eithers.bimap((lambda _wc_e: hydra.context.InContext(_wc_e, hydra.context.Context(hydra.lib.lists.cons("dependency namespace (type)", cx.trace), cx.messages, cx.other))), (lambda _wc_a: _wc_a), hydra.lib.eithers.bimap((lambda _e: hydra.error.OtherError(_e.value)), (lambda _a: _a), hydra.decode.core.type(graph, term))))), (lambda : hydra.lib.logic.if_else(is_encoded_term(deannotated_term()), (lambda : hydra.lib.eithers.map((lambda decoded_term: hydra.lib.sets.unions((data_names(), schema_names(), hydra.rewriting.term_dependency_names(binds, with_prims, with_noms, decoded_term)))), hydra.lib.eithers.bimap((lambda _wc_e: hydra.context.InContext(_wc_e, hydra.context.Context(hydra.lib.lists.cons("dependency namespace (term)", cx.trace), cx.messages, cx.other))), (lambda _wc_a: _wc_a), hydra.lib.eithers.bimap((lambda _e: hydra.error.OtherError(_e.value)), (lambda _a: _a), hydra.decode.core.term(graph, term))))), (lambda : Right(hydra.lib.sets.unions((data_names(), schema_names())))))))
+        return hydra.lib.logic.if_else(is_encoded_type(deannotated_term()), (lambda : hydra.lib.eithers.map((lambda typ: hydra.lib.sets.unions((data_names(), schema_names(), hydra.rewriting.type_dependency_names(True, typ)))), hydra.lib.eithers.bimap((lambda _wc_e: hydra.context.InContext(_wc_e, hydra.context.Context(hydra.lib.lists.cons("dependency namespace (type)", cx.trace), cx.messages, cx.other))), (lambda _wc_a: _wc_a), hydra.lib.eithers.bimap((lambda _e: cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(_e.value)))), (lambda _a: _a), hydra.decode.core.type(graph, term))))), (lambda : hydra.lib.logic.if_else(is_encoded_term(deannotated_term()), (lambda : hydra.lib.eithers.map((lambda decoded_term: hydra.lib.sets.unions((data_names(), schema_names(), hydra.rewriting.term_dependency_names(binds, with_prims, with_noms, decoded_term)))), hydra.lib.eithers.bimap((lambda _wc_e: hydra.context.InContext(_wc_e, hydra.context.Context(hydra.lib.lists.cons("dependency namespace (term)", cx.trace), cx.messages, cx.other))), (lambda _wc_a: _wc_a), hydra.lib.eithers.bimap((lambda _e: cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(_e.value)))), (lambda _a: _a), hydra.decode.core.term(graph, term))))), (lambda : Right(hydra.lib.sets.unions((data_names(), schema_names())))))))
     return hydra.lib.eithers.map((lambda names_list: hydra.lib.sets.from_list(hydra.lib.maybes.cat(hydra.lib.lists.map((lambda x1: hydra.names.namespace_of(x1)), hydra.lib.sets.to_list(hydra.lib.sets.delete(hydra.constants.placeholder_name, hydra.lib.sets.unions(names_list))))))), hydra.lib.eithers.map_list((lambda x1: dep_names(x1)), els))
 
-def dereference_type(cx: hydra.context.Context, graph: hydra.graph.Graph, name: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.OtherError], Maybe[hydra.core.Type]]:
+def dereference_type(cx: hydra.context.Context, graph: hydra.graph.Graph, name: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.Error], Maybe[hydra.core.Type]]:
     r"""Dereference a type name to get the actual type (Either version)."""
     
     @lru_cache(1)
     def mel() -> Maybe[hydra.core.Binding]:
         return hydra.lexical.dereference_element(graph, name)
-    return hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda el: hydra.lib.eithers.map((lambda x1: hydra.lib.maybes.pure(x1)), hydra.lib.eithers.bimap((lambda _wc_e: hydra.context.InContext(_wc_e, cx)), (lambda _wc_a: _wc_a), hydra.lib.eithers.bimap((lambda _e: hydra.error.OtherError(_e.value)), (lambda _a: _a), hydra.decode.core.type(graph, el.term))))), mel())
+    return hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda el: hydra.lib.eithers.map((lambda x1: hydra.lib.maybes.pure(x1)), hydra.lib.eithers.bimap((lambda _wc_e: hydra.context.InContext(_wc_e, cx)), (lambda _wc_a: _wc_a), hydra.lib.eithers.bimap((lambda _e: cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(_e.value)))), (lambda _a: _a), hydra.decode.core.type(graph, el.term))))), mel())
 
-def element_as_type_application_term(cx: hydra.context.Context, el: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.TypeApplicationTerm]:
+def element_as_type_application_term(cx: hydra.context.Context, el: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.TypeApplicationTerm]:
     r"""Convert an element to a typed term."""
     
-    return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(hydra.error.OtherError("missing element type"), cx))), (lambda ts: Right(hydra.core.TypeApplicationTerm(el.term, ts.type))), el.type)
+    return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("missing element type"))), cx))), (lambda ts: Right(hydra.core.TypeApplicationTerm(el.term, ts.type))), el.type)
 
-def elements_with_dependencies(cx: hydra.context.Context, graph: hydra.graph.Graph, original: frozenlist[hydra.core.Binding]) -> Either[hydra.context.InContext[hydra.error.OtherError], frozenlist[hydra.core.Binding]]:
+def elements_with_dependencies(cx: hydra.context.Context, graph: hydra.graph.Graph, original: frozenlist[hydra.core.Binding]) -> Either[hydra.context.InContext[hydra.error.Error], frozenlist[hydra.core.Binding]]:
     r"""Get elements with their dependencies."""
     
     def dep_names(el: hydra.core.Binding) -> frozenlist[hydra.core.Name]:
@@ -186,7 +186,7 @@ def field_type_map(fields: frozenlist[hydra.core.FieldType]) -> FrozenDict[hydra
         return (f.name, f.type)
     return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda x1: to_pair(x1)), fields))
 
-def field_types(cx: hydra.context.Context, graph: hydra.graph.Graph, t: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.OtherError], FrozenDict[hydra.core.Name, hydra.core.Type]]:
+def field_types(cx: hydra.context.Context, graph: hydra.graph.Graph, t: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.Error], FrozenDict[hydra.core.Name, hydra.core.Type]]:
     r"""Get field types from a record or union type (Either version)."""
     
     def to_map(fields: frozenlist[hydra.core.FieldType]) -> FrozenDict[hydra.core.Name, hydra.core.Type]:
@@ -202,18 +202,18 @@ def field_types(cx: hydra.context.Context, graph: hydra.graph.Graph, t: hydra.co
             return Right(to_map(rt2.fields))
         
         case hydra.core.TypeVariable(value=name):
-            return hydra.lib.eithers.bind(hydra.lexical.require_element(cx, graph, name), (lambda el: hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda _wc_e: hydra.context.InContext(_wc_e, cx)), (lambda _wc_a: _wc_a), hydra.lib.eithers.bimap((lambda _e: hydra.error.OtherError(_e.value)), (lambda _a: _a), hydra.decode.core.type(graph, el.term))), (lambda decoded_type: field_types(cx, graph, decoded_type)))))
+            return hydra.lib.eithers.bind(hydra.lexical.require_element(cx, graph, name), (lambda el: hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda _wc_e: hydra.context.InContext(_wc_e, cx)), (lambda _wc_a: _wc_a), hydra.lib.eithers.bimap((lambda _e: cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(_e.value)))), (lambda _a: _a), hydra.decode.core.type(graph, el.term))), (lambda decoded_type: field_types(cx, graph, decoded_type)))))
         
         case _:
-            return Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat(("expected record or union type but found ", hydra.show.core.type(t)))), cx))
+            return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat(("expected record or union type but found ", hydra.show.core.type(t)))))), cx))
 
-def find_field_type(cx: hydra.context.Context, fname: hydra.core.Name, fields: frozenlist[hydra.core.FieldType]) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Type]:
+def find_field_type(cx: hydra.context.Context, fname: hydra.core.Name, fields: frozenlist[hydra.core.FieldType]) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Type]:
     r"""Find a field type by name in a list of field types."""
     
     @lru_cache(1)
     def matching_fields() -> frozenlist[hydra.core.FieldType]:
         return hydra.lib.lists.filter((lambda ft: hydra.lib.equality.equal(ft.name.value, fname.value)), fields)
-    return hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields()), (lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("No such field: ", fname.value)), cx))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(matching_fields()), 1), (lambda : Right(hydra.lib.lists.head(matching_fields()).type)), (lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("Multiple fields named ", fname.value)), cx))))))
+    return hydra.lib.logic.if_else(hydra.lib.lists.null(matching_fields()), (lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2("No such field: ", fname.value)))), cx))), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(matching_fields()), 1), (lambda : Right(hydra.lib.lists.head(matching_fields()).type)), (lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2("Multiple fields named ", fname.value)))), cx))))))
 
 def normal_type_variable(i: int) -> hydra.core.Name:
     r"""Type variable naming convention follows Haskell: t0, t1, etc."""
@@ -373,28 +373,28 @@ def is_enum_type(typ: hydra.core.Type) -> bool:
         case _:
             return False
 
-def type_dependencies(cx: hydra.context.Context, graph: hydra.graph.Graph, with_schema: bool, transform: Callable[[hydra.core.Type], hydra.core.Type], name: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.OtherError], FrozenDict[hydra.core.Name, hydra.core.Type]]:
+def type_dependencies(cx: hydra.context.Context, graph: hydra.graph.Graph, with_schema: bool, transform: Callable[[hydra.core.Type], hydra.core.Type], name: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.Error], FrozenDict[hydra.core.Name, hydra.core.Type]]:
     r"""Get all type dependencies for a given type name (Either version)."""
     
-    def require_type(name2: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Type]:
+    def require_type(name2: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Type]:
         @lru_cache(1)
         def cx1() -> hydra.context.Context:
             return hydra.context.Context(hydra.lib.lists.cons(hydra.lib.strings.cat2("type dependencies of ", name2.value), cx.trace), cx.messages, cx.other)
-        return hydra.lib.eithers.bind(hydra.lexical.require_element(cx1(), graph, name2), (lambda el: hydra.lib.eithers.bimap((lambda _wc_e: hydra.context.InContext(_wc_e, cx1())), (lambda _wc_a: _wc_a), hydra.lib.eithers.bimap((lambda _e: hydra.error.OtherError(_e.value)), (lambda _a: _a), hydra.decode.core.type(graph, el.term)))))
-    def to_pair(name2: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.OtherError], tuple[hydra.core.Name, hydra.core.Type]]:
+        return hydra.lib.eithers.bind(hydra.lexical.require_element(cx1(), graph, name2), (lambda el: hydra.lib.eithers.bimap((lambda _wc_e: hydra.context.InContext(_wc_e, cx1())), (lambda _wc_a: _wc_a), hydra.lib.eithers.bimap((lambda _e: cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(_e.value)))), (lambda _a: _a), hydra.decode.core.type(graph, el.term)))))
+    def to_pair(name2: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.Error], tuple[hydra.core.Name, hydra.core.Type]]:
         return hydra.lib.eithers.map((lambda typ: (name2, transform(typ))), require_type(name2))
-    def deps(seeds: frozenset[hydra.core.Name], names: FrozenDict[hydra.core.Name, hydra.core.Type]) -> Either[hydra.context.InContext[hydra.error.OtherError], FrozenDict[hydra.core.Name, hydra.core.Type]]:
+    def deps(seeds: frozenset[hydra.core.Name], names: FrozenDict[hydra.core.Name, hydra.core.Type]) -> Either[hydra.context.InContext[hydra.error.Error], FrozenDict[hydra.core.Name, hydra.core.Type]]:
         return hydra.lib.logic.if_else(hydra.lib.sets.null(seeds), (lambda : Right(names)), (lambda : hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda x1: to_pair(x1)), hydra.lib.sets.to_list(seeds)), (lambda pairs: (new_names := hydra.lib.maps.union(names, hydra.lib.maps.from_list(pairs)), refs := hydra.lib.lists.foldl((lambda x1, x2: hydra.lib.sets.union(x1, x2)), hydra.lib.sets.empty(), hydra.lib.lists.map((lambda pair: hydra.rewriting.type_dependency_names(with_schema, hydra.lib.pairs.second(pair))), pairs)), visited := hydra.lib.sets.from_list(hydra.lib.maps.keys(names)), new_seeds := hydra.lib.sets.difference(refs, visited), deps(new_seeds, new_names))[4]))))
     return deps(hydra.lib.sets.singleton(name), hydra.lib.maps.empty())
 
-def is_serializable(cx: hydra.context.Context, graph: hydra.graph.Graph, el: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.error.OtherError], bool]:
+def is_serializable(cx: hydra.context.Context, graph: hydra.graph.Graph, el: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.error.Error], bool]:
     r"""Check if an element is serializable (no function types in dependencies) (Either version)."""
     
     def variants(typ: hydra.core.Type) -> frozenlist[hydra.variants.TypeVariant]:
         return hydra.lib.lists.map((lambda x1: hydra.reflect.type_variant(x1)), hydra.rewriting.fold_over_type(hydra.coders.TraversalOrder.PRE, (lambda m, t: hydra.lib.lists.cons(t, m)), (), typ))
     return hydra.lib.eithers.map((lambda deps: (all_variants := hydra.lib.sets.from_list(hydra.lib.lists.concat(hydra.lib.lists.map((lambda x1: variants(x1)), hydra.lib.maps.elems(deps)))), hydra.lib.logic.not_(hydra.lib.sets.member(hydra.variants.TypeVariant.FUNCTION, all_variants)))[1]), type_dependencies(cx, graph, False, (lambda x1: hydra.lib.equality.identity(x1)), el.name))
 
-def is_serializable_by_name(cx: hydra.context.Context, graph: hydra.graph.Graph, name: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.OtherError], bool]:
+def is_serializable_by_name(cx: hydra.context.Context, graph: hydra.graph.Graph, name: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.Error], bool]:
     r"""Check if a type (by name) is serializable, resolving all type dependencies (Either version)."""
     
     def variants(typ: hydra.core.Type) -> frozenlist[hydra.variants.TypeVariant]:
@@ -464,7 +464,7 @@ def module_contains_binary_literals(mod: hydra.module.Module) -> bool:
         return hydra.rewriting.fold_over_term(hydra.coders.TraversalOrder.PRE, (lambda x1, x2: check_term(x1, x2)), False, term)
     return hydra.lib.lists.foldl((lambda acc, el: hydra.lib.logic.or_(acc, term_contains_binary(el.term))), False, mod.elements)
 
-def module_dependency_namespaces(cx: hydra.context.Context, graph: hydra.graph.Graph, binds: bool, with_prims: bool, with_noms: bool, with_schema: bool, mod: hydra.module.Module) -> Either[hydra.context.InContext[hydra.error.OtherError], frozenset[hydra.module.Namespace]]:
+def module_dependency_namespaces(cx: hydra.context.Context, graph: hydra.graph.Graph, binds: bool, with_prims: bool, with_noms: bool, with_schema: bool, mod: hydra.module.Module) -> Either[hydra.context.InContext[hydra.error.Error], frozenset[hydra.module.Namespace]]:
     r"""Find dependency namespaces in all elements of a module, excluding the module's own namespace (Either version)."""
     
     return hydra.lib.eithers.map((lambda deps: hydra.lib.sets.delete(mod.namespace, deps)), dependency_namespaces(cx, graph, binds, with_prims, with_noms, with_schema, mod.elements))
@@ -509,12 +509,12 @@ def partition_definitions(defs: frozenlist[hydra.module.Definition]) -> tuple[fr
                 raise AssertionError("Unreachable: all variants handled")
     return (hydra.lib.maybes.cat(hydra.lib.lists.map((lambda x1: get_type(x1)), defs)), hydra.lib.maybes.cat(hydra.lib.lists.map((lambda x1: get_term(x1)), defs)))
 
-def require_type(cx: hydra.context.Context, graph: hydra.graph.Graph, name: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Type]:
+def require_type(cx: hydra.context.Context, graph: hydra.graph.Graph, name: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Type]:
     r"""Require a type by name."""
     
-    return hydra.lib.maybes.maybe((lambda : hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("no such type: ", name.value)), cx))), (lambda ts: Right(hydra.rewriting.type_scheme_to_f_type(ts))), hydra.lib.maps.lookup(name, graph.bound_types))), (lambda ts: Right(hydra.rewriting.type_scheme_to_f_type(ts))), hydra.lib.maps.lookup(name, graph.schema_types))
+    return hydra.lib.maybes.maybe((lambda : hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2("no such type: ", name.value)))), cx))), (lambda ts: Right(hydra.rewriting.type_scheme_to_f_type(ts))), hydra.lib.maps.lookup(name, graph.bound_types))), (lambda ts: Right(hydra.rewriting.type_scheme_to_f_type(ts))), hydra.lib.maps.lookup(name, graph.schema_types))
 
-def require_row_type(cx: hydra.context.Context, label: str, getter: Callable[[hydra.core.Type], Maybe[T0]], graph: hydra.graph.Graph, name: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.OtherError], T0]:
+def require_row_type(cx: hydra.context.Context, label: str, getter: Callable[[hydra.core.Type], Maybe[T0]], graph: hydra.graph.Graph, name: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.Error], T0]:
     r"""Require a name to resolve to a row type."""
     
     def raw_type(t: hydra.core.Type) -> hydra.core.Type:
@@ -530,9 +530,9 @@ def require_row_type(cx: hydra.context.Context, label: str, getter: Callable[[hy
                 
                 case _:
                     return t
-    return hydra.lib.eithers.bind(require_type(cx, graph, name), (lambda t: hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat((name.value, " does not resolve to a ", label, " type: ", hydra.show.core.type(t)))), cx))), (lambda x: Right(x)), getter(raw_type(t)))))
+    return hydra.lib.eithers.bind(require_type(cx, graph, name), (lambda t: hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat((name.value, " does not resolve to a ", label, " type: ", hydra.show.core.type(t)))))), cx))), (lambda x: Right(x)), getter(raw_type(t)))))
 
-def require_record_type(cx: hydra.context.Context, graph: hydra.graph.Graph, name: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.RowType]:
+def require_record_type(cx: hydra.context.Context, graph: hydra.graph.Graph, name: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.RowType]:
     r"""Require a name to resolve to a record type."""
     
     def to_record(t: hydra.core.Type) -> Maybe[hydra.core.RowType]:
@@ -544,12 +544,12 @@ def require_record_type(cx: hydra.context.Context, graph: hydra.graph.Graph, nam
                 return Nothing()
     return require_row_type(cx, "record type", (lambda x1: to_record(x1)), graph, name)
 
-def require_schema_type(cx: hydra.context.Context, types: FrozenDict[hydra.core.Name, hydra.core.TypeScheme], tname: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.OtherError], tuple[hydra.core.TypeScheme, hydra.context.Context]]:
+def require_schema_type(cx: hydra.context.Context, types: FrozenDict[hydra.core.Name, hydra.core.TypeScheme], tname: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.Error], tuple[hydra.core.TypeScheme, hydra.context.Context]]:
     r"""Look up a schema type and instantiate it, threading Context."""
     
-    return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat(("No such schema type: ", tname.value, ". Available types are: ", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map((lambda v1: v1.value), hydra.lib.maps.keys(types)))))), cx))), (lambda ts: Right(instantiate_type_scheme(cx, hydra.rewriting.deannotate_type_scheme_recursive(ts)))), hydra.lib.maps.lookup(tname, types))
+    return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat(("No such schema type: ", tname.value, ". Available types are: ", hydra.lib.strings.intercalate(", ", hydra.lib.lists.map((lambda v1: v1.value), hydra.lib.maps.keys(types)))))))), cx))), (lambda ts: Right(instantiate_type_scheme(cx, hydra.rewriting.deannotate_type_scheme_recursive(ts)))), hydra.lib.maps.lookup(tname, types))
 
-def require_union_type(cx: hydra.context.Context, graph: hydra.graph.Graph, name: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.RowType]:
+def require_union_type(cx: hydra.context.Context, graph: hydra.graph.Graph, name: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.RowType]:
     r"""Require a name to resolve to a union type."""
     
     def to_union(t: hydra.core.Type) -> Maybe[hydra.core.RowType]:
@@ -561,14 +561,14 @@ def require_union_type(cx: hydra.context.Context, graph: hydra.graph.Graph, name
                 return Nothing()
     return require_row_type(cx, "union", (lambda x1: to_union(x1)), graph, name)
 
-def require_union_field(cx: hydra.context.Context, graph: hydra.graph.Graph, tname: hydra.core.Name, fname: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Type]:
+def require_union_field(cx: hydra.context.Context, graph: hydra.graph.Graph, tname: hydra.core.Name, fname: hydra.core.Name) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Type]:
     r"""Require a field type from a union type."""
     
-    def with_row_type(rt: hydra.core.RowType) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Type]:
+    def with_row_type(rt: hydra.core.RowType) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Type]:
         @lru_cache(1)
         def matches() -> frozenlist[hydra.core.FieldType]:
             return hydra.lib.lists.filter((lambda ft: hydra.lib.equality.equal(ft.name, fname)), rt.fields)
-        return hydra.lib.logic.if_else(hydra.lib.lists.null(matches()), (lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat(("no field \"", fname.value, "\" in union type \"", tname.value))), cx))), (lambda : Right(hydra.lib.lists.head(matches()).type)))
+        return hydra.lib.logic.if_else(hydra.lib.lists.null(matches()), (lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat(("no field \"", fname.value, "\" in union type \"", tname.value))))), cx))), (lambda : Right(hydra.lib.lists.head(matches()).type)))
     return hydra.lib.eithers.bind(require_union_type(cx, graph, tname), (lambda x1: with_row_type(x1)))
 
 def resolve_type(graph: hydra.graph.Graph, typ: hydra.core.Type) -> Maybe[hydra.core.Type]:
@@ -581,7 +581,7 @@ def resolve_type(graph: hydra.graph.Graph, typ: hydra.core.Type) -> Maybe[hydra.
         case _:
             return Just(typ)
 
-def schema_graph_to_typing_environment(cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.OtherError], FrozenDict[hydra.core.Name, hydra.core.TypeScheme]]:
+def schema_graph_to_typing_environment(cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.Error], FrozenDict[hydra.core.Name, hydra.core.TypeScheme]]:
     r"""Convert a schema graph to a typing environment (Either version)."""
     
     def to_type_scheme(vars: frozenlist[hydra.core.Name], typ: hydra.core.Type) -> hydra.core.TypeScheme:
@@ -594,12 +594,12 @@ def schema_graph_to_typing_environment(cx: hydra.context.Context, g: hydra.graph
                 
                 case _:
                     return hydra.core.TypeScheme(hydra.lib.lists.reverse(vars), typ, Nothing())
-    def decode_type(term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Type]:
-        return hydra.lib.eithers.bimap((lambda _wc_e: hydra.context.InContext(_wc_e, cx)), (lambda _wc_a: _wc_a), hydra.lib.eithers.bimap((lambda _e: hydra.error.OtherError(_e.value)), (lambda _a: _a), hydra.decode.core.type(g, term)))
-    def decode_type_scheme(term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.TypeScheme]:
-        return hydra.lib.eithers.bimap((lambda _wc_e: hydra.context.InContext(_wc_e, cx)), (lambda _wc_a: _wc_a), hydra.lib.eithers.bimap((lambda _e: hydra.error.OtherError(_e.value)), (lambda _a: _a), hydra.decode.core.type_scheme(g, term)))
-    def to_pair(el: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.error.OtherError], Maybe[tuple[hydra.core.Name, hydra.core.TypeScheme]]]:
-        def for_term(term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.OtherError], Maybe[hydra.core.TypeScheme]]:
+    def decode_type(term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Type]:
+        return hydra.lib.eithers.bimap((lambda _wc_e: hydra.context.InContext(_wc_e, cx)), (lambda _wc_a: _wc_a), hydra.lib.eithers.bimap((lambda _e: cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(_e.value)))), (lambda _a: _a), hydra.decode.core.type(g, term)))
+    def decode_type_scheme(term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.TypeScheme]:
+        return hydra.lib.eithers.bimap((lambda _wc_e: hydra.context.InContext(_wc_e, cx)), (lambda _wc_a: _wc_a), hydra.lib.eithers.bimap((lambda _e: cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(_e.value)))), (lambda _a: _a), hydra.decode.core.type_scheme(g, term)))
+    def to_pair(el: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.error.Error], Maybe[tuple[hydra.core.Name, hydra.core.TypeScheme]]]:
+        def for_term(term: hydra.core.Term) -> Either[hydra.context.InContext[hydra.error.Error], Maybe[hydra.core.TypeScheme]]:
             match term:
                 case hydra.core.TermRecord(value=r):
                     return hydra.lib.logic.if_else(hydra.lib.equality.equal(r.type_name, hydra.core.Name("hydra.core.TypeScheme")), (lambda : hydra.lib.eithers.map((lambda x1: hydra.lib.maybes.pure(x1)), decode_type_scheme(el.term))), (lambda : Right(Nothing())))
