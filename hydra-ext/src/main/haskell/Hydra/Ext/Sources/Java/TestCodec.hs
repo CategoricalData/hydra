@@ -76,6 +76,7 @@ import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Accessors as ShowAccessors
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Show.Error     as ShowError
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
 import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
@@ -113,7 +114,7 @@ ns = Namespace "hydra.ext.java.testCodec"
 
 module_ :: Module
 module_ = Module ns elements
-    [JavaCoderSource.ns, JavaSerdeSource.ns, SerializationSource.ns, Formatting.ns, Names.ns, Inference.ns, Constants.ns, Rewriting.ns]
+    [JavaCoderSource.ns, JavaSerdeSource.ns, SerializationSource.ns, Formatting.ns, Names.ns, Inference.ns, Constants.ns, Rewriting.ns, ShowError.ns]
     (JavaHelpersSource.ns:JavaSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Java test code generation codec for JUnit-based generation tests"
   where
@@ -147,7 +148,7 @@ termToJava = define "termToJava" $
   doc "Convert a Hydra term to a Java expression string" $
   lambda "term" $ lambda "g" $
     Eithers.bimap
-      ("ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic"))
+      ("ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic"))
       (Serialization.printExpr <.> Serialization.parenthesize <.> JavaSerdeSource.writeExpression)
       (JavaCoderSource.encodeTerm
         @@ (record JavaHelpers._JavaEnvironment [
@@ -519,6 +520,6 @@ inferTerm = define "inferTerm" $
   doc "Run type inference on a single term" $
   lambda "g" $ lambda "term" $
     Eithers.bimap
-      ("ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic"))
+      ("ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic"))
       ("x" ~> Typing.inferenceResultTerm (var "x"))
       (Inference.inferInGraphContext @@ asTerm Lexical.emptyContext @@ var "g" @@ var "term")

@@ -8,7 +8,6 @@ import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
-import qualified Hydra.Error as Error
 import qualified Hydra.Ext.Java.Coder as Coder
 import qualified Hydra.Ext.Java.Helpers as Helpers
 import qualified Hydra.Ext.Java.Serde as Serde
@@ -26,6 +25,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Serialization as Serialization
+import qualified Hydra.Show.Error as Error
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Typing as Typing
 import qualified Hydra.Util as Util
@@ -38,7 +38,7 @@ import qualified Data.Set as S
 
 -- | Convert a Hydra term to a Java expression string
 termToJava :: (Core.Term -> Graph.Graph -> Either String String)
-termToJava term g = (Eithers.bimap (\ic -> Error.unOtherError (Context.inContextObject ic)) (\arg_ -> (\arg_ -> Serialization.printExpr (Serialization.parenthesize arg_)) (Serde.writeExpression arg_)) (Coder.encodeTerm (Helpers.JavaEnvironment {
+termToJava term g = (Eithers.bimap (\ic -> Error.error (Context.inContextObject ic)) (\arg_ -> (\arg_ -> Serialization.printExpr (Serialization.parenthesize arg_)) (Serde.writeExpression arg_)) (Coder.encodeTerm (Helpers.JavaEnvironment {
   Helpers.javaEnvironmentAliases = Helpers.Aliases {
     Helpers.aliasesCurrentNamespace = (Module.Namespace "test"),
     Helpers.aliasesPackages = Maps.empty,
@@ -314,4 +314,4 @@ inferTestCase g tcm =
 
 -- | Run type inference on a single term
 inferTerm :: (Graph.Graph -> Core.Term -> Either String Core.Term)
-inferTerm g term = (Eithers.bimap (\ic -> Error.unOtherError (Context.inContextObject ic)) (\x -> Typing.inferenceResultTerm x) (Inference.inferInGraphContext Lexical.emptyContext g term))
+inferTerm g term = (Eithers.bimap (\ic -> Error.error (Context.inContextObject ic)) (\x -> Typing.inferenceResultTerm x) (Inference.inferInGraphContext Lexical.emptyContext g term))

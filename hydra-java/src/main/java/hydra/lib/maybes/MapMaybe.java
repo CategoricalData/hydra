@@ -55,7 +55,7 @@ public class MapMaybe extends PrimitiveFunction {
                 List<Term> results = new ArrayList<>();
                 for (Term item : inputList) {
                     Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                        hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(f, item));
+                        hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(f, item));
                     if (r.isLeft()) return (Either) r;
                     Either<InContext<Error_>, Maybe<Term>> maybeResult = hydra.extract.core.Core.maybeTerm(cx,
                         t -> Either.right(t), graph, ((Either.Right<InContext<Error_>, Term>) r).value);

@@ -1139,6 +1139,41 @@
               "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}]},
     {
+      "name": "hydra.lexical.emptyContext",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {"string": "An empty context; no trace, no messages, no other data."}}}],
+          "body": {
+            "record": {
+              "fields": [
+                {
+                  "name": "trace",
+                  "term": {
+                    "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}},
+                {
+                  "name": "messages",
+                  "term": {
+                    "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}},
+                {
+                  "name": "other",
+                  "term": {
+                    "typeApplication": {
+                      "body": {
+                        "typeApplication": {
+                          "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
+                          "type": {"variable": "hydra.core.Name"}}},
+                      "type": {"variable": "hydra.core.Term"}}}}],
+              "typeName": "hydra.context.Context"}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.context.Context"},
+          "variables": []}]},
+    {
       "name": "hydra.lexical.emptyGraph",
       "term": {
         "annotated": {
@@ -4130,11 +4165,7 @@
               "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}]}],
   "namespace": "hydra.lexical",
-  "termDependencies": [
-    "hydra.monads",
-    "hydra.rewriting",
-    "hydra.show.core",
-    "hydra.show.error"],
+  "termDependencies": ["hydra.rewriting", "hydra.show.core", "hydra.show.error"],
   "typeDependencies": [
     "hydra.accessors",
     "hydra.ast",

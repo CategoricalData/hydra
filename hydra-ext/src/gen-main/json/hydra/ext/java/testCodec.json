@@ -166,12 +166,12 @@
                                                     "body": {
                                                       "function": {
                                                         "elimination": {"record": {"field": "object", "typeName": "hydra.context.InContext"}}}},
-                                                    "type": {"variable": "hydra.error.OtherError"}}}}},
-                                            "function": {"function": {"elimination": {"wrap": "hydra.error.OtherError"}}}}},
+                                                    "type": {"variable": "hydra.error.Error"}}}}},
+                                            "function": {"variable": "hydra.show.error.error"}}},
                                         "domain": [
                                           {
                                             "application": {
-                                              "argument": {"variable": "hydra.error.OtherError"},
+                                              "argument": {"variable": "hydra.error.Error"},
                                               "function": {"variable": "hydra.context.InContext"}}}],
                                         "parameter": "ic"}}},
                                   "function": {
@@ -185,7 +185,7 @@
                                                   "body": {"function": {"primitive": "hydra.lib.eithers.bimap"}},
                                                   "type": {
                                                     "application": {
-                                                      "argument": {"variable": "hydra.error.OtherError"},
+                                                      "argument": {"variable": "hydra.error.Error"},
                                                       "function": {"variable": "hydra.context.InContext"}}}}},
                                               "type": {"variable": "hydra.ext.java.syntax.Expression"}}},
                                           "type": {"literal": {"string": {}}}}},
@@ -2844,12 +2844,12 @@
                                                     "body": {
                                                       "function": {
                                                         "elimination": {"record": {"field": "object", "typeName": "hydra.context.InContext"}}}},
-                                                    "type": {"variable": "hydra.error.OtherError"}}}}},
-                                            "function": {"function": {"elimination": {"wrap": "hydra.error.OtherError"}}}}},
+                                                    "type": {"variable": "hydra.error.Error"}}}}},
+                                            "function": {"variable": "hydra.show.error.error"}}},
                                         "domain": [
                                           {
                                             "application": {
-                                              "argument": {"variable": "hydra.error.OtherError"},
+                                              "argument": {"variable": "hydra.error.Error"},
                                               "function": {"variable": "hydra.context.InContext"}}}],
                                         "parameter": "ic"}}},
                                   "function": {
@@ -2863,7 +2863,7 @@
                                                   "body": {"function": {"primitive": "hydra.lib.eithers.bimap"}},
                                                   "type": {
                                                     "application": {
-                                                      "argument": {"variable": "hydra.error.OtherError"},
+                                                      "argument": {"variable": "hydra.error.Error"},
                                                       "function": {"variable": "hydra.context.InContext"}}}}},
                                               "type": {"variable": "hydra.typing.InferenceResult"}}},
                                           "type": {"literal": {"string": {}}}}},
@@ -2895,7 +2895,8 @@
     "hydra.names",
     "hydra.inference",
     "hydra.constants",
-    "hydra.rewriting"],
+    "hydra.rewriting",
+    "hydra.show.error"],
   "typeDependencies": [
     "hydra.ext.java.helpers",
     "hydra.ext.java.syntax",

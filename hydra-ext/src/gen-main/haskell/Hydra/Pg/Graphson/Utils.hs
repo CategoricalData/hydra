@@ -8,13 +8,13 @@ import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Error as Error
 import qualified Hydra.Json.Model as Model
+import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Lists as Lists
 import qualified Hydra.Lib.Literals as Literals
 import qualified Hydra.Lib.Maps as Maps
 import qualified Hydra.Lib.Maybes as Maybes
 import qualified Hydra.Lib.Pairs as Pairs
-import qualified Hydra.Monads as Monads
 import qualified Hydra.Pg.Graphson.Construct as Construct
 import qualified Hydra.Pg.Graphson.Syntax as Syntax
 import qualified Hydra.Pg.Model as Model_
@@ -91,22 +91,22 @@ encodeTermValue term = ((\x -> case x of
       Core.FloatValueFloat64 v2 -> (Right (Syntax.ValueDouble (Syntax.DoubleValueFinite v2)))
       _ -> (Left (Context.InContext {
         Context.inContextObject = (Error.ErrorOther (Error.OtherError "unsupported float type")),
-        Context.inContextContext = Monads.emptyContext}))) v1)
+        Context.inContextContext = Lexical.emptyContext}))) v1)
     Core.LiteralInteger v1 -> ((\x -> case x of
       Core.IntegerValueBigint v2 -> (Right (Syntax.ValueBigInteger v2))
       Core.IntegerValueInt32 v2 -> (Right (Syntax.ValueInteger v2))
       Core.IntegerValueInt64 v2 -> (Right (Syntax.ValueLong v2))
       _ -> (Left (Context.InContext {
         Context.inContextObject = (Error.ErrorOther (Error.OtherError "unsupported integer type")),
-        Context.inContextContext = Monads.emptyContext}))) v1)
+        Context.inContextContext = Lexical.emptyContext}))) v1)
     Core.LiteralString v1 -> (Right (Syntax.ValueString v1))
     _ -> (Left (Context.InContext {
       Context.inContextObject = (Error.ErrorOther (Error.OtherError "unsupported literal type for GraphSON encoding")),
-      Context.inContextContext = Monads.emptyContext}))) v0)
+      Context.inContextContext = Lexical.emptyContext}))) v0)
   Core.TermUnit -> (Right Syntax.ValueNull)
   _ -> (Left (Context.InContext {
     Context.inContextObject = (Error.ErrorOther (Error.OtherError "unsupported term variant for GraphSON encoding")),
-    Context.inContextContext = Monads.emptyContext}))) (Rewriting.deannotateTerm term))
+    Context.inContextContext = Lexical.emptyContext}))) (Rewriting.deannotateTerm term))
 
 -- | Convert property graph elements to a list of GraphSON JSON values
 pgElementsToGraphson :: Ord t0 => ((t0 -> Either t1 Syntax.Value) -> [Model_.Element t0] -> Either t1 [Model.Value])

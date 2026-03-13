@@ -76,6 +76,7 @@ import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Accessors as ShowAccessors
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Show.Error     as ShowError
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
 import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing    as ShowTyping
@@ -116,7 +117,7 @@ ns = Namespace "hydra.ext.python.testCodec"
 
 module_ :: Module
 module_ = Module ns elements
-    [PyCoderSource.ns, PySerde.ns, PyNames.ns, PyUtils.ns, SerializationSource.ns, Formatting.ns, Names.ns, Inference.ns, Constants.ns, Rewriting.ns, Lexical.ns]
+    [PyCoderSource.ns, PySerde.ns, PyNames.ns, PyUtils.ns, SerializationSource.ns, Formatting.ns, Names.ns, Inference.ns, Constants.ns, Rewriting.ns, Lexical.ns, ShowError.ns]
     (PyHelpersSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Python test code generation codec for pytest-based generation tests"
   where
@@ -194,7 +195,7 @@ termToPythonWithContext = define "termToPythonWithContext" $
   doc "Convert a Hydra term to a Python expression string with a pre-built graph context" $
   lambda "namespaces_" $ lambda "graph0" $ lambda "skipCasts" $ lambda "term" $ lambda "_g" $
     Eithers.bimap
-      ("ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic"))
+      ("ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic"))
       (Serialization.printExpr <.> PySerde.encodeExpression)
       (PyCoderSource.encodeTermInline
         @@ asTerm Lexical.emptyContext
@@ -225,7 +226,7 @@ typeToPython = define "typeToPython" $
   doc "Convert a Hydra type to a Python type expression string" $
   lambda "namespaces_" $ lambda "typ" $ lambda "g" $
     Eithers.bimap
-      ("ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic"))
+      ("ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic"))
       (Serialization.printExpr <.> PySerde.encodeExpression)
       (PyCoderSource.encodeType
         @@ (record PyHelpers._PythonEnvironment [
@@ -529,6 +530,6 @@ inferTerm = define "inferTerm" $
   doc "Run type inference on a single term" $
   lambda "g" $ lambda "term" $
     Eithers.bimap
-      ("ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic"))
+      ("ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic"))
       ("x" ~> Typing.inferenceResultTerm (var "x"))
       (Inference.inferInGraphContext @@ asTerm Lexical.emptyContext @@ var "g" @@ var "term")

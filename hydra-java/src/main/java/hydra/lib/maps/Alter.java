@@ -57,7 +57,7 @@ public class Alter extends PrimitiveFunction {
                 Term key = args.get(1);
                 Maybe<Term> currentValue = Lookup.apply(key, mp);
                 Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                    hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(f, Terms.optional(currentValue)));
+                    hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(f, Terms.optional(currentValue)));
                 if (r.isLeft()) return (Either) r;
                 Either<InContext<Error_>, Maybe<Term>> maybeResult = hydra.extract.core.Core.maybeTerm(cx,
                     t -> Either.right(t), graph, ((Either.Right<InContext<Error_>, Term>) r).value);

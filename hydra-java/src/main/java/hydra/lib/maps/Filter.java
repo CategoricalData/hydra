@@ -57,7 +57,7 @@ public class Filter extends PrimitiveFunction {
                 Map<Term, Term> result = FromList.emptyLike(mp);
                 for (Map.Entry<Term, Term> entry : mp.entrySet()) {
                     Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                        hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(args.get(0), entry.getValue()));
+                        hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), entry.getValue()));
                     if (r.isLeft()) return (Either) r;
                     Either<InContext<Error_>, Boolean> b = hydra.extract.core.Core.boolean_(cx, graph,
                         ((Either.Right<InContext<Error_>, Term>) r).value);

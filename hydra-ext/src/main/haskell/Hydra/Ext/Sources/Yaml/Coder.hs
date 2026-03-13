@@ -37,9 +37,9 @@ import qualified Data.Set                                  as S
 import qualified Hydra.Ext.Org.Yaml.Model as YM
 
 
--- | Lift Either String to Either (InContext OtherError) using a context
-liftStringError :: TTerm Context -> TTerm (Either String a) -> TTerm (Either (InContext OtherError) a)
-liftStringError cx = Eithers.bimap ("_s" ~> Ctx.inContext (Error.otherError $ var "_s") cx) ("_x" ~> var "_x")
+-- | Lift Either String to Either (InContext Error) using a context
+liftStringError :: TTerm Context -> TTerm (Either String a) -> TTerm (Either (InContext Error) a)
+liftStringError cx = Eithers.bimap ("_s" ~> Ctx.inContext (Error.errorOther $ Error.otherError $ var "_s") cx) ("_x" ~> var "_x")
 
 ns :: Namespace
 ns = Namespace "hydra.ext.org.yaml.coder"
@@ -63,7 +63,7 @@ module_ = Module ns elements
       toBinding termCoder,
       toBinding unitCoder]
 
-yamlCoder :: TBinding (Type -> Context -> Graph -> Either (InContext OtherError) (Coder Term YM.Node))
+yamlCoder :: TBinding (Type -> Context -> Graph -> Either (InContext Error) (Coder Term YM.Node))
 yamlCoder = define "yamlCoder" $
   doc "Create a YAML coder for a given type" $
   "typ" ~> "cx" ~> "g" ~>
@@ -72,25 +72,25 @@ yamlCoder = define "yamlCoder" $
   "coder" <<~ var "mkTermCoder" @@ (Compute.adapterTarget $ var "adapter") $
   right $ AdaptUtils.composeCoders @@ (Compute.adapterCoder $ var "adapter") @@ var "coder"
 
-literalYamlCoder :: TBinding (LiteralType -> Either (InContext OtherError) (Coder Literal YM.Scalar))
+literalYamlCoder :: TBinding (LiteralType -> Either (InContext Error) (Coder Literal YM.Scalar))
 literalYamlCoder = define "literalYamlCoder" $
   doc "Create a YAML coder for literal types" $
   "lt" ~>
   "decodeBool" <~ ("cx" ~> "s" ~>
     cases YM._Scalar (var "s")
-      (Just $ Ctx.failInContext (Error.otherError (Strings.cat $ list [string "expected boolean, found scalar"])) (var "cx")) [
+      (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected boolean, found scalar"])) (var "cx")) [
       YM._Scalar_bool>>: "b" ~> right (Core.literalBoolean $ var "b")]) $
   "decodeFloat" <~ ("cx" ~> "s" ~>
     cases YM._Scalar (var "s")
-      (Just $ Ctx.failInContext (Error.otherError (Strings.cat $ list [string "expected float, found scalar"])) (var "cx")) [
+      (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected float, found scalar"])) (var "cx")) [
       YM._Scalar_float>>: "f" ~> right (Core.literalFloat $ Core.floatValueBigfloat $ var "f")]) $
   "decodeInteger" <~ ("cx" ~> "s" ~>
     cases YM._Scalar (var "s")
-      (Just $ Ctx.failInContext (Error.otherError (Strings.cat $ list [string "expected integer, found scalar"])) (var "cx")) [
+      (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected integer, found scalar"])) (var "cx")) [
       YM._Scalar_int>>: "i" ~> right (Core.literalInteger $ Core.integerValueBigint $ var "i")]) $
   "decodeString" <~ ("cx" ~> "s" ~>
     cases YM._Scalar (var "s")
-      (Just $ Ctx.failInContext (Error.otherError (Strings.cat $ list [string "expected string, found scalar"])) (var "cx")) [
+      (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected string, found scalar"])) (var "cx")) [
       YM._Scalar_str>>: "s'" ~> right (Core.literalString $ var "s'")]) $
   "encoded" <~ (cases _LiteralType (var "lt") Nothing [
     _LiteralType_boolean>>: constant $ Compute.coder
@@ -117,7 +117,7 @@ literalYamlCoder = define "literalYamlCoder" $
       (var "decodeString")]) $
   right $ var "encoded"
 
-recordCoder :: TBinding (RowType -> Context -> Graph -> Either (InContext OtherError) (Coder Term YM.Node))
+recordCoder :: TBinding (RowType -> Context -> Graph -> Either (InContext Error) (Coder Term YM.Node))
 recordCoder = define "recordCoder" $
   doc "Create a YAML coder for record types" $
   "rt" ~> "cx" ~> "g" ~>
@@ -130,7 +130,7 @@ recordCoder = define "recordCoder" $
     ("cx" ~> "term" ~> encodeRecord @@ var "coders" @@ var "cx" @@ var "g" @@ var "term")
     ("cx" ~> "val" ~> decodeRecord @@ var "rt" @@ var "coders" @@ var "cx" @@ var "val")
 
-encodeRecord :: TBinding ([(FieldType, Coder Term YM.Node)] -> Context -> Graph -> Term -> Either (InContext OtherError) YM.Node)
+encodeRecord :: TBinding ([(FieldType, Coder Term YM.Node)] -> Context -> Graph -> Term -> Either (InContext Error) YM.Node)
 encodeRecord = define "encodeRecord" $
   doc "Encode a record term to YAML" $
   "coders" ~> "cx" ~> "graph" ~> "term" ~>
@@ -159,7 +159,7 @@ encodeRecord = define "encodeRecord" $
   "maybeFields" <<~ Eithers.mapList (var "encodeField") (Lists.zip (var "coders") (var "fields")) $
   right (Yaml.nodeMapping $ Maps.fromList $ Maybes.cat $ var "maybeFields")
 
-decodeRecord :: TBinding (RowType -> [(FieldType, Coder Term YM.Node)] -> Context -> YM.Node -> Either (InContext OtherError) Term)
+decodeRecord :: TBinding (RowType -> [(FieldType, Coder Term YM.Node)] -> Context -> YM.Node -> Either (InContext Error) Term)
 decodeRecord = define "decodeRecord" $
   doc "Decode a YAML value to a record term" $
   "rt" ~> "coders" ~> "cx" ~> "n" ~>
@@ -175,36 +175,36 @@ decodeRecord = define "decodeRecord" $
     "fields" <<~ Eithers.mapList (var "decodeField") (var "coders") $
     right (Core.termRecord $ Core.record (Core.rowTypeTypeName $ var "rt") (var "fields"))) $
   cases YM._Node (var "n")
-    (Just $ Ctx.failInContext (Error.otherError (string "expected mapping")) (var "cx")) [
+    (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (string "expected mapping")) (var "cx")) [
     YM._Node_mapping>>: var "decodeObjectBody"]
 
-termCoder :: TBinding (Type -> Context -> Graph -> Either (InContext OtherError) (Coder Term YM.Node))
+termCoder :: TBinding (Type -> Context -> Graph -> Either (InContext Error) (Coder Term YM.Node))
 termCoder = define "termCoder" $
   doc "Create a YAML coder for term types" $
   "typ" ~> "cx" ~> "g" ~>
   "stripped" <~ (Rewriting.deannotateType @@ var "typ") $
   "encodeLiteral" <~ ("ac" ~> "cx" ~> "term" ~>
     cases _Term (var "term")
-      (Just $ Ctx.failInContext (Error.otherError (Strings.cat $ list [string "expected literal term, found: ", ShowCore.term @@ var "term"])) (var "cx")) [
+      (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected literal term, found: ", ShowCore.term @@ var "term"])) (var "cx")) [
       _Term_literal>>: "av" ~>
         "scalar" <<~ Compute.coderEncode (var "ac") @@ var "cx" @@ var "av" $
         right (Yaml.nodeScalar $ var "scalar")]) $
   "encodeList" <~ ("lc" ~> "cx" ~> "term" ~>
     cases _Term (var "term")
-      (Just $ Ctx.failInContext (Error.otherError (Strings.cat $ list [string "expected list term, found: ", ShowCore.term @@ var "term"])) (var "cx")) [
+      (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected list term, found: ", ShowCore.term @@ var "term"])) (var "cx")) [
       _Term_list>>: "els" ~>
         "encodedEls" <<~ Eithers.mapList ("el" ~> Compute.coderEncode (var "lc") @@ var "cx" @@ var "el") (var "els") $
         right (Yaml.nodeSequence $ var "encodedEls")]) $
   "decodeList" <~ ("lc" ~> "cx" ~> "n" ~>
     cases YM._Node (var "n")
-      (Just $ Ctx.failInContext (Error.otherError (string "expected sequence")) (var "cx")) [
+      (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (string "expected sequence")) (var "cx")) [
       YM._Node_sequence>>: "nodes" ~>
         "decodedNodes" <<~ Eithers.mapList ("node" ~> Compute.coderDecode (var "lc") @@ var "cx" @@ var "node") (var "nodes") $
         right (Core.termList $ var "decodedNodes")]) $
   "encodeMaybe" <~ ("maybeElementCoder" ~> "cx" ~> "maybeTerm" ~>
     "strippedMaybeTerm" <~ (Rewriting.deannotateTerm @@ var "maybeTerm") $
     cases _Term (var "strippedMaybeTerm")
-      (Just $ Ctx.failInContext (Error.otherError (Strings.cat $ list [string "expected optional term, found: ", ShowCore.term @@ var "maybeTerm"])) (var "cx")) [
+      (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected optional term, found: ", ShowCore.term @@ var "maybeTerm"])) (var "cx")) [
       _Term_maybe>>: "maybeContents" ~>
         Logic.ifElse (Maybes.isNothing $ var "maybeContents")
           (right $ Yaml.nodeScalar Yaml.scalarNull)
@@ -222,7 +222,7 @@ termCoder = define "termCoder" $
             right (Core.termMaybe $ just $ var "decodedInner")) [
           YM._Scalar_null>>: constant $ right (Core.termMaybe nothing)]]) $
   "result" <~ (cases _Type (var "stripped")
-    (Just $ Ctx.failInContext (Error.otherError (Strings.cat $ list [
+    (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [
       string "unsupported type in YAML: ",
       ShowCore.type_ @@ var "typ"])) (var "cx")) [
     _Type_literal>>: "at" ~>
@@ -231,7 +231,7 @@ termCoder = define "termCoder" $
         (var "encodeLiteral" @@ var "ac")
         ("cx" ~> "n" ~>
           cases YM._Node (var "n")
-            (Just $ Ctx.failInContext (Error.otherError (string "expected scalar node")) (var "cx")) [
+            (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (string "expected scalar node")) (var "cx")) [
             YM._Node_scalar>>: "s" ~>
               "lit" <<~ Compute.coderDecode (var "ac") @@ var "cx" @@ var "s" $
               right (Core.termLiteral $ var "lit")]),
@@ -260,13 +260,13 @@ termCoder = define "termCoder" $
       right $ Compute.coder
         ("cx" ~> "term" ~>
           cases _Term (var "term")
-            (Just $ Ctx.failInContext (Error.otherError (Strings.cat $ list [string "expected map term, found: ", ShowCore.term @@ var "term"])) (var "cx")) [
+            (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected map term, found: ", ShowCore.term @@ var "term"])) (var "cx")) [
             _Term_map>>: "m" ~>
               "entries" <<~ Eithers.mapList ("entry" ~> var "encodeEntry" @@ var "cx" @@ var "entry") (Maps.toList $ var "m") $
               right (Yaml.nodeMapping $ Maps.fromList $ var "entries")])
         ("cx" ~> "n" ~>
           cases YM._Node (var "n")
-            (Just $ Ctx.failInContext (Error.otherError (string "expected mapping")) (var "cx")) [
+            (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (string "expected mapping")) (var "cx")) [
             YM._Node_mapping>>: "m" ~>
               "entries" <<~ Eithers.mapList ("entry" ~> var "decodeEntry" @@ var "cx" @@ var "entry") (Maps.toList $ var "m") $
               right (Core.termMap $ Maps.fromList $ var "entries")]),
@@ -284,13 +284,13 @@ unitCoder = define "unitCoder" $
   doc "YAML coder for unit values" $
   "encodeUnit" <~ ("cx" ~> "term" ~>
     cases _Term (Rewriting.deannotateTerm @@ var "term")
-      (Just $ Ctx.failInContext (Error.otherError (Strings.cat $ list [string "expected unit, found: ", ShowCore.term @@ var "term"])) (var "cx")) [
+      (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "expected unit, found: ", ShowCore.term @@ var "term"])) (var "cx")) [
       _Term_unit>>: constant $ right $ Yaml.nodeScalar Yaml.scalarNull]) $
   "decodeUnit" <~ ("cx" ~> "n" ~>
     cases YM._Node (var "n")
-      (Just $ Ctx.failInContext (Error.otherError (string "expected null")) (var "cx")) [
+      (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (string "expected null")) (var "cx")) [
       YM._Node_scalar>>: "s" ~>
         cases YM._Scalar (var "s")
-          (Just $ Ctx.failInContext (Error.otherError (string "expected null scalar")) (var "cx")) [
+          (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (string "expected null scalar")) (var "cx")) [
           YM._Scalar_null>>: constant $ right Core.termUnit]]) $
   Compute.coder (var "encodeUnit") (var "decodeUnit")

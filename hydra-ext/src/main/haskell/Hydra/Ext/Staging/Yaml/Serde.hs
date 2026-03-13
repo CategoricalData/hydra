@@ -324,7 +324,7 @@ trimTrailingSpaces = reverse . dropWhile (== ' ') . reverse
 -- ========================================
 
 -- | YAML byte string coder
-yamlByteStringCoder :: Context -> Graph -> Type -> Either (InContext OtherError) (Coder (Term) BS.ByteString)
+yamlByteStringCoder :: Context -> Graph -> Type -> Either (InContext Error) (Coder (Term) BS.ByteString)
 yamlByteStringCoder cx g typ = do
   coder <- yamlCoder typ cx g
   Right $ Coder
@@ -332,11 +332,11 @@ yamlByteStringCoder cx g typ = do
       node <- coderEncode coder cx' term
       Right $ hydraYamlToBytes node)
     (\cx' bs -> case bytesToHydraYaml bs of
-      Left err -> Left $ InContext (OtherError err) cx'
+      Left err -> Left $ InContext (ErrorOther (OtherError err)) cx'
       Right node -> coderDecode coder cx' node)
 
 -- | YAML string coder
-yamlStringCoder :: Context -> Graph -> Type -> Either (InContext OtherError) (Coder (Term) String)
+yamlStringCoder :: Context -> Graph -> Type -> Either (InContext Error) (Coder (Term) String)
 yamlStringCoder cx g typ = do
   coder <- yamlCoder typ cx g
   Right $ Coder
@@ -344,5 +344,5 @@ yamlStringCoder cx g typ = do
       node <- coderEncode coder cx' term
       Right $ hydraYamlToString node)
     (\cx' s -> case parseYamlString s of
-      Left err -> Left $ InContext (OtherError err) cx'
+      Left err -> Left $ InContext (ErrorOther (OtherError err)) cx'
       Right node -> coderDecode coder cx' node)

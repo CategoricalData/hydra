@@ -94,7 +94,7 @@ ns = Namespace "hydra.inference"
 
 module_ :: Module
 module_ = Module ns elements
-    [Annotations.ns, Checking.ns, ExtractCore.ns, Lexical.ns, Monads.ns, Reflect.ns,
+    [Annotations.ns, Checking.ns, ExtractCore.ns, Lexical.ns, Reflect.ns,
       Rewriting.ns, Schemas.ns, ShowCore.ns, ShowError.ns, ShowTyping.ns, Sorting.ns, Substitution.ns,
       Unification.ns]
     kernelTypesNamespaces $

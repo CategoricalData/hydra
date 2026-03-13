@@ -44,7 +44,7 @@ public class Foldl extends PrimitiveFunction {
                 Term acc = args.get(1);
                 for (Term x : xs) {
                     Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                        hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(args.get(0), acc, x));
+                        hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), acc, x));
                     if (r.isLeft()) return r;
                     acc = ((Either.Right<InContext<Error_>, Term>) r).value;
                 }

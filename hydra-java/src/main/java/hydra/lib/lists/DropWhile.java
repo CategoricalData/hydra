@@ -43,7 +43,7 @@ public class DropWhile extends PrimitiveFunction {
                 int dropCount = 0;
                 for (Term x : lst) {
                     Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                        hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(args.get(0), x));
+                        hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), x));
                     if (r.isLeft()) return (Either) r;
                     Either<InContext<Error_>, Boolean> b = hydra.extract.core.Core.boolean_(cx, graph,
                         ((Either.Right<InContext<Error_>, Term>) r).value);
