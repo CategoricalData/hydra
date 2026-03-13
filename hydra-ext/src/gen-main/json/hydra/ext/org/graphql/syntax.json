@@ -18,7 +18,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.Name"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -54,7 +54,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.IntValue"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -90,7 +90,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.FloatValue"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -126,7 +126,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.StringValue"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -162,7 +162,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.Document"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -203,7 +203,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.Definition"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -277,7 +277,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.ExecutableDocument"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -319,7 +320,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.ExecutableDefinition"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -392,7 +394,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.OperationDefinition"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -465,7 +468,9 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {
+                                "string": "hydra.ext.org.graphql.syntax.OperationDefinition_Sequence"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -615,7 +620,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.OperationType"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -692,7 +697,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.SelectionSet"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -733,7 +738,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.Selection"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -825,7 +830,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.Field"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -979,7 +984,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.Alias"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -1045,7 +1050,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.Arguments"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -1086,7 +1091,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.Argument"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -1157,7 +1162,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.FragmentSpread"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -1233,7 +1238,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.InlineFragment"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -1335,7 +1340,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.FragmentDefinition"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -1453,7 +1459,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.FragmentName"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -1489,7 +1495,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.TypeCondition"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -1553,7 +1559,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.Value"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -1771,7 +1777,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.BooleanValue"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -1832,7 +1838,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.NullValue"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -1863,7 +1869,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.EnumValue"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -1899,7 +1905,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.ListValue"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -1976,7 +1982,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.ListValue_Sequence"}},
                             "typeName": "hydra.core.Name"}}},
                       {"name": "fields", "term": {"list": []}}],
                     "typeName": "hydra.core.RowType"}}},
@@ -2002,7 +2009,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.ObjectValue"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -2079,7 +2086,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.ObjectValue_Sequence"}},
                             "typeName": "hydra.core.Name"}}},
                       {"name": "fields", "term": {"list": []}}],
                     "typeName": "hydra.core.RowType"}}},
@@ -2105,7 +2113,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.ObjectField"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -2176,7 +2184,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.VariablesDefinition"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -2299,7 +2308,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.Variable"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -2335,7 +2344,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.DefaultValue"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -2371,7 +2380,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.Type"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -2463,7 +2472,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.NamedType"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -2499,7 +2508,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.ListType"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -2535,7 +2544,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.NonNullType"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -2606,7 +2615,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.Directives"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -2647,7 +2656,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.Directive"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -2723,7 +2732,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.TypeSystemDocment"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -2765,7 +2775,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.TypeSystemDefinition"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -2859,7 +2870,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.TypeSystemExtensionDocument"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -2902,7 +2914,9 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {
+                                "string": "hydra.ext.org.graphql.syntax.TypeSystemDefinitionOrExtension"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -2975,7 +2989,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.TypeSystemExtension"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -3047,7 +3062,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.SchemaDefinition"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -3150,7 +3166,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.SchemaExtension"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -3222,7 +3239,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.SchemaExtension_Sequence"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -3299,7 +3317,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.RootOperationTypeDefinition"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -3370,7 +3389,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.Description"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -3406,7 +3425,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.TypeDefinition"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -3567,7 +3586,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.org.graphql.syntax.TypeExtension"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -3728,7 +3747,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.ScalarTypeDefinition"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -3830,7 +3850,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.ScalarTypeExtension"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -3901,7 +3922,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.ObjectTypeDefinition"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -4057,7 +4079,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.ObjectTypeExtension"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -4155,7 +4178,9 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {
+                                "string": "hydra.ext.org.graphql.syntax.ObjectTypeExtension_Sequence"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -4280,7 +4305,9 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {
+                                "string": "hydra.ext.org.graphql.syntax.ObjectTypeExtension_Sequence2"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -4383,7 +4410,9 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {
+                                "string": "hydra.ext.org.graphql.syntax.ObjectTypeExtension_Sequence3"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -4455,7 +4484,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.ImplementsInterfaces"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -4530,7 +4560,9 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {
+                                "string": "hydra.ext.org.graphql.syntax.ImplementsInterfaces_Sequence"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -4602,7 +4634,9 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {
+                                "string": "hydra.ext.org.graphql.syntax.ImplementsInterfaces_Sequence2"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -4673,7 +4707,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.FieldsDefinition"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -4715,7 +4750,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.FieldDefinition"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -4865,7 +4901,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.ArgumentsDefinition"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -4907,7 +4944,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.InputValueDefinition"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -5056,7 +5094,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.InterfaceTypeDefinition"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -5131,7 +5170,9 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {
+                                "string": "hydra.ext.org.graphql.syntax.InterfaceTypeDefinition_Sequence"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -5282,7 +5323,9 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {
+                                "string": "hydra.ext.org.graphql.syntax.InterfaceTypeDefinition_Sequence2"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -5406,7 +5449,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.InterfaceTypeExtension"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -5504,7 +5548,9 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {
+                                "string": "hydra.ext.org.graphql.syntax.InterfaceTypeExtension_Sequence"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -5629,7 +5675,9 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {
+                                "string": "hydra.ext.org.graphql.syntax.InterfaceTypeExtension_Sequence2"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -5727,7 +5775,9 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {
+                                "string": "hydra.ext.org.graphql.syntax.InterfaceTypeExtension_Sequence3"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -5799,7 +5849,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.UnionTypeDefinition"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -5928,7 +5979,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.UnionMemberTypes"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -6001,7 +6053,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.UnionMemberTypes_Sequence"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -6073,7 +6126,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.UnionMemberTypes_Sequence2"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -6142,7 +6196,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.UnionTypeExtension"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -6216,7 +6271,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.UnionTypeExtension_Sequence"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -6314,7 +6370,9 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {
+                                "string": "hydra.ext.org.graphql.syntax.UnionTypeExtension_Sequence2"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -6385,7 +6443,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.EnumTypeDefinition"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -6514,7 +6573,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.EnumValuesDefinition"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -6556,7 +6616,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.EnumValueDefinition"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -6658,7 +6719,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.EnumTypeExtension"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -6731,7 +6793,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.EnumTypeExtension_Sequence"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -6829,7 +6892,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.EnumTypeExtension_Sequence2"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -6900,7 +6964,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.InputObjectTypeDefinition"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -6975,7 +7040,9 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {
+                                "string": "hydra.ext.org.graphql.syntax.InputObjectTypeDefinition_Sequence"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -7099,7 +7166,9 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {
+                                "string": "hydra.ext.org.graphql.syntax.InputObjectTypeDefinition_Sequence2"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -7201,7 +7270,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.InputFieldsDefinition"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -7243,7 +7313,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.InputObjectTypeExtension"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -7318,7 +7389,9 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {
+                                "string": "hydra.ext.org.graphql.syntax.InputObjectTypeExtension_Sequence"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -7416,7 +7489,9 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {
+                                "string": "hydra.ext.org.graphql.syntax.InputObjectTypeExtension_Sequence2"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -7487,7 +7562,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.DirectiveDefinition"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -7633,7 +7709,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.DirectiveLocations"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -7707,7 +7784,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.DirectiveLocations_Sequence"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -7780,7 +7858,9 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {
+                                "string": "hydra.ext.org.graphql.syntax.DirectiveLocations_Sequence2"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -7850,7 +7930,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.DirectiveLocation"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -7923,7 +8004,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.ExecutableDirectiveLocation"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -8080,7 +8162,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.org.graphql.syntax.TypeSystemDirectiveLocation"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",

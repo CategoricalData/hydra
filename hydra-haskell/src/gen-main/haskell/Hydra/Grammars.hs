@@ -20,6 +20,7 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
+import qualified Hydra.Rewriting as Rewriting
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -66,8 +67,10 @@ grammarToModule ns grammar desc =
           let elements = (Lists.map (\pair ->  
                   let lname = (Pairs.first pair)
                   in  
-                    let typ = (wrapType (Pairs.second pair))
-                    in (Annotations.typeElement (toName ns lname) typ)) elementPairs)
+                    let elName = (toName ns lname)
+                    in  
+                      let typ = (replacePlaceholders elName (wrapType (Pairs.second pair)))
+                      in (Annotations.typeElement elName typ)) elementPairs)
           in Module.Module {
             Module.moduleNamespace = ns,
             Module.moduleElements = elements,
@@ -155,6 +158,20 @@ rawName pat = ((\x -> case x of
   Grammar.PatternRegex _ -> "regex"
   Grammar.PatternSequence _ -> "sequence"
   Grammar.PatternStar v0 -> (Strings.cat2 "listOf" (Formatting.capitalize (rawName v0)))) pat)
+
+-- | Replace Placeholder names in a type with the actual element name
+replacePlaceholders :: (Core.Name -> Core.Type -> Core.Type)
+replacePlaceholders elName typ = (Rewriting.rewriteType (\recurse -> \t -> (\x -> case x of
+  Core.TypeRecord v0 -> (Logic.ifElse (Equality.equal (Core.rowTypeTypeName v0) Constants.placeholderName) (Core.TypeRecord (Core.RowType {
+    Core.rowTypeTypeName = elName,
+    Core.rowTypeFields = (Core.rowTypeFields v0)})) t)
+  Core.TypeUnion v0 -> (Logic.ifElse (Equality.equal (Core.rowTypeTypeName v0) Constants.placeholderName) (Core.TypeUnion (Core.RowType {
+    Core.rowTypeTypeName = elName,
+    Core.rowTypeFields = (Core.rowTypeFields v0)})) t)
+  Core.TypeWrap v0 -> (Logic.ifElse (Equality.equal (Core.wrappedTypeTypeName v0) Constants.placeholderName) (Core.TypeWrap (Core.WrappedType {
+    Core.wrappedTypeTypeName = elName,
+    Core.wrappedTypeBody = (Core.wrappedTypeBody v0)})) t)
+  _ -> t) t) typ)
 
 -- | Remove trivial patterns from records
 simplify :: (Bool -> [Grammar.Pattern] -> [Grammar.Pattern])

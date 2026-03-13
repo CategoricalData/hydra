@@ -57,6 +57,7 @@ import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
+import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 
 import Hydra.Grammar as G
 
@@ -66,7 +67,7 @@ ns = Namespace "hydra.grammars"
 
 module_ :: Module
 module_ = Module ns elements
-    [Annotations.ns, Formatting.ns, Names.ns]
+    [Annotations.ns, Constants.ns, Formatting.ns, Names.ns, Rewriting.ns]
     kernelTypesNamespaces $
     Just ("A utility for converting a BNF grammar to a Hydra module.")
   where
@@ -78,6 +79,7 @@ module_ = Module ns elements
      toBinding isNontrivial,
      toBinding makeElements,
      toBinding rawName,
+     toBinding replacePlaceholders,
      toBinding simplify,
      toBinding toName,
      toBinding wrapType]
@@ -128,8 +130,9 @@ grammarToModule = define "grammarToModule" $
   "elements" <~ Lists.map
     ("pair" ~>
       "lname" <~ Pairs.first (var "pair") $
-      "typ" <~ wrapType @@ (Pairs.second (var "pair")) $
-      Annotations.typeElement @@ (toName @@ var "ns" @@ var "lname") @@ var "typ")
+      "elName" <~ toName @@ var "ns" @@ var "lname" $
+      "typ" <~ replacePlaceholders @@ var "elName" @@ (wrapType @@ (Pairs.second (var "pair"))) $
+      Annotations.typeElement @@ var "elName" @@ var "typ")
     (var "elementPairs") $
   Module.module_ (var "ns") (var "elements") (list ([] :: [TTerm Namespace])) (list ([] :: [TTerm Namespace])) (var "desc")
 
@@ -237,6 +240,26 @@ toName = define "toName" $
   doc "Convert local name to qualified name" $
   "ns" ~> "local" ~>
   Names.unqualifyName @@ (Module.qualifiedName (just (var "ns")) (var "local"))
+
+replacePlaceholders :: TBinding (Name -> Type -> Type)
+replacePlaceholders = define "replacePlaceholders" $
+  doc "Replace Placeholder names in a type with the actual element name" $
+  "elName" ~> "typ" ~>
+  Rewriting.rewriteType @@ ("recurse" ~> "t" ~>
+    cases _Type (var "t") (Just (var "t")) [
+    _Type_record>>: "rt" ~>
+      Logic.ifElse (Equality.equal (Core.rowTypeTypeName $ var "rt") Constants.placeholderName)
+        (Core.typeRecord (Core.rowType (var "elName") (Core.rowTypeFields $ var "rt")))
+        (var "t"),
+    _Type_union>>: "ut" ~>
+      Logic.ifElse (Equality.equal (Core.rowTypeTypeName $ var "ut") Constants.placeholderName)
+        (Core.typeUnion (Core.rowType (var "elName") (Core.rowTypeFields $ var "ut")))
+        (var "t"),
+    _Type_wrap>>: "wt" ~>
+      Logic.ifElse (Equality.equal (Core.wrappedTypeTypeName $ var "wt") Constants.placeholderName)
+        (Core.typeWrap (Core.wrappedType (var "elName") (Core.wrappedTypeBody $ var "wt")))
+        (var "t")])
+  @@ var "typ"
 
 wrapType :: TBinding (Type -> Type)
 wrapType = define "wrapType" $

@@ -17,7 +17,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.datalog.syntax.Constant"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -53,7 +53,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.datalog.syntax.Relation"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -89,7 +89,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.datalog.syntax.Variable"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -125,7 +125,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.datalog.syntax.Program"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "body",
@@ -166,7 +166,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.datalog.syntax.Program_Elmt"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -237,7 +237,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.datalog.syntax.Fact"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -308,7 +308,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.datalog.syntax.Rule"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -379,7 +379,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.datalog.syntax.Atom"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -450,7 +450,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.datalog.syntax.AtomList"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -521,7 +521,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.datalog.syntax.AtomList_Multiple"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -592,7 +592,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.datalog.syntax.Term"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -663,7 +663,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.datalog.syntax.TermList"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -734,7 +734,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.datalog.syntax.TermList_Multiple"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -805,7 +805,7 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {"literal": {"string": "hydra.ext.datalog.syntax.ConstantList"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",
@@ -877,7 +877,8 @@
                         "name": "typeName",
                         "term": {
                           "wrap": {
-                            "body": {"literal": {"string": "Placeholder"}},
+                            "body": {
+                              "literal": {"string": "hydra.ext.datalog.syntax.ConstantList_Multiple"}},
                             "typeName": "hydra.core.Name"}}},
                       {
                         "name": "fields",

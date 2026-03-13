@@ -20,7 +20,7 @@ import Hydra.Ext.Python.Language
 import Hydra.Ext.Pegasus.Language (pdlLanguage)
 import Hydra.Ext.Scala.Language (scalaLanguage)
 import Hydra.Ext.Cpp.Coder (moduleToCpp)
-import Hydra.Ext.Staging.Graphql.Coder
+import Hydra.Ext.Graphql.Coder (moduleToGraphql)
 import Hydra.Ext.Graphql.Language (graphqlLanguage)
 import Hydra.Ext.Java.Coder (moduleToJava)
 import Hydra.Ext.Json.Schema.Coder
