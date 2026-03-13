@@ -121,7 +121,6 @@ pyright src/gen-main/python/hydra/inference.py
 pyright src/gen-main/python/hydra/languages.py
 pyright src/gen-main/python/hydra/lexical.py
 pyright src/gen-main/python/hydra/literals.py
-pyright src/gen-main/python/hydra/monads.py
 pyright src/gen-main/python/hydra/names.py
 pyright src/gen-main/python/hydra/reduction.py
 pyright src/gen-main/python/hydra/rewriting.py
@@ -169,7 +168,6 @@ from hydra.constants import *
 from hydra.languages import *
 # from hydra.lexical import *
 from hydra.literals import *
-# from hydra.monads import *
 # from hydra.names import *
 # from hydra.reduction import *
 # from hydra.rewriting import *

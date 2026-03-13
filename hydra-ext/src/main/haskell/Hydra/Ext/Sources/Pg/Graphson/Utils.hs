@@ -67,7 +67,6 @@ import qualified Hydra.Sources.Kernel.Terms.Inference      as Inference
 import qualified Hydra.Sources.Kernel.Terms.Languages      as Languages
 import qualified Hydra.Sources.Kernel.Terms.Lexical        as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
-import qualified Hydra.Sources.Kernel.Terms.Monads         as Monads
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
@@ -143,15 +142,15 @@ encodeTermValue :: TBinding (Term -> Either (InContext OtherError) G.Value)
 encodeTermValue = define "encodeTermValue" $
   doc "Encode a Hydra Term as a GraphSON Value. Supports literals and unit values." $
   "term" ~>
-    match _Term (Just $ left (Ctx.inContext (Error.otherError (string "unsupported term variant for GraphSON encoding")) (asTerm Monads.emptyContext))) [
+    match _Term (Just $ left (Ctx.inContext (Error.otherError (string "unsupported term variant for GraphSON encoding")) (asTerm Lexical.emptyContext))) [
       _Term_literal>>: "lit" ~>
-        match _Literal (Just $ left (Ctx.inContext (Error.otherError (string "unsupported literal type for GraphSON encoding")) (asTerm Monads.emptyContext))) [
+        match _Literal (Just $ left (Ctx.inContext (Error.otherError (string "unsupported literal type for GraphSON encoding")) (asTerm Lexical.emptyContext))) [
           _Literal_binary>>: "b" ~>
             right $ inject G._Value G._Value_binary (Literals.binaryToString $ var "b"),
           _Literal_boolean>>: "b" ~>
             right $ inject G._Value G._Value_boolean (var "b"),
           _Literal_float>>: "fv" ~>
-            match _FloatValue (Just $ left (Ctx.inContext (Error.otherError (string "unsupported float type")) (asTerm Monads.emptyContext))) [
+            match _FloatValue (Just $ left (Ctx.inContext (Error.otherError (string "unsupported float type")) (asTerm Lexical.emptyContext))) [
               _FloatValue_bigfloat>>: "f" ~>
                 right $ inject G._Value G._Value_bigDecimal
                   (wrap G._BigDecimalValue $ Literals.showBigfloat $ var "f"),
@@ -163,7 +162,7 @@ encodeTermValue = define "encodeTermValue" $
                   (inject G._DoubleValue G._DoubleValue_finite (var "f"))]
             @@ var "fv",
           _Literal_integer>>: "iv" ~>
-            match _IntegerValue (Just $ left (Ctx.inContext (Error.otherError (string "unsupported integer type")) (asTerm Monads.emptyContext))) [
+            match _IntegerValue (Just $ left (Ctx.inContext (Error.otherError (string "unsupported integer type")) (asTerm Lexical.emptyContext))) [
               _IntegerValue_bigint>>: "i" ~>
                 right $ inject G._Value G._Value_bigInteger (var "i"),
               _IntegerValue_int32>>: "i" ~>

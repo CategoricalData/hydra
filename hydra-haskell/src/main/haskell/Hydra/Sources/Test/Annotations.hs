@@ -22,7 +22,7 @@ import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
 import qualified Hydra.Dsl.Meta.Graph as Graph
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
-import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
+
 
 
 -- | Test state (an empty Graph)
@@ -31,7 +31,7 @@ testState = metaref Lexical.emptyGraph
 
 -- | Empty Context for Either-based function tests
 testContext :: TTerm Term
-testContext = metaref Monads.emptyContext
+testContext = metaref Lexical.emptyContext
 
 
 

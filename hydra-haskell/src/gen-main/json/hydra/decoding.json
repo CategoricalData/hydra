@@ -15752,7 +15752,6 @@
     "hydra.formatting",
     "hydra.extract.helpers",
     "hydra.lexical",
-    "hydra.monads",
     "hydra.names",
     "hydra.rewriting",
     "hydra.schemas",

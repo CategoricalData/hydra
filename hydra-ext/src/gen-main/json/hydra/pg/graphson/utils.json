@@ -1209,7 +1209,9 @@
                                                                                                     "wrap": {
                                                                                                       "body": {"literal": {"string": "unsupported float type"}},
                                                                                                       "typeName": "hydra.error.OtherError"}}},
-                                                                                                {"name": "context", "term": {"variable": "hydra.monads.emptyContext"}}],
+                                                                                                {
+                                                                                                  "name": "context",
+                                                                                                  "term": {"variable": "hydra.lexical.emptyContext"}}],
                                                                                               "typeName": "hydra.context.InContext"}},
                                                                                           "type": {"variable": "hydra.error.OtherError"}}}}},
                                                                                   "type": {
@@ -1317,7 +1319,9 @@
                                                                                                     "wrap": {
                                                                                                       "body": {"literal": {"string": "unsupported integer type"}},
                                                                                                       "typeName": "hydra.error.OtherError"}}},
-                                                                                                {"name": "context", "term": {"variable": "hydra.monads.emptyContext"}}],
+                                                                                                {
+                                                                                                  "name": "context",
+                                                                                                  "term": {"variable": "hydra.lexical.emptyContext"}}],
                                                                                               "typeName": "hydra.context.InContext"}},
                                                                                           "type": {"variable": "hydra.error.OtherError"}}}}},
                                                                                   "type": {
@@ -1369,7 +1373,9 @@
                                                                                 "body": {
                                                                                   "literal": {"string": "unsupported literal type for GraphSON encoding"}},
                                                                                 "typeName": "hydra.error.OtherError"}}},
-                                                                          {"name": "context", "term": {"variable": "hydra.monads.emptyContext"}}],
+                                                                          {
+                                                                            "name": "context",
+                                                                            "term": {"variable": "hydra.lexical.emptyContext"}}],
                                                                         "typeName": "hydra.context.InContext"}},
                                                                     "type": {"variable": "hydra.error.OtherError"}}}}},
                                                             "type": {
@@ -1421,7 +1427,9 @@
                                                           "body": {
                                                             "literal": {"string": "unsupported term variant for GraphSON encoding"}},
                                                           "typeName": "hydra.error.OtherError"}}},
-                                                    {"name": "context", "term": {"variable": "hydra.monads.emptyContext"}}],
+                                                    {
+                                                      "name": "context",
+                                                      "term": {"variable": "hydra.lexical.emptyContext"}}],
                                                   "typeName": "hydra.context.InContext"}},
                                               "type": {"variable": "hydra.error.OtherError"}}}}},
                                       "type": {

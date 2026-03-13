@@ -92,6 +92,12 @@ def elements_to_graph(parent: hydra.graph.Graph, schema_types: FrozenDict[hydra.
     return hydra.graph.Graph(build_graph(elements, hydra.lib.maps.empty(), prims).bound_terms, build_graph(elements, hydra.lib.maps.empty(), prims).bound_types, build_graph(elements, hydra.lib.maps.empty(), prims).class_constraints, build_graph(elements, hydra.lib.maps.empty(), prims).lambda_variables, build_graph(elements, hydra.lib.maps.empty(), prims).metadata, build_graph(elements, hydra.lib.maps.empty(), prims).primitives, schema_types, build_graph(elements, hydra.lib.maps.empty(), prims).type_variables)
 
 @lru_cache(1)
+def empty_context() -> hydra.context.Context:
+    r"""An empty context; no trace, no messages, no other data."""
+    
+    return hydra.context.Context((), (), hydra.lib.maps.empty())
+
+@lru_cache(1)
 def empty_graph() -> hydra.graph.Graph:
     r"""An empty graph; no elements, no primitives, no schema."""
     

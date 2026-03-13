@@ -102,10 +102,7 @@ modulesToGraph bsGraph universeModules modules =
           in  
             let schemaGraph = (Lexical.elementsToGraph bsGraph Maps.empty schemaElements)
             in  
-              let schemaTypes = (Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Schemas.schemaGraphToTypingEnvironment (Context.Context {
-                      Context.contextTrace = [],
-                      Context.contextMessages = [],
-                      Context.contextOther = Maps.empty}) schemaGraph))
+              let schemaTypes = (Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Schemas.schemaGraphToTypingEnvironment Lexical.emptyContext schemaGraph))
               in (Lexical.elementsToGraph bsGraph schemaTypes dataElements)
 
 -- | Pure core of code generation: given a coder, language, flags, bootstrap graph, universe, and modules to generate, produce a list of (filePath, content) pairs.
@@ -133,10 +130,7 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
                     in  
                       let schemaGraph = (Lexical.elementsToGraph bsGraph Maps.empty schemaElements)
                       in  
-                        let schemaTypes2 = (Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Schemas.schemaGraphToTypingEnvironment (Context.Context {
-                                Context.contextTrace = [],
-                                Context.contextMessages = [],
-                                Context.contextOther = Maps.empty}) schemaGraph))
+                        let schemaTypes2 = (Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Schemas.schemaGraphToTypingEnvironment Lexical.emptyContext schemaGraph))
                         in  
                           let dataGraph = (Lexical.elementsToGraph bsGraph schemaTypes2 dataElements)
                           in (Eithers.bind (Logic.ifElse (Lists.null typeModulesToGenerate) (Right []) ( 
@@ -295,10 +289,7 @@ generateCoderModules codec bsGraph universeModules typeModules cx =
           in  
             let schemaGraph = (Lexical.elementsToGraph bsGraph Maps.empty schemaElements)
             in  
-              let schemaTypes = (Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Schemas.schemaGraphToTypingEnvironment (Context.Context {
-                      Context.contextTrace = [],
-                      Context.contextMessages = [],
-                      Context.contextOther = Maps.empty}) schemaGraph))
+              let schemaTypes = (Eithers.either (\_ -> Maps.empty) (\_r -> _r) (Schemas.schemaGraphToTypingEnvironment Lexical.emptyContext schemaGraph))
               in  
                 let allElements = (Lists.concat2 schemaElements dataElements)
                 in  

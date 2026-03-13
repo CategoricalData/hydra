@@ -99,7 +99,7 @@ def modules_to_graph(bs_graph: hydra.graph.Graph, universe_modules: frozenlist[h
         return hydra.lexical.elements_to_graph(bs_graph, hydra.lib.maps.empty(), schema_elements())
     @lru_cache(1)
     def schema_types() -> FrozenDict[hydra.core.Name, hydra.core.TypeScheme]:
-        return hydra.lib.eithers.either((lambda _: hydra.lib.maps.empty()), (lambda _r: _r), hydra.schemas.schema_graph_to_typing_environment(hydra.context.Context((), (), hydra.lib.maps.empty()), schema_graph()))
+        return hydra.lib.eithers.either((lambda _: hydra.lib.maps.empty()), (lambda _r: _r), hydra.schemas.schema_graph_to_typing_environment(hydra.lexical.empty_context(), schema_graph()))
     return hydra.lexical.elements_to_graph(bs_graph, schema_types(), data_elements())
 
 def strip_module_type_schemes(m: hydra.module.Module) -> hydra.module.Module:
@@ -178,7 +178,7 @@ def generate_coder_modules(codec: Callable[[T0, hydra.graph.Graph, T1], Either[T
         return hydra.lexical.elements_to_graph(bs_graph, hydra.lib.maps.empty(), schema_elements())
     @lru_cache(1)
     def schema_types() -> FrozenDict[hydra.core.Name, hydra.core.TypeScheme]:
-        return hydra.lib.eithers.either((lambda _: hydra.lib.maps.empty()), (lambda _r: _r), hydra.schemas.schema_graph_to_typing_environment(hydra.context.Context((), (), hydra.lib.maps.empty()), schema_graph()))
+        return hydra.lib.eithers.either((lambda _: hydra.lib.maps.empty()), (lambda _r: _r), hydra.schemas.schema_graph_to_typing_environment(hydra.lexical.empty_context(), schema_graph()))
     @lru_cache(1)
     def all_elements() -> frozenlist[hydra.core.Binding]:
         return hydra.lib.lists.concat2(schema_elements(), data_elements())
@@ -255,7 +255,7 @@ def generate_source_files(print_definitions: Callable[[
         return hydra.lexical.elements_to_graph(bs_graph, hydra.lib.maps.empty(), schema_elements())
     @lru_cache(1)
     def schema_types2() -> FrozenDict[hydra.core.Name, hydra.core.TypeScheme]:
-        return hydra.lib.eithers.either((lambda _: hydra.lib.maps.empty()), (lambda _r: _r), hydra.schemas.schema_graph_to_typing_environment(hydra.context.Context((), (), hydra.lib.maps.empty()), schema_graph()))
+        return hydra.lib.eithers.either((lambda _: hydra.lib.maps.empty()), (lambda _r: _r), hydra.schemas.schema_graph_to_typing_environment(hydra.lexical.empty_context(), schema_graph()))
     @lru_cache(1)
     def data_graph() -> hydra.graph.Graph:
         return hydra.lexical.elements_to_graph(bs_graph, schema_types2(), data_elements())

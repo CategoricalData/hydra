@@ -49,7 +49,7 @@ public class MapMaybe extends PrimitiveFunction {
                 }
                 Term val = maybe.fromJust();
                 Either<InContext<OtherError>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                    hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(fn, val));
+                    new hydra.context.Context(java.util.List.of(), java.util.List.of(), java.util.Map.of()), graph, true, Terms.apply(fn, val));
                 if (r.isLeft()) return (Either) r;
                 Either<InContext<OtherError>, hydra.util.Either<Term, Term>> eitherResult =
                     hydra.extract.core.Core.eitherTerm(cx, t -> Either.right(t), t -> Either.right(t), graph,

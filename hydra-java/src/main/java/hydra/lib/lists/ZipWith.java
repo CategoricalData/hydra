@@ -48,7 +48,7 @@ public class ZipWith extends PrimitiveFunction {
                     int minSize = Math.min(lst1.size(), lst2.size());
                     for (int i = 0; i < minSize; i++) {
                         Either<InContext<OtherError>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                            hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(Terms.apply(f, lst1.get(i)), lst2.get(i)));
+                            new hydra.context.Context(java.util.List.of(), java.util.List.of(), java.util.Map.of()), graph, true, Terms.apply(Terms.apply(f, lst1.get(i)), lst2.get(i)));
                         if (r.isLeft()) return (Either) r;
                         results.add(((Either.Right<InContext<OtherError>, Term>) r).value);
                     }

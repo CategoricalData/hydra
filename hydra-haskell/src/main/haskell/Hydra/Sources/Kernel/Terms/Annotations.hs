@@ -67,7 +67,6 @@ import qualified Data.Maybe                  as Y
 import qualified Hydra.Sources.Kernel.Terms.Constants    as Constants
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical      as Lexical
-import qualified Hydra.Sources.Kernel.Terms.Monads       as Monads
 import qualified Hydra.Sources.Kernel.Terms.Rewriting    as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
 import qualified Hydra.Sources.Decode.Core            as DecodeCore

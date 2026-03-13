@@ -123,7 +123,7 @@ public interface CodeGeneration {
       (java.util.function.Function<hydra.context.InContext<hydra.error.OtherError>, java.util.Map<hydra.core.Name, hydra.core.TypeScheme>>) (ignored -> (java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply()))),
       (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.TypeScheme>, java.util.Map<hydra.core.Name, hydra.core.TypeScheme>>) (_r -> _r),
       hydra.schemas.Schemas.schemaGraphToTypingEnvironment(
-        new hydra.context.Context((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply()))),
+        hydra.lexical.Lexical.emptyContext(),
         schemaGraph.get())));
     return hydra.lexical.Lexical.elementsToGraph(
       bsGraph,
@@ -169,7 +169,7 @@ public interface CodeGeneration {
       (java.util.function.Function<hydra.context.InContext<hydra.error.OtherError>, java.util.Map<hydra.core.Name, hydra.core.TypeScheme>>) (ignored -> (java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply()))),
       (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.TypeScheme>, java.util.Map<hydra.core.Name, hydra.core.TypeScheme>>) (_r -> _r),
       hydra.schemas.Schemas.schemaGraphToTypingEnvironment(
-        new hydra.context.Context((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply()))),
+        hydra.lexical.Lexical.emptyContext(),
         schemaGraph.get())));
     hydra.graph.Graph dataGraph = hydra.lexical.Lexical.elementsToGraph(
       bsGraph,
@@ -464,7 +464,7 @@ public interface CodeGeneration {
       (java.util.function.Function<hydra.context.InContext<hydra.error.OtherError>, java.util.Map<hydra.core.Name, hydra.core.TypeScheme>>) (ignored -> (java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) ((java.util.Map<hydra.core.Name, hydra.core.TypeScheme>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.TypeScheme>apply()))),
       (java.util.function.Function<java.util.Map<hydra.core.Name, hydra.core.TypeScheme>, java.util.Map<hydra.core.Name, hydra.core.TypeScheme>>) (_r -> _r),
       hydra.schemas.Schemas.schemaGraphToTypingEnvironment(
-        new hydra.context.Context((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply()))),
+        hydra.lexical.Lexical.emptyContext(),
         schemaGraph.get())));
     hydra.graph.Graph graph = hydra.lexical.Lexical.elementsToGraph(
       bsGraph,

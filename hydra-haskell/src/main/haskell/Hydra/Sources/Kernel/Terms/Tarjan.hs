@@ -54,7 +54,6 @@ import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
 import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
-import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 
 import qualified Hydra.Topology as Topo
 
@@ -64,7 +63,7 @@ ns = Namespace "hydra.tarjan"
 
 module_ :: Module
 module_ = Module ns elements
-    [Constants.ns, Monads.ns]
+    [Constants.ns]
     kernelTypesNamespaces $
     Just ("This implementation of Tarjan's algorithm was originally based on GraphSCC by Iavor S. Diatchki:"
       <> " https://hackage.haskell.org/package/GraphSCC.")

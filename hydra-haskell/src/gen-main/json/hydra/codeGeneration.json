@@ -1046,27 +1046,7 @@
                                                                     "argument": {"variable": "schemaGraph"},
                                                                     "function": {
                                                                       "application": {
-                                                                        "argument": {
-                                                                          "record": {
-                                                                            "fields": [
-                                                                              {
-                                                                                "name": "trace",
-                                                                                "term": {
-                                                                                  "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}},
-                                                                              {
-                                                                                "name": "messages",
-                                                                                "term": {
-                                                                                  "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}},
-                                                                              {
-                                                                                "name": "other",
-                                                                                "term": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
-                                                                                        "type": {"variable": "hydra.core.Name"}}},
-                                                                                    "type": {"variable": "hydra.core.Term"}}}}],
-                                                                            "typeName": "hydra.context.Context"}},
+                                                                        "argument": {"variable": "hydra.lexical.emptyContext"},
                                                                         "function": {"variable": "hydra.schemas.schemaGraphToTypingEnvironment"}}}}},
                                                                 "function": {
                                                                   "application": {
@@ -1571,27 +1551,7 @@
                                                                                                                                           "argument": {"variable": "schemaGraph"},
                                                                                                                                           "function": {
                                                                                                                                             "application": {
-                                                                                                                                              "argument": {
-                                                                                                                                                "record": {
-                                                                                                                                                  "fields": [
-                                                                                                                                                    {
-                                                                                                                                                      "name": "trace",
-                                                                                                                                                      "term": {
-                                                                                                                                                        "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}},
-                                                                                                                                                    {
-                                                                                                                                                      "name": "messages",
-                                                                                                                                                      "term": {
-                                                                                                                                                        "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}},
-                                                                                                                                                    {
-                                                                                                                                                      "name": "other",
-                                                                                                                                                      "term": {
-                                                                                                                                                        "typeApplication": {
-                                                                                                                                                          "body": {
-                                                                                                                                                            "typeApplication": {
-                                                                                                                                                              "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
-                                                                                                                                                              "type": {"variable": "hydra.core.Name"}}},
-                                                                                                                                                          "type": {"variable": "hydra.core.Term"}}}}],
-                                                                                                                                                  "typeName": "hydra.context.Context"}},
+                                                                                                                                              "argument": {"variable": "hydra.lexical.emptyContext"},
                                                                                                                                               "function": {"variable": "hydra.schemas.schemaGraphToTypingEnvironment"}}}}},
                                                                                                                                       "function": {
                                                                                                                                         "application": {
@@ -4625,27 +4585,7 @@
                                                                                                 "argument": {"variable": "schemaGraph"},
                                                                                                 "function": {
                                                                                                   "application": {
-                                                                                                    "argument": {
-                                                                                                      "record": {
-                                                                                                        "fields": [
-                                                                                                          {
-                                                                                                            "name": "trace",
-                                                                                                            "term": {
-                                                                                                              "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}},
-                                                                                                          {
-                                                                                                            "name": "messages",
-                                                                                                            "term": {
-                                                                                                              "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}},
-                                                                                                          {
-                                                                                                            "name": "other",
-                                                                                                            "term": {
-                                                                                                              "typeApplication": {
-                                                                                                                "body": {
-                                                                                                                  "typeApplication": {
-                                                                                                                    "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
-                                                                                                                    "type": {"variable": "hydra.core.Name"}}},
-                                                                                                                "type": {"variable": "hydra.core.Term"}}}}],
-                                                                                                        "typeName": "hydra.context.Context"}},
+                                                                                                    "argument": {"variable": "hydra.lexical.emptyContext"},
                                                                                                     "function": {"variable": "hydra.schemas.schemaGraphToTypingEnvironment"}}}}},
                                                                                             "function": {
                                                                                               "application": {
@@ -5776,7 +5716,6 @@
     "hydra.inference",
     "hydra.json.decode",
     "hydra.lexical",
-    "hydra.monads",
     "hydra.names",
     "hydra.rewriting",
     "hydra.schemas",

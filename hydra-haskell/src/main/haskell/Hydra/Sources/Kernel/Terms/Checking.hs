@@ -96,7 +96,7 @@ import qualified Hydra.Sources.Kernel.Terms.Formatting   as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Lexical      as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Reflect      as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting    as Rewriting
-import qualified Hydra.Sources.Kernel.Terms.Monads       as Monads
+
 import qualified Hydra.Sources.Kernel.Terms.Schemas      as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Meta    as ShowMeta
@@ -108,7 +108,7 @@ ns = Namespace "hydra.checking"
 
 module_ :: Module
 module_ = Module ns elements
-    [Constants.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Monads.ns, Reflect.ns, Rewriting.ns,
+    [Constants.ns, ExtractCore.ns, Formatting.ns, Lexical.ns, Reflect.ns, Rewriting.ns,
       Schemas.ns, ShowCore.ns, ShowMeta.ns, Substitution.ns]
     kernelTypesNamespaces $
     Just "Type checking and type reconstruction (type-of) for the results of Hydra unification and inference"

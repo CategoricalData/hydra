@@ -45,7 +45,7 @@ public class Foldr extends PrimitiveFunction {
                 // Fold from the right by iterating in reverse
                 for (int i = xs.size() - 1; i >= 0; i--) {
                     Either<InContext<OtherError>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                        hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(args.get(0), xs.get(i), acc));
+                        new hydra.context.Context(java.util.List.of(), java.util.List.of(), java.util.Map.of()), graph, true, Terms.apply(args.get(0), xs.get(i), acc));
                     if (r.isLeft()) return r;
                     acc = ((Either.Right<InContext<OtherError>, Term>) r).value;
                 }

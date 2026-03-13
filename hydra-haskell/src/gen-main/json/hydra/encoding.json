@@ -5442,7 +5442,6 @@
     "hydra.annotations",
     "hydra.decode.core",
     "hydra.formatting",
-    "hydra.monads",
     "hydra.names",
     "hydra.rewriting",
     "hydra.schemas"],

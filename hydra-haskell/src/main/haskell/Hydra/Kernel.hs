@@ -34,7 +34,6 @@ module Hydra.Kernel (
   module Hydra.Core,
   module Hydra.Error,
   module Hydra.Languages,
-  module Hydra.Monads,
   module Hydra.Formatting,
   module Hydra.Graph,
   module Hydra.Inference,
@@ -81,7 +80,6 @@ import Hydra.Context
 import Hydra.Core
 import Hydra.Error
 import Hydra.Languages
-import Hydra.Monads
 import Hydra.Formatting
 import Hydra.Graph
 import Hydra.Inference

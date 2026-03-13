@@ -54,7 +54,7 @@ public class Map extends PrimitiveFunction {
                 java.util.Map<Term, Term> result = FromList.emptyLike(mp);
                 for (java.util.Map.Entry<Term, Term> e : mp.entrySet()) {
                     Either<InContext<OtherError>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                        hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(args.get(0), e.getValue()));
+                        new hydra.context.Context(java.util.List.of(), java.util.List.of(), java.util.Map.of()), graph, true, Terms.apply(args.get(0), e.getValue()));
                     if (r.isLeft()) return (Either) r;
                     result.put(e.getKey(), ((Either.Right<InContext<OtherError>, Term>) r).value);
                 }

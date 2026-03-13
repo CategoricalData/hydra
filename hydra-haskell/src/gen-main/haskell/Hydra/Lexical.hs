@@ -94,6 +94,13 @@ elementsToGraph parent schemaTypes elements =
     Graph.graphSchemaTypes = schemaTypes,
     Graph.graphTypeVariables = (Graph.graphTypeVariables (buildGraph elements Maps.empty prims))}
 
+-- | An empty context; no trace, no messages, no other data.
+emptyContext :: Context.Context
+emptyContext = Context.Context {
+  Context.contextTrace = [],
+  Context.contextMessages = [],
+  Context.contextOther = Maps.empty}
+
 -- | An empty graph; no elements, no primitives, no schema.
 emptyGraph :: Graph.Graph
 emptyGraph = Graph.Graph {

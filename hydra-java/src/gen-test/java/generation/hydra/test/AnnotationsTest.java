@@ -408,7 +408,7 @@ public class AnnotationsTest {
             hydra.util.Either.<T1, hydra.util.Maybe<String>>right(hydra.util.Maybe.just("hello")),
 
             hydra.annotations.Annotations.getTermDescription(
-  hydra.monads.Monads.emptyContext(),
+  hydra.lexical.Lexical.emptyContext(),
   hydra.lexical.Lexical.emptyGraph(),
   hydra.annotations.Annotations.setTermDescription(
     hydra.util.Maybe.just("hello"),
@@ -425,7 +425,7 @@ public class AnnotationsTest {
             hydra.util.Either.<T1, hydra.util.Maybe<String>>right(hydra.util.Maybe.just("")),
 
             hydra.annotations.Annotations.getTermDescription(
-  hydra.monads.Monads.emptyContext(),
+  hydra.lexical.Lexical.emptyContext(),
   hydra.lexical.Lexical.emptyGraph(),
   hydra.annotations.Annotations.setTermDescription(
     hydra.util.Maybe.just(""),
@@ -442,7 +442,7 @@ public class AnnotationsTest {
             hydra.util.Either.<T1, hydra.util.Maybe<String>>right(hydra.util.Maybe.just("desc")),
 
             hydra.annotations.Annotations.getTermDescription(
-  hydra.monads.Monads.emptyContext(),
+  hydra.lexical.Lexical.emptyContext(),
   hydra.lexical.Lexical.emptyGraph(),
   hydra.annotations.Annotations.setTermDescription(
     hydra.util.Maybe.just("desc"),
@@ -459,7 +459,7 @@ public class AnnotationsTest {
             hydra.util.Either.<T1, hydra.util.Maybe<T0>>right((hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing())),
 
             hydra.annotations.Annotations.getTermDescription(
-  hydra.monads.Monads.emptyContext(),
+  hydra.lexical.Lexical.emptyContext(),
   hydra.lexical.Lexical.emptyGraph(),
   new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int16((short) (42))))));
 
@@ -474,7 +474,7 @@ public class AnnotationsTest {
             hydra.util.Either.<T1, hydra.util.Maybe<T0>>right((hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing())),
 
             hydra.annotations.Annotations.getTermDescription(
-  hydra.monads.Monads.emptyContext(),
+  hydra.lexical.Lexical.emptyContext(),
   hydra.lexical.Lexical.emptyGraph(),
   new hydra.core.Term.Literal(new hydra.core.Literal.String_("no description here"))));
 
@@ -489,7 +489,7 @@ public class AnnotationsTest {
             hydra.util.Either.<T1, hydra.util.Maybe<T0>>right((hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing())),
 
             hydra.annotations.Annotations.getTermDescription(
-  hydra.monads.Monads.emptyContext(),
+  hydra.lexical.Lexical.emptyContext(),
   hydra.lexical.Lexical.emptyGraph(),
   new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(0)))));
 

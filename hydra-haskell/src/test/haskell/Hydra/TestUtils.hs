@@ -22,7 +22,6 @@ import qualified Hydra.Sources.Kernel.Terms.Annotations as TermAnnotations
 import qualified Hydra.Sources.Kernel.Terms.Constants as TermConstants
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as TermExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical as TermLexical
-import qualified Hydra.Sources.Kernel.Terms.Monads as TermMonads
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as TermRewriting
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as TermShowCore
 import qualified Hydra.Sources.Decode.Core as TermDecodeCore
@@ -55,11 +54,10 @@ testGraph :: Graph
 testGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes testSchemaGraph) (kernelTermBindings ++ dataBindings)
   where
     -- Include only essential kernel term definitions for interpreter tests.
-    -- The evaluator needs hydra.monads (and its dependencies) plus hydra.annotations (and its dependencies).
+    -- The evaluator needs hydra.annotations (and its dependencies).
     kernelTermBindings = L.concat $ fmap moduleElements
       [ TermConstants.module_
       , TermShowCore.module_
-      , TermMonads.module_
       , TermExtractCore.module_
       , TermLexical.module_
       , TermRewriting.module_

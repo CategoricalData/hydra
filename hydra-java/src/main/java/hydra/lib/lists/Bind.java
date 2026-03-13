@@ -43,7 +43,7 @@ public class Bind extends PrimitiveFunction {
                 List<Term> allResults = new ArrayList<>();
                 for (Term a : argsArg) {
                     Either<InContext<OtherError>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                        hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(mapping, a));
+                        new hydra.context.Context(java.util.List.of(), java.util.List.of(), java.util.Map.of()), graph, true, Terms.apply(mapping, a));
                     if (r.isLeft()) return (Either) r;
                     Either<InContext<OtherError>, List<Term>> inner = hydra.extract.core.Core.list(cx, graph,
                         ((Either.Right<InContext<OtherError>, Term>) r).value);

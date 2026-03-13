@@ -68,7 +68,6 @@ import qualified Hydra.Sources.Kernel.Terms.Inference      as Inference
 import qualified Hydra.Sources.Kernel.Terms.Languages      as Languages
 import qualified Hydra.Sources.Kernel.Terms.Lexical        as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
-import qualified Hydra.Sources.Kernel.Terms.Monads         as Monads
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
@@ -169,7 +168,7 @@ termToJava = define "termToJava" $
                   JavaHelpers._Aliases_thunkedVars>>: Sets.empty],
               JavaHelpers._JavaEnvironment_graph>>: var "g"])
         @@ var "term"
-        @@ Ctx.emptyContext
+        @@ asTerm Lexical.emptyContext
         @@ var "g")
 
 
@@ -522,4 +521,4 @@ inferTerm = define "inferTerm" $
     Eithers.bimap
       ("ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic"))
       ("x" ~> Typing.inferenceResultTerm (var "x"))
-      (Inference.inferInGraphContext @@ Ctx.emptyContext @@ var "g" @@ var "term")
+      (Inference.inferInGraphContext @@ asTerm Lexical.emptyContext @@ var "g" @@ var "term")

@@ -198,10 +198,10 @@ public class TestSuiteRunner {
             new Term.Wrap(new hydra.core.WrappedTerm(new Name("hydra.core.Name"),
                 new Term.Literal(new hydra.core.Literal.String_("firstClassType")))));
 
-        // Add kernel monads term bindings (hand-written since generated sources exceed JVM method size limits)
-        List<Binding> monadBindings = new ArrayList<>();
-        addMonadsBindings(monadBindings);
-        for (Binding b : monadBindings) {
+        // Add kernel constant term bindings (hand-written since generated sources exceed JVM method size limits)
+        List<Binding> constantBindings = new ArrayList<>();
+        addConstantBindings(constantBindings);
+        for (Binding b : constantBindings) {
             boundTerms.put(b.name, b.term);
         }
 
@@ -238,17 +238,10 @@ public class TestSuiteRunner {
     }
 
     /**
-     * Add term-level bindings for context and graph constants needed by tests.
+     * Add term-level bindings for graph constants needed by tests.
      * These are hand-written because the generated source modules exceed JVM method size limits.
      */
-    private static void addMonadsBindings(List<Binding> bindings) {
-        // hydra.monads.emptyContext = record(Context){trace=[], messages=[], other={}}
-        addConstantBinding(bindings, "hydra.monads.emptyContext",
-            record("hydra.context.Context",
-                field("trace", list()),
-                field("messages", list()),
-                field("other", new Term.Map(Collections.emptyMap()))));
-
+    private static void addConstantBindings(List<Binding> bindings) {
         // hydra.lexical.emptyGraph = record(Graph){boundTerms={}, boundTypes={}, classConstraints={},
         //   lambdaVariables=set(), metadata={}, primitives={}, schemaTypes={}, typeVariables=set()}
         addConstantBinding(bindings, "hydra.lexical.emptyGraph",

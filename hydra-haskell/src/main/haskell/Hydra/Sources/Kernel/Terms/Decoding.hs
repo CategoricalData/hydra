@@ -55,7 +55,7 @@ import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Extract.Helpers as Helpers
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
-import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
+
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
@@ -76,7 +76,7 @@ ns = Namespace "hydra.decoding"
 
 module_ :: Module
 module_ = Module ns elements
-    [Annotations.ns, Formatting.ns, Helpers.ns, Lexical.ns, Monads.ns, Names.ns, Rewriting.ns, Schemas.ns, ShowCore.ns]
+    [Annotations.ns, Formatting.ns, Helpers.ns, Lexical.ns, Names.ns, Rewriting.ns, Schemas.ns, ShowCore.ns]
     kernelTypesNamespaces $
     Just "Functions for generating term decoders from type modules"
   where

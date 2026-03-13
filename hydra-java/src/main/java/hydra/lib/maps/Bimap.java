@@ -56,10 +56,10 @@ public class Bimap extends PrimitiveFunction {
                 java.util.LinkedHashMap<Term, Term> result = new java.util.LinkedHashMap<>();
                 for (Map.Entry<Term, Term> entry : mp.entrySet()) {
                     Either<InContext<OtherError>, Term> kr = hydra.reduction.Reduction.reduceTerm(
-                        hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(args.get(0), entry.getKey()));
+                        new hydra.context.Context(java.util.List.of(), java.util.List.of(), java.util.Map.of()), graph, true, Terms.apply(args.get(0), entry.getKey()));
                     if (kr.isLeft()) return (Either) kr;
                     Either<InContext<OtherError>, Term> vr = hydra.reduction.Reduction.reduceTerm(
-                        hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(args.get(1), entry.getValue()));
+                        new hydra.context.Context(java.util.List.of(), java.util.List.of(), java.util.Map.of()), graph, true, Terms.apply(args.get(1), entry.getValue()));
                     if (vr.isLeft()) return (Either) vr;
                     result.put(((Either.Right<InContext<OtherError>, Term>) kr).value,
                                ((Either.Right<InContext<OtherError>, Term>) vr).value);

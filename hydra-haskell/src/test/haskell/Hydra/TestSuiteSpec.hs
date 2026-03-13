@@ -89,7 +89,7 @@ defaultTestRunner desc tcase = if Testing.isDisabled tcase
       H.it "type checking failure" $ H.shouldBe True False  -- TODO: implement
     TestCaseTypeReduction (TypeReductionTestCase input output) ->
       H.it "type reduction" $ H.shouldBe
-        (either (const input) id $ betaReduceType emptyContext testGraph input)
+        (either (const input) id $ betaReduceType (Context [] [] M.empty) testGraph input)
         output
     TestCaseTopologicalSort (TopologicalSortTestCase adjList expected) ->
       H.it "topological sort" $ H.shouldBe

@@ -53,7 +53,7 @@ import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Decode.Core as DecodeCore
-import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
+
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
@@ -73,7 +73,7 @@ ns = Namespace "hydra.encoding"
 
 module_ :: Module
 module_ = Module ns elements
-    [Annotations.ns, moduleNamespace DecodeCore.module_, Formatting.ns, Monads.ns, Names.ns, Rewriting.ns, Schemas.ns]
+    [Annotations.ns, moduleNamespace DecodeCore.module_, Formatting.ns, Names.ns, Rewriting.ns, Schemas.ns]
     kernelTypesNamespaces $
     Just "Functions for generating term encoders from type modules"
   where

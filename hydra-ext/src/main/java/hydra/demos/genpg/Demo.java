@@ -6,7 +6,6 @@ import hydra.context.InContext;
 import hydra.core.Term;
 import hydra.error.OtherError;
 import hydra.graph.Graph;
-import hydra.monads.Monads;
 import hydra.json.writer.Writer;
 import hydra.pg.model.Edge;
 import hydra.pg.model.Element;
@@ -84,7 +83,7 @@ public class Demo {
             List<Vertex<Term>> vspecs,
             List<Edge<Term>> especs) throws IOException {
         Table<Term> table = decodeTableIo(tableType, path);
-        Context cx = Monads.emptyContext();
+        Context cx = new Context(java.util.List.of(), java.util.List.of(), java.util.Map.of());
         Either<InContext<OtherError>, Pair<List<Vertex<Term>>, List<Edge<Term>>>> result =
             Transform.transformTableRows(cx, graphContext, vspecs, especs, tableType, table.data);
         if (result.isLeft()) {

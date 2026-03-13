@@ -41,7 +41,6 @@ import hydra.reduction
 import hydra.serialization
 import hydra.sorting
 import hydra.util
-import hydra.monads
 import hydra.rewriting
 import hydra.schemas
 import hydra.show.core
@@ -104,13 +103,12 @@ def _load_kernel_term_bindings() -> dict[hydra.core.Name, hydra.core.Binding]:
 
     json_dir = "../hydra-haskell/src/gen-main/json"
 
-    # Load only the essential evaluator term modules (hydra.monads + hydra.annotations
+    # Load only the essential evaluator term modules (hydra.annotations
     # and their dependencies). Loading all 92 term modules from JSON is too slow.
     # This matches the optimization in Haskell (TestUtils.hs) and Java (TestSuiteRunner.java).
     evaluator_term_namespaces = [
         hydra.core.Name("hydra.constants"),
         hydra.core.Name("hydra.show.core"),
-        hydra.core.Name("hydra.monads"),
         hydra.core.Name("hydra.extract.core"),
         hydra.core.Name("hydra.lexical"),
         hydra.core.Name("hydra.rewriting"),

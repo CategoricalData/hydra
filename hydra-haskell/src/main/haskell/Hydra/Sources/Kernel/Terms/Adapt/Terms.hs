@@ -63,7 +63,7 @@ import qualified Hydra.Sources.Kernel.Terms.Adapt.Utils    as AdaptUtils
 import qualified Hydra.Sources.CoderUtils                  as CoderUtils
 import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core   as ExtractCore
-import qualified Hydra.Sources.Kernel.Terms.Monads         as Monads
+
 import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Meta.Error        as Error
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
@@ -77,7 +77,7 @@ ns = Namespace "hydra.adapt.terms"
 
 module_ :: Module
 module_ = Module ns elements
-    [AdaptLiterals.ns, AdaptUtils.ns, CoderUtils.ns, Annotations.ns, ExtractCore.ns, Monads.ns,
+    [AdaptLiterals.ns, AdaptUtils.ns, CoderUtils.ns, Annotations.ns, ExtractCore.ns,
       Reflect.ns, Rewriting.ns, Schemas.ns, ShowCore.ns]
     kernelTypesNamespaces $
     Just "Adapter framework for types and terms"

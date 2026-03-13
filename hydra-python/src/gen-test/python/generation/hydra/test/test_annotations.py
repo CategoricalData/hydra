@@ -153,27 +153,27 @@ def test_descriptions__set_description__3():
 
 def test_descriptions__get_existing_description__1():
 
-    assert (hydra.annotations.get_term_description(hydra.monads.empty_context(), hydra.lexical.empty_graph(), hydra.annotations.set_term_description(Just("hello"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(42))))))))) == (Right(Just("hello")))
+    assert (hydra.annotations.get_term_description(hydra.lexical.empty_context(), hydra.lexical.empty_graph(), hydra.annotations.set_term_description(Just("hello"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(42))))))))) == (Right(Just("hello")))
 
 def test_descriptions__get_existing_description__2():
 
-    assert (hydra.annotations.get_term_description(hydra.monads.empty_context(), hydra.lexical.empty_graph(), hydra.annotations.set_term_description(Just(""), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("test"))))))) == (Right(Just("")))
+    assert (hydra.annotations.get_term_description(hydra.lexical.empty_context(), hydra.lexical.empty_graph(), hydra.annotations.set_term_description(Just(""), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("test"))))))) == (Right(Just("")))
 
 def test_descriptions__get_existing_description__3():
 
-    assert (hydra.annotations.get_term_description(hydra.monads.empty_context(), hydra.lexical.empty_graph(), hydra.annotations.set_term_description(Just("desc"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(False))))))) == (Right(Just("desc")))
+    assert (hydra.annotations.get_term_description(hydra.lexical.empty_context(), hydra.lexical.empty_graph(), hydra.annotations.set_term_description(Just("desc"), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(False))))))) == (Right(Just("desc")))
 
 def test_descriptions__get_missing_description__1():
 
-    assert (hydra.annotations.get_term_description(hydra.monads.empty_context(), hydra.lexical.empty_graph(), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt16(42)))))))) == (Right(Nothing()))
+    assert (hydra.annotations.get_term_description(hydra.lexical.empty_context(), hydra.lexical.empty_graph(), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt16(42)))))))) == (Right(Nothing()))
 
 def test_descriptions__get_missing_description__2():
 
-    assert (hydra.annotations.get_term_description(hydra.monads.empty_context(), hydra.lexical.empty_graph(), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("no description here")))))) == (Right(Nothing()))
+    assert (hydra.annotations.get_term_description(hydra.lexical.empty_context(), hydra.lexical.empty_graph(), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralString("no description here")))))) == (Right(Nothing()))
 
 def test_descriptions__get_missing_description__3():
 
-    assert (hydra.annotations.get_term_description(hydra.monads.empty_context(), hydra.lexical.empty_graph(), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(0)))))))) == (Right(Nothing()))
+    assert (hydra.annotations.get_term_description(hydra.lexical.empty_context(), hydra.lexical.empty_graph(), cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralInteger(cast(hydra.core.IntegerValue, hydra.core.IntegerValueInt32(0)))))))) == (Right(Nothing()))
 
 def test_descriptions__outer_description_overrides_inner__1():
 
