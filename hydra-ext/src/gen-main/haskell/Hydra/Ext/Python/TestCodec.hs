@@ -69,10 +69,7 @@ emptyPythonModuleMetadata ns_ = Helpers.PythonModuleMetadata {
 
 -- | Convert a Hydra term to a Python expression string with a pre-built graph context
 termToPythonWithContext :: (Module.Namespaces Syntax.DottedName -> Graph.Graph -> Bool -> Core.Term -> t0 -> Either String String)
-termToPythonWithContext namespaces_ graph0 skipCasts term _g = (Eithers.bimap (\ic -> Error.unOtherError (Context.inContextObject ic)) (\arg_ -> Serialization.printExpr (Serde.encodeExpression arg_)) (Coder.encodeTermInline (Context.Context {
-  Context.contextTrace = [],
-  Context.contextMessages = [],
-  Context.contextOther = Maps.empty}) (Helpers.PythonEnvironment {
+termToPythonWithContext namespaces_ graph0 skipCasts term _g = (Eithers.bimap (\ic -> Error.unOtherError (Context.inContextObject ic)) (\arg_ -> Serialization.printExpr (Serde.encodeExpression arg_)) (Coder.encodeTermInline Lexical.emptyContext (Helpers.PythonEnvironment {
   Helpers.pythonEnvironmentNamespaces = namespaces_,
   Helpers.pythonEnvironmentBoundTypeVariables = ([], Maps.empty),
   Helpers.pythonEnvironmentGraph = graph0,
@@ -300,7 +297,4 @@ inferTestCase g tcm =
 
 -- | Run type inference on a single term
 inferTerm :: (Graph.Graph -> Core.Term -> Either String Core.Term)
-inferTerm g term = (Eithers.bimap (\ic -> Error.unOtherError (Context.inContextObject ic)) (\x -> Typing.inferenceResultTerm x) (Inference.inferInGraphContext (Context.Context {
-  Context.contextTrace = [],
-  Context.contextMessages = [],
-  Context.contextOther = Maps.empty}) g term))
+inferTerm g term = (Eithers.bimap (\ic -> Error.unOtherError (Context.inContextObject ic)) (\x -> Typing.inferenceResultTerm x) (Inference.inferInGraphContext Lexical.emptyContext g term))

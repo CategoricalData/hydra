@@ -13,7 +13,7 @@ public interface TestCodec {
       hydra.ext.java.coder.Coder.encodeTerm(
         new hydra.ext.java.helpers.JavaEnvironment(new hydra.ext.java.helpers.Aliases(new hydra.module.Namespace("test"), (java.util.Map<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>) ((java.util.Map<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>) (hydra.lib.maps.Empty.<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())), g),
         term,
-        new hydra.context.Context((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply()))),
+        hydra.lexical.Lexical.emptyContext(),
         g));
   }
   
@@ -501,7 +501,7 @@ public interface TestCodec {
       (java.util.function.Function<hydra.context.InContext<hydra.error.OtherError>, String>) (ic -> (((java.util.function.Function<hydra.context.InContext<hydra.error.OtherError>, hydra.error.OtherError>) (projected -> projected.object)).apply(ic)).value),
       (java.util.function.Function<hydra.typing.InferenceResult, hydra.core.Term>) (x -> (x).term),
       hydra.inference.Inference.inferInGraphContext(
-        new hydra.context.Context((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply()))),
+        hydra.lexical.Lexical.emptyContext(),
         g,
         term));
   }

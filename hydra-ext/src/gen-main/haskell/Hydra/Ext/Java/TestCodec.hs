@@ -15,6 +15,7 @@ import qualified Hydra.Ext.Java.Serde as Serde
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Inference as Inference
+import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
@@ -52,10 +53,7 @@ termToJava term g = (Eithers.bimap (\ic -> Error.unOtherError (Context.inContext
     Helpers.aliasesTrustedTypeVars = Sets.empty,
     Helpers.aliasesMethodCodomain = Nothing,
     Helpers.aliasesThunkedVars = Sets.empty},
-  Helpers.javaEnvironmentGraph = g}) term (Context.Context {
-  Context.contextTrace = [],
-  Context.contextMessages = [],
-  Context.contextOther = Maps.empty}) g))
+  Helpers.javaEnvironmentGraph = g}) term Lexical.emptyContext g))
 
 -- | Convert a Hydra type to a Java type expression string (placeholder returning Object)
 typeToJava :: (t0 -> t1 -> Either t2 String)
@@ -316,7 +314,4 @@ inferTestCase g tcm =
 
 -- | Run type inference on a single term
 inferTerm :: (Graph.Graph -> Core.Term -> Either String Core.Term)
-inferTerm g term = (Eithers.bimap (\ic -> Error.unOtherError (Context.inContextObject ic)) (\x -> Typing.inferenceResultTerm x) (Inference.inferInGraphContext (Context.Context {
-  Context.contextTrace = [],
-  Context.contextMessages = [],
-  Context.contextOther = Maps.empty}) g term))
+inferTerm g term = (Eithers.bimap (\ic -> Error.unOtherError (Context.inContextObject ic)) (\x -> Typing.inferenceResultTerm x) (Inference.inferInGraphContext Lexical.emptyContext g term))

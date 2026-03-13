@@ -171,27 +171,7 @@
                                                                 "typeName": "hydra.ext.python.helpers.PythonEnvironment"}},
                                                             "function": {
                                                               "application": {
-                                                                "argument": {
-                                                                  "record": {
-                                                                    "fields": [
-                                                                      {
-                                                                        "name": "trace",
-                                                                        "term": {
-                                                                          "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}},
-                                                                      {
-                                                                        "name": "messages",
-                                                                        "term": {
-                                                                          "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}},
-                                                                      {
-                                                                        "name": "other",
-                                                                        "term": {
-                                                                          "typeApplication": {
-                                                                            "body": {
-                                                                              "typeApplication": {
-                                                                                "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
-                                                                                "type": {"variable": "hydra.core.Name"}}},
-                                                                            "type": {"variable": "hydra.core.Term"}}}}],
-                                                                    "typeName": "hydra.context.Context"}},
+                                                                "argument": {"variable": "hydra.lexical.emptyContext"},
                                                                 "function": {"variable": "hydra.ext.python.coder.encodeTermInline"}}}}}}}}},
                                                 "function": {
                                                   "application": {
@@ -2905,27 +2885,7 @@
                                   "argument": {"variable": "g"},
                                   "function": {
                                     "application": {
-                                      "argument": {
-                                        "record": {
-                                          "fields": [
-                                            {
-                                              "name": "trace",
-                                              "term": {
-                                                "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}},
-                                            {
-                                              "name": "messages",
-                                              "term": {
-                                                "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}},
-                                            {
-                                              "name": "other",
-                                              "term": {
-                                                "typeApplication": {
-                                                  "body": {
-                                                    "typeApplication": {
-                                                      "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
-                                                      "type": {"variable": "hydra.core.Name"}}},
-                                                  "type": {"variable": "hydra.core.Term"}}}}],
-                                          "typeName": "hydra.context.Context"}},
+                                      "argument": {"variable": "hydra.lexical.emptyContext"},
                                       "function": {"variable": "hydra.inference.inferInGraphContext"}}}}}}},
                           "function": {
                             "application": {
