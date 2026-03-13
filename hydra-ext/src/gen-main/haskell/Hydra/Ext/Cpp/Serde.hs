@@ -66,7 +66,7 @@ encodeAssignmentOperator op = ((\x -> case x of
   Syntax.AssignmentOperatorMultiplyAssign -> (Serialization.cst "*=")
   Syntax.AssignmentOperatorDivideAssign -> (Serialization.cst "/=")
   Syntax.AssignmentOperatorModuloAssign -> (Serialization.cst "%=")
-  Syntax.AssignmentOperatorLeftShiftAssign -> (Serialization.cst "<<=")
+  Syntax.AssignmentOperatorLeftShiftAssign -> (Serialization.cst " <<~")
   Syntax.AssignmentOperatorRightShiftAssign -> (Serialization.cst ">>=")
   Syntax.AssignmentOperatorBitwiseAndAssign -> (Serialization.cst "&=")
   Syntax.AssignmentOperatorBitwiseXorAssign -> (Serialization.cst "^=")
