@@ -20,7 +20,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Interpreter-friendly map for Set terms.
-map :: (Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+map :: (Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term)
 map cx g fun setTerm = (Eithers.bind (Core_.set cx g setTerm) (\elements -> Right (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.sets.fromList"))),
   Core.applicationArgument = (Core.TermList (Lists.map (\el -> Core.TermApplication (Core.Application {

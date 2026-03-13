@@ -2,7 +2,7 @@
 
 -- DEBUG: Focus namespace = (Namespace {unNamespace = "generation.hydra.test.annotations"},ModuleName {unModuleName = "Annotations"})
 -- DEBUG: Namespace mappings:
--- [(Namespace {unNamespace = "hydra.annotations"},ModuleName {unModuleName = "Annotations"}),(Namespace {unNamespace = "hydra.core"},ModuleName {unModuleName = "Core"}),(Namespace {unNamespace = "hydra.lexical"},ModuleName {unModuleName = "Lexical"})]
+-- [(Namespace {unNamespace = "hydra.annotations"},ModuleName {unModuleName = "Annotations"}),(Namespace {unNamespace = "hydra.core"},ModuleName {unModuleName = "Core"}),(Namespace {unNamespace = "hydra.lexical"},ModuleName {unModuleName = "Lexical"}),(Namespace {unNamespace = "hydra.monads"},ModuleName {unModuleName = "Monads"})]
 
 module Generation.Hydra.Test.AnnotationsSpec where
 
@@ -15,6 +15,7 @@ import qualified Data.Maybe as Y
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Core as Core
 import qualified Hydra.Lexical as Lexical
+import qualified Hydra.Monads as Monads
 
 spec :: H.Spec
 spec = H.describe "annotations" $ do
@@ -125,23 +126,23 @@ spec = H.describe "annotations" $ do
           Core.annotatedTermAnnotation = (M.fromList [
             (Core.Name "description", (Core.TermLiteral (Core.LiteralString "A longer description with spaces")))])}))
     H.it "get existing description #1" $ H.shouldBe
-      (Annotations.getTermDescription Lexical.emptyContext Lexical.emptyGraph (Annotations.setTermDescription (Just "hello") (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))
-      (Right (Just "hello") :: Either (InContext OtherError) (Maybe String))
+      (Annotations.getTermDescription Monads.emptyContext Lexical.emptyGraph (Annotations.setTermDescription (Just "hello") (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 42)))))
+      (Right (Just "hello") :: Either (InContext Error) (Maybe String))
     H.it "get existing description #2" $ H.shouldBe
-      (Annotations.getTermDescription Lexical.emptyContext Lexical.emptyGraph (Annotations.setTermDescription (Just "") (Core.TermLiteral (Core.LiteralString "test"))))
-      (Right (Just "") :: Either (InContext OtherError) (Maybe String))
+      (Annotations.getTermDescription Monads.emptyContext Lexical.emptyGraph (Annotations.setTermDescription (Just "") (Core.TermLiteral (Core.LiteralString "test"))))
+      (Right (Just "") :: Either (InContext Error) (Maybe String))
     H.it "get existing description #3" $ H.shouldBe
-      (Annotations.getTermDescription Lexical.emptyContext Lexical.emptyGraph (Annotations.setTermDescription (Just "desc") (Core.TermLiteral (Core.LiteralBoolean False))))
-      (Right (Just "desc") :: Either (InContext OtherError) (Maybe String))
+      (Annotations.getTermDescription Monads.emptyContext Lexical.emptyGraph (Annotations.setTermDescription (Just "desc") (Core.TermLiteral (Core.LiteralBoolean False))))
+      (Right (Just "desc") :: Either (InContext Error) (Maybe String))
     H.it "get missing description #1" $ H.shouldBe
-      (Annotations.getTermDescription Lexical.emptyContext Lexical.emptyGraph (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt16 42))))
-      (Right Nothing :: Either (InContext OtherError) (Maybe String))
+      (Annotations.getTermDescription Monads.emptyContext Lexical.emptyGraph (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt16 42))))
+      (Right Nothing :: Either (InContext Error) (Maybe String))
     H.it "get missing description #2" $ H.shouldBe
-      (Annotations.getTermDescription Lexical.emptyContext Lexical.emptyGraph (Core.TermLiteral (Core.LiteralString "no description here")))
-      (Right Nothing :: Either (InContext OtherError) (Maybe String))
+      (Annotations.getTermDescription Monads.emptyContext Lexical.emptyGraph (Core.TermLiteral (Core.LiteralString "no description here")))
+      (Right Nothing :: Either (InContext Error) (Maybe String))
     H.it "get missing description #3" $ H.shouldBe
-      (Annotations.getTermDescription Lexical.emptyContext Lexical.emptyGraph (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0))))
-      (Right Nothing :: Either (InContext OtherError) (Maybe String))
+      (Annotations.getTermDescription Monads.emptyContext Lexical.emptyGraph (Core.TermLiteral (Core.LiteralInteger (Core.IntegerValueInt32 0))))
+      (Right Nothing :: Either (InContext Error) (Maybe String))
     H.it "outer description overrides inner #1" $ H.shouldBe
       (Annotations.setTermDescription (Just "outer") (Annotations.setTermDescription (Just "inner") (Core.TermLiteral (Core.LiteralString "bar"))))
       (Core.TermAnnotated (Core.AnnotatedTerm {

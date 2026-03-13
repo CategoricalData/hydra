@@ -25,6 +25,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
+import qualified Hydra.Show.Error as Error_
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -63,16 +64,16 @@ adaptedModuleDefinitions lang cx graph mod =
                       let name = (Core.bindingName el)
                       in (Logic.ifElse (Annotations.isNativeType el) (Eithers.bind (Eithers.bimap (\e -> Error.unDecodingError e) (\x -> x) (Core_.type_ graph term)) (\coreTyp -> Eithers.bind (adaptTypeToLanguage lang cx graph coreTyp) (\adaptedTyp -> Right (Module.DefinitionType (Module.TypeDefinition {
                         Module.typeDefinitionName = name,
-                        Module.typeDefinitionType = adaptedTyp}))))) (Maybes.maybe (Left (Strings.cat2 "no adapter for element " (Core.unName name))) (\adapter -> Eithers.bind (Eithers.bimap (\ic -> Error.unOtherError (Context.inContextObject ic)) (\x -> x) (Compute.coderEncode (Compute.adapterCoder adapter) cx term)) (\adapted -> Right (Module.DefinitionTerm (Module.TermDefinition {
+                        Module.typeDefinitionType = adaptedTyp}))))) (Maybes.maybe (Left (Strings.cat2 "no adapter for element " (Core.unName name))) (\adapter -> Eithers.bind (Eithers.bimap (\ic -> Error_.error (Context.inContextObject ic)) (\x -> x) (Compute.coderEncode (Compute.adapterCoder adapter) cx term)) (\adapted -> Right (Module.DefinitionTerm (Module.TermDefinition {
                         Module.termDefinitionName = name,
                         Module.termDefinitionTerm = adapted,
                         Module.termDefinitionType = (Schemas.typeToTypeScheme (Compute.adapterTarget adapter))})))) (Maps.lookup typ adapters))))
-      in (Eithers.bind (Eithers.mapList (\_el -> Eithers.bimap (\ic -> Error.unOtherError (Context.inContextObject ic)) (\x -> x) (Schemas.elementAsTypeApplicationTerm cx _el)) els) (\tterms ->  
+      in (Eithers.bind (Eithers.mapList (\_el -> Eithers.bimap (\ic -> Error_.error (Context.inContextObject ic)) (\x -> x) (Schemas.elementAsTypeApplicationTerm cx _el)) els) (\tterms ->  
         let types = (Sets.toList (Sets.fromList (Lists.map (\arg_ -> Rewriting.deannotateType (Core.typeApplicationTermType arg_)) tterms)))
         in (Eithers.bind (adaptersFor types) (\adapters -> Eithers.mapList (classify adapters) (Lists.zip els tterms)))))
 
 -- | Given a target language, a unidirectional last-mile encoding, and a source type, construct a unidirectional adapting coder for terms of that type
-constructCoder :: (Coders.Language -> (Context.Context -> Core.Term -> Either (Context.InContext Error.OtherError) t0) -> t1 -> Graph.Graph -> Core.Type -> Either String (Compute.Coder Core.Term t0))
+constructCoder :: (Coders.Language -> (Context.Context -> Core.Term -> Either (Context.InContext Error.Error) t0) -> t1 -> Graph.Graph -> Core.Type -> Either String (Compute.Coder Core.Term t0))
 constructCoder lang encodeTerm cx g typ = (Eithers.map (\adapter -> Utils.composeCoders (Compute.adapterCoder adapter) (Utils.unidirectionalCoder encodeTerm)) (languageAdapter lang cx g typ))
 
 -- | Given a target language and a source type, produce an adapter, which rewrites the type and its terms according to the language's constraints
@@ -85,10 +86,10 @@ languageAdapter lang _cx g typ =
   in (Terms.termAdapter cx0 typ)
 
 -- | Given a target language, a unidirectional last mile encoding, and an intermediate helper function, transform a given module into a target representation
-transformModule :: (Coders.Language -> (Context.Context -> Core.Term -> Either (Context.InContext Error.OtherError) t0) -> (Module.Module -> M.Map Core.Type (Compute.Coder Core.Term t0) -> [(Core.Binding, Core.TypeApplicationTerm)] -> Either String t1) -> Context.Context -> Graph.Graph -> Module.Module -> Either String t1)
+transformModule :: (Coders.Language -> (Context.Context -> Core.Term -> Either (Context.InContext Error.Error) t0) -> (Module.Module -> M.Map Core.Type (Compute.Coder Core.Term t0) -> [(Core.Binding, Core.TypeApplicationTerm)] -> Either String t1) -> Context.Context -> Graph.Graph -> Module.Module -> Either String t1)
 transformModule lang encodeTerm createModule cx g mod =  
   let els = (Module.moduleElements mod)
-  in (Eithers.bind (Eithers.mapList (\_el -> Eithers.bimap (\ic -> Error.unOtherError (Context.inContextObject ic)) (\x -> x) (Schemas.elementAsTypeApplicationTerm cx _el)) els) (\tterms ->  
+  in (Eithers.bind (Eithers.mapList (\_el -> Eithers.bimap (\ic -> Error_.error (Context.inContextObject ic)) (\x -> x) (Schemas.elementAsTypeApplicationTerm cx _el)) els) (\tterms ->  
     let types = (Lists.nub (Lists.map Core.typeApplicationTermType tterms))
     in (Eithers.bind (Eithers.mapList (constructCoder lang encodeTerm cx g) types) (\cdrs ->  
       let coders = (Maps.fromList (Lists.zip types cdrs))

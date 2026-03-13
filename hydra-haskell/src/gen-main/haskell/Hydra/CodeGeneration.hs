@@ -34,6 +34,7 @@ import qualified Hydra.Module as Module__
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Show.Core as Core__
+import qualified Hydra.Show.Error as Error_
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -106,7 +107,7 @@ modulesToGraph bsGraph universeModules modules =
               in (Lexical.elementsToGraph bsGraph schemaTypes dataElements)
 
 -- | Pure core of code generation: given a coder, language, flags, bootstrap graph, universe, and modules to generate, produce a list of (filePath, content) pairs.
-generateSourceFiles :: Ord t0 => ((Module__.Module -> [Module__.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.OtherError) (M.Map t0 t1)) -> Coders.Language -> Bool -> Bool -> Bool -> Bool -> Graph.Graph -> [Module__.Module] -> [Module__.Module] -> Context.Context -> Either (Context.InContext Error.OtherError) [(t0, t1)])
+generateSourceFiles :: Ord t0 => ((Module__.Module -> [Module__.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (M.Map t0 t1)) -> Coders.Language -> Bool -> Bool -> Bool -> Bool -> Graph.Graph -> [Module__.Module] -> [Module__.Module] -> Context.Context -> Either (Context.InContext Error.Error) [(t0, t1)])
 generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings bsGraph universeModules modsToGenerate cx =  
   let namespaceMap = (Maps.fromList (Lists.map (\m -> (Module__.moduleNamespace m, m)) (Lists.concat2 universeModules modsToGenerate)))
   in  
@@ -136,7 +137,7 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
                           in (Eithers.bind (Logic.ifElse (Lists.null typeModulesToGenerate) (Right []) ( 
                             let nameLists = (Lists.map (\m -> Lists.map (\e -> Core.bindingName e) (Lists.filter (\e -> Annotations.isNativeType e) (Module__.moduleElements m))) typeModulesToGenerate)
                             in (Eithers.bind (Eithers.bimap (\s -> Context.InContext {
-                              Context.inContextObject = (Error.OtherError s),
+                              Context.inContextObject = (Error.ErrorOther (Error.OtherError s)),
                               Context.inContextContext = cx}) (\r -> r) (Simple.schemaGraphToDefinitions constraints schemaGraph nameLists cx)) (\schemaResult ->  
                               let defLists = (Pairs.second schemaResult)
                               in  
@@ -156,7 +157,7 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
                                     in (Eithers.map (\m -> Maps.toList m) (printDefinitions mod (Lists.map (\d -> Module__.DefinitionType d) defs) cx schemaGraphWithTypes))) (Lists.zip typeModulesToGenerate defLists))))))) (\schemaFiles -> Eithers.bind (Logic.ifElse (Lists.null termModulesToGenerate) (Right []) ( 
                             let namespaces = (Lists.map (\m -> Module__.moduleNamespace m) termModulesToGenerate)
                             in (Eithers.bind (Eithers.bimap (\s -> Context.InContext {
-                              Context.inContextObject = (Error.OtherError s),
+                              Context.inContextObject = (Error.ErrorOther (Error.OtherError s)),
                               Context.inContextContext = cx}) (\r -> r) (Simple.dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings dataElements dataGraph namespaces cx)) (\dataResult ->  
                               let g1 = (Pairs.first dataResult)
                               in  
@@ -252,7 +253,7 @@ moduleToJson m =
   in (Eithers.map (\json -> Writer.printJson json) (Encode.toJson term))
 
 -- | Perform type inference on modules and reconstruct with inferred types
-inferModules :: (Context.Context -> Graph.Graph -> [Module__.Module] -> [Module__.Module] -> Either (Context.InContext Error.OtherError) [Module__.Module])
+inferModules :: (Context.Context -> Graph.Graph -> [Module__.Module] -> [Module__.Module] -> Either (Context.InContext Error.Error) [Module__.Module])
 inferModules cx bsGraph universeMods targetMods =  
   let g0 = (modulesToGraph bsGraph universeMods universeMods)
   in  
@@ -302,7 +303,7 @@ inferAndGenerateLexicon cx bsGraph kernelModules =
   let g0 = (modulesToGraph bsGraph kernelModules kernelModules)
   in  
     let dataElements = (Lists.filter (\e -> Logic.not (Annotations.isNativeType e)) (Lists.concat (Lists.map (\m -> Module__.moduleElements m) kernelModules)))
-    in (Eithers.bind (Eithers.bimap (\ic -> Error.unOtherError (Context.inContextObject ic)) (\x -> x) (Inference.inferGraphTypes cx dataElements g0)) (\inferResultWithCx ->  
+    in (Eithers.bind (Eithers.bimap (\ic -> Error_.error (Context.inContextObject ic)) (\x -> x) (Inference.inferGraphTypes cx dataElements g0)) (\inferResultWithCx ->  
       let g1 = (Pairs.first (Pairs.first inferResultWithCx))
       in (Eithers.bimap Error.unDecodingError (\x -> x) (generateLexicon g1))))
 

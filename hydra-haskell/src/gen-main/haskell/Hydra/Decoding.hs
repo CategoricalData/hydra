@@ -1082,9 +1082,9 @@ decodeMaybeType elemType =
     Core.applicationArgument = elemDecoder}))
 
 -- | Transform a type module into a decoder module
-decodeModule :: (Context.Context -> Graph.Graph -> Module.Module -> Either (Context.InContext Error.OtherError) (Maybe Module.Module))
+decodeModule :: (Context.Context -> Graph.Graph -> Module.Module -> Either (Context.InContext Error.Error) (Maybe Module.Module))
 decodeModule cx graph mod = (Eithers.bind (filterTypeBindings cx graph (Module.moduleElements mod)) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\ic -> Context.InContext {
-  Context.inContextObject = (Error.OtherError (Error.unDecodingError (Context.inContextObject ic))),
+  Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unDecodingError (Context.inContextObject ic)))),
   Context.inContextContext = (Context.inContextContext ic)}) (\x -> x) (decodeBinding cx graph b)) typeBindings) (\decodedBindings ->  
   let decodedTypeDeps = (Lists.map decodeNamespace (Module.moduleTypeDependencies mod))
   in  
@@ -1518,11 +1518,11 @@ decoderTypeScheme typ =
           Core.typeSchemeConstraints = constraints}
 
 -- | Filter bindings to only decodable type definitions
-filterTypeBindings :: (Context.Context -> Graph.Graph -> [Core.Binding] -> Either (Context.InContext Error.OtherError) [Core.Binding])
+filterTypeBindings :: (Context.Context -> Graph.Graph -> [Core.Binding] -> Either (Context.InContext Error.Error) [Core.Binding])
 filterTypeBindings cx graph bindings = (Eithers.map Maybes.cat (Eithers.mapList (isDecodableBinding cx graph) (Lists.filter Annotations.isNativeType bindings)))
 
 -- | Check if a binding is decodable (serializable type)
-isDecodableBinding :: (Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Error.OtherError) (Maybe Core.Binding))
+isDecodableBinding :: (Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Error.Error) (Maybe Core.Binding))
 isDecodableBinding cx graph b = (Eithers.bind (Schemas.isSerializableByName cx graph (Core.bindingName b)) (\serializable -> Right (Logic.ifElse serializable (Just b) Nothing)))
 
 -- | Prepend decoder types for forall parameters to base type

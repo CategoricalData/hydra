@@ -372,9 +372,9 @@ encodePairType pt = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
         Core.applicationArgument = (Core.TermVariable (Core.Name "p"))}))}}))})))
 
 -- | Transform a type module into an encoder module
-encodeModule :: (Context.Context -> Graph.Graph -> Module.Module -> Either (Context.InContext Error.OtherError) (Maybe Module.Module))
+encodeModule :: (Context.Context -> Graph.Graph -> Module.Module -> Either (Context.InContext Error.Error) (Maybe Module.Module))
 encodeModule cx graph mod = (Eithers.bind (filterTypeBindings cx graph (Module.moduleElements mod)) (\typeBindings -> Logic.ifElse (Lists.null typeBindings) (Right Nothing) (Eithers.bind (Eithers.mapList (\b -> Eithers.bimap (\ic -> Context.InContext {
-  Context.inContextObject = (Error.OtherError (Error.unDecodingError (Context.inContextObject ic))),
+  Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unDecodingError (Context.inContextObject ic)))),
   Context.inContextContext = (Context.inContextContext ic)}) (\x -> x) (encodeBinding cx graph b)) typeBindings) (\encodedBindings -> Right (Just (Module.Module {
   Module.moduleNamespace = (encodeNamespace (Module.moduleNamespace mod)),
   Module.moduleElements = encodedBindings,
@@ -514,11 +514,11 @@ encodeWrappedType wt = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                 Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))})))
 
 -- | Filter bindings to only encodable type definitions
-filterTypeBindings :: (Context.Context -> Graph.Graph -> [Core.Binding] -> Either (Context.InContext Error.OtherError) [Core.Binding])
+filterTypeBindings :: (Context.Context -> Graph.Graph -> [Core.Binding] -> Either (Context.InContext Error.Error) [Core.Binding])
 filterTypeBindings cx graph bindings = (Eithers.map Maybes.cat (Eithers.mapList (isEncodableBinding cx graph) (Lists.filter Annotations.isNativeType bindings)))
 
 -- | Check if a binding is encodable (serializable type)
-isEncodableBinding :: (Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Error.OtherError) (Maybe Core.Binding))
+isEncodableBinding :: (Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Error.Error) (Maybe Core.Binding))
 isEncodableBinding cx graph b = (Eithers.bind (Schemas.isSerializableByName cx graph (Core.bindingName b)) (\serializable -> Right (Logic.ifElse serializable (Just b) Nothing)))
 
 -- | Check whether a type is the unit type

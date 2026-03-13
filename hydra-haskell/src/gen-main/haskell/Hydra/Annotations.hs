@@ -39,19 +39,19 @@ aggregateAnnotations getValue getX getAnns t =
   in (Maps.fromList (Lists.concat (toPairs [] t)))
 
 -- | Debug if the debug ID matches (Either version)
-debugIf :: (Context.Context -> String -> String -> Either (Context.InContext Error.OtherError) ())
+debugIf :: (Context.Context -> String -> String -> Either (Context.InContext Error.Error) ())
 debugIf cx debugId message = (Eithers.bind (getDebugId cx) (\mid -> Logic.ifElse (Equality.equal mid (Just debugId)) (Left (Context.InContext {
-  Context.inContextObject = (Error.OtherError message),
+  Context.inContextObject = (Error.ErrorOther (Error.OtherError message)),
   Context.inContextContext = cx})) (Right ())))
 
 -- | Fail if the given flag is set (Either version)
-failOnFlag :: (Context.Context -> Core.Name -> String -> Either (Context.InContext Error.OtherError) ())
+failOnFlag :: (Context.Context -> Core.Name -> String -> Either (Context.InContext Error.Error) ())
 failOnFlag cx flag msg = (Eithers.bind (hasFlag cx flag) (\val -> Logic.ifElse val (Left (Context.InContext {
-  Context.inContextObject = (Error.OtherError msg),
+  Context.inContextObject = (Error.ErrorOther (Error.OtherError msg)),
   Context.inContextContext = cx})) (Right ())))
 
 -- | Get the debug ID from context (Either version)
-getDebugId :: (Context.Context -> Either (Context.InContext Error.OtherError) (Maybe String))
+getDebugId :: (Context.Context -> Either (Context.InContext Error.Error) (Maybe String))
 getDebugId cx = (Maybes.maybe (Right Nothing) (\term -> Eithers.map Maybes.pure (Core___.string cx (Graph.Graph {
   Graph.graphBoundTerms = Maps.empty,
   Graph.graphBoundTypes = Maps.empty,
@@ -81,7 +81,7 @@ getCount key cx = (Maybes.maybe 0 (\term -> (\x -> case x of
   _ -> 0) term) (Maps.lookup key (Context.contextOther cx)))
 
 -- | Get description from annotations map (Either version)
-getDescription :: (Context.Context -> Graph.Graph -> M.Map Core.Name Core.Term -> Either (Context.InContext Error.OtherError) (Maybe String))
+getDescription :: (Context.Context -> Graph.Graph -> M.Map Core.Name Core.Term -> Either (Context.InContext Error.Error) (Maybe String))
 getDescription cx graph anns = (Maybes.maybe (Right Nothing) (\term -> Eithers.map Maybes.pure (Core___.string cx graph term)) (Maps.lookup (Core.Name "description") anns))
 
 -- | Get a term annotation
@@ -89,7 +89,7 @@ getTermAnnotation :: (Core.Name -> Core.Term -> Maybe Core.Term)
 getTermAnnotation key term = (Maps.lookup key (termAnnotationInternal term))
 
 -- | Get term description (Either version)
-getTermDescription :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) (Maybe String))
+getTermDescription :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) (Maybe String))
 getTermDescription cx graph term =  
   let peel = (\t -> (\x -> case x of
           Core.TermTypeLambda v0 -> (peel (Core.typeLambdaBody v0))
@@ -106,21 +106,21 @@ getTypeAnnotation :: (Core.Name -> Core.Type -> Maybe Core.Term)
 getTypeAnnotation key typ = (Maps.lookup key (typeAnnotationInternal typ))
 
 -- | Get type classes from term
-getTypeClasses :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) (M.Map Core.Name (S.Set Classes.TypeClass)))
+getTypeClasses :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) (M.Map Core.Name (S.Set Classes.TypeClass)))
 getTypeClasses cx graph term =  
   let decodeClass = (\term ->  
           let byName = (Maps.fromList [
                   (Core.Name "equality", Classes.TypeClassEquality),
                   (Core.Name "ordering", Classes.TypeClassOrdering)])
           in (Eithers.bind (Core___.unitVariant cx (Core.Name "hydra.classes.TypeClass") graph term) (\fn -> Maybes.maybe (Left (Context.InContext {
-            Context.inContextObject = (Error.OtherError (Strings.cat2 "unexpected: expected type class, got " (Core____.term term))),
+            Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "unexpected: expected type class, got " (Core____.term term)))),
             Context.inContextContext = cx})) (\x -> Right x) (Maps.lookup fn byName))))
   in (Maybes.maybe (Right Maps.empty) (\term -> Core___.map cx (\t -> Eithers.bimap (\de -> Context.InContext {
-    Context.inContextObject = (Error.OtherError (Error.unDecodingError de)),
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unDecodingError de))),
     Context.inContextContext = cx}) (\x -> x) (Core_.name graph t)) (Core___.setOf cx decodeClass graph) graph term) (getTermAnnotation Constants.key_classes term))
 
 -- | Get type description (Either version)
-getTypeDescription :: (Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Error.OtherError) (Maybe String))
+getTypeDescription :: (Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Error.Error) (Maybe String))
 getTypeDescription cx graph typ = (getDescription cx graph (typeAnnotationInternal typ))
 
 -- | For a typed term, decide whether a coder should encode it as a native type expression, or as a Hydra type expression.
@@ -137,7 +137,7 @@ hasDescription :: (M.Map Core.Name t0 -> Bool)
 hasDescription anns = (Maybes.isJust (Maps.lookup Constants.key_description anns))
 
 -- | Check if flag is set (Either version)
-hasFlag :: (Context.Context -> Core.Name -> Either (Context.InContext Error.OtherError) Bool)
+hasFlag :: (Context.Context -> Core.Name -> Either (Context.InContext Error.Error) Bool)
 hasFlag cx flag =  
   let term = (getAttrWithDefault flag (Core.TermLiteral (Core.LiteralBoolean False)) cx)
   in (Core___.boolean cx (Graph.Graph {
@@ -293,5 +293,5 @@ typeElement name typ =
         Core.typeSchemeConstraints = Nothing}))}
 
 -- | Execute different branches based on flag (Either version)
-whenFlag :: (Context.Context -> Core.Name -> Either (Context.InContext Error.OtherError) t0 -> Either (Context.InContext Error.OtherError) t0 -> Either (Context.InContext Error.OtherError) t0)
+whenFlag :: (Context.Context -> Core.Name -> Either (Context.InContext Error.Error) t0 -> Either (Context.InContext Error.Error) t0 -> Either (Context.InContext Error.Error) t0)
 whenFlag cx flag ethen eelse = (Eithers.bind (hasFlag cx flag) (\b -> Logic.ifElse b ethen eelse))

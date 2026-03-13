@@ -150,9 +150,9 @@ fieldsOf t =
     Core.TypeUnion v0 -> (Core.rowTypeFields v0)
     _ -> []) stripped)
 
-getField :: (Context.Context -> M.Map Core.Name t0 -> Core.Name -> (t0 -> Either (Context.InContext Error.OtherError) t1) -> Either (Context.InContext Error.OtherError) t1)
+getField :: (Context.Context -> M.Map Core.Name t0 -> Core.Name -> (t0 -> Either (Context.InContext Error.Error) t1) -> Either (Context.InContext Error.Error) t1)
 getField cx m fname decode = (Maybes.maybe (Left (Context.InContext {
-  Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 "expected field " (Core.unName fname)) " not found")),
+  Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 "expected field " (Core.unName fname)) " not found"))),
   Context.inContextContext = cx})) decode (Maps.lookup fname m))
 
 -- | Look up a binding in a graph by name
@@ -170,19 +170,19 @@ lookupPrimitive graph name = (Maps.lookup name (Graph.graphPrimitives graph))
 lookupTerm :: (Graph.Graph -> Core.Name -> Maybe Core.Term)
 lookupTerm graph name = (Maps.lookup name (Graph.graphBoundTerms graph))
 
-matchEnum :: (Context.Context -> Graph.Graph -> Core.Name -> [(Core.Name, t0)] -> Core.Term -> Either (Context.InContext Error.OtherError) t0)
+matchEnum :: (Context.Context -> Graph.Graph -> Core.Name -> [(Core.Name, t0)] -> Core.Term -> Either (Context.InContext Error.Error) t0)
 matchEnum cx graph tname pairs = (matchUnion cx graph tname (Lists.map (\pair -> matchUnitField (Pairs.first pair) (Pairs.second pair)) pairs))
 
-matchRecord :: (Context.Context -> t0 -> (M.Map Core.Name Core.Term -> Either (Context.InContext Error.OtherError) t1) -> Core.Term -> Either (Context.InContext Error.OtherError) t1)
+matchRecord :: (Context.Context -> t0 -> (M.Map Core.Name Core.Term -> Either (Context.InContext Error.Error) t1) -> Core.Term -> Either (Context.InContext Error.Error) t1)
 matchRecord cx graph decode term =  
   let stripped = (Rewriting.deannotateAndDetypeTerm term)
   in ((\x -> case x of
     Core.TermRecord v0 -> (decode (Maps.fromList (Lists.map (\field -> (Core.fieldName field, (Core.fieldTerm field))) (Core.recordFields v0))))
     _ -> (Left (Context.InContext {
-      Context.inContextObject = (Error.OtherError (Strings.cat2 "expected a record, got " (Core_.term term))),
+      Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "expected a record, got " (Core_.term term)))),
       Context.inContextContext = cx}))) stripped)
 
-matchUnion :: (Context.Context -> Graph.Graph -> Core.Name -> [(Core.Name, (Core.Term -> Either (Context.InContext Error.OtherError) t0))] -> Core.Term -> Either (Context.InContext Error.OtherError) t0)
+matchUnion :: (Context.Context -> Graph.Graph -> Core.Name -> [(Core.Name, (Core.Term -> Either (Context.InContext Error.Error) t0))] -> Core.Term -> Either (Context.InContext Error.Error) t0)
 matchUnion cx graph tname pairs term =  
   let stripped = (Rewriting.deannotateAndDetypeTerm term)
   in  
@@ -195,25 +195,25 @@ matchUnion cx graph tname pairs term =
                 in  
                   let val = (Core.fieldTerm (Core.injectionField v0))
                   in (Maybes.maybe (Left (Context.InContext {
-                    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "no matching case for field \"" (Core.unName fname)) "\" in union type ") (Core.unName tname))),
+                    Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "no matching case for field \"" (Core.unName fname)) "\" in union type ") (Core.unName tname)))),
                     Context.inContextContext = cx})) (\f -> f val) (Maps.lookup fname mapping))
         in (Logic.ifElse (Equality.equal (Core.unName (Core.injectionTypeName v0)) (Core.unName tname)) exp (Left (Context.InContext {
-          Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected injection for type " (Core.unName tname)) ", got ") (Core_.term term))),
+          Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected injection for type " (Core.unName tname)) ", got ") (Core_.term term)))),
           Context.inContextContext = cx})))
       _ -> (Left (Context.InContext {
-        Context.inContextObject = (Error.OtherError (Strings.cat [
+        Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat [
           "expected inject(",
           (Core.unName tname),
           ") with one of {",
           (Strings.intercalate ", " (Lists.map (\pair -> Core.unName (Pairs.first pair)) pairs)),
           "}, got ",
-          (Core_.term stripped)])),
+          (Core_.term stripped)]))),
         Context.inContextContext = cx}))) stripped)
 
 matchUnitField :: (t0 -> t1 -> (t0, (t2 -> Either t3 t1)))
 matchUnitField fname x = (fname, (\ignored -> Right x))
 
-requireElement :: (Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Error.OtherError) Core.Binding)
+requireElement :: (Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Error.Error) Core.Binding)
 requireElement cx graph name =  
   let showAll = False
   in  
@@ -222,24 +222,24 @@ requireElement cx graph name =
     in  
       let errMsg = (Strings.cat2 (Strings.cat2 (Strings.cat2 (Strings.cat2 "no such element: " (Core.unName name)) ". Available elements: {") (Strings.intercalate ", " (ellipsis (Lists.map Core.unName (Maps.keys (Graph.graphBoundTerms graph)))))) "}")
       in (Maybes.maybe (Left (Context.InContext {
-        Context.inContextObject = (Error.OtherError errMsg),
+        Context.inContextObject = (Error.ErrorOther (Error.OtherError errMsg)),
         Context.inContextContext = cx})) (\x -> Right x) (dereferenceElement graph name))
 
-requirePrimitive :: (Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Error.OtherError) Graph.Primitive)
+requirePrimitive :: (Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Error.Error) Graph.Primitive)
 requirePrimitive cx graph name = (Maybes.maybe (Left (Context.InContext {
-  Context.inContextObject = (Error.OtherError (Strings.cat2 "no such primitive function: " (Core.unName name))),
+  Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "no such primitive function: " (Core.unName name)))),
   Context.inContextContext = cx})) (\x -> Right x) (lookupPrimitive graph name))
 
-requirePrimitiveType :: (Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Error.OtherError) Core.TypeScheme)
+requirePrimitiveType :: (Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Error.Error) Core.TypeScheme)
 requirePrimitiveType cx tx name =  
   let mts = (Maps.lookup name (Maps.fromList (Lists.map (\_gpt_p -> (Graph.primitiveName _gpt_p, (Graph.primitiveType _gpt_p))) (Maps.elems (Graph.graphPrimitives tx)))))
   in (Maybes.maybe (Left (Context.InContext {
-    Context.inContextObject = (Error.OtherError (Strings.cat2 "no such primitive function: " (Core.unName name))),
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "no such primitive function: " (Core.unName name)))),
     Context.inContextContext = cx})) (\ts -> Right ts) mts)
 
-requireTerm :: (Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Error.OtherError) Core.Term)
+requireTerm :: (Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Error.Error) Core.Term)
 requireTerm cx graph name = (Maybes.maybe (Left (Context.InContext {
-  Context.inContextObject = (Error.OtherError (Strings.cat2 "no such element: " (Core.unName name))),
+  Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "no such element: " (Core.unName name)))),
   Context.inContextContext = cx})) (\x -> Right x) (resolveTerm graph name))
 
 -- | TODO: distinguish between lambda-bound and let-bound variables
@@ -252,7 +252,7 @@ resolveTerm graph name =
             _ -> (Just term)) stripped))
   in (Maybes.maybe Nothing recurse (lookupTerm graph name))
 
-stripAndDereferenceTerm :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+stripAndDereferenceTerm :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) Core.Term)
 stripAndDereferenceTerm cx graph term =  
   let stripped = (Rewriting.deannotateAndDetypeTerm term)
   in ((\x -> case x of

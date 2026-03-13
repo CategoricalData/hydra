@@ -1075,7 +1075,7 @@
                                                                               "domain": [
                                                                                 {
                                                                                   "application": {
-                                                                                    "argument": {"variable": "hydra.error.OtherError"},
+                                                                                    "argument": {"variable": "hydra.error.Error"},
                                                                                     "function": {"variable": "hydra.context.InContext"}}}],
                                                                               "parameter": "_"}}},
                                                                         "function": {
@@ -1087,7 +1087,7 @@
                                                                                     "body": {"function": {"primitive": "hydra.lib.eithers.either"}},
                                                                                     "type": {
                                                                                       "application": {
-                                                                                        "argument": {"variable": "hydra.error.OtherError"},
+                                                                                        "argument": {"variable": "hydra.error.Error"},
                                                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                 "type": {
                                                                                   "map": {
@@ -1580,7 +1580,7 @@
                                                                                                                                                     "domain": [
                                                                                                                                                       {
                                                                                                                                                         "application": {
-                                                                                                                                                          "argument": {"variable": "hydra.error.OtherError"},
+                                                                                                                                                          "argument": {"variable": "hydra.error.Error"},
                                                                                                                                                           "function": {"variable": "hydra.context.InContext"}}}],
                                                                                                                                                     "parameter": "_"}}},
                                                                                                                                               "function": {
@@ -1592,7 +1592,7 @@
                                                                                                                                                           "body": {"function": {"primitive": "hydra.lib.eithers.either"}},
                                                                                                                                                           "type": {
                                                                                                                                                             "application": {
-                                                                                                                                                              "argument": {"variable": "hydra.error.OtherError"},
+                                                                                                                                                              "argument": {"variable": "hydra.error.Error"},
                                                                                                                                                               "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                                                                       "type": {
                                                                                                                                                         "map": {
@@ -1658,7 +1658,7 @@
                                                                                                                                                                               "type": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}}}}}}}},
                                                                                                                                                               "type": {
                                                                                                                                                                 "application": {
-                                                                                                                                                                  "argument": {"variable": "hydra.error.OtherError"},
+                                                                                                                                                                  "argument": {"variable": "hydra.error.Error"},
                                                                                                                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                                                                           "type": {
                                                                                                                                                             "list": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}}},
@@ -2040,7 +2040,7 @@
                                                                                                                                                                                                                                   "list": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}}},
                                                                                                                                                                                                                             "type": {
                                                                                                                                                                                                                               "application": {
-                                                                                                                                                                                                                                "argument": {"variable": "hydra.error.OtherError"},
+                                                                                                                                                                                                                                "argument": {"variable": "hydra.error.Error"},
                                                                                                                                                                                                                                 "function": {"variable": "hydra.context.InContext"}}}}}}}}}}}}},
                                                                                                                                                                                                         "domain": [
                                                                                                                                                                                                           {
@@ -2063,7 +2063,7 @@
                                                                                                                                                                                                             "list": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}}},
                                                                                                                                                                                                       "type": {
                                                                                                                                                                                                         "application": {
-                                                                                                                                                                                                          "argument": {"variable": "hydra.error.OtherError"},
+                                                                                                                                                                                                          "argument": {"variable": "hydra.error.Error"},
                                                                                                                                                                                                           "function": {"variable": "hydra.context.InContext"}}}}}}}}},
                                                                                                                                                                                           "function": {
                                                                                                                                                                                             "application": {
@@ -2096,7 +2096,7 @@
                                                                                                                                                                                                         "list": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}}},
                                                                                                                                                                                                   "type": {
                                                                                                                                                                                                     "application": {
-                                                                                                                                                                                                      "argument": {"variable": "hydra.error.OtherError"},
+                                                                                                                                                                                                      "argument": {"variable": "hydra.error.Error"},
                                                                                                                                                                                                       "function": {"variable": "hydra.context.InContext"}}}}}}}}}}}}}}}}},
                                                                                                                                                                       "domain": [
                                                                                                                                                                         {
@@ -2161,10 +2161,15 @@
                                                                                                                                                                                                 {
                                                                                                                                                                                                   "name": "object",
                                                                                                                                                                                                   "term": {
-                                                                                                                                                                                                    "wrap": {"body": {"variable": "s"}, "typeName": "hydra.error.OtherError"}}},
+                                                                                                                                                                                                    "union": {
+                                                                                                                                                                                                      "field": {
+                                                                                                                                                                                                        "name": "other",
+                                                                                                                                                                                                        "term": {
+                                                                                                                                                                                                          "wrap": {"body": {"variable": "s"}, "typeName": "hydra.error.OtherError"}}},
+                                                                                                                                                                                                      "typeName": "hydra.error.Error"}}},
                                                                                                                                                                                                 {"name": "context", "term": {"variable": "cx"}}],
                                                                                                                                                                                               "typeName": "hydra.context.InContext"}},
-                                                                                                                                                                                          "type": {"variable": "hydra.error.OtherError"}}},
+                                                                                                                                                                                          "type": {"variable": "hydra.error.Error"}}},
                                                                                                                                                                                       "domain": [{"literal": {"string": {}}}],
                                                                                                                                                                                       "parameter": "s"}}},
                                                                                                                                                                                 "function": {
@@ -2183,7 +2188,7 @@
                                                                                                                                                                                                 "second": {"list": {"list": {"variable": "hydra.module.TermDefinition"}}}}}}},
                                                                                                                                                                                         "type": {
                                                                                                                                                                                           "application": {
-                                                                                                                                                                                            "argument": {"variable": "hydra.error.OtherError"},
+                                                                                                                                                                                            "argument": {"variable": "hydra.error.Error"},
                                                                                                                                                                                             "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                                                                                                     "type": {
                                                                                                                                                                                       "pair": {
@@ -2198,7 +2203,7 @@
                                                                                                                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                                                                                                                 "type": {
                                                                                                                                                                                   "application": {
-                                                                                                                                                                                    "argument": {"variable": "hydra.error.OtherError"},
+                                                                                                                                                                                    "argument": {"variable": "hydra.error.Error"},
                                                                                                                                                                                     "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                                                                                             "type": {
                                                                                                                                                                               "pair": {
@@ -2220,7 +2225,7 @@
                                                                                                                                                                             "type": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}}}},
                                                                                                                                                                     "type": {
                                                                                                                                                                       "application": {
-                                                                                                                                                                        "argument": {"variable": "hydra.error.OtherError"},
+                                                                                                                                                                        "argument": {"variable": "hydra.error.Error"},
                                                                                                                                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                                                                                 "type": {
                                                                                                                                                                   "list": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}}},
@@ -2240,7 +2245,7 @@
                                                                                                                                                                       "either": {
                                                                                                                                                                         "left": {
                                                                                                                                                                           "application": {
-                                                                                                                                                                            "argument": {"variable": "hydra.error.OtherError"},
+                                                                                                                                                                            "argument": {"variable": "hydra.error.Error"},
                                                                                                                                                                             "function": {"variable": "hydra.context.InContext"}}},
                                                                                                                                                                         "right": {
                                                                                                                                                                           "list": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}}}}}}}}}}},
@@ -2253,7 +2258,7 @@
                                                                                                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                                                                                                 "type": {
                                                                                                                                                                   "application": {
-                                                                                                                                                                    "argument": {"variable": "hydra.error.OtherError"},
+                                                                                                                                                                    "argument": {"variable": "hydra.error.Error"},
                                                                                                                                                                     "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                                                                             "type": {
                                                                                                                                                               "list": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}}},
@@ -2567,7 +2572,7 @@
                                                                                                                                                                                                                 "list": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}}},
                                                                                                                                                                                                           "type": {
                                                                                                                                                                                                             "application": {
-                                                                                                                                                                                                              "argument": {"variable": "hydra.error.OtherError"},
+                                                                                                                                                                                                              "argument": {"variable": "hydra.error.Error"},
                                                                                                                                                                                                               "function": {"variable": "hydra.context.InContext"}}}}}}}}}}}}},
                                                                                                                                                                                       "domain": [
                                                                                                                                                                                         {
@@ -2590,7 +2595,7 @@
                                                                                                                                                                                           "list": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}}},
                                                                                                                                                                                     "type": {
                                                                                                                                                                                       "application": {
-                                                                                                                                                                                        "argument": {"variable": "hydra.error.OtherError"},
+                                                                                                                                                                                        "argument": {"variable": "hydra.error.Error"},
                                                                                                                                                                                         "function": {"variable": "hydra.context.InContext"}}}}}}}}},
                                                                                                                                                                         "function": {
                                                                                                                                                                           "application": {
@@ -2623,7 +2628,7 @@
                                                                                                                                                                                       "list": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}}},
                                                                                                                                                                                 "type": {
                                                                                                                                                                                   "application": {
-                                                                                                                                                                                    "argument": {"variable": "hydra.error.OtherError"},
+                                                                                                                                                                                    "argument": {"variable": "hydra.error.Error"},
                                                                                                                                                                                     "function": {"variable": "hydra.context.InContext"}}}}}}}}}}}}},
                                                                                                                                                             "domain": [
                                                                                                                                                               {
@@ -2679,10 +2684,15 @@
                                                                                                                                                                                       {
                                                                                                                                                                                         "name": "object",
                                                                                                                                                                                         "term": {
-                                                                                                                                                                                          "wrap": {"body": {"variable": "s"}, "typeName": "hydra.error.OtherError"}}},
+                                                                                                                                                                                          "union": {
+                                                                                                                                                                                            "field": {
+                                                                                                                                                                                              "name": "other",
+                                                                                                                                                                                              "term": {
+                                                                                                                                                                                                "wrap": {"body": {"variable": "s"}, "typeName": "hydra.error.OtherError"}}},
+                                                                                                                                                                                            "typeName": "hydra.error.Error"}}},
                                                                                                                                                                                       {"name": "context", "term": {"variable": "cx"}}],
                                                                                                                                                                                     "typeName": "hydra.context.InContext"}},
-                                                                                                                                                                                "type": {"variable": "hydra.error.OtherError"}}},
+                                                                                                                                                                                "type": {"variable": "hydra.error.Error"}}},
                                                                                                                                                                             "domain": [{"literal": {"string": {}}}],
                                                                                                                                                                             "parameter": "s"}}},
                                                                                                                                                                       "function": {
@@ -2704,7 +2714,7 @@
                                                                                                                                                                                       "second": {"list": {"list": {"variable": "hydra.module.TypeDefinition"}}}}}}},
                                                                                                                                                                               "type": {
                                                                                                                                                                                 "application": {
-                                                                                                                                                                                  "argument": {"variable": "hydra.error.OtherError"},
+                                                                                                                                                                                  "argument": {"variable": "hydra.error.Error"},
                                                                                                                                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                                                                                           "type": {
                                                                                                                                                                             "pair": {
@@ -2722,7 +2732,7 @@
                                                                                                                                                                       "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                                                                                                       "type": {
                                                                                                                                                                         "application": {
-                                                                                                                                                                          "argument": {"variable": "hydra.error.OtherError"},
+                                                                                                                                                                          "argument": {"variable": "hydra.error.Error"},
                                                                                                                                                                           "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                                                                                   "type": {
                                                                                                                                                                     "pair": {
@@ -2747,7 +2757,7 @@
                                                                                                                                                                   "type": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}}}},
                                                                                                                                                           "type": {
                                                                                                                                                             "application": {
-                                                                                                                                                              "argument": {"variable": "hydra.error.OtherError"},
+                                                                                                                                                              "argument": {"variable": "hydra.error.Error"},
                                                                                                                                                               "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                                                                       "type": {
                                                                                                                                                         "list": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}}},
@@ -2767,7 +2777,7 @@
                                                                                                                                                             "either": {
                                                                                                                                                               "left": {
                                                                                                                                                                 "application": {
-                                                                                                                                                                  "argument": {"variable": "hydra.error.OtherError"},
+                                                                                                                                                                  "argument": {"variable": "hydra.error.Error"},
                                                                                                                                                                   "function": {"variable": "hydra.context.InContext"}}},
                                                                                                                                                               "right": {
                                                                                                                                                                 "list": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}}}}}}}}}}},
@@ -2780,7 +2790,7 @@
                                                                                                                                                       "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                                                                                       "type": {
                                                                                                                                                         "application": {
-                                                                                                                                                          "argument": {"variable": "hydra.error.OtherError"},
+                                                                                                                                                          "argument": {"variable": "hydra.error.Error"},
                                                                                                                                                           "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                                                                   "type": {
                                                                                                                                                     "list": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}}},
@@ -2817,7 +2827,7 @@
                                             "either": {
                                               "left": {
                                                 "application": {
-                                                  "argument": {"variable": "hydra.error.OtherError"},
+                                                  "argument": {"variable": "hydra.error.Error"},
                                                   "function": {"variable": "hydra.context.InContext"}}},
                                               "right": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "t1"}}}}},
                                           "domain": {"variable": "hydra.graph.Graph"}}},
@@ -2854,7 +2864,7 @@
                                                     "either": {
                                                       "left": {
                                                         "application": {
-                                                          "argument": {"variable": "hydra.error.OtherError"},
+                                                          "argument": {"variable": "hydra.error.Error"},
                                                           "function": {"variable": "hydra.context.InContext"}}},
                                                       "right": {
                                                         "list": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}}},
@@ -2879,7 +2889,7 @@
                                 "either": {
                                   "left": {
                                     "application": {
-                                      "argument": {"variable": "hydra.error.OtherError"},
+                                      "argument": {"variable": "hydra.error.Error"},
                                       "function": {"variable": "hydra.context.InContext"}}},
                                   "right": {"map": {"keys": {"variable": "t0"}, "values": {"variable": "t1"}}}}},
                               "domain": {"variable": "hydra.graph.Graph"}}},
@@ -4216,7 +4226,7 @@
                                                                                                 "type": {"variable": "hydra.module.Module"}}}}}}}}},
                                                                                 "type": {
                                                                                   "application": {
-                                                                                    "argument": {"variable": "hydra.error.OtherError"},
+                                                                                    "argument": {"variable": "hydra.error.Error"},
                                                                                     "function": {"variable": "hydra.context.InContext"}}}}},
                                                                             "type": {"list": {"variable": "hydra.module.Module"}}}}}}}}}}}}}},
                                                     "domain": [
@@ -4249,7 +4259,7 @@
                                                               "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                               "type": {
                                                                 "application": {
-                                                                  "argument": {"variable": "hydra.error.OtherError"},
+                                                                  "argument": {"variable": "hydra.error.Error"},
                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                           "type": {
                                                             "pair": {
@@ -4282,7 +4292,7 @@
                             "either": {
                               "left": {
                                 "application": {
-                                  "argument": {"variable": "hydra.error.OtherError"},
+                                  "argument": {"variable": "hydra.error.Error"},
                                   "function": {"variable": "hydra.context.InContext"}}},
                               "right": {"list": {"variable": "hydra.module.Module"}}}},
                           "domain": {"list": {"variable": "hydra.module.Module"}}}},
@@ -4614,7 +4624,7 @@
                                                                                                           "domain": [
                                                                                                             {
                                                                                                               "application": {
-                                                                                                                "argument": {"variable": "hydra.error.OtherError"},
+                                                                                                                "argument": {"variable": "hydra.error.Error"},
                                                                                                                 "function": {"variable": "hydra.context.InContext"}}}],
                                                                                                           "parameter": "_"}}},
                                                                                                     "function": {
@@ -4626,7 +4636,7 @@
                                                                                                                 "body": {"function": {"primitive": "hydra.lib.eithers.either"}},
                                                                                                                 "type": {
                                                                                                                   "application": {
-                                                                                                                    "argument": {"variable": "hydra.error.OtherError"},
+                                                                                                                    "argument": {"variable": "hydra.error.Error"},
                                                                                                                     "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                             "type": {
                                                                                                               "map": {
@@ -5012,12 +5022,12 @@
                                                                           "body": {
                                                                             "function": {
                                                                               "elimination": {"record": {"field": "object", "typeName": "hydra.context.InContext"}}}},
-                                                                          "type": {"variable": "hydra.error.OtherError"}}}}},
-                                                                  "function": {"function": {"elimination": {"wrap": "hydra.error.OtherError"}}}}},
+                                                                          "type": {"variable": "hydra.error.Error"}}}}},
+                                                                  "function": {"variable": "hydra.show.error.error"}}},
                                                               "domain": [
                                                                 {
                                                                   "application": {
-                                                                    "argument": {"variable": "hydra.error.OtherError"},
+                                                                    "argument": {"variable": "hydra.error.Error"},
                                                                     "function": {"variable": "hydra.context.InContext"}}}],
                                                               "parameter": "ic"}}},
                                                         "function": {
@@ -5031,7 +5041,7 @@
                                                                         "body": {"function": {"primitive": "hydra.lib.eithers.bimap"}},
                                                                         "type": {
                                                                           "application": {
-                                                                            "argument": {"variable": "hydra.error.OtherError"},
+                                                                            "argument": {"variable": "hydra.error.Error"},
                                                                             "function": {"variable": "hydra.context.InContext"}}}}},
                                                                     "type": {
                                                                       "pair": {
@@ -5720,6 +5730,7 @@
     "hydra.rewriting",
     "hydra.schemas",
     "hydra.show.core",
+    "hydra.show.error",
     "hydra.decoding",
     "hydra.encoding",
     "hydra.json.decode",

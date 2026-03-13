@@ -26,6 +26,7 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
+import qualified Hydra.Show.Error as Error_
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -38,7 +39,7 @@ alphaConvert :: (Core.Name -> Core.Name -> Core.Term -> Core.Term)
 alphaConvert vold vnew term = (Rewriting.replaceFreeTermVariable vold (Core.TermVariable vnew) term)
 
 -- | Eagerly beta-reduce a type by substituting type arguments into type lambdas
-betaReduceType :: (Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Error.OtherError) Core.Type)
+betaReduceType :: (Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Error.Error) Core.Type)
 betaReduceType cx graph typ =  
   let reduceApp = (\app ->  
           let lhs = (Core.applicationTypeFunction app)
@@ -379,7 +380,7 @@ etaExpansionArity graph term = ((\x -> case x of
   _ -> 0) term)
 
 -- | Recursively transform arbitrary terms like 'add 42' into terms like '\x.add 42 x', eliminating partial application. Variable references are not expanded. This is useful for targets like Python with weaker support for currying than Hydra or Haskell. Note: this is a "trusty" function which assumes the graph is well-formed, i.e. no dangling references. It also assumes that type inference has already been performed. After eta expansion, type inference needs to be performed again, as new, untyped lambdas may have been added.
-etaExpandTypedTerm :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+etaExpandTypedTerm :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) Core.Term)
 etaExpandTypedTerm cx tx0 term0 =  
   let rewrite = (\topLevel -> \forced -> \typeArgs -> \recurse -> \tx -> \term ->  
           let rewriteSpine = (\term -> (\x -> case x of
@@ -491,7 +492,7 @@ etaExpandTypedTerm cx tx0 term0 =
   in (Rewriting.rewriteTermWithContextM (rewrite True False []) tx0 term0)
 
 -- | A term evaluation function which is alternatively lazy or eager
-reduceTerm :: (Context.Context -> Graph.Graph -> Bool -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+reduceTerm :: (Context.Context -> Graph.Graph -> Bool -> Core.Term -> Either (Context.InContext Error.Error) Core.Term)
 reduceTerm cx graph eager term =  
   let reduce = (\eager -> reduceTerm cx graph eager)
   in  
@@ -512,33 +513,30 @@ reduceTerm cx graph eager term =
                 Core.applicationFunction = fun,
                 Core.applicationArgument = (Lists.head args)})) (Lists.tail args)))
         in  
-          let mapErrorToOtherError = (\ic -> Context.InContext {
-                  Context.inContextObject = (Error.OtherError ((\x -> case x of
-                    Error.ErrorDecoding v0 -> (Error.unDecodingError v0)
-                    Error.ErrorOther v0 -> (Error.unOtherError v0)
-                    Error.ErrorUnification v0 -> (Error.unificationErrorMessage v0)) (Context.inContextObject ic))),
+          let mapErrorToString = (\ic -> Context.InContext {
+                  Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error_.error (Context.inContextObject ic)))),
                   Context.inContextContext = (Context.inContextContext ic)})
           in  
             let applyElimination = (\elm -> \reducedArg -> (\x -> case x of
                     Core.EliminationRecord v0 -> (Eithers.bind (Core__.record cx (Core.projectionTypeName v0) graph (Rewriting.deannotateTerm reducedArg)) (\fields ->  
                       let matchingFields = (Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.projectionField v0)) fields)
                       in (Logic.ifElse (Lists.null matchingFields) (Left (Context.InContext {
-                        Context.inContextObject = (Error.OtherError (Strings.cat [
+                        Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat [
                           "no such field: ",
                           (Core.unName (Core.projectionField v0)),
                           " in ",
                           (Core.unName (Core.projectionTypeName v0)),
-                          " record"])),
+                          " record"]))),
                         Context.inContextContext = cx})) (Right (Core.fieldTerm (Lists.head matchingFields))))))
                     Core.EliminationUnion v0 -> (Eithers.bind (Core__.injection cx (Core.caseStatementTypeName v0) graph reducedArg) (\field ->  
                       let matchingFields = (Lists.filter (\f -> Equality.equal (Core.fieldName f) (Core.fieldName field)) (Core.caseStatementCases v0))
                       in (Logic.ifElse (Lists.null matchingFields) (Maybes.maybe (Left (Context.InContext {
-                        Context.inContextObject = (Error.OtherError (Strings.cat [
+                        Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat [
                           "no such field ",
                           (Core.unName (Core.fieldName field)),
                           " in ",
                           (Core.unName (Core.caseStatementTypeName v0)),
-                          " case statement"])),
+                          " case statement"]))),
                         Context.inContextContext = cx})) (\x -> Right x) (Core.caseStatementDefault v0)) (Right (Core.TermApplication (Core.Application {
                         Core.applicationFunction = (Core.fieldTerm (Lists.head matchingFields)),
                         Core.applicationArgument = (Core.fieldTerm field)}))))))
@@ -569,7 +567,7 @@ reduceTerm cx graph eager term =
                                       let remainingArgs = (Lists.drop arity args)
                                       in (Eithers.bind (Eithers.mapList (reduceArg eager) argList) (\reducedArgs ->  
                                         let strippedArgs = (Lists.map Rewriting.deannotateTerm reducedArgs)
-                                        in (Eithers.bind (Eithers.bimap mapErrorToOtherError (\x -> x) (Graph.primitiveImplementation prim cx graph strippedArgs)) (\primResult -> Eithers.bind (reduce eager primResult) (\reducedResult -> applyIfNullary eager reducedResult remainingArgs))))))
+                                        in (Eithers.bind (Eithers.bimap mapErrorToString (\x -> x) (Graph.primitiveImplementation prim cx graph strippedArgs)) (\primResult -> Eithers.bind (reduce eager primResult) (\reducedResult -> applyIfNullary eager reducedResult remainingArgs))))))
                             in ((\x -> case x of
                               Core.TermApplication v0 -> (applyIfNullary eager (Core.applicationFunction v0) (Lists.cons (Core.applicationArgument v0) args))
                               Core.TermFunction v0 -> ((\x -> case x of

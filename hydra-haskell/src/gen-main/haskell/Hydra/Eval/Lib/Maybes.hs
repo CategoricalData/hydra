@@ -22,37 +22,37 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Interpreter-friendly applicative apply for Maybe terms.
-apply :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+apply :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term)
 apply cx g funOptTerm argOptTerm = ((\x -> case x of
   Core.TermMaybe v0 -> ((\x -> case x of
     Core.TermMaybe v1 -> (Right (Core.TermMaybe (Maybes.bind v0 (\f -> Maybes.map (\x -> Core.TermApplication (Core.Application {
       Core.applicationFunction = f,
       Core.applicationArgument = x})) v1))))
     _ -> (Left (Context.InContext {
-      Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "optional value") " but found ") (Core__.term argOptTerm))),
+      Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "optional value") " but found ") (Core__.term argOptTerm)))),
       Context.inContextContext = cx}))) argOptTerm)
   _ -> (Left (Context.InContext {
-    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "optional function") " but found ") (Core__.term funOptTerm))),
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "optional function") " but found ") (Core__.term funOptTerm)))),
     Context.inContextContext = cx}))) funOptTerm)
 
 -- | Interpreter-friendly monadic bind for Maybe terms.
-bind :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+bind :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term)
 bind cx g optTerm funTerm = ((\x -> case x of
   Core.TermMaybe v0 -> (Right (Maybes.maybe (Core.TermMaybe Nothing) (\val -> Core.TermApplication (Core.Application {
     Core.applicationFunction = funTerm,
     Core.applicationArgument = val})) v0))
   _ -> (Left (Context.InContext {
-    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "optional value") " but found ") (Core__.term optTerm))),
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "optional value") " but found ") (Core__.term optTerm)))),
     Context.inContextContext = cx}))) optTerm)
 
 -- | Interpreter-friendly case analysis for Maybe terms (cases argument order).
-cases :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+cases :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term)
 cases cx g optTerm defaultTerm funTerm = ((\x -> case x of
   Core.TermMaybe v0 -> (Right (Maybes.maybe defaultTerm (\val -> Core.TermApplication (Core.Application {
     Core.applicationFunction = funTerm,
     Core.applicationArgument = val})) v0))
   _ -> (Left (Context.InContext {
-    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "optional value") " but found ") (Core__.term optTerm))),
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "optional value") " but found ") (Core__.term optTerm)))),
     Context.inContextContext = cx}))) optTerm)
 
 -- | Interpreter-friendly Kleisli composition for Maybe.
@@ -66,17 +66,17 @@ compose cx g funF funG xTerm = (Right (Core.TermApplication (Core.Application {
   Core.applicationArgument = funG})))
 
 -- | Interpreter-friendly map for Maybe terms.
-map :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+map :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term)
 map cx g funTerm optTerm = ((\x -> case x of
   Core.TermMaybe v0 -> (Right (Core.TermMaybe (Maybes.map (\val -> Core.TermApplication (Core.Application {
     Core.applicationFunction = funTerm,
     Core.applicationArgument = val})) v0)))
   _ -> (Left (Context.InContext {
-    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "optional value") " but found ") (Core__.term optTerm))),
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "optional value") " but found ") (Core__.term optTerm)))),
     Context.inContextContext = cx}))) optTerm)
 
 -- | Interpreter-friendly mapMaybe for List terms.
-mapMaybe :: (Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+mapMaybe :: (Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term)
 mapMaybe cx g funTerm listTerm = (Eithers.bind (Core_.list cx g listTerm) (\elements -> Right (Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maybes.cat"))),
   Core.applicationArgument = (Core.TermList (Lists.map (\el -> Core.TermApplication (Core.Application {
@@ -84,11 +84,11 @@ mapMaybe cx g funTerm listTerm = (Eithers.bind (Core_.list cx g listTerm) (\elem
     Core.applicationArgument = el})) elements))}))))
 
 -- | Interpreter-friendly case analysis for Maybe terms.
-maybe :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+maybe :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term)
 maybe cx g defaultTerm funTerm optTerm = ((\x -> case x of
   Core.TermMaybe v0 -> (Right (Maybes.maybe defaultTerm (\val -> Core.TermApplication (Core.Application {
     Core.applicationFunction = funTerm,
     Core.applicationArgument = val})) v0))
   _ -> (Left (Context.InContext {
-    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "optional value") " but found ") (Core__.term optTerm))),
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "optional value") " but found ") (Core__.term optTerm)))),
     Context.inContextContext = cx}))) optTerm)

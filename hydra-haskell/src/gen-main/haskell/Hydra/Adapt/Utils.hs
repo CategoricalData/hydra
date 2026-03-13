@@ -27,7 +27,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Create a bidirectional coder from a direction-aware function
-bidirectional :: ((Coders.CoderDirection -> Context.Context -> t0 -> Either (Context.InContext Error.OtherError) t0) -> Compute.Coder t0 t0)
+bidirectional :: ((Coders.CoderDirection -> Context.Context -> t0 -> Either (Context.InContext Error.Error) t0) -> Compute.Coder t0 t0)
 bidirectional f = Compute.Coder {
   Compute.coderEncode = (f Coders.CoderDirectionEncode),
   Compute.coderDecode = (f Coders.CoderDirectionDecode)}
@@ -59,7 +59,7 @@ composeCoders c1 c2 = Compute.Coder {
   Compute.coderDecode = (\cx -> \c -> Eithers.bind (Compute.coderDecode c2 cx c) (\b2 -> Compute.coderDecode c1 cx b2))}
 
 -- | Apply coder in the specified direction
-encodeDecode :: (Coders.CoderDirection -> Compute.Coder t0 t0 -> Context.Context -> t0 -> Either (Context.InContext Error.OtherError) t0)
+encodeDecode :: (Coders.CoderDirection -> Compute.Coder t0 t0 -> Context.Context -> t0 -> Either (Context.InContext Error.Error) t0)
 encodeDecode dir coder cx term = ((\x -> case x of
   Coders.CoderDirectionEncode -> (Compute.coderEncode coder cx term)
   Coders.CoderDirectionDecode -> (Compute.coderDecode coder cx term)) dir)
@@ -126,9 +126,9 @@ typeIsSupported constraints t =
         in (Logic.and (Coders.languageConstraintsTypes constraints base) (Logic.and (isSupportedVariant (Reflect.typeVariant base)) (isSupported base)))
 
 -- | Create a unidirectional coder
-unidirectionalCoder :: ((Context.Context -> t0 -> Either (Context.InContext Error.OtherError) t1) -> Compute.Coder t0 t1)
+unidirectionalCoder :: ((Context.Context -> t0 -> Either (Context.InContext Error.Error) t1) -> Compute.Coder t0 t1)
 unidirectionalCoder m = Compute.Coder {
   Compute.coderEncode = m,
   Compute.coderDecode = (\cx -> \_ -> Left (Context.InContext {
-    Context.inContextObject = (Error.OtherError "inbound mapping is unsupported"),
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError "inbound mapping is unsupported")),
     Context.inContextContext = cx}))}

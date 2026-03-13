@@ -55,7 +55,7 @@
                                     "either": {
                                       "left": {
                                         "application": {
-                                          "argument": {"variable": "hydra.error.OtherError"},
+                                          "argument": {"variable": "hydra.error.Error"},
                                           "function": {"variable": "hydra.context.InContext"}}},
                                       "right": {"variable": "t0"}}},
                                   "domain": {"variable": "t0"}}},
@@ -85,7 +85,7 @@
                             "either": {
                               "left": {
                                 "application": {
-                                  "argument": {"variable": "hydra.error.OtherError"},
+                                  "argument": {"variable": "hydra.error.Error"},
                                   "function": {"variable": "hydra.context.InContext"}}},
                               "right": {"variable": "t0"}}},
                           "domain": {"variable": "t0"}}},
@@ -756,7 +756,7 @@
                                                                                   "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                   "type": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.error.OtherError"},
+                                                                                      "argument": {"variable": "hydra.error.Error"},
                                                                                       "function": {"variable": "hydra.context.InContext"}}}}},
                                                                               "type": {"variable": "t1"}}},
                                                                           "type": {"variable": "t2"}}}}}}},
@@ -826,7 +826,7 @@
                                                                                   "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                   "type": {
                                                                                     "application": {
-                                                                                      "argument": {"variable": "hydra.error.OtherError"},
+                                                                                      "argument": {"variable": "hydra.error.Error"},
                                                                                       "function": {"variable": "hydra.context.InContext"}}}}},
                                                                               "type": {"variable": "t1"}}},
                                                                           "type": {"variable": "t0"}}}}}}},
@@ -1000,7 +1000,7 @@
                             "either": {
                               "left": {
                                 "application": {
-                                  "argument": {"variable": "hydra.error.OtherError"},
+                                  "argument": {"variable": "hydra.error.Error"},
                                   "function": {"variable": "hydra.context.InContext"}}},
                               "right": {"variable": "t0"}}},
                           "domain": {"variable": "t0"}}},
@@ -1158,7 +1158,7 @@
                                                   "body": {"either": {"@right": {"variable": "x"}}},
                                                   "type": {
                                                     "application": {
-                                                      "argument": {"variable": "hydra.error.OtherError"},
+                                                      "argument": {"variable": "hydra.error.Error"},
                                                       "function": {"variable": "hydra.context.InContext"}}}}},
                                               "type": {"variable": "t0"}}},
                                           "domain": [{"variable": "t0"}],
@@ -1180,7 +1180,7 @@
                                                   "body": {"either": {"@right": {"variable": "x"}}},
                                                   "type": {
                                                     "application": {
-                                                      "argument": {"variable": "hydra.error.OtherError"},
+                                                      "argument": {"variable": "hydra.error.Error"},
                                                       "function": {"variable": "hydra.context.InContext"}}}}},
                                               "type": {"variable": "t0"}}},
                                           "domain": [{"variable": "t0"}],
@@ -2021,15 +2021,20 @@
                                                                           {
                                                                             "name": "object",
                                                                             "term": {
-                                                                              "wrap": {
-                                                                                "body": {"literal": {"string": "inbound mapping is unsupported"}},
-                                                                                "typeName": "hydra.error.OtherError"}}},
+                                                                              "union": {
+                                                                                "field": {
+                                                                                  "name": "other",
+                                                                                  "term": {
+                                                                                    "wrap": {
+                                                                                      "body": {"literal": {"string": "inbound mapping is unsupported"}},
+                                                                                      "typeName": "hydra.error.OtherError"}}},
+                                                                                "typeName": "hydra.error.Error"}}},
                                                                           {"name": "context", "term": {"variable": "cx"}}],
                                                                         "typeName": "hydra.context.InContext"}},
-                                                                    "type": {"variable": "hydra.error.OtherError"}}}}},
+                                                                    "type": {"variable": "hydra.error.Error"}}}}},
                                                             "type": {
                                                               "application": {
-                                                                "argument": {"variable": "hydra.error.OtherError"},
+                                                                "argument": {"variable": "hydra.error.Error"},
                                                                 "function": {"variable": "hydra.context.InContext"}}}}},
                                                         "type": {"variable": "t0"}}},
                                                     "domain": [{"variable": "t1"}],
@@ -2048,7 +2053,7 @@
                                     "either": {
                                       "left": {
                                         "application": {
-                                          "argument": {"variable": "hydra.error.OtherError"},
+                                          "argument": {"variable": "hydra.error.Error"},
                                           "function": {"variable": "hydra.context.InContext"}}},
                                       "right": {"variable": "t1"}}},
                                   "domain": {"variable": "t0"}}},
@@ -2076,7 +2081,7 @@
                         "either": {
                           "left": {
                             "application": {
-                              "argument": {"variable": "hydra.error.OtherError"},
+                              "argument": {"variable": "hydra.error.Error"},
                               "function": {"variable": "hydra.context.InContext"}}},
                           "right": {"variable": "t1"}}},
                       "domain": {"variable": "t0"}}},
