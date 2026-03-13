@@ -122,7 +122,9 @@ import qualified Hydra.Ext.Sources.Tinkerpop.Gremlin           as Gremlin
 import qualified Hydra.Ext.Sources.Tinkerpop.Language          as TinkerpopLanguage
 import qualified Hydra.Ext.Sources.TypeScript.Model            as TypeScriptModel
 import qualified Hydra.Ext.Sources.Xml.Schema                  as XmlSchema
+import qualified Hydra.Ext.Sources.Yaml.Coder                  as YamlCoder
 import qualified Hydra.Ext.Sources.Yaml.Language                as YamlLanguage
+import qualified Hydra.Ext.Sources.Yaml.Serde                   as YamlSerde
 
 import qualified Hydra.Sources.Decode.Pg.Mapping               as DecodePgMapping
 import qualified Hydra.Sources.Decode.Pg.Model                 as DecodePgModel
@@ -339,7 +341,9 @@ typescriptModules = [
 
 yamlModules :: [Module]
 yamlModules = [
-  YamlLanguage.module_]
+  YamlLanguage.module_,
+  YamlCoder.module_,
+  YamlSerde.module_]
 
 {-
   :set +m
@@ -398,7 +402,8 @@ hydraExtRecentlyPromotedModules = [
   ScalaUtils.module_,
   ShaclCoder.module_,
   ShaclLanguage.shaclLanguageModule,
-  TinkerpopLanguage.module_]
+  TinkerpopLanguage.module_,
+  YamlSerde.module_]
 
 -- All hydra-ext modules for the GenPG demo
 genpgModules :: [Module]
