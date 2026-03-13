@@ -144,14 +144,14 @@ module_ = Module ns elements
       toBinding termToString]
 
 -- | Decode an edge label from a term
-decodeEdgeLabel :: TBinding (Context -> Graph -> Term -> Either (InContext OtherError) PG.EdgeLabel)
+decodeEdgeLabel :: TBinding (Context -> Graph -> Term -> Either (InContext Error) PG.EdgeLabel)
 decodeEdgeLabel = define "decodeEdgeLabel" $
   doc "Decode an edge label from a term" $
   "cx" ~> "g" ~> "t" ~>
     Eithers.map ("_x" ~> wrap PG._EdgeLabel (var "_x")) (ExtractCore.string @@ var "cx" @@ var "g" @@ var "t")
 
 -- | Decode an edge specification from a term
-decodeEdgeSpec :: TBinding (Context -> Graph -> Term -> Either (InContext OtherError) PGM.EdgeSpec)
+decodeEdgeSpec :: TBinding (Context -> Graph -> Term -> Either (InContext Error) PGM.EdgeSpec)
 decodeEdgeSpec = define "decodeEdgeSpec" $
   doc "Decode an edge specification from a term" $
   "cx" ~> "g" ~> "term" ~>
@@ -173,7 +173,7 @@ decodeEdgeSpec = define "decodeEdgeSpec" $
       @@ var "term")
 
 -- | Decode an element specification from a term
-decodeElementSpec :: TBinding (Context -> Graph -> Term -> Either (InContext OtherError) PGM.ElementSpec)
+decodeElementSpec :: TBinding (Context -> Graph -> Term -> Either (InContext Error) PGM.ElementSpec)
 decodeElementSpec = define "decodeElementSpec" $
   doc "Decode an element specification from a term" $
   "cx" ~> "g" ~> "term" ~>
@@ -184,14 +184,14 @@ decodeElementSpec = define "decodeElementSpec" $
       @@ var "term"
 
 -- | Decode a property key from a term
-decodePropertyKey :: TBinding (Context -> Graph -> Term -> Either (InContext OtherError) PG.PropertyKey)
+decodePropertyKey :: TBinding (Context -> Graph -> Term -> Either (InContext Error) PG.PropertyKey)
 decodePropertyKey = define "decodePropertyKey" $
   doc "Decode a property key from a term" $
   "cx" ~> "g" ~> "t" ~>
     Eithers.map ("_x" ~> wrap PG._PropertyKey (var "_x")) (ExtractCore.string @@ var "cx" @@ var "g" @@ var "t")
 
 -- | Decode a property specification from a term
-decodePropertySpec :: TBinding (Context -> Graph -> Term -> Either (InContext OtherError) PGM.PropertySpec)
+decodePropertySpec :: TBinding (Context -> Graph -> Term -> Either (InContext Error) PGM.PropertySpec)
 decodePropertySpec = define "decodePropertySpec" $
   doc "Decode a property specification from a term" $
   "cx" ~> "g" ~> "term" ~>
@@ -206,7 +206,7 @@ decodePropertySpec = define "decodePropertySpec" $
       @@ var "term"
 
 -- | Decode a value specification from a term
-decodeValueSpec :: TBinding (Context -> Graph -> Term -> Either (InContext OtherError) PGM.ValueSpec)
+decodeValueSpec :: TBinding (Context -> Graph -> Term -> Either (InContext Error) PGM.ValueSpec)
 decodeValueSpec = define "decodeValueSpec" $
   doc "Decode a value specification from a term" $
   "cx" ~> "g" ~> "term" ~>
@@ -228,14 +228,14 @@ decodeValueSpec = define "decodeValueSpec" $
             right (inject PGM._ValueSpec PGM._ValueSpec_pattern (var "s"))]]
 
 -- | Decode a vertex label from a term
-decodeVertexLabel :: TBinding (Context -> Graph -> Term -> Either (InContext OtherError) PG.VertexLabel)
+decodeVertexLabel :: TBinding (Context -> Graph -> Term -> Either (InContext Error) PG.VertexLabel)
 decodeVertexLabel = define "decodeVertexLabel" $
   doc "Decode a vertex label from a term" $
   "cx" ~> "g" ~> "t" ~>
     Eithers.map ("_x" ~> wrap PG._VertexLabel (var "_x")) (ExtractCore.string @@ var "cx" @@ var "g" @@ var "t")
 
 -- | Decode a vertex specification from a term
-decodeVertexSpec :: TBinding (Context -> Graph -> Term -> Either (InContext OtherError) PGM.VertexSpec)
+decodeVertexSpec :: TBinding (Context -> Graph -> Term -> Either (InContext Error) PGM.VertexSpec)
 decodeVertexSpec = define "decodeVertexSpec" $
   doc "Decode a vertex specification from a term" $
   "cx" ~> "g" ~> "term" ~>
@@ -253,7 +253,7 @@ decodeVertexSpec = define "decodeVertexSpec" $
       @@ var "term"
 
 -- | Extract a list from a term and apply a decoder to each element
-expectList :: TBinding (Context -> Graph -> (Context -> Graph -> Term -> Either (InContext OtherError) x) -> Term -> Either (InContext OtherError) [x])
+expectList :: TBinding (Context -> Graph -> (Context -> Graph -> Term -> Either (InContext Error) x) -> Term -> Either (InContext Error) [x])
 expectList = define "expectList" $
   doc "Extract a list from a term and apply a decoder to each element" $
   "cx" ~> "g" ~> "f" ~> "term" ~>
@@ -261,7 +261,7 @@ expectList = define "expectList" $
       ("elems" ~> Eithers.mapList (var "f" @@ var "cx" @@ var "g") (var "elems"))
 
 -- | Parse an edge id pattern from a value spec and schema
-parseEdgeIdPattern :: TBinding (Context -> Graph -> PGM.Schema s t v -> PGM.ValueSpec -> Either (InContext OtherError) (Context -> Term -> Either (InContext OtherError) [v]))
+parseEdgeIdPattern :: TBinding (Context -> Graph -> PGM.Schema s t v -> PGM.ValueSpec -> Either (InContext Error) (Context -> Term -> Either (InContext Error) [v]))
 parseEdgeIdPattern = define "parseEdgeIdPattern" $
   doc "Parse an edge id pattern from a value spec and schema" $
   "cx" ~> "g" ~> "schema" ~> "spec" ~>
@@ -273,7 +273,7 @@ parseEdgeIdPattern = define "parseEdgeIdPattern" $
 
 -- | Parse an edge specification into a label and encoder function
 parseEdgeSpec :: TBinding (Context -> Graph -> PGM.Schema s t v -> PGM.EdgeSpec
-  -> Either (InContext OtherError) (PG.Label, Context -> Term -> Either (InContext OtherError) [PG.Element v]))
+  -> Either (InContext Error) (PG.Label, Context -> Term -> Either (InContext Error) [PG.Element v]))
 parseEdgeSpec = define "parseEdgeSpec" $
   doc "Parse an edge specification into a label and encoder function" $
   "cx" ~> "g" ~> "schema" ~> "spec" ~> lets [
@@ -303,7 +303,7 @@ parseEdgeSpec = define "parseEdgeSpec" $
 
 -- | Parse an element specification into a label and encoder function
 parseElementSpec :: TBinding (Context -> Graph -> PGM.Schema s t v -> PGM.ElementSpec
-  -> Either (InContext OtherError) (PG.Label, Context -> Term -> Either (InContext OtherError) [PG.Element v]))
+  -> Either (InContext Error) (PG.Label, Context -> Term -> Either (InContext Error) [PG.Element v]))
 parseElementSpec = define "parseElementSpec" $
   doc "Parse an element specification into a label and encoder function" $
   "cx" ~> "g" ~> "schema" ~> "spec" ~>
@@ -313,21 +313,21 @@ parseElementSpec = define "parseElementSpec" $
     @@ var "spec"
 
 -- | Evaluate a single step of a path traversal on a term
-evalStep :: TBinding (Context -> String -> Term -> Either (InContext OtherError) [Term])
+evalStep :: TBinding (Context -> String -> Term -> Either (InContext Error) [Term])
 evalStep = define "evalStep" $
   doc "Evaluate a single step of a path traversal on a term" $
   "cx" ~> "step" ~> "term" ~>
     Logic.ifElse (Strings.null $ var "step")
       (right (list [var "term"]))
       (cases _Term (Rewriting.deannotateTerm @@ var "term")
-        (Just $ left (Ctx.inContext (Error.otherError $ string "Can't traverse through term for step " ++ var "step") (var "cx"))) [
+        (Just $ left (Ctx.inContext (Error.errorOther $ Error.otherError $ string "Can't traverse through term for step " ++ var "step") (var "cx"))) [
         _Term_list>>: "terms" ~>
           Eithers.map (lambda "xs" $ Lists.concat (var "xs")) (Eithers.mapList (evalStep @@ var "cx" @@ var "step") (var "terms")),
         _Term_maybe>>: "mt" ~>
           Maybes.maybe (right (list ([] :: [TTerm Term]))) ("t" ~> evalStep @@ var "cx" @@ var "step" @@ var "t") (var "mt"),
         _Term_record>>: "rec" ~>
           Maybes.maybe
-            (left $ Ctx.inContext (Error.otherError $ string "No such field " ++ var "step" ++ string " in record") (var "cx"))
+            (left $ Ctx.inContext (Error.errorOther $ Error.otherError $ string "No such field " ++ var "step" ++ string " in record") (var "cx"))
             ("t" ~> right (list [var "t"]))
             (Maps.lookup (Core.name $ var "step") (Schemas.fieldMap @@ (Core.recordFields $ var "rec"))),
         _Term_union>>: "inj" ~>
@@ -338,7 +338,7 @@ evalStep = define "evalStep" $
           evalStep @@ var "cx" @@ var "step" @@ (Core.wrappedTermBody $ var "wt")])
 
 -- | Evaluate a path (list of steps) on a term, returning all resulting terms
-evalPath :: TBinding (Context -> [String] -> Term -> Either (InContext OtherError) [Term])
+evalPath :: TBinding (Context -> [String] -> Term -> Either (InContext Error) [Term])
 evalPath = define "evalPath" $
   doc "Evaluate a path (list of steps) on a term, returning all resulting terms" $
   "cx" ~> "path" ~> "term" ~>
@@ -372,7 +372,7 @@ termToString = define "termToString" $
 --   The pattern is represented as: (firstLiteral, [(pathSteps, trailingLiteral), ...])
 --   We build result strings by starting with firstLit, then for each pair, evaluating the path
 --   on the term to get strings, and appending pathResult ++ trailingLiteral.
-applyPattern :: TBinding (Context -> String -> [([String], String)] -> Term -> Either (InContext OtherError) [Term])
+applyPattern :: TBinding (Context -> String -> [([String], String)] -> Term -> Either (InContext Error) [Term])
 applyPattern = define "applyPattern" $
   doc "Apply a parsed pattern to a term, producing string terms" $
   "cx" ~> "firstLit" ~> "pairs" ~> "term" ~>
@@ -401,7 +401,7 @@ applyPattern = define "applyPattern" $
 
 -- | Parse a string pattern into a function that traverses terms.
 --   Patterns can contain ${path/to/field} expressions that are evaluated against terms.
-parsePattern :: TBinding (Context -> Graph -> String -> Either (InContext OtherError) (Context -> Term -> Either (InContext OtherError) [Term]))
+parsePattern :: TBinding (Context -> Graph -> String -> Either (InContext Error) (Context -> Term -> Either (InContext Error) [Term]))
 parsePattern = define "parsePattern" $
   doc "Parse a string pattern into a function that traverses terms" $
   "cx" ~> "_g" ~> "pat" ~> lets [
@@ -424,7 +424,7 @@ parsePattern = define "parsePattern" $
 
 -- | Parse a property specification into an encoder function
 parsePropertySpec :: TBinding (Context -> Graph -> PGM.Schema s t v -> PGM.PropertySpec
-  -> Either (InContext OtherError) (Context -> Term -> Either (InContext OtherError) [(PG.PropertyKey, v)]))
+  -> Either (InContext Error) (Context -> Term -> Either (InContext Error) [(PG.PropertyKey, v)]))
 parsePropertySpec = define "parsePropertySpec" $
   doc "Parse a property specification into an encoder function" $
   "cx" ~> "g" ~> "schema" ~> "spec" ~> lets [
@@ -438,7 +438,7 @@ parsePropertySpec = define "parsePropertySpec" $
               ("values" ~> right (Lists.map ("v" ~> pair (var "key") (var "v")) (var "values"))))))
 
 -- | Parse a value specification into a function that processes terms
-parseValueSpec :: TBinding (Context -> Graph -> PGM.ValueSpec -> Either (InContext OtherError) (Context -> Term -> Either (InContext OtherError) [Term]))
+parseValueSpec :: TBinding (Context -> Graph -> PGM.ValueSpec -> Either (InContext Error) (Context -> Term -> Either (InContext Error) [Term]))
 parseValueSpec = define "parseValueSpec" $
   doc "Parse a value specification into a function that processes terms" $
   "cx" ~> "g" ~> "spec" ~>
@@ -448,7 +448,7 @@ parseValueSpec = define "parseValueSpec" $
     @@ var "spec"
 
 -- | Parse a vertex id pattern from a value spec and schema
-parseVertexIdPattern :: TBinding (Context -> Graph -> PGM.Schema s t v -> PGM.ValueSpec -> Either (InContext OtherError) (Context -> Term -> Either (InContext OtherError) [v]))
+parseVertexIdPattern :: TBinding (Context -> Graph -> PGM.Schema s t v -> PGM.ValueSpec -> Either (InContext Error) (Context -> Term -> Either (InContext Error) [v]))
 parseVertexIdPattern = define "parseVertexIdPattern" $
   doc "Parse a vertex id pattern from a value spec and schema" $
   "cx" ~> "g" ~> "schema" ~> "spec" ~>
@@ -460,7 +460,7 @@ parseVertexIdPattern = define "parseVertexIdPattern" $
 
 -- | Parse a vertex specification into a label and encoder function
 parseVertexSpec :: TBinding (Context -> Graph -> PGM.Schema s t v -> PGM.VertexSpec
-  -> Either (InContext OtherError) (PG.Label, Context -> Term -> Either (InContext OtherError) [PG.Element v]))
+  -> Either (InContext Error) (PG.Label, Context -> Term -> Either (InContext Error) [PG.Element v]))
 parseVertexSpec = define "parseVertexSpec" $
   doc "Parse a vertex specification into a label and encoder function" $
   "cx" ~> "g" ~> "schema" ~> "spec" ~> lets [
@@ -481,17 +481,17 @@ parseVertexSpec = define "parseVertexSpec" $
                     PG._Vertex_properties>>: var "tprops"])])))))))
 
 -- | Read a field from a map of fields by name
-readField :: TBinding (Context -> M.Map Name Term -> Name -> (Term -> Either (InContext OtherError) a) -> Either (InContext OtherError) a)
+readField :: TBinding (Context -> M.Map Name Term -> Name -> (Term -> Either (InContext Error) a) -> Either (InContext Error) a)
 readField = define "readField" $
   doc "Read a field from a map of fields by name" $
   "cx" ~> "fields" ~> "fname" ~> "fun" ~>
     Maybes.maybe
-      (left $ Ctx.inContext (Error.otherError (string "no such field: " ++ (Core.unName $ var "fname"))) (var "cx"))
+      (left $ Ctx.inContext (Error.errorOther $ Error.otherError (string "no such field: " ++ (Core.unName $ var "fname"))) (var "cx"))
       (var "fun")
       (Maps.lookup (var "fname") (var "fields"))
 
 -- | Read an injection (union value) from a term
-readInjection :: TBinding (Context -> Graph -> [(Name, Term -> Either (InContext OtherError) x)] -> Term -> Either (InContext OtherError) x)
+readInjection :: TBinding (Context -> Graph -> [(Name, Term -> Either (InContext Error) x)] -> Term -> Either (InContext Error) x)
 readInjection = define "readInjection" $
   doc "Read an injection (union value) from a term" $
   "cx" ~> "g" ~> "cases" ~> "encoded" ~>
@@ -499,18 +499,18 @@ readInjection = define "readInjection" $
       ("mp" ~> lets [
         "entries">: Maps.toList $ var "mp"] $
         Logic.ifElse (Lists.null $ var "entries")
-          (left $ Ctx.inContext (Error.otherError $ string "empty injection") (var "cx"))
+          (left $ Ctx.inContext (Error.errorOther $ Error.otherError $ string "empty injection") (var "cx"))
           (lets [
             "f">: Lists.head $ var "entries",
             "key">: Pairs.first $ var "f",
             "val">: Pairs.second $ var "f",
             "matching">: Lists.filter ("c" ~> Equality.equal (Pairs.first $ var "c") (var "key")) (var "cases")] $
             Logic.ifElse (Lists.null $ var "matching")
-              (left $ Ctx.inContext (Error.otherError $ string "unexpected field: " ++ (Core.unName $ var "key")) (var "cx"))
+              (left $ Ctx.inContext (Error.errorOther $ Error.otherError $ string "unexpected field: " ++ (Core.unName $ var "key")) (var "cx"))
               ((Pairs.second $ Lists.head $ var "matching") @@ var "val")))
 
 -- | Read a record from a term as a map of field names to values
-readRecord :: TBinding (Context -> Graph -> (M.Map Name Term -> Either (InContext OtherError) x) -> Term -> Either (InContext OtherError) x)
+readRecord :: TBinding (Context -> Graph -> (M.Map Name Term -> Either (InContext Error) x) -> Term -> Either (InContext Error) x)
 readRecord = define "readRecord" $
   doc "Read a record from a term as a map of field names to values" $
   "cx" ~> "g" ~> "cons" ~> "term" ~>
@@ -518,21 +518,21 @@ readRecord = define "readRecord" $
       (var "cons")
 
 -- | Require exactly one result from a list-producing function
-requireUnique :: TBinding (Context -> String -> (Term -> Either (InContext OtherError) [x]) -> Term -> Either (InContext OtherError) x)
+requireUnique :: TBinding (Context -> String -> (Term -> Either (InContext Error) [x]) -> Term -> Either (InContext Error) x)
 requireUnique = define "requireUnique" $
   doc "Require exactly one result from a list-producing function" $
   "cx" ~> "context" ~> "fun" ~> "term" ~>
     Eithers.bind (var "fun" @@ var "term")
       ("results" ~>
         Logic.ifElse (Lists.null $ var "results")
-          (left $ Ctx.inContext (Error.otherError $ string "No value found: " ++ var "context") (var "cx"))
+          (left $ Ctx.inContext (Error.errorOther $ Error.otherError $ string "No value found: " ++ var "context") (var "cx"))
           (Logic.ifElse (Equality.equal (Lists.length $ var "results") (int32 1))
             (right $ Lists.head $ var "results")
-            (left $ Ctx.inContext (Error.otherError $ string "Multiple values found: " ++ var "context") (var "cx"))))
+            (left $ Ctx.inContext (Error.errorOther $ Error.otherError $ string "Multiple values found: " ++ var "context") (var "cx"))))
 
 -- | Create an adapter that maps terms to property graph elements using a mapping specification
 termToElementsAdapter :: TBinding (Context -> Graph -> PGM.Schema s t v -> Type
-  -> Either (InContext OtherError) (Adapter Type [PG.Label] Term [PG.Element v]))
+  -> Either (InContext Error) (Adapter Type [PG.Label] Term [PG.Element v]))
 termToElementsAdapter = define "termToElementsAdapter" $
   doc "Create an adapter that maps terms to property graph elements using a mapping specification" $
   "cx" ~> "g" ~> "schema" ~> "typ" ~> lets [
@@ -541,7 +541,7 @@ termToElementsAdapter = define "termToElementsAdapter" $
       (right $ Compute.adapter false (var "typ") (list ([] :: [TTerm PG.Label]))
         (Compute.coder
           ("_cx" ~> "_t" ~> right (list ([] :: [TTerm (PG.Element ())])))
-          ("cx'" ~> "_els" ~> left (Ctx.inContext (Error.otherError $ string "no corresponding element type") (var "cx'")))))
+          ("cx'" ~> "_els" ~> left (Ctx.inContext (Error.errorOther $ Error.otherError $ string "no corresponding element type") (var "cx'")))))
       ("term" ~>
         Eithers.bind (expectList @@ var "cx" @@ var "g" @@ decodeElementSpec @@ var "term")
           ("specTerms" ~> Eithers.bind (Eithers.mapList (parseElementSpec @@ var "cx" @@ var "g" @@ var "schema") (var "specTerms"))
@@ -552,5 +552,5 @@ termToElementsAdapter = define "termToElementsAdapter" $
                 (Compute.coder
                   ("cx'" ~> "t" ~>
                     Eithers.map ("_xs" ~> Lists.concat (var "_xs")) (Eithers.mapList ("e" ~> var "e" @@ var "cx'" @@ var "t") (var "encoders")))
-                  ("cx'" ~> "_els" ~> left (Ctx.inContext (Error.otherError $ string "element decoding is not yet supported") (var "cx'"))))))))
+                  ("cx'" ~> "_els" ~> left (Ctx.inContext (Error.errorOther $ Error.otherError $ string "element decoding is not yet supported") (var "cx'"))))))))
       (Annotations.getTypeAnnotation @@ var "key_elements" @@ var "typ")

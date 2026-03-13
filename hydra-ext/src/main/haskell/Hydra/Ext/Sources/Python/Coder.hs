@@ -451,7 +451,7 @@ environmentTypeParameters = def "environmentTypeParameters" $
       (Pairs.first (project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "env"))
 
 -- | Encode a float value to a Python expression
-encodeFloatValue :: TBinding (FloatValue -> Either (InContext OtherError) Py.Expression)
+encodeFloatValue :: TBinding (FloatValue -> Either (InContext Error) Py.Expression)
 encodeFloatValue = def "encodeFloatValue" $
   doc "Encode a float value to a Python expression" $
   "fv" ~>
@@ -468,7 +468,7 @@ encodeFloatValue = def "encodeFloatValue" $
           (PyDsl.atomNumber $ PyDsl.numberFloat $ Literals.float64ToBigfloat $ var "f")]
 
 -- | Encode an integer value to a Python expression
-encodeIntegerValue :: TBinding (IntegerValue -> Either (InContext OtherError) Py.Expression)
+encodeIntegerValue :: TBinding (IntegerValue -> Either (InContext Error) Py.Expression)
 encodeIntegerValue = def "encodeIntegerValue" $
   doc "Encode an integer value to a Python expression" $
   "iv" ~>
@@ -488,7 +488,7 @@ encodeIntegerValue = def "encodeIntegerValue" $
       _IntegerValue_uint64>>: "i" ~> var "toPyInt" @@ (Literals.uint64ToBigint $ var "i")]
 
 -- | Encode a literal value to a Python expression
-encodeLiteral :: TBinding (Literal -> Either (InContext OtherError) Py.Expression)
+encodeLiteral :: TBinding (Literal -> Either (InContext Error) Py.Expression)
 encodeLiteral = def "encodeLiteral" $
   doc "Encode a literal value to a Python expression" $
   "lit" ~>
@@ -514,7 +514,7 @@ encodeLiteral = def "encodeLiteral" $
         right $ PyUtils.stringToPyExpression @@ PyDsl.quoteStyleDouble @@ var "s"]
 
 -- | Encode a literal type to a Python type expression
-encodeLiteralType :: TBinding (LiteralType -> Either (InContext OtherError) Py.Expression)
+encodeLiteralType :: TBinding (LiteralType -> Either (InContext Error) Py.Expression)
 encodeLiteralType = def "encodeLiteralType" $
   doc "Encode a literal type to a Python type expression" $
   "lt" ~>
@@ -532,7 +532,7 @@ encodeLiteralType = def "encodeLiteralType" $
 
 -- | Encode an application type to Python expression.
 --   Gathers all type arguments and encodes as primary[args].
-encodeApplicationType :: TBinding (PyHelpers.PythonEnvironment -> ApplicationType -> Either (InContext OtherError) Py.Expression)
+encodeApplicationType :: TBinding (PyHelpers.PythonEnvironment -> ApplicationType -> Either (InContext Error) Py.Expression)
 encodeApplicationType = def "encodeApplicationType" $
   doc "Encode an application type to Python expression" $
   "env" ~> "at" ~>
@@ -569,7 +569,7 @@ encodeApplicationType = def "encodeApplicationType" $
 
 -- | Encode a forall type to Python expression.
 --   Gathers all type parameters and encodes the body with parameters.
-encodeForallType :: TBinding (PyHelpers.PythonEnvironment -> ForallType -> Either (InContext OtherError) Py.Expression)
+encodeForallType :: TBinding (PyHelpers.PythonEnvironment -> ForallType -> Either (InContext Error) Py.Expression)
 encodeForallType = def "encodeForallType" $
   doc "Encode a forall type to Python expression" $
   "env" ~> "lt" ~>
@@ -607,7 +607,7 @@ encodeForallType = def "encodeForallType" $
 
 -- | Encode a function type to Python Callable[..., return_type].
 --   Gathers all domain types and the final codomain.
-encodeFunctionType :: TBinding (PyHelpers.PythonEnvironment -> FunctionType -> Either (InContext OtherError) Py.Expression)
+encodeFunctionType :: TBinding (PyHelpers.PythonEnvironment -> FunctionType -> Either (InContext Error) Py.Expression)
 encodeFunctionType = def "encodeFunctionType" $
   doc "Encode a function type to Python Callable expression" $
   "env" ~> "ft" ~>
@@ -649,7 +649,7 @@ encodeFunctionType = def "encodeFunctionType" $
 
 -- | Encode a Hydra type to a Python type expression.
 --   This is the main recursive type encoder.
-encodeType :: TBinding (PyHelpers.PythonEnvironment -> Type -> Either (InContext OtherError) Py.Expression)
+encodeType :: TBinding (PyHelpers.PythonEnvironment -> Type -> Either (InContext Error) Py.Expression)
 encodeType = def "encodeType" $
   doc "Encode a Hydra type to a Python type expression" $
   "env" ~> "typ" ~>
@@ -701,7 +701,7 @@ encodeType = def "encodeType" $
 
 -- | Encode a type to a Python expression, quoting if the type has free variables.
 --   Free variables indicate forward references that need to be quoted strings in Python.
-encodeTypeQuoted :: TBinding (PyHelpers.PythonEnvironment -> Type -> Either (InContext OtherError) Py.Expression)
+encodeTypeQuoted :: TBinding (PyHelpers.PythonEnvironment -> Type -> Either (InContext Error) Py.Expression)
 encodeTypeQuoted = def "encodeTypeQuoted" $
   doc "Encode a type to a Python expression, quoting if the type has free variables" $
   "env" ~> "typ" ~>
@@ -745,7 +745,7 @@ findTypeParams = def "findTypeParams" $
 -- | Encode a wrapped type (newtype) to a Python class definition.
 --   Creates a class that extends Node[inner_type] with optional Generic[T] for polymorphic types.
 --   TYPE_ is assigned after the class to avoid self-reference issues (e.g., Name.TYPE_ = Name(...)).
-encodeWrappedType :: TBinding (PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Either (InContext OtherError) [Py.Statement])
+encodeWrappedType :: TBinding (PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Either (InContext Error) [Py.Statement])
 encodeWrappedType = def "encodeWrappedType" $
   doc "Encode a wrapped type (newtype) to a Python class definition" $
   "env" ~> "name" ~> "typ" ~> "comment" ~>
@@ -1115,7 +1115,7 @@ eliminateUnitVar = def "eliminateUnitVar" $
 --   Takes: encoder function, isFull (whether all variants are covered), optional default term, type name
 --   Returns: list of CaseBlocks (empty or containing the wildcard case)
 --   The encoder function is passed in to allow calling from Staging code that provides encodeTermInline.
-encodeDefaultCaseBlock :: TBinding ((Term -> Either (InContext OtherError) Py.Expression) -> Bool -> Maybe Term -> Name -> Either (InContext OtherError) [Py.CaseBlock])
+encodeDefaultCaseBlock :: TBinding ((Term -> Either (InContext Error) Py.Expression) -> Bool -> Maybe Term -> Name -> Either (InContext Error) [Py.CaseBlock])
 encodeDefaultCaseBlock = def "encodeDefaultCaseBlock" $
   doc "Encode the default (wildcard) case block for a match statement" $
   "encodeTerm" ~> "isFull" ~> "mdflt" ~> "tname" ~>
@@ -1137,7 +1137,7 @@ encodeDefaultCaseBlock = def "encodeDefaultCaseBlock" $
 --   The encodeBody function is passed in to allow different encoding strategies
 --   (inline vs multiline).
 --   Uses withLambda to extend Graph with the case binding variable.
-encodeCaseBlock :: TBinding (Context -> PyHelpers.PythonEnvironment -> Name -> RowType -> Bool -> (PyHelpers.PythonEnvironment -> Term -> Either (InContext OtherError) [Py.Statement]) -> Field -> Either (InContext OtherError) Py.CaseBlock)
+encodeCaseBlock :: TBinding (Context -> PyHelpers.PythonEnvironment -> Name -> RowType -> Bool -> (PyHelpers.PythonEnvironment -> Term -> Either (InContext Error) [Py.Statement]) -> Field -> Either (InContext Error) Py.CaseBlock)
 encodeCaseBlock = def "encodeCaseBlock" $
   doc "Encode a single case (Field) into a CaseBlock for a match statement" $
   "cx" ~> "env" ~> "tname" ~> "rowType" ~> "isEnum" ~> "encodeBody" ~> "field" ~>
@@ -1216,7 +1216,7 @@ makePyGraph = def "makePyGraph" $
 -- | Helper for running computations within a PyGraph context
 
 -- | Encode a field type for record definitions (field: type annotation)
-encodeFieldType :: TBinding (Context -> PyHelpers.PythonEnvironment -> FieldType -> Either (InContext OtherError) Py.Statement)
+encodeFieldType :: TBinding (Context -> PyHelpers.PythonEnvironment -> FieldType -> Either (InContext Error) Py.Statement)
 encodeFieldType = def "encodeFieldType" $
   doc "Encode a field type for record definitions (field: type annotation)" $
   "cx" ~> "env" ~> "fieldType" ~>
@@ -1243,7 +1243,7 @@ dataclassDecorator = def "dataclassDecorator" $
           (Phantoms.list ([] :: [TTerm Py.KwargOrDoubleStarred]))))
 
 -- | Encode a record type as a Python dataclass
-encodeRecordType :: TBinding (Context -> PyHelpers.PythonEnvironment -> Name -> RowType -> Maybe String -> Either (InContext OtherError) Py.Statement)
+encodeRecordType :: TBinding (Context -> PyHelpers.PythonEnvironment -> Name -> RowType -> Maybe String -> Either (InContext Error) Py.Statement)
 encodeRecordType = def "encodeRecordType" $
   doc "Encode a record type as a Python dataclass" $
   "cx" ~> "env" ~> "name" ~> "rowType" ~> "comment" ~>
@@ -1271,7 +1271,7 @@ encodeRecordType = def "encodeRecordType" $
         Phantoms.field Py._ClassDefinition_body (var "body")]
 
 -- | Encode an enum value assignment: ENUM_VALUE = Name("enum_value")
-encodeEnumValueAssignment :: TBinding (Context -> PyHelpers.PythonEnvironment -> FieldType -> Either (InContext OtherError) [Py.Statement])
+encodeEnumValueAssignment :: TBinding (Context -> PyHelpers.PythonEnvironment -> FieldType -> Either (InContext Error) [Py.Statement])
 encodeEnumValueAssignment = def "encodeEnumValueAssignment" $
   doc "Encode an enum value assignment statement with optional comment" $
   "cx" ~> "env" ~> "fieldType" ~>
@@ -1307,7 +1307,7 @@ deconflictVariantName = def "deconflictVariantName" $
       -- No collision: use the normal variant name
       (PyNames.variantName @@ var "isQualified" @@ var "env" @@ var "unionName" @@ var "fname")
 
-encodeUnionField :: TBinding (Context -> PyHelpers.PythonEnvironment -> Name -> FieldType -> Either (InContext OtherError) Py.Statement)
+encodeUnionField :: TBinding (Context -> PyHelpers.PythonEnvironment -> Name -> FieldType -> Either (InContext Error) Py.Statement)
 encodeUnionField = def "encodeUnionField" $
   doc "Encode a union field as a variant class" $
   "cx" ~> "env" ~> "unionName" ~> "fieldType" ~>
@@ -1337,7 +1337,7 @@ encodeUnionField = def "encodeUnionField" $
         (var "body")
 
 -- | Encode a union type as either an enum or a set of variant classes
-encodeUnionType :: TBinding (Context -> PyHelpers.PythonEnvironment -> Name -> RowType -> Maybe String -> Either (InContext OtherError) [Py.Statement])
+encodeUnionType :: TBinding (Context -> PyHelpers.PythonEnvironment -> Name -> RowType -> Maybe String -> Either (InContext Error) [Py.Statement])
 encodeUnionType = def "encodeUnionType" $
   doc "Encode a union type as an enum (for unit-only fields) or variant classes" $
   "cx" ~> "env" ~> "name" ~> "rowType" ~> "comment" ~>
@@ -1398,7 +1398,7 @@ encodeTypeDefSingle = def "encodeTypeDefSingle" $
 
 -- | Encode a type assignment (dispatches to record, union, wrap, or simple typedef)
 --   Name constants are now generated inside the class body by each type encoder.
-encodeTypeAssignment :: TBinding (Context -> PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Either (InContext OtherError) [[Py.Statement]])
+encodeTypeAssignment :: TBinding (Context -> PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Either (InContext Error) [[Py.Statement]])
 encodeTypeAssignment = def "encodeTypeAssignment" $
   doc "Encode a type definition, dispatching based on type structure" $
   "cx" ~> "env" ~> "name" ~> "typ" ~> "comment" ~>
@@ -1406,7 +1406,7 @@ encodeTypeAssignment = def "encodeTypeAssignment" $
     right $ Lists.map ("s" ~> list [var "s"]) (var "defStmts")
 
 -- | Inner type assignment encoding that handles forall unwrapping
-encodeTypeAssignmentInner :: TBinding (Context -> PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Either (InContext OtherError) [Py.Statement])
+encodeTypeAssignmentInner :: TBinding (Context -> PyHelpers.PythonEnvironment -> Name -> Type -> Maybe String -> Either (InContext Error) [Py.Statement])
 encodeTypeAssignmentInner = def "encodeTypeAssignmentInner" $
   doc "Encode the inner type definition, unwrapping forall types" $
   "cx" ~> "env" ~> "name" ~> "typ" ~> "comment" ~>
@@ -1436,7 +1436,7 @@ encodeTypeAssignmentInner = def "encodeTypeAssignmentInner" $
         encodeWrappedType @@ var "env" @@ var "name" @@ var "innerType" @@ var "comment"]
 
 -- | Encode a field (name-value pair) to a Python (Name, Expression) pair
-encodeField :: TBinding (Context -> PyHelpers.PythonEnvironment -> Field -> (TTerm Term -> Either (InContext OtherError) Py.Expression) -> Either (InContext OtherError) (Py.Name, Py.Expression))
+encodeField :: TBinding (Context -> PyHelpers.PythonEnvironment -> Field -> (TTerm Term -> Either (InContext Error) Py.Expression) -> Either (InContext Error) (Py.Name, Py.Expression))
 encodeField = def "encodeField" $
   doc "Encode a field (name-value pair) to a Python (Name, Expression) pair" $
   "cx" ~> "env" ~> "field" ~> "encodeTerm" ~>
@@ -1446,7 +1446,7 @@ encodeField = def "encodeField" $
     right $ pair (PyNames.encodeFieldName @@ var "env" @@ var "fname") (var "pterm")
 
 -- | Encode bindings as function definitions
-encodeBindingsAsDefs :: TBinding (PyHelpers.PythonEnvironment -> (PyHelpers.PythonEnvironment -> Binding -> Either (InContext OtherError) Py.Statement) -> [Binding] -> Either (InContext OtherError) [Py.Statement])
+encodeBindingsAsDefs :: TBinding (PyHelpers.PythonEnvironment -> (PyHelpers.PythonEnvironment -> Binding -> Either (InContext Error) Py.Statement) -> [Binding] -> Either (InContext Error) [Py.Statement])
 encodeBindingsAsDefs = def "encodeBindingsAsDefs" $
   doc "Encode bindings as function definitions" $
   "env" ~> "encodeBinding" ~> "bindings" ~>
@@ -1458,7 +1458,7 @@ encodeBindingsAsDefs = def "encodeBindingsAsDefs" $
 --   2. Hoisted bindings: lambdas wrapping a case statement application (from hoisting)
 --   3. Case elimination functions: case statements as values
 --   4. Other terms: falls back to encodeTermMultiline
-encodeBindingAs :: TBinding (Context -> PyHelpers.PythonEnvironment -> Binding -> Either (InContext OtherError) Py.Statement)
+encodeBindingAs :: TBinding (Context -> PyHelpers.PythonEnvironment -> Binding -> Either (InContext Error) Py.Statement)
 encodeBindingAs = def "encodeBindingAs" $
   doc "Encode a binding as a Python statement (function definition or assignment)" $
   "cx" ~> "env" ~> "binding" ~>
@@ -1622,7 +1622,7 @@ encodeBindingAs = def "encodeBindingAs" $
 -- | Encode a definition (term or type) to Python statements
 encodeDefinition :: TBinding (Context -> PyHelpers.PythonEnvironment
   -> Definition
-  -> Either (InContext OtherError) [[Py.Statement]])
+  -> Either (InContext Error) [[Py.Statement]])
 encodeDefinition = def "encodeDefinition" $
   doc "Encode a definition (term or type) to Python statements" $
   "cx" ~> "env" ~> "def_" ~>
@@ -1829,7 +1829,7 @@ shouldThunkBinding = def "shouldThunkBinding" $
 -- | Analyze a function term with Python-specific Graph management.
 --   This is a wrapper around CoderUtils.analyzeFunctionTermWith that provides the Python-specific
 --   Graph getteranalyzePythonFunction/setter and Python-specific binding metadata (which skips trivial bindings).
-analyzePythonFunction :: TBinding (Context -> PyHelpers.PythonEnvironment -> Term -> Either (InContext OtherError) (FunctionStructure PyHelpers.PythonEnvironment))
+analyzePythonFunction :: TBinding (Context -> PyHelpers.PythonEnvironment -> Term -> Either (InContext Error) (FunctionStructure PyHelpers.PythonEnvironment))
 analyzePythonFunction = def "analyzePythonFunction" $
   doc "Analyze a function term with Python-specific Graph management" $
   lambda "cx" $ lambda "env" $ lambda "term" $
@@ -1865,7 +1865,7 @@ withDefinitions = def "withDefinitions" $
 --   the Staging version handles that.
 encodeBindingAsAssignment :: TBinding (Context -> Bool -> PyHelpers.PythonEnvironment
   -> Binding
-  -> Either (InContext OtherError) Py.NamedExpression)
+  -> Either (InContext Error) Py.NamedExpression)
 encodeBindingAsAssignment = def "encodeBindingAsAssignment" $
   doc "Encode a binding as a walrus operator assignment" $
   "cx" ~> "allowThunking" ~> "env" ~> "binding" ~>
@@ -1899,7 +1899,7 @@ encodeBindingAsAssignment = def "encodeBindingAsAssignment" $
 --   Non-recursive returns stay as normal return statements.
 encodeTermMultilineTCO :: TBinding (Context -> PyHelpers.PythonEnvironment
   -> Name -> [Name] -> TTerm Term
-  -> Either (InContext OtherError) [Py.Statement])
+  -> Either (InContext Error) [Py.Statement])
 encodeTermMultilineTCO = def "encodeTermMultilineTCO" $
   doc "Encode a term body for TCO: tail self-calls become param reassignment + continue" $
   "cx" ~> "env" ~> "funcName" ~> "paramNames" ~> "term" ~>
@@ -1977,7 +1977,7 @@ encodeTermMultilineTCO = def "encodeTermMultilineTCO" $
 --   Takes: environment, name, type params, arg names, body term, domain types, optional codomain, comment, prefix statements
 encodeFunctionDefinition :: TBinding (Context -> PyHelpers.PythonEnvironment
   -> Name -> [Name] -> [Name] -> TTerm Term -> [Type] -> Maybe Type -> Maybe String -> [Py.Statement]
-  -> Either (InContext OtherError) Py.Statement)
+  -> Either (InContext Error) Py.Statement)
 encodeFunctionDefinition = def "encodeFunctionDefinition" $
   doc "Encode a function definition with parameters and body" $
   "cx" ~> "env" ~> "name" ~> "tparams" ~> "args" ~> "body" ~> "doms" ~> "mcod" ~> "comment" ~> "prefixes" ~>
@@ -2033,7 +2033,7 @@ encodeFunctionDefinition = def "encodeFunctionDefinition" $
 --   This handles case statements specially by generating match statements.
 encodeTermMultiline :: TBinding (Context -> PyHelpers.PythonEnvironment
   -> TTerm Term
-  -> Either (InContext OtherError) [Py.Statement])
+  -> Either (InContext Error) [Py.Statement])
 encodeTermMultiline = def "encodeTermMultiline" $
   doc "Encode a term to a list of statements with return as final statement" $
   "cx" ~> "env" ~> "term" ~>
@@ -2086,7 +2086,7 @@ encodeTermMultiline = def "encodeTermMultiline" $
 --   This handles lambdas, primitives, projections, wrap eliminations, and case eliminations.
 encodeFunction :: TBinding (Context -> PyHelpers.PythonEnvironment
   -> Function
-  -> Either (InContext OtherError) Py.Expression)
+  -> Either (InContext Error) Py.Expression)
 encodeFunction = def "encodeFunction" $
   doc "Encode a function term to a Python expression" $
   "cx" ~> "env" ~> "f" ~>
@@ -2144,7 +2144,7 @@ encodeFunction = def "encodeFunction" $
 --   This dispatches to either a simple assignment or a function definition depending on complexity.
 encodeTermAssignment :: TBinding (Context -> PyHelpers.PythonEnvironment
   -> Name -> TTerm Term -> TypeScheme -> Maybe String
-  -> Either (InContext OtherError) Py.Statement)
+  -> Either (InContext Error) Py.Statement)
 encodeTermAssignment = def "encodeTermAssignment" $
   doc "Encode a term assignment to a Python statement" $
   "cx" ~> "env" ~> "name" ~> "term" ~> "ts" ~> "comment" ~>
@@ -2172,7 +2172,7 @@ encodeTermAssignment = def "encodeTermAssignment" $
 -- | Encode a variable reference to a Python expression.
 --   This handles various cases: lambda variables, let-bound variables, primitives, and graph elements.
 --   The complexity arises from needing to determine when a variable needs call syntax () vs plain reference.
-encodeVariable :: TBinding (Context -> PyHelpers.PythonEnvironment -> Name -> [Py.Expression] -> Either (InContext OtherError) Py.Expression)
+encodeVariable :: TBinding (Context -> PyHelpers.PythonEnvironment -> Name -> [Py.Expression] -> Either (InContext Error) Py.Expression)
 encodeVariable = def "encodeVariable" $
   doc "Encode a variable reference to a Python expression" $
   "cx" ~> "env" ~> "name" ~> "args" ~>
@@ -2221,7 +2221,7 @@ encodeVariable = def "encodeVariable" $
               (Maybes.maybe
                 -- Not in graph elements - check metadata
                 (Maybes.maybe
-                  (left $ Ctx.inContext (Error.otherError $ Strings.cat2 (string "Unknown variable: ") (Core.unName (var "name"))) (var "cx"))
+                  (left $ Ctx.inContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Unknown variable: ") (Core.unName (var "name"))) (var "cx"))
                   (constant $ right $ var "asFunctionCall")  -- Lifted case expression
                   (Maps.lookup (var "name") (var "tcMetadata")))
               -- In graph elements
@@ -2315,7 +2315,7 @@ encodeVariable = def "encodeVariable" $
 --   - Variable applications
 encodeApplication :: TBinding (Context -> PyHelpers.PythonEnvironment
   -> Application
-  -> Either (InContext OtherError) Py.Expression)
+  -> Either (InContext Error) Py.Expression)
 encodeApplication = def "encodeApplication" $
   doc "Encode a function application to a Python expression" $
   "cx" ~> "env" ~> "app" ~>
@@ -2351,7 +2351,7 @@ encodeApplicationInner :: TBinding (Context -> PyHelpers.PythonEnvironment
   -> TTerm Term  -- fun
   -> [Py.Expression]  -- hargs
   -> [Py.Expression]  -- rargs
-  -> Either (InContext OtherError) (Py.Expression, [Py.Expression]))
+  -> Either (InContext Error) (Py.Expression, [Py.Expression]))
 encodeApplicationInner = def "encodeApplicationInner" $
   doc "Inner helper for encodeApplication" $
   "cx" ~> "env" ~> "fun" ~> "hargs" ~> "rargs" ~>
@@ -2431,7 +2431,7 @@ encodeApplicationInner = def "encodeApplicationInner" $
 --   statement cannot be emitted (e.g., inside a lambda or walrus assignment).
 encodeUnionEliminationInline :: TBinding (Context -> PyHelpers.PythonEnvironment
   -> CaseStatement -> Py.Expression
-  -> Either (InContext OtherError) Py.Expression)
+  -> Either (InContext Error) Py.Expression)
 encodeUnionEliminationInline = def "encodeUnionEliminationInline" $
   doc "Encode a union elimination as an inline conditional chain (isinstance-based ternary)" $
   "cx" ~> "env" ~> "cs" ~> "pyArg" ~>
@@ -2507,7 +2507,7 @@ encodeUnionEliminationInline = def "encodeUnionEliminationInline" $
 encodeTermInline :: TBinding (Context -> PyHelpers.PythonEnvironment
   -> Bool
   -> TTerm Term
-  -> Either (InContext OtherError) Py.Expression)
+  -> Either (InContext Error) Py.Expression)
 encodeTermInline = def "encodeTermInline" $
   doc "Encode a term to a Python expression (inline form)" $
   "cx" ~> "env" ~> "noCast" ~> "term" ~>
@@ -4200,7 +4200,7 @@ moduleImports = def "moduleImports" $
 --   4. Encodes all definitions
 --   5. Generates imports based on metadata
 --   6. Assembles the final module
-encodePythonModule :: TBinding (Context -> Graph -> Module -> [Definition] -> Either (InContext OtherError) Py.Module)
+encodePythonModule :: TBinding (Context -> Graph -> Module -> [Definition] -> Either (InContext Error) Py.Module)
 encodePythonModule = def "encodePythonModule" $
   doc "Encode a Hydra module to a Python module AST" $
   "cx" ~> "g" ~> "mod" ~> "defs0" ~>
@@ -4241,7 +4241,7 @@ encodePythonModule = def "encodePythonModule" $
       right $ PyDsl.module_ (var "body"))
 
 -- | Main entry point: convert a Hydra module to Python source files.
-moduleToPython :: TBinding (Module -> [Definition] -> Context -> Graph -> Either (InContext OtherError) (M.Map FilePath String))
+moduleToPython :: TBinding (Module -> [Definition] -> Context -> Graph -> Either (InContext Error) (M.Map FilePath String))
 moduleToPython = def "moduleToPython" $
   doc "Convert a Hydra module to Python source files" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>

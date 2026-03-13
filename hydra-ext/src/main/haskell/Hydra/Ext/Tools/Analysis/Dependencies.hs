@@ -42,6 +42,7 @@ g.E()
 module Hydra.Ext.Tools.Analysis.Dependencies where
 
 import Hydra.Kernel
+import qualified Hydra.Show.Error as ShowError
 import Hydra.Generation
 import Hydra.Sources.Kernel.Terms.All
 import Hydra.Sources.Libraries
@@ -89,7 +90,7 @@ combinedGraphToDependencyGraphson :: Graph -> Graph -> Either String [Json.Value
 combinedGraphToDependencyGraphson dataGraph schemaGraph = do
   pg <- combinedGraphToDependencyPropertyGraph dataGraph schemaGraph
   case pgElementsToGraphson encodeStringValue $ propertyGraphElements pg of
-    Left (InContext (OtherError msg) _) -> Left msg
+    Left ic -> Left (ShowError.error (inContextObject ic))
     Right v -> Right v
 
 combinedGraphToDependencyPropertyGraph :: Graph -> Graph -> Either String (PG.Graph String)
@@ -119,7 +120,7 @@ nameToVertexId = unName
 termGraphToDependencyGraphson :: Bool -> Bool -> Graph -> Either String [Json.Value]
 termGraphToDependencyGraphson withPrims withTypes g = case pgElementsToGraphson encodeStringValue $
     propertyGraphElements $ termGraphToDependencyPropertyGraph withPrims withTypes g of
-  Left (InContext (OtherError msg) _) -> Left msg
+  Left ic -> Left (ShowError.error (inContextObject ic))
   Right v -> Right v
 
 -- | Given a Hydra graph, create a property graph in which the vertices are all elements of the graph
@@ -184,7 +185,7 @@ typeGraphToDependencyGraphson :: Graph -> Either String [Json.Value]
 typeGraphToDependencyGraphson g = do
   pg <- typeGraphToDependencyPropertyGraph g
   case pgElementsToGraphson encodeStringValue $ propertyGraphElements pg of
-    Left (InContext (OtherError msg) _) -> Left msg
+    Left ic -> Left (ShowError.error (inContextObject ic))
     Right v -> Right v
 
 typeGraphToDependencyPropertyGraph :: Graph -> Either String (PG.Graph String)

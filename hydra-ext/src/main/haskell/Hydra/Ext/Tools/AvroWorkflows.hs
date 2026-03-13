@@ -16,6 +16,7 @@ module Hydra.Ext.Tools.AvroWorkflows (
 ) where
 
 import Hydra.Kernel
+import qualified Hydra.Show.Error as ShowError
 import Hydra.Dsl.Annotations
 import qualified Hydra.Ext.Org.Apache.Avro.Schema as Avro
 import qualified Hydra.Json.Model as Json
@@ -48,7 +49,7 @@ import System.FilePath.Posix
 import System.Directory
 
 
-type Result a = Either (InContext OtherError) a
+type Result a = Either (InContext Error) a
 
 -- | The last mile of a transformation, which encodes and serializes terms to a file
 data LastMile a =
@@ -67,7 +68,7 @@ parseJsonEither s = case JsonParser.parseJson s of
   ParseResultFailure err -> Left (parseErrorMessage err)
 
 eitherToIo :: Result a -> IO a
-eitherToIo (Left (InContext (OtherError msg) _)) = fail msg
+eitherToIo (Left ic) = fail (ShowError.error (inContextObject ic))
 eitherToIo (Right v) = return v
 
 data JsonPayloadFormat = Json | Jsonl

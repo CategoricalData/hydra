@@ -127,7 +127,7 @@ define = definitionInModule module_
 
 
 -- | Top-level entry point: convert a module to GraphQL schema files.
-moduleToGraphql :: TBinding (Module -> [Definition] -> Context -> Graph -> Either (InContext OtherError) (M.Map FilePath String))
+moduleToGraphql :: TBinding (Module -> [Definition] -> Context -> Graph -> Either (InContext Error) (M.Map FilePath String))
 moduleToGraphql = define "moduleToGraphql" $
   lambda "mod" $ lambda "defs" $
     "cx" ~> "g" ~> lets [
@@ -160,7 +160,7 @@ findPrefixes = lambda "modNs" $ lambda "tdefs" $ lets [
     (var "namespaces")
 
 -- | Encode a TypeDefinition to a GraphQL TypeDefinition
-encodeTypeDefinition :: TBinding (Context -> Graph -> M.Map Namespace String -> TypeDefinition -> Either (InContext OtherError) G.TypeDefinition)
+encodeTypeDefinition :: TBinding (Context -> Graph -> M.Map Namespace String -> TypeDefinition -> Either (InContext Error) G.TypeDefinition)
 encodeTypeDefinition = define "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "tdef" $
     encodeNamedType @@ var "cx" @@ var "g" @@ var "prefixes"
@@ -168,7 +168,7 @@ encodeTypeDefinition = define "encodeTypeDefinition" $
       @@ (Module.typeDefinitionType $ var "tdef")
 
 -- | Get the description from a type as a GraphQL Description
-descriptionFromType :: TBinding (Context -> Graph -> Type -> Either (InContext OtherError) (Maybe G.Description))
+descriptionFromType :: TBinding (Context -> Graph -> Type -> Either (InContext Error) (Maybe G.Description))
 descriptionFromType = define "descriptionFromType" $
   "cx" ~> "g" ~> lambda "typ" $
     Eithers.map
@@ -178,7 +178,7 @@ descriptionFromType = define "descriptionFromType" $
       (Annotations.getTypeDescription @@ var "cx" @@ var "g" @@ var "typ")
 
 -- | Encode an enum field type to a GraphQL EnumValueDefinition
-encodeEnumFieldType :: TBinding (Context -> Graph -> FieldType -> Either (InContext OtherError) G.EnumValueDefinition)
+encodeEnumFieldType :: TBinding (Context -> Graph -> FieldType -> Either (InContext Error) G.EnumValueDefinition)
 encodeEnumFieldType = define "encodeEnumFieldType" $
   "cx" ~> "g" ~> lambda "ft" $
     "desc" <<~ (descriptionFromType @@ var "cx" @@ var "g" @@ (Core.fieldTypeType $ var "ft")) $
@@ -198,7 +198,7 @@ encodeFieldName = define "encodeFieldName" $
   lambda "name" $ wrap G._Name (sanitize @@ (Core.unName $ var "name"))
 
 -- | Encode a field type to a GraphQL FieldDefinition
-encodeFieldType :: TBinding (Context -> Graph -> M.Map Namespace String -> FieldType -> Either (InContext OtherError) G.FieldDefinition)
+encodeFieldType :: TBinding (Context -> Graph -> M.Map Namespace String -> FieldType -> Either (InContext Error) G.FieldDefinition)
 encodeFieldType = define "encodeFieldType" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "ft" $
     "gtype" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "prefixes" @@ (Core.fieldTypeType $ var "ft")) $
@@ -211,32 +211,32 @@ encodeFieldType = define "encodeFieldType" $
       G._FieldDefinition_Directives>>: nothing])
 
 -- | Encode a literal type to a GraphQL NamedType
-encodeLiteralType :: TBinding (Context -> LiteralType -> Either (InContext OtherError) G.NamedType)
+encodeLiteralType :: TBinding (Context -> LiteralType -> Either (InContext Error) G.NamedType)
 encodeLiteralType = define "encodeLiteralType" $
   "cx" ~> lambda "lt" $
     cases _LiteralType (var "lt")
-      (Just $ Ctx.failInContext (Error.otherError $ Strings.cat2 (string "Expected GraphQL-compatible literal type, found: ") (ShowCore.literalType @@ var "lt")) (var "cx")) [
+      (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected GraphQL-compatible literal type, found: ") (ShowCore.literalType @@ var "lt")) (var "cx")) [
       _LiteralType_boolean>>: constant $
         right (wrap G._NamedType (wrap G._Name (string "Boolean"))),
       _LiteralType_float>>: lambda "ft_" $
         cases _FloatType (var "ft_")
-          (Just $ Ctx.failInContext (Error.otherError $ Strings.cat2 (string "Expected 64-bit float type, found: ") (ShowCore.floatType @@ var "ft_")) (var "cx")) [
+          (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected 64-bit float type, found: ") (ShowCore.floatType @@ var "ft_")) (var "cx")) [
           _FloatType_float64>>: constant $
             right (wrap G._NamedType (wrap G._Name (string "Float")))],
       _LiteralType_integer>>: lambda "it_" $
         cases _IntegerType (var "it_")
-          (Just $ Ctx.failInContext (Error.otherError $ Strings.cat2 (string "Expected 32-bit signed integer type, found: ") (ShowCore.integerType @@ var "it_")) (var "cx")) [
+          (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected 32-bit signed integer type, found: ") (ShowCore.integerType @@ var "it_")) (var "cx")) [
           _IntegerType_int32>>: constant $
             right (wrap G._NamedType (wrap G._Name (string "Int")))],
       _LiteralType_string>>: constant $
         right (wrap G._NamedType (wrap G._Name (string "String")))]
 
 -- | Encode a named type to a GraphQL type definition.
-encodeNamedType :: TBinding (Context -> Graph -> M.Map Namespace String -> Name -> Type -> Either (InContext OtherError) G.TypeDefinition)
+encodeNamedType :: TBinding (Context -> Graph -> M.Map Namespace String -> Name -> Type -> Either (InContext Error) G.TypeDefinition)
 encodeNamedType = define "encodeNamedType" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "name" $ lambda "typ" $
     cases _Type (Rewriting.deannotateType @@ var "typ")
-      (Just $ Ctx.failInContext (Error.otherError $ Strings.cat2 (string "Expected record or union type, found: ") (ShowCore.type_ @@ var "typ")) (var "cx")) [
+      (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected record or union type, found: ") (ShowCore.type_ @@ var "typ")) (var "cx")) [
       _Type_record>>: lambda "rt" $
         "gfields" <<~ (Eithers.mapList (lambda "f" $ encodeFieldType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "f") (Core.rowTypeFields (var "rt"))) $
         "desc" <<~ (descriptionFromType @@ var "cx" @@ var "g" @@ var "typ") $
@@ -278,21 +278,21 @@ encodeNamedType = define "encodeNamedType" $
         wrapAsRecord (var "name") (var "cx") (var "g") (var "prefixes") (Core.wrappedTypeBody (var "wt"))]
 
 -- | Helper: wrap a type in a record with a single "value" field
-wrapAsRecord :: TTerm Name -> TTerm Context -> TTerm Graph -> TTerm (M.Map Namespace String) -> TTerm Type -> TTerm (Either (InContext OtherError) G.TypeDefinition)
+wrapAsRecord :: TTerm Name -> TTerm Context -> TTerm Graph -> TTerm (M.Map Namespace String) -> TTerm Type -> TTerm (Either (InContext Error) G.TypeDefinition)
 wrapAsRecord name cx g prefixes innerTyp =
   encodeNamedType @@ cx @@ g @@ prefixes @@ name @@
     (inject _Type _Type_record $ Core.rowType name (list [
       Core.fieldType (Core.name $ string "value") innerTyp]))
 
 -- | Encode a Hydra type as a GraphQL type reference
-encodeType :: TBinding (Context -> Graph -> M.Map Namespace String -> Type -> Either (InContext OtherError) G.Type)
+encodeType :: TBinding (Context -> Graph -> M.Map Namespace String -> Type -> Either (InContext Error) G.Type)
 encodeType = define "encodeType" $
   "cx" ~> "g" ~> lambda "prefixes" $ lambda "typ" $
     cases _Type (Rewriting.deannotateType @@ var "typ")
-      (Just $ Ctx.failInContext (Error.otherError $ Strings.cat2 (string "Expected GraphQL-compatible type, found: ") (ShowCore.type_ @@ var "typ")) (var "cx")) [
+      (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected GraphQL-compatible type, found: ") (ShowCore.type_ @@ var "typ")) (var "cx")) [
       _Type_maybe>>: lambda "et" $
         cases _Type (Rewriting.deannotateType @@ var "et")
-          (Just $ Ctx.failInContext (Error.otherError $ Strings.cat2 (string "Expected GraphQL-compatible type, found: ") (ShowCore.type_ @@ var "et")) (var "cx")) [
+          (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected GraphQL-compatible type, found: ") (ShowCore.type_ @@ var "et")) (var "cx")) [
           _Type_list>>: lambda "et2" $
             Eithers.map (lambda "gt" $ inject G._Type G._Type_list (wrap G._ListType (var "gt")))
               (encodeType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "et2"),

@@ -147,7 +147,7 @@ tab :: String -> Type
 tab = Bootstrap.typeref TabularModel.ns
 
 -- | Evaluate properties by applying each spec to the record and extracting optional values
-evaluateProperties :: TBinding (Context -> Graph -> M.Map PG.PropertyKey Term -> Term -> Either (InContext OtherError) (M.Map PG.PropertyKey Term))
+evaluateProperties :: TBinding (Context -> Graph -> M.Map PG.PropertyKey Term -> Term -> Either (InContext Error) (M.Map PG.PropertyKey Term))
 evaluateProperties = define "evaluateProperties" $
   doc "Evaluate property specifications against a record term" $
   "cx" ~> "g" ~> "specs" ~> "record" ~>
@@ -170,7 +170,7 @@ evaluateProperties = define "evaluateProperties" $
         (Maps.toList $ var "specs"))
 
 -- | Evaluate an edge specification against a record term
-evaluateEdge :: TBinding (Context -> Graph -> PG.Edge Term -> Term -> Either (InContext OtherError) (Maybe (PG.Edge Term)))
+evaluateEdge :: TBinding (Context -> Graph -> PG.Edge Term -> Term -> Either (InContext Error) (Maybe (PG.Edge Term)))
 evaluateEdge = define "evaluateEdge" $
   doc "Evaluate an edge specification against a record term to produce an optional edge" $
   "cx" ~> "g" ~> "edgeSpec" ~> "record" ~>
@@ -211,7 +211,7 @@ evaluateEdge = define "evaluateEdge" $
                             (var "mInId"))))))
 
 -- | Evaluate a vertex specification against a record term
-evaluateVertex :: TBinding (Context -> Graph -> PG.Vertex Term -> Term -> Either (InContext OtherError) (Maybe (PG.Vertex Term)))
+evaluateVertex :: TBinding (Context -> Graph -> PG.Vertex Term -> Term -> Either (InContext Error) (Maybe (PG.Vertex Term)))
 evaluateVertex = define "evaluateVertex" $
   doc "Evaluate a vertex specification against a record term to produce an optional vertex" $
   "cx" ~> "g" ~> "vertexSpec" ~> "record" ~>
@@ -379,7 +379,7 @@ termRowToRecord = define "termRowToRecord" $
         (var "cells")
 
 -- | Transform a record through vertex and edge specifications
-transformRecord :: TBinding (Context -> Graph -> [PG.Vertex Term] -> [PG.Edge Term] -> Term -> Either (InContext OtherError) ([PG.Vertex Term], [PG.Edge Term]))
+transformRecord :: TBinding (Context -> Graph -> [PG.Vertex Term] -> [PG.Edge Term] -> Term -> Either (InContext Error) ([PG.Vertex Term], [PG.Edge Term]))
 transformRecord = define "transformRecord" $
   doc "Transform a record through vertex and edge specifications to produce vertices and edges" $
   "cx" ~> "g" ~> "vspecs" ~> "especs" ~> "record" ~>
@@ -528,7 +528,7 @@ parseTableLines = define "parseTableLines" $
 
 -- | Transform all rows from a decoded table through vertex/edge specs
 -- This is the pure part of table transformation (runs in Either monad)
-transformTableRows :: TBinding (Context -> Graph -> [PG.Vertex Term] -> [PG.Edge Term] -> Tab.TableType -> [Tab.DataRow Term] -> Either (InContext OtherError) ([PG.Vertex Term], [PG.Edge Term]))
+transformTableRows :: TBinding (Context -> Graph -> [PG.Vertex Term] -> [PG.Edge Term] -> Tab.TableType -> [Tab.DataRow Term] -> Either (InContext Error) ([PG.Vertex Term], [PG.Edge Term]))
 transformTableRows = define "transformTableRows" $
   doc "Transform all rows from a table through vertex/edge specifications" $
   "cx" ~> "g" ~> "vspecs" ~> "especs" ~> "tableType" ~> "rows" ~>

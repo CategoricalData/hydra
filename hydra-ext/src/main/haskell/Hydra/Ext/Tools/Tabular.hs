@@ -31,7 +31,7 @@ referenceCoder fieldCoders = Coder encode decode
         decodeField field@(Field fname fterm) = case M.lookup fname fieldCoders of
           Just coder -> case fterm of
             TermVariable v -> Field fname <$> coderDecode coder cx v
-            _ -> Left $ InContext (OtherError $ "expected variable, found: " ++ ShowCore.term fterm) cx
+            _ -> Left $ InContext (ErrorOther (OtherError $ "expected variable, found: " ++ ShowCore.term fterm)) cx
           Nothing -> return field
 
 -- | Consumes a row type and a cell-level coder, producing a record coder.
@@ -46,10 +46,10 @@ tabularAdapter (RowType typeName fieldTypes) cellAdapter = Coder encode decode
       return $ Record typeName fields
     decode cx (Record tname fields) = do
       if (tname /= typeName)
-        then Left $ InContext (OtherError $ "expected record of type " ++ unName typeName ++ ", found record of type " ++ unName tname) cx
+        then Left $ InContext (ErrorOther (OtherError $ "expected record of type " ++ unName typeName ++ ", found record of type " ++ unName tname)) cx
         else DataRow <$> CM.sequence (fieldDecoders cx <*> fields)
     fieldDecoders cx = L.zipWith (decodeField cx) fieldTypes cellCoders
       where
         decodeField cx fieldType coder field = if (fieldName field /= fieldTypeName fieldType)
-          then Left $ InContext (OtherError $ "expected field " ++ unName (fieldTypeName fieldType) ++ ", found field " ++ unName (fieldName field)) cx
+          then Left $ InContext (ErrorOther (OtherError $ "expected field " ++ unName (fieldTypeName fieldType) ++ ", found field " ++ unName (fieldName field))) cx
           else coderDecode coder cx (fieldTerm field)

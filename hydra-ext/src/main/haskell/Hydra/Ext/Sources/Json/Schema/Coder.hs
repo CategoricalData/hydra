@@ -128,7 +128,7 @@ module_ = Module ns elements
 
 
 -- | Result type alias
-type Result a = Either (InContext OtherError) a
+type Result a = Either (InContext Error) a
 
 
 moduleToJsonSchema :: TBinding (JsonSchemaOptions -> Module -> [Definition] -> Context -> Graph -> Result (M.Map FilePath String))

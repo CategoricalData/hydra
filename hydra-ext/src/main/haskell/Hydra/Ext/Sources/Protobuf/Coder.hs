@@ -36,6 +36,7 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Show.Error     as ShowError
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
 import qualified Hydra.Sources.Decode.Core                 as DecodeCore
 import           Prelude hiding ((++))
@@ -75,7 +76,7 @@ module_ :: Module
 module_ = Module ns elements
     [moduleNamespace ProtobufSerdeSource.module_, moduleNamespace ProtobufLanguageSource.protobufLanguageModule,
       Formatting.ns, Names.ns, Rewriting.ns, Schemas.ns, Lexical.ns, Serialization.ns,
-      Annotations.ns, Constants.ns, ExtractCore.ns, AdaptModules.ns, ShowCore.ns,
+      Annotations.ns, Constants.ns, ExtractCore.ns, AdaptModules.ns, ShowCore.ns, ShowError.ns,
       moduleNamespace DecodeCore.module_]
     (ProtobufEnvironment.ns:Proto3Syntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Protobuf code generator: converts Hydra modules to Protocol Buffers v3 definitions"
@@ -127,21 +128,21 @@ key_proto_field_index = def "key_proto_field_index" $
 -- Error helpers
 -- =============================================================================
 
-err :: TBinding (Context -> String -> Either (InContext OtherError) a)
+err :: TBinding (Context -> String -> Either (InContext Error) a)
 err = def "err" $
   "cx" ~> "msg" ~>
-  Ctx.failInContext (Error.otherError (var "msg")) (var "cx")
+  Ctx.failInContext (Error.errorOther $ Error.otherError (var "msg")) (var "cx")
 
-unexpectedE :: TBinding (Context -> String -> String -> Either (InContext OtherError) a)
+unexpectedE :: TBinding (Context -> String -> String -> Either (InContext Error) a)
 unexpectedE = def "unexpectedE" $
   "cx" ~> "expected" ~> "found" ~>
   asTerm err @@ var "cx" @@ (Strings.cat (list [string "Expected ", var "expected", string ", found: ", var "found"]))
 
-fromEitherString :: TBinding (Context -> Either String a -> Either (InContext OtherError) a)
+fromEitherString :: TBinding (Context -> Either String a -> Either (InContext Error) a)
 fromEitherString = def "fromEitherString" $
   "cx" ~> "e" ~>
   Eithers.bimap
-    ("msg" ~> Ctx.inContext (Error.otherError (var "msg")) (var "cx"))
+    ("msg" ~> Ctx.inContext (Error.errorOther $ Error.otherError (var "msg")) (var "cx"))
     ("a" ~> var "a")
     (var "e")
 
@@ -198,7 +199,7 @@ structuralTypeName = def "structuralTypeName" $
 
 -- | Generate a helper message definition for a structural type.
 -- Returns the definition and the updated context (counter state).
-generateStructuralTypeMessage :: TBinding (Context -> Graph -> Namespace -> Term -> Either (InContext OtherError) (P3.Definition, Context))
+generateStructuralTypeMessage :: TBinding (Context -> Graph -> Namespace -> Term -> Either (InContext Error) (P3.Definition, Context))
 generateStructuralTypeMessage = def "generateStructuralTypeMessage" $
   doc "Generate a helper message definition for a structural type" $
   "cx" ~> "g" ~> "localNs" ~> "ref" ~> lets [
@@ -252,7 +253,7 @@ generateStructuralTypeMessage = def "generateStructuralTypeMessage" $
           (var "cx4")] @@ var "ref"
 
 -- | Encode a simple type for helper message fields
-encodeSimpleTypeForHelper :: TBinding (Context -> Namespace -> Type -> Either (InContext OtherError) P3.SimpleType)
+encodeSimpleTypeForHelper :: TBinding (Context -> Namespace -> Type -> Either (InContext Error) P3.SimpleType)
 encodeSimpleTypeForHelper = def "encodeSimpleTypeForHelper" $
   doc "Encode a simple type for helper message fields" $
   "cx" ~> "localNs" ~> "typ" ~> lets [
@@ -303,7 +304,7 @@ collectStructuralTypes_collectFromType = def "collectStructuralTypes_collectFrom
 -- =============================================================================
 
 -- | Note: follows the Protobuf Style Guide (https://protobuf.dev/programming-guides/style)
-moduleToProtobuf :: TBinding (Module -> [Definition] -> Context -> Graph -> Either (InContext OtherError) (M.Map FilePath String))
+moduleToProtobuf :: TBinding (Module -> [Definition] -> Context -> Graph -> Either (InContext Error) (M.Map FilePath String))
 moduleToProtobuf = def "moduleToProtobuf" $
   doc "Convert a Hydra module to Protocol Buffers v3 source files" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~> lets [
@@ -331,7 +332,7 @@ javaPackageOptionName = def "javaPackageOptionName" $
 -- Module construction
 -- =============================================================================
 
-constructModule :: TBinding (Context -> Graph -> Module -> [TypeDefinition] -> Either (InContext OtherError) P3.ProtoFile)
+constructModule :: TBinding (Context -> Graph -> Module -> [TypeDefinition] -> Either (InContext Error) P3.ProtoFile)
 constructModule = def "constructModule" $
   doc "Construct a Protobuf file from a Hydra module and its type definitions" $
   "cx" ~> "g" ~> "mod" ~> "typeDefs" ~> lets [
@@ -405,7 +406,7 @@ constructModule = def "constructModule" $
 -- =============================================================================
 
 -- | Helper to thread context through a list, accumulating results
-mapAccumResult :: TBinding ((Context -> a -> Either (InContext OtherError) (b, Context)) -> Context -> [a] -> Either (InContext OtherError) ([b], Context))
+mapAccumResult :: TBinding ((Context -> a -> Either (InContext Error) (b, Context)) -> Context -> [a] -> Either (InContext Error) ([b], Context))
 mapAccumResult = def "mapAccumResult" $
   doc "Thread context through a list, accumulating results" $
   "f" ~> "cx0" ~> "xs" ~>
@@ -436,7 +437,7 @@ encodeDefinition = def "encodeDefinition" $
       inject _Type _Type_record (Core.rowType (var "name") (list [Core.fieldType (Core.name (string "value")) (var "t")])),
     "toEitherString">: "result" ~>
       Eithers.bimap
-        ("ic" ~> unwrap _OtherError @@ (project _InContext _InContext_object @@ var "ic"))
+        ("ic" ~> ShowError.error_ @@ (project _InContext _InContext_object @@ var "ic"))
         ("a" ~> var "a")
         (var "result"),
     "encode">: "cx0" ~> "options" ~> "t" ~>
@@ -458,7 +459,7 @@ encodeDefinition = def "encodeDefinition" $
 -- Enum encoding
 -- =============================================================================
 
-encodeEnumDefinition :: TBinding (Context -> Graph -> [P3.Option] -> RowType -> Either (InContext OtherError) P3.EnumDefinition)
+encodeEnumDefinition :: TBinding (Context -> Graph -> [P3.Option] -> RowType -> Either (InContext Error) P3.EnumDefinition)
 encodeEnumDefinition = def "encodeEnumDefinition" $
   doc "Encode a Hydra union type as a Protobuf enum definition" $
   "cx" ~> "g" ~> "options" ~> "rt" ~> lets [
@@ -507,7 +508,7 @@ encodeFieldName = def "encodeFieldName" $
         (Formatting.convertCaseCamelToLowerSnake @@ (unwrap _Name @@ var "name"))
 
 -- | Returns the field and updated context (for counter threading)
-encodeFieldType :: TBinding (Context -> Graph -> Namespace -> FieldType -> Either (InContext OtherError) (P3.Field, Context))
+encodeFieldType :: TBinding (Context -> Graph -> Namespace -> FieldType -> Either (InContext Error) (P3.Field, Context))
 encodeFieldType = def "encodeFieldType" $
   doc "Encode a Hydra field type as a Protobuf field" $
   "cx" ~> "g" ~> "localNs" ~> "ft" ~> lets [
@@ -571,7 +572,7 @@ encodeFieldType = def "encodeFieldType" $
             "term">: Core.bindingTerm (var "el")] $
             Eithers.bind
               (Eithers.bimap
-                ("de" ~> Ctx.inContext (Error.otherError (Error.unDecodingError @@ var "de")) (var "cx0"))
+                ("de" ~> Ctx.inContext (Error.errorOther $ Error.otherError (Error.unDecodingError @@ var "de")) (var "cx0"))
                 ("t" ~> var "t")
                 (decodeType @@ var "g0" @@ var "term"))
               ("resolvedTyp" ~> var "encodeSimpleType_" @@ var "cx0" @@ var "g0" @@ var "ns0" @@ var "noms" @@ var "resolvedTyp"))]] $
@@ -595,7 +596,7 @@ encodeFieldType = def "encodeFieldType" $
 -- =============================================================================
 
 -- | Returns the message definition; counter is threaded via context
-encodeRecordType :: TBinding (Context -> Graph -> Namespace -> [P3.Option] -> RowType -> Either (InContext OtherError) P3.MessageDefinition)
+encodeRecordType :: TBinding (Context -> Graph -> Namespace -> [P3.Option] -> RowType -> Either (InContext Error) P3.MessageDefinition)
 encodeRecordType = def "encodeRecordType" $
   doc "Encode a Hydra record type as a Protobuf message definition" $
   "cx" ~> "g" ~> "localNs" ~> "options" ~> "rt" ~> lets [
@@ -615,7 +616,7 @@ encodeRecordType = def "encodeRecordType" $
 -- Scalar type encoding
 -- =============================================================================
 
-encodeScalarType :: TBinding (Context -> LiteralType -> Either (InContext OtherError) P3.ScalarType)
+encodeScalarType :: TBinding (Context -> LiteralType -> Either (InContext Error) P3.ScalarType)
 encodeScalarType = def "encodeScalarType" $
   doc "Encode a Hydra literal type as a Protobuf scalar type" $
   "cx" ~> "lt" ~>
@@ -637,7 +638,7 @@ encodeScalarType = def "encodeScalarType" $
           _IntegerType_uint64>>: constant $ right (inject P3._ScalarType P3._ScalarType_uint64 unit)],
       _LiteralType_string>>: constant $ right (inject P3._ScalarType P3._ScalarType_string unit)]
 
-encodeScalarTypeWrapped :: TBinding (Context -> LiteralType -> Either (InContext OtherError) P3.SimpleType)
+encodeScalarTypeWrapped :: TBinding (Context -> LiteralType -> Either (InContext Error) P3.SimpleType)
 encodeScalarTypeWrapped = def "encodeScalarTypeWrapped" $
   doc "Encode a Hydra literal type as a wrapped Protobuf type (for optional scalars)" $
   "cx" ~> "lt" ~> lets [
@@ -709,7 +710,7 @@ flattenType = def "flattenType" $
 -- Options
 -- =============================================================================
 
-findOptions :: TBinding (Context -> Graph -> Type -> Either (InContext OtherError) [P3.Option])
+findOptions :: TBinding (Context -> Graph -> Type -> Either (InContext Error) [P3.Option])
 findOptions = def "findOptions" $
   doc "Find Protobuf options for a type (description and deprecated)" $
   "cx" ~> "g" ~> "typ" ~>
@@ -774,7 +775,7 @@ namespaceToPackageName = def "namespaceToPackageName" $
 -- Boolean annotation reading
 -- =============================================================================
 
-readBooleanAnnotation :: TBinding (Context -> Graph -> Name -> Type -> Either (InContext OtherError) Bool)
+readBooleanAnnotation :: TBinding (Context -> Graph -> Name -> Type -> Either (InContext Error) Bool)
 readBooleanAnnotation = def "readBooleanAnnotation" $
   doc "Read a boolean annotation from a type" $
   "cx" ~> "g" ~> "key" ~> "typ" ~>

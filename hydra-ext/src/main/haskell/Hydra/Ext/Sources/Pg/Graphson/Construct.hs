@@ -155,7 +155,7 @@ aggregateMap = define "aggregateMap" $
       (var "pairs")
 
 -- | Convert a PG edge property to GraphSON format
-edgePropertyToGraphson :: TBinding ((v -> Either (InContext OtherError) G.Value) -> (PG.PropertyKey, v) -> Either (InContext OtherError) (G.PropertyKey, G.Value))
+edgePropertyToGraphson :: TBinding ((v -> Either (InContext Error) G.Value) -> (PG.PropertyKey, v) -> Either (InContext Error) (G.PropertyKey, G.Value))
 edgePropertyToGraphson = define "edgePropertyToGraphson" $
   doc "Convert a property graph edge property to a GraphSON property" $
   "encodeValue" ~> "prop" ~>
@@ -167,7 +167,7 @@ edgePropertyToGraphson = define "edgePropertyToGraphson" $
       (var "encodeValue" @@ (Pairs.second $ var "prop"))
 
 -- | Convert a PG vertex property to GraphSON format
-vertexPropertyToGraphson :: TBinding ((v -> Either (InContext OtherError) G.Value) -> (PG.PropertyKey, v) -> Either (InContext OtherError) (G.PropertyKey, G.VertexPropertyValue))
+vertexPropertyToGraphson :: TBinding ((v -> Either (InContext Error) G.Value) -> (PG.PropertyKey, v) -> Either (InContext Error) (G.PropertyKey, G.VertexPropertyValue))
 vertexPropertyToGraphson = define "vertexPropertyToGraphson" $
   doc "Convert a property graph vertex property to a GraphSON vertex property" $
   "encodeValue" ~> "prop" ~>
@@ -181,7 +181,7 @@ vertexPropertyToGraphson = define "vertexPropertyToGraphson" $
       (var "encodeValue" @@ (Pairs.second $ var "prop"))
 
 -- | Convert a PG adjacent edge to GraphSON format
-adjacentEdgeToGraphson :: TBinding ((v -> Either (InContext OtherError) G.Value) -> PG.AdjacentEdge v -> Either (InContext OtherError) (G.EdgeLabel, G.AdjacentEdge))
+adjacentEdgeToGraphson :: TBinding ((v -> Either (InContext Error) G.Value) -> PG.AdjacentEdge v -> Either (InContext Error) (G.EdgeLabel, G.AdjacentEdge))
 adjacentEdgeToGraphson = define "adjacentEdgeToGraphson" $
   doc "Convert a property graph adjacent edge to a GraphSON adjacent edge" $
   "encodeValue" ~> "edge" ~>
@@ -207,7 +207,7 @@ adjacentEdgeToGraphson = define "adjacentEdgeToGraphson" $
                       G._AdjacentEdge_properties>>: Maps.fromList (var "propPairs")]))))
 
 -- | Convert a PG vertex with adjacent edges to a GraphSON vertex
-pgVertexWithAdjacentEdgesToGraphsonVertex :: TBinding ((v -> Either (InContext OtherError) G.Value) -> PG.VertexWithAdjacentEdges v -> Either (InContext OtherError) G.Vertex)
+pgVertexWithAdjacentEdgesToGraphsonVertex :: TBinding ((v -> Either (InContext Error) G.Value) -> PG.VertexWithAdjacentEdges v -> Either (InContext Error) G.Vertex)
 pgVertexWithAdjacentEdgesToGraphsonVertex = define "pgVertexWithAdjacentEdgesToGraphsonVertex" $
   doc "Convert a property graph vertex with adjacent edges to a GraphSON vertex" $
   "encodeValue" ~> "vae" ~>
@@ -243,10 +243,10 @@ graphsonVertexToJsonCoder = define "graphsonVertexToJsonCoder" $
   doc "A coder that converts GraphSON vertices to JSON. Decoding is not supported." $
   Compute.coder
     ("_cx" ~> "v" ~> right (Coder.vertexToJson @@ var "v"))
-    ("_cx" ~> "_" ~> Ctx.failInContext (Error.otherError $ string "decoding GraphSON JSON is currently unsupported") (var "_cx"))
+    ("_cx" ~> "_" ~> Ctx.failInContext (Error.errorOther $ Error.otherError $ string "decoding GraphSON JSON is currently unsupported") (var "_cx"))
 
 -- | Convert a PG vertex with adjacent edges directly to JSON
-pgVertexWithAdjacentEdgesToJson :: TBinding ((v -> Either (InContext OtherError) G.Value) -> PG.VertexWithAdjacentEdges v -> Either (InContext OtherError) JM.Value)
+pgVertexWithAdjacentEdgesToJson :: TBinding ((v -> Either (InContext Error) G.Value) -> PG.VertexWithAdjacentEdges v -> Either (InContext Error) JM.Value)
 pgVertexWithAdjacentEdgesToJson = define "pgVertexWithAdjacentEdgesToJson" $
   doc "Convert a property graph vertex with adjacent edges to JSON" $
   "encodeValue" ~> "vertex" ~>

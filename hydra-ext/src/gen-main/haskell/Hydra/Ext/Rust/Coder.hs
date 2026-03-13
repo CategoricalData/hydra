@@ -218,7 +218,7 @@ encodeType cx g t =
     Core.TypeVariable v0 -> (Right (rustPath (Formatting.capitalize (Core.unName v0))))
     Core.TypeForall v0 -> (encodeType cx g (Core.forallTypeBody v0))) typ)
 
-encodeTerm :: (Context.Context -> t0 -> Core.Term -> Either (Context.InContext Error.OtherError) Syntax.Expression)
+encodeTerm :: (Context.Context -> t0 -> Core.Term -> Either (Context.InContext Error.Error) Syntax.Expression)
 encodeTerm cx g term = ((\x -> case x of
   Core.TermAnnotated v0 -> (encodeTerm cx g (Core.annotatedTermBody v0))
   Core.TermApplication v0 -> (Eithers.bind (encodeTerm cx g (Core.applicationFunction v0)) (\fun -> Eithers.bind (encodeTerm cx g (Core.applicationArgument v0)) (\arg -> Right (rustCall fun [
@@ -289,10 +289,10 @@ encodeTerm cx g term = ((\x -> case x of
     in (Eithers.bind (encodeTerm cx g (Core.wrappedTermBody v0)) (\inner -> Right (rustCall (rustExprPath tname) [
       inner])))
   _ -> (Left (Context.InContext {
-    Context.inContextObject = (Error.OtherError "unexpected term variant"),
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected term variant")),
     Context.inContextContext = cx}))) term)
 
-encodeFunction :: (Context.Context -> t0 -> Core.Function -> Either (Context.InContext Error.OtherError) Syntax.Expression)
+encodeFunction :: (Context.Context -> t0 -> Core.Function -> Either (Context.InContext Error.Error) Syntax.Expression)
 encodeFunction cx g fun = ((\x -> case x of
   Core.FunctionLambda v0 ->  
     let param = (Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.lambdaParameter v0)))
@@ -301,7 +301,7 @@ encodeFunction cx g fun = ((\x -> case x of
   Core.FunctionPrimitive v0 -> (Right (rustExprPath (Core.unName v0)))
   Core.FunctionElimination v0 -> (encodeElimination cx g v0 Nothing)) fun)
 
-encodeElimination :: (Context.Context -> t0 -> Core.Elimination -> Maybe Core.Term -> Either (Context.InContext Error.OtherError) Syntax.Expression)
+encodeElimination :: (Context.Context -> t0 -> Core.Elimination -> Maybe Core.Term -> Either (Context.InContext Error.Error) Syntax.Expression)
 encodeElimination cx g elim marg = ((\x -> case x of
   Core.EliminationRecord v0 ->  
     let fname = (Formatting.convertCaseCamelToLowerSnake (Core.unName (Core.projectionField v0)))
@@ -446,7 +446,7 @@ encodeTypeDefinition cx g tdef =
               Syntax.itemWithCommentsVisibility = Syntax.VisibilityPublic,
               Syntax.itemWithCommentsItem = item})))
 
-encodeTermDefinition :: (Context.Context -> t0 -> Module.TermDefinition -> Either (Context.InContext Error.OtherError) Syntax.ItemWithComments)
+encodeTermDefinition :: (Context.Context -> t0 -> Module.TermDefinition -> Either (Context.InContext Error.Error) Syntax.ItemWithComments)
 encodeTermDefinition cx g tdef =  
   let name = (Module.termDefinitionName tdef)
   in  
@@ -475,7 +475,7 @@ encodeTermDefinition cx g tdef =
               Syntax.fnDefUnsafe = False,
               Syntax.fnDefDoc = Nothing}))}))))
 
-moduleToRust :: (Module.Module -> [Module.Definition] -> Context.Context -> t0 -> Either (Context.InContext Error.OtherError) (M.Map String String))
+moduleToRust :: (Module.Module -> [Module.Definition] -> Context.Context -> t0 -> Either (Context.InContext Error.Error) (M.Map String String))
 moduleToRust mod defs cx g =  
   let partitioned = (Schemas.partitionDefinitions defs)
   in  

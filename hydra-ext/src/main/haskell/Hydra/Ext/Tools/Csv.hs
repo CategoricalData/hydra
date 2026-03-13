@@ -34,12 +34,12 @@ tableCsvCoder hasHeader = Coder encode decode
         headerRows = if hasHeader
           then case mheader of
             Just (HeaderRow names) -> Right [encodeCsvLine names]
-            Nothing -> Left $ InContext (OtherError "missing header") cx
+            Nothing -> Left $ InContext (ErrorOther (OtherError "missing header")) cx
           else Right []
     decode cx rows = do
         (mheader, rest) <- if hasHeader
           then if L.null rows
-            then Left $ InContext (OtherError "missing header") cx
+            then Left $ InContext (ErrorOther (OtherError "missing header")) cx
             else Right (Just $ HeaderRow $ decodeCsvLine $ head rows, tail rows)
           else Right (Nothing, rows)
         drows <- CM.mapM (coderDecode dataRowCsvCoder cx) rest
@@ -50,7 +50,7 @@ tableCsvCoder hasHeader = Coder encode decode
 
 type DomainCoders t v = M.Map t (Coder v String)
 
-relationCsvCoder :: (Ord t, Show t) => DomainCoders t v -> RM.RelationSchema t -> Bool -> Context -> Either (InContext OtherError) (Coder (RM.Relation v) [String])
+relationCsvCoder :: (Ord t, Show t) => DomainCoders t v -> RM.RelationSchema t -> Bool -> Context -> Either (InContext Error) (Coder (RM.Relation v) [String])
 relationCsvCoder coderMap schema hasHeader cx = do
     coder <- rowCsvCoder coderMap schema cx
     return $ Coder (encode coder) (decode coder)
@@ -69,7 +69,7 @@ relationCsvCoder coderMap schema hasHeader cx = do
         dataRows = if hasHeader then L.tail inRows else inRows
 
 -- | Encodes a single Row as a line of a CSV, and vice versa.
-rowCsvCoder :: (Ord t, Show t) => DomainCoders t v -> RM.RelationSchema t -> Context -> Either (InContext OtherError) (Coder (RM.Row v) String)
+rowCsvCoder :: (Ord t, Show t) => DomainCoders t v -> RM.RelationSchema t -> Context -> Either (InContext Error) (Coder (RM.Row v) String)
 rowCsvCoder coderMap schema cx = do
     coders <- CM.mapM findCoder (RM.columnSchemaDomain <$> RM.relationSchemaColumns schema)
     return $ Coder (encode coders) (decode coders)
@@ -77,7 +77,7 @@ rowCsvCoder coderMap schema cx = do
     encode coders cx' (RM.Row cells) = encodeCsvLine <$> (encodeCells cx' coders cells)
     decode coders cx' line = RM.Row <$> (decodeCells cx' coders $ decodeCsvLine line)
     findCoder typ = case M.lookup typ coderMap of
-      Nothing -> Left $ InContext (OtherError $ "no coder for type: " ++ show typ) cx
+      Nothing -> Left $ InContext (ErrorOther (OtherError $ "no coder for type: " ++ show typ)) cx
       Just c -> pure c
     encodeCells cx' coders = CM.zipWithM (\c v -> coderEncode c cx' v) coders
     decodeCells cx' coders = CM.zipWithM (\c v -> coderDecode c cx' v) coders

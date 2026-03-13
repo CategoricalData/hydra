@@ -128,15 +128,15 @@ module_ = Module ns elements
       toBinding withType]
 
 
--- | Construct a Left (InContext OtherError) error
-err :: TBinding (Context -> String -> Either (InContext OtherError) a)
+-- | Construct a Left (InContext Error) error
+err :: TBinding (Context -> String -> Either (InContext Error) a)
 err = define "err" $
   doc "Construct an error result with a context and message" $
   lambda "cx" $ lambda "msg" $
-    left (Ctx.inContext (Error.otherError (var "msg")) (var "cx"))
+    left (Ctx.inContext (Error.errorOther $ Error.otherError (var "msg")) (var "cx"))
 
 -- | Construct an 'expected X, found Y' error
-unexpectedE :: TBinding (Context -> String -> String -> Either (InContext OtherError) a)
+unexpectedE :: TBinding (Context -> String -> String -> Either (InContext Error) a)
 unexpectedE = define "unexpectedE" $
   doc "Construct an error for unexpected input, given expected and found descriptions" $
   lambda "cx" $ lambda "expected" $ lambda "found" $
@@ -147,7 +147,7 @@ unexpectedE = define "unexpectedE" $
       var "found"])
 
 -- | Main SHACL coder: encode a module's type elements into a ShapesGraph
-shaclCoder :: TBinding (Module -> Context -> Graph -> Either (InContext OtherError) (Shacl.ShapesGraph, Context))
+shaclCoder :: TBinding (Module -> Context -> Graph -> Either (InContext Error) (Shacl.ShapesGraph, Context))
 shaclCoder = define "shaclCoder" $
   doc "Encode a module's type elements as a SHACL ShapesGraph" $
   lambda "mod" $ lambda "cx" $ lambda "g" $ lets [
@@ -155,7 +155,7 @@ shaclCoder = define "shaclCoder" $
     "toShape">: lambda "el" $
       Eithers.bind
         (Eithers.bimap
-          ("__de" ~> Ctx.inContext (Error.otherError (Error.unDecodingError @@ var "__de")) (var "cx"))
+          ("__de" ~> Ctx.inContext (Error.errorOther $ Error.otherError (Error.unDecodingError @@ var "__de")) (var "cx"))
           ("__t" ~> var "__t")
           (Phantoms.decoderFor _Type @@ var "g" @@ (Core.bindingTerm (var "el"))))
         ("__typ" ~> Eithers.map
@@ -199,7 +199,7 @@ elementIri = define "elementIri" $
     nameToIri @@ (Core.bindingName (var "el"))
 
 -- | Encode a record field as RDF triples
-encodeField :: TBinding (Name -> Rdf.Resource -> Field -> Context -> Graph -> Either (InContext OtherError) ([Rdf.Triple], Context))
+encodeField :: TBinding (Name -> Rdf.Resource -> Field -> Context -> Graph -> Either (InContext Error) ([Rdf.Triple], Context))
 encodeField = define "encodeField" $
   doc "Encode a record field as RDF triples with a given subject" $
   lambda "rname" $ lambda "subject" $ lambda "field" $ lambda "cx" $ lambda "g" $ lets [
@@ -220,7 +220,7 @@ encodeField = define "encodeField" $
           (var "cx2")))
 
 -- | Encode a FieldType as a SHACL property shape definition
-encodeFieldType :: TBinding (Name -> Maybe Integer -> FieldType -> Context -> Either (InContext OtherError) (Shacl.Definition Shacl.PropertyShape))
+encodeFieldType :: TBinding (Name -> Maybe Integer -> FieldType -> Context -> Either (InContext Error) (Shacl.Definition Shacl.PropertyShape))
 encodeFieldType = define "encodeFieldType" $
   doc "Encode a FieldType as a SHACL property shape Definition" $
   lambda "rname" $ lambda "order" $ lambda "ft" $ lambda "cx" $ lets [
@@ -287,7 +287,7 @@ encodeLiteralType = define "encodeLiteralType" $
       _LiteralType_string>>: constant $ var "xsd" @@ string "string"]
 
 -- | Encode a Hydra Term as a list of RDF Descriptions
-encodeTerm :: TBinding (Rdf.Resource -> Term -> Context -> Graph -> Either (InContext OtherError) ([Rdf.Description], Context))
+encodeTerm :: TBinding (Rdf.Resource -> Term -> Context -> Graph -> Either (InContext Error) ([Rdf.Description], Context))
 encodeTerm = define "encodeTerm" $
   doc "Encode a Hydra term as a list of RDF Descriptions" $
   lambda "subject" $ lambda "term" $ lambda "cx" $ lambda "g" $
@@ -380,7 +380,7 @@ encodeTerm = define "encodeTerm" $
           (encodeField @@ var "rname" @@ var "subject" @@ var "field" @@ var "cx" @@ var "g")]
 
 -- | Helper for encoding lists as RDF (recursive)
-encodeList :: TBinding (Rdf.Resource -> [Term] -> Context -> Graph -> Either (InContext OtherError) ([Rdf.Description], Context))
+encodeList :: TBinding (Rdf.Resource -> [Term] -> Context -> Graph -> Either (InContext Error) ([Rdf.Description], Context))
 encodeList = define "encodeList" $
   doc "Encode a list of terms as RDF list structure" $
   lambda "subj" $ lambda "terms" $ lambda "cx0" $ lambda "g" $
@@ -420,7 +420,7 @@ encodeList = define "encodeList" $
               (encodeList @@ var "next" @@ (Lists.tail (var "terms")) @@ var "cx3" @@ var "g")))
 
 -- | Fold over a list, accumulating results and threading context
-foldAccumResult :: TBinding ((Context -> a -> Either (InContext OtherError) (b, Context)) -> Context -> [a] -> Either (InContext OtherError) ([b], Context))
+foldAccumResult :: TBinding ((Context -> a -> Either (InContext Error) (b, Context)) -> Context -> [a] -> Either (InContext Error) ([b], Context))
 foldAccumResult = define "foldAccumResult" $
   doc "Fold over a list, accumulating results and threading context through each step" $
   lambda "f" $ lambda "cx" $ lambda "xs" $
@@ -435,7 +435,7 @@ foldAccumResult = define "foldAccumResult" $
           (foldAccumResult @@ var "f" @@ (Pairs.second (var "__r")) @@ (Lists.tail (var "xs")))))
 
 -- | Encode a Hydra Type as SHACL CommonProperties
-encodeType :: TBinding (Type -> Context -> Either (InContext OtherError) Shacl.CommonProperties)
+encodeType :: TBinding (Type -> Context -> Either (InContext Error) Shacl.CommonProperties)
 encodeType = define "encodeType" $
   doc "Encode a Hydra type as SHACL CommonProperties" $
   lambda "typ" $ lambda "cx" $ lets [

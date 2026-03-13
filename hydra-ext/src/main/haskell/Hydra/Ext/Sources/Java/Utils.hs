@@ -1267,7 +1267,7 @@ toAcceptMethod = def "toAcceptMethod" $
 -- =============================================================================
 
 -- | Convert a Java Type to an array type
-toJavaArrayType :: TBinding (Java.Type -> Context -> Either (InContext OtherError) Java.Type)
+toJavaArrayType :: TBinding (Java.Type -> Context -> Either (InContext Error) Java.Type)
 toJavaArrayType = def "toJavaArrayType" $
   lambda "t" $ "cx" ~>
   cases Java._Type (var "t") Nothing [
@@ -1285,22 +1285,22 @@ toJavaArrayType = def "toJavaArrayType" $
           right (JavaDsl.typeReference (JavaDsl.referenceTypeArray
             (JavaDsl.arrayType (var "newDims") (var "variant")))),
         Java._ReferenceType_variable>>: constant $
-          Ctx.failInContext (Error.otherError $ string "don't know how to make Java reference type into array type") (var "cx")],
+          Ctx.failInContext (Error.errorOther $ Error.otherError $ string "don't know how to make Java reference type into array type") (var "cx")],
     Java._Type_primitive>>: constant $
-      Ctx.failInContext (Error.otherError $ string "don't know how to make Java type into array type") (var "cx")]
+      Ctx.failInContext (Error.errorOther $ Error.otherError $ string "don't know how to make Java type into array type") (var "cx")]
 
 -- =============================================================================
 -- Type to reference type
 -- =============================================================================
 
 -- | Extract the reference type from a Java type, failing if it's a primitive type
-javaTypeToJavaReferenceType :: TBinding (Java.Type -> Context -> Either (InContext OtherError) Java.ReferenceType)
+javaTypeToJavaReferenceType :: TBinding (Java.Type -> Context -> Either (InContext Error) Java.ReferenceType)
 javaTypeToJavaReferenceType = def "javaTypeToJavaReferenceType" $
   lambda "t" $ "cx" ~>
   cases Java._Type (var "t") Nothing [
     Java._Type_reference>>: lambda "rt" $ right (var "rt"),
     Java._Type_primitive>>: constant $
-      Ctx.failInContext (Error.otherError $ string "expected a Java reference type") (var "cx")]
+      Ctx.failInContext (Error.errorOther $ Error.otherError $ string "expected a Java reference type") (var "cx")]
 
 -- =============================================================================
 -- Reference type to raw type
@@ -1337,7 +1337,7 @@ javaReferenceTypeToRawType = def "javaReferenceTypeToRawType" $
 -- =============================================================================
 
 -- | Add a reference type as a type argument to an existing Java type
-addJavaTypeParameter :: TBinding (Java.ReferenceType -> Java.Type -> Context -> Either (InContext OtherError) Java.Type)
+addJavaTypeParameter :: TBinding (Java.ReferenceType -> Java.Type -> Context -> Either (InContext Error) Java.Type)
 addJavaTypeParameter = def "addJavaTypeParameter" $
   lambda "rt" $ lambda "t" $ "cx" ~>
   cases Java._Type (var "t") Nothing [
@@ -1356,13 +1356,13 @@ addJavaTypeParameter = def "addJavaTypeParameter" $
                     (JavaDsl.classType (var "anns") (var "qual") (var "id")
                       (Lists.concat2 (var "args") (list [JavaDsl.typeArgumentReference (var "rt")])))))),
             Java._ClassOrInterfaceType_interface>>: constant $
-              Ctx.failInContext (Error.otherError $ string "expected a Java class type") (var "cx")],
+              Ctx.failInContext (Error.errorOther $ Error.otherError $ string "expected a Java class type") (var "cx")],
         Java._ReferenceType_variable>>: lambda "tv" $
           right (javaTypeVariableToType @@ var "tv"),
         Java._ReferenceType_array>>: constant $
-          Ctx.failInContext (Error.otherError $ string "expected a Java class or interface type, or a variable") (var "cx")],
+          Ctx.failInContext (Error.errorOther $ Error.otherError $ string "expected a Java class or interface type, or a variable") (var "cx")],
     Java._Type_primitive>>: constant $
-      Ctx.failInContext (Error.otherError $ string "expected a reference type") (var "cx")]
+      Ctx.failInContext (Error.errorOther $ Error.otherError $ string "expected a reference type") (var "cx")]
 
 -- =============================================================================
 -- Aliases modifiers
