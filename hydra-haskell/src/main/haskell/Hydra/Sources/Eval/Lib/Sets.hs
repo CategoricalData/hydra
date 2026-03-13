@@ -72,7 +72,7 @@ module_ = Module ns elements
 
 -- | Interpreter-friendly map for Set terms.
 -- Applies fun to each element.
-map_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
+map_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 map_ = define "map" $
   doc "Interpreter-friendly map for Set terms." $
   "cx" ~> "g" ~>

@@ -96,14 +96,15 @@ import qualified Hydra.Sources.Haskell.Language as HaskellLanguage
 import qualified Hydra.Sources.Haskell.Ast as HaskellAst
 import qualified Hydra.Sources.Haskell.Serde as HaskellSerde
 import qualified Hydra.Sources.Haskell.Utils as HaskellUtils
+import qualified Hydra.Sources.Kernel.Terms.Show.Error as ShowError
 
 
-formatOtherError :: TTerm (InContext OtherError -> String)
-formatOtherError = "ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")
+formatError :: TTerm (InContext Error -> String)
+formatError = "ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic")
 
--- | Lift Either String to Either (InContext OtherError) using a context
-liftStringError :: TTerm Context -> TTerm (Either String a) -> TTerm (Either (InContext OtherError) a)
-liftStringError cx = Eithers.bimap ("_s" ~> Ctx.inContext (Error.otherError $ var "_s") cx) ("_x" ~> var "_x")
+-- | Lift Either String to Either (InContext Error) using a context
+liftStringError :: TTerm Context -> TTerm (Either String a) -> TTerm (Either (InContext Error) a)
+liftStringError cx = Eithers.bimap ("_s" ~> Ctx.inContext (Error.errorOther $ Error.otherError $ var "_s") cx) ("_x" ~> var "_x")
 
 type HaskellNamespaces = Namespaces H.ModuleName
 
@@ -113,7 +114,7 @@ haskellCoderDefinition = definitionInModule module_
 module_ :: Module
 module_ = Module ns elements
     [HaskellSerde.ns, HaskellUtils.ns,
-      AdaptModules.ns, Rewriting.ns, Serialization.ns]
+      AdaptModules.ns, Rewriting.ns, Serialization.ns, ShowError.ns]
     (HaskellAst.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Functions for encoding Hydra modules as Haskell modules"
   where
@@ -157,7 +158,7 @@ keyHaskellVar = haskellCoderDefinition "keyHaskellVar" $
   doc "The key used to track Haskell variable depth in annotations" $
   wrap _Name $ string "haskellVar"
 
-adaptTypeToHaskellAndEncode :: TBinding (HaskellNamespaces -> Type -> Context -> Graph -> Either (InContext OtherError) H.Type)
+adaptTypeToHaskellAndEncode :: TBinding (HaskellNamespaces -> Type -> Context -> Graph -> Either (InContext Error) H.Type)
 adaptTypeToHaskellAndEncode = haskellCoderDefinition "adaptTypeToHaskellAndEncode" $
   doc "Adapt a Hydra type to Haskell's type system and encode it" $
   "namespaces" ~> "typ" ~> "cx" ~> "g" ~>
@@ -184,7 +185,7 @@ constantForTypeName = haskellCoderDefinition "constantForTypeName" $
   "tname" ~>
     Strings.cat2 (string "_") (Names.localNameOf @@ var "tname")
 
-constructModule :: TBinding (HaskellNamespaces -> Module -> [Definition] -> Context -> Graph -> Either (InContext OtherError) H.Module)
+constructModule :: TBinding (HaskellNamespaces -> Module -> [Definition] -> Context -> Graph -> Either (InContext Error) H.Module)
 constructModule = haskellCoderDefinition "constructModule" $
   doc "Construct a Haskell module from a Hydra module and its definitions" $
   "namespaces" ~> "mod" ~> "defs" ~> "cx" ~> "g" ~> lets [
@@ -253,7 +254,7 @@ constructModule = haskellCoderDefinition "constructModule" $
       H._Module_imports>>: var "imports",
       H._Module_declarations>>: var "decls"]
 
-encodeFunction :: TBinding (Int -> HaskellNamespaces -> Function -> Context -> Graph -> Either (InContext OtherError) H.Expression)
+encodeFunction :: TBinding (Int -> HaskellNamespaces -> Function -> Context -> Graph -> Either (InContext Error) H.Expression)
 encodeFunction = haskellCoderDefinition "encodeFunction" $
   doc "Encode a Hydra function as a Haskell expression" $
   "depth" ~> "namespaces" ~> "fun" ~> "cx" ~> "g" ~>
@@ -301,7 +302,7 @@ encodeFunction = haskellCoderDefinition "encodeFunction" $
                   (var "v0"),
                 "hname">: HaskellUtils.unionFieldReference @@ (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g"))) @@ var "namespaces" @@ var "dn" @@ var "fn"] $
                     "args" <<~ (Maybes.cases (Maps.lookup (var "fn") (var "fieldMap"))
-                        (Ctx.failInContext (Error.otherError (Strings.cat $ list [string "field ", Literals.showString $ (Core.unName $ var "fn"),
+                        (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "field ", Literals.showString $ (Core.unName $ var "fn"),
                           string " not found in ", Literals.showString $ (Core.unName $ var "dn")])) (var "cx")) $
                         "fieldType" ~> lets [
                           "ft">: Core.fieldTypeType $ var "fieldType",
@@ -325,12 +326,12 @@ encodeFunction = haskellCoderDefinition "encodeFunction" $
       _Function_primitive>>: "name" ~>
         right $ inject H._Expression H._Expression_variable $ HaskellUtils.elementReference @@ var "namespaces" @@ var "name"]
 
-encodeLiteral :: TBinding (Literal -> Context -> Either (InContext OtherError) H.Expression)
+encodeLiteral :: TBinding (Literal -> Context -> Either (InContext Error) H.Expression)
 encodeLiteral = haskellCoderDefinition "encodeLiteral" $
   doc "Encode a Hydra literal as a Haskell expression" $
   "l" ~> "cx" ~>
     cases _Literal (var "l")
-      (Just $ Ctx.failInContext (Error.otherError (Strings.cat2 (string "literal value ") (ShowCore.literal @@ var "l"))) (var "cx")) [
+      (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat2 (string "literal value ") (ShowCore.literal @@ var "l"))) (var "cx")) [
       _Literal_binary>>: "bs" ~>
         right $ HaskellUtils.hsapp
           @@ (HaskellUtils.hsvar @@ string "Literals.stringToBinary")
@@ -369,7 +370,7 @@ encodeLiteral = haskellCoderDefinition "encodeLiteral" $
       _Literal_string>>: "s" ~>
         right $ HaskellUtils.hslit @@ (inject H._Literal H._Literal_string $ var "s")]
 
-encodeTerm :: TBinding (Int -> HaskellNamespaces -> Term -> Context -> Graph -> Either (InContext OtherError) H.Expression)
+encodeTerm :: TBinding (Int -> HaskellNamespaces -> Term -> Context -> Graph -> Either (InContext Error) H.Expression)
 encodeTerm = haskellCoderDefinition "encodeTerm" $
   doc "Encode a Hydra term as a Haskell expression" $
   "depth" ~> "namespaces" ~> "term" ~> "cx" ~> "g" ~> lets [
@@ -391,7 +392,7 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
       "rhs" <<~ encodeTerm @@ var "depth" @@ var "namespaces" @@ (inject _Term _Term_list $ Sets.toList $ var "s") @@ var "cx" @@ var "g" $
       right $ HaskellUtils.hsapp @@ var "lhs" @@ var "rhs") $
     cases _Term (Rewriting.deannotateTerm @@ var "term")
-      (Just $ Ctx.failInContext (Error.otherError (Strings.cat2 (string "unexpected term: ") (ShowCore.term @@ var "term"))) (var "cx")) [
+      (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat2 (string "unexpected term: ") (ShowCore.term @@ var "term"))) (var "cx")) [
       _Term_application>>: "app" ~> lets [
         "fun">: Core.applicationFunction $ var "app",
         "arg">: Core.applicationArgument $ var "app"] $
@@ -486,7 +487,7 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
         "rhs" <<~ var "encode" @@ var "term'" $
         right $ HaskellUtils.hsapp @@ var "lhs" @@ var "rhs"]
 
-encodeType :: TBinding (HaskellNamespaces -> Type -> Context -> Graph -> Either (InContext OtherError) H.Type)
+encodeType :: TBinding (HaskellNamespaces -> Type -> Context -> Graph -> Either (InContext Error) H.Type)
 encodeType = haskellCoderDefinition "encodeType" $
   doc "Encode a Hydra type as a Haskell type" $
   "namespaces" ~>
@@ -496,7 +497,7 @@ encodeType = haskellCoderDefinition "encodeType" $
     right $ inject H._Type H._Type_variable $ HaskellUtils.elementReference @@ var "namespaces" @@ var "name",
   "unitTuple">: inject H._Type H._Type_tuple $ list ([] :: [TTerm H.Type])] $
   cases _Type (Rewriting.deannotateType @@ var "typ")
-    (Just $ Ctx.failInContext (Error.otherError (Strings.cat2 (string "unexpected type: ") (ShowCore.type_ @@ var "typ"))) (var "cx")) [
+    (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat2 (string "unexpected type: ") (ShowCore.type_ @@ var "typ"))) (var "cx")) [
     _Type_application>>: "app" ~> lets [
       "lhs">: Core.applicationTypeFunction $ var "app",
       "rhs">: Core.applicationTypeArgument $ var "app"] $
@@ -529,7 +530,7 @@ encodeType = haskellCoderDefinition "encodeType" $
         right $ inject H._Type H._Type_list $ var "hlt",
     _Type_literal>>: "lt" ~>
       cases _LiteralType (var "lt")
-        (Just $ Ctx.failInContext (Error.otherError (Strings.cat2 (string "unexpected literal type: ") (ShowCore.literalType @@ var "lt"))) (var "cx")) [
+        (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat2 (string "unexpected literal type: ") (ShowCore.literalType @@ var "lt"))) (var "cx")) [
         _LiteralType_binary>>: constant $
           right $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "B.ByteString",
         _LiteralType_boolean>>: constant $
@@ -544,7 +545,7 @@ encodeType = haskellCoderDefinition "encodeType" $
               right $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Double"],
         _LiteralType_integer>>: "it" ~>
           cases _IntegerType (var "it")
-            (Just $ Ctx.failInContext (Error.otherError (Strings.cat2 (string "unexpected integer type: ") (ShowCore.integerType @@ var "it"))) (var "cx")) [
+            (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat2 (string "unexpected integer type: ") (ShowCore.integerType @@ var "it"))) (var "cx")) [
             _IntegerType_bigint>>: constant $
               right $ inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "Integer",
             _IntegerType_int8>>: constant $
@@ -590,7 +591,7 @@ encodeType = haskellCoderDefinition "encodeType" $
       "name">: Core.wrappedTypeTypeName $ var "wrapped"] $
       var "ref" @@ var "name"]
 
-encodeTypeWithClassAssertions :: TBinding (HaskellNamespaces -> M.Map Name (S.Set TypeClass) -> Type -> Context -> Graph -> Either (InContext OtherError) H.Type)
+encodeTypeWithClassAssertions :: TBinding (HaskellNamespaces -> M.Map Name (S.Set TypeClass) -> Type -> Context -> Graph -> Either (InContext Error) H.Type)
 encodeTypeWithClassAssertions = haskellCoderDefinition "encodeTypeWithClassAssertions" $
   doc "Encode a Hydra type as a Haskell type with typeclass assertions" $
   "namespaces" ~> "explicitClasses" ~> "typ" ~> "cx" ~> "g" ~> lets [
@@ -655,14 +656,14 @@ getImplicitTypeClasses = haskellCoderDefinition "getImplicitTypeClasses" $
       pair (var "name") (Sets.fromList $ list [Graph.typeClassOrdering])] $
     Maps.fromList $ Lists.map (var "toPair") (Sets.toList $ findOrdVariables @@ var "typ")
 
-moduleToHaskellModule :: TBinding (Module -> [Definition] -> Context -> Graph -> Prelude.Either (InContext OtherError) H.Module)
+moduleToHaskellModule :: TBinding (Module -> [Definition] -> Context -> Graph -> Prelude.Either (InContext Error) H.Module)
 moduleToHaskellModule = haskellCoderDefinition "moduleToHaskellModule" $
   doc "Convert a Hydra module and definitions to a Haskell module AST" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>
     "namespaces" <<~ HaskellUtils.namespacesForModule @@ var "mod" @@ var "cx" @@ var "g" $
       constructModule @@ var "namespaces" @@ var "mod" @@ var "defs" @@ var "cx" @@ var "g"
 
-moduleToHaskell :: TBinding (Module -> [Definition] -> Context -> Graph -> Prelude.Either (InContext OtherError) (M.Map String String))
+moduleToHaskell :: TBinding (Module -> [Definition] -> Context -> Graph -> Prelude.Either (InContext Error) (M.Map String String))
 moduleToHaskell = haskellCoderDefinition "moduleToHaskell" $
   doc "Convert a Hydra module to Haskell source code as a filepath-to-content map" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>
@@ -697,7 +698,7 @@ nameDecls = haskellCoderDefinition "nameDecls" $
       (Lists.cons (var "toDecl" @@ Core.nameLift _Name @@ var "nameDecl") (Lists.map (var "toDecl" @@ Core.nameLift _Name) (var "fieldDecls")))
       (list ([] :: [TTerm H.DeclarationWithComments]))
 
-toDataDeclaration :: TBinding (HaskellNamespaces -> TermDefinition -> Context -> Graph -> Either (InContext OtherError) H.DeclarationWithComments)
+toDataDeclaration :: TBinding (HaskellNamespaces -> TermDefinition -> Context -> Graph -> Either (InContext Error) H.DeclarationWithComments)
 toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
   doc "Convert a Hydra term definition to a Haskell declaration with comments" $
   "namespaces" ~> "def" ~> "cx" ~> "g" ~> lets [
@@ -767,7 +768,7 @@ toDataDeclaration = haskellCoderDefinition "toDataDeclaration" $
 
 -- | Simplified version of toTypeDeclarations that works with Name and Type directly
 -- This is used with the new Definition-based API
-toTypeDeclarationsFrom :: TBinding (HaskellNamespaces -> Name -> Type -> Context -> Graph -> Either (InContext OtherError) [H.DeclarationWithComments])
+toTypeDeclarationsFrom :: TBinding (HaskellNamespaces -> Name -> Type -> Context -> Graph -> Either (InContext Error) [H.DeclarationWithComments])
 toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
   doc "Convert a Hydra type definition to Haskell declarations" $
   "namespaces" ~> "elementName" ~> "typ" ~> "cx" ~> "g" ~> lets [
@@ -886,7 +887,7 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
       "nameDecls'">: nameDecls @@ var "namespaces" @@ var "elementName" @@ var "typ"] $
       right $ Lists.concat $ list [list [var "mainDecl"], var "nameDecls'", var "tdecls"]
 
-typeDecl :: TBinding (HaskellNamespaces -> Name -> Type -> Context -> Graph -> Either (InContext OtherError) H.DeclarationWithComments)
+typeDecl :: TBinding (HaskellNamespaces -> Name -> Type -> Context -> Graph -> Either (InContext Error) H.DeclarationWithComments)
 typeDecl = haskellCoderDefinition "typeDecl" $
   doc "Generate a Haskell declaration for a type definition constant" $
   "namespaces" ~> "name" ~> "typ" ~> "cx" ~> "g" ~> lets [

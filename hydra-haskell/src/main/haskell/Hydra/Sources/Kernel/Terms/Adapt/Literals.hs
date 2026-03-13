@@ -60,16 +60,17 @@ import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 
 import qualified Hydra.Sources.Kernel.Terms.Reflect      as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Show.Error   as ShowError
 
-formatOtherError :: TTerm (InContext OtherError -> String)
-formatOtherError = "ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")
+formatError :: TTerm (InContext Error -> String)
+formatError = "ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic")
 
 ns :: Namespace
 ns = Namespace "hydra.adapt.literals"
 
 module_ :: Module
 module_ = Module ns elements
-    [AdaptUtils.ns, ExtractCore.ns, Reflect.ns, ShowCore.ns]
+    [AdaptUtils.ns, ExtractCore.ns, Reflect.ns, ShowCore.ns, ShowError.ns]
     kernelTypesNamespaces $
     Just "Adapter framework for literal types and terms"
   where
@@ -299,7 +300,7 @@ literalAdapter = define "literalAdapter" $
           (right (Core.literalBoolean true))
           (Logic.ifElse (Equality.equal (var "s") (string "false"))
             (right (Core.literalBoolean false))
-            (Ctx.failInContext (Error.otherError (string "expected boolean literal, found " ++ var "s")) (var "cx")))) $
+            (Ctx.failInContext (Error.errorOther $ Error.otherError (string "expected boolean literal, found " ++ var "s")) (var "cx")))) $
       list [Compute.adapter false (var "t") Core.literalTypeString (Compute.coder (var "encode") (var "decode"))]) $
     Logic.ifElse (var "hasIntegers")
       (var "withIntegers")
@@ -309,7 +310,7 @@ literalAdapter = define "literalAdapter" $
   "forFloat" <~ ("t" ~> "ft" ~>
       "withFloats" <~ (
         "adapt" <~ ("adapter" ~> "dir" ~> "cx" ~> "l" ~> cases _Literal (var "l")
-          (Just (Ctx.failInContext (Error.otherError (string "expected floating-point literal, found " ++ (ShowCore.literal @@ var "l"))) (var "cx"))) [
+          (Just (Ctx.failInContext (Error.errorOther $ Error.otherError (string "expected floating-point literal, found " ++ (ShowCore.literal @@ var "l"))) (var "cx"))) [
           _Literal_float>>: "fv" ~> Eithers.map (unaryFunction Core.literalFloat) (
             AdaptUtils.encodeDecode @@ var "dir" @@ (Compute.adapterCoder (var "adapter")) @@ var "cx" @@ var "fv")]) $
         "adapter" <<~ floatAdapter @@ var "cx" @@ var "ft" $
@@ -323,7 +324,7 @@ literalAdapter = define "literalAdapter" $
   "forInteger" <~ ("t" ~> "it" ~>
       "withIntegers" <~ (
         "adapt" <~ ("adapter" ~> "dir" ~> "cx" ~> "lit" ~> cases _Literal (var "lit")
-          (Just (Ctx.failInContext (Error.otherError (string "expected integer literal, found " ++ (ShowCore.literal @@ var "lit"))) (var "cx"))) [
+          (Just (Ctx.failInContext (Error.errorOther $ Error.otherError (string "expected integer literal, found " ++ (ShowCore.literal @@ var "lit"))) (var "cx"))) [
           _Literal_integer>>: "iv" ~> Eithers.map (unaryFunction Core.literalInteger) (
             AdaptUtils.encodeDecode @@ var "dir" @@ (Compute.adapterCoder (var "adapter")) @@ var "cx" @@ var "iv")]) $
         "adapter" <<~ integerAdapter @@ var "cx" @@ var "it" $

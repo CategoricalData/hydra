@@ -90,7 +90,7 @@ module_ = Module ns elements
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-bidirectional :: TBinding ((CoderDirection -> Context -> b -> Either (InContext OtherError) b) -> Coder b b)
+bidirectional :: TBinding ((CoderDirection -> Context -> b -> Either (InContext Error) b) -> Coder b b)
 bidirectional = define "bidirectional" $
   doc "Create a bidirectional coder from a direction-aware function" $
   "f" ~> Compute.coder (var "f" @@ Coders.coderDirectionEncode) (var "f" @@ Coders.coderDirectionDecode)
@@ -127,7 +127,7 @@ composeCoders = define "composeCoders" $
     ("cx" ~> "a" ~> "b1" <<~ Compute.coderEncode (var "c1") @@ var "cx" @@ var "a" $ Compute.coderEncode (var "c2") @@ var "cx" @@ var "b1")
     ("cx" ~> "c" ~> "b2" <<~ Compute.coderDecode (var "c2") @@ var "cx" @@ var "c" $ Compute.coderDecode (var "c1") @@ var "cx" @@ var "b2")
 
-encodeDecode :: TBinding (CoderDirection -> Coder x x -> Context -> x -> Either (InContext OtherError) x)
+encodeDecode :: TBinding (CoderDirection -> Coder x x -> Context -> x -> Either (InContext Error) x)
 encodeDecode = define "encodeDecode" $
   doc "Apply coder in the specified direction" $
   "dir" ~> "coder" ~> "cx" ~> "term" ~>
@@ -224,10 +224,10 @@ typeIsSupported = define "typeIsSupported" $
   where
     andAll = Lists.foldl (binaryFunction Logic.and) true
 
-unidirectionalCoder :: TBinding ((Context -> a -> Either (InContext OtherError) b) -> Coder a b)
+unidirectionalCoder :: TBinding ((Context -> a -> Either (InContext Error) b) -> Coder a b)
 unidirectionalCoder = define "unidirectionalCoder" $
   doc "Create a unidirectional coder" $
   "m" ~>
   Compute.coder
     (var "m")
-    ("cx" ~> "_" ~> Ctx.failInContext (Error.otherError (string "inbound mapping is unsupported")) (var "cx"))
+    ("cx" ~> "_" ~> Ctx.failInContext (Error.errorOther $ Error.otherError (string "inbound mapping is unsupported")) (var "cx"))

@@ -46,14 +46,14 @@ adapterWithTarget a target = adapter
   target
   (Hydra.Dsl.Meta.Compute.adapterCoder a)
 
-coder :: TTerm (Context -> v1 -> Either (InContext OtherError) v2) -> TTerm (Context -> v2 -> Either (InContext OtherError) v1) -> TTerm (Coder v1 v2)
+coder :: TTerm (Context -> v1 -> Either (InContext Error) v2) -> TTerm (Context -> v2 -> Either (InContext Error) v1) -> TTerm (Coder v1 v2)
 coder encode decode = record _Coder [
   _Coder_encode>>: encode,
   _Coder_decode>>: decode]
 
-coderEncode :: TTerm (Coder v1 v2) -> TTerm (Context -> v1 -> Either (InContext OtherError) v2)
+coderEncode :: TTerm (Coder v1 v2) -> TTerm (Context -> v1 -> Either (InContext Error) v2)
 coderEncode c = project _Coder _Coder_encode @@ c
 
-coderDecode :: TTerm (Coder v1 v2) -> TTerm (Context -> v2 -> Either (InContext OtherError) v1)
+coderDecode :: TTerm (Coder v1 v2) -> TTerm (Context -> v2 -> Either (InContext Error) v1)
 coderDecode c = project _Coder _Coder_decode @@ c
 

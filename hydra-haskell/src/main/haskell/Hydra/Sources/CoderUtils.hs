@@ -507,7 +507,7 @@ unionTypeToRecordType = define "unionTypeToRecordType" $
 
 -- | Extract comments/description from a Binding (element definition).
 -- This is a common pattern for coders that need to preserve documentation.
-commentsFromElement :: TBinding (Context -> Graph -> Binding -> Either (InContext OtherError) (Maybe String))
+commentsFromElement :: TBinding (Context -> Graph -> Binding -> Either (InContext Error) (Maybe String))
 commentsFromElement = define "commentsFromElement" $
   doc "Extract comments/description from a Binding" $
   "cx" ~> "g" ~> "b" ~>
@@ -515,7 +515,7 @@ commentsFromElement = define "commentsFromElement" $
 
 -- | Extract comments/description from a FieldType.
 -- This is a common pattern for coders that need to preserve field documentation.
-commentsFromFieldType :: TBinding (Context -> Graph -> FieldType -> Either (InContext OtherError) (Maybe String))
+commentsFromFieldType :: TBinding (Context -> Graph -> FieldType -> Either (InContext Error) (Maybe String))
 commentsFromFieldType = define "commentsFromFieldType" $
   doc "Extract comments/description from a FieldType" $
   "cx" ~> "g" ~> "ft" ~>
@@ -523,7 +523,7 @@ commentsFromFieldType = define "commentsFromFieldType" $
 
 -- | Check/reconstruct the type of a term, discarding the updated Context.
 -- Wraps Checking.typeOf and returns just the Type.
-typeOfTerm :: TBinding (Context -> Graph -> Term -> Either (InContext OtherError) Type)
+typeOfTerm :: TBinding (Context -> Graph -> Term -> Either (InContext Error) Type)
 typeOfTerm = define "typeOfTerm" $
   doc "Check the type of a term" $
   "cx" ~> "g" ~> "term" ~>
@@ -554,7 +554,7 @@ analyzeFunctionTerm :: TBinding (
   (Graph -> env -> env) ->
   env ->
   Term ->
-  Either (InContext OtherError) (FunctionStructure env))
+  Either (InContext Error) (FunctionStructure env))
 analyzeFunctionTerm = define "analyzeFunctionTerm" $
   doc "Analyze a function term, collecting lambdas, type lambdas, lets, and type applications" $
   "cx" ~> "getTC" ~> "setTC" ~> "env" ~> "term" ~>
@@ -567,7 +567,7 @@ analyzeFunctionTermWith :: TBinding (
   (Graph -> env -> env) ->
   env ->
   Term ->
-  Either (InContext OtherError) (FunctionStructure env))
+  Either (InContext Error) (FunctionStructure env))
 analyzeFunctionTermWith = define "analyzeFunctionTermWith" $
   doc "Analyze a function term with configurable binding metadata" $
   "cx" ~> "forBinding" ~> "getTC" ~> "setTC" ~> "env" ~> "term" ~>
@@ -592,7 +592,7 @@ analyzeFunctionTermWith_finish :: TBinding (
   Context ->
   (env -> Graph) ->
   env -> [Name] -> [Name] -> [Binding] -> [Type] -> [Type] -> Term ->
-  Either (InContext OtherError) (FunctionStructure env))
+  Either (InContext Error) (FunctionStructure env))
 analyzeFunctionTermWith_finish = define "analyzeFunctionTermWith_finish" $
   "cx" ~> "getTC" ~> "fEnv" ~> "tparams" ~> "args" ~> "bindings" ~> "doms" ~> "tapps" ~> "body" ~>
   "bodyWithTapps" <~ Lists.foldl
@@ -618,7 +618,7 @@ analyzeFunctionTermWith_gather :: TBinding (
   (env -> Graph) ->
   (Graph -> env -> env) ->
   Bool -> env -> [Name] -> [Name] -> [Binding] -> [Type] -> [Type] -> Term ->
-  Either (InContext OtherError) (FunctionStructure env))
+  Either (InContext Error) (FunctionStructure env))
 analyzeFunctionTermWith_gather = define "analyzeFunctionTermWith_gather" $
   "cx" ~> "forBinding" ~> "getTC" ~> "setTC" ~>
   "argMode" ~> "gEnv" ~> "tparams" ~> "args" ~> "bindings" ~> "doms" ~> "tapps" ~> "t" ~>

@@ -71,6 +71,7 @@ import qualified Hydra.Sources.Kernel.Terms.Lexical      as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Rewriting   as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas     as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Show.Core   as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Show.Error  as ShowError
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph  as ShowGraph
 
 
@@ -80,7 +81,7 @@ ns = Namespace "hydra.adapt.simple"
 module_ :: Module
 module_ = Module ns elements
     [Hoisting.ns, Inference.ns, Lexical.ns, Literals.ns, Names.ns, Reduction.ns, Reflect.ns, Rewriting.ns, Schemas.ns,
-      ShowCore.ns, ShowGraph.ns]
+      ShowCore.ns, ShowError.ns, ShowGraph.ns]
     kernelTypesNamespaces $
     Just "Simple, one-way adapters for types and terms"
   where
@@ -106,8 +107,8 @@ module_ = Module ns elements
       toBinding termAlternatives,
       toBinding typeAlternatives]
 
-formatOtherError :: TTerm (InContext OtherError -> String)
-formatOtherError = "ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")
+formatError :: TTerm (InContext Error -> String)
+formatError = "ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic")
 
 formatDecodingError :: TTerm (InContext DecodingError -> String)
 formatDecodingError = "ic" ~> Error.unDecodingError @@ Ctx.inContextObject (var "ic")
@@ -631,7 +632,7 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
   -- inferGraphTypes now takes ordered bindings and returns (Graph, [Binding])
   "bins2" <<~ Logic.ifElse (var "doInfer")
      (Eithers.map ("result" ~> Pairs.second (Pairs.first (var "result")))
-       (Eithers.bimap formatOtherError ("x" ~> var "x")
+       (Eithers.bimap formatError ("x" ~> var "x")
          (Inference.inferGraphTypes @@ var "cx" @@ var "bins1" @@ (var "rebuildGraph" @@ var "bins1"))))
      (var "checkBindingsTyped" @@ string "after case hoisting" @@ var "bins1") $
 
@@ -752,7 +753,7 @@ termAlternatives = define "termAlternatives" $
         Core.field (var "fname") $ Core.termMaybe $ Logic.ifElse (Equality.equal (var "ftname") (var "fname"))
           (just $ var "fterm")
           (nothing)) $
-      "rt" <<~ Eithers.bimap formatOtherError ("x" ~> var "x") (Schemas.requireUnionType @@ var "cx" @@ var "graph" @@ var "tname") $
+      "rt" <<~ Eithers.bimap formatError ("x" ~> var "x") (Schemas.requireUnionType @@ var "cx" @@ var "graph" @@ var "tname") $
       right $ list [
         Core.termRecord $ Core.record (var "tname") (Lists.map (var "forFieldType") (Core.rowTypeFields $ var "rt"))],
     _Term_unit>>: constant $ right $ list [

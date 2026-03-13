@@ -1032,7 +1032,7 @@ usingKernelTypesTests = define "usingKernelTypesTests" $
         T.applys (T.var "hydra.compute.Coder") (T.var <$> ["t0", "t0"]),
         T.var "hydra.context.Context",
         T.var "t0",
-        T.either_ (T.applys (T.var "hydra.context.InContext") [T.var "hydra.error.OtherError"]) (T.var "t0")])]
+        T.either_ (T.applys (T.var "hydra.context.InContext") [T.var "hydra.error.Error"]) (T.var "t0")])]
 
 unionEliminationsWithDefaultsTests :: TBinding TestGroup
 unionEliminationsWithDefaultsTests = define "unionEliminationsWithDefaultsTests" $

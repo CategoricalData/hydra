@@ -193,7 +193,7 @@ hsvar = haskellUtilsDefinition "hsvar" $
   "s" ~>
     inject H._Expression H._Expression_variable $ (rawName @@ var "s")
 
-namespacesForModule :: TBinding (Module -> Context -> Graph -> Either (InContext OtherError) HaskellNamespaces)
+namespacesForModule :: TBinding (Module -> Context -> Graph -> Either (InContext Error) HaskellNamespaces)
 namespacesForModule = haskellUtilsDefinition "namespacesForModule" $
   doc "Compute the Haskell module namespaces for a Hydra module" $
   "mod" ~> "cx" ~> "g" ~>

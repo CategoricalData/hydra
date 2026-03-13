@@ -70,6 +70,7 @@ import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Show.Error     as ShowError
 
 
 ns :: Namespace
@@ -78,7 +79,7 @@ ns = Namespace "hydra.adapt.terms"
 module_ :: Module
 module_ = Module ns elements
     [AdaptLiterals.ns, AdaptUtils.ns, CoderUtils.ns, Annotations.ns, ExtractCore.ns,
-      Reflect.ns, Rewriting.ns, Schemas.ns, ShowCore.ns]
+      Reflect.ns, Rewriting.ns, Schemas.ns, ShowCore.ns, ShowError.ns]
     kernelTypesNamespaces $
     Just "Adapter framework for types and terms"
   where
@@ -113,8 +114,8 @@ module_ = Module ns elements
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-formatOtherError :: TTerm (InContext OtherError -> String)
-formatOtherError = "ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")
+formatError :: TTerm (InContext Error -> String)
+formatError = "ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic")
 
 fieldAdapter :: TBinding (AdapterContext -> FieldType -> Either String (SymmetricAdapter FieldType Field))
 fieldAdapter = define "fieldAdapter" $
@@ -138,7 +139,7 @@ forTypeReference = define "forTypeReference" $
   "cx" ~> "name" ~>
   "encdec" <~ ("name" ~> "adapters0" ~> "dir" ~> "cx" ~> "term" ~>
     Maybes.maybe
-      (Ctx.failInContext (Error.otherError (Strings.cat2 (string "no adapter for reference type ") (unwrap _Name @@ var "name"))) (var "cx"))
+      (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat2 (string "no adapter for reference type ") (unwrap _Name @@ var "name"))) (var "cx"))
       ("ad" ~> AdaptUtils.encodeDecode @@ var "dir" @@ (Compute.adapterCoder (var "ad")) @@ var "cx" @@ var "term")
       (Maps.lookup (var "name") (var "adapters0"))) $
   "forType" <~ ("cx2" ~> "adapters0" ~> "t" ~>
@@ -208,11 +209,11 @@ functionToUnion = define "functionToUnion" $
   "readFromString" <~ ("cx" ~> "graph" ~> "term" ~>
     "s" <<~ ExtractCore.string @@ var "cx" @@ var "graph" @@ var "term" $
     Maybes.maybe
-      (Ctx.failInContext (Error.otherError (Strings.cat2 (string "failed to parse term: ") (var "s"))) (var "cx"))
+      (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat2 (string "failed to parse term: ") (var "s"))) (var "cx"))
       (unaryFunction right)
       (ShowCore.readTerm @@ var "s")) $
   "decode" <~ ("graph" ~> "ad" ~> "cx" ~> "term" ~>
-    "notFound" <~ ("fname" ~> Ctx.failInContext (Error.otherError (Strings.cat2 (string "unexpected field: ") (unwrap _Name @@ var "fname"))) (var "cx")) $
+    "notFound" <~ ("fname" ~> Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat2 (string "unexpected field: ") (unwrap _Name @@ var "fname"))) (var "cx")) $
     "forCases" <~ ("fterm" ~> var "readFromString" @@ var "cx" @@ var "graph" @@ var "fterm") $
     "forLambda" <~ ("fterm" ~> var "readFromString" @@ var "cx" @@ var "graph" @@ var "fterm") $
     "forWrapped" <~ ("fterm" ~>
@@ -678,7 +679,7 @@ unionToRecord = define "unionToRecord" $
   "fromRecordFields" <~ ("cx" ~> "term" ~> "term'" ~> "t'" ~> "fields" ~>
     "matches" <~ Maybes.mapMaybe (var "forField") (var "fields") $
     Logic.ifElse (Lists.null (var "matches"))
-      (Ctx.failInContext (Error.otherError (Strings.cat (list [
+      (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat (list [
         string "cannot convert term back to union: ",
         ShowCore.term @@ var "term",
         string " where type = ",

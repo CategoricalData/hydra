@@ -419,7 +419,7 @@ encodeLiteralType = define "encodeLiteralType" $
 
 -- | Transform a type module into an encoder module
 -- Returns Nothing if the module has no encodable type definitions
-encodeModule :: TBinding (Context -> Graph -> Module -> Prelude.Either (InContext OtherError) (Maybe Module))
+encodeModule :: TBinding (Context -> Graph -> Module -> Prelude.Either (InContext Error) (Maybe Module))
 encodeModule = define "encodeModule" $
   doc "Transform a type module into an encoder module" $
   "cx" ~> "graph" ~> "mod" ~>
@@ -428,7 +428,7 @@ encodeModule = define "encodeModule" $
       (right nothing)
       ("encodedBindings" <<~ Eithers.mapList ("b" ~>
         Eithers.bimap
-          ("ic" ~> Ctx.inContext (Error.otherError (Error.unDecodingError @@ Ctx.inContextObject (var "ic"))) (Ctx.inContextContext (var "ic")))
+          ("ic" ~> Ctx.inContext (Error.errorOther $ Error.otherError (Error.unDecodingError @@ Ctx.inContextObject (var "ic"))) (Ctx.inContextContext (var "ic")))
           ("x" ~> var "x")
           (encodeBinding @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
         -- The encoder module depends on encoder modules for both the type and term dependencies
@@ -577,7 +577,7 @@ encodeWrappedType = define "encodeWrappedType" $
 
 -- | Filter bindings to only encodable type definitions
 -- A binding is encodable if it is a native type AND is serializable (no function types in dependencies)
-filterTypeBindings :: TBinding (Context -> Graph -> [Binding] -> Prelude.Either (InContext OtherError) [Binding])
+filterTypeBindings :: TBinding (Context -> Graph -> [Binding] -> Prelude.Either (InContext Error) [Binding])
 filterTypeBindings = define "filterTypeBindings" $
   doc "Filter bindings to only encodable type definitions" $
   "cx" ~> "graph" ~> "bindings" ~>
@@ -587,7 +587,7 @@ filterTypeBindings = define "filterTypeBindings" $
         primitive _lists_filter @@ Annotations.isNativeType @@ var "bindings"
 
 -- | Check if a binding is encodable and return Just binding if so, Nothing otherwise
-isEncodableBinding :: TBinding (Context -> Graph -> Binding -> Prelude.Either (InContext OtherError) (Maybe Binding))
+isEncodableBinding :: TBinding (Context -> Graph -> Binding -> Prelude.Either (InContext Error) (Maybe Binding))
 isEncodableBinding = define "isEncodableBinding" $
   doc "Check if a binding is encodable (serializable type)" $
   "cx" ~> "graph" ~> "b" ~>

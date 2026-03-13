@@ -66,6 +66,7 @@ import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Show.Error as ShowError
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 
 
@@ -79,7 +80,7 @@ module_ :: Module
 module_ = Module ns elements
     [Arity.ns, Checking.ns, ExtractCore.ns, Hoisting.ns, Inference.ns, Lexical.ns,
       Rewriting.ns,
-      Schemas.ns, ShowCore.ns]
+      Schemas.ns, ShowCore.ns, ShowError.ns]
     kernelTypesNamespaces $
     Just "Functions for reducing terms and types, i.e. performing computations."
   where
@@ -97,14 +98,8 @@ module_ = Module ns elements
      toBinding termIsClosed,
      toBinding termIsValue]
 
-formatOtherError :: TTerm (InContext OtherError -> String)
-formatOtherError = "ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")
-
 formatError :: TTerm (InContext Error -> String)
-formatError = "_fic" ~> cases _Error (Ctx.inContextObject $ var "_fic") Nothing [
-  _Error_decoding>>: "_de" ~> Error.unDecodingError @@ var "_de",
-  _Error_other>>: "_oe" ~> Error.unOtherError @@ var "_oe",
-  _Error_unification>>: "_ue" ~> Error.unificationErrorMessage (var "_ue")]
+formatError = "_fic" ~> ShowError.error_ @@ Ctx.inContextObject (var "_fic")
 
 alphaConvert :: TBinding (Name -> Name -> Term -> Term)
 alphaConvert = define "alphaConvert" $
@@ -114,7 +109,7 @@ alphaConvert = define "alphaConvert" $
 
 -- Note: this is eager beta reduction, in that we always descend into subtypes,
 --       and always reduce the right-hand side of an application prior to substitution
-betaReduceType :: TBinding (Context -> Graph -> Type -> Prelude.Either (InContext OtherError) Type)
+betaReduceType :: TBinding (Context -> Graph -> Type -> Prelude.Either (InContext Error) Type)
 betaReduceType = define "betaReduceType" $
   doc "Eagerly beta-reduce a type by substituting type arguments into type lambdas" $
   "cx" ~> "graph" ~> "typ" ~>
@@ -568,7 +563,7 @@ etaExpansionArity = define "etaExpansionArity" $
           ("b" ~> Core.bindingType $ var "b"))]
 
 -- TODO: add lambda domains as part of the rewriting process, so inference does not need to be performed again.
-etaExpandTypedTerm :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) Term)
+etaExpandTypedTerm :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext Error) Term)
 etaExpandTypedTerm = define "etaExpandTypedTerm" $
   doc ("Recursively transform arbitrary terms like 'add 42' into terms like '\\x.add 42 x',"
     <> " eliminating partial application. Variable references are not expanded."
@@ -751,7 +746,7 @@ etaReduceTerm = define "etaReduceTerm" $
         (Just $ var "noChange") [
         _Function_lambda>>: "l" ~> var "reduceLambda" @@ var "l"]]
 
-reduceTerm :: TBinding (Context -> Graph -> Bool -> Term -> Prelude.Either (InContext OtherError) Term)
+reduceTerm :: TBinding (Context -> Graph -> Bool -> Term -> Prelude.Either (InContext Error) Term)
 reduceTerm = define "reduceTerm" $
   doc "A term evaluation function which is alternatively lazy or eager" $
   "cx" ~> "graph" ~> "eager" ~> "term" ~>
@@ -776,12 +771,9 @@ reduceTerm = define "reduceTerm" $
       (var "applyToArguments" @@
         (Core.termApplication $ Core.application (var "fun") (Lists.head $ var "args")) @@
         (Lists.tail $ var "args"))) $
-  "mapErrorToOtherError" <~ ("ic" ~>
+  "mapErrorToString" <~ ("ic" ~>
     Ctx.inContext
-      (Error.otherError (cases _Error (Ctx.inContextObject $ var "ic") Nothing [
-        _Error_decoding>>: "_de" ~> Error.unDecodingError @@ var "_de",
-        _Error_other>>: "_oe" ~> Error.unOtherError @@ var "_oe",
-        _Error_unification>>: "_ue" ~> Error.unificationErrorMessage (var "_ue")]))
+      (Error.errorOther $ Error.otherError (ShowError.error_ @@ Ctx.inContextObject (var "ic")))
       (Ctx.inContextContext $ var "ic")) $
   "applyElimination" <~ ("elm" ~> "reducedArg" ~>
     cases _Elimination (var "elm") Nothing [
@@ -792,7 +784,7 @@ reduceTerm = define "reduceTerm" $
           (var "fields") $
         Logic.ifElse
           (Lists.null $ var "matchingFields")
-          (Ctx.failInContext (Error.otherError (Strings.cat $ list [
+          (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [
             string "no such field: ",
             unwrap _Name @@ (Core.projectionField $ var "proj"),
             string " in ",
@@ -806,7 +798,7 @@ reduceTerm = define "reduceTerm" $
           (Core.caseStatementCases $ var "cs") $
         Logic.ifElse (Lists.null $ var "matchingFields")
           (Maybes.maybe
-            (Ctx.failInContext (Error.otherError (Strings.cat $ list [
+            (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [
               string "no such field ",
               unwrap _Name @@ (Core.fieldName $ var "field"),
               string " in ",
@@ -841,7 +833,7 @@ reduceTerm = define "reduceTerm" $
       "reducedArgs" <<~ Eithers.mapList (var "reduceArg" @@ var "eager") (var "argList") $
       -- Strip annotations from reduced args so primitives can extract values properly
       "strippedArgs" <~ Lists.map Rewriting.deannotateTerm (var "reducedArgs") $
-      "primResult" <<~ Eithers.bimap (var "mapErrorToOtherError") ("x" ~> var "x") (Graph.primitiveImplementation (var "prim") @@ var "cx" @@ var "graph" @@ var "strippedArgs") $
+      "primResult" <<~ Eithers.bimap (var "mapErrorToString") ("x" ~> var "x") (Graph.primitiveImplementation (var "prim") @@ var "cx" @@ var "graph" @@ var "strippedArgs") $
       "reducedResult" <<~ var "reduce" @@ var "eager" @@ var "primResult" $
       var "applyIfNullary" @@ var "eager" @@ var "reducedResult" @@ var "remainingArgs") $
     cases _Term (var "stripped")

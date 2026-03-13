@@ -85,14 +85,14 @@ graphToSchema = define "graphToSchema" $
   Eithers.bind (Eithers.mapList (var "toPair") (var "els")) (
     "pairs" ~> right (Maps.fromList (var "pairs")))
 
-instantiateTemplate :: TBinding (Context -> Bool -> M.Map Name Type -> Type -> Either (InContext OtherError) Term)
+instantiateTemplate :: TBinding (Context -> Bool -> M.Map Name Type -> Type -> Either (InContext Error) Term)
 instantiateTemplate = define "instantiateTemplate" $
   doc ("Given a graph schema and a nonrecursive type, instantiate it with default values."
     <> " If the minimal flag is set, the smallest possible term is produced; otherwise, exactly one subterm"
     <> " is produced for constructors which do not otherwise require one, e.g. in lists and optionals") $
   "cx" ~> "minimal" ~> "schema" ~> "t" ~>
   "inst" <~ instantiateTemplate @@ var "cx" @@ var "minimal" @@ var "schema" $
-  "noPoly" <~ Ctx.failInContext (Error.otherError (string "Polymorphic and function types are not currently supported")) (var "cx") $
+  "noPoly" <~ Ctx.failInContext (Error.errorOther $ Error.otherError (string "Polymorphic and function types are not currently supported")) (var "cx") $
   "forFloat" <~ ("ft" ~> cases _FloatType (var "ft")
     Nothing [
     _FloatType_bigfloat>>: constant (Core.floatValueBigfloat (bigfloat 0.0)),
@@ -154,7 +154,7 @@ instantiateTemplate = define "instantiateTemplate" $
         "e" ~> right (Core.termSet (Sets.fromList (list [var "e"]))))),
     _Type_variable>>: "tname" ~>
       Maybes.maybe
-        (Ctx.failInContext (Error.otherError (Strings.cat2 (string "Type variable ") (Strings.cat2 (ShowCore.term @@ (Core.termVariable (var "tname"))) (string " not found in schema")))) (var "cx"))
+        (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat2 (string "Type variable ") (Strings.cat2 (ShowCore.term @@ (Core.termVariable (var "tname"))) (string " not found in schema")))) (var "cx"))
         (var "inst")
         (Maps.lookup (var "tname") (var "schema")),
     _Type_wrap>>: "wt" ~>

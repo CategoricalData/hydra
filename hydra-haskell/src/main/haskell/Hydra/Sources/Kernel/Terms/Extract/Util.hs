@@ -56,6 +56,7 @@ import qualified Data.Maybe                  as Y
 import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Meta.Error        as Error
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
+import qualified Hydra.Sources.Kernel.Terms.Show.Error as ShowError
 
 
 ns :: Namespace
@@ -63,7 +64,7 @@ ns = Namespace "hydra.extract.util"
 
 module_ :: Module
 module_ = Module ns elements
-    [ExtractCore.ns]
+    [ExtractCore.ns, ShowError.ns]
     kernelTypesNamespaces $
     Just ("Extraction and validation for hydra.util types")
   where
@@ -73,10 +74,10 @@ module_ = Module ns elements
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-formatOtherError :: TTerm (InContext OtherError -> String)
-formatOtherError = "ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")
+formatError :: TTerm (InContext Error -> String)
+formatError = "ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic")
 
-comparison :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) Comparison)
+comparison :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext Error) Comparison)
 comparison = define "comparison" $
   doc "Extract a comparison from a term" $
   "cx" ~> "graph" ~> "term" ~>
@@ -87,4 +88,4 @@ comparison = define "comparison" $
             (right Graph.comparisonLessThan)
             (Logic.ifElse (Equality.equal (Core.unName $ var "fname") (string $ unName _Comparison_greaterThan))
               (right Graph.comparisonGreaterThan)
-              (Ctx.failInContext (Error.otherError (string "expected comparison but found " ++ Core.unName (var "fname"))) (var "cx"))))
+              (Ctx.failInContext (Error.errorOther $ Error.otherError (string "expected comparison but found " ++ Core.unName (var "fname"))) (var "cx"))))

@@ -69,6 +69,7 @@ import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical      as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Rewriting    as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Show.Error   as ShowError
 import qualified Hydra.Sources.Decode.Core            as DecodeCore
 import qualified Hydra.Sources.Encode.Core            as EncodeCore
 import Hydra.Encoding (encodeBindingName)
@@ -80,7 +81,7 @@ ns = Namespace "hydra.annotations"
 module_ :: Module
 module_ = Module ns elements
     [Constants.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, ExtractCore.ns, Lexical.ns,
-      Rewriting.ns, ShowCore.ns]
+      Rewriting.ns, ShowCore.ns, ShowError.ns]
     kernelTypesNamespaces $
     Just "Utilities for reading and writing type and term annotations"
   where
@@ -125,8 +126,8 @@ module_ = Module ns elements
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
 
-formatOtherError :: TTerm (InContext OtherError -> String)
-formatOtherError = "ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")
+formatError :: TTerm (InContext Error -> String)
+formatError = "ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic")
 
 aggregateAnnotations :: TBinding ((x -> Maybe y) -> (y -> x) -> (y -> M.Map Name Term) -> x -> M.Map Name Term)
 aggregateAnnotations = define "aggregateAnnotations" $
@@ -139,22 +140,22 @@ aggregateAnnotations = define "aggregateAnnotations" $
     (var "getValue" @@ var "t")) $
   Maps.fromList (Lists.concat (var "toPairs" @@ list ([] :: [TTerm [(Name, Term)]]) @@ var "t"))
 
-debugIf :: TBinding (Context -> String -> String -> Prelude.Either (InContext OtherError) ())
+debugIf :: TBinding (Context -> String -> String -> Prelude.Either (InContext Error) ())
 debugIf = define "debugIf" $
   doc "Debug if the debug ID matches (Either version)" $
   "cx" ~> "debugId" ~> "message" ~>
   "mid" <<~ getDebugId @@ var "cx" $
   Logic.ifElse (Equality.equal (var "mid") (just $ var "debugId"))
-    (Ctx.failInContext (Error.otherError (var "message")) (var "cx"))
+    (Ctx.failInContext (Error.errorOther $ Error.otherError (var "message")) (var "cx"))
     (right unit)
 
-failOnFlag :: TBinding (Context -> Name -> String -> Prelude.Either (InContext OtherError) ())
+failOnFlag :: TBinding (Context -> Name -> String -> Prelude.Either (InContext Error) ())
 failOnFlag = define "failOnFlag" $
   doc "Fail if the given flag is set (Either version)" $
   "cx" ~> "flag" ~> "msg" ~>
   "val" <<~ hasFlag @@ var "cx" @@ var "flag" $
   Logic.ifElse (var "val")
-    (Ctx.failInContext (Error.otherError (var "msg")) (var "cx"))
+    (Ctx.failInContext (Error.errorOther $ Error.otherError (var "msg")) (var "cx"))
     (right unit)
 
 getAttr :: TBinding (Name -> Context -> Maybe Term)
@@ -181,7 +182,7 @@ getCount = define "getCount" $
           _IntegerValue_int32>>: "i" ~> var "i"]]])
     (Maps.lookup (var "key") (Ctx.contextOther (var "cx")))
 
-getDebugId :: TBinding (Context -> Prelude.Either (InContext OtherError) (Maybe String))
+getDebugId :: TBinding (Context -> Prelude.Either (InContext Error) (Maybe String))
 getDebugId = define "getDebugId" $
   doc "Get the debug ID from context (Either version)" $
   "cx" ~>
@@ -190,7 +191,7 @@ getDebugId = define "getDebugId" $
     ("term" ~> Eithers.map (unaryFunction just) (ExtractCore.string @@ var "cx" @@ Graph.emptyGraph @@ var "term"))
     (getAttr @@ Constants.key_debugId @@ var "cx")
 
-getDescription :: TBinding (Context -> Graph -> M.Map Name Term -> Prelude.Either (InContext OtherError) (Maybe String))
+getDescription :: TBinding (Context -> Graph -> M.Map Name Term -> Prelude.Either (InContext Error) (Maybe String))
 getDescription = define "getDescription" $
   doc "Get description from annotations map (Either version)" $
   "cx" ~> "graph" ~> "anns" ~>
@@ -204,7 +205,7 @@ getTermAnnotation = define "getTermAnnotation" $
   doc "Get a term annotation" $
   "key" ~> "term" ~> Maps.lookup (var "key") (termAnnotationInternal @@ var "term")
 
-getTermDescription :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) (Maybe String))
+getTermDescription :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext Error) (Maybe String))
 getTermDescription = define "getTermDescription" $
   doc "Get term description (Either version)" $
   "cx" ~> "graph" ~> "term" ~>
@@ -228,7 +229,7 @@ getTypeAnnotation = define "getTypeAnnotation" $
   doc "Get a type annotation" $
   "key" ~> "typ" ~> Maps.lookup (var "key") (typeAnnotationInternal @@ var "typ")
 
-getTypeClasses :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext OtherError) (M.Map Name (S.Set TypeClass)))
+getTypeClasses :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext Error) (M.Map Name (S.Set TypeClass)))
 getTypeClasses = define "getTypeClasses" $
   doc "Get type classes from term" $
   "cx" ~> "graph" ~> "term" ~>
@@ -238,7 +239,7 @@ getTypeClasses = define "getTypeClasses" $
       pair (Core.nameLift _TypeClass_ordering) Graph.typeClassOrdering]) $
     "fn" <<~ ExtractCore.unitVariant @@ var "cx" @@ Core.nameLift _TypeClass @@ var "graph" @@ var "term" $
     Maybes.maybe
-      (Ctx.failInContext (Error.otherError (string "unexpected: expected type class, got " ++ (ShowCore.term @@ var "term"))) (var "cx"))
+      (Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected: expected type class, got " ++ (ShowCore.term @@ var "term"))) (var "cx"))
       (unaryFunction right)
       (Maps.lookup (var "fn") (var "byName"))) $
   Maybes.maybe
@@ -247,7 +248,7 @@ getTypeClasses = define "getTypeClasses" $
       ExtractCore.map
         @@ var "cx"
         @@ ("t" ~> Eithers.bimap
-          ("de" ~> Ctx.inContext (Error.otherError (Error.unDecodingError @@ var "de")) (var "cx"))
+          ("de" ~> Ctx.inContext (Error.errorOther $ Error.otherError (Error.unDecodingError @@ var "de")) (var "cx"))
           ("x" ~> var "x")
           (decoderFor _Name @@ var "graph" @@ var "t"))
         @@ (ExtractCore.setOf @@ var "cx" @@ var "decodeClass" @@ var "graph")
@@ -255,7 +256,7 @@ getTypeClasses = define "getTypeClasses" $
         @@ (var "term"))
     (getTermAnnotation @@ Constants.key_classes @@ var "term")
 
-getTypeDescription :: TBinding (Context -> Graph -> Type -> Prelude.Either (InContext OtherError) (Maybe String))
+getTypeDescription :: TBinding (Context -> Graph -> Type -> Prelude.Either (InContext Error) (Maybe String))
 getTypeDescription = define "getTypeDescription" $
   doc "Get type description (Either version)" $
   "cx" ~> "graph" ~> "typ" ~>
@@ -281,7 +282,7 @@ hasDescription = define "hasDescription" $
   doc "Check if annotations contain description" $
   "anns" ~> Maybes.isJust (Maps.lookup (Constants.key_description) (var "anns"))
 
-hasFlag :: TBinding (Context -> Name -> Prelude.Either (InContext OtherError) Bool)
+hasFlag :: TBinding (Context -> Name -> Prelude.Either (InContext Error) Bool)
 hasFlag = define "hasFlag" $
   doc "Check if flag is set (Either version)" $
   "cx" ~> "flag" ~>
@@ -444,7 +445,7 @@ typeElement = define "typeElement" $
     (Maps.fromList (list [pair (Constants.key_type) (var "schemaTerm")])))) $
   Core.binding (var "name") (var "dataTerm") (just (Core.typeScheme (list ([] :: [TTerm Name])) (Core.typeVariable $ Core.nameLift _Type) Phantoms.nothing))
 
-whenFlag :: TBinding (Context -> Name -> Prelude.Either (InContext OtherError) a -> Prelude.Either (InContext OtherError) a -> Prelude.Either (InContext OtherError) a)
+whenFlag :: TBinding (Context -> Name -> Prelude.Either (InContext Error) a -> Prelude.Either (InContext Error) a -> Prelude.Either (InContext Error) a)
 whenFlag = define "whenFlag" $
   doc "Execute different branches based on flag (Either version)" $
   "cx" ~> "flag" ~> "ethen" ~> "eelse" ~>
