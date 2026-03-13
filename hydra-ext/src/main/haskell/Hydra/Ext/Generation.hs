@@ -30,21 +30,12 @@ import Hydra.Ext.Python.Coder (moduleToPython)
 import Hydra.Ext.Rust.Coder (moduleToRust)
 import Hydra.Ext.Rust.Language (rustLanguage)
 import Hydra.Ext.Scala.Coder (moduleToScala)
-import Hydra.Ext.Staging.Yaml.Modules
-import Hydra.Ext.Org.Yaml.Language
+
 
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Writer as JsonWriter
 
-import qualified Hydra.Context as Context
-import qualified Hydra.Error as Error
-import qualified Hydra.Monads as Monads
-
-import qualified Control.Monad as CM
-import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
-import qualified System.Directory as SD
 import qualified System.FilePath as FP
 
 
@@ -134,61 +125,3 @@ writeRust = generateSources moduleToRust rustLanguage True False False False
 writeScala :: FP.FilePath -> [Module] -> [Module] -> IO Int
 writeScala = generateSources moduleToScala scalaLanguage True True False False
 
--- | YAML generation - only processes data modules (term definitions), skips schema modules
--- First argument: output directory
--- Second argument: universe modules (all modules for type/term resolution)
--- Third argument: modules to transform and generate
-writeYaml :: FP.FilePath -> [Module] -> [Module] -> IO ()
-writeYaml basePath universeModules modulesToGenerate =
-    case generateFiles modulesToGenerate of
-      Left ic -> fail $ "Failed to generate YAML files: " ++ formatError ic
-      Right files -> mapM_ writePair files
-  where
-    cx = Monads.emptyContext
-    constraints = languageConstraints yamlLanguage
-    hasNativeTypes mod = not $ L.null $ L.filter isNativeType $ moduleElements mod
-
-    -- Build the complete universe by computing transitive closure of dependencies
-    namespaceMap = M.fromList [(moduleNamespace m, m) | m <- universeModules ++ modulesToGenerate]
-
-    transitiveClosure :: [Module] -> S.Set Namespace
-    transitiveClosure startMods = go (S.fromList $ moduleNamespace <$> startMods) S.empty
-      where
-        go pending visited
-          | S.null pending = visited
-          | otherwise =
-              let newVisited = S.union visited pending
-                  nextDeps = S.fromList $ concat
-                    [moduleTermDependencies m ++ moduleTypeDependencies m
-                    | ns <- S.toList pending
-                    , Just m <- [M.lookup ns namespaceMap]]
-                  newPending = S.difference nextDeps newVisited
-              in go newPending newVisited
-
-    allNeededNamespaces = transitiveClosure modulesToGenerate
-    completeUniverse = [m | ns <- S.toList allNeededNamespaces, Just m <- [M.lookup ns namespaceMap]]
-                    ++ modulesToGenerate
-
-    generateFiles mods =
-        let dataModules = L.filter (not . hasNativeTypes) mods
-        in if L.null dataModules
-          then Right []
-          else do
-            let g0 = modulesToGraph completeUniverse completeUniverse
-                namespaces = fmap moduleNamespace dataModules
-                dataElements = L.filter (not . isNativeType) $ L.concatMap moduleElements completeUniverse
-            -- Infer types on the data graph before adaptation (eta expansion requires types)
-            ((g0', _inferredBindings), _cx1) <- inferGraphTypes cx dataElements g0
-            (g1, defLists) <- wrapStringError $ dataGraphToDefinitions constraints True True False False dataElements g0' namespaces cx
-            L.concat . fmap M.toList <$> CM.zipWithM (forEachModule g1) dataModules defLists
-
-    forEachModule g1 mod defs = moduleToYaml mod (fmap DefinitionTerm defs) cx g1
-
-    wrapStringError :: Either String a -> Either (Context.InContext Error.OtherError) a
-    wrapStringError (Left err) = Left $ Context.InContext (Error.OtherError err) cx
-    wrapStringError (Right a) = Right a
-
-    writePair (path, contents) = do
-      let fullPath = basePath FP.</> path
-      SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
-      writeFile fullPath contents

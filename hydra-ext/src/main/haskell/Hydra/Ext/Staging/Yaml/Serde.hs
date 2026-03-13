@@ -2,8 +2,6 @@
 
 module Hydra.Ext.Staging.Yaml.Serde where
 
-import Hydra.Kernel
-import Hydra.Ext.Org.Yaml.Coder
 import qualified Hydra.Ext.Org.Yaml.Model as YM
 
 import qualified Data.ByteString.Lazy as BS
@@ -319,30 +317,3 @@ trimTrailingSpaces :: String -> String
 trimTrailingSpaces = reverse . dropWhile (== ' ') . reverse
 
 
--- ========================================
--- Coders: Term <-> ByteString/String
--- ========================================
-
--- | YAML byte string coder
-yamlByteStringCoder :: Context -> Graph -> Type -> Either (InContext OtherError) (Coder (Term) BS.ByteString)
-yamlByteStringCoder cx g typ = do
-  coder <- yamlCoder typ cx g
-  Right $ Coder
-    (\cx' term -> do
-      node <- coderEncode coder cx' term
-      Right $ hydraYamlToBytes node)
-    (\cx' bs -> case bytesToHydraYaml bs of
-      Left err -> Left $ InContext (OtherError err) cx'
-      Right node -> coderDecode coder cx' node)
-
--- | YAML string coder
-yamlStringCoder :: Context -> Graph -> Type -> Either (InContext OtherError) (Coder (Term) String)
-yamlStringCoder cx g typ = do
-  coder <- yamlCoder typ cx g
-  Right $ Coder
-    (\cx' term -> do
-      node <- coderEncode coder cx' term
-      Right $ hydraYamlToString node)
-    (\cx' s -> case parseYamlString s of
-      Left err -> Left $ InContext (OtherError err) cx'
-      Right node -> coderDecode coder cx' node)
