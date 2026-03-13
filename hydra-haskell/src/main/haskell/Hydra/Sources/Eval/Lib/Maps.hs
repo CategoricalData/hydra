@@ -78,7 +78,7 @@ module_ = Module ns elements
 
 -- | Interpreter-friendly alter for Map terms.
 -- Applies funTerm to the current value (or Nothing) and updates accordingly.
-alter_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext OtherError) Term)
+alter_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
 alter_ = define "alter" $
   doc "Interpreter-friendly alter for Map terms." $
   "cx" ~> "g" ~>
@@ -118,7 +118,7 @@ alter_ = define "alter" $
 
 -- | Interpreter-friendly bimap for Map terms.
 -- Applies keyFun to each key and valFun to each value.
-bimap_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext OtherError) Term)
+bimap_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
 bimap_ = define "bimap" $
   doc "Interpreter-friendly bimap for Map terms." $
   "cx" ~> "g" ~>
@@ -140,7 +140,7 @@ bimap_ = define "bimap" $
 
 -- | Interpreter-friendly filter for Map terms.
 -- Keeps entries where valPred returns true for the value.
-filter_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
+filter_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 filter_ = define "filter" $
   doc "Interpreter-friendly filter for Map terms." $
   "cx" ~> "g" ~>
@@ -168,7 +168,7 @@ filter_ = define "filter" $
 
 -- | Interpreter-friendly filterWithKey for Map terms.
 -- Keeps entries where pred returns true for the key and value.
-filterWithKey_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
+filterWithKey_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 filterWithKey_ = define "filterWithKey" $
   doc "Interpreter-friendly filterWithKey for Map terms." $
   "cx" ~> "g" ~>
@@ -199,7 +199,7 @@ filterWithKey_ = define "filterWithKey" $
 
 -- | Interpreter-friendly map for Map terms.
 -- Applies valFun to each value.
-map_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
+map_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 map_ = define "map" $
   doc "Interpreter-friendly map for Map terms." $
   "cx" ~> "g" ~>
@@ -218,7 +218,7 @@ map_ = define "map" $
 
 -- | Interpreter-friendly mapKeys for Map terms.
 -- Applies keyFun to each key.
-mapKeys_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
+mapKeys_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 mapKeys_ = define "mapKeys" $
   doc "Interpreter-friendly mapKeys for Map terms." $
   "cx" ~> "g" ~>

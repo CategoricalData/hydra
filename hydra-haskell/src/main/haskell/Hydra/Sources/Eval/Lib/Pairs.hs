@@ -73,7 +73,7 @@ module_ = Module ns elements
 
 -- | Interpreter-friendly bimap for Pair terms.
 -- Applies firstFun to the first element and secondFun to the second element.
-bimap_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext OtherError) Term)
+bimap_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
 bimap_ = define "bimap" $
   doc "Interpreter-friendly bimap for Pair terms." $
   "cx" ~> "g" ~>

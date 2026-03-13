@@ -28,9 +28,9 @@ import Hydra.Rewriting (removeTermAnnotations)
 import Data.String(IsString(..))
 import Data.Either (Either)
 
--- | A helper to create an OtherError InContext from a string message and context
-otherErr :: Context.Context -> String -> Context.InContext Error.OtherError
-otherErr cx msg = Context.InContext (Error.OtherError msg) cx
+-- | A helper to create an Error InContext from a string message and context
+otherErr :: Context.Context -> String -> Context.InContext Error.Error
+otherErr cx msg = Context.InContext (Error.ErrorOther (Error.OtherError msg)) cx
 
 -- | A type variable specification with optional class constraints
 data TypeVar = TypeVar {
@@ -119,7 +119,7 @@ floatType :: TermCoder FloatType
 floatType = TermCoder (TypeVariable _FloatType) encode decode
   where
     encode _cx g term = case DecodeCore.floatType g term of
-      Left err -> Left $ Context.InContext (Error.OtherError (Error.unDecodingError err)) _cx
+      Left err -> Left $ Context.InContext (Error.ErrorDecoding err) _cx
       Right v -> Right v
     decode _cx = Right . EncodeCore.floatType
 
@@ -150,7 +150,7 @@ function dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType 
 -- | A TermCoder for function types, using a reducer to bridge term-level functions to native functions.
 --   The reducer is called to evaluate function application at the term level.
 --   Failures in reduction or encoding/decoding will result in a runtime error.
-functionWithReduce :: (Context.Context -> Graph -> Term -> Either (Context.InContext Error.OtherError) Term) -> TermCoder x -> TermCoder y -> TermCoder (x -> y)
+functionWithReduce :: (Context.Context -> Graph -> Term -> Either (Context.InContext Error.Error) Term) -> TermCoder x -> TermCoder y -> TermCoder (x -> y)
 functionWithReduce reduce dom cod = TermCoder (Types.function (termCoderType dom) (termCoderType cod)) encode decode
   where
     encode cx g funTerm = Right $ \x ->
@@ -169,7 +169,7 @@ integerType :: TermCoder IntegerType
 integerType = TermCoder (TypeVariable _IntegerType) encode decode
   where
     encode _cx g term = case DecodeCore.integerType g term of
-      Left err -> Left $ Context.InContext (Error.OtherError (Error.unDecodingError err)) _cx
+      Left err -> Left $ Context.InContext (Error.ErrorDecoding err) _cx
       Right v -> Right v
     decode _cx = Right . EncodeCore.integerType
 
@@ -219,7 +219,7 @@ literalType :: TermCoder LiteralType
 literalType = TermCoder (TypeVariable _LiteralType) encode decode
   where
     encode _cx g term = case DecodeCore.literalType g term of
-      Left err -> Left $ Context.InContext (Error.OtherError (Error.unDecodingError err)) _cx
+      Left err -> Left $ Context.InContext (Error.ErrorDecoding err) _cx
       Right v -> Right v
     decode _cx = Right . EncodeCore.literalType
 
@@ -255,9 +255,7 @@ prim0 :: Name -> x -> [TypeVar] -> TermCoder x -> Primitive
 prim0 name value vars output = Primitive name typ impl
   where
     typ = buildTypeScheme vars $ termCoderType output
-    impl cx _g _args = case termCoderDecode output cx value of
-      Left icoe -> Left $ Context.InContext (Error.ErrorOther (Context.inContextObject icoe)) (Context.inContextContext icoe)
-      Right v -> Right v
+    impl cx _g _args = termCoderDecode output cx value
 
 prim1 :: Name -> (x -> y) -> [TypeVar] -> TermCoder x -> TermCoder y -> Primitive
 prim1 name compute vars input1 output = Primitive name typ impl
@@ -265,7 +263,7 @@ prim1 name compute vars input1 output = Primitive name typ impl
     typ = buildTypeScheme vars $ Types.functionMany [
       termCoderType input1,
       termCoderType output]
-    impl cx g args = wrapOther cx $ do
+    impl cx g args = do
       ExtractCore.nArgs cx name 1 args
       arg1 <- termCoderEncode input1 cx g (args !! 0)
       termCoderDecode output cx $ compute arg1
@@ -277,7 +275,7 @@ prim2 name compute vars input1 input2 output = Primitive name typ impl
       termCoderType input1,
       termCoderType input2,
       termCoderType output]
-    impl cx g args = wrapOther cx $ do
+    impl cx g args = do
       ExtractCore.nArgs cx name 2 args
       arg1 <- termCoderEncode input1 cx g (args !! 0)
       arg2 <- termCoderEncode input2 cx g (args !! 1)
@@ -291,17 +289,12 @@ prim3 name compute vars input1 input2 input3 output = Primitive name typ impl
       termCoderType input2,
       termCoderType input3,
       termCoderType output]
-    impl cx g args = wrapOther cx $ do
+    impl cx g args = do
       ExtractCore.nArgs cx name 3 args
       arg1 <- termCoderEncode input1 cx g (args !! 0)
       arg2 <- termCoderEncode input2 cx g (args !! 1)
       arg3 <- termCoderEncode input3 cx g (args !! 2)
       termCoderDecode output cx $ compute arg1 arg2 arg3
-
--- | Wrap an Either (InContext OtherError) into Either (InContext Error)
-wrapOther :: Context.Context -> Either (Context.InContext Error.OtherError) a -> Either (Context.InContext Error.Error) a
-wrapOther _cx (Right v) = Right v
-wrapOther _cx (Left (Context.InContext oe cx')) = Left $ Context.InContext (Error.ErrorOther oe) cx'
 
 set :: Ord x => TermCoder x -> TermCoder (S.Set x)
 set els = TermCoder (Types.set $ termCoderType els) encode decode
@@ -325,7 +318,7 @@ type_ :: TermCoder Type
 type_ = TermCoder (TypeVariable _Type) encode decode
   where
     encode _cx g t = case DecodeCore.type_ g t of
-      Left err -> Left $ Context.InContext (Error.OtherError (Error.unDecodingError err)) _cx
+      Left err -> Left $ Context.InContext (Error.ErrorDecoding err) _cx
       Right v -> Right v
     decode _cx = Right . EncodeCore.type_
 

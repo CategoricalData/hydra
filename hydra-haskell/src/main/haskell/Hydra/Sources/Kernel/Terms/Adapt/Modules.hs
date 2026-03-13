@@ -65,6 +65,7 @@ import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Show.Error as ShowError
 
 
 ns :: Namespace
@@ -73,7 +74,7 @@ ns = Namespace "hydra.adapt.modules"
 module_ :: Module
 module_ = Module ns elements
     [AdaptTerms.ns, AdaptUtils.ns, Annotations.ns, moduleNamespace DecodeCore.module_,
-      Lexical.ns, Rewriting.ns, Schemas.ns]
+      Lexical.ns, Rewriting.ns, Schemas.ns, ShowError.ns]
     kernelTypesNamespaces $
     Just "Entry point for Hydra's adapter (type/term rewriting) framework"
   where
@@ -85,8 +86,8 @@ module_ = Module ns elements
      toBinding languageAdapter,
      toBinding transformModule]
 
-formatOtherError :: TTerm (InContext OtherError -> String)
-formatOtherError = "ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")
+formatError :: TTerm (InContext Error -> String)
+formatError = "ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic")
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
@@ -109,7 +110,7 @@ adaptTypeToLanguage = define "adaptTypeToLanguage" $
   "lang" ~> "cx" ~> "g" ~> "typ" ~>
   Eithers.map (unaryFunction Compute.adapterTarget) (languageAdapter @@ var "lang" @@ var "cx" @@ var "g" @@ var "typ")
 
-constructCoder :: TBinding (Language -> (Context -> Term -> Either (InContext OtherError) c) -> Context -> Graph -> Type -> Either String (Coder Term c))
+constructCoder :: TBinding (Language -> (Context -> Term -> Either (InContext Error) c) -> Context -> Graph -> Type -> Either String (Coder Term c))
 constructCoder = define "constructCoder" $
   doc "Given a target language, a unidirectional last-mile encoding, and a source type, construct a unidirectional adapting coder for terms of that type" $
   "lang" ~> "encodeTerm" ~> "cx" ~> "g" ~> "typ" ~>
@@ -126,12 +127,12 @@ languageAdapter = define "languageAdapter" $
   "cx0" <~ Coders.adapterContext (var "g") (var "lang") Maps.empty $
   AdaptTerms.termAdapter @@ var "cx0" @@ var "typ"
 
-transformModule :: TBinding (Language -> (Context -> Term -> Either (InContext OtherError) e) -> (Module -> M.Map Type (Coder Term e) -> [(Binding, TypeApplicationTerm)] -> Either String d) -> Context -> Graph -> Module -> Either String d)
+transformModule :: TBinding (Language -> (Context -> Term -> Either (InContext Error) e) -> (Module -> M.Map Type (Coder Term e) -> [(Binding, TypeApplicationTerm)] -> Either String d) -> Context -> Graph -> Module -> Either String d)
 transformModule = define "transformModule" $
   doc "Given a target language, a unidirectional last mile encoding, and an intermediate helper function, transform a given module into a target representation" $
   "lang" ~> "encodeTerm" ~> "createModule" ~> "cx" ~> "g" ~> "mod" ~>
   "els" <~ Module.moduleElements (var "mod") $
-  "tterms" <<~ Eithers.mapList ("_el" ~> Eithers.bimap ("ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")) ("x" ~> var "x") (Schemas.elementAsTypeApplicationTerm @@ var "cx" @@ var "_el")) (var "els") $
+  "tterms" <<~ Eithers.mapList ("_el" ~> Eithers.bimap ("ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic")) ("x" ~> var "x") (Schemas.elementAsTypeApplicationTerm @@ var "cx" @@ var "_el")) (var "els") $
   "types" <~ Lists.nub (Lists.map (unaryFunction Core.typeApplicationTermType) (var "tterms")) $
   "cdrs" <<~ Eithers.mapList (constructCoder @@ var "lang" @@ var "encodeTerm" @@ var "cx" @@ var "g") (var "types") $
   "coders" <~ Maps.fromList (Lists.zip (var "types") (var "cdrs")) $
@@ -158,10 +159,10 @@ adaptedModuleDefinitions = define "adaptedModuleDefinitions" $
       (Maybes.maybe
         (left $ Strings.cat2 (string "no adapter for element ") (unwrap _Name @@ var "name"))
         (lambda "adapter" (
-          "adapted" <<~ Eithers.bimap ("ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")) ("x" ~> var "x") (Compute.coderEncode (Compute.adapterCoder $ var "adapter") @@ var "cx" @@ var "term") $
+          "adapted" <<~ Eithers.bimap ("ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic")) ("x" ~> var "x") (Compute.coderEncode (Compute.adapterCoder $ var "adapter") @@ var "cx" @@ var "term") $
           right $ Module.definitionTerm $ Module.termDefinition (var "name") (var "adapted") (Schemas.typeToTypeScheme @@ (Compute.adapterTarget $ var "adapter"))))
         (Maps.lookup (var "typ") (var "adapters")))) $
-  "tterms" <<~ Eithers.mapList ("_el" ~> Eithers.bimap ("ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")) ("x" ~> var "x") (Schemas.elementAsTypeApplicationTerm @@ var "cx" @@ var "_el")) (var "els") $
+  "tterms" <<~ Eithers.mapList ("_el" ~> Eithers.bimap ("ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic")) ("x" ~> var "x") (Schemas.elementAsTypeApplicationTerm @@ var "cx" @@ var "_el")) (var "els") $
   "types" <~ Sets.toList (Sets.fromList (Lists.map (Rewriting.deannotateType <.> unaryFunction Core.typeApplicationTermType) (var "tterms"))) $
   "adapters" <<~ var "adaptersFor" @@ var "types" $
   Eithers.mapList (var "classify" @@ var "adapters") (Lists.zip (var "els") (var "tterms"))

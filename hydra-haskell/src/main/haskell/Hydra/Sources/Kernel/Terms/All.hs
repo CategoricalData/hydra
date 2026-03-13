@@ -35,6 +35,7 @@ import qualified Hydra.Sources.Kernel.Terms.Schemas         as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization   as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Accessors  as ShowAccessors
 import qualified Hydra.Sources.Kernel.Terms.Show.Core       as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Show.Error      as ShowError
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph      as ShowGraph
 import qualified Hydra.Sources.Kernel.Terms.Show.Meta       as ShowMeta
 import qualified Hydra.Sources.Kernel.Terms.Show.Typing     as ShowTyping
@@ -127,6 +128,7 @@ kernelPrimaryTermsModules = [
   Serialization.module_,
   ShowAccessors.module_,
   ShowCore.module_,
+  ShowError.module_,
   ShowGraph.module_,
   ShowMeta.module_,
   ShowTyping.module_,

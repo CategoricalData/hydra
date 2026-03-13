@@ -80,7 +80,7 @@ module_ = Module ns elements
 -- | Interpreter-friendly bind for Either terms.
 -- Takes an Either term and a function term, applies the function to the Right
 -- value and returns the result (which should be an Either), or returns the Left unchanged.
-bind_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
+bind_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 bind_ = define "bind" $
   doc "Interpreter-friendly bind for Either terms." $
   "cx" ~> "g" ~>
@@ -98,7 +98,7 @@ bind_ = define "bind" $
 -- | Interpreter-friendly bimap for Either terms.
 -- Takes two function terms (for left and right) and an Either term, applies
 -- the appropriate function to the contained value and re-wraps the result.
-bimap_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext OtherError) Term)
+bimap_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
 bimap_ = define "bimap" $
   doc "Interpreter-friendly bimap for Either terms." $
   "cx" ~> "g" ~>
@@ -114,7 +114,7 @@ bimap_ = define "bimap" $
 -- | Interpreter-friendly case analysis for Either terms.
 -- Takes two function terms and an Either term, applies the appropriate function
 -- to the contained value.
-either_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext OtherError) Term)
+either_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
 either_ = define "either" $
   doc "Interpreter-friendly case analysis for Either terms." $
   "cx" ~> "g" ~>
@@ -130,7 +130,7 @@ either_ = define "either" $
 -- | Interpreter-friendly foldl for Either.
 -- foldl funTerm initTerm listTerm: folds funTerm over elements of listTerm,
 -- threading an accumulator starting from initTerm. Short-circuits on first Left.
-foldl_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext OtherError) Term)
+foldl_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
 foldl_ = define "foldl" $
   doc "Interpreter-friendly foldl for Either." $
   "cx" ~> "g" ~>
@@ -157,7 +157,7 @@ foldl_ = define "foldl" $
     (Core.termEither $ right $ var "initTerm")
     (var "elements")
 
-map_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
+map_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 map_ = define "map" $
   doc "Interpreter-friendly map for Either terms." $
   "cx" ~> "g" ~>
@@ -173,7 +173,7 @@ map_ = define "map" $
 -- | Interpreter-friendly mapList for Either (traverse).
 -- mapList funTerm listTerm: applies funTerm to each element, collecting results.
 -- Short-circuits on first Left error.
-mapList_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
+mapList_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 mapList_ = define "mapList" $
   doc "Interpreter-friendly mapList for Either (traverse)." $
   "cx" ~> "g" ~>
@@ -220,7 +220,7 @@ mapList_ = define "mapList" $
 -- | Interpreter-friendly mapSet for Either (traverse over Set).
 -- mapSet funTerm setTerm: applies funTerm to each element, collecting results as a set.
 -- Short-circuits on first Left error.
-mapSet_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
+mapSet_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 mapSet_ = define "mapSet" $
   doc "Interpreter-friendly mapSet for Either (traverse over Set)." $
   "cx" ~> "g" ~>
@@ -264,7 +264,7 @@ mapSet_ = define "mapSet" $
 
 -- | Interpreter-friendly mapMaybe for Either (traverse over Maybe).
 -- mapMaybe funTerm maybeTerm: if Just, applies funTerm to the value.
-mapMaybe_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
+mapMaybe_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 mapMaybe_ = define "mapMaybe" $
   doc "Interpreter-friendly mapMaybe for Either (traverse over Maybe)." $
   "cx" ~> "g" ~>

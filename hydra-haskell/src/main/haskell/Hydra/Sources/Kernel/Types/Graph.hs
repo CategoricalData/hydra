@@ -84,7 +84,7 @@ termCoder = define "TermCoder" $
       Core.type_,
     "encode">:
       doc "An encode function from terms to native values" $
-      Context.context ~> graph ~> Core.term ~> T.either_ (Context.inContext @@ Error.otherError) "a",
+      Context.context ~> graph ~> Core.term ~> T.either_ (Context.inContext @@ Error.error_) "a",
     "decode">:
       doc "A decode function from native values to terms" $
-      Context.context ~> "a" ~> T.either_ (Context.inContext @@ Error.otherError) Core.term]
+      Context.context ~> "a" ~> T.either_ (Context.inContext @@ Error.error_) Core.term]

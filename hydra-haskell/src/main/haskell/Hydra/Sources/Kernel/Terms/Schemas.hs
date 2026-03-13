@@ -117,6 +117,7 @@ import qualified Hydra.Sources.Kernel.Terms.Names        as Names
 import qualified Hydra.Sources.Kernel.Terms.Reflect      as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting    as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Show.Error   as ShowError
 import qualified Hydra.Sources.Kernel.Terms.Sorting      as Sorting
 import qualified Hydra.Sources.Kernel.Terms.Substitution as Substitution
 
@@ -129,13 +130,13 @@ ns = Namespace "hydra.schemas"
 define :: String -> TTerm a -> TBinding a
 define = definitionInNamespace ns
 
-formatOtherError :: TTerm (InContext OtherError -> String)
-formatOtherError = "ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")
+formatError :: TTerm (InContext Error -> String)
+formatError = "ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic")
 
 module_ :: Module
 module_ = Module ns elements
     [Annotations.ns, Constants.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, Lexical.ns,
-      Names.ns, Reflect.ns, Rewriting.ns, ShowCore.ns, Sorting.ns, Substitution.ns]
+      Names.ns, Reflect.ns, Rewriting.ns, ShowCore.ns, ShowError.ns, Sorting.ns, Substitution.ns]
     kernelTypesNamespaces $
     Just ("Various functions for dereferencing and decoding schema types.")
   where
@@ -220,7 +221,7 @@ definitionDependencyNamespaces = define "definitionDependencyNamespaces" $
   "allNames" <~ Sets.unions (Lists.map (var "defNames") (var "defs")) $
   Sets.fromList (Maybes.cat (Lists.map (Names.namespaceOf) (Sets.toList (var "allNames"))))
 
-dependencyNamespaces :: TBinding (Context -> Graph -> Bool -> Bool -> Bool -> Bool -> [Binding] -> Either (InContext OtherError) (S.Set Namespace))
+dependencyNamespaces :: TBinding (Context -> Graph -> Bool -> Bool -> Bool -> Bool -> [Binding] -> Either (InContext Error) (S.Set Namespace))
 dependencyNamespaces = define "dependencyNamespaces" $
   doc "Find dependency namespaces in all of a set of terms (Either version)" $
   "cx" ~> "graph" ~> "binds" ~> "withPrims" ~> "withNoms" ~> "withSchema" ~> "els" ~>
@@ -239,7 +240,7 @@ dependencyNamespaces = define "dependencyNamespaces" $
           var "dataNames", var "schemaNames",
           Rewriting.typeDependencyNames @@ true @@ var "typ"]))
         (Ctx.withContext (Ctx.pushTrace (string "dependency namespace (type)") (var "cx"))
-          (Eithers.bimap ("_e" ~> Error.otherError (Error.unDecodingError @@ var "_e")) ("_a" ~> var "_a")
+          (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (Error.unDecodingError @@ var "_e")) ("_a" ~> var "_a")
             (decoderFor _Type @@ var "graph" @@ var "term"))))
       -- Handle encoded terms: decode as Term and extract term dependency names
       (Logic.ifElse (isEncodedTerm @@ var "deannotatedTerm")
@@ -247,14 +248,14 @@ dependencyNamespaces = define "dependencyNamespaces" $
             var "dataNames", var "schemaNames",
             Rewriting.termDependencyNames @@ var "binds" @@ var "withPrims" @@ var "withNoms" @@ var "decodedTerm"]))
           (Ctx.withContext (Ctx.pushTrace (string "dependency namespace (term)") (var "cx"))
-            (Eithers.bimap ("_e" ~> Error.otherError (Error.unDecodingError @@ var "_e")) ("_a" ~> var "_a")
+            (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (Error.unDecodingError @@ var "_e")) ("_a" ~> var "_a")
               (decoderFor _Term @@ var "graph" @@ var "term"))))
         (right (Sets.unions (list [var "dataNames", var "schemaNames"]))))) $
   Eithers.map ("namesList" ~> Sets.fromList (Maybes.cat (Lists.map (Names.namespaceOf) (
       Sets.toList (Sets.delete (Constants.placeholderName) (Sets.unions (var "namesList")))))))
     (Eithers.mapList (var "depNames") (var "els"))
 
-dereferenceType :: TBinding (Context -> Graph -> Name -> Either (InContext OtherError) (Maybe Type))
+dereferenceType :: TBinding (Context -> Graph -> Name -> Either (InContext Error) (Maybe Type))
 dereferenceType = define "dereferenceType" $
   doc "Dereference a type name to get the actual type (Either version)" $
   "cx" ~> "graph" ~> "name" ~>
@@ -263,18 +264,18 @@ dereferenceType = define "dereferenceType" $
     (right nothing)
     ("el" ~> Eithers.map (unaryFunction just)
       (Ctx.withContext (var "cx")
-        (Eithers.bimap ("_e" ~> Error.otherError (Error.unDecodingError @@ var "_e")) ("_a" ~> var "_a")
+        (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (Error.unDecodingError @@ var "_e")) ("_a" ~> var "_a")
           (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el")))))
 
-elementAsTypeApplicationTerm :: TBinding (Context -> Binding -> Either (InContext OtherError) TypeApplicationTerm)
+elementAsTypeApplicationTerm :: TBinding (Context -> Binding -> Either (InContext Error) TypeApplicationTerm)
 elementAsTypeApplicationTerm = define "elementAsTypeApplicationTerm" $
   doc "Convert an element to a typed term" $
   "cx" ~> "el" ~>
-  Maybes.maybe (Ctx.failInContext (Error.otherError (string "missing element type")) (var "cx"))
+  Maybes.maybe (Ctx.failInContext (Error.errorOther $ Error.otherError (string "missing element type")) (var "cx"))
     ("ts" ~> right (Core.typeApplicationTerm (Core.bindingTerm (var "el")) (Core.typeSchemeType (var "ts"))))
     (Core.bindingType (var "el"))
 
-elementsWithDependencies :: TBinding (Context -> Graph -> [Binding] -> Either (InContext OtherError) [Binding])
+elementsWithDependencies :: TBinding (Context -> Graph -> [Binding] -> Either (InContext Error) [Binding])
 elementsWithDependencies = define "elementsWithDependencies" $
   doc "Get elements with their dependencies" $
   "cx" ~> "graph" ~> "original" ~>
@@ -374,14 +375,14 @@ fieldTypeMap = define "fieldTypeMap" $
   "toPair" <~ ("f" ~> pair (Core.fieldTypeName $ var "f") (Core.fieldTypeType $ var "f")) $
   Maps.fromList $ Lists.map (var "toPair") (var "fields")
 
-fieldTypes :: TBinding (Context -> Graph -> Type -> Either (InContext OtherError) (M.Map Name Type))
+fieldTypes :: TBinding (Context -> Graph -> Type -> Either (InContext Error) (M.Map Name Type))
 fieldTypes = define "fieldTypes" $
   doc "Get field types from a record or union type (Either version)" $
   "cx" ~> "graph" ~> "t" ~>
   "toMap" <~ ("fields" ~> Maps.fromList (Lists.map
     ("ft" ~> pair (Core.fieldTypeName (var "ft")) (Core.fieldTypeType (var "ft")))
     (var "fields"))) $
-  match _Type (Just (Ctx.failInContext (Error.otherError (
+  match _Type (Just (Ctx.failInContext (Error.errorOther $ Error.otherError (
     Strings.cat (list [string "expected record or union type but found ", ShowCore.type_ @@ var "t"]))) (var "cx"))) [
     _Type_forall>>: "ft" ~> fieldTypes @@ var "cx" @@ var "graph" @@ Core.forallTypeBody (var "ft"),
     _Type_record>>: "rt" ~> right (var "toMap" @@ Core.rowTypeFields (var "rt")),
@@ -390,12 +391,12 @@ fieldTypes = define "fieldTypes" $
       Eithers.bind (Lexical.requireElement @@ var "cx" @@ var "graph" @@ var "name") (
         "el" ~>
         Eithers.bind (Ctx.withContext (var "cx")
-          (Eithers.bimap ("_e" ~> Error.otherError (Error.unDecodingError @@ var "_e")) ("_a" ~> var "_a")
+          (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (Error.unDecodingError @@ var "_e")) ("_a" ~> var "_a")
             (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el")))) (
           "decodedType" ~> fieldTypes @@ var "cx" @@ var "graph" @@ var "decodedType"))]
   @@ (Rewriting.deannotateType @@ var "t")
 
-findFieldType :: TBinding (Context -> Name -> [FieldType] -> Either (InContext OtherError) Type)
+findFieldType :: TBinding (Context -> Name -> [FieldType] -> Either (InContext Error) Type)
 findFieldType = define "findFieldType" $
   doc "Find a field type by name in a list of field types" $
   "cx" ~> "fname" ~> "fields" ~>
@@ -403,10 +404,10 @@ findFieldType = define "findFieldType" $
     ("ft" ~> Equality.equal (Core.unName (Core.fieldTypeName (var "ft"))) (Core.unName (var "fname")))
     (var "fields") $
   Logic.ifElse (Lists.null (var "matchingFields"))
-    (Ctx.failInContext (Error.otherError (Strings.cat2 (string "No such field: ") (Core.unName (var "fname")))) (var "cx"))
+    (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat2 (string "No such field: ") (Core.unName (var "fname")))) (var "cx"))
     (Logic.ifElse (Equality.equal (Lists.length (var "matchingFields")) (int32 1))
       (right (Core.fieldTypeType (Lists.head (var "matchingFields"))))
-      (Ctx.failInContext (Error.otherError (Strings.cat2 (string "Multiple fields named ") (Core.unName (var "fname")))) (var "cx")))
+      (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat2 (string "Multiple fields named ") (Core.unName (var "fname")))) (var "cx")))
 
 fTypeIsPolymorphic :: TBinding (Type -> Bool)
 fTypeIsPolymorphic = define "fTypeIsPolymorphic" $
@@ -555,7 +556,7 @@ isEnumType = define "isEnumType" $
     _Type_union>>: "rt" ~> isEnumRowType @@ var "rt"]
   @@ (Rewriting.deannotateType @@ var "typ")
 
-isSerializable :: TBinding (Context -> Graph -> Binding -> Either (InContext OtherError) Bool)
+isSerializable :: TBinding (Context -> Graph -> Binding -> Either (InContext Error) Bool)
 isSerializable = define "isSerializable" $
   doc "Check if an element is serializable (no function types in dependencies) (Either version)" $
   "cx" ~> "graph" ~> "el" ~>
@@ -577,7 +578,7 @@ isSerializableType = define "isSerializableType" $
       ("m" ~> "t" ~> Lists.cons (var "t") (var "m")) @@ list ([] :: [TTerm Type]) @@ var "typ")) $
   Logic.not (Sets.member Variants.typeVariantFunction (var "allVariants"))
 
-isSerializableByName :: TBinding (Context -> Graph -> Name -> Either (InContext OtherError) Bool)
+isSerializableByName :: TBinding (Context -> Graph -> Name -> Either (InContext Error) Bool)
 isSerializableByName = define "isSerializableByName" $
   doc "Check if a type (by name) is serializable, resolving all type dependencies (Either version)" $
   "cx" ~> "graph" ~> "name" ~>
@@ -628,7 +629,7 @@ moduleContainsBinaryLiterals = define "moduleContainsBinaryLiterals" $
     false
     (Module.moduleElements (var "mod"))
 
-moduleDependencyNamespaces :: TBinding (Context -> Graph -> Bool -> Bool -> Bool -> Bool -> Module -> Either (InContext OtherError) (S.Set Namespace))
+moduleDependencyNamespaces :: TBinding (Context -> Graph -> Bool -> Bool -> Bool -> Bool -> Module -> Either (InContext Error) (S.Set Namespace))
 moduleDependencyNamespaces = define "moduleDependencyNamespaces" $
   doc "Find dependency namespaces in all elements of a module, excluding the module's own namespace (Either version)" $
   "cx" ~> "graph" ~> "binds" ~> "withPrims" ~> "withNoms" ~> "withSchema" ~> "mod" ~>
@@ -673,7 +674,7 @@ partitionDefinitions = define "partitionDefinitions" $
     (Maybes.cat $ Lists.map (var "getType") (var "defs"))
     (Maybes.cat $ Lists.map (var "getTerm") (var "defs"))
 
-requireRecordType :: TBinding (Context -> Graph -> Name -> Either (InContext OtherError) RowType)
+requireRecordType :: TBinding (Context -> Graph -> Name -> Either (InContext Error) RowType)
 requireRecordType = define "requireRecordType" $
   doc "Require a name to resolve to a record type" $
   "cx" ~> "graph" ~> "name" ~>
@@ -681,7 +682,7 @@ requireRecordType = define "requireRecordType" $
     _Type_record>>: "rt" ~> just (var "rt")]) $
   requireRowType @@ var "cx" @@ string "record type" @@ var "toRecord" @@ var "graph" @@ var "name"
 
-requireRowType :: TBinding (Context -> String -> (Type -> Maybe RowType) -> Graph -> Name -> Either (InContext OtherError) RowType)
+requireRowType :: TBinding (Context -> String -> (Type -> Maybe RowType) -> Graph -> Name -> Either (InContext Error) RowType)
 requireRowType = define "requireRowType" $
   doc "Require a name to resolve to a row type" $
   "cx" ~> "label" ~> "getter" ~> "graph" ~> "name" ~>
@@ -691,7 +692,7 @@ requireRowType = define "requireRowType" $
   Eithers.bind (requireType @@ var "cx" @@ var "graph" @@ var "name") (
     "t" ~>
     Maybes.maybe
-      (Ctx.failInContext (Error.otherError (Strings.cat (list [
+      (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat (list [
         Core.unName (var "name"),
         (string " does not resolve to a "),
         var "label",
@@ -700,13 +701,13 @@ requireRowType = define "requireRowType" $
       (unaryFunction right)
       (var "getter" @@ (var "rawType" @@ var "t")))
 
-requireSchemaType :: TBinding (Context -> M.Map Name TypeScheme -> Name -> Either (InContext OtherError) (TypeScheme, Context))
+requireSchemaType :: TBinding (Context -> M.Map Name TypeScheme -> Name -> Either (InContext Error) (TypeScheme, Context))
 requireSchemaType = define "requireSchemaType" $
   doc "Look up a schema type and instantiate it, threading Context" $
   "cx" ~> "types" ~> "tname" ~>
   Maybes.maybe
     (left $ Ctx.inContext
-      (Error.otherError $ Strings.cat $ list [
+      (Error.errorOther $ Error.otherError $ Strings.cat $ list [
         (string "No such schema type: "),
         Core.unName $ var "tname",
         (string ". Available types are: "),
@@ -715,20 +716,20 @@ requireSchemaType = define "requireSchemaType" $
     ("ts" ~> right $ instantiateTypeScheme @@ var "cx" @@ (Rewriting.deannotateTypeSchemeRecursive @@ var "ts"))
     (Maps.lookup (var "tname") (var "types"))
 
-requireType :: TBinding (Context -> Graph -> Name -> Either (InContext OtherError) Type)
+requireType :: TBinding (Context -> Graph -> Name -> Either (InContext Error) Type)
 requireType = define "requireType" $
   doc "Require a type by name" $
   "cx" ~> "graph" ~> "name" ~>
   -- Look up in schema types first, then fall back to bound types
   Maybes.maybe
     (Maybes.maybe
-      (Ctx.failInContext (Error.otherError (Strings.cat2 (string "no such type: ") (Core.unName (var "name")))) (var "cx"))
+      (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat2 (string "no such type: ") (Core.unName (var "name")))) (var "cx"))
       ("ts" ~> right (Rewriting.typeSchemeToFType @@ var "ts"))
       (Maps.lookup (var "name") (Graph.graphBoundTypes (var "graph"))))
     ("ts" ~> right (Rewriting.typeSchemeToFType @@ var "ts"))
     (Maps.lookup (var "name") (Graph.graphSchemaTypes (var "graph")))
 
-requireUnionField_ :: TBinding (Context -> Graph -> Name -> Name -> Either (InContext OtherError) Type)
+requireUnionField_ :: TBinding (Context -> Graph -> Name -> Name -> Either (InContext Error) Type)
 requireUnionField_ = define "requireUnionField" $
   doc "Require a field type from a union type" $
   "cx" ~> "graph" ~> "tname" ~> "fname" ~>
@@ -737,7 +738,7 @@ requireUnionField_ = define "requireUnionField" $
       ("ft" ~> Equality.equal (Core.fieldTypeName $ var "ft") (var "fname"))
       (Core.rowTypeFields $ var "rt")) $
     Logic.ifElse (Lists.null $ var "matches")
-      (Ctx.failInContext (Error.otherError $ Strings.cat $ list [
+      (Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat $ list [
         string "no field \"",
         Core.unName (var "fname"),
         string "\" in union type \"",
@@ -745,7 +746,7 @@ requireUnionField_ = define "requireUnionField" $
       (right $ Core.fieldTypeType $ Lists.head $ var "matches")) $
   Eithers.bind (requireUnionType @@ var "cx" @@ var "graph" @@ var "tname") (var "withRowType")
 
-requireUnionType :: TBinding (Context -> Graph -> Name -> Either (InContext OtherError) RowType)
+requireUnionType :: TBinding (Context -> Graph -> Name -> Either (InContext Error) RowType)
 requireUnionType = define "requireUnionType" $
   doc "Require a name to resolve to a union type" $
   "cx" ~> "graph" ~> "name" ~>
@@ -767,7 +768,7 @@ resolveType = define "resolveType" $
         (Maps.lookup (var "name") (Graph.graphSchemaTypes (var "graph")))]
   @@ (Rewriting.deannotateType @@ var "typ")
 
-schemaGraphToTypingEnvironment :: TBinding (Context -> Graph -> Either (InContext OtherError) (M.Map Name TypeScheme))
+schemaGraphToTypingEnvironment :: TBinding (Context -> Graph -> Either (InContext Error) (M.Map Name TypeScheme))
 schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
   doc "Convert a schema graph to a typing environment (Either version)" $
   "cx" ~> "g" ~>
@@ -778,11 +779,11 @@ schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
       @@ Core.forallTypeBody (var "ft")]) $
   "decodeType" <~ ("term" ~>
     Ctx.withContext (var "cx")
-      (Eithers.bimap ("_e" ~> Error.otherError (Error.unDecodingError @@ var "_e")) ("_a" ~> var "_a")
+      (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (Error.unDecodingError @@ var "_e")) ("_a" ~> var "_a")
         (decoderFor _Type @@ var "g" @@ var "term"))) $
   "decodeTypeScheme" <~ ("term" ~>
     Ctx.withContext (var "cx")
-      (Eithers.bimap ("_e" ~> Error.otherError (Error.unDecodingError @@ var "_e")) ("_a" ~> var "_a")
+      (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (Error.unDecodingError @@ var "_e")) ("_a" ~> var "_a")
         (decoderFor _TypeScheme @@ var "g" @@ var "term"))) $
   "toPair" <~ ("el" ~>
     "forTerm" <~ ("term" ~> cases _Term (var "term") (Just (right nothing)) [
@@ -832,7 +833,7 @@ topologicalSortTypeDefinitions = define "topologicalSortTypeDefinitions" $
   Lists.map ("names" ~> Maybes.cat (Lists.map ("n" ~> Maps.lookup (var "n") (var "nameToDef")) (var "names"))) (
     var "sorted")
 
-typeDependencies :: TBinding (Context -> Graph -> Bool -> (Type -> Type) -> Name -> Either (InContext OtherError) (M.Map Name Type))
+typeDependencies :: TBinding (Context -> Graph -> Bool -> (Type -> Type) -> Name -> Either (InContext Error) (M.Map Name Type))
 typeDependencies = define "typeDependencies" $
   doc "Get all type dependencies for a given type name (Either version)" $
   "cx" ~> "graph" ~> "withSchema" ~> "transform" ~> "name" ~>
@@ -840,7 +841,7 @@ typeDependencies = define "typeDependencies" $
     "cx1" <~ Ctx.pushTrace (Strings.cat2 (string "type dependencies of ") (Core.unName (var "name"))) (var "cx") $
     Eithers.bind (Lexical.requireElement @@ var "cx1" @@ var "graph" @@ var "name") (
       "el" ~> Ctx.withContext (var "cx1")
-        (Eithers.bimap ("_e" ~> Error.otherError (Error.unDecodingError @@ var "_e")) ("_a" ~> var "_a")
+        (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (Error.unDecodingError @@ var "_e")) ("_a" ~> var "_a")
           (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el"))))) $
   "toPair" <~ ("name" ~>
     Eithers.map ("typ" ~> pair (var "name") (var "transform" @@ var "typ"))

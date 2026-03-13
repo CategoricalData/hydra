@@ -86,7 +86,7 @@ module_ = Module ns elements
 
 -- | Interpreter-friendly applicative apply for List terms.
 -- Applies each function in funsTerm to each argument in argsTerm.
-apply_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
+apply_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 apply_ = define "apply" $
   doc "Interpreter-friendly applicative apply for List terms." $
   "cx" ~> "g" ~>
@@ -100,7 +100,7 @@ apply_ = define "apply" $
 
 -- | Interpreter-friendly monadic bind for List terms.
 -- Applies funTerm to each element and concatenates the results.
-bind_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
+bind_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 bind_ = define "bind" $
   doc "Interpreter-friendly monadic bind for List terms." $
   "cx" ~> "g" ~>
@@ -114,7 +114,7 @@ bind_ = define "bind" $
 
 -- | Interpreter-friendly dropWhile for List terms.
 -- Drops elements from the front while predTerm returns true.
-dropWhile_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
+dropWhile_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 dropWhile_ = define "dropWhile" $
   doc "Interpreter-friendly dropWhile for List terms." $
   "cx" ~> "g" ~>
@@ -130,7 +130,7 @@ dropWhile_ = define "dropWhile" $
 
 -- | Interpreter-friendly filter for List terms.
 -- Keeps elements where predTerm returns true.
-filter_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
+filter_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 filter_ = define "filter" $
   doc "Interpreter-friendly filter for List terms." $
   "cx" ~> "g" ~>
@@ -151,7 +151,7 @@ filter_ = define "filter" $
 
 -- | Interpreter-friendly find for List terms.
 -- Returns the first element where predTerm returns true, or Nothing if none found.
-find_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
+find_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 find_ = define "find" $
   doc "Interpreter-friendly find for List terms." $
   "cx" ~> "g" ~>
@@ -167,7 +167,7 @@ find_ = define "find" $
 
 -- | Interpreter-friendly left fold for List terms.
 -- Folds from the left: foldl f init [e1,e2,e3] = f (f (f init e1) e2) e3
-foldl_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext OtherError) Term)
+foldl_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
 foldl_ = define "foldl" $
   doc "Interpreter-friendly left fold for List terms." $
   "cx" ~> "g" ~>
@@ -200,7 +200,7 @@ foldr_ = define "foldr" $
 -- | Interpreter-friendly map for List terms.
 -- Applies funTerm to each element of listTerm.
 -- Note: builds result directly using foldl to avoid recursive primitive calls.
-map_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
+map_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 map_ = define "map" $
   doc "Interpreter-friendly map for List terms." $
   "cx" ~> "g" ~>
@@ -218,7 +218,7 @@ map_ = define "map" $
 -- | Interpreter-friendly partition for List terms.
 -- Partitions elements into (satisfying predicate, not satisfying predicate).
 -- Unlike span, partition checks ALL elements, not just the prefix.
-partition_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
+partition_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 partition_ = define "partition" $
   doc "Interpreter-friendly partition for List terms." $
   "cx" ~> "g" ~>
@@ -271,7 +271,7 @@ partition_ = define "partition" $
 -- | Interpreter-friendly sortOn for List terms.
 -- Sorts elements by comparing the results of applying projTerm to each.
 -- Uses insertion sort: for each element, use span to find insertion point.
-sortOn_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
+sortOn_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 sortOn_ = define "sortOn" $
   doc "Interpreter-friendly sortOn for List terms." $
   "cx" ~> "g" ~>
@@ -318,7 +318,7 @@ sortOn_ = define "sortOn" $
 -- | Interpreter-friendly span for List terms.
 -- Splits the list into (takeWhile pred list, dropWhile pred list).
 -- Uses foldl with state ((stillTaking, left), right) to track the split point.
-span_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext OtherError) Term)
+span_ :: TBinding (Context -> Graph -> Term -> Term -> Either (InContext Error) Term)
 span_ = define "span" $
   doc "Interpreter-friendly span for List terms." $
   "cx" ~> "g" ~>
@@ -396,7 +396,7 @@ span_ = define "span" $
 
 -- | Interpreter-friendly zipWith for List terms.
 -- Applies funTerm to corresponding pairs of elements.
-zipWith_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext OtherError) Term)
+zipWith_ :: TBinding (Context -> Graph -> Term -> Term -> Term -> Either (InContext Error) Term)
 zipWith_ = define "zipWith" $
   doc "Interpreter-friendly zipWith for List terms." $
   "cx" ~> "g" ~>

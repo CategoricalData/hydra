@@ -526,7 +526,7 @@ decodeLiteralType = define "decodeLiteralType" $
 
 -- | Transform a type module into a decoder module
 -- Returns Nothing if the module has no decodable type definitions
-decodeModule :: TBinding (Context -> Graph -> Module -> Prelude.Either (InContext OtherError) (Maybe Module))
+decodeModule :: TBinding (Context -> Graph -> Module -> Prelude.Either (InContext Error) (Maybe Module))
 decodeModule = define "decodeModule" $
   doc "Transform a type module into a decoder module" $
   "cx" ~> "graph" ~> "mod" ~>
@@ -535,7 +535,7 @@ decodeModule = define "decodeModule" $
       (right nothing)
       ("decodedBindings" <<~ Eithers.mapList ("b" ~>
         Eithers.bimap
-          ("ic" ~> Ctx.inContext (Error.otherError (Error.unDecodingError @@ Ctx.inContextObject (var "ic"))) (Ctx.inContextContext (var "ic")))
+          ("ic" ~> Ctx.inContext (Error.errorOther $ Error.otherError (Error.unDecodingError @@ Ctx.inContextObject (var "ic"))) (Ctx.inContextContext (var "ic")))
           ("x" ~> var "x")
           (decodeBinding @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
         -- Decoder modules need:
@@ -772,7 +772,7 @@ decodeWrappedType = define "decodeWrappedType" $
           @@@ (DC.project _WrappedTerm _WrappedTerm_body @@@ DC.var "wrappedTerm"))]
 
 -- | Filter bindings to only decodable type definitions
-filterTypeBindings :: TBinding (Context -> Graph -> [Binding] -> Prelude.Either (InContext OtherError) [Binding])
+filterTypeBindings :: TBinding (Context -> Graph -> [Binding] -> Prelude.Either (InContext Error) [Binding])
 filterTypeBindings = define "filterTypeBindings" $
   doc "Filter bindings to only decodable type definitions" $
   "cx" ~> "graph" ~> "bindings" ~>
@@ -781,7 +781,7 @@ filterTypeBindings = define "filterTypeBindings" $
       primitive _lists_filter @@ Annotations.isNativeType @@ var "bindings"
 
 -- | Check if a binding is decodable and return Just binding if so, Nothing otherwise
-isDecodableBinding :: TBinding (Context -> Graph -> Binding -> Prelude.Either (InContext OtherError) (Maybe Binding))
+isDecodableBinding :: TBinding (Context -> Graph -> Binding -> Prelude.Either (InContext Error) (Maybe Binding))
 isDecodableBinding = define "isDecodableBinding" $
   doc "Check if a binding is decodable (serializable type)" $
   "cx" ~> "graph" ~> "b" ~>

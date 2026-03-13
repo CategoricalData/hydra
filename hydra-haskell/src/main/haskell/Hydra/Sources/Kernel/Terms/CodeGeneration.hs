@@ -77,6 +77,7 @@ import qualified Hydra.Sources.Kernel.Terms.Names           as Names
 import qualified Hydra.Sources.Kernel.Terms.Rewriting       as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas         as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Show.Core       as ShowCore
+import qualified Hydra.Sources.Kernel.Terms.Show.Error      as ShowError
 
 -- Dependencies on secondary generated modules (decode/encode)
 import qualified Hydra.Sources.Decode.Core                  as DecodeCore
@@ -90,7 +91,7 @@ ns = Namespace "hydra.codeGeneration"
 module_ :: Module
 module_ = Module ns elements
     [AdaptSimple.ns, Annotations.ns, Inference.ns, JsonDecode.ns, Lexical.ns, Names.ns,
-     Rewriting.ns, Schemas.ns, ShowCore.ns,
+     Rewriting.ns, Schemas.ns, ShowCore.ns, ShowError.ns,
      Namespace "hydra.decoding", Namespace "hydra.encoding",
      Namespace "hydra.json.decode", Namespace "hydra.json.encode", Namespace "hydra.json.writer",
      moduleNamespace DecodeCore.module_, moduleNamespace DecodeModule.module_, moduleNamespace EncodeModule.module_]
@@ -234,11 +235,11 @@ modulesToGraph = define "modulesToGraph" $
 -- and modules to generate, produce a list of (filePath, content) pairs.
 -- This function contains no I/O and can be generated to other languages.
 generateSourceFiles
-  :: TBinding ((Module -> [Definition] -> Context -> Graph -> Prelude.Either (InContext OtherError) (M.Map String String))
+  :: TBinding ((Module -> [Definition] -> Context -> Graph -> Prelude.Either (InContext Error) (M.Map String String))
     -> Language
     -> Bool -> Bool -> Bool -> Bool
     -> Graph -> [Module] -> [Module]
-    -> Context -> Prelude.Either (InContext OtherError) [(String, String)])
+    -> Context -> Prelude.Either (InContext Error) [(String, String)])
 generateSourceFiles = define "generateSourceFiles" $
   doc ("Pure core of code generation: given a coder, language, flags, bootstrap graph, universe,"
     <> " and modules to generate, produce a list of (filePath, content) pairs.") $
@@ -280,7 +281,7 @@ generateSourceFiles = define "generateSourceFiles" $
         ("m" ~> Lists.map ("e" ~> Core.bindingName $ var "e")
           (Lists.filter ("e" ~> Annotations.isNativeType @@ var "e") (Module.moduleElements $ var "m")))
         (var "typeModulesToGenerate") $
-      "schemaResult" <<~ Eithers.bimap ("s" ~> Ctx.inContext (Error.otherError (var "s")) (var "cx")) ("r" ~> var "r")
+      "schemaResult" <<~ Eithers.bimap ("s" ~> Ctx.inContext (Error.errorOther $ Error.otherError (var "s")) (var "cx")) ("r" ~> var "r")
         (AdaptSimple.schemaGraphToDefinitions @@ var "constraints" @@ var "schemaGraph" @@ var "nameLists" @@ var "cx") $
       "defLists" <~ Pairs.second (var "schemaResult") $
       "schemaGraphWithTypes" <~ Graph.graphWithSchemaTypes (var "schemaGraph") (var "schemaTypes2") $
@@ -296,7 +297,7 @@ generateSourceFiles = define "generateSourceFiles" $
   "termFiles" <<~ Logic.ifElse (Lists.null $ var "termModulesToGenerate")
     (right (TTerm (Terms.list []) :: TTerm [(String, String)]))
     ("namespaces" <~ Lists.map ("m" ~> Module.moduleNamespace (var "m")) (var "termModulesToGenerate") $
-      "dataResult" <<~ Eithers.bimap ("s" ~> Ctx.inContext (Error.otherError (var "s")) (var "cx")) ("r" ~> var "r")
+      "dataResult" <<~ Eithers.bimap ("s" ~> Ctx.inContext (Error.errorOther $ Error.otherError (var "s")) (var "cx")) ("r" ~> var "r")
         (AdaptSimple.dataGraphToDefinitions
           @@ var "constraints"
           @@ var "doInfer" @@ var "doExpand" @@ var "doHoistCaseStatements" @@ var "doHoistPolymorphicLetBindings"
@@ -423,7 +424,7 @@ moduleToJson = define "moduleToJson" $
 -- | Perform type inference on a set of modules and reconstruct the target modules
 -- with inferred types. Type-only modules (containing only native type definitions)
 -- are passed through unchanged.
-inferModules :: TBinding (Context -> Graph -> [Module] -> [Module] -> Prelude.Either (InContext OtherError) [Module])
+inferModules :: TBinding (Context -> Graph -> [Module] -> [Module] -> Prelude.Either (InContext Error) [Module])
 inferModules = define "inferModules" $
   doc "Perform type inference on modules and reconstruct with inferred types" $
   "cx" ~> "bsGraph" ~> "universeMods" ~> "targetMods" ~>
@@ -455,8 +456,8 @@ inferModules = define "inferModules" $
 -- Takes a codec function, bootstrap graph, universe modules, and type modules.
 -- Returns the generated coder modules (Nothing results are filtered out).
 generateCoderModules
-  :: TBinding ((Context -> Graph -> Module -> Prelude.Either (InContext OtherError) (Maybe Module)) -> Graph -> [Module] -> [Module]
-    -> Context -> Prelude.Either (InContext OtherError) [Module])
+  :: TBinding ((Context -> Graph -> Module -> Prelude.Either (InContext Error) (Maybe Module)) -> Graph -> [Module] -> [Module]
+    -> Context -> Prelude.Either (InContext Error) [Module])
 generateCoderModules = define "generateCoderModules" $
   doc "Generate encoder or decoder modules for a list of type modules" $
   "codec" ~> "bsGraph" ~> "universeModules" ~> "typeModules" ~> "cx" ~>
@@ -490,7 +491,7 @@ inferAndGenerateLexicon = define "inferAndGenerateLexicon" $
   "g0" <~ modulesToGraph @@ var "bsGraph" @@ var "kernelModules" @@ var "kernelModules" $
   "dataElements" <~ Lists.filter ("e" ~> Logic.not $ Annotations.isNativeType @@ var "e")
     (Lists.concat $ Lists.map ("m" ~> Module.moduleElements (var "m")) (var "kernelModules")) $
-  "inferResultWithCx" <<~ Eithers.bimap ("ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")) ("x" ~> var "x") (Inference.inferGraphTypes @@ var "cx" @@ var "dataElements" @@ var "g0") $
+  "inferResultWithCx" <<~ Eithers.bimap ("ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic")) ("x" ~> var "x") (Inference.inferGraphTypes @@ var "cx" @@ var "dataElements" @@ var "g0") $
   "g1" <~ Pairs.first (Pairs.first $ var "inferResultWithCx") $
   Eithers.bimap Error.unDecodingError ("x" ~> var "x") (generateLexicon @@ var "g1")
 
