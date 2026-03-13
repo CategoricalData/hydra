@@ -66,11 +66,14 @@ public interface Grammars {
     hydra.util.Lazy<java.util.List<hydra.core.Binding>> elements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.util.Pair<String, hydra.core.Type>, hydra.core.Binding>) (pair -> {
         hydra.util.Lazy<String> lname = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pair));
-        hydra.util.Lazy<hydra.core.Type> typ = new hydra.util.Lazy<>(() -> hydra.grammars.Grammars.wrapType(hydra.lib.pairs.Second.apply(pair)));
+        hydra.core.Name elName = hydra.grammars.Grammars.toName(
+          ns,
+          lname.get());
+        hydra.util.Lazy<hydra.core.Type> typ = new hydra.util.Lazy<>(() -> hydra.grammars.Grammars.replacePlaceholders(
+          elName,
+          hydra.grammars.Grammars.wrapType(hydra.lib.pairs.Second.apply(pair))));
         return hydra.annotations.Annotations.typeElement(
-          hydra.grammars.Grammars.toName(
-            ns,
-            lname.get()),
+          elName,
           typ.get());
       }),
       elementPairs.get()));
@@ -334,6 +337,47 @@ public interface Grammars {
           hydra.formatting.Formatting.capitalize(hydra.grammars.Grammars.rawName((p).value)));
       }
     });
+  }
+  
+  static hydra.core.Type replacePlaceholders(hydra.core.Name elName, hydra.core.Type typ) {
+    return hydra.rewriting.Rewriting.rewriteType(
+      (java.util.function.Function<java.util.function.Function<hydra.core.Type, hydra.core.Type>, java.util.function.Function<hydra.core.Type, hydra.core.Type>>) (recurse -> (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (t -> (t).accept(new hydra.core.Type.PartialVisitor<>() {
+        @Override
+        public hydra.core.Type otherwise(hydra.core.Type instance) {
+          return t;
+        }
+        
+        @Override
+        public hydra.core.Type visit(hydra.core.Type.Record rt) {
+          return hydra.lib.logic.IfElse.lazy(
+            hydra.lib.equality.Equal.apply(
+              ((rt).value).typeName,
+              hydra.constants.Constants.placeholderName()),
+            () -> new hydra.core.Type.Record(new hydra.core.RowType(elName, ((rt).value).fields)),
+            () -> t);
+        }
+        
+        @Override
+        public hydra.core.Type visit(hydra.core.Type.Union ut) {
+          return hydra.lib.logic.IfElse.lazy(
+            hydra.lib.equality.Equal.apply(
+              ((ut).value).typeName,
+              hydra.constants.Constants.placeholderName()),
+            () -> new hydra.core.Type.Union(new hydra.core.RowType(elName, ((ut).value).fields)),
+            () -> t);
+        }
+        
+        @Override
+        public hydra.core.Type visit(hydra.core.Type.Wrap wt) {
+          return hydra.lib.logic.IfElse.lazy(
+            hydra.lib.equality.Equal.apply(
+              ((wt).value).typeName,
+              hydra.constants.Constants.placeholderName()),
+            () -> new hydra.core.Type.Wrap(new hydra.core.WrappedType(elName, ((wt).value).body)),
+            () -> t);
+        }
+      }))),
+      typ);
   }
   
   static java.util.List<hydra.grammar.Pattern> simplify(Boolean isRecord, java.util.List<hydra.grammar.Pattern> pats) {

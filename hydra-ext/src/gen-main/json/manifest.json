@@ -81,6 +81,8 @@
     "hydra.ext.org.graphviz.dot",
     "hydra.ext.org.geojson.model",
     "hydra.ext.graphql.language",
+    "hydra.ext.graphql.coder",
+    "hydra.ext.graphql.serde",
     "hydra.ext.org.graphql.syntax",
     "hydra.ext.graphviz.coder",
     "hydra.ext.graphviz.serde",
