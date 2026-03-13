@@ -20,6 +20,7 @@ import qualified Hydra.Dsl.Meta.Coders                     as Coders
 import qualified Hydra.Dsl.Meta.Compute                    as Compute
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
+import qualified Hydra.Dsl.Meta.Error                      as Error
 import qualified Hydra.Dsl.Meta.Grammar                    as Grammar
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Meta.Json                       as Json
@@ -113,39 +114,29 @@ ns = Namespace "hydra.ext.java.testCodec"
 
 module_ :: Module
 module_ = Module ns elements
-    [JavaCoderSource.ns, JavaSerdeSource.ns, SerializationSource.ns, Formatting.ns, Names.ns, Inference.ns, Constants.ns]
+    [JavaCoderSource.ns, JavaSerdeSource.ns, SerializationSource.ns, Formatting.ns, Names.ns, Inference.ns, Constants.ns, Rewriting.ns]
     (JavaHelpersSource.ns:JavaSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Java test code generation codec for JUnit-based generation tests"
   where
     elements = [
-      -- Term and type encoding
       toBinding termToJava,
       toBinding typeToJava,
-      -- Test codec construction
       toBinding javaTestCodec,
-      -- Formatting helpers
       toBinding formatJavaTestName,
       toBinding namespaceToJavaClassName,
-      -- Templates
       toBinding javaTestCaseTemplate,
       toBinding javaTestGroupTemplate,
       toBinding javaModuleTemplate,
       toBinding javaImportTemplate,
-      -- Imports
       toBinding findJavaImports,
-      -- Test hierarchy generation
       toBinding generateJavaTestGroupHierarchy,
       toBinding generateJavaTestCase,
-      -- Assertion helpers
       toBinding getAssertionType,
       toBinding generateAssertion,
-      -- Inference variable detection
       toBinding isInferenceVar,
-      -- Test file generation
       toBinding generateTestFileWithJavaCodec,
       toBinding buildJavaTestModule,
       toBinding generateJavaTestFile,
-      -- Type inference on test groups
       toBinding inferTestGroupTerms,
       toBinding inferTestCase,
       toBinding inferTerm]
@@ -156,7 +147,8 @@ termToJava :: TBinding (Term -> Graph -> Either String String)
 termToJava = define "termToJava" $
   doc "Convert a Hydra term to a Java expression string" $
   lambda "term" $ lambda "g" $
-    Eithers.map
+    Eithers.bimap
+      ("ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic"))
       (Serialization.printExpr <.> Serialization.parenthesize <.> JavaSerdeSource.writeExpression)
       (JavaCoderSource.encodeTerm
         @@ (record JavaHelpers._JavaEnvironment [
@@ -208,11 +200,22 @@ javaTestCodec = define "javaTestCodec" $
 
 
 -- | Format a test name for Java (camelCase method name)
+-- Special characters are mapped to descriptive words to preserve uniqueness
 formatJavaTestName :: TBinding (String -> String)
 formatJavaTestName = define "formatJavaTestName" $
-  doc "Format a test name for Java (camelCase method name with 'test' prefix)" $
-  lambda "name" $
-    Strings.cat2 (string "test") (Formatting.capitalize @@ var "name")
+  doc "Format a test name for Java (PascalCase method name with 'test' prefix)" $
+  lambda "name" $ lets [
+    "replaced">: replaceChar (string "-") (string " Neg")
+      (replaceChar (string ".") (string "Dot")
+        (replaceChar (string "+") (string " Plus")
+          (replaceChar (string "/") (string " Div")
+            (replaceChar (string "*") (string " Mul")
+              (replaceChar (string "#") (string " Num") (var "name")))))),
+    "sanitized">: Formatting.nonAlnumToUnderscores @@ var "replaced",
+    "pascal_">: Formatting.convertCase @@ Util.caseConventionLowerSnake @@ Util.caseConventionPascal @@ var "sanitized"] $
+    Strings.cat2 (string "test") (var "pascal_")
+  where
+    replaceChar old new s = Strings.intercalate new (Strings.splitOn old s)
 
 
 -- | Convert namespace to Java class name
@@ -281,13 +284,13 @@ getAssertionType :: TBinding (Term -> String)
 getAssertionType = define "getAssertionType" $
   doc "Determine the assertion type based on the output term structure (returns a string tag)" $
   lambda "term" $
-    cases _Term (Rewriting.deannotateTerm @@ var "term") (Just (constant $ string "assertEquals")) [
+    cases _Term (Rewriting.deannotateTerm @@ var "term") (Just (string "assertEquals")) [
       _Term_literal>>: lambda "lit" $
-        cases _Literal (var "lit") (Just (constant $ string "assertEquals")) [
-          _Literal_binary>>: constant $ string "assertArrayEquals",
+        cases _Literal (var "lit") (Just (string "assertEquals")) [
+          _Literal_binary>>: lambda "_b" $ string "assertArrayEquals",
           _Literal_float>>: lambda "fv" $
-            cases _FloatValue (var "fv") (Just (constant $ string "assertDoubleEquals")) [
-              _FloatValue_bigfloat>>: constant $ string "assertBigDecimalEquals"]]]
+            cases _FloatValue (var "fv") (Just (string "assertDoubleEquals")) [
+              _FloatValue_bigfloat>>: lambda "_bf" $ string "assertBigDecimalEquals"]]]
 
 
 -- | Generate the assertion code based on the assertion type
@@ -340,7 +343,7 @@ generateJavaTestGroupHierarchy = define "generateJavaTestGroupHierarchy" $
     "subgroups">: project _TestGroup _TestGroup_subgroups @@ var "testGroup"] $
     Eithers.bind
       (Eithers.map
-        (lambda "lines_" $ Strings.intercalate (string "\n\n") (var "lines_"))
+        (lambda "lines_" $ Strings.intercalate (string "\n\n") (Lists.concat (var "lines_")))
         (Eithers.mapList
           (lambda "tc" $ generateJavaTestCase @@ var "g" @@ var "codec" @@ var "groupPath" @@ var "tc")
           (var "cases_")))
@@ -384,18 +387,29 @@ generateJavaTestCase = define "generateJavaTestCase" $
           (Strings.intercalate (string "_") (Lists.concat2 (var "groupPath") (list [var "name_"]))),
         "formattedName">: project _TestCodec _TestCodec_formatTestName @@ var "codec" @@ var "fullName",
         "assertType">: getAssertionType @@ var "output_"] $
-        Eithers.bind
-          (project _TestCodec _TestCodec_encodeTerm @@ var "codec" @@ var "input_" @@ var "g")
-          (lambda "inputCode" $
-            Eithers.map
-              (lambda "outputCode" $ lets [
-                "assertionLines">: generateAssertion @@ var "assertType" @@ var "outputCode" @@ var "inputCode"] $
-                Lists.concat2
-                  (list [
-                    string "    @Test",
-                    Strings.cat (list [string "    public void ", var "formattedName", string "() {"])])
-                  (Lists.concat2 (var "assertionLines") (list [string "    }"])))
-              (project _TestCodec _TestCodec_encodeTerm @@ var "codec" @@ var "output_" @@ var "g"))]
+        lets [
+          "typeVars">: Lists.sort (Lists.filter (asTerm isInferenceVar)
+            (Sets.toList (Sets.union
+              (Rewriting.freeTypeVariablesInTerm @@ var "input_")
+              (Rewriting.freeTypeVariablesInTerm @@ var "output_")))),
+          "typeParamsStr">: Logic.ifElse (Lists.null (var "typeVars"))
+            (string "")
+            (Strings.cat (list [
+              string "<",
+              Strings.intercalate (string ", ") (Lists.map ("n_" ~> Formatting.capitalize @@ (unwrap _Name @@ var "n_")) (var "typeVars")),
+              string "> "]))] $
+          Eithers.bind
+            (project _TestCodec _TestCodec_encodeTerm @@ var "codec" @@ var "input_" @@ var "g")
+            (lambda "inputCode" $
+              Eithers.map
+                (lambda "outputCode" $ lets [
+                  "assertionLines">: generateAssertion @@ var "assertType" @@ var "outputCode" @@ var "inputCode"] $
+                  Lists.concat2
+                    (list [
+                      string "    @Test",
+                      Strings.cat (list [string "    public ", var "typeParamsStr", string "void ", var "formattedName", string "() {"])])
+                    (Lists.concat2 (var "assertionLines") (list [string "    }"])))
+                (project _TestCodec _TestCodec_encodeTerm @@ var "codec" @@ var "output_" @@ var "g"))]
 
 
 -- | Generate test file using Java codec
@@ -505,6 +519,7 @@ inferTerm :: TBinding (Graph -> Term -> Either String Term)
 inferTerm = define "inferTerm" $
   doc "Run type inference on a single term" $
   lambda "g" $ lambda "term" $
-    Eithers.map
-      (project _InferenceResult _InferenceResult_term)
+    Eithers.bimap
+      ("ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic"))
+      ("x" ~> Typing.inferenceResultTerm (var "x"))
       (Inference.inferInGraphContext @@ Ctx.emptyContext @@ var "g" @@ var "term")

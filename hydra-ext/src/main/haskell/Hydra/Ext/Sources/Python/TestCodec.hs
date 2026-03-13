@@ -20,6 +20,7 @@ import qualified Hydra.Dsl.Meta.Coders                     as Coders
 import qualified Hydra.Dsl.Meta.Compute                    as Compute
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
+import qualified Hydra.Dsl.Meta.Error                      as Error
 import qualified Hydra.Dsl.Meta.Grammar                    as Grammar
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Meta.Json                       as Json
@@ -101,6 +102,7 @@ import qualified Hydra.Ext.Sources.Python.Coder as PyCoderSource
 import qualified Hydra.Ext.Sources.Python.Serde as PySerde
 import qualified Hydra.Ext.Sources.Python.Names as PyNames
 import qualified Hydra.Ext.Sources.Python.Utils as PyUtils
+import qualified Hydra.Sources.Kernel.Terms.Lexical         as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as SerializationSource
 import Hydra.Testing (TestCodec(..))
 import Hydra.Coders (LanguageName(..))
@@ -115,7 +117,7 @@ ns = Namespace "hydra.ext.python.testCodec"
 
 module_ :: Module
 module_ = Module ns elements
-    [PyCoderSource.ns, PySerde.ns, PyNames.ns, PyUtils.ns, SerializationSource.ns, Formatting.ns, Names.ns, Inference.ns, Constants.ns]
+    [PyCoderSource.ns, PySerde.ns, PyNames.ns, PyUtils.ns, SerializationSource.ns, Formatting.ns, Names.ns, Inference.ns, Constants.ns, Rewriting.ns, Lexical.ns]
     (PyHelpersSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Python test code generation codec for pytest-based generation tests"
   where
@@ -192,7 +194,8 @@ termToPythonWithContext :: TBinding (Namespaces Py.DottedName -> Graph -> Bool -
 termToPythonWithContext = define "termToPythonWithContext" $
   doc "Convert a Hydra term to a Python expression string with a pre-built graph context" $
   lambda "namespaces_" $ lambda "graph0" $ lambda "skipCasts" $ lambda "term" $ lambda "_g" $
-    Eithers.map
+    Eithers.bimap
+      ("ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic"))
       (Serialization.printExpr <.> PySerde.encodeExpression)
       (PyCoderSource.encodeTermInline
         @@ Ctx.emptyContext
@@ -222,7 +225,8 @@ typeToPython :: TBinding (Namespaces Py.DottedName -> Type -> Graph -> Either St
 typeToPython = define "typeToPython" $
   doc "Convert a Hydra type to a Python type expression string" $
   lambda "namespaces_" $ lambda "typ" $ lambda "g" $
-    Eithers.map
+    Eithers.bimap
+      ("ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic"))
       (Serialization.printExpr <.> PySerde.encodeExpression)
       (PyCoderSource.encodeType
         @@ (record PyHelpers._PythonEnvironment [
@@ -276,11 +280,18 @@ pythonTestCodecWithContext = define "pythonTestCodecWithContext" $
 
 
 -- | Format a test name for Python (snake_case, valid identifier)
+-- Each character is individually lowercased; non-alphanumeric chars become underscores (preserving runs)
 formatPythonTestName :: TBinding (String -> String)
 formatPythonTestName = define "formatPythonTestName" $
   doc "Format a test name for Python (snake_case with test_ prefix)" $
   lambda "name" $
-    Strings.cat2 (string "test_") (Formatting.convertCaseCamelToLowerSnake @@ var "name")
+    Strings.cat2 (string "test_")
+      (Strings.fromList (Lists.map
+        (lambda "c" $
+          Logic.ifElse (Chars.isAlphaNum (var "c"))
+            (Chars.toLower (var "c"))
+            (int32 95))  -- underscore
+        (Strings.toList (var "name"))))
 
 
 -- | Convert namespace to Python module name
@@ -344,12 +355,23 @@ findPythonImports = define "findPythonImports" $
       (Maps.toList (var "filtered"))
 
 
--- | Build namespaces for Python module
+-- | Build namespaces for Python module from graph bindings
 namespacesForPythonModule :: TBinding (Module -> Graph -> Either String (Namespaces Py.DottedName))
 namespacesForPythonModule = define "namespacesForPythonModule" $
   doc "Build namespaces for a Python module, resolving all imports and primitives" $
-  lambda "mod" $ lambda "graph_" $
-    right (PyUtils.findNamespaces @@ Module.moduleNamespace (var "mod") @@ list ([] :: [TTerm Definition]))
+  lambda "mod" $ lambda "graph_" $ lets [
+    "bindings">: Lexical.graphToBindings @@ var "graph_",
+    "defs">: Maybes.mapMaybe
+      (lambda "b" $
+        Maybes.map
+          (lambda "ts" $
+            Module.definitionTerm (record _TermDefinition [
+              _TermDefinition_name>>: project _Binding _Binding_name @@ var "b",
+              _TermDefinition_term>>: project _Binding _Binding_term @@ var "b",
+              _TermDefinition_type>>: var "ts"]))
+          (project _Binding _Binding_type @@ var "b"))
+      (var "bindings")] $
+    right (PyUtils.findNamespaces @@ Module.moduleNamespace (var "mod") @@ var "defs")
 
 
 -- | Generate Python test group hierarchy
@@ -372,7 +394,7 @@ generatePythonTestGroupHierarchy = define "generatePythonTestGroupHierarchy" $
                 @@ (Lists.concat2 (var "groupPath") (list [var "groupName"]))
                 @@ var "subgroup"))
           (var "subgroups") $ lets [
-      "testCasesStr">: Strings.intercalate (string "\n\n") (var "testCaseLines"),
+      "testCasesStr">: Strings.intercalate (string "\n\n") (Lists.concat (var "testCaseLines")),
       "subgroupsStr">: Strings.intercalate (string "\n\n") (var "subgroupBlocks")] $
       right (Strings.cat (list [
           var "testCasesStr",
@@ -507,6 +529,7 @@ inferTerm :: TBinding (Graph -> Term -> Either String Term)
 inferTerm = define "inferTerm" $
   doc "Run type inference on a single term" $
   lambda "g" $ lambda "term" $
-    Eithers.map
-      (project _InferenceResult _InferenceResult_term)
+    Eithers.bimap
+      ("ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic"))
+      ("x" ~> Typing.inferenceResultTerm (var "x"))
       (Inference.inferInGraphContext @@ Ctx.emptyContext @@ var "g" @@ var "term")
