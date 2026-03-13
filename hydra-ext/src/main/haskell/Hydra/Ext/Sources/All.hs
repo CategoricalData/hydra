@@ -190,8 +190,8 @@ otherExtModules = [
   Dot.module_,
   GeoJson.module_,
   GraphqlLanguage.graphqlLanguageModule,
-  -- GraphqlCoder.module_,  -- TODO(#267): blocked by grammar-to-type Placeholder bug in Description type
-  -- GraphqlSerde.module_,  -- TODO(#267): blocked by GraphqlCoder dependency
+  GraphqlCoder.module_,
+  GraphqlSerde.module_,
   graphqlSyntaxModule,
   GraphvizCoder.module_,
   GraphvizSerde.module_,
