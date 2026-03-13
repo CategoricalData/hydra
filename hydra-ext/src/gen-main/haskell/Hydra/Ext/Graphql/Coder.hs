@@ -36,7 +36,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-moduleToGraphql :: (Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.OtherError) (M.Map String String))
+moduleToGraphql :: (Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (M.Map String String))
 moduleToGraphql mod defs cx g =  
   let partitioned = (Schemas.partitionDefinitions defs) 
       typeDefs = (Pairs.first partitioned)
@@ -46,13 +46,13 @@ moduleToGraphql mod defs cx g =
       filePath = (Names.namespaceToFilePath Util.CaseConventionCamel (Module.FileExtension "graphql") (Module.moduleNamespace mod))
   in (Eithers.bind (Eithers.mapList (\td -> encodeTypeDefinition cx g prefixes td) typeDefs) (\gtdefs -> Right (Maps.fromList (Lists.pure (filePath, (Serialization.printExpr (Serialization.parenthesize (Serde.exprDocument (Syntax.Document (Lists.map (\gtdef -> Syntax.DefinitionTypeSystem (Syntax.TypeSystemDefinitionOrExtensionDefinition (Syntax.TypeSystemDefinitionType gtdef))) gtdefs))))))))))
 
-encodeTypeDefinition :: (Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> Module.TypeDefinition -> Either (Context.InContext Error.OtherError) Syntax.TypeDefinition)
+encodeTypeDefinition :: (Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> Module.TypeDefinition -> Either (Context.InContext Error.Error) Syntax.TypeDefinition)
 encodeTypeDefinition cx g prefixes tdef = (encodeNamedType cx g prefixes (Module.typeDefinitionName tdef) (Module.typeDefinitionType tdef))
 
-descriptionFromType :: (Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Error.OtherError) (Maybe Syntax.Description))
+descriptionFromType :: (Context.Context -> Graph.Graph -> Core.Type -> Either (Context.InContext Error.Error) (Maybe Syntax.Description))
 descriptionFromType cx g typ = (Eithers.map (\mval -> Maybes.map (\s -> Syntax.Description (Syntax.StringValue s)) mval) (Annotations.getTypeDescription cx g typ))
 
-encodeEnumFieldType :: (Context.Context -> Graph.Graph -> Core.FieldType -> Either (Context.InContext Error.OtherError) Syntax.EnumValueDefinition)
+encodeEnumFieldType :: (Context.Context -> Graph.Graph -> Core.FieldType -> Either (Context.InContext Error.Error) Syntax.EnumValueDefinition)
 encodeEnumFieldType cx g ft = (Eithers.bind (descriptionFromType cx g (Core.fieldTypeType ft)) (\desc -> Right (Syntax.EnumValueDefinition {
   Syntax.enumValueDefinitionDescription = desc,
   Syntax.enumValueDefinitionEnumValue = (encodeEnumFieldName (Core.fieldTypeName ft)),
@@ -64,7 +64,7 @@ encodeEnumFieldName name = (Syntax.EnumValue (Syntax.Name (sanitize (Core.unName
 encodeFieldName :: (Core.Name -> Syntax.Name)
 encodeFieldName name = (Syntax.Name (sanitize (Core.unName name)))
 
-encodeFieldType :: (Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> Core.FieldType -> Either (Context.InContext Error.OtherError) Syntax.FieldDefinition)
+encodeFieldType :: (Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> Core.FieldType -> Either (Context.InContext Error.Error) Syntax.FieldDefinition)
 encodeFieldType cx g prefixes ft = (Eithers.bind (encodeType cx g prefixes (Core.fieldTypeType ft)) (\gtype -> Eithers.bind (descriptionFromType cx g (Core.fieldTypeType ft)) (\desc -> Right (Syntax.FieldDefinition {
   Syntax.fieldDefinitionDescription = desc,
   Syntax.fieldDefinitionName = (encodeFieldName (Core.fieldTypeName ft)),
@@ -72,25 +72,25 @@ encodeFieldType cx g prefixes ft = (Eithers.bind (encodeType cx g prefixes (Core
   Syntax.fieldDefinitionType = gtype,
   Syntax.fieldDefinitionDirectives = Nothing}))))
 
-encodeLiteralType :: (Context.Context -> Core.LiteralType -> Either (Context.InContext Error.OtherError) Syntax.NamedType)
+encodeLiteralType :: (Context.Context -> Core.LiteralType -> Either (Context.InContext Error.Error) Syntax.NamedType)
 encodeLiteralType cx lt = ((\x -> case x of
   Core.LiteralTypeBoolean -> (Right (Syntax.NamedType (Syntax.Name "Boolean")))
   Core.LiteralTypeFloat v0 -> ((\x -> case x of
     Core.FloatTypeFloat64 -> (Right (Syntax.NamedType (Syntax.Name "Float")))
     _ -> (Left (Context.InContext {
-      Context.inContextObject = (Error.OtherError (Strings.cat2 "Expected 64-bit float type, found: " (Core_.floatType v0))),
+      Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "Expected 64-bit float type, found: " (Core_.floatType v0)))),
       Context.inContextContext = cx}))) v0)
   Core.LiteralTypeInteger v0 -> ((\x -> case x of
     Core.IntegerTypeInt32 -> (Right (Syntax.NamedType (Syntax.Name "Int")))
     _ -> (Left (Context.InContext {
-      Context.inContextObject = (Error.OtherError (Strings.cat2 "Expected 32-bit signed integer type, found: " (Core_.integerType v0))),
+      Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "Expected 32-bit signed integer type, found: " (Core_.integerType v0)))),
       Context.inContextContext = cx}))) v0)
   Core.LiteralTypeString -> (Right (Syntax.NamedType (Syntax.Name "String")))
   _ -> (Left (Context.InContext {
-    Context.inContextObject = (Error.OtherError (Strings.cat2 "Expected GraphQL-compatible literal type, found: " (Core_.literalType lt))),
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "Expected GraphQL-compatible literal type, found: " (Core_.literalType lt)))),
     Context.inContextContext = cx}))) lt)
 
-encodeNamedType :: (Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> Core.Name -> Core.Type -> Either (Context.InContext Error.OtherError) Syntax.TypeDefinition)
+encodeNamedType :: (Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> Core.Name -> Core.Type -> Either (Context.InContext Error.Error) Syntax.TypeDefinition)
 encodeNamedType cx g prefixes name typ = ((\x -> case x of
   Core.TypeRecord v0 -> (Eithers.bind (Eithers.mapList (\f -> encodeFieldType cx g prefixes f) (Core.rowTypeFields v0)) (\gfields -> Eithers.bind (descriptionFromType cx g typ) (\desc -> Right (Syntax.TypeDefinitionObject (Syntax.ObjectTypeDefinition {
     Syntax.objectTypeDefinitionDescription = desc,
@@ -158,10 +158,10 @@ encodeNamedType cx g prefixes name typ = ((\x -> case x of
         Core.fieldTypeName = (Core.Name "value"),
         Core.fieldTypeType = (Core.wrappedTypeBody v0)}]})))
   _ -> (Left (Context.InContext {
-    Context.inContextObject = (Error.OtherError (Strings.cat2 "Expected record or union type, found: " (Core_.type_ typ))),
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "Expected record or union type, found: " (Core_.type_ typ)))),
     Context.inContextContext = cx}))) (Rewriting.deannotateType typ))
 
-encodeType :: (Context.Context -> t0 -> M.Map Module.Namespace String -> Core.Type -> Either (Context.InContext Error.OtherError) Syntax.Type)
+encodeType :: (Context.Context -> t0 -> M.Map Module.Namespace String -> Core.Type -> Either (Context.InContext Error.Error) Syntax.Type)
 encodeType cx g prefixes typ = ((\x -> case x of
   Core.TypeMaybe v0 -> ((\x -> case x of
     Core.TypeList v1 -> (Eithers.map (\gt -> Syntax.TypeList (Syntax.ListType gt)) (encodeType cx g prefixes v1))
@@ -173,7 +173,7 @@ encodeType cx g prefixes typ = ((\x -> case x of
     Core.TypeWrap v1 -> (Right (Syntax.TypeNamed (Syntax.NamedType (encodeTypeName prefixes (Core.wrappedTypeTypeName v1)))))
     Core.TypeVariable v1 -> (Right (Syntax.TypeNamed (Syntax.NamedType (encodeTypeName prefixes v1))))
     _ -> (Left (Context.InContext {
-      Context.inContextObject = (Error.OtherError (Strings.cat2 "Expected GraphQL-compatible type, found: " (Core_.type_ v0))),
+      Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "Expected GraphQL-compatible type, found: " (Core_.type_ v0)))),
       Context.inContextContext = cx}))) (Rewriting.deannotateType v0))
   Core.TypeList v0 -> (Eithers.map (\gt -> Syntax.TypeNonNull (Syntax.NonNullTypeList (Syntax.ListType gt))) (encodeType cx g prefixes v0))
   Core.TypeSet v0 -> (Eithers.map (\gt -> Syntax.TypeNonNull (Syntax.NonNullTypeList (Syntax.ListType gt))) (encodeType cx g prefixes v0))
@@ -184,7 +184,7 @@ encodeType cx g prefixes typ = ((\x -> case x of
   Core.TypeVariable v0 -> (Right (Syntax.TypeNonNull (Syntax.NonNullTypeNamed (Syntax.NamedType (encodeTypeName prefixes v0)))))
   Core.TypeWrap v0 -> (Right (Syntax.TypeNonNull (Syntax.NonNullTypeNamed (Syntax.NamedType (encodeTypeName prefixes (Core.wrappedTypeTypeName v0))))))
   _ -> (Left (Context.InContext {
-    Context.inContextObject = (Error.OtherError (Strings.cat2 "Expected GraphQL-compatible type, found: " (Core_.type_ typ))),
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "Expected GraphQL-compatible type, found: " (Core_.type_ typ)))),
     Context.inContextContext = cx}))) (Rewriting.deannotateType typ))
 
 encodeTypeName :: (M.Map Module.Namespace String -> Core.Name -> Syntax.Name)

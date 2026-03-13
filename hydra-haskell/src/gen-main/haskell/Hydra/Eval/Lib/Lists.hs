@@ -78,7 +78,7 @@ foldl cx g funTerm initTerm listTerm = (Eithers.bind (Core_.list cx g listTerm) 
   Core.applicationArgument = el})) initTerm elements)))
 
 -- | Interpreter-friendly right fold for List terms.
-foldr :: (Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+foldr :: (Context.Context -> Graph.Graph -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term)
 foldr cx g funTerm initTerm listTerm = (Eithers.bind (Core_.list cx g listTerm) (\elements -> Right (Lists.foldr (\el -> \acc -> Core.TermApplication (Core.Application {
   Core.applicationFunction = (Core.TermApplication (Core.Application {
     Core.applicationFunction = funTerm,

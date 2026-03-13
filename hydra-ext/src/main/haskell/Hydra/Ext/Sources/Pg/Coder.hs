@@ -211,13 +211,13 @@ constructEdgeCoder = define "constructEdgeCoder" $
                         -- Compute out/in vertex labels from spec aliases or fall back to parentLabel
                         Eithers.bind (Maybes.maybe (right $ var "parentLabel")
                           ("spec" ~> Maybes.maybe
-                            (left $ Ctx.inContext (Error.otherError $ string "no out-vertex label") (var "cx"))
+                            (left $ Ctx.inContext (Error.errorOther $ Error.otherError $ string "no out-vertex label") (var "cx"))
                             (lambda "a" $ right $ wrap PG._VertexLabel (var "a"))
                             (Pairs.second $ Pairs.second $ var "spec"))
                           (var "mOutSpec"))
                           ("outLabel" ~> Eithers.bind (Maybes.maybe (right $ var "parentLabel")
                             ("spec" ~> Maybes.maybe
-                              (left $ Ctx.inContext (Error.otherError $ string "no in-vertex label") (var "cx"))
+                              (left $ Ctx.inContext (Error.errorOther $ Error.otherError $ string "no in-vertex label") (var "cx"))
                               (lambda "a" $ right $ wrap PG._VertexLabel (var "a"))
                               (Pairs.second $ Pairs.second $ var "spec"))
                             (var "mInSpec"))

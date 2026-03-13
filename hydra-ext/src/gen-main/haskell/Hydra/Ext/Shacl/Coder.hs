@@ -34,13 +34,13 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Construct an error result with a context and message
-err :: (Context.Context -> String -> Either (Context.InContext Error.OtherError) t0)
+err :: (Context.Context -> String -> Either (Context.InContext Error.Error) t0)
 err cx msg = (Left (Context.InContext {
-  Context.inContextObject = (Error.OtherError msg),
+  Context.inContextObject = (Error.ErrorOther (Error.OtherError msg)),
   Context.inContextContext = cx}))
 
 -- | Construct an error for unexpected input, given expected and found descriptions
-unexpectedE :: (Context.Context -> String -> String -> Either (Context.InContext Error.OtherError) t0)
+unexpectedE :: (Context.Context -> String -> String -> Either (Context.InContext Error.Error) t0)
 unexpectedE cx expected found = (err cx (Strings.cat [
   "Expected ",
   expected,
@@ -48,11 +48,11 @@ unexpectedE cx expected found = (err cx (Strings.cat [
   found]))
 
 -- | Encode a module's type elements as a SHACL ShapesGraph
-shaclCoder :: (Module.Module -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.OtherError) (Model.ShapesGraph, Context.Context))
+shaclCoder :: (Module.Module -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (Model.ShapesGraph, Context.Context))
 shaclCoder mod cx g =  
   let typeEls = (Lists.filter Annotations.isNativeType (Module.moduleElements mod)) 
       toShape = (\el -> Eithers.bind (Eithers.bimap (\_de -> Context.InContext {
-              Context.inContextObject = (Error.OtherError (Error.unDecodingError _de)),
+              Context.inContextObject = (Error.ErrorOther (Error.OtherError (Error.unDecodingError _de))),
               Context.inContextContext = cx}) (\_t -> _t) (Core_.type_ g (Core.bindingTerm el))) (\_typ -> Eithers.map (\_cp -> Model.Definition {
               Model.definitionIri = (elementIri el),
               Model.definitionTarget = (Model.ShapeNode (Model.NodeShape {
@@ -80,7 +80,7 @@ elementIri :: (Core.Binding -> Syntax.Iri)
 elementIri el = (Utils.nameToIri (Core.bindingName el))
 
 -- | Encode a record field as RDF triples with a given subject
-encodeField :: (Core.Name -> Syntax.Resource -> Core.Field -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.OtherError) ([Syntax.Triple], Context.Context))
+encodeField :: (Core.Name -> Syntax.Resource -> Core.Field -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) ([Syntax.Triple], Context.Context))
 encodeField rname subject field cx g =  
   let pair1 = (Utils.nextBlankNode cx) 
       node = (Pairs.first pair1)
@@ -91,7 +91,7 @@ encodeField rname subject field cx g =
     in (Right (Lists.concat2 (Utils.triplesOf descs) (Utils.forObjects subject (Utils.propertyIri rname (Core.fieldName field)) (Utils.subjectsOf descs)), cx2))))
 
 -- | Encode a FieldType as a SHACL property shape Definition
-encodeFieldType :: (Core.Name -> Maybe Integer -> Core.FieldType -> Context.Context -> Either (Context.InContext Error.OtherError) (Model.Definition Model.PropertyShape))
+encodeFieldType :: (Core.Name -> Maybe Integer -> Core.FieldType -> Context.Context -> Either (Context.InContext Error.Error) (Model.Definition Model.PropertyShape))
 encodeFieldType rname order ft cx =  
   let fname = (Core.fieldTypeName ft) 
       ftype = (Core.fieldTypeType ft)
@@ -143,7 +143,7 @@ encodeLiteralType lt =
     Core.LiteralTypeString -> (xsd "string")) lt)
 
 -- | Encode a Hydra term as a list of RDF Descriptions
-encodeTerm :: (Syntax.Resource -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.OtherError) ([Syntax.Description], Context.Context))
+encodeTerm :: (Syntax.Resource -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) ([Syntax.Description], Context.Context))
 encodeTerm subject term cx g = ((\x -> case x of
   Core.TermAnnotated v0 -> (encodeTerm subject (Core.annotatedTermBody v0) cx g)
   Core.TermList v0 -> (encodeList subject v0 cx g)
@@ -186,7 +186,7 @@ encodeTerm subject term cx g = ((\x -> case x of
   _ -> (unexpectedE cx "RDF-compatible term" "unsupported term variant")) term)
 
 -- | Encode a list of terms as RDF list structure
-encodeList :: (Syntax.Resource -> [Core.Term] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.OtherError) ([Syntax.Description], Context.Context))
+encodeList :: (Syntax.Resource -> [Core.Term] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) ([Syntax.Description], Context.Context))
 encodeList subj terms cx0 g = (Logic.ifElse (Lists.null terms) (Right ([
   Syntax.Description {
     Syntax.descriptionSubject = (Syntax.NodeIri (Syntax.Iri "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil")),
@@ -215,7 +215,7 @@ foldAccumResult :: ((t0 -> t1 -> Either t2 (t3, t0)) -> t0 -> [t1] -> Either t2 
 foldAccumResult f cx xs = (Logic.ifElse (Lists.null xs) (Right ([], cx)) (Eithers.bind (f cx (Lists.head xs)) (\_r -> Eithers.map (\_rest -> (Lists.cons (Pairs.first _r) (Pairs.first _rest), (Pairs.second _rest))) (foldAccumResult f (Pairs.second _r) (Lists.tail xs)))))
 
 -- | Encode a Hydra type as SHACL CommonProperties
-encodeType :: (Core.Type -> Context.Context -> Either (Context.InContext Error.OtherError) Model.CommonProperties)
+encodeType :: (Core.Type -> Context.Context -> Either (Context.InContext Error.Error) Model.CommonProperties)
 encodeType typ cx =  
   let any = (Right (common []))
   in ((\x -> case x of

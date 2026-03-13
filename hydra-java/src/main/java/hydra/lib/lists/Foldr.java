@@ -17,7 +17,7 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.variable;
 import hydra.context.Context;
 import hydra.context.InContext;
-import hydra.error.OtherError;
+import hydra.error.Error_;
 import hydra.util.Either;
 
 
@@ -39,15 +39,15 @@ public class Foldr extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(2)), xs -> {
                 Term acc = args.get(1);
                 // Fold from the right by iterating in reverse
                 for (int i = xs.size() - 1; i >= 0; i--) {
-                    Either<InContext<OtherError>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                        new hydra.context.Context(java.util.List.of(), java.util.List.of(), java.util.Map.of()), graph, true, Terms.apply(args.get(0), xs.get(i), acc));
+                    Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
+                        hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(args.get(0), xs.get(i), acc));
                     if (r.isLeft()) return r;
-                    acc = ((Either.Right<InContext<OtherError>, Term>) r).value;
+                    acc = ((Either.Right<InContext<Error_>, Term>) r).value;
                 }
                 return Either.right(acc);
             });
