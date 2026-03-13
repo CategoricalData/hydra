@@ -27,7 +27,7 @@ T0 = TypeVar("T0")
 T1 = TypeVar("T1")
 T2 = TypeVar("T2")
 
-def bidirectional(f: Callable[[hydra.coders.CoderDirection, hydra.context.Context, T0], Either[hydra.context.InContext[hydra.error.OtherError], T0]]) -> hydra.compute.Coder[T0, T0]:
+def bidirectional(f: Callable[[hydra.coders.CoderDirection, hydra.context.Context, T0], Either[hydra.context.InContext[hydra.error.Error], T0]]) -> hydra.compute.Coder[T0, T0]:
     r"""Create a bidirectional coder from a direction-aware function."""
     
     return hydra.compute.Coder((lambda v1, v2: f(hydra.coders.CoderDirection.ENCODE, v1, v2)), (lambda v1, v2: f(hydra.coders.CoderDirection.DECODE, v1, v2)))
@@ -48,7 +48,7 @@ def compose_coders(c1: hydra.compute.Coder[T0, T1], c2: hydra.compute.Coder[T1, 
     
     return hydra.compute.Coder((lambda cx, a: hydra.lib.eithers.bind(c1.encode(cx, a), (lambda b1: c2.encode(cx, b1)))), (lambda cx, c: hydra.lib.eithers.bind(c2.decode(cx, c), (lambda b2: c1.decode(cx, b2)))))
 
-def encode_decode(dir: hydra.coders.CoderDirection, coder: hydra.compute.Coder[T0, T0], cx: hydra.context.Context, term: T0) -> Either[hydra.context.InContext[hydra.error.OtherError], T0]:
+def encode_decode(dir: hydra.coders.CoderDirection, coder: hydra.compute.Coder[T0, T0], cx: hydra.context.Context, term: T0) -> Either[hydra.context.InContext[hydra.error.Error], T0]:
     r"""Apply coder in the specified direction."""
     
     match dir:
@@ -160,7 +160,7 @@ def type_is_supported(constraints: hydra.coders.LanguageConstraints, t: hydra.co
                 raise AssertionError("Unreachable: all variants handled")
     return hydra.lib.logic.and_(constraints.types(base()), hydra.lib.logic.and_(is_supported_variant(hydra.reflect.type_variant(base())), is_supported(base())))
 
-def unidirectional_coder(m: Callable[[hydra.context.Context, T0], Either[hydra.context.InContext[hydra.error.OtherError], T1]]) -> hydra.compute.Coder[T0, T1]:
+def unidirectional_coder(m: Callable[[hydra.context.Context, T0], Either[hydra.context.InContext[hydra.error.Error], T1]]) -> hydra.compute.Coder[T0, T1]:
     r"""Create a unidirectional coder."""
     
-    return hydra.compute.Coder(m, (lambda cx, _: Left(hydra.context.InContext(hydra.error.OtherError("inbound mapping is unsupported"), cx))))
+    return hydra.compute.Coder(m, (lambda cx, _: Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("inbound mapping is unsupported"))), cx))))

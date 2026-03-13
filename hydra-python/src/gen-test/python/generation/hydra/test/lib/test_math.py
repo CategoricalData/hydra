@@ -41,12 +41,16 @@ import hydra.parsing
 import hydra.rewriting
 import hydra.serialization
 import hydra.show.core
+import hydra.show.error
+import hydra.show.meta
+import hydra.show.typing
 import hydra.sorting
 import hydra.tarjan
 import hydra.testing
 import hydra.topology
 import hydra.typing
 import hydra.util
+import hydra.variants
 
 # abs
 

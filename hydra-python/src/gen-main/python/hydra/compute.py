@@ -47,8 +47,8 @@ class Bicoder(Generic[T1, T2, V1, V2]):
 class Coder(Generic[V1, V2]):
     r"""An encoder and decoder; a bidirectional transformation between two types."""
     
-    encode: Annotated[Callable[[hydra.context.Context, V1], Either[hydra.context.InContext[hydra.error.OtherError], V2]], "A function which encodes source values as target values in a given context"]
-    decode: Annotated[Callable[[hydra.context.Context, V2], Either[hydra.context.InContext[hydra.error.OtherError], V1]], "A function which decodes target values as source values in a given context"]
+    encode: Annotated[Callable[[hydra.context.Context, V1], Either[hydra.context.InContext[hydra.error.Error], V2]], "A function which encodes source values as target values in a given context"]
+    decode: Annotated[Callable[[hydra.context.Context, V2], Either[hydra.context.InContext[hydra.error.Error], V1]], "A function which decodes target values as source values in a given context"]
     
     TYPE_ = hydra.core.Name("hydra.compute.Coder")
     ENCODE = hydra.core.Name("encode")

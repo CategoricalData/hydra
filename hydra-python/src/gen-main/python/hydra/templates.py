@@ -30,14 +30,14 @@ def graph_to_schema(cx: hydra.context.Context, graph: hydra.graph.Graph, els: fr
         return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda _wc_e: hydra.context.InContext(_wc_e, cx)), (lambda _wc_a: _wc_a), hydra.decode.core.type(graph, el.term)), (lambda t: Right((name, t))))
     return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda x1: to_pair(x1)), els), (lambda pairs: Right(hydra.lib.maps.from_list(pairs))))
 
-def instantiate_template(cx: hydra.context.Context, minimal: bool, schema: FrozenDict[hydra.core.Name, hydra.core.Type], t: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Term]:
+def instantiate_template(cx: hydra.context.Context, minimal: bool, schema: FrozenDict[hydra.core.Name, hydra.core.Type], t: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]:
     r"""Given a graph schema and a nonrecursive type, instantiate it with default values. If the minimal flag is set, the smallest possible term is produced; otherwise, exactly one subterm is produced for constructors which do not otherwise require one, e.g. in lists and optionals."""
     
-    def inst(v1: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Term]:
+    def inst(v1: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Term]:
         return instantiate_template(cx, minimal, schema, v1)
     @lru_cache(1)
-    def no_poly() -> Either[hydra.context.InContext[hydra.error.OtherError], T0]:
-        return Left(hydra.context.InContext(hydra.error.OtherError("Polymorphic and function types are not currently supported"), cx))
+    def no_poly() -> Either[hydra.context.InContext[hydra.error.Error], T0]:
+        return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("Polymorphic and function types are not currently supported"))), cx))
     def for_float(ft: hydra.core.FloatType) -> hydra.core.FloatValue:
         match ft:
             case hydra.core.FloatType.BIGFLOAT:
@@ -131,7 +131,7 @@ def instantiate_template(cx: hydra.context.Context, minimal: bool, schema: Froze
         case hydra.core.TypeRecord(value=rt):
             tname = rt.type_name
             fields = rt.fields
-            def to_field(ft: hydra.core.FieldType) -> Either[hydra.context.InContext[hydra.error.OtherError], hydra.core.Field]:
+            def to_field(ft: hydra.core.FieldType) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Field]:
                 return hydra.lib.eithers.bind(inst(ft.type), (lambda e: Right(hydra.core.Field(ft.name, e))))
             return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda x1: to_field(x1)), fields), (lambda dfields: Right(cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(tname, dfields))))))
         
@@ -139,7 +139,7 @@ def instantiate_template(cx: hydra.context.Context, minimal: bool, schema: Froze
             return hydra.lib.logic.if_else(minimal, (lambda : Right(cast(hydra.core.Term, hydra.core.TermSet(hydra.lib.sets.empty())))), (lambda : hydra.lib.eithers.bind(inst(et2), (lambda e: Right(cast(hydra.core.Term, hydra.core.TermSet(hydra.lib.sets.from_list((e,)))))))))
         
         case hydra.core.TypeVariable(value=tname):
-            return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(hydra.error.OtherError(hydra.lib.strings.cat2("Type variable ", hydra.lib.strings.cat2(hydra.show.core.term(cast(hydra.core.Term, hydra.core.TermVariable(tname))), " not found in schema"))), cx))), (lambda x1: inst(x1)), hydra.lib.maps.lookup(tname, schema))
+            return hydra.lib.maybes.maybe((lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2("Type variable ", hydra.lib.strings.cat2(hydra.show.core.term(cast(hydra.core.Term, hydra.core.TermVariable(tname))), " not found in schema"))))), cx))), (lambda x1: inst(x1)), hydra.lib.maps.lookup(tname, schema))
         
         case hydra.core.TypeWrap(value=wt):
             tname = wt.type_name

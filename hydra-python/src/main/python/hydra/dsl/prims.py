@@ -35,18 +35,9 @@ X = TypeVar("X")
 Y = TypeVar("Y")
 
 
-def other_err(cx: Context, msg: str) -> InContext[OtherError]:
-    """Create an OtherError InContext from a string message and context."""
-    return InContext(object=OtherError(msg), context=cx)
-
-
-def wrap_other(cx: Context, result: Either[InContext[OtherError], A]) -> Either[InContext[Error], A]:
-    """Wrap Either (InContext OtherError) into Either (InContext Error)."""
-    match result:
-        case Right(value=v):
-            return Right(v)
-        case Left(value=ic):
-            return Left(InContext(object=ErrorOther(ic.object), context=ic.context))
+def other_err(cx: Context, msg: str) -> InContext[Error]:
+    """Create an Error (Other) InContext from a string message and context."""
+    return InContext(object=ErrorOther(OtherError(msg)), context=cx)
 
 
 
@@ -218,7 +209,7 @@ def float_type() -> TermCoder[FloatType]:
         result = decode_core.float_type(g, t)
         match result:
             case Left(value=err):
-                return Left(InContext(object=OtherError(err.value), context=cx))
+                return Left(InContext(object=ErrorOther(OtherError(err.value)), context=cx))
             case Right(value=v):
                 return Right(v)
     return TermCoder(
@@ -243,7 +234,7 @@ def integer_type() -> TermCoder[IntegerType]:
         result = decode_core.integer_type(g, t)
         match result:
             case Left(value=err):
-                return Left(InContext(object=OtherError(err.value), context=cx))
+                return Left(InContext(object=ErrorOther(OtherError(err.value)), context=cx))
             case Right(value=v):
                 return Right(v)
     return TermCoder(
@@ -276,7 +267,7 @@ def literal_type() -> TermCoder[LiteralType]:
         result = decode_core.literal_type(g, t)
         match result:
             case Left(value=err):
-                return Left(InContext(object=OtherError(err.value), context=cx))
+                return Left(InContext(object=ErrorOther(OtherError(err.value)), context=cx))
             case Right(value=v):
                 return Right(v)
     return TermCoder(
@@ -301,7 +292,7 @@ def type_() -> TermCoder[Type]:
         result = decode_core.type(g, t)
         match result:
             case Left(value=err):
-                return Left(InContext(object=OtherError(err.value), context=cx))
+                return Left(InContext(object=ErrorOther(OtherError(err.value)), context=cx))
             case Right(value=v):
                 return Right(v)
     return TermCoder(
@@ -469,7 +460,7 @@ def function_with_reduce(
 ) -> TermCoder[Callable[[X], Y]]:
     """TermCoder for function types, using a reducer to bridge term-level functions to native functions.
 
-    The reduce parameter should be (cx, g, term) -> Either[InContext[OtherError], Term].
+    The reduce parameter should be (cx, g, term) -> Either[InContext[Error], Term].
     """
     def encode(cx, g, fun_term):
         def native_fun(x):
@@ -517,7 +508,7 @@ def prim0(
     """Create a 0-argument primitive function."""
     def impl(cx: Context, g: Graph, args: frozenlist[Term]) -> Either[InContext[Error], Term]:
         result = output.decode(cx, value())
-        return wrap_other(cx, result)
+        return result
 
     return Primitive(
         name=name, type=build_type_scheme(variables, output.type), implementation=impl
@@ -547,7 +538,7 @@ def prim1(
                 case Right(value=arg1):
                     pass
             return output.decode(cx, compute(arg1))
-        return wrap_other(cx, go())
+        return go()
 
     return Primitive(
         name=name,
@@ -586,7 +577,7 @@ def prim2(
                 case Right(value=arg2):
                     pass
             return output.decode(cx, compute(arg1, arg2))
-        return wrap_other(cx, go())
+        return go()
 
     return Primitive(
         name=name,
@@ -635,7 +626,7 @@ def prim3(
                 case Right(value=arg3):
                     pass
             return output.decode(cx, compute(arg1, arg2, arg3))
-        return wrap_other(cx, go())
+        return go()
 
     return Primitive(
         name=name,
