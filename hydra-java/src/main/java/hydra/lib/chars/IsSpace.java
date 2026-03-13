@@ -16,7 +16,7 @@ import static hydra.dsl.Types.int32;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
 import hydra.context.InContext;
-import hydra.error.OtherError;
+import hydra.error.Error_;
 import hydra.util.Either;
 
 /**
@@ -45,7 +45,7 @@ public class IsSpace extends PrimitiveFunction {
      * @return a function that takes a list of terms and returns a flow producing a boolean term
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply(c -> Terms.boolean_(apply(c)), hydra.extract.core.Core.int32(cx, graph, args.get(0)));
     }
 

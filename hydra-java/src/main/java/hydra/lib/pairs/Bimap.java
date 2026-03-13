@@ -17,7 +17,7 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.variable;
 import hydra.context.Context;
 import hydra.context.InContext;
-import hydra.error.OtherError;
+import hydra.error.Error_;
 import hydra.util.Either;
 
 /**
@@ -53,7 +53,7 @@ public class Bimap extends PrimitiveFunction {
      * @return the implementation function
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> {
             Term forFirst = args.get(0);
             Term forSecond = args.get(1);

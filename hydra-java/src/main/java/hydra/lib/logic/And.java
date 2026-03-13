@@ -15,7 +15,7 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
 import hydra.context.InContext;
-import hydra.error.OtherError;
+import hydra.error.Error_;
 import hydra.util.Either;
 
 /**
@@ -44,7 +44,7 @@ public class And extends PrimitiveFunction {
      * @return a function that takes a list of terms and returns an Either producing the AND result
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.boolean_(cx, graph, args.get(0)), b1 -> hydra.lib.eithers.Map.apply(b2 -> Terms.boolean_(And.apply(b1, b2)), hydra.extract.core.Core.boolean_(cx, graph, args.get(1))));
     }
 

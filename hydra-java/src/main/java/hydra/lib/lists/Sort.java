@@ -19,7 +19,7 @@ import static hydra.dsl.Types.scheme;
 import static hydra.dsl.Types.schemeOrd;
 import hydra.context.Context;
 import hydra.context.InContext;
-import hydra.error.OtherError;
+import hydra.error.Error_;
 import hydra.util.Either;
 
 
@@ -37,7 +37,7 @@ public class Sort extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<List<Term>, Term>) lst -> {
                 List<Term> sorted = new ArrayList<>(lst);
                 sorted.sort(hydra.lib.equality.Compare::compareTerms);

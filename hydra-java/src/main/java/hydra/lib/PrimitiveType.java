@@ -5,6 +5,7 @@ import hydra.context.InContext;
 import hydra.core.Term;
 import hydra.core.Type;
 import hydra.dsl.Types;
+import hydra.error.Error_;
 import hydra.error.OtherError;
 import hydra.graph.Graph;
 import hydra.util.Either;
@@ -23,7 +24,7 @@ import static hydra.dsl.Types.variable;
 public class PrimitiveType<T> {
     public final String name;
     public final Type type;
-    public final TriFunction<Context, Graph, Term, Either<InContext<OtherError>, T>> expect;
+    public final TriFunction<Context, Graph, Term, Either<InContext<Error_>, T>> expect;
     public final Comparator<T> comparator;
 
     /**
@@ -44,7 +45,7 @@ public class PrimitiveType<T> {
      */
     public PrimitiveType(String name,
                          Type type,
-                         TriFunction<Context, Graph, Term, Either<InContext<OtherError>, T>> expect,
+                         TriFunction<Context, Graph, Term, Either<InContext<Error_>, T>> expect,
                          Comparator<T> comparator) {
         this.name = name;
         this.type = type;
@@ -114,7 +115,7 @@ public class PrimitiveType<T> {
         return new PrimitiveType<>(
                 "type",
                 hydra.dsl.Types.apply(variable(Type.TYPE_), variable("a")),
-                (cx, graph, t) -> Either.left(new InContext<>(new OtherError("Core type decoding not yet implemented"), cx)),
+                (cx, graph, t) -> Either.left(new InContext<>(new Error_.Other(new OtherError("Core type decoding not yet implemented")), cx)),
                 (a, b) -> {
                     throw new UnsupportedOperationException("Type comparison is not yet supported");
                 });

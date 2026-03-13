@@ -16,7 +16,7 @@ import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
 import hydra.context.InContext;
-import hydra.error.OtherError;
+import hydra.error.Error_;
 import hydra.util.Either;
 
 
@@ -48,19 +48,19 @@ public class Bind extends PrimitiveFunction {
      * @return a function that performs monadic bind on optional values
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.maybeTerm(cx, t -> Either.right(t), graph, args.get(0)), arg -> {
                 if (arg.isNothing()) {
                     return Either.right(Terms.optional(Maybe.nothing()));
                 }
                 Term val = arg.fromJust();
-                Either<InContext<OtherError>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                    new hydra.context.Context(java.util.List.of(), java.util.List.of(), java.util.Map.of()), graph, true, Terms.apply(args.get(1), val));
+                Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
+                    hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(args.get(1), val));
                 if (r.isLeft()) return (Either) r;
-                Either<InContext<OtherError>, Maybe<Term>> maybeResult = hydra.extract.core.Core.maybeTerm(cx,
-                    t -> Either.right(t), graph, ((Either.Right<InContext<OtherError>, Term>) r).value);
+                Either<InContext<Error_>, Maybe<Term>> maybeResult = hydra.extract.core.Core.maybeTerm(cx,
+                    t -> Either.right(t), graph, ((Either.Right<InContext<Error_>, Term>) r).value);
                 if (maybeResult.isLeft()) return (Either) maybeResult;
-                return Either.right(Terms.optional(((Either.Right<InContext<OtherError>, Maybe<Term>>) maybeResult).value));
+                return Either.right(Terms.optional(((Either.Right<InContext<Error_>, Maybe<Term>>) maybeResult).value));
             });
     }
 

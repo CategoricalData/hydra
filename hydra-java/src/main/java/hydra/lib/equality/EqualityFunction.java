@@ -7,7 +7,7 @@ import hydra.core.Term;
 import hydra.core.Type;
 import hydra.core.TypeScheme;
 import hydra.dsl.Terms;
-import hydra.error.OtherError;
+import hydra.error.Error_;
 import hydra.graph.Graph;
 import hydra.lib.PrimitiveType;
 import hydra.tools.PrimitiveFunction;
@@ -41,7 +41,7 @@ public abstract class EqualityFunction<T> extends PrimitiveFunction {
 
     protected final Name name;
     protected final TypeScheme type;
-    protected final PrimitiveType.TriFunction<Context, Graph, Term, Either<InContext<OtherError>, T>> expect;
+    protected final PrimitiveType.TriFunction<Context, Graph, Term, Either<InContext<Error_>, T>> expect;
     protected final BiFunction<T, T, Boolean> criterion;
 
     public EqualityFunction(PrimitiveType<T> type, Relation relation) {
@@ -50,7 +50,7 @@ public abstract class EqualityFunction<T> extends PrimitiveFunction {
 
     private EqualityFunction(String typeName,
                              Type datatype,
-                             PrimitiveType.TriFunction<Context, Graph, Term, Either<InContext<OtherError>, T>> expect,
+                             PrimitiveType.TriFunction<Context, Graph, Term, Either<InContext<Error_>, T>> expect,
                              Comparator<T> comparator,
                              Relation relation) {
         this.name = new Name("hydra.lib.equality." + relation.prefix + capitalize(typeName));
@@ -90,7 +90,7 @@ public abstract class EqualityFunction<T> extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph ->
             hydra.lib.eithers.Bind.apply(expect.apply(cx, graph, args.get(0)), arg0 ->
                 hydra.lib.eithers.Map.apply(arg1 ->

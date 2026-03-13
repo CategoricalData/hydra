@@ -19,7 +19,7 @@ import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
 import hydra.context.Context;
 import hydra.context.InContext;
-import hydra.error.OtherError;
+import hydra.error.Error_;
 import hydra.util.Either;
 
 
@@ -40,17 +40,17 @@ public class ZipWith extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(1)), lst1 ->
                 hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(2)), lst2 -> {
                     Term f = args.get(0);
                     List<Term> results = new ArrayList<>();
                     int minSize = Math.min(lst1.size(), lst2.size());
                     for (int i = 0; i < minSize; i++) {
-                        Either<InContext<OtherError>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                            new hydra.context.Context(java.util.List.of(), java.util.List.of(), java.util.Map.of()), graph, true, Terms.apply(Terms.apply(f, lst1.get(i)), lst2.get(i)));
+                        Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
+                            hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(Terms.apply(f, lst1.get(i)), lst2.get(i)));
                         if (r.isLeft()) return (Either) r;
-                        results.add(((Either.Right<InContext<OtherError>, Term>) r).value);
+                        results.add(((Either.Right<InContext<Error_>, Term>) r).value);
                     }
                     return Either.right(Terms.list(results));
                 }));

@@ -61,7 +61,7 @@ public interface Modules {
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.MapList.apply(
         (java.util.function.Function<hydra.core.Binding, hydra.util.Either<String, hydra.core.TypeApplicationTerm>>) (_el -> hydra.lib.eithers.Bimap.apply(
-          (java.util.function.Function<hydra.context.InContext<hydra.error.OtherError>, String>) (ic -> (((java.util.function.Function<hydra.context.InContext<hydra.error.OtherError>, hydra.error.OtherError>) (projected -> projected.object)).apply(ic)).value),
+          (java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, String>) (ic -> hydra.show.error.Error_.error(((java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, hydra.error.Error_>) (projected -> projected.object)).apply(ic))),
           (java.util.function.Function<hydra.core.TypeApplicationTerm, hydra.core.TypeApplicationTerm>) (x -> x),
           hydra.schemas.Schemas.elementAsTypeApplicationTerm(
             cx,
@@ -82,6 +82,7 @@ public interface Modules {
                 p0,
                 p1)),
               hydra.schemas.Schemas::typeToTypeScheme,
+              hydra.show.error.Error_::error,
               lang,
               adapters,
               v1)),
@@ -91,7 +92,7 @@ public interface Modules {
       }));
   }
   
-  static <T0> hydra.util.Either<String, hydra.module.Definition> adaptedModuleDefinitions_classify(hydra.context.Context cx, hydra.graph.Graph graph, java.util.function.Function<hydra.core.Binding, Boolean> hydra_annotations_isNativeType2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.core.Type>>> hydra_decode_core_type2, java.util.function.Function<hydra.core.Type, hydra.core.TypeScheme> hydra_schemas_typeToTypeScheme2, hydra.coders.Language lang, java.util.Map<hydra.core.Type, hydra.compute.Adapter<T0, hydra.core.Type, hydra.core.Term, hydra.core.Term>> adapters, hydra.util.Pair<hydra.core.Binding, hydra.core.TypeApplicationTerm> pair) {
+  static <T0> hydra.util.Either<String, hydra.module.Definition> adaptedModuleDefinitions_classify(hydra.context.Context cx, hydra.graph.Graph graph, java.util.function.Function<hydra.core.Binding, Boolean> hydra_annotations_isNativeType2, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.core.Type>>> hydra_decode_core_type2, java.util.function.Function<hydra.core.Type, hydra.core.TypeScheme> hydra_schemas_typeToTypeScheme2, java.util.function.Function<hydra.error.Error_, String> hydra_show_error_error2, hydra.coders.Language lang, java.util.Map<hydra.core.Type, hydra.compute.Adapter<T0, hydra.core.Type, hydra.core.Term, hydra.core.Term>> adapters, hydra.util.Pair<hydra.core.Binding, hydra.core.TypeApplicationTerm> pair) {
     hydra.util.Lazy<hydra.core.Binding> el = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pair));
     hydra.core.Name name = (el.get()).name;
     hydra.util.Lazy<hydra.core.TypeApplicationTerm> tt = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pair));
@@ -110,23 +111,23 @@ public interface Modules {
             cx,
             graph,
             coreTyp),
-          (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.module.Definition>>) (adaptedTyp -> hydra.util.Either.<String, hydra.module.Definition>right(new hydra.module.Definition.Type(new hydra.module.TypeDefinition(name, adaptedTyp))))))),
+          (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.module.Definition>>) (adaptedTyp -> (hydra.util.Either<String, hydra.module.Definition>) ((hydra.util.Either<String, hydra.module.Definition>) (hydra.util.Either.<String, hydra.module.Definition>right(new hydra.module.Definition.Type(new hydra.module.TypeDefinition(name, adaptedTyp))))))))),
       () -> hydra.lib.maybes.Maybe.applyLazy(
-        () -> hydra.util.Either.<String, hydra.module.Definition>left(hydra.lib.strings.Cat2.apply(
+        () -> (hydra.util.Either<String, hydra.module.Definition>) ((hydra.util.Either<String, hydra.module.Definition>) (hydra.util.Either.<String, hydra.module.Definition>left(hydra.lib.strings.Cat2.apply(
           "no adapter for element ",
-          (name).value)),
+          (name).value)))),
         (java.util.function.Function<hydra.compute.Adapter<T0, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.util.Either<String, hydra.module.Definition>>) (adapter -> hydra.lib.eithers.Bind.apply(
           hydra.lib.eithers.Bimap.apply(
-            (java.util.function.Function<hydra.context.InContext<hydra.error.OtherError>, String>) (ic -> (((java.util.function.Function<hydra.context.InContext<hydra.error.OtherError>, hydra.error.OtherError>) (projected -> projected.object)).apply(ic)).value),
+            (java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, String>) (ic -> (hydra_show_error_error2).apply(((java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, hydra.error.Error_>) (projected -> projected.object)).apply(ic))),
             (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (x -> x),
-            ((((java.util.function.Function<hydra.compute.Coder<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>>>>) ((java.util.function.Function<hydra.compute.Coder<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>>>>) (projected -> projected.encode))).apply(((java.util.function.Function<hydra.compute.Adapter<T0, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.compute.Coder<hydra.core.Term, hydra.core.Term>>) ((java.util.function.Function<hydra.compute.Adapter<T0, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.compute.Coder<hydra.core.Term, hydra.core.Term>>) ((java.util.function.Function<hydra.compute.Adapter<T0, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.compute.Coder<hydra.core.Term, hydra.core.Term>>) ((java.util.function.Function<hydra.compute.Adapter<T0, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.compute.Coder<hydra.core.Term, hydra.core.Term>>) (projected -> projected.coder))))).apply(adapter))).apply(cx)).apply(term)),
-          (java.util.function.Function<hydra.core.Term, hydra.util.Either<String, hydra.module.Definition>>) (adapted -> hydra.util.Either.<String, hydra.module.Definition>right(new hydra.module.Definition.Term(new hydra.module.TermDefinition(name, adapted, (hydra_schemas_typeToTypeScheme2).apply(((java.util.function.Function<hydra.compute.Adapter<T0, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) ((java.util.function.Function<hydra.compute.Adapter<T0, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) ((java.util.function.Function<hydra.compute.Adapter<T0, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) ((java.util.function.Function<hydra.compute.Adapter<T0, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) (projected -> projected.target))))).apply(adapter)))))))),
+            ((((java.util.function.Function<hydra.compute.Coder<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>>) ((java.util.function.Function<hydra.compute.Coder<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>>) (projected -> projected.encode))).apply(((java.util.function.Function<hydra.compute.Adapter<T0, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.compute.Coder<hydra.core.Term, hydra.core.Term>>) ((java.util.function.Function<hydra.compute.Adapter<T0, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.compute.Coder<hydra.core.Term, hydra.core.Term>>) ((java.util.function.Function<hydra.compute.Adapter<T0, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.compute.Coder<hydra.core.Term, hydra.core.Term>>) ((java.util.function.Function<hydra.compute.Adapter<T0, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.compute.Coder<hydra.core.Term, hydra.core.Term>>) (projected -> projected.coder))))).apply(adapter))).apply(cx)).apply(term)),
+          (java.util.function.Function<hydra.core.Term, hydra.util.Either<String, hydra.module.Definition>>) (adapted -> (hydra.util.Either<String, hydra.module.Definition>) ((hydra.util.Either<String, hydra.module.Definition>) (hydra.util.Either.<String, hydra.module.Definition>right(new hydra.module.Definition.Term(new hydra.module.TermDefinition(name, adapted, (hydra_schemas_typeToTypeScheme2).apply(((java.util.function.Function<hydra.compute.Adapter<T0, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) ((java.util.function.Function<hydra.compute.Adapter<T0, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) ((java.util.function.Function<hydra.compute.Adapter<T0, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) ((java.util.function.Function<hydra.compute.Adapter<T0, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.core.Type>) (projected -> projected.target))))).apply(adapter)))))))))),
         hydra.lib.maps.Lookup.apply(
           typ,
           adapters)));
   }
   
-  static <T0, T1> hydra.util.Either<String, hydra.compute.Coder<hydra.core.Term, T0>> constructCoder(hydra.coders.Language lang, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>> encodeTerm, T1 cx, hydra.graph.Graph g, hydra.core.Type typ) {
+  static <T0, T1> hydra.util.Either<String, hydra.compute.Coder<hydra.core.Term, T0>> constructCoder(hydra.coders.Language lang, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>>> encodeTerm, T1 cx, hydra.graph.Graph g, hydra.core.Type typ) {
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.compute.Coder<hydra.core.Term, T0>>) (adapter -> hydra.adapt.utils.Utils.composeCoders(
         ((java.util.function.Function<hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.compute.Coder<hydra.core.Term, hydra.core.Term>>) ((java.util.function.Function<hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.compute.Coder<hydra.core.Term, hydra.core.Term>>) ((java.util.function.Function<hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.compute.Coder<hydra.core.Term, hydra.core.Term>>) ((java.util.function.Function<hydra.compute.Adapter<hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term>, hydra.compute.Coder<hydra.core.Term, hydra.core.Term>>) (projected -> projected.coder))))).apply(adapter),
@@ -145,12 +146,12 @@ public interface Modules {
       typ);
   }
   
-  static <T0, T1> hydra.util.Either<String, T1> transformModule(hydra.coders.Language lang, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, T0>>> encodeTerm, java.util.function.Function<hydra.module.Module, java.util.function.Function<java.util.Map<hydra.core.Type, hydra.compute.Coder<hydra.core.Term, T0>>, java.util.function.Function<java.util.List<hydra.util.Pair<hydra.core.Binding, hydra.core.TypeApplicationTerm>>, hydra.util.Either<String, T1>>>> createModule, hydra.context.Context cx, hydra.graph.Graph g, hydra.module.Module mod) {
+  static <T0, T1> hydra.util.Either<String, T1> transformModule(hydra.coders.Language lang, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>>> encodeTerm, java.util.function.Function<hydra.module.Module, java.util.function.Function<java.util.Map<hydra.core.Type, hydra.compute.Coder<hydra.core.Term, T0>>, java.util.function.Function<java.util.List<hydra.util.Pair<hydra.core.Binding, hydra.core.TypeApplicationTerm>>, hydra.util.Either<String, T1>>>> createModule, hydra.context.Context cx, hydra.graph.Graph g, hydra.module.Module mod) {
     java.util.List<hydra.core.Binding> els = (mod).elements;
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.MapList.apply(
         (java.util.function.Function<hydra.core.Binding, hydra.util.Either<String, hydra.core.TypeApplicationTerm>>) (_el -> hydra.lib.eithers.Bimap.apply(
-          (java.util.function.Function<hydra.context.InContext<hydra.error.OtherError>, String>) (ic -> (((java.util.function.Function<hydra.context.InContext<hydra.error.OtherError>, hydra.error.OtherError>) (projected -> projected.object)).apply(ic)).value),
+          (java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, String>) (ic -> hydra.show.error.Error_.error(((java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, hydra.error.Error_>) (projected -> projected.object)).apply(ic))),
           (java.util.function.Function<hydra.core.TypeApplicationTerm, hydra.core.TypeApplicationTerm>) (x -> x),
           hydra.schemas.Schemas.elementAsTypeApplicationTerm(
             cx,

@@ -2,6 +2,7 @@ package hydra.compute;
 
 import hydra.context.Context;
 import hydra.context.InContext;
+import hydra.error.Error_;
 import hydra.error.OtherError;
 import hydra.util.Either;
 
@@ -58,9 +59,9 @@ public class StatelessCoder<V1, V2> extends Coder<V1, V2> {
 
     /**
      * Convert a simple Either-based function to the Coder encode/decode signature.
-     * The Context parameter is ignored; Either Left strings are wrapped in InContext OtherError.
+     * The Context parameter is ignored; Either Left strings are wrapped in InContext Error_.
      */
-    private static <A, B> Function<Context, Function<A, Either<InContext<OtherError>, B>>>
+    private static <A, B> Function<Context, Function<A, Either<InContext<Error_>, B>>>
             toCoderFn(Function<A, Either<String, B>> fn) {
         return cx -> a -> {
             Either<String, B> result = fn.apply(a);
@@ -68,7 +69,7 @@ public class StatelessCoder<V1, V2> extends Coder<V1, V2> {
                 return Either.right(((Either.Right<String, B>) result).value);
             } else {
                 String msg = ((Either.Left<String, B>) result).value;
-                return Either.left(new InContext<>(new OtherError(msg), cx));
+                return Either.left(new InContext<>(new Error_.Other(new OtherError(msg)), cx));
             }
         };
     }

@@ -17,7 +17,7 @@ import static hydra.dsl.Types.list;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
 import hydra.context.InContext;
-import hydra.error.OtherError;
+import hydra.error.Error_;
 import hydra.util.Either;
 
 
@@ -35,10 +35,10 @@ public class Transpose extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(0)), outerList -> {
             // Parse each inner list
-            Either<InContext<OtherError>, List<List<Term>>> matrixFlow = Either.right(new ArrayList<>());
+            Either<InContext<Error_>, List<List<Term>>> matrixFlow = Either.right(new ArrayList<>());
             for (Term inner : outerList) {
                 matrixFlow = hydra.lib.eithers.Bind.apply(matrixFlow, acc ->
                     hydra.lib.eithers.Map.apply(row -> {

@@ -377,7 +377,7 @@ public class Generation {
      * Generate source files and write them to disk.
      */
     public static void generateSources(
-            Function<Module, Function<List<Definition>, Function<hydra.context.Context, Function<Graph, Either<hydra.context.InContext<hydra.error.OtherError>, Map<String, String>>>>>> coder,
+            Function<Module, Function<List<Definition>, Function<hydra.context.Context, Function<Graph, Either<hydra.context.InContext<hydra.error.Error_>, Map<String, String>>>>>> coder,
             hydra.coders.Language language,
             boolean doInfer,
             boolean doExpand,
@@ -389,16 +389,16 @@ public class Generation {
         Graph bsGraph = bootstrapGraph();
         hydra.context.Context cx = new hydra.context.Context(
                 Collections.emptyList(), Collections.emptyList(), Collections.emptyMap());
-        Either<hydra.context.InContext<hydra.error.OtherError>, List<Pair<String, String>>> result =
+        Either<hydra.context.InContext<hydra.error.Error_>, List<Pair<String, String>>> result =
                 CodeGeneration.generateSourceFiles(coder, language,
                         doInfer, doExpand, doHoistCase, doHoistPoly,
                         bsGraph, universe, modulesToGenerate, cx);
         List<Pair<String, String>> files;
         if (result.isLeft()) {
-            hydra.context.InContext<hydra.error.OtherError> err = ((Either.Left<hydra.context.InContext<hydra.error.OtherError>, List<Pair<String, String>>>) result).value;
-            throw new RuntimeException("Code generation failed: " + err.object.value);
+            hydra.context.InContext<hydra.error.Error_> err = ((Either.Left<hydra.context.InContext<hydra.error.Error_>, List<Pair<String, String>>>) result).value;
+            throw new RuntimeException("Code generation failed: " + hydra.show.error.Error_.error(err.object));
         }
-        files = ((Either.Right<hydra.context.InContext<hydra.error.OtherError>, List<Pair<String, String>>>) result).value;
+        files = ((Either.Right<hydra.context.InContext<hydra.error.Error_>, List<Pair<String, String>>>) result).value;
         for (Pair<String, String> pair : files) {
             String filePath = basePath + File.separator + pair.first;
             String content = pair.second;

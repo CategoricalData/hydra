@@ -126,10 +126,10 @@ public interface Bootstrap {
       java.util.Map.entry(
         new hydra.core.Name("hydra.compute.Coder"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("v1"), new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("v2"), new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.compute.Coder"), java.util.List.of(
-          new hydra.core.FieldType(new hydra.core.Name("encode"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.Context")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("v1")), new hydra.core.Type.Either(new hydra.core.EitherType(new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.InContext")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.OtherError")))), new hydra.core.Type.Variable(new hydra.core.Name("v2")))))))), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.FieldType(new hydra.core.Name("encode"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.Context")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("v1")), new hydra.core.Type.Either(new hydra.core.EitherType(new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.InContext")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.Error")))), new hydra.core.Type.Variable(new hydra.core.Name("v2")))))))), java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A function which encodes source values as target values in a given context"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("decode"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.Context")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("v2")), new hydra.core.Type.Either(new hydra.core.EitherType(new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.InContext")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.OtherError")))), new hydra.core.Type.Variable(new hydra.core.Name("v1")))))))), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.FieldType(new hydra.core.Name("decode"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.Context")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("v2")), new hydra.core.Type.Either(new hydra.core.EitherType(new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.InContext")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.Error")))), new hydra.core.Type.Variable(new hydra.core.Name("v1")))))))), java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A function which decodes target values as source values in a given context")))))))))))))), java.util.Map.ofEntries(java.util.Map.entry(
           new hydra.core.Name("description"),
@@ -720,29 +720,224 @@ public interface Bootstrap {
           new hydra.core.Name("description"),
           new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type wrapped in a type name; a newtype"))))))),
       java.util.Map.entry(
+        new hydra.core.Name("hydra.error.CheckingError"),
+        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Union(new hydra.core.RowType(new hydra.core.Name("hydra.error.CheckingError"), java.util.List.of(
+          new hydra.core.FieldType(new hydra.core.Name("incorrectUnification"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.IncorrectUnificationError")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A post-unification consistency check failure"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("notAForallType"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.NotAForallTypeError")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type that is not a forall type when one was expected"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("notAFunctionType"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.NotAFunctionTypeError")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type that is not a function type when one was expected"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("typeArityMismatch"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.TypeArityMismatchError")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type constructor applied to the wrong number of arguments"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("typeMismatch"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.TypeMismatchError")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type mismatch between expected and actual types"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("unboundTypeVariables"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.UnboundTypeVariablesError")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("Type variables that are not bound in scope"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("unequalTypes"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.UnequalTypesError")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("Multiple types that should be equal but are not"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("unsupportedTermVariant"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.UnsupportedTermVariantError")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A term variant that the type checker does not support"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("untypedLambda"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.UntypedLambdaError")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A lambda expression without a type annotation on its parameter"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("untypedLetBinding"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.UntypedLetBindingError")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A let binding without a type annotation")))))))))), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("An error that occurred during type checking"))))))),
+      java.util.Map.entry(
         new hydra.core.Name("hydra.error.DecodingError"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Wrap(new hydra.core.WrappedType(new hydra.core.Name("hydra.error.DecodingError"), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()))), java.util.Map.ofEntries(java.util.Map.entry(
           new hydra.core.Name("description"),
           new hydra.core.Term.Literal(new hydra.core.Literal.String_("An error that occurred during decoding of a term"))))))),
       java.util.Map.entry(
+        new hydra.core.Name("hydra.error.DuplicateBindingError"),
+        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.error.DuplicateBindingError"), java.util.List.of(new hydra.core.FieldType(new hydra.core.Name("name"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("The duplicated binding name")))))))))), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A duplicate binding name in a let expression"))))))),
+      java.util.Map.entry(
+        new hydra.core.Name("hydra.error.DuplicateFieldError"),
+        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.error.DuplicateFieldError"), java.util.List.of(new hydra.core.FieldType(new hydra.core.Name("name"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("The duplicated field name")))))))))), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A duplicate field name in a record or union type"))))))),
+      java.util.Map.entry(
         new hydra.core.Name("hydra.error.Error"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Union(new hydra.core.RowType(new hydra.core.Name("hydra.error.Error"), java.util.List.of(
+          new hydra.core.FieldType(new hydra.core.Name("checking"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.CheckingError")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type checking error"))))))),
           new hydra.core.FieldType(new hydra.core.Name("decoding"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.DecodingError")), java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("An error that occurred during decoding of a term"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("duplicateBinding"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.DuplicateBindingError")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A duplicate binding name error"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("duplicateField"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.DuplicateFieldError")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A duplicate field name error"))))))),
           new hydra.core.FieldType(new hydra.core.Name("other"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.OtherError")), java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("Any other error"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("undefinedField"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.UndefinedFieldError")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A reference to an undefined field"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("undefinedTerm"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.UndefinedTermError")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A reference to an undefined term"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("undefinedType"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.UndefinedTypeError")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A reference to an undefined type"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("unexpectedTermVariant"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.UnexpectedTermVariantError")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("An unexpected term variant"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("unexpectedTypeVariant"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.UnexpectedTypeVariantError")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("An unexpected type variant"))))))),
           new hydra.core.FieldType(new hydra.core.Name("unification"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.UnificationError")), java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type unification error")))))))))), java.util.Map.ofEntries(java.util.Map.entry(
           new hydra.core.Name("description"),
           new hydra.core.Term.Literal(new hydra.core.Literal.String_("An error of any kind, with kernel errors particularly differentiated"))))))),
       java.util.Map.entry(
+        new hydra.core.Name("hydra.error.IncorrectUnificationError"),
+        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.error.IncorrectUnificationError"), java.util.List.of(new hydra.core.FieldType(new hydra.core.Name("substitution"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.typing.TypeSubst")), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("The substitution that failed the consistency check")))))))))), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A post-unification consistency check failure"))))))),
+      java.util.Map.entry(
+        new hydra.core.Name("hydra.error.NotAForallTypeError"),
+        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.error.NotAForallTypeError"), java.util.List.of(
+          new hydra.core.FieldType(new hydra.core.Name("type"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The actual type encountered"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("typeArguments"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.List(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type"))), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The type arguments that were being applied")))))))))), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type that is not a forall type when type arguments are being applied"))))))),
+      java.util.Map.entry(
+        new hydra.core.Name("hydra.error.NotAFunctionTypeError"),
+        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.error.NotAFunctionTypeError"), java.util.List.of(new hydra.core.FieldType(new hydra.core.Name("type"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("The actual type encountered")))))))))), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type that is not a function type when one was expected in an application"))))))),
+      java.util.Map.entry(
         new hydra.core.Name("hydra.error.OtherError"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Wrap(new hydra.core.WrappedType(new hydra.core.Name("hydra.error.OtherError"), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()))), java.util.Map.ofEntries(java.util.Map.entry(
           new hydra.core.Name("description"),
           new hydra.core.Term.Literal(new hydra.core.Literal.String_("Any other error"))))))),
+      java.util.Map.entry(
+        new hydra.core.Name("hydra.error.TypeArityMismatchError"),
+        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.error.TypeArityMismatchError"), java.util.List.of(
+          new hydra.core.FieldType(new hydra.core.Name("type"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The type being checked"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("expectedArity"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int32())), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The expected number of type arguments"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("actualArity"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int32())), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The actual number of type arguments provided"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("typeArguments"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.List(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type"))), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The type arguments that were provided")))))))))), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type constructor applied to the wrong number of type arguments"))))))),
+      java.util.Map.entry(
+        new hydra.core.Name("hydra.error.TypeMismatchError"),
+        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.error.TypeMismatchError"), java.util.List.of(
+          new hydra.core.FieldType(new hydra.core.Name("expectedType"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The expected type"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("actualType"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The actual type encountered")))))))))), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A type mismatch between expected and actual types"))))))),
+      java.util.Map.entry(
+        new hydra.core.Name("hydra.error.UnboundTypeVariablesError"),
+        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.error.UnboundTypeVariablesError"), java.util.List.of(
+          new hydra.core.FieldType(new hydra.core.Name("variables"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Set(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name"))), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The set of unbound type variable names"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("type"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The type containing the unbound variables")))))))))), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("Type variables that appear free in a type but are not bound in scope"))))))),
+      java.util.Map.entry(
+        new hydra.core.Name("hydra.error.UndefinedFieldError"),
+        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.error.UndefinedFieldError"), java.util.List.of(
+          new hydra.core.FieldType(new hydra.core.Name("fieldName"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The name of the undefined field"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("typeName"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The name of the type in which the field was expected")))))))))), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A reference to a field that does not exist in the given type"))))))),
+      java.util.Map.entry(
+        new hydra.core.Name("hydra.error.UndefinedTermError"),
+        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.error.UndefinedTermError"), java.util.List.of(new hydra.core.FieldType(new hydra.core.Name("name"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("The name of the undefined term")))))))))), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A reference to a term (element, binding, or primitive) that is not defined"))))))),
+      java.util.Map.entry(
+        new hydra.core.Name("hydra.error.UndefinedTypeError"),
+        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.error.UndefinedTypeError"), java.util.List.of(new hydra.core.FieldType(new hydra.core.Name("name"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Name")), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("The name of the undefined type")))))))))), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A reference to a type or type variable that is not defined"))))))),
+      java.util.Map.entry(
+        new hydra.core.Name("hydra.error.UnequalTypesError"),
+        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.error.UnequalTypesError"), java.util.List.of(
+          new hydra.core.FieldType(new hydra.core.Name("types"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.List(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type"))), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The list of types that are not all equal"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("description"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_()), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("A description of the context in which the types were expected to be equal")))))))))), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("Multiple types that should all be equal but are not"))))))),
+      java.util.Map.entry(
+        new hydra.core.Name("hydra.error.UnexpectedTermVariantError"),
+        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.error.UnexpectedTermVariantError"), java.util.List.of(
+          new hydra.core.FieldType(new hydra.core.Name("expectedVariant"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.variants.TermVariant")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The expected term variant"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("actualTerm"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The actual term that was encountered")))))))))), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("An unexpected term variant was encountered"))))))),
+      java.util.Map.entry(
+        new hydra.core.Name("hydra.error.UnexpectedTypeVariantError"),
+        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.error.UnexpectedTypeVariantError"), java.util.List.of(
+          new hydra.core.FieldType(new hydra.core.Name("expectedVariant"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.variants.TypeVariant")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The expected type variant"))))))),
+          new hydra.core.FieldType(new hydra.core.Name("actualType"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Name("description"),
+            new hydra.core.Term.Literal(new hydra.core.Literal.String_("The actual type that was encountered")))))))))), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("An unexpected type variant was encountered"))))))),
       java.util.Map.entry(
         new hydra.core.Name("hydra.error.UnificationError"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.error.UnificationError"), java.util.List.of(
@@ -757,6 +952,25 @@ public interface Bootstrap {
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A human-readable error message")))))))))), java.util.Map.ofEntries(java.util.Map.entry(
           new hydra.core.Name("description"),
           new hydra.core.Term.Literal(new hydra.core.Literal.String_("An error that occurred during type unification"))))))),
+      java.util.Map.entry(
+        new hydra.core.Name("hydra.error.UnsupportedTermVariantError"),
+        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.error.UnsupportedTermVariantError"), java.util.List.of(new hydra.core.FieldType(new hydra.core.Name("termVariant"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.variants.TermVariant")), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("The unsupported term variant")))))))))), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A term variant that the type checker does not support"))))))),
+      java.util.Map.entry(
+        new hydra.core.Name("hydra.error.UntypedLambdaError"),
+        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.error.UntypedLambdaError"), (java.util.List<hydra.core.FieldType>) (java.util.List.<hydra.core.FieldType>of()))), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A lambda expression without a type annotation on its parameter"))))))),
+      java.util.Map.entry(
+        new hydra.core.Name("hydra.error.UntypedLetBindingError"),
+        new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.error.UntypedLetBindingError"), java.util.List.of(new hydra.core.FieldType(new hydra.core.Name("binding"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Binding")), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("The untyped binding")))))))))), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.Name("description"),
+          new hydra.core.Term.Literal(new hydra.core.Literal.String_("A let binding without a type annotation"))))))),
       java.util.Map.entry(
         new hydra.core.Name("hydra.graph.Graph"),
         new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Record(new hydra.core.RowType(new hydra.core.Name("hydra.graph.Graph"), java.util.List.of(
@@ -806,10 +1020,10 @@ public interface Bootstrap {
           new hydra.core.FieldType(new hydra.core.Name("type"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("The Hydra type of encoded terms"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("encode"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.Context")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.graph.Graph")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term")), new hydra.core.Type.Either(new hydra.core.EitherType(new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.InContext")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.OtherError")))), new hydra.core.Type.Variable(new hydra.core.Name("a")))))))))), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.FieldType(new hydra.core.Name("encode"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.Context")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.graph.Graph")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term")), new hydra.core.Type.Either(new hydra.core.EitherType(new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.InContext")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.Error")))), new hydra.core.Type.Variable(new hydra.core.Name("a")))))))))), java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("An encode function from terms to native values"))))))),
-          new hydra.core.FieldType(new hydra.core.Name("decode"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.Context")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("a")), new hydra.core.Type.Either(new hydra.core.EitherType(new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.InContext")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.OtherError")))), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term")))))))), java.util.Map.ofEntries(java.util.Map.entry(
+          new hydra.core.FieldType(new hydra.core.Name("decode"), new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.Context")), new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(new hydra.core.Name("a")), new hydra.core.Type.Either(new hydra.core.EitherType(new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(new hydra.core.Name("hydra.context.InContext")), new hydra.core.Type.Variable(new hydra.core.Name("hydra.error.Error")))), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term")))))))), java.util.Map.ofEntries(java.util.Map.entry(
             new hydra.core.Name("description"),
             new hydra.core.Term.Literal(new hydra.core.Literal.String_("A decode function from native values to terms")))))))))))), java.util.Map.ofEntries(java.util.Map.entry(
           new hydra.core.Name("description"),

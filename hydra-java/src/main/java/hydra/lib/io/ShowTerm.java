@@ -16,7 +16,7 @@ import static hydra.dsl.Types.string;
 import static hydra.dsl.Types.variable;
 import hydra.context.Context;
 import hydra.context.InContext;
-import hydra.error.OtherError;
+import hydra.error.Error_;
 import hydra.util.Either;
 
 /**
@@ -45,7 +45,7 @@ public class ShowTerm extends PrimitiveFunction {
      * @return a function that takes a list of terms and returns a flow producing a string term
      */
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> Either.right(Terms.string(ShowTerm.apply(args.get(0))));
     }
 

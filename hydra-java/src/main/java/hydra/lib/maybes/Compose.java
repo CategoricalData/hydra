@@ -16,7 +16,7 @@ import static hydra.dsl.Types.optional;
 import static hydra.dsl.Types.scheme;
 import hydra.context.Context;
 import hydra.context.InContext;
-import hydra.error.OtherError;
+import hydra.error.Error_;
 import hydra.util.Either;
 
 
@@ -37,13 +37,13 @@ public class Compose extends PrimitiveFunction {
     }
 
     @Override
-    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<OtherError>, Term>>>> implementation() {
+    protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> {
-            Function<Term, Either<InContext<OtherError>, Maybe<Term>>> nativeF = val ->
+            Function<Term, Either<InContext<Error_>, Maybe<Term>>> nativeF = val ->
                 hydra.lib.eithers.Bind.apply(
                     hydra.reduction.Reduction.reduceTerm(new hydra.context.Context(java.util.List.of(), java.util.List.of(), java.util.Map.of()), graph, true, Terms.apply(args.get(0), val)),
                     reduced -> hydra.extract.core.Core.maybeTerm(cx, t -> Either.right(t), graph, reduced));
-            Function<Term, Either<InContext<OtherError>, Maybe<Term>>> nativeG = val ->
+            Function<Term, Either<InContext<Error_>, Maybe<Term>>> nativeG = val ->
                 hydra.lib.eithers.Bind.apply(
                     hydra.reduction.Reduction.reduceTerm(new hydra.context.Context(java.util.List.of(), java.util.List.of(), java.util.Map.of()), graph, true, Terms.apply(args.get(1), val)),
                     reduced -> hydra.extract.core.Core.maybeTerm(cx, t -> Either.right(t), graph, reduced));
