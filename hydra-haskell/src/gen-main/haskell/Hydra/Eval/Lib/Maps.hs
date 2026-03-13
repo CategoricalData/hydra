@@ -20,7 +20,7 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Interpreter-friendly alter for Map terms.
-alter :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+alter :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term)
 alter cx g funTerm keyTerm mapTerm = ((\x -> case x of
   Core.TermMap v0 ->  
     let currentVal = (Maps.lookup keyTerm v0)
@@ -49,11 +49,11 @@ alter cx g funTerm keyTerm mapTerm = ((\x -> case x of
               Core.applicationArgument = mapTerm}))})))})),
         Core.applicationArgument = newVal})))
   _ -> (Left (Context.InContext {
-    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map value") " but found ") (Core_.term mapTerm))),
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map value") " but found ") (Core_.term mapTerm)))),
     Context.inContextContext = cx}))) mapTerm)
 
 -- | Interpreter-friendly bimap for Map terms.
-bimap :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+bimap :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term)
 bimap cx g keyFun valFun mapTerm = ((\x -> case x of
   Core.TermMap v0 ->  
     let pairs = (Maps.toList v0)
@@ -67,11 +67,11 @@ bimap cx g keyFun valFun mapTerm = ((\x -> case x of
           Core.applicationFunction = valFun,
           Core.applicationArgument = v})))) pairs))))
   _ -> (Left (Context.InContext {
-    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map value") " but found ") (Core_.term mapTerm))),
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map value") " but found ") (Core_.term mapTerm)))),
     Context.inContextContext = cx}))) mapTerm)
 
 -- | Interpreter-friendly filter for Map terms.
-filter :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+filter :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term)
 filter cx g valPred mapTerm = ((\x -> case x of
   Core.TermMap v0 ->  
     let pairs = (Maps.toList v0)
@@ -91,11 +91,11 @@ filter cx g valPred mapTerm = ((\x -> case x of
               Core.applicationArgument = (Core.TermList (Lists.pure (Core.TermPair (Pairs.first p, v))))})),
             Core.applicationArgument = (Core.TermList [])}))) pairs))}))})))
   _ -> (Left (Context.InContext {
-    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map value") " but found ") (Core_.term mapTerm))),
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map value") " but found ") (Core_.term mapTerm)))),
     Context.inContextContext = cx}))) mapTerm)
 
 -- | Interpreter-friendly filterWithKey for Map terms.
-filterWithKey :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+filterWithKey :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term)
 filterWithKey cx g pred mapTerm = ((\x -> case x of
   Core.TermMap v0 ->  
     let pairs = (Maps.toList v0)
@@ -119,11 +119,11 @@ filterWithKey cx g pred mapTerm = ((\x -> case x of
                 Core.applicationArgument = (Core.TermList (Lists.pure (Core.TermPair (k, v))))})),
               Core.applicationArgument = (Core.TermList [])}))) pairs))}))})))
   _ -> (Left (Context.InContext {
-    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map value") " but found ") (Core_.term mapTerm))),
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map value") " but found ") (Core_.term mapTerm)))),
     Context.inContextContext = cx}))) mapTerm)
 
 -- | Interpreter-friendly map for Map terms.
-map :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+map :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term)
 map cx g valFun mapTerm = ((\x -> case x of
   Core.TermMap v0 ->  
     let pairs = (Maps.toList v0)
@@ -135,11 +135,11 @@ map cx g valFun mapTerm = ((\x -> case x of
           Core.applicationFunction = valFun,
           Core.applicationArgument = v})))) pairs))))
   _ -> (Left (Context.InContext {
-    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map value") " but found ") (Core_.term mapTerm))),
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map value") " but found ") (Core_.term mapTerm)))),
     Context.inContextContext = cx}))) mapTerm)
 
 -- | Interpreter-friendly mapKeys for Map terms.
-mapKeys :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Term)
+mapKeys :: (Context.Context -> t0 -> Core.Term -> Core.Term -> Either (Context.InContext Error.Error) Core.Term)
 mapKeys cx g keyFun mapTerm = ((\x -> case x of
   Core.TermMap v0 ->  
     let pairs = (Maps.toList v0)
@@ -151,5 +151,5 @@ mapKeys cx g keyFun mapTerm = ((\x -> case x of
           Core.applicationFunction = keyFun,
           Core.applicationArgument = k}), v)) pairs))))
   _ -> (Left (Context.InContext {
-    Context.inContextObject = (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map value") " but found ") (Core_.term mapTerm))),
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "map value") " but found ") (Core_.term mapTerm)))),
     Context.inContextContext = cx}))) mapTerm)

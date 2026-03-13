@@ -258,15 +258,15 @@ unionTypeToRecordType rt =
     Core.rowTypeFields = (Lists.map makeOptional (Core.rowTypeFields rt))}
 
 -- | Extract comments/description from a Binding
-commentsFromElement :: (Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Error.OtherError) (Maybe String))
+commentsFromElement :: (Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Error.Error) (Maybe String))
 commentsFromElement cx g b = (Annotations.getTermDescription cx g (Core.bindingTerm b))
 
 -- | Extract comments/description from a FieldType
-commentsFromFieldType :: (Context.Context -> Graph.Graph -> Core.FieldType -> Either (Context.InContext Error.OtherError) (Maybe String))
+commentsFromFieldType :: (Context.Context -> Graph.Graph -> Core.FieldType -> Either (Context.InContext Error.Error) (Maybe String))
 commentsFromFieldType cx g ft = (Annotations.getTypeDescription cx g (Core.fieldTypeType ft))
 
 -- | Check the type of a term
-typeOfTerm :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.OtherError) Core.Type)
+typeOfTerm :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) Core.Type)
 typeOfTerm cx g term = (Eithers.map Pairs.first (Checking.typeOf cx g [] term))
 
 -- | Produces metadata for a binding if it is complex

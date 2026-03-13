@@ -76,9 +76,9 @@ data TermCoder a =
     -- | The Hydra type of encoded terms
     termCoderType :: Core.Type,
     -- | An encode function from terms to native values
-    termCoderEncode :: (Context.Context -> Graph -> Core.Term -> Either (Context.InContext Error.OtherError) a),
+    termCoderEncode :: (Context.Context -> Graph -> Core.Term -> Either (Context.InContext Error.Error) a),
     -- | A decode function from native values to terms
-    termCoderDecode :: (Context.Context -> a -> Either (Context.InContext Error.OtherError) Core.Term)}
+    termCoderDecode :: (Context.Context -> a -> Either (Context.InContext Error.Error) Core.Term)}
 
 _TermCoder = (Core.Name "hydra.graph.TermCoder")
 

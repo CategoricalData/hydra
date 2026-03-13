@@ -144,7 +144,7 @@ literalAdapter cx lt =
                                 let encode = (\cx -> \lit -> Eithers.bind (Core_.booleanLiteral cx lit) (\b -> Right (Core.LiteralString (Logic.ifElse b "true" "false"))))
                                 in  
                                   let decode = (\cx -> \lit -> Eithers.bind (Core_.stringLiteral cx lit) (\s -> Logic.ifElse (Equality.equal s "true") (Right (Core.LiteralBoolean True)) (Logic.ifElse (Equality.equal s "false") (Right (Core.LiteralBoolean False)) (Left (Context.InContext {
-                                          Context.inContextObject = (Error.OtherError (Strings.cat2 "expected boolean literal, found " s)),
+                                          Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "expected boolean literal, found " s))),
                                           Context.inContextContext = cx})))))
                                   in [
                                     Compute.Adapter {
@@ -161,7 +161,7 @@ literalAdapter cx lt =
                       let adapt = (\adapter -> \dir -> \cx -> \l -> (\x -> case x of
                               Core.LiteralFloat v0 -> (Eithers.map (\x -> Core.LiteralFloat x) (Utils.encodeDecode dir (Compute.adapterCoder adapter) cx v0))
                               _ -> (Left (Context.InContext {
-                                Context.inContextObject = (Error.OtherError (Strings.cat2 "expected floating-point literal, found " (Core__.literal l))),
+                                Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "expected floating-point literal, found " (Core__.literal l)))),
                                 Context.inContextContext = cx}))) l)
                       in (Eithers.bind (floatAdapter cx ft) (\adapter ->  
                         let step = (Utils.bidirectional (adapt adapter))
@@ -182,7 +182,7 @@ literalAdapter cx lt =
                         let adapt = (\adapter -> \dir -> \cx -> \lit -> (\x -> case x of
                                 Core.LiteralInteger v0 -> (Eithers.map (\x -> Core.LiteralInteger x) (Utils.encodeDecode dir (Compute.adapterCoder adapter) cx v0))
                                 _ -> (Left (Context.InContext {
-                                  Context.inContextObject = (Error.OtherError (Strings.cat2 "expected integer literal, found " (Core__.literal lit))),
+                                  Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "expected integer literal, found " (Core__.literal lit)))),
                                   Context.inContextContext = cx}))) lit)
                         in (Eithers.bind (integerAdapter cx it) (\adapter ->  
                           let step = (Utils.bidirectional (adapt adapter))

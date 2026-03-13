@@ -1176,7 +1176,7 @@
                                                                                                                                                           "name": "variable",
                                                                                                                                                           "term": {
                                                                                                                                                             "wrap": {
-                                                                                                                                                              "body": {"literal": {"string": "hydra.error.OtherError"}},
+                                                                                                                                                              "body": {"literal": {"string": "hydra.error.Error"}},
                                                                                                                                                               "typeName": "hydra.core.Name"}}},
                                                                                                                                                         "typeName": "hydra.core.Type"}}}],
                                                                                                                                                 "typeName": "hydra.core.ApplicationType"}}},
@@ -1315,7 +1315,7 @@
                                                                                                                                             "name": "variable",
                                                                                                                                             "term": {
                                                                                                                                               "wrap": {
-                                                                                                                                                "body": {"literal": {"string": "hydra.error.OtherError"}},
+                                                                                                                                                "body": {"literal": {"string": "hydra.error.Error"}},
                                                                                                                                                 "typeName": "hydra.core.Name"}}},
                                                                                                                                           "typeName": "hydra.core.Type"}}}],
                                                                                                                                   "typeName": "hydra.core.ApplicationType"}}},

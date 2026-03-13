@@ -1053,7 +1053,7 @@
                                                                                               "type": {"variable": "hydra.ext.haskell.ast.ModuleName"}}}}},
                                                                                       "type": {
                                                                                         "application": {
-                                                                                          "argument": {"variable": "hydra.error.OtherError"},
+                                                                                          "argument": {"variable": "hydra.error.Error"},
                                                                                           "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                   "type": {
                                                                                     "application": {
@@ -1094,7 +1094,7 @@
                                                 "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                 "type": {
                                                   "application": {
-                                                    "argument": {"variable": "hydra.error.OtherError"},
+                                                    "argument": {"variable": "hydra.error.Error"},
                                                     "function": {"variable": "hydra.context.InContext"}}}}},
                                             "type": {"set": {"variable": "hydra.module.Namespace"}}}},
                                         "type": {
@@ -1120,7 +1120,7 @@
                         "either": {
                           "left": {
                             "application": {
-                              "argument": {"variable": "hydra.error.OtherError"},
+                              "argument": {"variable": "hydra.error.Error"},
                               "function": {"variable": "hydra.context.InContext"}}},
                           "right": {
                             "application": {

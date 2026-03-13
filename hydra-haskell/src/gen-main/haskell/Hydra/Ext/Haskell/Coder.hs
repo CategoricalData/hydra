@@ -58,13 +58,13 @@ keyHaskellVar :: Core.Name
 keyHaskellVar = (Core.Name "haskellVar")
 
 -- | Adapt a Hydra type to Haskell's type system and encode it
-adaptTypeToHaskellAndEncode :: (Module.Namespaces Ast.ModuleName -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.OtherError) Ast.Type)
+adaptTypeToHaskellAndEncode :: (Module.Namespaces Ast.ModuleName -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Ast.Type)
 adaptTypeToHaskellAndEncode namespaces typ cx g =  
   let enc = (\t -> encodeType namespaces t cx g)
   in ((\x -> case x of
     Core.TypeVariable _ -> (enc typ)
     _ -> (Eithers.bind (Eithers.bimap (\_s -> Context.InContext {
-      Context.inContextObject = (Error.OtherError _s),
+      Context.inContextObject = (Error.ErrorOther (Error.OtherError _s)),
       Context.inContextContext = cx}) (\_x -> _x) (Modules.adaptTypeToLanguage Language.haskellLanguage cx g typ)) (\adaptedType -> enc adaptedType))) (Rewriting.deannotateType typ))
 
 -- | Generate a constant name for a field (e.g., '_TypeName_fieldName')
@@ -80,7 +80,7 @@ constantForTypeName :: (Core.Name -> String)
 constantForTypeName tname = (Strings.cat2 "_" (Names.localNameOf tname))
 
 -- | Construct a Haskell module from a Hydra module and its definitions
-constructModule :: (Module.Namespaces Ast.ModuleName -> Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.OtherError) Ast.Module)
+constructModule :: (Module.Namespaces Ast.ModuleName -> Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Ast.Module)
 constructModule namespaces mod defs cx g =  
   let h = (\namespace -> Module.unNamespace namespace) 
       createDeclarations = (\def -> (\x -> case x of
@@ -145,7 +145,7 @@ constructModule namespaces mod defs cx g =
       Ast.moduleDeclarations = decls}))))
 
 -- | Encode a Hydra function as a Haskell expression
-encodeFunction :: (Int -> Module.Namespaces Ast.ModuleName -> Core.Function -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.OtherError) Ast.Expression)
+encodeFunction :: (Int -> Module.Namespaces Ast.ModuleName -> Core.Function -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Ast.Expression)
 encodeFunction depth namespaces fun cx g = ((\x -> case x of
   Core.FunctionElimination v0 -> ((\x -> case x of
     Core.EliminationWrap v1 -> (Right (Ast.ExpressionVariable (Utils.elementReference namespaces (Names.qname (Maybes.fromJust (Names.namespaceOf v1)) (Utils.newtypeAccessorName v1)))))
@@ -181,11 +181,11 @@ encodeFunction depth namespaces fun cx g = ((\x -> case x of
                       v1 = (Logic.ifElse (Rewriting.isFreeVariableInTerm (Core.Name v0) rhsTerm) Constants.ignoredVariable v0)
                       hname = (Utils.unionFieldReference (Sets.fromList (Maps.keys (Graph.graphBoundTerms g))) namespaces dn fn)
                   in (Eithers.bind (Maybes.cases (Maps.lookup fn fieldMap) (Left (Context.InContext {
-                    Context.inContextObject = (Error.OtherError (Strings.cat [
+                    Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat [
                       "field ",
                       (Literals.showString (Core.unName fn)),
                       " not found in ",
-                      (Literals.showString (Core.unName dn))])),
+                      (Literals.showString (Core.unName dn))]))),
                     Context.inContextContext = cx})) (\fieldType ->  
                     let ft = (Core.fieldTypeType fieldType) 
                         noArgs = []
@@ -207,7 +207,7 @@ encodeFunction depth namespaces fun cx g = ((\x -> case x of
   Core.FunctionPrimitive v0 -> (Right (Ast.ExpressionVariable (Utils.elementReference namespaces v0)))) fun)
 
 -- | Encode a Hydra literal as a Haskell expression
-encodeLiteral :: (Core.Literal -> Context.Context -> Either (Context.InContext Error.OtherError) Ast.Expression)
+encodeLiteral :: (Core.Literal -> Context.Context -> Either (Context.InContext Error.Error) Ast.Expression)
 encodeLiteral l cx = ((\x -> case x of
   Core.LiteralBinary v0 -> (Right (Utils.hsapp (Utils.hsvar "Literals.stringToBinary") (Utils.hslit (Ast.LiteralString (Literals.binaryToString v0)))))
   Core.LiteralBoolean v0 -> (Right (Utils.hsvar (Logic.ifElse v0 "True" "False")))
@@ -227,11 +227,11 @@ encodeLiteral l cx = ((\x -> case x of
     Core.IntegerValueUint64 v1 -> (Right (Utils.hslit (Ast.LiteralInteger (Literals.uint64ToBigint v1))))) v0)
   Core.LiteralString v0 -> (Right (Utils.hslit (Ast.LiteralString v0)))
   _ -> (Left (Context.InContext {
-    Context.inContextObject = (Error.OtherError (Strings.cat2 "literal value " (Core__.literal l))),
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "literal value " (Core__.literal l)))),
     Context.inContextContext = cx}))) l)
 
 -- | Encode a Hydra term as a Haskell expression
-encodeTerm :: (Int -> Module.Namespaces Ast.ModuleName -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.OtherError) Ast.Expression)
+encodeTerm :: (Int -> Module.Namespaces Ast.ModuleName -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Ast.Expression)
 encodeTerm depth namespaces term cx g =  
   let encode = (\t -> encodeTerm depth namespaces t cx g)
   in  
@@ -312,11 +312,11 @@ encodeTerm depth namespaces term cx g =
               lhs = (Ast.ExpressionVariable (Utils.elementReference namespaces tname))
           in (Eithers.bind (encode term_) (\rhs -> Right (Utils.hsapp lhs rhs)))
         _ -> (Left (Context.InContext {
-          Context.inContextObject = (Error.OtherError (Strings.cat2 "unexpected term: " (Core__.term term))),
+          Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "unexpected term: " (Core__.term term)))),
           Context.inContextContext = cx}))) (Rewriting.deannotateTerm term))
 
 -- | Encode a Hydra type as a Haskell type
-encodeType :: (Module.Namespaces Ast.ModuleName -> Core.Type -> Context.Context -> t0 -> Either (Context.InContext Error.OtherError) Ast.Type)
+encodeType :: (Module.Namespaces Ast.ModuleName -> Core.Type -> Context.Context -> t0 -> Either (Context.InContext Error.Error) Ast.Type)
 encodeType namespaces typ cx g =  
   let encode = (\t -> encodeType namespaces t cx g) 
       ref = (\name -> Right (Ast.TypeVariable (Utils.elementReference namespaces name)))
@@ -360,11 +360,11 @@ encodeType namespaces typ cx g =
         Core.IntegerTypeInt32 -> (Right (Ast.TypeVariable (Utils.rawName "Int")))
         Core.IntegerTypeInt64 -> (Right (Ast.TypeVariable (Utils.rawName "I.Int64")))
         _ -> (Left (Context.InContext {
-          Context.inContextObject = (Error.OtherError (Strings.cat2 "unexpected integer type: " (Core__.integerType v1))),
+          Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "unexpected integer type: " (Core__.integerType v1)))),
           Context.inContextContext = cx}))) v1)
       Core.LiteralTypeString -> (Right (Ast.TypeVariable (Utils.rawName "String")))
       _ -> (Left (Context.InContext {
-        Context.inContextObject = (Error.OtherError (Strings.cat2 "unexpected literal type: " (Core__.literalType v0))),
+        Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "unexpected literal type: " (Core__.literalType v0)))),
         Context.inContextContext = cx}))) v0)
     Core.TypeMap v0 ->  
       let kt = (Core.mapTypeKeys v0) 
@@ -392,11 +392,11 @@ encodeType namespaces typ cx g =
       let name = (Core.wrappedTypeTypeName v0)
       in (ref name)
     _ -> (Left (Context.InContext {
-      Context.inContextObject = (Error.OtherError (Strings.cat2 "unexpected type: " (Core__.type_ typ))),
+      Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "unexpected type: " (Core__.type_ typ)))),
       Context.inContextContext = cx}))) (Rewriting.deannotateType typ))
 
 -- | Encode a Hydra type as a Haskell type with typeclass assertions
-encodeTypeWithClassAssertions :: (Module.Namespaces Ast.ModuleName -> M.Map Core.Name (S.Set Classes.TypeClass) -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.OtherError) Ast.Type)
+encodeTypeWithClassAssertions :: (Module.Namespaces Ast.ModuleName -> M.Map Core.Name (S.Set Classes.TypeClass) -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Ast.Type)
 encodeTypeWithClassAssertions namespaces explicitClasses typ cx g =  
   let classes = (Maps.union explicitClasses (getImplicitTypeClasses typ)) 
       implicitClasses = (getImplicitTypeClasses typ)
@@ -447,11 +447,11 @@ getImplicitTypeClasses typ =
   in (Maps.fromList (Lists.map toPair (Sets.toList (findOrdVariables typ))))
 
 -- | Convert a Hydra module and definitions to a Haskell module AST
-moduleToHaskellModule :: (Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.OtherError) Ast.Module)
+moduleToHaskellModule :: (Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Ast.Module)
 moduleToHaskellModule mod defs cx g = (Eithers.bind (Utils.namespacesForModule mod cx g) (\namespaces -> constructModule namespaces mod defs cx g))
 
 -- | Convert a Hydra module to Haskell source code as a filepath-to-content map
-moduleToHaskell :: (Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.OtherError) (M.Map String String))
+moduleToHaskell :: (Module.Module -> [Module.Definition] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (M.Map String String))
 moduleToHaskell mod defs cx g = (Eithers.bind (moduleToHaskellModule mod defs cx g) (\hsmod ->  
   let s = (Serialization.printExpr (Serialization.parenthesize (Serde.moduleToExpr hsmod))) 
       filepath = (Names.namespaceToFilePath Util.CaseConventionPascal (Module.FileExtension "hs") (Module.moduleNamespace mod))
@@ -481,7 +481,7 @@ nameDecls namespaces name typ =
   in (Logic.ifElse useCoreImport (Lists.cons (toDecl (Core.Name "hydra.core.Name") nameDecl) (Lists.map (toDecl (Core.Name "hydra.core.Name")) fieldDecls)) [])
 
 -- | Convert a Hydra term definition to a Haskell declaration with comments
-toDataDeclaration :: (Module.Namespaces Ast.ModuleName -> Module.TermDefinition -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.OtherError) Ast.DeclarationWithComments)
+toDataDeclaration :: (Module.Namespaces Ast.ModuleName -> Module.TermDefinition -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Ast.DeclarationWithComments)
 toDataDeclaration namespaces def cx g =  
   let name = (Module.termDefinitionName def) 
       term = (Module.termDefinitionTerm def)
@@ -539,7 +539,7 @@ toDataDeclaration namespaces def cx g =
   in (Eithers.bind (Annotations.getTermDescription cx g term) (\comments -> toDecl comments hname term Nothing))
 
 -- | Convert a Hydra type definition to Haskell declarations
-toTypeDeclarationsFrom :: (Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.OtherError) [Ast.DeclarationWithComments])
+toTypeDeclarationsFrom :: (Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) [Ast.DeclarationWithComments])
 toTypeDeclarationsFrom namespaces elementName typ cx g =  
   let lname = (Names.localNameOf elementName) 
       hname = (Utils.simpleName lname)
@@ -647,7 +647,7 @@ toTypeDeclarationsFrom namespaces elementName typ cx g =
         tdecls]))))))))
 
 -- | Generate a Haskell declaration for a type definition constant
-typeDecl :: (Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.OtherError) Ast.DeclarationWithComments)
+typeDecl :: (Module.Namespaces Ast.ModuleName -> Core.Name -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Ast.DeclarationWithComments)
 typeDecl namespaces name typ cx g =  
   let typeName = (\ns -> \name_ -> Names.qname ns (typeNameLocal name_)) 
       typeNameLocal = (\name_ -> Strings.cat [

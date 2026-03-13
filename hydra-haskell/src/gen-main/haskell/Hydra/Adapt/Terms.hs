@@ -56,7 +56,7 @@ fieldAdapter cx ftyp =
 forTypeReference :: (Coders.AdapterContext -> Core.Name -> Either String (Compute.Adapter Core.Type Core.Type Core.Term Core.Term))
 forTypeReference cx name =  
   let encdec = (\name -> \adapters0 -> \dir -> \cx -> \term -> Maybes.maybe (Left (Context.InContext {
-          Context.inContextObject = (Error.OtherError (Strings.cat2 "no adapter for reference type " (Core.unName name))),
+          Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "no adapter for reference type " (Core.unName name)))),
           Context.inContextContext = cx})) (\ad -> Utils.encodeDecode dir (Compute.adapterCoder ad) cx term) (Maps.lookup name adapters0))
   in  
     let forType = (\cx2 -> \adapters0 -> \t -> Eithers.bind (termAdapter cx2 t) (\actual -> Right actual))
@@ -156,12 +156,12 @@ functionToUnion cx t =
             in (Compute.coderEncode (Compute.adapterCoder ad) cx (encTerm term strippedTerm)))
     in  
       let readFromString = (\cx -> \graph -> \term -> Eithers.bind (Core_.string cx graph term) (\s -> Maybes.maybe (Left (Context.InContext {
-              Context.inContextObject = (Error.OtherError (Strings.cat2 "failed to parse term: " s)),
+              Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "failed to parse term: " s))),
               Context.inContextContext = cx})) (\x -> Right x) (Core__.readTerm s)))
       in  
         let decode = (\graph -> \ad -> \cx -> \term ->  
                 let notFound = (\fname -> Left (Context.InContext {
-                        Context.inContextObject = (Error.OtherError (Strings.cat2 "unexpected field: " (Core.unName fname))),
+                        Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "unexpected field: " (Core.unName fname)))),
                         Context.inContextContext = cx}))
                 in  
                   let forCases = (\fterm -> readFromString cx graph fterm)
@@ -655,13 +655,13 @@ unionToRecord cx t =
     let fromRecordFields = (\cx -> \term -> \term_ -> \t_ -> \fields ->  
             let matches = (Maybes.mapMaybe forField fields)
             in (Logic.ifElse (Lists.null matches) (Left (Context.InContext {
-              Context.inContextObject = (Error.OtherError (Strings.cat [
+              Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat [
                 "cannot convert term back to union: ",
                 (Core__.term term),
                 " where type = ",
                 (Core__.type_ t),
                 "    and target type = ",
-                (Core__.type_ t_)])),
+                (Core__.type_ t_)]))),
               Context.inContextContext = cx})) (Right (Lists.head matches))))
     in  
       let forRecTerm = (\cx -> \nm -> \ad -> \term -> \recTerm -> (\x -> case x of

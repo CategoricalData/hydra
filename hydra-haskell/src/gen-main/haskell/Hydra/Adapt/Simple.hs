@@ -30,6 +30,7 @@ import qualified Hydra.Reflect as Reflect
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Show.Core as Core_
+import qualified Hydra.Show.Error as Error_
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -305,7 +306,7 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
                 let bins0 = originalBindings
                 in  
                   let bins1 = (Logic.ifElse doHoistCaseStatements (hoistCases bins0) bins0)
-                  in (Eithers.bind (Logic.ifElse doInfer (Eithers.map (\result -> Pairs.second (Pairs.first result)) (Eithers.bimap (\ic -> Error.unOtherError (Context.inContextObject ic)) (\x -> x) (Inference.inferGraphTypes cx bins1 (rebuildGraph bins1)))) (checkBindingsTyped "after case hoisting" bins1)) (\bins2 -> Eithers.bind (Logic.ifElse doHoistPolymorphicLetBindings (checkBindingsTyped "after let hoisting" (hoistPoly bins2)) (Right bins2)) (\bins3 -> Eithers.bind (adaptDataGraph constraints doExpand bins3 cx (rebuildGraph bins3)) (\adaptResult ->  
+                  in (Eithers.bind (Logic.ifElse doInfer (Eithers.map (\result -> Pairs.second (Pairs.first result)) (Eithers.bimap (\ic -> Error_.error (Context.inContextObject ic)) (\x -> x) (Inference.inferGraphTypes cx bins1 (rebuildGraph bins1)))) (checkBindingsTyped "after case hoisting" bins1)) (\bins2 -> Eithers.bind (Logic.ifElse doHoistPolymorphicLetBindings (checkBindingsTyped "after let hoisting" (hoistPoly bins2)) (Right bins2)) (\bins3 -> Eithers.bind (adaptDataGraph constraints doExpand bins3 cx (rebuildGraph bins3)) (\adaptResult ->  
                     let adapted = (Pairs.first adaptResult)
                     in  
                       let adaptedBindings = (Pairs.second adaptResult)
@@ -483,7 +484,7 @@ termAlternatives cx graph term = ((\x -> case x of
                     in Core.Field {
                       Core.fieldName = fname,
                       Core.fieldTerm = (Core.TermMaybe (Logic.ifElse (Equality.equal ftname fname) (Just fterm) Nothing))})
-            in (Eithers.bind (Eithers.bimap (\ic -> Error.unOtherError (Context.inContextObject ic)) (\x -> x) (Schemas.requireUnionType cx graph tname)) (\rt -> Right [
+            in (Eithers.bind (Eithers.bimap (\ic -> Error_.error (Context.inContextObject ic)) (\x -> x) (Schemas.requireUnionType cx graph tname)) (\rt -> Right [
               Core.TermRecord (Core.Record {
                 Core.recordTypeName = tname,
                 Core.recordFields = (Lists.map forFieldType (Core.rowTypeFields rt))})]))
