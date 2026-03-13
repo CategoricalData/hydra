@@ -958,7 +958,7 @@
               "domain": {"variable": "t0"}}},
           "variables": ["t0"]}]}],
   "namespace": "hydra.extract.json",
-  "termDependencies": ["hydra.monads"],
+  "termDependencies": [],
   "typeDependencies": [
     "hydra.accessors",
     "hydra.ast",

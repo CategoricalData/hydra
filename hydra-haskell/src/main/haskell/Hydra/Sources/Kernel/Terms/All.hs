@@ -25,7 +25,7 @@ import qualified Hydra.Sources.Kernel.Terms.Inference       as Inference
 import qualified Hydra.Sources.Kernel.Terms.Languages       as Languages
 import qualified Hydra.Sources.Kernel.Terms.Lexical         as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Literals        as Literals
-import qualified Hydra.Sources.Kernel.Terms.Monads          as Monads
+
 import qualified Hydra.Sources.Kernel.Terms.Names           as Names
 import qualified Hydra.Sources.Kernel.Terms.Parsers         as Parsers
 import qualified Hydra.Sources.Kernel.Terms.Reduction       as Reduction
@@ -117,7 +117,7 @@ kernelPrimaryTermsModules = [
   Languages.module_,
   Lexical.module_,
   Literals.module_,
-  Monads.module_,
+
   Names.module_,
   Parsers.module_,
   Reduction.module_,

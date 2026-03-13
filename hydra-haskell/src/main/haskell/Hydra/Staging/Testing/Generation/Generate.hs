@@ -13,7 +13,6 @@ import Hydra.Sources.Test.All (testModules)
 
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
-import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Lib.Strings as Strings
 
@@ -84,7 +83,6 @@ buildTestGroupMap subModuleNamespaces rootTestGroup =
     -- e.g., "hydra.test.lib.chars" -> "hydra.lib.chars primitives"
     -- e.g., "hydra.test.formatting" -> "formatting"
     -- e.g., "hydra.test.checking.all" -> "checking"
-    -- e.g., "hydra.test.monads" -> "hydra.monads"
     -- e.g., "hydra.test.etaExpansion" -> "eta expansion"
     -- e.g., "hydra.test.json.parser" -> "JSON parser"
     deriveTestGroupName (Namespace ns) =
@@ -147,7 +145,7 @@ generateGenerationTestSuite testGen outDir modules lookupTestGroup = do
 
       -- Perform type inference ONCE upfront for the entire graph
       putStrLn "Starting type inference..."
-      let cx0 = emptyContext
+      let cx0 = Context [] [] M.empty
       case Inference.inferGraphTypes cx0 (graphToBindings graph) graph of
         Left ic -> do
           putStrLn $ "✗ Type inference failed: " ++ unOtherError (inContextObject ic)
@@ -171,9 +169,8 @@ generateGenerationTestSuite testGen outDir modules lookupTestGroup = do
       writeFile fullPath content
       putStrLn $ "  Generated: " ++ fullPath
     -- Core.module_ is required for schema types like Either, Maybe, etc.
-    -- Monads.module_ is required for primitives like hydra.monads.pure
     -- Lexical.module_ is required for hydra.lexical.emptyGraph
-    extraModules = [Formatting.module_, Lexical.module_, Monads.module_, Core.module_]
+    extraModules = [Formatting.module_, Lexical.module_, Core.module_]
 
 -- | Generate all test files using the provided test generator and write them
 generateAllFiles :: TestGenerator a -> Graph -> FilePath -> [(Module, TestGroup)] -> ((FilePath, String) -> IO ()) -> IO (Either String Int)

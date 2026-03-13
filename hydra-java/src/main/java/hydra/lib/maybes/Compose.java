@@ -41,11 +41,11 @@ public class Compose extends PrimitiveFunction {
         return args -> cx -> graph -> {
             Function<Term, Either<InContext<OtherError>, Maybe<Term>>> nativeF = val ->
                 hydra.lib.eithers.Bind.apply(
-                    hydra.reduction.Reduction.reduceTerm(hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(args.get(0), val)),
+                    hydra.reduction.Reduction.reduceTerm(new hydra.context.Context(java.util.List.of(), java.util.List.of(), java.util.Map.of()), graph, true, Terms.apply(args.get(0), val)),
                     reduced -> hydra.extract.core.Core.maybeTerm(cx, t -> Either.right(t), graph, reduced));
             Function<Term, Either<InContext<OtherError>, Maybe<Term>>> nativeG = val ->
                 hydra.lib.eithers.Bind.apply(
-                    hydra.reduction.Reduction.reduceTerm(hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(args.get(1), val)),
+                    hydra.reduction.Reduction.reduceTerm(new hydra.context.Context(java.util.List.of(), java.util.List.of(), java.util.Map.of()), graph, true, Terms.apply(args.get(1), val)),
                     reduced -> hydra.extract.core.Core.maybeTerm(cx, t -> Either.right(t), graph, reduced));
             return hydra.lib.eithers.Bind.apply(nativeF.apply(args.get(2)), maybeB -> {
                 if (!maybeB.isJust()) {

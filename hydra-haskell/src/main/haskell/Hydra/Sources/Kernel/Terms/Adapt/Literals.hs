@@ -57,7 +57,7 @@ import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Meta.Error        as Error
 import qualified Hydra.Sources.Kernel.Terms.Adapt.Utils  as AdaptUtils
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
-import qualified Hydra.Sources.Kernel.Terms.Monads       as Monads
+
 import qualified Hydra.Sources.Kernel.Terms.Reflect      as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Show.Core    as ShowCore
 
@@ -69,7 +69,7 @@ ns = Namespace "hydra.adapt.literals"
 
 module_ :: Module
 module_ = Module ns elements
-    [AdaptUtils.ns, ExtractCore.ns, Monads.ns, Reflect.ns, ShowCore.ns]
+    [AdaptUtils.ns, ExtractCore.ns, Reflect.ns, ShowCore.ns]
     kernelTypesNamespaces $
     Just "Adapter framework for literal types and terms"
   where

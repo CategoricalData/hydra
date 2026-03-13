@@ -62,12 +62,12 @@ addNamespacesToNamespaces ns0 names =
     mapMaybe f = foldr (\x acc -> maybe acc (:acc) (f x)) []
 
 termToHaskell :: Namespaces H.ModuleName -> Term -> Graph -> Either String String
-termToHaskell namespaces term g = case HaskellCoder.encodeTerm 0 namespaces term emptyContext g of
+termToHaskell namespaces term g = case HaskellCoder.encodeTerm 0 namespaces term (Context [] [] M.empty) g of
   Left ic -> Left $ unOtherError (inContextObject ic)
   Right result -> Right $ printExpr . parenthesize . HaskellSerde.expressionToExpr $ result
 
 typeToHaskell :: Namespaces H.ModuleName -> Type -> Graph -> Either String String
-typeToHaskell namespaces typ g = case HaskellCoder.encodeType namespaces typ emptyContext g of
+typeToHaskell namespaces typ g = case HaskellCoder.encodeType namespaces typ (Context [] [] M.empty) g of
   Left ic -> Left $ unOtherError (inContextObject ic)
   Right result -> Right $ printExpr . parenthesize . HaskellSerde.typeToExpr $ result
 
@@ -243,7 +243,7 @@ generateTypeAnnotationFor g namespaces inputTerm outputTerm = do
 -- (e.g., schema types being unified with polymorphic type variables)
 tryInferTypeOf :: Graph -> Term -> Maybe (Term, TypeScheme)
 tryInferTypeOf g term =
-  let cx = emptyContext
+  let cx = Context [] [] M.empty
   in case Inference.inferTypeOf cx g term of
     Left _ -> Nothing
     Right (result, _cx') -> Just result
@@ -336,7 +336,7 @@ generateHaskellTestFile testModule testGroup g = do
           testBindings = zipWith (\i term -> Binding (Name $ "_test_" ++ show i) term Nothing) ([0..] :: [Integer]) testTerms
           tempModule = mod { moduleElements = testBindings }
       -- Get initial namespaces from the module
-      baseNamespaces <- mapInContextError $ namespacesForModule tempModule emptyContext graph
+      baseNamespaces <- mapInContextError $ namespacesForModule tempModule (Context [] [] M.empty) graph
       -- Extract additional namespaces from term-encoded variable references
       let encodedNames = S.unions $ map (extractEncodedTermVariableNames graph) testTerms
       -- Add the encoded term namespaces to the base namespaces
@@ -352,7 +352,7 @@ generateHaskellTestFile testModule testGroup g = do
 haskellTestGenerator :: TestGenerator H.ModuleName
 haskellTestGenerator = TestGenerator {
   testGenNamespacesForModule = \m g -> do
-    case namespacesForModule m emptyContext g of
+    case namespacesForModule m (Context [] [] M.empty) g of
       Left ic -> Left (unOtherError (inContextObject ic))
       Right ns -> Right ns,
   testGenCreateCodec = haskellTestCodec,

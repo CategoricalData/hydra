@@ -2016,7 +2016,6 @@
     "hydra.annotations",
     "hydra.decode.core",
     "hydra.lexical",
-    "hydra.monads",
     "hydra.rewriting",
     "hydra.schemas"],
   "typeDependencies": [

@@ -10186,7 +10186,6 @@
     "hydra.decode.core",
     "hydra.encode.core",
     "hydra.lexical",
-    "hydra.monads",
     "hydra.names",
     "hydra.reflect",
     "hydra.rewriting",

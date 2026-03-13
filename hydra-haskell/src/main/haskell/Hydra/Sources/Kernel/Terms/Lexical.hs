@@ -2,7 +2,7 @@
 module Hydra.Sources.Kernel.Terms.Lexical where
 
 -- Standard imports for kernel terms modules
-import Hydra.Kernel hiding (buildGraph, chooseUniqueName, dereferenceElement, dereferenceSchemaType, dereferenceVariable, elementsToGraph, emptyGraph, extendGraphWithBindings, fieldsOf, getField, graphToBindings, lookupElement, lookupPrimitive, lookupTerm, matchEnum, matchRecord, matchUnion, matchUnitField, requireElement, requirePrimitive, requirePrimitiveType, requireTerm, resolveTerm, stripAndDereferenceTerm, stripAndDereferenceTermEither)
+import Hydra.Kernel hiding (buildGraph, chooseUniqueName, dereferenceElement, dereferenceSchemaType, dereferenceVariable, elementsToGraph, emptyContext, emptyGraph, extendGraphWithBindings, fieldsOf, getField, graphToBindings, lookupElement, lookupPrimitive, lookupTerm, matchEnum, matchRecord, matchUnion, matchUnitField, requireElement, requirePrimitive, requirePrimitiveType, requireTerm, resolveTerm, stripAndDereferenceTerm, stripAndDereferenceTermEither)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors    as Accessors
 import qualified Hydra.Dsl.Annotations       as Annotations
@@ -55,7 +55,7 @@ import qualified Data.Map                    as M
 import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
-import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
+
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
@@ -68,7 +68,7 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-   [Monads.ns, Rewriting.ns, ShowCore.ns]
+   [Rewriting.ns, ShowCore.ns]
     kernelTypesNamespaces $
     Just ("A module for lexical operations over graphs.")
   where
@@ -79,6 +79,7 @@ module_ = Module ns elements
       toBinding dereferenceSchemaType,
       toBinding dereferenceVariable,
       toBinding elementsToGraph,
+      toBinding emptyContext,
       toBinding emptyGraph,
       toBinding extendGraphWithBindings,
       toBinding graphToBindings,
@@ -185,6 +186,14 @@ elementsToGraph = define "elementsToGraph" $
   Graph.graphWithSchemaTypes
     (buildGraph @@ var "elements" @@ Maps.empty @@ var "prims")
     (var "schemaTypes")
+
+emptyContext :: TBinding Context
+emptyContext = define "emptyContext" $
+  doc "An empty context; no trace, no messages, no other data." $
+  record _Context [
+    _Context_trace>>: list ([] :: [TTerm String]),
+    _Context_messages>>: list ([] :: [TTerm String]),
+    _Context_other>>: Maps.empty]
 
 emptyGraph :: TBinding Graph
 emptyGraph = define "emptyGraph" $

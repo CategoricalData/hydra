@@ -11584,7 +11584,7 @@
                                                                                                         "name": "variable",
                                                                                                         "term": {
                                                                                                           "wrap": {
-                                                                                                            "body": {"literal": {"string": "hydra.monads.emptyContext"}},
+                                                                                                            "body": {"literal": {"string": "hydra.lexical.emptyContext"}},
                                                                                                             "typeName": "hydra.core.Name"}}},
                                                                                                       "typeName": "hydra.core.Term"}}}],
                                                                                               "typeName": "hydra.core.Application"}}},
@@ -11867,7 +11867,7 @@
                                                                                                         "name": "variable",
                                                                                                         "term": {
                                                                                                           "wrap": {
-                                                                                                            "body": {"literal": {"string": "hydra.monads.emptyContext"}},
+                                                                                                            "body": {"literal": {"string": "hydra.lexical.emptyContext"}},
                                                                                                             "typeName": "hydra.core.Name"}}},
                                                                                                       "typeName": "hydra.core.Term"}}}],
                                                                                               "typeName": "hydra.core.Application"}}},
@@ -12116,7 +12116,7 @@
                                                                                                         "name": "variable",
                                                                                                         "term": {
                                                                                                           "wrap": {
-                                                                                                            "body": {"literal": {"string": "hydra.monads.emptyContext"}},
+                                                                                                            "body": {"literal": {"string": "hydra.lexical.emptyContext"}},
                                                                                                             "typeName": "hydra.core.Name"}}},
                                                                                                       "typeName": "hydra.core.Term"}}}],
                                                                                               "typeName": "hydra.core.Application"}}},
@@ -12365,7 +12365,7 @@
                                                                                                         "name": "variable",
                                                                                                         "term": {
                                                                                                           "wrap": {
-                                                                                                            "body": {"literal": {"string": "hydra.monads.emptyContext"}},
+                                                                                                            "body": {"literal": {"string": "hydra.lexical.emptyContext"}},
                                                                                                             "typeName": "hydra.core.Name"}}},
                                                                                                       "typeName": "hydra.core.Term"}}}],
                                                                                               "typeName": "hydra.core.Application"}}},
@@ -12588,7 +12588,7 @@
                                                                                                         "name": "variable",
                                                                                                         "term": {
                                                                                                           "wrap": {
-                                                                                                            "body": {"literal": {"string": "hydra.monads.emptyContext"}},
+                                                                                                            "body": {"literal": {"string": "hydra.lexical.emptyContext"}},
                                                                                                             "typeName": "hydra.core.Name"}}},
                                                                                                       "typeName": "hydra.core.Term"}}}],
                                                                                               "typeName": "hydra.core.Application"}}},
@@ -12779,7 +12779,7 @@
                                                                                                         "name": "variable",
                                                                                                         "term": {
                                                                                                           "wrap": {
-                                                                                                            "body": {"literal": {"string": "hydra.monads.emptyContext"}},
+                                                                                                            "body": {"literal": {"string": "hydra.lexical.emptyContext"}},
                                                                                                             "typeName": "hydra.core.Name"}}},
                                                                                                       "typeName": "hydra.core.Term"}}}],
                                                                                               "typeName": "hydra.core.Application"}}},

@@ -47,7 +47,7 @@ public class MapList extends PrimitiveFunction {
                 List<Term> results = new ArrayList<>();
                 for (Term element : lst) {
                     Either<InContext<OtherError>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                        hydra.monads.Monads.emptyContext(), graph, true, Terms.apply(fn, element));
+                        new hydra.context.Context(java.util.List.of(), java.util.List.of(), java.util.Map.of()), graph, true, Terms.apply(fn, element));
                     if (r.isLeft()) return r;
                     Either<InContext<OtherError>, hydra.util.Either<Term, Term>> eitherResult =
                         hydra.extract.core.Core.eitherTerm(cx, t -> Either.right(t), t -> Either.right(t), graph,

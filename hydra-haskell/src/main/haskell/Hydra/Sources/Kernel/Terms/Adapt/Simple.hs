@@ -67,7 +67,7 @@ import qualified Hydra.Sources.Kernel.Terms.Names       as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction   as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect     as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Lexical      as Lexical
-import qualified Hydra.Sources.Kernel.Terms.Monads      as Monads
+
 import qualified Hydra.Sources.Kernel.Terms.Rewriting   as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas     as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Show.Core   as ShowCore
@@ -79,7 +79,7 @@ ns = Namespace "hydra.adapt.simple"
 
 module_ :: Module
 module_ = Module ns elements
-    [Hoisting.ns, Inference.ns, Lexical.ns, Literals.ns, Monads.ns, Names.ns, Reduction.ns, Reflect.ns, Rewriting.ns, Schemas.ns,
+    [Hoisting.ns, Inference.ns, Lexical.ns, Literals.ns, Names.ns, Reduction.ns, Reflect.ns, Rewriting.ns, Schemas.ns,
       ShowCore.ns, ShowGraph.ns]
     kernelTypesNamespaces $
     Just "Simple, one-way adapters for types and terms"

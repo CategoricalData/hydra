@@ -13612,7 +13612,6 @@
     "hydra.extract.core",
     "hydra.formatting",
     "hydra.lexical",
-    "hydra.monads",
     "hydra.reflect",
     "hydra.rewriting",
     "hydra.schemas",

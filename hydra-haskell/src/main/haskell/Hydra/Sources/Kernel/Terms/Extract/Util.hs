@@ -56,7 +56,6 @@ import qualified Data.Maybe                  as Y
 import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Meta.Error        as Error
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
-import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
 
 
 ns :: Namespace
@@ -64,7 +63,7 @@ ns = Namespace "hydra.extract.util"
 
 module_ :: Module
 module_ = Module ns elements
-    [ExtractCore.ns, Monads.ns]
+    [ExtractCore.ns]
     kernelTypesNamespaces $
     Just ("Extraction and validation for hydra.util types")
   where

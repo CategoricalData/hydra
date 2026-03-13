@@ -18,9 +18,6 @@ context traceStack messages other = record _Context [
     _Context_messages>>: messages,
     _Context_other>>: other]
 
-emptyContext :: TTerm Context
-emptyContext = context (list ([] :: [TTerm String])) (list ([] :: [TTerm String])) Maps.empty
-
 contextTrace :: TTerm Context -> TTerm [String]
 contextTrace cx = project _Context _Context_trace @@ cx
 

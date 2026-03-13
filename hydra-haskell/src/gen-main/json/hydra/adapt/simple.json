@@ -8923,7 +8923,6 @@
     "hydra.inference",
     "hydra.lexical",
     "hydra.literals",
-    "hydra.monads",
     "hydra.names",
     "hydra.reduction",
     "hydra.reflect",

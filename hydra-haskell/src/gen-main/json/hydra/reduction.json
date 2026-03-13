@@ -10680,7 +10680,6 @@
     "hydra.hoisting",
     "hydra.inference",
     "hydra.lexical",
-    "hydra.monads",
     "hydra.rewriting",
     "hydra.schemas",
     "hydra.show.core"],

@@ -1946,7 +1946,7 @@
                   "values": {"list": {"literal": {"integer": {"int32": {}}}}}}}}},
           "variables": []}]}],
   "namespace": "hydra.tarjan",
-  "termDependencies": ["hydra.constants", "hydra.monads"],
+  "termDependencies": ["hydra.constants"],
   "typeDependencies": [
     "hydra.accessors",
     "hydra.ast",

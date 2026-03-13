@@ -112,7 +112,7 @@ import qualified Hydra.Sources.Kernel.Terms.Annotations  as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Constants    as Constants
 import qualified Hydra.Sources.Decode.Core  as DecodeCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical      as Lexical
-import qualified Hydra.Sources.Kernel.Terms.Monads       as Monads
+
 import qualified Hydra.Sources.Kernel.Terms.Names        as Names
 import qualified Hydra.Sources.Kernel.Terms.Reflect      as Reflect
 import qualified Hydra.Sources.Kernel.Terms.Rewriting    as Rewriting
@@ -134,7 +134,7 @@ formatOtherError = "ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")
 
 module_ :: Module
 module_ = Module ns elements
-    [Annotations.ns, Constants.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, Lexical.ns, Monads.ns,
+    [Annotations.ns, Constants.ns, moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_, Lexical.ns,
       Names.ns, Reflect.ns, Rewriting.ns, ShowCore.ns, Sorting.ns, Substitution.ns]
     kernelTypesNamespaces $
     Just ("Various functions for dereferencing and decoding schema types.")

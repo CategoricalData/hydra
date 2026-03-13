@@ -61,7 +61,7 @@ import qualified Hydra.Sources.Kernel.Terms.Adapt.Utils as AdaptUtils
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Decode.Core as DecodeCore
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
-import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
+
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
@@ -73,7 +73,7 @@ ns = Namespace "hydra.adapt.modules"
 module_ :: Module
 module_ = Module ns elements
     [AdaptTerms.ns, AdaptUtils.ns, Annotations.ns, moduleNamespace DecodeCore.module_,
-      Lexical.ns, Monads.ns, Rewriting.ns, Schemas.ns]
+      Lexical.ns, Rewriting.ns, Schemas.ns]
     kernelTypesNamespaces $
     Just "Entry point for Hydra's adapter (type/term rewriting) framework"
   where

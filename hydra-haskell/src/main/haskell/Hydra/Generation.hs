@@ -15,7 +15,6 @@ import qualified Hydra.Context as Context
 import qualified Hydra.Decoding as Decoding
 import qualified Hydra.Encoding as Encoding
 import qualified Hydra.Error as Error
-import qualified Hydra.Monads as Monads
 import qualified Hydra.Sources.All as Sources
 import qualified Hydra.Sources.Eval.Lib.All as EvalLib
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
@@ -59,7 +58,7 @@ generateSources
   -> [Module]  -- ^ Modules to generate
   -> IO Int  -- ^ Number of files written
 generateSources printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings basePath universeModules modulesToGenerate = do
-    let cx = Monads.emptyContext
+    let cx = Context.Context [] [] M.empty
     case CodeGeneration.generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings bootstrapGraph universeModules modulesToGenerate cx of
       Left ic -> fail $ "Failed to generate source files: " ++ formatError ic
       Right files -> do
@@ -92,7 +91,7 @@ writeHaskell = generateSources moduleToHaskell haskellLanguage True False False 
 -- | Generate and write the lexicon file (IO wrapper).
 writeLexicon :: FilePath -> IO ()
 writeLexicon path = do
-  case CodeGeneration.inferAndGenerateLexicon Monads.emptyContext bootstrapGraph Sources.kernelModules of
+  case CodeGeneration.inferAndGenerateLexicon (Context [] [] M.empty) bootstrapGraph Sources.kernelModules of
     Left err -> fail $ "Lexicon generation failed: " ++ err
     Right content -> do
       writeFile path content
@@ -107,7 +106,7 @@ writeLexiconToStandardPath = writeLexicon "../docs/hydra-lexicon.txt"
 -- | IO wrapper for generateCoderModules. Evaluates the Either and handles errors.
 generateCoderModulesIO :: (Context.Context -> Graph -> Module -> Either (Context.InContext Error.OtherError) (Maybe Module)) -> String -> [Module] -> [Module] -> IO [Module]
 generateCoderModulesIO codec label universeModules typeModules = do
-    let cx = Monads.emptyContext
+    let cx = Context.Context [] [] M.empty
     case CodeGeneration.generateCoderModules codec bootstrapGraph universeModules typeModules cx of
       Left ic -> fail $ "Failed to generate " ++ label ++ " modules: " ++ formatError ic
       Right results -> return results
@@ -184,7 +183,7 @@ writeEncoderHaskell = writeCoderHaskell generateEncoderModules
 -- | IO wrapper for inferModules. Evaluates the Either and handles errors.
 inferModulesIO :: [Module] -> [Module] -> IO [Module]
 inferModulesIO universeMods targetMods = do
-  case CodeGeneration.inferModules Monads.emptyContext bootstrapGraph universeMods targetMods of
+  case CodeGeneration.inferModules (Context [] [] M.empty) bootstrapGraph universeMods targetMods of
     Left ic -> fail $ "Type inference failed: " ++ formatError ic
     Right mods -> return mods
 

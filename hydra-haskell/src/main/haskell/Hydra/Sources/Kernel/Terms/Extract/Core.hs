@@ -58,14 +58,14 @@ import qualified Data.Maybe                  as Y
 import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Meta.Error        as Error
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
-import qualified Hydra.Sources.Kernel.Terms.Monads as Monads
+
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
 formatOtherError :: TTerm (InContext OtherError -> String)
 formatOtherError = "ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic")
 
--- Helper for Either-based unexpected errors (replaces Monads.unexpected for migrated functions)
+
 unexpected :: TTerm Context -> TTerm String -> TTerm String -> TTerm (Prelude.Either (InContext OtherError) a)
 unexpected cx expected actual = Ctx.failInContext (Error.otherError (Phantoms.string "expected " ++ expected ++ Phantoms.string " but found " ++ actual)) cx
 
@@ -74,7 +74,7 @@ ns = Namespace "hydra.extract.core"
 
 module_ :: Module
 module_ = Module ns elements
-    [Monads.ns, Lexical.ns, Rewriting.ns, ShowCore.ns]
+    [Lexical.ns, Rewriting.ns, ShowCore.ns]
     kernelTypesNamespaces $
     Just ("Extraction and validation for hydra.core types")
   where

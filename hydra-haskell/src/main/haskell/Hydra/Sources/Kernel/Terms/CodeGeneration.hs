@@ -73,7 +73,7 @@ import qualified Hydra.Sources.Kernel.Terms.Annotations     as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Inference       as Inference
 import qualified Hydra.Sources.Kernel.Terms.Lexical         as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Names           as Names
-import qualified Hydra.Sources.Kernel.Terms.Monads          as Monads
+
 import qualified Hydra.Sources.Kernel.Terms.Rewriting       as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas         as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Show.Core       as ShowCore
@@ -89,7 +89,7 @@ ns = Namespace "hydra.codeGeneration"
 
 module_ :: Module
 module_ = Module ns elements
-    [AdaptSimple.ns, Annotations.ns, Inference.ns, JsonDecode.ns, Lexical.ns, Monads.ns, Names.ns,
+    [AdaptSimple.ns, Annotations.ns, Inference.ns, JsonDecode.ns, Lexical.ns, Names.ns,
      Rewriting.ns, Schemas.ns, ShowCore.ns,
      Namespace "hydra.decoding", Namespace "hydra.encoding",
      Namespace "hydra.json.decode", Namespace "hydra.json.encode", Namespace "hydra.json.writer",
@@ -227,7 +227,7 @@ modulesToGraph = define "modulesToGraph" $
   "schemaTypes" <~ Eithers.either_
     (constant (Maps.empty :: TTerm (M.Map Name TypeScheme)))
     ("_r" ~> var "_r")
-    (Schemas.schemaGraphToTypingEnvironment @@ Ctx.emptyContext @@ var "schemaGraph") $
+    (Schemas.schemaGraphToTypingEnvironment @@ Lexical.emptyContext @@ var "schemaGraph") $
   Lexical.elementsToGraph @@ var "bsGraph" @@ var "schemaTypes" @@ var "dataElements"
 
 -- | Pure core of code generation: given a coder, language, flags, bootstrap graph, universe,
@@ -270,7 +270,7 @@ generateSourceFiles = define "generateSourceFiles" $
   "schemaTypes2" <~ Eithers.either_
     (constant (Maps.empty :: TTerm (M.Map Name TypeScheme)))
     ("_r" ~> var "_r")
-    (Schemas.schemaGraphToTypingEnvironment @@ Ctx.emptyContext @@ var "schemaGraph") $
+    (Schemas.schemaGraphToTypingEnvironment @@ Lexical.emptyContext @@ var "schemaGraph") $
   "dataGraph" <~ Lexical.elementsToGraph @@ var "bsGraph" @@ var "schemaTypes2" @@ var "dataElements" $
 
   -- Generate type modules
@@ -475,7 +475,7 @@ generateCoderModules = define "generateCoderModules" $
   "schemaTypes" <~ Eithers.either_
     (constant (Maps.empty :: TTerm (M.Map Name TypeScheme)))
     ("_r" ~> var "_r")
-    (Schemas.schemaGraphToTypingEnvironment @@ Ctx.emptyContext @@ var "schemaGraph") $
+    (Schemas.schemaGraphToTypingEnvironment @@ Lexical.emptyContext @@ var "schemaGraph") $
   "allElements" <~ Lists.concat2 (var "schemaElements") (var "dataElements") $
   "graph" <~ Lexical.elementsToGraph @@ var "bsGraph" @@ var "schemaTypes" @@ var "allElements" $
   Eithers.map ("results" ~> Maybes.cat (var "results")) $

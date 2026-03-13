@@ -10043,11 +10043,7 @@
               "domain": {"variable": "hydra.context.Context"}}},
           "variables": []}]}],
   "namespace": "hydra.extract.core",
-  "termDependencies": [
-    "hydra.monads",
-    "hydra.lexical",
-    "hydra.rewriting",
-    "hydra.show.core"],
+  "termDependencies": ["hydra.lexical", "hydra.rewriting", "hydra.show.core"],
   "typeDependencies": [
     "hydra.accessors",
     "hydra.ast",
