@@ -15,6 +15,8 @@ import qualified Hydra.Context as Context
 import qualified Hydra.Decoding as Decoding
 import qualified Hydra.Encoding as Encoding
 import qualified Hydra.Error as Error
+import qualified Hydra.Show.Error as ShowError
+import qualified Hydra.Monads as Monads
 import qualified Hydra.Sources.All as Sources
 import qualified Hydra.Sources.Eval.Lib.All as EvalLib
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
@@ -36,18 +38,21 @@ import qualified System.Directory as SD
 import qualified Data.Maybe as Y
 
 
--- | Format an InContext OtherError with trace information
-formatError :: Context.InContext Error.OtherError -> String
-formatError ic = Error.unOtherError (Context.inContextObject ic) ++ traceInfo
+-- | Format an InContext Error with trace information
+formatError :: Context.InContext Error.Error -> String
+formatError ic = showError (Context.inContextObject ic) ++ traceInfo
   where
     cx = Context.inContextContext ic
     stack = Context.contextTrace cx
     traceInfo = if L.null stack then "" else " (" ++ L.intercalate " > " (reverse stack) ++ ")"
 
+showError :: Error.Error -> String
+showError = ShowError.error
+
 -- | Generate source files and write them to disk.
 -- This is a thin I/O wrapper around 'generateSourceFiles'.
 generateSources
-  :: (Module -> [Definition] -> Context.Context -> Graph -> Either (Context.InContext Error.OtherError) (M.Map FilePath String))
+  :: (Module -> [Definition] -> Context.Context -> Graph -> Either (Context.InContext Error.Error) (M.Map FilePath String))
   -> Language
   -> Bool  -- ^ doInfer
   -> Bool  -- ^ doExpand
@@ -104,7 +109,7 @@ writeLexiconToStandardPath = writeLexicon "../docs/hydra-lexicon.txt"
 ----------------------------------------
 
 -- | IO wrapper for generateCoderModules. Evaluates the Either and handles errors.
-generateCoderModulesIO :: (Context.Context -> Graph -> Module -> Either (Context.InContext Error.OtherError) (Maybe Module)) -> String -> [Module] -> [Module] -> IO [Module]
+generateCoderModulesIO :: (Context.Context -> Graph -> Module -> Either (Context.InContext Error.Error) (Maybe Module)) -> String -> [Module] -> [Module] -> IO [Module]
 generateCoderModulesIO codec label universeModules typeModules = do
     let cx = Context.Context [] [] M.empty
     case CodeGeneration.generateCoderModules codec bootstrapGraph universeModules typeModules cx of

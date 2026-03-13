@@ -7,6 +7,7 @@ Test.Hspec.hspec Hydra.TestSuiteSpec.spec
 module Hydra.TestSuiteSpec where
 
 import Hydra.Kernel
+import Hydra.Generation (showError)
 import Hydra.TestUtils
 import Hydra.Testing
 import Hydra.Inference
