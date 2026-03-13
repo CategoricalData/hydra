@@ -75,10 +75,10 @@ public interface Lists {
         cx,
         g,
         listTerm),
-      (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>>) (elements -> (hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) ((hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>) (hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>right(hydra.lib.lists.Foldr.apply(
+      (java.util.function.Function<java.util.List<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>>) (elements -> hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term>right(hydra.lib.lists.Foldr.apply(
         (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (el -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (acc -> new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Application(new hydra.core.Application(funTerm, el)), acc)))),
         initTerm,
-        elements))))));
+        elements))));
   }
   
   static hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.core.Term> map(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Term funTerm, hydra.core.Term listTerm) {
