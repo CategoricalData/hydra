@@ -108,13 +108,13 @@ avro_values :: String
 avro_values = "values"
 
 -- | Construct an error result with a message in context
-err :: (Context.Context -> String -> Either (Context.InContext Error.OtherError) t0)
+err :: (Context.Context -> String -> Either (Context.InContext Error.Error) t0)
 err cx msg = (Left (Context.InContext {
-  Context.inContextObject = (Error.OtherError msg),
+  Context.inContextObject = (Error.ErrorOther (Error.OtherError msg)),
   Context.inContextContext = cx}))
 
 -- | Construct an error for unexpected values
-unexpectedE :: (Context.Context -> String -> String -> Either (Context.InContext Error.OtherError) t0)
+unexpectedE :: (Context.Context -> String -> String -> Either (Context.InContext Error.Error) t0)
 unexpectedE cx expected found = (err cx (Strings.cat [
   "Expected ",
   expected,
@@ -142,22 +142,22 @@ expectStringE cx value = ((\x -> case x of
   Model.ValueString v0 -> (Right v0)) value)
 
 -- | Look up a required attribute in a JSON object map
-requireE :: (Context.Context -> String -> M.Map String t0 -> Either (Context.InContext Error.OtherError) t0)
+requireE :: (Context.Context -> String -> M.Map String t0 -> Either (Context.InContext Error.Error) t0)
 requireE cx fname m = (Maybes.maybe (err cx (Strings.cat [
   "required attribute ",
   (Literals.showString fname),
   " not found"])) (\v -> Right v) (Maps.lookup fname m))
 
 -- | Look up a required array attribute in a JSON object map
-requireArrayE :: (Context.Context -> String -> M.Map String Model.Value -> Either (Context.InContext Error.OtherError) [Model.Value])
+requireArrayE :: (Context.Context -> String -> M.Map String Model.Value -> Either (Context.InContext Error.Error) [Model.Value])
 requireArrayE cx fname m = (Eithers.bind (requireE cx fname m) (\v -> expectArrayE cx v))
 
 -- | Look up a required number attribute in a JSON object map
-requireNumberE :: (Context.Context -> String -> M.Map String Model.Value -> Either (Context.InContext Error.OtherError) Double)
+requireNumberE :: (Context.Context -> String -> M.Map String Model.Value -> Either (Context.InContext Error.Error) Double)
 requireNumberE cx fname m = (Eithers.bind (requireE cx fname m) (\v -> expectNumberE cx v))
 
 -- | Look up a required string attribute in a JSON object map
-requireStringE :: (Context.Context -> String -> M.Map String Model.Value -> Either (Context.InContext Error.OtherError) String)
+requireStringE :: (Context.Context -> String -> M.Map String Model.Value -> Either (Context.InContext Error.Error) String)
 requireStringE cx fname m = (Eithers.bind (requireE cx fname m) (\v -> expectStringE cx v))
 
 -- | Look up an optional attribute in a JSON object map

@@ -7363,7 +7363,7 @@
                                                                               "typeName": "hydra.ext.java.syntax.Type"}}}},
                                                                       "type": {
                                                                         "application": {
-                                                                          "argument": {"variable": "hydra.error.OtherError"},
+                                                                          "argument": {"variable": "hydra.error.Error"},
                                                                           "function": {"variable": "hydra.context.InContext"}}}}},
                                                                   "type": {"variable": "hydra.ext.java.syntax.Type"}}},
                                                               "domain": [{"variable": "hydra.ext.java.syntax.ClassOrInterfaceType"}],
@@ -7456,7 +7456,7 @@
                                                                                   "typeName": "hydra.ext.java.syntax.Type"}}}},
                                                                           "type": {
                                                                             "application": {
-                                                                              "argument": {"variable": "hydra.error.OtherError"},
+                                                                              "argument": {"variable": "hydra.error.Error"},
                                                                               "function": {"variable": "hydra.context.InContext"}}}}},
                                                                       "type": {"variable": "hydra.ext.java.syntax.Type"}}}}},
                                                               "domain": [{"variable": "hydra.ext.java.syntax.ArrayType"}],
@@ -7480,17 +7480,22 @@
                                                                                     {
                                                                                       "name": "object",
                                                                                       "term": {
-                                                                                        "wrap": {
-                                                                                          "body": {
-                                                                                            "literal": {
-                                                                                              "string": "don't know how to make Java reference type into array type"}},
-                                                                                          "typeName": "hydra.error.OtherError"}}},
+                                                                                        "union": {
+                                                                                          "field": {
+                                                                                            "name": "other",
+                                                                                            "term": {
+                                                                                              "wrap": {
+                                                                                                "body": {
+                                                                                                  "literal": {
+                                                                                                    "string": "don't know how to make Java reference type into array type"}},
+                                                                                                "typeName": "hydra.error.OtherError"}}},
+                                                                                          "typeName": "hydra.error.Error"}}},
                                                                                     {"name": "context", "term": {"variable": "cx"}}],
                                                                                   "typeName": "hydra.context.InContext"}},
-                                                                              "type": {"variable": "hydra.error.OtherError"}}}}},
+                                                                              "type": {"variable": "hydra.error.Error"}}}}},
                                                                       "type": {
                                                                         "application": {
-                                                                          "argument": {"variable": "hydra.error.OtherError"},
+                                                                          "argument": {"variable": "hydra.error.Error"},
                                                                           "function": {"variable": "hydra.context.InContext"}}}}},
                                                                   "type": {"variable": "hydra.ext.java.syntax.Type"}}},
                                                               "domain": [{"variable": "hydra.ext.java.syntax.TypeVariable"}],
@@ -7518,16 +7523,21 @@
                                                               {
                                                                 "name": "object",
                                                                 "term": {
-                                                                  "wrap": {
-                                                                    "body": {
-                                                                      "literal": {"string": "don't know how to make Java type into array type"}},
-                                                                    "typeName": "hydra.error.OtherError"}}},
+                                                                  "union": {
+                                                                    "field": {
+                                                                      "name": "other",
+                                                                      "term": {
+                                                                        "wrap": {
+                                                                          "body": {
+                                                                            "literal": {"string": "don't know how to make Java type into array type"}},
+                                                                          "typeName": "hydra.error.OtherError"}}},
+                                                                    "typeName": "hydra.error.Error"}}},
                                                               {"name": "context", "term": {"variable": "cx"}}],
                                                             "typeName": "hydra.context.InContext"}},
-                                                        "type": {"variable": "hydra.error.OtherError"}}}}},
+                                                        "type": {"variable": "hydra.error.Error"}}}}},
                                                 "type": {
                                                   "application": {
-                                                    "argument": {"variable": "hydra.error.OtherError"},
+                                                    "argument": {"variable": "hydra.error.Error"},
                                                     "function": {"variable": "hydra.context.InContext"}}}}},
                                             "type": {"variable": "hydra.ext.java.syntax.Type"}}},
                                         "domain": [{"variable": "hydra.ext.java.syntax.PrimitiveTypeWithAnnotations"}],
@@ -7549,7 +7559,7 @@
                     "either": {
                       "left": {
                         "application": {
-                          "argument": {"variable": "hydra.error.OtherError"},
+                          "argument": {"variable": "hydra.error.Error"},
                           "function": {"variable": "hydra.context.InContext"}}},
                       "right": {"variable": "hydra.ext.java.syntax.Type"}}},
                   "domain": {"variable": "hydra.context.Context"}}},
@@ -7583,7 +7593,7 @@
                                                 "body": {"either": {"@right": {"variable": "rt"}}},
                                                 "type": {
                                                   "application": {
-                                                    "argument": {"variable": "hydra.error.OtherError"},
+                                                    "argument": {"variable": "hydra.error.Error"},
                                                     "function": {"variable": "hydra.context.InContext"}}}}},
                                             "type": {"variable": "hydra.ext.java.syntax.ReferenceType"}}},
                                         "domain": [{"variable": "hydra.ext.java.syntax.ReferenceType"}],
@@ -7607,15 +7617,20 @@
                                                               {
                                                                 "name": "object",
                                                                 "term": {
-                                                                  "wrap": {
-                                                                    "body": {"literal": {"string": "expected a Java reference type"}},
-                                                                    "typeName": "hydra.error.OtherError"}}},
+                                                                  "union": {
+                                                                    "field": {
+                                                                      "name": "other",
+                                                                      "term": {
+                                                                        "wrap": {
+                                                                          "body": {"literal": {"string": "expected a Java reference type"}},
+                                                                          "typeName": "hydra.error.OtherError"}}},
+                                                                    "typeName": "hydra.error.Error"}}},
                                                               {"name": "context", "term": {"variable": "cx"}}],
                                                             "typeName": "hydra.context.InContext"}},
-                                                        "type": {"variable": "hydra.error.OtherError"}}}}},
+                                                        "type": {"variable": "hydra.error.Error"}}}}},
                                                 "type": {
                                                   "application": {
-                                                    "argument": {"variable": "hydra.error.OtherError"},
+                                                    "argument": {"variable": "hydra.error.Error"},
                                                     "function": {"variable": "hydra.context.InContext"}}}}},
                                             "type": {"variable": "hydra.ext.java.syntax.ReferenceType"}}},
                                         "domain": [{"variable": "hydra.ext.java.syntax.PrimitiveTypeWithAnnotations"}],
@@ -7637,7 +7652,7 @@
                     "either": {
                       "left": {
                         "application": {
-                          "argument": {"variable": "hydra.error.OtherError"},
+                          "argument": {"variable": "hydra.error.Error"},
                           "function": {"variable": "hydra.context.InContext"}}},
                       "right": {"variable": "hydra.ext.java.syntax.ReferenceType"}}},
                   "domain": {"variable": "hydra.context.Context"}}},
@@ -8012,7 +8027,7 @@
                                                                                                               "typeName": "hydra.ext.java.syntax.Type"}}}},
                                                                                                       "type": {
                                                                                                         "application": {
-                                                                                                          "argument": {"variable": "hydra.error.OtherError"},
+                                                                                                          "argument": {"variable": "hydra.error.Error"},
                                                                                                           "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                   "type": {"variable": "hydra.ext.java.syntax.Type"}}}}},
                                                                                           "domain": [{"variable": "hydra.ext.java.syntax.ClassType"}],
@@ -8036,15 +8051,20 @@
                                                                                                                 {
                                                                                                                   "name": "object",
                                                                                                                   "term": {
-                                                                                                                    "wrap": {
-                                                                                                                      "body": {"literal": {"string": "expected a Java class type"}},
-                                                                                                                      "typeName": "hydra.error.OtherError"}}},
+                                                                                                                    "union": {
+                                                                                                                      "field": {
+                                                                                                                        "name": "other",
+                                                                                                                        "term": {
+                                                                                                                          "wrap": {
+                                                                                                                            "body": {"literal": {"string": "expected a Java class type"}},
+                                                                                                                            "typeName": "hydra.error.OtherError"}}},
+                                                                                                                      "typeName": "hydra.error.Error"}}},
                                                                                                                 {"name": "context", "term": {"variable": "cx"}}],
                                                                                                               "typeName": "hydra.context.InContext"}},
-                                                                                                          "type": {"variable": "hydra.error.OtherError"}}}}},
+                                                                                                          "type": {"variable": "hydra.error.Error"}}}}},
                                                                                                   "type": {
                                                                                                     "application": {
-                                                                                                      "argument": {"variable": "hydra.error.OtherError"},
+                                                                                                      "argument": {"variable": "hydra.error.Error"},
                                                                                                       "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                               "type": {"variable": "hydra.ext.java.syntax.Type"}}},
                                                                                           "domain": [{"variable": "hydra.ext.java.syntax.InterfaceType"}],
@@ -8070,7 +8090,7 @@
                                                                                     "function": {"variable": "hydra.ext.java.utils.javaTypeVariableToType"}}}}},
                                                                             "type": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.error.OtherError"},
+                                                                                "argument": {"variable": "hydra.error.Error"},
                                                                                 "function": {"variable": "hydra.context.InContext"}}}}},
                                                                         "type": {"variable": "hydra.ext.java.syntax.Type"}}},
                                                                     "domain": [{"variable": "hydra.ext.java.syntax.TypeVariable"}],
@@ -8094,16 +8114,21 @@
                                                                                           {
                                                                                             "name": "object",
                                                                                             "term": {
-                                                                                              "wrap": {
-                                                                                                "body": {
-                                                                                                  "literal": {"string": "expected a Java class or interface type, or a variable"}},
-                                                                                                "typeName": "hydra.error.OtherError"}}},
+                                                                                              "union": {
+                                                                                                "field": {
+                                                                                                  "name": "other",
+                                                                                                  "term": {
+                                                                                                    "wrap": {
+                                                                                                      "body": {
+                                                                                                        "literal": {"string": "expected a Java class or interface type, or a variable"}},
+                                                                                                      "typeName": "hydra.error.OtherError"}}},
+                                                                                                "typeName": "hydra.error.Error"}}},
                                                                                           {"name": "context", "term": {"variable": "cx"}}],
                                                                                         "typeName": "hydra.context.InContext"}},
-                                                                                    "type": {"variable": "hydra.error.OtherError"}}}}},
+                                                                                    "type": {"variable": "hydra.error.Error"}}}}},
                                                                             "type": {
                                                                               "application": {
-                                                                                "argument": {"variable": "hydra.error.OtherError"},
+                                                                                "argument": {"variable": "hydra.error.Error"},
                                                                                 "function": {"variable": "hydra.context.InContext"}}}}},
                                                                         "type": {"variable": "hydra.ext.java.syntax.Type"}}},
                                                                     "domain": [{"variable": "hydra.ext.java.syntax.ArrayType"}],
@@ -8131,15 +8156,20 @@
                                                                     {
                                                                       "name": "object",
                                                                       "term": {
-                                                                        "wrap": {
-                                                                          "body": {"literal": {"string": "expected a reference type"}},
-                                                                          "typeName": "hydra.error.OtherError"}}},
+                                                                        "union": {
+                                                                          "field": {
+                                                                            "name": "other",
+                                                                            "term": {
+                                                                              "wrap": {
+                                                                                "body": {"literal": {"string": "expected a reference type"}},
+                                                                                "typeName": "hydra.error.OtherError"}}},
+                                                                          "typeName": "hydra.error.Error"}}},
                                                                     {"name": "context", "term": {"variable": "cx"}}],
                                                                   "typeName": "hydra.context.InContext"}},
-                                                              "type": {"variable": "hydra.error.OtherError"}}}}},
+                                                              "type": {"variable": "hydra.error.Error"}}}}},
                                                       "type": {
                                                         "application": {
-                                                          "argument": {"variable": "hydra.error.OtherError"},
+                                                          "argument": {"variable": "hydra.error.Error"},
                                                           "function": {"variable": "hydra.context.InContext"}}}}},
                                                   "type": {"variable": "hydra.ext.java.syntax.Type"}}},
                                               "domain": [{"variable": "hydra.ext.java.syntax.PrimitiveTypeWithAnnotations"}],
@@ -8165,7 +8195,7 @@
                         "either": {
                           "left": {
                             "application": {
-                              "argument": {"variable": "hydra.error.OtherError"},
+                              "argument": {"variable": "hydra.error.Error"},
                               "function": {"variable": "hydra.context.InContext"}}},
                           "right": {"variable": "hydra.ext.java.syntax.Type"}}},
                       "domain": {"variable": "hydra.context.Context"}}},

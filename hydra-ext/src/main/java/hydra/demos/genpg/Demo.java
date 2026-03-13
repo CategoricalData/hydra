@@ -4,7 +4,7 @@ import hydra.Generation;
 import hydra.context.Context;
 import hydra.context.InContext;
 import hydra.core.Term;
-import hydra.error.OtherError;
+import hydra.error.Error_;
 import hydra.graph.Graph;
 import hydra.json.writer.Writer;
 import hydra.pg.model.Edge;
@@ -84,13 +84,13 @@ public class Demo {
             List<Edge<Term>> especs) throws IOException {
         Table<Term> table = decodeTableIo(tableType, path);
         Context cx = new Context(java.util.List.of(), java.util.List.of(), java.util.Map.of());
-        Either<InContext<OtherError>, Pair<List<Vertex<Term>>, List<Edge<Term>>>> result =
+        Either<InContext<Error_>, Pair<List<Vertex<Term>>, List<Edge<Term>>>> result =
             Transform.transformTableRows(cx, graphContext, vspecs, especs, tableType, table.data);
         if (result.isLeft()) {
             throw new RuntimeException(
-                "Transform error: " + ((Either.Left<InContext<OtherError>, ?>) result).value.object.value);
+                "Transform error: " + hydra.show.error.Error_.error(((Either.Left<InContext<Error_>, ?>) result).value.object));
         }
-        return ((Either.Right<InContext<OtherError>, Pair<List<Vertex<Term>>, List<Edge<Term>>>>) result).value;
+        return ((Either.Right<InContext<Error_>, Pair<List<Vertex<Term>>, List<Edge<Term>>>>) result).value;
     }
 
     /**

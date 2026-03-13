@@ -94,7 +94,7 @@ import qualified Hydra.Ext.Org.Apache.Avro.Schema as Avro
 import qualified Hydra.Json.Model as JM
 import qualified Hydra.Ext.Sources.Avro.Schema as AvroSchema
 -- Result type alias (was previously imported from Staging module)
-type Result a = Either (InContext OtherError) a
+type Result a = Either (InContext Error) a
 
 
 define :: String -> TTerm a -> TBinding a
@@ -189,7 +189,7 @@ err :: TBinding (Context -> String -> Result a)
 err = define "err" $
   doc "Construct an error result with a message in context" $
   lambda "cx" $ lambda "msg" $
-    Ctx.failInContext (Error.otherError (var "msg")) (var "cx")
+    Ctx.failInContext (Error.errorOther $ Error.otherError (var "msg")) (var "cx")
 
 unexpectedE :: TBinding (Context -> String -> String -> Result a)
 unexpectedE = define "unexpectedE" $

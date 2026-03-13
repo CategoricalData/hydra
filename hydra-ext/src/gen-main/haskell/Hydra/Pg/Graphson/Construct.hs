@@ -57,7 +57,7 @@ graphsonVertexToJsonCoder :: (Compute.Coder Syntax.Vertex Model.Value)
 graphsonVertexToJsonCoder = Compute.Coder {
   Compute.coderEncode = (\_cx -> \v -> Right (Coder.vertexToJson v)),
   Compute.coderDecode = (\_cx -> \_ -> Left (Context.InContext {
-    Context.inContextObject = (Error.OtherError "decoding GraphSON JSON is currently unsupported"),
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError "decoding GraphSON JSON is currently unsupported")),
     Context.inContextContext = _cx}))}
 
 -- | Convert a property graph vertex with adjacent edges to a GraphSON vertex

@@ -5,6 +5,7 @@ import com.cedarsoftware.util.io.JsonWriter;
 import hydra.compute.Coder;
 import hydra.context.Context;
 import hydra.context.InContext;
+import hydra.error.Error_;
 import hydra.error.OtherError;
 import hydra.json.model.Value;
 import hydra.util.Either;
@@ -31,7 +32,7 @@ public class JsonSerde extends Coder<Value, String> {
     /**
      * Convert a simple Either-based function to the Coder's Context-based Either signature.
      */
-    private static <A, B> java.util.function.Function<Context, java.util.function.Function<A, Either<InContext<OtherError>, B>>>
+    private static <A, B> java.util.function.Function<Context, java.util.function.Function<A, Either<InContext<Error_>, B>>>
             toCoderFn(java.util.function.Function<A, Either<String, B>> fn) {
         return cx -> a -> {
             Either<String, B> result = fn.apply(a);
@@ -39,7 +40,7 @@ public class JsonSerde extends Coder<Value, String> {
                 return Either.right(((Either.Right<String, B>) result).value);
             } else {
                 String msg = ((Either.Left<String, B>) result).value;
-                return Either.left(new InContext<>(new OtherError(msg), cx));
+                return Either.left(new InContext<>(new Error_.Other(new OtherError(msg)), cx));
             }
         };
     }

@@ -33,10 +33,10 @@ import qualified Data.Set as S
 import qualified Data.Maybe as Y
 
 
-type Result a = Either (InContext OtherError) a
+type Result a = Either (InContext Error) a
 
 err :: Context -> String -> Result a
-err cx msg = Left (InContext (OtherError msg) cx)
+err cx msg = Left (InContext (ErrorOther (OtherError msg)) cx)
 
 elementSummary :: Bool -> Binding -> Graph -> Result String
 elementSummary withTypes el g = do
@@ -48,7 +48,7 @@ elementSummary withTypes el g = do
         Nothing -> Right Nothing
         Just ts -> Just <$> if Schemas.isType (deannotateType $ typeSchemeType ts)
           then case DecodeCore.type_ g $ bindingTerm el of
-            Left de -> Left (InContext (OtherError (unDecodingError de)) emptyContext)
+            Left de -> Left (InContext (ErrorDecoding de) emptyContext)
             Right typ -> Right $ " = " ++ ShowCore.type_ (deannotateType typ)
           else Right $ " : " ++ ShowCore.typeScheme ts
       else Right Nothing

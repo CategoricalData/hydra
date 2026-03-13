@@ -22,10 +22,10 @@ import qualified Data.Map as M
 import qualified Data.Maybe as Y
 
 
-type Result a = Either (InContext OtherError) a
+type Result a = Either (InContext Error) a
 
 err :: Context -> String -> Result a
-err cx msg = Left (InContext (OtherError msg) cx)
+err cx msg = Left (InContext (ErrorOther (OtherError msg)) cx)
 
 unexpectedE :: Context -> String -> String -> Result a
 unexpectedE cx expected found = err cx $ "Expected " ++ expected ++ ", found: " ++ found
@@ -131,12 +131,12 @@ avroHydraAdapter cx schema env0 = case schema of
                   pk <- findAvroPrimaryKeyField cx qname avroFields
                   -- TODO: Nothing values for optional fields
                   let encodePair cx (k, v) = case M.lookup k adaptersByFieldName of
-                        Nothing -> Left $ InContext (OtherError $ "unrecognized field for " ++ showQname qname ++ ": " ++ show k) cx
+                        Nothing -> Left $ InContext (ErrorOther (OtherError $ "unrecognized field for " ++ showQname qname ++ ": " ++ show k)) cx
                         Just (f, ad) -> do
                           v' <- coderEncode (adapterCoder ad) cx v
                           return $ Field (Name k) v'
                   let decodeField cx (Field (Name k) v) = case M.lookup k adaptersByFieldName of
-                        Nothing -> Left $ InContext (OtherError $ "unrecognized field for " ++ showQname qname ++ ": " ++ show k) cx
+                        Nothing -> Left $ InContext (ErrorOther (OtherError $ "unrecognized field for " ++ showQname qname ++ ": " ++ show k)) cx
                         Just (f, ad) -> do
                           v' <- coderDecode (adapterCoder ad) cx v
                           return (k, v')

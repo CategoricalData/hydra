@@ -1364,7 +1364,7 @@
                                                                         "type": {"literal": {"string": {}}}}}}}}}}}}},
                                                     "type": {
                                                       "application": {
-                                                        "argument": {"variable": "hydra.error.OtherError"},
+                                                        "argument": {"variable": "hydra.error.Error"},
                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                 "type": {"literal": {"string": {}}}}},
                                             "domain": [{"literal": {"boolean": {}}}],
@@ -1381,7 +1381,7 @@
                                                     "body": {"either": {"@right": {"variable": "s"}}},
                                                     "type": {
                                                       "application": {
-                                                        "argument": {"variable": "hydra.error.OtherError"},
+                                                        "argument": {"variable": "hydra.error.Error"},
                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                 "type": {"literal": {"string": {}}}}},
                                             "domain": [{"literal": {"string": {}}}],
@@ -1403,7 +1403,7 @@
                                                             "function": {"function": {"primitive": "hydra.lib.literals.showBigfloat"}}}}}},
                                                     "type": {
                                                       "application": {
-                                                        "argument": {"variable": "hydra.error.OtherError"},
+                                                        "argument": {"variable": "hydra.error.Error"},
                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                 "type": {"literal": {"string": {}}}}},
                                             "domain": [{"literal": {"float": {"bigfloat": {}}}}],
@@ -1438,7 +1438,7 @@
                     "either": {
                       "left": {
                         "application": {
-                          "argument": {"variable": "hydra.error.OtherError"},
+                          "argument": {"variable": "hydra.error.Error"},
                           "function": {"variable": "hydra.context.InContext"}}},
                       "right": {"literal": {"string": {}}}}},
                   "domain": {"variable": "hydra.json.model.Value"}}},
@@ -1634,13 +1634,18 @@
                                                 {
                                                   "name": "object",
                                                   "term": {
-                                                    "wrap": {"body": {"variable": "msg"}, "typeName": "hydra.error.OtherError"}}},
+                                                    "union": {
+                                                      "field": {
+                                                        "name": "other",
+                                                        "term": {
+                                                          "wrap": {"body": {"variable": "msg"}, "typeName": "hydra.error.OtherError"}}},
+                                                      "typeName": "hydra.error.Error"}}},
                                                 {"name": "context", "term": {"variable": "cx"}}],
                                               "typeName": "hydra.context.InContext"}},
-                                          "type": {"variable": "hydra.error.OtherError"}}}}},
+                                          "type": {"variable": "hydra.error.Error"}}}}},
                                   "type": {
                                     "application": {
-                                      "argument": {"variable": "hydra.error.OtherError"},
+                                      "argument": {"variable": "hydra.error.Error"},
                                       "function": {"variable": "hydra.context.InContext"}}}}},
                               "type": {"variable": "t0"}}},
                           "domain": [{"literal": {"string": {}}}],
@@ -1659,7 +1664,7 @@
                     "either": {
                       "left": {
                         "application": {
-                          "argument": {"variable": "hydra.error.OtherError"},
+                          "argument": {"variable": "hydra.error.Error"},
                           "function": {"variable": "hydra.context.InContext"}}},
                       "right": {"variable": "t0"}}},
                   "domain": {"literal": {"string": {}}}}},
@@ -1722,7 +1727,7 @@
                         "either": {
                           "left": {
                             "application": {
-                              "argument": {"variable": "hydra.error.OtherError"},
+                              "argument": {"variable": "hydra.error.Error"},
                               "function": {"variable": "hydra.context.InContext"}}},
                           "right": {"variable": "t0"}}},
                       "domain": {"literal": {"string": {}}}}},
@@ -1975,7 +1980,7 @@
                                                           "type": {"variable": "hydra.context.Context"}}},
                                                       "type": {
                                                         "application": {
-                                                          "argument": {"variable": "hydra.error.OtherError"},
+                                                          "argument": {"variable": "hydra.error.Error"},
                                                           "function": {"variable": "hydra.context.InContext"}}}}}}}}},
                                           "domain": [{"variable": "hydra.json.model.Value"}],
                                           "parameter": "v"}}},
@@ -2010,7 +2015,7 @@
                                                   "either": {
                                                     "left": {
                                                       "application": {
-                                                        "argument": {"variable": "hydra.error.OtherError"},
+                                                        "argument": {"variable": "hydra.error.Error"},
                                                         "function": {"variable": "hydra.context.InContext"}}},
                                                     "right": {"literal": {"string": {}}}}}}},
                                             "type": {"variable": "hydra.json.model.Value"}}}}}}}}},
@@ -2037,7 +2042,7 @@
                         "either": {
                           "left": {
                             "application": {
-                              "argument": {"variable": "hydra.error.OtherError"},
+                              "argument": {"variable": "hydra.error.Error"},
                               "function": {"variable": "hydra.context.InContext"}}},
                           "right": {"literal": {"string": {}}}}},
                       "domain": {

@@ -161,7 +161,7 @@ examplePgSchema = define "examplePgSchema" $
     PGM._Schema_defaultEdgeId>>: string "defaultEdgeId"]
 
 -- | Extract a string from a term using the empty graph
-expString :: TBinding (Context -> Term -> Either (InContext OtherError) String)
+expString :: TBinding (Context -> Term -> Either (InContext Error) String)
 expString = define "expString" $
   doc "Extract a string from a term using the empty graph" $
   "cx" ~> "term" ~>
@@ -178,7 +178,7 @@ propertyGraphElements = define "propertyGraphElements" $
 
 -- | Convert a type-annotated term to property graph elements
 typeApplicationTermToPropertyGraph :: TBinding (PGM.Schema Graph t v -> Type -> t -> t -> Context -> Graph
-  -> Either (InContext OtherError) (Term -> Context -> Either (InContext OtherError) [PG.Element v]))
+  -> Either (InContext Error) (Term -> Context -> Either (InContext Error) [PG.Element v]))
 typeApplicationTermToPropertyGraph = define "typeApplicationTermToPropertyGraph" $
   doc "Convert a type-annotated term to property graph elements" $
   "schema" ~> "typ" ~> "vidType" ~> "eidType" ~> "cx" ~> "g" ~>
@@ -204,7 +204,7 @@ lazyGraphToElements = define "lazyGraphToElements" $
       (Lists.map ("x" ~> inject PG._Element PG._Element_edge (var "x")) (project PG._LazyGraph PG._LazyGraph_edges @@ var "lg"))
 
 -- | Convert a property graph element to JSON
-pgElementToJson :: TBinding (PGM.Schema Graph t v -> PG.Element v -> Context -> Either (InContext OtherError) JM.Value)
+pgElementToJson :: TBinding (PGM.Schema Graph t v -> PG.Element v -> Context -> Either (InContext Error) JM.Value)
 pgElementToJson = define "pgElementToJson" $
   doc "Convert a property graph element to JSON" $
   "schema" ~> "el" ~> "cx" ~>
@@ -238,14 +238,14 @@ pgElementToJson = define "pgElementToJson" $
     @@ var "el"
 
 -- | Convert a list of property graph elements to JSON
-pgElementsToJson :: TBinding (PGM.Schema Graph t v -> [PG.Element v] -> Context -> Either (InContext OtherError) JM.Value)
+pgElementsToJson :: TBinding (PGM.Schema Graph t v -> [PG.Element v] -> Context -> Either (InContext Error) JM.Value)
 pgElementsToJson = define "pgElementsToJson" $
   doc "Convert a list of property graph elements to JSON" $
   "schema" ~> "els" ~> "cx" ~>
     Eithers.map ("els'" ~> Json.valueArray (var "els'")) (Eithers.mapList ("el" ~> pgElementToJson @@ var "schema" @@ var "el" @@ var "cx") (var "els"))
 
 -- Internal helper (not exported as a binding)
-propsToJson :: TTerm (PGM.Schema Graph t v -> Context -> M.Map PG.PropertyKey v -> Either (InContext OtherError) (Y.Maybe (String, JM.Value)))
+propsToJson :: TTerm (PGM.Schema Graph t v -> Context -> M.Map PG.PropertyKey v -> Either (InContext Error) (Y.Maybe (String, JM.Value)))
 propsToJson = "schema" ~> "cx" ~> "pairs" ~>
   Logic.ifElse (Maps.null $ var "pairs")
     (right nothing)

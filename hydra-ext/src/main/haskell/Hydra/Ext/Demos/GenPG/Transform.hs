@@ -1,6 +1,7 @@
 module Hydra.Ext.Demos.GenPG.Transform where
 
 import Hydra.Kernel
+import qualified Hydra.Show.Error as ShowError
 import qualified Hydra.Pg.Model as Pg
 import Hydra.Ext.Dsl.Pg.Mappings
 import Hydra.Dsl.Tabular
@@ -20,7 +21,7 @@ import qualified Data.Maybe as Y
 type PgTransform = M.Map String ([Pg.Vertex Term], [Pg.Edge Term])
 
 
-type Result a = Either (InContext OtherError) a
+type Result a = Either (InContext Error) a
 
 evaluate :: Context -> Graph -> Term -> Result Term
 evaluate cx g term = reduceTerm cx g True term
@@ -46,7 +47,7 @@ evaluateProperties cx g specs record = M.fromList . Y.catMaybes <$> (CM.mapM for
         TermMaybe mv -> case mv of
           Nothing -> return Nothing
           Just v -> return $ Just (k, v)
-        _ -> Left $ InContext (OtherError $ "expected an optional value for property " ++ Pg.unPropertyKey k ++ " but got " ++ ShowCore.term value) cx
+        _ -> Left $ InContext (ErrorOther (OtherError $ "expected an optional value for property " ++ Pg.unPropertyKey k ++ " but got " ++ ShowCore.term value)) cx
 
 evaluateVertex :: Context -> Graph -> Pg.Vertex Term -> Term -> Result (Maybe (Pg.Vertex Term))
 evaluateVertex cx g (Pg.Vertex label idSpec propSpecs) record = do
@@ -118,7 +119,7 @@ transformTable tableType@(TableType (RelationName tableName) _) path vspecs espe
     (Table _ rows) <- decodeTableIo tableType path
     let cx = emptyContext
     pairs <- case CM.mapM (transformRecord cx hydraCoreGraph vspecs especs . termRowToRecord tableType) rows of
-      Left (InContext (OtherError msg) _) -> fail msg
+      Left ic -> fail $ ShowError.error (inContextObject ic)
       Right ps -> return ps
     return $ L.foldl addRow ([], []) pairs
   where

@@ -124,4 +124,3 @@ writeRust = generateSources moduleToRust rustLanguage True False False False
 -- Third argument: modules to transform and generate
 writeScala :: FP.FilePath -> [Module] -> [Module] -> IO Int
 writeScala = generateSources moduleToScala scalaLanguage True True False False
-

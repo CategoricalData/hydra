@@ -732,7 +732,7 @@ toAcceptMethod abstract vtparams =
   in (methodDeclaration mods tparams anns Names.acceptMethodName [
     param] result body)
 
-toJavaArrayType :: (Syntax.Type -> Context.Context -> Either (Context.InContext Error.OtherError) Syntax.Type)
+toJavaArrayType :: (Syntax.Type -> Context.Context -> Either (Context.InContext Error.Error) Syntax.Type)
 toJavaArrayType t cx = ((\x -> case x of
   Syntax.TypeReference v0 -> ((\x -> case x of
     Syntax.ReferenceTypeClassOrInterface v1 -> (Right (Syntax.TypeReference (Syntax.ReferenceTypeArray (Syntax.ArrayType {
@@ -748,17 +748,17 @@ toJavaArrayType t cx = ((\x -> case x of
         Syntax.arrayTypeDims = newDims,
         Syntax.arrayTypeVariant = variant}))))
     Syntax.ReferenceTypeVariable _ -> (Left (Context.InContext {
-      Context.inContextObject = (Error.OtherError "don't know how to make Java reference type into array type"),
+      Context.inContextObject = (Error.ErrorOther (Error.OtherError "don't know how to make Java reference type into array type")),
       Context.inContextContext = cx}))) v0)
   Syntax.TypePrimitive _ -> (Left (Context.InContext {
-    Context.inContextObject = (Error.OtherError "don't know how to make Java type into array type"),
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError "don't know how to make Java type into array type")),
     Context.inContextContext = cx}))) t)
 
-javaTypeToJavaReferenceType :: (Syntax.Type -> Context.Context -> Either (Context.InContext Error.OtherError) Syntax.ReferenceType)
+javaTypeToJavaReferenceType :: (Syntax.Type -> Context.Context -> Either (Context.InContext Error.Error) Syntax.ReferenceType)
 javaTypeToJavaReferenceType t cx = ((\x -> case x of
   Syntax.TypeReference v0 -> (Right v0)
   Syntax.TypePrimitive _ -> (Left (Context.InContext {
-    Context.inContextObject = (Error.OtherError "expected a Java reference type"),
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError "expected a Java reference type")),
     Context.inContextContext = cx}))) t)
 
 javaReferenceTypeToRawType :: (Syntax.ReferenceType -> Syntax.ReferenceType)
@@ -785,7 +785,7 @@ javaReferenceTypeToRawType rt = ((\x -> case x of
         Syntax.classTypeArguments = []}))))) v0)
   _ -> rt) rt)
 
-addJavaTypeParameter :: (Syntax.ReferenceType -> Syntax.Type -> Context.Context -> Either (Context.InContext Error.OtherError) Syntax.Type)
+addJavaTypeParameter :: (Syntax.ReferenceType -> Syntax.Type -> Context.Context -> Either (Context.InContext Error.Error) Syntax.Type)
 addJavaTypeParameter rt t cx = ((\x -> case x of
   Syntax.TypeReference v0 -> ((\x -> case x of
     Syntax.ReferenceTypeClassOrInterface v1 -> ((\x -> case x of
@@ -801,14 +801,14 @@ addJavaTypeParameter rt t cx = ((\x -> case x of
           Syntax.classTypeArguments = (Lists.concat2 args [
             Syntax.TypeArgumentReference rt])})))))
       Syntax.ClassOrInterfaceTypeInterface _ -> (Left (Context.InContext {
-        Context.inContextObject = (Error.OtherError "expected a Java class type"),
+        Context.inContextObject = (Error.ErrorOther (Error.OtherError "expected a Java class type")),
         Context.inContextContext = cx}))) v1)
     Syntax.ReferenceTypeVariable v1 -> (Right (javaTypeVariableToType v1))
     Syntax.ReferenceTypeArray _ -> (Left (Context.InContext {
-      Context.inContextObject = (Error.OtherError "expected a Java class or interface type, or a variable"),
+      Context.inContextObject = (Error.ErrorOther (Error.OtherError "expected a Java class or interface type, or a variable")),
       Context.inContextContext = cx}))) v0)
   Syntax.TypePrimitive _ -> (Left (Context.InContext {
-    Context.inContextObject = (Error.OtherError "expected a reference type"),
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError "expected a reference type")),
     Context.inContextContext = cx}))) t)
 
 uniqueVarName :: (Helpers.Aliases -> Core.Name -> Core.Name)

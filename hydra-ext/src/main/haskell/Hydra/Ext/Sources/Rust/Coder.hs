@@ -355,7 +355,7 @@ encodeLiteral = def "encodeLiteral" $
 -- =============================================================================
 
 -- | Encode a Hydra type as a Rust syntax type
-encodeType :: TBinding (Context -> Graph -> Type -> Either (InContext OtherError) R.Type)
+encodeType :: TBinding (Context -> Graph -> Type -> Either (InContext Error) R.Type)
 encodeType = def "encodeType" $
   "cx" ~> "g" ~> lambda "t" $
     "typ" <~ (Rewriting.deannotateType @@ var "t") $
@@ -421,11 +421,11 @@ encodeType = def "encodeType" $
 -- =============================================================================
 
 -- | Encode a Hydra term as a Rust expression
-encodeTerm :: TBinding (Context -> Graph -> Term -> Either (InContext OtherError) R.Expression)
+encodeTerm :: TBinding (Context -> Graph -> Term -> Either (InContext Error) R.Expression)
 encodeTerm = def "encodeTerm" $
   "cx" ~> "g" ~> lambda "term" $
     cases _Term (var "term") (Just $
-      Ctx.failInContext (Error.otherError $ string "unexpected term variant") (var "cx"))
+      Ctx.failInContext (Error.errorOther $ Error.otherError $ string "unexpected term variant") (var "cx"))
     [_Term_annotated>>: lambda "at" $
        encodeTerm @@ var "cx" @@ var "g" @@ Core.annotatedTermBody (var "at"),
      _Term_application>>: lambda "app" $
@@ -535,7 +535,7 @@ encodeTerm = def "encodeTerm" $
 -- =============================================================================
 
 -- | Encode a Hydra function as a Rust expression
-encodeFunction :: TBinding (Context -> Graph -> Function -> Either (InContext OtherError) R.Expression)
+encodeFunction :: TBinding (Context -> Graph -> Function -> Either (InContext Error) R.Expression)
 encodeFunction = def "encodeFunction" $
   "cx" ~> "g" ~> lambda "fun" $
     cases _Function (var "fun") Nothing [
@@ -554,7 +554,7 @@ encodeFunction = def "encodeFunction" $
 
 -- | Encode a Hydra elimination as a Rust expression.
 -- Takes an optional argument for applied eliminations.
-encodeElimination :: TBinding (Context -> Graph -> Elimination -> Maybe Term -> Either (InContext OtherError) R.Expression)
+encodeElimination :: TBinding (Context -> Graph -> Elimination -> Maybe Term -> Either (InContext Error) R.Expression)
 encodeElimination = def "encodeElimination" $
   "cx" ~> "g" ~> lambda "elim" $ lambda "marg" $
     cases _Elimination (var "elim") Nothing [
@@ -645,7 +645,7 @@ encodeElimination = def "encodeElimination" $
 -- =============================================================================
 
 -- | Encode a Hydra record field as a Rust struct field
-encodeStructField :: TBinding (Context -> Graph -> FieldType -> Either (InContext OtherError) R.StructField)
+encodeStructField :: TBinding (Context -> Graph -> FieldType -> Either (InContext Error) R.StructField)
 encodeStructField = def "encodeStructField" $
   "cx" ~> "g" ~> lambda "ft" $
     "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
@@ -662,7 +662,7 @@ encodeStructField = def "encodeStructField" $
 -- =============================================================================
 
 -- | Encode a Hydra union field as a Rust enum variant
-encodeEnumVariant :: TBinding (Context -> Graph -> FieldType -> Either (InContext OtherError) R.EnumVariant)
+encodeEnumVariant :: TBinding (Context -> Graph -> FieldType -> Either (InContext Error) R.EnumVariant)
 encodeEnumVariant = def "encodeEnumVariant" $
   "cx" ~> "g" ~> lambda "ft" $
     "fname" <~ Core.unName (Core.fieldTypeName (var "ft")) $
@@ -698,7 +698,7 @@ encodeEnumVariant = def "encodeEnumVariant" $
 -- =============================================================================
 
 -- | Encode a Hydra type definition as a Rust item
-encodeTypeDefinition :: TBinding (Context -> Graph -> TypeDefinition -> Either (InContext OtherError) R.ItemWithComments)
+encodeTypeDefinition :: TBinding (Context -> Graph -> TypeDefinition -> Either (InContext Error) R.ItemWithComments)
 encodeTypeDefinition = def "encodeTypeDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Module.typeDefinitionName (var "tdef") $
@@ -770,7 +770,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
 -- =============================================================================
 
 -- | Encode a Hydra term definition as a Rust function item
-encodeTermDefinition :: TBinding (Context -> Graph -> TermDefinition -> Either (InContext OtherError) R.ItemWithComments)
+encodeTermDefinition :: TBinding (Context -> Graph -> TermDefinition -> Either (InContext Error) R.ItemWithComments)
 encodeTermDefinition = def "encodeTermDefinition" $
   "cx" ~> "g" ~> lambda "tdef" $
     "name" <~ Module.termDefinitionName (var "tdef") $
@@ -804,7 +804,7 @@ encodeTermDefinition = def "encodeTermDefinition" $
 -- =============================================================================
 
 -- | Convert a Hydra module to a map of file paths to Rust source code strings.
-moduleToRust :: TBinding (Module -> [Definition] -> Context -> Graph -> Either (InContext OtherError) (M.Map FilePath String))
+moduleToRust :: TBinding (Module -> [Definition] -> Context -> Graph -> Either (InContext Error) (M.Map FilePath String))
 moduleToRust = def "moduleToRust" $
   "mod" ~> "defs" ~> "cx" ~> "g" ~>
     "partitioned" <~ (Schemas.partitionDefinitions @@ var "defs") $

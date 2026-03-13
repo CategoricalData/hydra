@@ -96,7 +96,7 @@ import qualified Hydra.Ext.Sources.Avro.Schema as AvroSchema
 import qualified Hydra.Ext.Staging.Avro.Coder as StagingAvroCoder
 
 -- Local type aliases for types not exported by the staging module
-type Result a = Either (InContext OtherError) a
+type Result a = Either (InContext Error) a
 -- Phantom-type equivalents for unexported staging types
 data AvroForeignKey = AvroForeignKey Name (String -> Name)
 data AvroPrimaryKey = AvroPrimaryKey Name (String -> Name)
@@ -162,7 +162,7 @@ err :: TBinding (Context -> String -> Result a)
 err = define "err" $
   doc "Construct an error result with a message in context" $
   lambda "cx" $ lambda "msg" $
-    Ctx.failInContext (Error.otherError (var "msg")) (var "cx")
+    Ctx.failInContext (Error.errorOther $ Error.otherError (var "msg")) (var "cx")
 
 unexpectedE :: TBinding (Context -> String -> String -> Result a)
 unexpectedE = define "unexpectedE" $

@@ -123,94 +123,94 @@ public interface Utils {
   }
   
   static <T0> hydra.util.Either<T0, hydra.pg.graphson.syntax.Value> encodeStringValue(String s) {
-    return hydra.util.Either.<T0, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.String_(s));
+    return (hydra.util.Either<T0, hydra.pg.graphson.syntax.Value>) ((hydra.util.Either<T0, hydra.pg.graphson.syntax.Value>) (hydra.util.Either.<T0, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.String_(s))));
   }
   
-  static hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value> encodeTermValue(hydra.core.Term term) {
+  static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> encodeTermValue(hydra.core.Term term) {
     return (hydra.rewriting.Rewriting.deannotateTerm(term)).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value> otherwise(hydra.core.Term instance) {
-        return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError("unsupported term variant for GraphSON encoding"), hydra.lexical.Lexical.emptyContext())));
+      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> otherwise(hydra.core.Term instance) {
+        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("unsupported term variant for GraphSON encoding")), hydra.monads.Monads.emptyContext())))));
       }
       
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value> visit(hydra.core.Term.Literal lit) {
+      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.Term.Literal lit) {
         return ((lit).value).accept(new hydra.core.Literal.PartialVisitor<>() {
           @Override
-          public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value> otherwise(hydra.core.Literal instance) {
-            return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError("unsupported literal type for GraphSON encoding"), hydra.lexical.Lexical.emptyContext())));
+          public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> otherwise(hydra.core.Literal instance) {
+            return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("unsupported literal type for GraphSON encoding")), hydra.monads.Monads.emptyContext())))));
           }
           
           @Override
-          public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value> visit(hydra.core.Literal.Binary b) {
-            return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.Binary(hydra.lib.literals.BinaryToString.apply((b).value)));
+          public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.Literal.Binary b) {
+            return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.Binary(hydra.lib.literals.BinaryToString.apply((b).value)))));
           }
           
           @Override
-          public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value> visit(hydra.core.Literal.Boolean_ b) {
-            return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.Boolean_((b).value));
+          public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.Literal.Boolean_ b) {
+            return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.Boolean_((b).value))));
           }
           
           @Override
-          public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value> visit(hydra.core.Literal.Float_ fv) {
+          public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.Literal.Float_ fv) {
             return ((fv).value).accept(new hydra.core.FloatValue.PartialVisitor<>() {
               @Override
-              public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value> otherwise(hydra.core.FloatValue instance) {
-                return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError("unsupported float type"), hydra.lexical.Lexical.emptyContext())));
+              public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> otherwise(hydra.core.FloatValue instance) {
+                return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("unsupported float type")), hydra.monads.Monads.emptyContext())))));
               }
               
               @Override
-              public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value> visit(hydra.core.FloatValue.Bigfloat f) {
-                return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.BigDecimal(new hydra.pg.graphson.syntax.BigDecimalValue(hydra.lib.literals.ShowBigfloat.apply((f).value))));
+              public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.FloatValue.Bigfloat f) {
+                return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.BigDecimal(new hydra.pg.graphson.syntax.BigDecimalValue(hydra.lib.literals.ShowBigfloat.apply((f).value))))));
               }
               
               @Override
-              public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value> visit(hydra.core.FloatValue.Float32 f) {
-                return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.Float_(new hydra.pg.graphson.syntax.FloatValue.Finite((f).value)));
+              public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.FloatValue.Float32 f) {
+                return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.Float_(new hydra.pg.graphson.syntax.FloatValue.Finite((f).value)))));
               }
               
               @Override
-              public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value> visit(hydra.core.FloatValue.Float64 f) {
-                return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.Double_(new hydra.pg.graphson.syntax.DoubleValue.Finite((f).value)));
+              public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.FloatValue.Float64 f) {
+                return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.Double_(new hydra.pg.graphson.syntax.DoubleValue.Finite((f).value)))));
               }
             });
           }
           
           @Override
-          public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value> visit(hydra.core.Literal.Integer_ iv) {
+          public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.Literal.Integer_ iv) {
             return ((iv).value).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
               @Override
-              public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value> otherwise(hydra.core.IntegerValue instance) {
-                return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value>left((hydra.context.InContext<hydra.error.OtherError>) (new hydra.context.InContext<hydra.error.OtherError>(new hydra.error.OtherError("unsupported integer type"), hydra.lexical.Lexical.emptyContext())));
+              public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> otherwise(hydra.core.IntegerValue instance) {
+                return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("unsupported integer type")), hydra.monads.Monads.emptyContext())))));
               }
               
               @Override
-              public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value> visit(hydra.core.IntegerValue.Bigint i) {
-                return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.BigInteger((i).value));
+              public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.IntegerValue.Bigint i) {
+                return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.BigInteger((i).value))));
               }
               
               @Override
-              public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value> visit(hydra.core.IntegerValue.Int32 i) {
-                return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.Integer_((i).value));
+              public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.IntegerValue.Int32 i) {
+                return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.Integer_((i).value))));
               }
               
               @Override
-              public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value> visit(hydra.core.IntegerValue.Int64 i) {
-                return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.Long_((i).value));
+              public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.IntegerValue.Int64 i) {
+                return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.Long_((i).value))));
               }
             });
           }
           
           @Override
-          public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value> visit(hydra.core.Literal.String_ s) {
-            return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.String_((s).value));
+          public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.Literal.String_ s) {
+            return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.String_((s).value))));
           }
         });
       }
       
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value> visit(hydra.core.Term.Unit ignored) {
-        return hydra.util.Either.<hydra.context.InContext<hydra.error.OtherError>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.Null());
+      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.Term.Unit ignored) {
+        return (hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) ((hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>) (hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>right(new hydra.pg.graphson.syntax.Value.Null())));
       }
     });
   }

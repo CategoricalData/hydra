@@ -118,7 +118,7 @@ rewriteAvroSchemaM :: (t0 -> t1 -> t2)
 rewriteAvroSchemaM f schema = (rewriteAvroSchemaM f schema)
 
 -- | Convert a JSON value to a string, supporting booleans, strings, and numbers
-jsonToStringE :: (Context.Context -> Model.Value -> Either (Context.InContext Error.OtherError) String)
+jsonToStringE :: (Context.Context -> Model.Value -> Either (Context.InContext Error.Error) String)
 jsonToStringE cx v = ((\x -> case x of
   Model.ValueBoolean v0 -> (Right (Logic.ifElse v0 "true" "false"))
   Model.ValueString v0 -> (Right v0)
@@ -138,13 +138,13 @@ termToStringE :: (t0 -> t1 -> t2)
 termToStringE cx term = (termToStringE cx term)
 
 -- | Construct an error result with a message in context
-err :: (Context.Context -> String -> Either (Context.InContext Error.OtherError) t0)
+err :: (Context.Context -> String -> Either (Context.InContext Error.Error) t0)
 err cx msg = (Left (Context.InContext {
-  Context.inContextObject = (Error.OtherError msg),
+  Context.inContextObject = (Error.ErrorOther (Error.OtherError msg)),
   Context.inContextContext = cx}))
 
 -- | Construct an error for unexpected values
-unexpectedE :: (Context.Context -> String -> String -> Either (Context.InContext Error.OtherError) t0)
+unexpectedE :: (Context.Context -> String -> String -> Either (Context.InContext Error.Error) t0)
 unexpectedE cx expected found = (err cx (Strings.cat [
   "Expected ",
   expected,
@@ -167,7 +167,7 @@ expectStringE cx value = ((\x -> case x of
   Model.ValueString v0 -> (Right v0)) value)
 
 -- | Look up a required string attribute in a JSON object map
-requireStringE :: (Context.Context -> String -> M.Map String Model.Value -> Either (Context.InContext Error.OtherError) String)
+requireStringE :: (Context.Context -> String -> M.Map String Model.Value -> Either (Context.InContext Error.Error) String)
 requireStringE cx fname m = (Maybes.maybe (err cx (Strings.cat [
   "required attribute ",
   (Literals.showString fname),

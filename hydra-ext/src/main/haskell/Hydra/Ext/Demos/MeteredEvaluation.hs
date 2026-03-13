@@ -4,6 +4,7 @@
 module Hydra.Ext.Demos.MeteredEvaluation (demoMeteredEvaluation) where
 
 import Hydra.Kernel
+import qualified Hydra.Show.Error as ShowError
 import Hydra.Dsl.Meta.Phantoms
 import qualified Hydra.Dsl.Types as Types
 import Hydra.Dsl.Meta.Lib.Lists as Lists
@@ -37,7 +38,7 @@ testModule = Module testNs elements [] [] Nothing
 demoMeteredEvaluation :: IO ()
 demoMeteredEvaluation = do
     case result of
-      Left (InContext (OtherError msg) _) -> putStrLn $ "error: " <> msg
+      Left ic -> putStrLn $ "error: " <> ShowError.error (inContextObject ic)
       Right reduced -> putStrLn $ "result: " <> show reduced
   where
     graph = modulesToGraph [testModule] [testModule]
