@@ -326,20 +326,6 @@ inferenceTestCase x = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "output"),
       Core.fieldTerm = (Core_.typeScheme (Testing.inferenceTestCaseOutput x))}]}))
 
-jsonCoderTestCase :: (Testing.JsonCoderTestCase -> Core.Term)
-jsonCoderTestCase x = (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.testing.JsonCoderTestCase"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "type"),
-      Core.fieldTerm = (Core_.type_ (Testing.jsonCoderTestCaseType x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "term"),
-      Core.fieldTerm = (Core_.term (Testing.jsonCoderTestCaseTerm x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "json"),
-      Core.fieldTerm = (Model.value (Testing.jsonCoderTestCaseJson x))}]}))
-
 jsonDecodeTestCase :: (Testing.JsonDecodeTestCase -> Core.Term)
 jsonDecodeTestCase x = (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.testing.JsonDecodeTestCase"),
@@ -466,11 +452,6 @@ testCase x = case x of
     Core.injectionField = Core.Field {
       Core.fieldName = (Core.Name "inferenceFailure"),
       Core.fieldTerm = (inferenceFailureTestCase v0)}}))
-  Testing.TestCaseJsonCoder v0 -> (Core.TermUnion (Core.Injection {
-    Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
-    Core.injectionField = Core.Field {
-      Core.fieldName = (Core.Name "jsonCoder"),
-      Core.fieldTerm = (jsonCoderTestCase v0)}}))
   Testing.TestCaseJsonDecode v0 -> (Core.TermUnion (Core.Injection {
     Core.injectionTypeName = (Core.Name "hydra.testing.TestCase"),
     Core.injectionField = Core.Field {

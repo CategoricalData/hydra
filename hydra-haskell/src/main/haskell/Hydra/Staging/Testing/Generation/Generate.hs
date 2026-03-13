@@ -86,7 +86,7 @@ buildTestGroupMap subModuleNamespaces rootTestGroup =
     -- e.g., "hydra.test.checking.all" -> "checking"
     -- e.g., "hydra.test.monads" -> "hydra.monads"
     -- e.g., "hydra.test.etaExpansion" -> "eta expansion"
-    -- e.g., "hydra.test.json.coder" -> "JSON coder"
+    -- e.g., "hydra.test.json.parser" -> "JSON parser"
     deriveTestGroupName (Namespace ns) =
       let parts = Strings.splitOn "." ns
           -- Remove "hydra.test." prefix and handle different patterns

@@ -999,50 +999,6 @@ public interface Testing {
         raw));
   }
   
-  static hydra.util.Either<hydra.error.DecodingError, hydra.testing.JsonCoderTestCase> jsonCoderTestCase(hydra.graph.Graph cx, hydra.core.Term raw) {
-    return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.testing.JsonCoderTestCase>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.JsonCoderTestCase>left(new hydra.error.DecodingError(err))),
-      (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.JsonCoderTestCase>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
-        @Override
-        public hydra.util.Either<hydra.error.DecodingError, hydra.testing.JsonCoderTestCase> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.testing.JsonCoderTestCase>left(new hydra.error.DecodingError("expected record of type hydra.testing.JsonCoderTestCase"));
-        }
-        
-        @Override
-        public hydra.util.Either<hydra.error.DecodingError, hydra.testing.JsonCoderTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
-          return hydra.lib.eithers.Bind.apply(
-            hydra.extract.helpers.Helpers.requireField(
-              "type",
-              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.core.Type>>>) (p0 -> p1 -> hydra.decode.core.Core.type(
-                p0,
-                p1)),
-              fieldMap,
-              cx),
-            (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.error.DecodingError, hydra.testing.JsonCoderTestCase>>) (field_type -> hydra.lib.eithers.Bind.apply(
-              hydra.extract.helpers.Helpers.requireField(
-                "term",
-                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.core.Term>>>) (p0 -> p1 -> hydra.decode.core.Core.term(
-                  p0,
-                  p1)),
-                fieldMap,
-                cx),
-              (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.JsonCoderTestCase>>) (field_term -> hydra.lib.eithers.Bind.apply(
-                hydra.extract.helpers.Helpers.requireField(
-                  "json",
-                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.json.model.Value>>>) (p0 -> p1 -> hydra.decode.json.model.Model.value(
-                    p0,
-                    p1)),
-                  fieldMap,
-                  cx),
-                (java.util.function.Function<hydra.json.model.Value, hydra.util.Either<hydra.error.DecodingError, hydra.testing.JsonCoderTestCase>>) (field_json -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.JsonCoderTestCase>right(new hydra.testing.JsonCoderTestCase(field_type, field_term, field_json))))))));
-        }
-      })),
-      hydra.lexical.Lexical.stripAndDereferenceTermEither(
-        cx,
-        raw));
-  }
-  
   static hydra.util.Either<hydra.error.DecodingError, hydra.testing.JsonDecodeTestCase> jsonDecodeTestCase(hydra.graph.Graph cx, hydra.core.Term raw) {
     return hydra.lib.eithers.Either.apply(
       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, hydra.testing.JsonDecodeTestCase>>) (err -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.JsonDecodeTestCase>left(new hydra.error.DecodingError(err))),
@@ -1446,11 +1402,6 @@ public interface Testing {
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCase>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCase>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCase>>>(new hydra.core.Name("inferenceFailure"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCase>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<hydra.testing.InferenceFailureTestCase, hydra.testing.TestCase>) (t -> new hydra.testing.TestCase.InferenceFailure(t)),
               hydra.decode.testing.Testing.inferenceFailureTestCase(
-                cx,
-                input)))))),
-            (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCase>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCase>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCase>>>(new hydra.core.Name("jsonCoder"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCase>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<hydra.testing.JsonCoderTestCase, hydra.testing.TestCase>) (t -> new hydra.testing.TestCase.JsonCoder(t)),
-              hydra.decode.testing.Testing.jsonCoderTestCase(
                 cx,
                 input)))))),
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCase>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCase>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCase>>>(new hydra.core.Name("jsonDecode"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCase>>) (input -> hydra.lib.eithers.Map.apply(

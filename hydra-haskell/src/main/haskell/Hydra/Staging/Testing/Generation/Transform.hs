@@ -81,7 +81,6 @@ transformTestCase tcase@(TestCaseWithMetadata name tc desc tags) = case tc of
     TestCaseHoistSubterms _ -> Nothing
     TestCaseInference _ -> Nothing
     TestCaseInferenceFailure _ -> Nothing
-    TestCaseJsonCoder _ -> Nothing
     TestCaseJsonDecode _ -> Nothing
     TestCaseJsonEncode _ -> Nothing
     TestCaseJsonParser _ -> Nothing

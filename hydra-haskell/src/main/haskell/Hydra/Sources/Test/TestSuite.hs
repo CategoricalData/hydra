@@ -47,7 +47,6 @@ import qualified Hydra.Sources.Test.Inference.Fundamentals as InferenceFundament
 import qualified Hydra.Sources.Test.Inference.KernelExamples as InferenceKernelExamples
 import qualified Hydra.Sources.Test.Inference.Classes as InferenceClasses
 import qualified Hydra.Sources.Test.Inference.NominalTypes as InferenceNominalTypes
-import qualified Hydra.Sources.Test.Json.Coder as JsonCoder
 import qualified Hydra.Sources.Test.Json.Parser as JsonParser
 import qualified Hydra.Sources.Test.Json.Roundtrip as JsonRoundtrip
 import qualified Hydra.Sources.Test.Json.Writer as JsonWriter
@@ -103,7 +102,6 @@ otherPairs = [
   (Formatting.ns, Formatting.allTests),
   (HoistingAll.ns, HoistingAll.allTests),
   (InferenceAll.ns, InferenceAll.allTests),
-  (JsonCoder.ns, JsonCoder.allTests),
   (JsonParser.ns, JsonParser.allTests),
   (JsonRoundtrip.ns, JsonRoundtrip.allTests),
   (JsonWriter.ns, JsonWriter.allTests),
@@ -129,7 +127,7 @@ testSuiteModules =
    HoistingAll.module_, HoistingCases.module_, HoistingLet.module_,
    -- Other tests
    Annotations.module_, EtaExpansion.module_, Formatting.module_,
-   JsonCoder.module_, JsonParser.module_, JsonRoundtrip.module_, JsonWriter.module_,
+   JsonParser.module_, JsonRoundtrip.module_, JsonWriter.module_,
    Reduction.module_, Rewriting.module_, Serialization.module_, Sorting.module_,
    -- TODO: Ordering.module_ temporarily removed - needs investigation
    -- Checking tests (including sub-modules)

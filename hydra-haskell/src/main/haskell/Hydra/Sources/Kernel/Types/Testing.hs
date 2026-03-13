@@ -53,7 +53,6 @@ module_ = Module ns elements [Ast.ns, Coders.ns, Compute.ns, Graph.ns, JsonModel
       evaluationTestCase,
       inferenceFailureTestCase,
       inferenceTestCase,
-      jsonCoderTestCase,
       jsonDecodeTestCase,
       jsonEncodeTestCase,
       jsonParserTestCase,
@@ -374,21 +373,6 @@ inferenceTestCase = define "InferenceTestCase" $
       doc "The expected type scheme"
       Core.typeScheme]
 
-jsonCoderTestCase :: Binding
-jsonCoderTestCase = define "JsonCoderTestCase" $
-  doc ("A test case which encodes a Hydra term to JSON using a type-directed coder,"
-    <> " and verifies that decoding produces the original term (round-trip)") $
-  T.record [
-    "type">:
-      doc "The Hydra type that determines how the term is encoded/decoded"
-      Core.type_,
-    "term">:
-      doc "The Hydra term to encode"
-      Core.term,
-    "json">:
-      doc "The expected JSON value"
-      JsonModel.value]
-
 jsonDecodeTestCase :: Binding
 jsonDecodeTestCase = define "JsonDecodeTestCase" $
   doc ("A test case for the Either-based JSON decoder."
@@ -541,9 +525,6 @@ testCase = define "TestCase" $
     "inferenceFailure">:
       doc "A type inference failure test"
       inferenceFailureTestCase,
-    "jsonCoder">:
-      doc "A JSON coder (round-trip) test"
-      jsonCoderTestCase,
     "jsonDecode">:
       doc "A JSON decode test using Either-based decoder"
       jsonDecodeTestCase,

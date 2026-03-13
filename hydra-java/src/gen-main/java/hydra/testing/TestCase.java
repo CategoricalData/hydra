@@ -32,8 +32,6 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
   
   public static final hydra.core.Name INFERENCE_FAILURE = new hydra.core.Name("inferenceFailure");
   
-  public static final hydra.core.Name JSON_CODER = new hydra.core.Name("jsonCoder");
-  
   public static final hydra.core.Name JSON_DECODE = new hydra.core.Name("jsonDecode");
   
   public static final hydra.core.Name JSON_ENCODE = new hydra.core.Name("jsonEncode");
@@ -116,8 +114,6 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     R visit(Inference instance) ;
     
     R visit(InferenceFailure instance) ;
-    
-    R visit(JsonCoder instance) ;
     
     R visit(JsonDecode instance) ;
     
@@ -220,10 +216,6 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     }
     
     default R visit(InferenceFailure instance) {
-      return otherwise(instance);
-    }
-    
-    default R visit(JsonCoder instance) {
       return otherwise(instance);
     }
     
@@ -800,49 +792,6 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
         return tagCmp;
       }
       InferenceFailure o = (InferenceFailure) other;
-      return ((Comparable) value).compareTo(o.value);
-    }
-    
-    @Override
-    public <R> R accept(Visitor<R> visitor) {
-      return visitor.visit(this);
-    }
-  }
-  
-  /**
-   * A JSON coder (round-trip) test
-   */
-  public static final class JsonCoder extends hydra.testing.TestCase implements Serializable {
-    public final hydra.testing.JsonCoderTestCase value;
-    
-    public JsonCoder (hydra.testing.JsonCoderTestCase value) {
-      this.value = value;
-    }
-    
-    @Override
-    public boolean equals(Object other) {
-      if (!(other instanceof JsonCoder)) {
-        return false;
-      }
-      JsonCoder o = (JsonCoder) other;
-      return java.util.Objects.equals(
-        this.value,
-        o.value);
-    }
-    
-    @Override
-    public int hashCode() {
-      return 2 * java.util.Objects.hashCode(value);
-    }
-    
-    @Override
-    @SuppressWarnings("unchecked")
-    public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
-      if (tagCmp != 0) {
-        return tagCmp;
-      }
-      JsonCoder o = (JsonCoder) other;
       return ((Comparable) value).compareTo(o.value);
     }
     

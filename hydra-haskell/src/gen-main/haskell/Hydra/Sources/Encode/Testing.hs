@@ -1812,83 +1812,6 @@ module_ = Module.Module {
           Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
         Core.typeSchemeConstraints = Nothing}))},
     Core.Binding {
-      Core.bindingName = (Core.Name "hydra.encode.testing.jsonCoderTestCase"),
-      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-        Core.lambdaParameter = (Core.Name "x"),
-        Core.lambdaDomain = Nothing,
-        Core.lambdaBody = (Core.TermUnion (Core.Injection {
-          Core.injectionTypeName = (Core.Name "hydra.core.Term"),
-          Core.injectionField = Core.Field {
-            Core.fieldName = (Core.Name "record"),
-            Core.fieldTerm = (Core.TermRecord (Core.Record {
-              Core.recordTypeName = (Core.Name "hydra.core.Record"),
-              Core.recordFields = [
-                Core.Field {
-                  Core.fieldName = (Core.Name "typeName"),
-                  Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
-                    Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                    Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.testing.JsonCoderTestCase"))}))},
-                Core.Field {
-                  Core.fieldName = (Core.Name "fields"),
-                  Core.fieldTerm = (Core.TermList [
-                    Core.TermRecord (Core.Record {
-                      Core.recordTypeName = (Core.Name "hydra.core.Field"),
-                      Core.recordFields = [
-                        Core.Field {
-                          Core.fieldName = (Core.Name "name"),
-                          Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
-                            Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "type"))}))},
-                        Core.Field {
-                          Core.fieldName = (Core.Name "term"),
-                          Core.fieldTerm = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.core.type")),
-                            Core.applicationArgument = (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-                                Core.projectionTypeName = (Core.Name "hydra.testing.JsonCoderTestCase"),
-                                Core.projectionField = (Core.Name "type")})))),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}),
-                    (Core.TermRecord (Core.Record {
-                      Core.recordTypeName = (Core.Name "hydra.core.Field"),
-                      Core.recordFields = [
-                        Core.Field {
-                          Core.fieldName = (Core.Name "name"),
-                          Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
-                            Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "term"))}))},
-                        Core.Field {
-                          Core.fieldName = (Core.Name "term"),
-                          Core.fieldTerm = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.core.term")),
-                            Core.applicationArgument = (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-                                Core.projectionTypeName = (Core.Name "hydra.testing.JsonCoderTestCase"),
-                                Core.projectionField = (Core.Name "term")})))),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})),
-                    (Core.TermRecord (Core.Record {
-                      Core.recordTypeName = (Core.Name "hydra.core.Field"),
-                      Core.recordFields = [
-                        Core.Field {
-                          Core.fieldName = (Core.Name "name"),
-                          Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
-                            Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                            Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "json"))}))},
-                        Core.Field {
-                          Core.fieldName = (Core.Name "term"),
-                          Core.fieldTerm = (Core.TermApplication (Core.Application {
-                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.json.model.value")),
-                            Core.applicationArgument = (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-                                Core.projectionTypeName = (Core.Name "hydra.testing.JsonCoderTestCase"),
-                                Core.projectionField = (Core.Name "json")})))),
-                              Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))])}]}))}}))}))),
-      Core.bindingType = (Just (Core.TypeScheme {
-        Core.typeSchemeVariables = [],
-        Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-          Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.testing.JsonCoderTestCase")),
-          Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.core.Term"))})),
-        Core.typeSchemeConstraints = Nothing}))},
-    Core.Binding {
       Core.bindingName = (Core.Name "hydra.encode.testing.jsonDecodeTestCase"),
       Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "x"),
@@ -2700,38 +2623,6 @@ module_ = Module.Module {
                               Core.fieldName = (Core.Name "term"),
                               Core.fieldTerm = (Core.TermApplication (Core.Application {
                                 Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.testing.inferenceFailureTestCase")),
-                                Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))},
-          Core.Field {
-            Core.fieldName = (Core.Name "jsonCoder"),
-            Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-              Core.lambdaParameter = (Core.Name "y"),
-              Core.lambdaDomain = Nothing,
-              Core.lambdaBody = (Core.TermUnion (Core.Injection {
-                Core.injectionTypeName = (Core.Name "hydra.core.Term"),
-                Core.injectionField = Core.Field {
-                  Core.fieldName = (Core.Name "union"),
-                  Core.fieldTerm = (Core.TermRecord (Core.Record {
-                    Core.recordTypeName = (Core.Name "hydra.core.Injection"),
-                    Core.recordFields = [
-                      Core.Field {
-                        Core.fieldName = (Core.Name "typeName"),
-                        Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
-                          Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                          Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "hydra.testing.TestCase"))}))},
-                      Core.Field {
-                        Core.fieldName = (Core.Name "field"),
-                        Core.fieldTerm = (Core.TermRecord (Core.Record {
-                          Core.recordTypeName = (Core.Name "hydra.core.Field"),
-                          Core.recordFields = [
-                            Core.Field {
-                              Core.fieldName = (Core.Name "name"),
-                              Core.fieldTerm = (Core.TermWrap (Core.WrappedTerm {
-                                Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
-                                Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "jsonCoder"))}))},
-                            Core.Field {
-                              Core.fieldName = (Core.Name "term"),
-                              Core.fieldTerm = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.encode.testing.jsonCoderTestCase")),
                                 Core.applicationArgument = (Core.TermVariable (Core.Name "y"))}))}]}))}]}))}}))})))},
           Core.Field {
             Core.fieldName = (Core.Name "jsonDecode"),

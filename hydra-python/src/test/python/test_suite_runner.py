@@ -315,10 +315,6 @@ def default_test_runner(desc: str, tcase: hydra.testing.TestCaseWithMetadata) ->
         case hydra.testing.TestCaseInferenceFailure(value=tc):
             return lambda: run_inference_failure_test(desc, tc)
 
-        case hydra.testing.TestCaseJsonCoder(value=tc):
-            # JSON coder tests require JSON coder module - skip for now
-            return None
-
         case hydra.testing.TestCaseJsonParser(value=tc):
             # JSON parser tests require JSON parser module - skip for now
             return None
@@ -890,21 +886,10 @@ def run_rewrite_type_test(test_case: hydra.testing.RewriteTypeTestCase) -> None:
 
 def run_json_decode_test(test_case: hydra.testing.JsonDecodeTestCase) -> None:
     """Execute a JSON decode test."""
-    import hydra.ext.org.json.coder as json_coder
+    import hydra.json.decode as json_decode
 
-    graph = get_test_graph()
-    cx = _empty_context()
-
-    coder_result = json_coder.json_coder(test_case.type, cx, graph)
-
-    match coder_result:
-        case Left(value=err):
-            pytest.fail(f"Failed to create JSON coder: {err.object.value}")
-            return
-        case Right(value=coder):
-            pass
-
-    decode_result = coder.decode(cx, test_case.json)
+    empty_types = FrozenDict({})
+    decode_result = json_decode.from_json(empty_types, test_case.type, test_case.json)
 
     match test_case.expected:
         case Left(value=_err_msg):
@@ -931,33 +916,41 @@ def run_json_decode_test(test_case: hydra.testing.JsonDecodeTestCase) -> None:
 
 
 def run_json_encode_test(test_case: hydra.testing.JsonEncodeTestCase) -> None:
-    """Execute a JSON encode test.
+    """Execute a JSON encode test."""
+    import hydra.json.encode as json_encode
 
-    Note: Encoding without a type is challenging since we need a coder.
-    For now, we skip these tests as they require type information.
-    """
-    # Without a type in the test case, we can't create a coder
-    # This matches the Haskell behavior which marks these as pending
-    pytest.skip("JSON encode tests require type information to create coder")
+    encode_result = json_encode.to_json(test_case.term)
+
+    match test_case.expected:
+        case Left(value=_err_msg):
+            # Expected failure
+            match encode_result:
+                case Left(_):
+                    pass  # Expected failure, got failure
+                case Right(value=result):
+                    pytest.fail(
+                        f"Expected encode failure but got success: {result}"
+                    )
+        case Right(value=expected_json):
+            # Expected success
+            match encode_result:
+                case Left(value=err):
+                    pytest.fail(f"JSON encode failed: {err}")
+                case Right(value=result):
+                    assert result == expected_json, (
+                        f"JSON encode mismatch:\n"
+                        f"  Expected: {expected_json}\n"
+                        f"  Actual: {result}"
+                    )
 
 
 def run_json_roundtrip_test(test_case: hydra.testing.JsonRoundtripTestCase) -> None:
     """Execute a JSON roundtrip test."""
-    import hydra.ext.org.json.coder as json_coder
+    import hydra.json.encode as json_encode
+    import hydra.json.decode as json_decode
 
-    graph = get_test_graph()
-    cx = _empty_context()
-
-    coder_result = json_coder.json_coder(test_case.type, cx, graph)
-
-    match coder_result:
-        case Left(value=err):
-            pytest.fail(f"Failed to create JSON coder: {err.object.value}")
-            return
-        case Right(value=coder):
-            pass
-
-    encode_result = coder.encode(cx, test_case.term)
+    # Encode
+    encode_result = json_encode.to_json(test_case.term)
 
     match encode_result:
         case Left(value=err):
@@ -967,7 +960,8 @@ def run_json_roundtrip_test(test_case: hydra.testing.JsonRoundtripTestCase) -> N
             pass
 
     # Decode the JSON back
-    decode_result = coder.decode(cx, json)
+    empty_types = FrozenDict({})
+    decode_result = json_decode.from_json(empty_types, test_case.type, json)
 
     match decode_result:
         case Left(value=err):

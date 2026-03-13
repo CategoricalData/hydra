@@ -297,19 +297,6 @@ class InferenceTestCase:
     OUTPUT = hydra.core.Name("output")
 
 @dataclass(frozen=True)
-class JsonCoderTestCase:
-    r"""A test case which encodes a Hydra term to JSON using a type-directed coder, and verifies that decoding produces the original term (round-trip)."""
-    
-    type: Annotated[hydra.core.Type, "The Hydra type that determines how the term is encoded/decoded"]
-    term: Annotated[hydra.core.Term, "The Hydra term to encode"]
-    json: Annotated[hydra.json.model.Value, "The expected JSON value"]
-    
-    TYPE_ = hydra.core.Name("hydra.testing.JsonCoderTestCase")
-    TYPE = hydra.core.Name("type")
-    TERM = hydra.core.Name("term")
-    JSON = hydra.core.Name("json")
-
-@dataclass(frozen=True)
 class JsonDecodeTestCase:
     r"""A test case for the Either-based JSON decoder. Takes a type, input JSON, and expected result (Either String Term)."""
     
@@ -439,9 +426,6 @@ class TestCaseInference(Node["InferenceTestCase"]):
 class TestCaseInferenceFailure(Node["InferenceFailureTestCase"]):
     r"""A type inference failure test"""
 
-class TestCaseJsonCoder(Node["JsonCoderTestCase"]):
-    r"""A JSON coder (round-trip) test"""
-
 class TestCaseJsonDecode(Node["JsonDecodeTestCase"]):
     r"""A JSON decode test using Either-based decoder"""
 
@@ -529,7 +513,7 @@ class _TestCaseMeta(type):
 
 # A simple test case with an input and an expected output.
 class TestCase(metaclass=_TestCaseMeta):
-    r"""TestCaseAlphaConversion | TestCaseCaseConversion | TestCaseDeannotateTerm | TestCaseDeannotateType | TestCaseDelegatedEvaluation | TestCaseEtaExpansion | TestCaseFlattenLetTerms | TestCaseFreeVariables | TestCaseEvaluation | TestCaseInference | TestCaseInferenceFailure | TestCaseJsonCoder | TestCaseJsonDecode | TestCaseJsonEncode | TestCaseJsonParser | TestCaseJsonRoundtrip | TestCaseJsonWriter | TestCaseLiftLambdaAboveLet | TestCaseSerialization | TestCaseSimplifyTerm | TestCaseTopologicalSort | TestCaseTopologicalSortBindings | TestCaseTopologicalSortSCC | TestCaseTypeChecking | TestCaseTypeCheckingFailure | TestCaseTypeReduction | TestCaseNormalizeTypeVariables | TestCaseFoldOverTerm | TestCaseRewriteTerm | TestCaseRewriteType | TestCaseHoistSubterms | TestCaseHoistCaseStatements | TestCaseHoistLetBindings | TestCaseHoistPolymorphicLetBindings | TestCaseSubstInType | TestCaseVariableOccursInType | TestCaseUnifyTypes | TestCaseJoinTypes | TestCaseUnshadowVariables"""
+    r"""TestCaseAlphaConversion | TestCaseCaseConversion | TestCaseDeannotateTerm | TestCaseDeannotateType | TestCaseDelegatedEvaluation | TestCaseEtaExpansion | TestCaseFlattenLetTerms | TestCaseFreeVariables | TestCaseEvaluation | TestCaseInference | TestCaseInferenceFailure | TestCaseJsonDecode | TestCaseJsonEncode | TestCaseJsonParser | TestCaseJsonRoundtrip | TestCaseJsonWriter | TestCaseLiftLambdaAboveLet | TestCaseSerialization | TestCaseSimplifyTerm | TestCaseTopologicalSort | TestCaseTopologicalSortBindings | TestCaseTopologicalSortSCC | TestCaseTypeChecking | TestCaseTypeCheckingFailure | TestCaseTypeReduction | TestCaseNormalizeTypeVariables | TestCaseFoldOverTerm | TestCaseRewriteTerm | TestCaseRewriteType | TestCaseHoistSubterms | TestCaseHoistCaseStatements | TestCaseHoistLetBindings | TestCaseHoistPolymorphicLetBindings | TestCaseSubstInType | TestCaseVariableOccursInType | TestCaseUnifyTypes | TestCaseJoinTypes | TestCaseUnshadowVariables"""
     
     TYPE_ = hydra.core.Name("hydra.testing.TestCase")
     ALPHA_CONVERSION = hydra.core.Name("alphaConversion")
@@ -543,7 +527,6 @@ class TestCase(metaclass=_TestCaseMeta):
     EVALUATION = hydra.core.Name("evaluation")
     INFERENCE = hydra.core.Name("inference")
     INFERENCE_FAILURE = hydra.core.Name("inferenceFailure")
-    JSON_CODER = hydra.core.Name("jsonCoder")
     JSON_DECODE = hydra.core.Name("jsonDecode")
     JSON_ENCODE = hydra.core.Name("jsonEncode")
     JSON_PARSER = hydra.core.Name("jsonParser")
