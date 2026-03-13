@@ -109,7 +109,7 @@ def generate_test_file_with_python_codec(codec: hydra.testing.TestCodec, test_mo
 def infer_term(g: hydra.graph.Graph, term: hydra.core.Term) -> Either[str, hydra.core.Term]:
     r"""Run type inference on a single term."""
     
-    return hydra.lib.eithers.bimap((lambda ic: ic.object.value), (lambda x: x.term), hydra.inference.infer_in_graph_context(hydra.context.Context((), (), hydra.lib.maps.empty()), g, term))
+    return hydra.lib.eithers.bimap((lambda ic: ic.object.value), (lambda x: x.term), hydra.inference.infer_in_graph_context(hydra.lexical.empty_context(), g, term))
 
 def infer_test_case(g: hydra.graph.Graph, tcm: hydra.testing.TestCaseWithMetadata):
     r"""Run type inference on the terms in a test case."""
@@ -169,7 +169,7 @@ python_test_group_template = "# {groupName}"
 def term_to_python_with_context(namespaces_: hydra.module.Namespaces[hydra.ext.python.syntax.DottedName], graph0: hydra.graph.Graph, skip_casts: bool, term: hydra.core.Term, _g: T0) -> Either[str, str]:
     r"""Convert a Hydra term to a Python expression string with a pre-built graph context."""
     
-    return hydra.lib.eithers.bimap((lambda ic: ic.object.value), (lambda arg_: hydra.serialization.print_expr(hydra.ext.python.serde.encode_expression(arg_))), hydra.ext.python.coder.encode_term_inline(hydra.context.Context((), (), hydra.lib.maps.empty()), hydra.ext.python.helpers.PythonEnvironment(namespaces_, ((), hydra.lib.maps.empty()), graph0, hydra.lib.sets.empty(), hydra.ext.python.utils.target_python_version, skip_casts, hydra.lib.sets.empty()), skip_casts, term))
+    return hydra.lib.eithers.bimap((lambda ic: ic.object.value), (lambda arg_: hydra.serialization.print_expr(hydra.ext.python.serde.encode_expression(arg_))), hydra.ext.python.coder.encode_term_inline(hydra.lexical.empty_context(), hydra.ext.python.helpers.PythonEnvironment(namespaces_, ((), hydra.lib.maps.empty()), graph0, hydra.lib.sets.empty(), hydra.ext.python.utils.target_python_version, skip_casts, hydra.lib.sets.empty()), skip_casts, term))
 
 def type_to_python(namespaces_: hydra.module.Namespaces[hydra.ext.python.syntax.DottedName], typ: hydra.core.Type, g: hydra.graph.Graph) -> Either[str, str]:
     r"""Convert a Hydra type to a Python type expression string."""

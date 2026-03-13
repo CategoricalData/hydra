@@ -18,6 +18,7 @@ import hydra.ext.java.helpers
 import hydra.ext.java.serde
 import hydra.formatting
 import hydra.inference
+import hydra.lexical
 import hydra.lib.eithers
 import hydra.lib.equality
 import hydra.lib.lists
@@ -152,7 +153,7 @@ def generate_test_file_with_java_codec(codec: hydra.testing.TestCodec, test_modu
 def infer_term(g: hydra.graph.Graph, term: hydra.core.Term) -> Either[str, hydra.core.Term]:
     r"""Run type inference on a single term."""
     
-    return hydra.lib.eithers.bimap((lambda ic: ic.object.value), (lambda x: x.term), hydra.inference.infer_in_graph_context(hydra.context.Context((), (), hydra.lib.maps.empty()), g, term))
+    return hydra.lib.eithers.bimap((lambda ic: ic.object.value), (lambda x: x.term), hydra.inference.infer_in_graph_context(hydra.lexical.empty_context(), g, term))
 
 def infer_test_case(g: hydra.graph.Graph, tcm: hydra.testing.TestCaseWithMetadata):
     r"""Run type inference on the terms in a test case."""
@@ -201,7 +202,7 @@ def namespace_to_java_class_name(ns_: hydra.module.Namespace) -> str:
 def term_to_java(term: hydra.core.Term, g: hydra.graph.Graph) -> Either[str, str]:
     r"""Convert a Hydra term to a Java expression string."""
     
-    return hydra.lib.eithers.bimap((lambda ic: ic.object.value), (lambda arg_: hydra.serialization.print_expr(hydra.serialization.parenthesize(hydra.ext.java.serde.write_expression(arg_)))), hydra.ext.java.coder.encode_term(hydra.ext.java.helpers.JavaEnvironment(hydra.ext.java.helpers.Aliases(hydra.module.Namespace("test"), hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty(), Nothing(), hydra.lib.sets.empty()), g), term, hydra.context.Context((), (), hydra.lib.maps.empty()), g))
+    return hydra.lib.eithers.bimap((lambda ic: ic.object.value), (lambda arg_: hydra.serialization.print_expr(hydra.serialization.parenthesize(hydra.ext.java.serde.write_expression(arg_)))), hydra.ext.java.coder.encode_term(hydra.ext.java.helpers.JavaEnvironment(hydra.ext.java.helpers.Aliases(hydra.module.Namespace("test"), hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.sets.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty(), hydra.lib.maps.empty(), hydra.lib.sets.empty(), Nothing(), hydra.lib.sets.empty()), g), term, hydra.lexical.empty_context(), g))
 
 def type_to_java(_t: T0, _g: T1) -> Either[T2, str]:
     r"""Convert a Hydra type to a Java type expression string (placeholder returning Object)."""
