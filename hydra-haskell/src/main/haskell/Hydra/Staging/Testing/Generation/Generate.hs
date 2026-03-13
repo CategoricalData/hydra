@@ -148,7 +148,7 @@ generateGenerationTestSuite testGen outDir modules lookupTestGroup = do
       let cx0 = Context [] [] M.empty
       case Inference.inferGraphTypes cx0 (graphToBindings graph) graph of
         Left ic -> do
-          putStrLn $ "✗ Type inference failed: " ++ unOtherError (inContextObject ic)
+          putStrLn $ "✗ Type inference failed: " ++ showError (inContextObject ic)
           return False
         Right ((g, _inferredBindings), _cx') -> do
           putStrLn $ "Type inference complete. Generating " ++ show (length moduleTestPairs) ++ " module(s)..."

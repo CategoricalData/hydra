@@ -4,6 +4,7 @@ module Hydra.Staging.Testing.Generation.HaskellCodec where
 
 import Hydra.Kernel hiding (map)
 import Hydra.Testing
+import Hydra.Generation (showError)
 import Hydra.Coders (LanguageName(..))
 import Hydra.Staging.Testing.Generation.Transform (collectTestCases, addGenerationPrefix)
 import Hydra.Staging.Testing.Generation.Generate (TestGenerator(..), createTestGroupLookup, generateGenerationTestSuite)
@@ -62,13 +63,13 @@ addNamespacesToNamespaces ns0 names =
     mapMaybe f = foldr (\x acc -> maybe acc (:acc) (f x)) []
 
 termToHaskell :: Namespaces H.ModuleName -> Term -> Graph -> Either String String
-termToHaskell namespaces term g = case HaskellCoder.encodeTerm 0 namespaces term (Context [] [] M.empty) g of
-  Left ic -> Left $ unOtherError (inContextObject ic)
+termToHaskell namespaces term g = case HaskellCoder.encodeTerm 0 namespaces term emptyContext g of
+  Left ic -> Left $ showError (inContextObject ic)
   Right result -> Right $ printExpr . parenthesize . HaskellSerde.expressionToExpr $ result
 
 typeToHaskell :: Namespaces H.ModuleName -> Type -> Graph -> Either String String
-typeToHaskell namespaces typ g = case HaskellCoder.encodeType namespaces typ (Context [] [] M.empty) g of
-  Left ic -> Left $ unOtherError (inContextObject ic)
+typeToHaskell namespaces typ g = case HaskellCoder.encodeType namespaces typ emptyContext g of
+  Left ic -> Left $ showError (inContextObject ic)
   Right result -> Right $ printExpr . parenthesize . HaskellSerde.typeToExpr $ result
 
 -- | Create a Haskell TestCodec that uses the real Haskell coder
@@ -344,7 +345,7 @@ generateHaskellTestFile testModule testGroup g = do
     extractTestTerms (TestCaseWithMetadata _ tcase _ _) = case tcase of
       TestCaseDelegatedEvaluation (DelegatedEvaluationTestCase input output) -> [input, output]
       _ -> []
-    mapInContextError (Left ic) = Left (unOtherError (inContextObject ic))
+    mapInContextError (Left ic) = Left (showError (inContextObject ic))
     mapInContextError (Right a) = Right a
 
 -- | Haskell-specific test generator
@@ -352,8 +353,8 @@ generateHaskellTestFile testModule testGroup g = do
 haskellTestGenerator :: TestGenerator H.ModuleName
 haskellTestGenerator = TestGenerator {
   testGenNamespacesForModule = \m g -> do
-    case namespacesForModule m (Context [] [] M.empty) g of
-      Left ic -> Left (unOtherError (inContextObject ic))
+    case namespacesForModule m emptyContext g of
+      Left ic -> Left (showError (inContextObject ic))
       Right ns -> Right ns,
   testGenCreateCodec = haskellTestCodec,
   testGenGenerateTestFile = generateHaskellTestFile,
