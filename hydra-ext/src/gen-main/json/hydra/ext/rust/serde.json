@@ -10075,7 +10075,7 @@
                                         "term": {
                                           "function": {
                                             "lambda": {
-                                              "body": {"literal": {"string": " <<~"}},
+                                              "body": {"literal": {"string": "<<="}},
                                               "domain": [{"unit": {}}],
                                               "parameter": "_"}}}},
                                       {

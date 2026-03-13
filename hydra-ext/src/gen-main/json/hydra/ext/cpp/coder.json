@@ -6165,7 +6165,7 @@
                               "union": {
                                 "field": {"name": "lowerSnake", "term": {"unit": {}}},
                                 "typeName": "hydra.util.CaseConvention"}},
-                            "function": {"variable": "hydra.adapt.utils.nameToFilePath"}}}}}}}}},
+                            "function": {"variable": "hydra.coderUtils.nameToFilePath"}}}}}}}}},
             "domain": [{"variable": "hydra.core.Name"}],
             "parameter": "name"}}},
       "type": [

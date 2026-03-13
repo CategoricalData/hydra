@@ -49,15 +49,16 @@ import qualified Data.Maybe                                as Y
 import qualified Hydra.Ext.Protobuf.Proto3 as P3
 import qualified Hydra.Ext.Sources.Protobuf.Proto3 as Proto3Syntax
 import qualified Hydra.Ext.Sources.Protobuf.Language as ProtobufLanguageSource
+import qualified Hydra.Ext.Sources.Protobuf.Environment as ProtobufEnvironment
 import qualified Hydra.Ext.Sources.Protobuf.Serde as ProtobufSerdeSource
 
 
 def :: String -> TTerm a -> TBinding a
 def = definitionInModule module_
 
--- | Name for the ad-hoc StructuralTypeRef union type (either | pair)
+-- | Name for the StructuralTypeRef union type (either | pair)
 _StructuralTypeRef :: Name
-_StructuralTypeRef = Name "StructuralTypeRef"
+_StructuralTypeRef = Name "hydra.ext.protobuf.environment.StructuralTypeRef"
 
 -- | An empty list term, avoiding ambiguous type variable issues with 'list []'
 emptyList :: TTerm [a]
@@ -76,7 +77,7 @@ module_ = Module ns elements
       Formatting.ns, Names.ns, Rewriting.ns, Schemas.ns, Lexical.ns, Serialization.ns,
       Annotations.ns, Constants.ns, ExtractCore.ns, AdaptModules.ns, ShowCore.ns,
       moduleNamespace DecodeCore.module_]
-    (Proto3Syntax.ns:KernelTypes.kernelTypesNamespaces) $
+    (ProtobufEnvironment.ns:Proto3Syntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Protobuf code generator: converts Hydra modules to Protocol Buffers v3 definitions"
   where
     elements = [

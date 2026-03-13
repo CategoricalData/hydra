@@ -206,7 +206,8 @@ writeDefn = define "writeDefn" $
         "typ">: project Scala._Defn_Val Scala._Defn_Val_decltpe @@ var "dv",
         "rhs">: project Scala._Defn_Val Scala._Defn_Val_rhs @@ var "dv",
         "firstPat">: Lists.head (var "pats"),
-        "patName">: project Scala._Pat_Var Scala._Pat_Var_name @@ var "firstPat",
+        "patName">: cases Scala._Pat (var "firstPat") Nothing [
+          Scala._Pat_var>>: lambda "pv" $ project Scala._Pat_Var Scala._Pat_Var_name @@ var "pv"],
         "nameStr">: unwrap Scala._PredefString @@ (project Scala._Data_Name Scala._Data_Name_value @@ var "patName"),
         "nameAndType">: Maybes.maybe
           (Serialization.cst @@ var "nameStr")
@@ -301,19 +302,19 @@ writeImporter = define "writeImporter" $
         (Serialization.noSep @@ list [
           Serialization.cst @@ string ".",
           cases Scala._Importee (Lists.head (var "importees")) Nothing [
-            Scala._Importee_wildcard>>: constant $ Serialization.cst @@ string "*",
+            Scala._Importee_wildcard>>: constant (Serialization.cst @@ string "*"),
             Scala._Importee_name>>: lambda "in" $
-              Serialization.cst @@ (unwrap Scala._PredefString @@ (project Scala._Data_Name Scala._Data_Name_value @@
-                (project Scala._Importee_Name Scala._Importee_Name_name @@ var "in")))]])
+              Serialization.cst @@ (cases Scala._Name (project Scala._Importee_Name Scala._Importee_Name_name @@ var "in") Nothing [
+                Scala._Name_value>>: lambda "s" $ var "s"])]])
         (Serialization.noSep @@ list [
           Serialization.cst @@ string ".",
           Serialization.curlyBracesList @@ nothing @@ Serialization.inlineStyle @@
             (Lists.map
               (lambda "it" $ cases Scala._Importee (var "it") Nothing [
-                Scala._Importee_wildcard>>: constant $ Serialization.cst @@ string "*",
+                Scala._Importee_wildcard>>: constant (Serialization.cst @@ string "*"),
                 Scala._Importee_name>>: lambda "in" $
-                  Serialization.cst @@ (unwrap Scala._PredefString @@ (project Scala._Data_Name Scala._Data_Name_value @@
-                    (project Scala._Importee_Name Scala._Importee_Name_name @@ var "in")))])
+                  Serialization.cst @@ (cases Scala._Name (project Scala._Importee_Name Scala._Importee_Name_name @@ var "in") Nothing [
+                    Scala._Name_value>>: lambda "s" $ var "s"])])
               (var "importees"))]))] $
     Serialization.spaceSep @@ list [
       Serialization.cst @@ string "import",
@@ -323,7 +324,7 @@ writeLit :: TBinding (Scala.Lit -> Expr)
 writeLit = define "writeLit" $
   doc "Convert a literal to an expression" $
   lambda "lit" $
-    cases Scala._Lit (var "lit") Nothing [
+    cases Scala._Lit (var "lit") (Just $ Serialization.cst @@ string "TODO:literal") [
       Scala._Lit_int>>: lambda "i" $ Serialization.cst @@ (Literals.showInt32 (var "i")),
       Scala._Lit_boolean>>: lambda "b" $ Serialization.cst @@ (Logic.ifElse (var "b") (string "true") (string "false")),
       Scala._Lit_unit>>: constant $ Serialization.cst @@ string "()",

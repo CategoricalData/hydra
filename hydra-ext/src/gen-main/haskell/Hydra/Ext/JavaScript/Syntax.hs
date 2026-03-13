@@ -1443,7 +1443,7 @@ data AssignmentOperator =
   AssignmentOperatorModuloAssign  |
   -- | **=
   AssignmentOperatorExponentiateAssign  |
-  -- |  <<~
+  -- | <<=
   AssignmentOperatorLeftShiftAssign  |
   -- | >>=
   AssignmentOperatorRightShiftAssign  |

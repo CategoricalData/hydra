@@ -4,7 +4,7 @@
 
 module Hydra.Ext.Cpp.Coder where
 
-import qualified Hydra.Adapt.Utils as Utils
+import qualified Hydra.CoderUtils as CoderUtils
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Error as Error
@@ -539,7 +539,7 @@ serializeHeaderFile :: (Core.Name -> [Syntax.IncludeDirective] -> [Syntax.Declar
 serializeHeaderFile name includes decls = (bindingNameToFilePath name, (Serialization.printExpr (Serialization.parenthesize (Serde.encodeProgram (createHeaderFile includes decls)))))
 
 bindingNameToFilePath :: (Core.Name -> String)
-bindingNameToFilePath name = (Utils.nameToFilePath Util.CaseConventionLowerSnake Util.CaseConventionLowerSnake (Module.FileExtension "h") name)
+bindingNameToFilePath name = (CoderUtils.nameToFilePath Util.CaseConventionLowerSnake Util.CaseConventionLowerSnake (Module.FileExtension "h") name)
 
 findIncludes :: (Bool -> Module.Namespace -> [Module.TypeDefinition] -> [Syntax.IncludeDirective])
 findIncludes withFwd ns defs = (Lists.concat [

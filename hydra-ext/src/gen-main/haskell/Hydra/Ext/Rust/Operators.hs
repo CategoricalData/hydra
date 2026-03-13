@@ -49,9 +49,9 @@ bitOrAssignOp = (Serialization.op "|=" 1 Ast.AssociativityRight)
 bitXorAssignOp :: Ast.Op
 bitXorAssignOp = (Serialization.op "^=" 1 Ast.AssociativityRight)
 
--- | Shift-left assign operator ( <<~)
+-- | Shift-left assign operator (<<=)
 shlAssignOp :: Ast.Op
-shlAssignOp = (Serialization.op " <<~" 1 Ast.AssociativityRight)
+shlAssignOp = (Serialization.op "<<=" 1 Ast.AssociativityRight)
 
 -- | Shift-right assign operator (>>=)
 shrAssignOp :: Ast.Op

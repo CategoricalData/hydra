@@ -722,7 +722,7 @@ assignmentOperatorToString op = ((\x -> case x of
   Syntax.AssignmentOperatorDivideAssign -> "/="
   Syntax.AssignmentOperatorModuloAssign -> "%="
   Syntax.AssignmentOperatorExponentiateAssign -> "**="
-  Syntax.AssignmentOperatorLeftShiftAssign -> " <<~"
+  Syntax.AssignmentOperatorLeftShiftAssign -> "<<="
   Syntax.AssignmentOperatorRightShiftAssign -> ">>="
   Syntax.AssignmentOperatorUnsignedRightShiftAssign -> ">>>="
   Syntax.AssignmentOperatorBitwiseAndAssign -> "&="
