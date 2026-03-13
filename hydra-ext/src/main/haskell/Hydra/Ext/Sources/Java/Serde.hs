@@ -1147,7 +1147,7 @@ writeAssignment = def "writeAssignment" $
       Java._AssignmentOperator_mod>>: constant $ string "%=",
       Java._AssignmentOperator_plus>>: constant $ string "+=",
       Java._AssignmentOperator_minus>>: constant $ string "-=",
-      Java._AssignmentOperator_shiftLeft>>: constant $ string " <<~",
+      Java._AssignmentOperator_shiftLeft>>: constant $ string "<<=",
       Java._AssignmentOperator_shiftRight>>: constant $ string ">>=",
       Java._AssignmentOperator_shiftRightZeroFill>>: constant $ string ">>>=",
       Java._AssignmentOperator_and>>: constant $ string "&=",

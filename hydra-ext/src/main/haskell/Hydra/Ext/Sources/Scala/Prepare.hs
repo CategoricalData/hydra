@@ -78,7 +78,7 @@ prepareFloatType = def "prepareFloatType" $
         triple
           Core.floatTypeFloat64
           ("v" ~> cases _FloatValue (var "v") (Just (var "v")) [
-            _FloatValue_bigfloat>>: ("d" ~> inject _FloatValue _FloatValue_float64 (var "d"))])
+            _FloatValue_bigfloat>>: ("d" ~> inject _FloatValue _FloatValue_float64 (Literals.bigfloatToFloat64 (var "d")))])
           (Sets.fromList $ list [string "replace arbitrary-precision floating-point numbers with 64-bit floating-point numbers (doubles)"]))])
 
 prepareIntegerType :: TBinding (IntegerType -> (IntegerType, IntegerValue -> IntegerValue, S.Set String))
@@ -90,25 +90,25 @@ prepareIntegerType = def "prepareIntegerType" $
         triple
           Core.integerTypeInt64
           ("v" ~> cases _IntegerValue (var "v") (Just (var "v")) [
-            _IntegerValue_bigint>>: ("i" ~> inject _IntegerValue _IntegerValue_int64 (var "i"))])
+            _IntegerValue_bigint>>: ("i" ~> inject _IntegerValue _IntegerValue_int64 (Literals.bigintToInt64 (var "i")))])
           (Sets.fromList $ list [string "replace arbitrary-precision integers with 64-bit integers"])),
       _IntegerType_uint8>>: (constant $
         triple
           Core.integerTypeInt8
           ("v" ~> cases _IntegerValue (var "v") (Just (var "v")) [
-            _IntegerValue_uint8>>: ("i" ~> inject _IntegerValue _IntegerValue_int8 (var "i"))])
+            _IntegerValue_uint8>>: ("i" ~> inject _IntegerValue _IntegerValue_int8 (Literals.bigintToInt8 (Literals.uint8ToBigint (var "i"))))])
           (Sets.fromList $ list [string "replace unsigned 8-bit integers with signed 8-bit integers"])),
       _IntegerType_uint32>>: (constant $
         triple
           Core.integerTypeInt32
           ("v" ~> cases _IntegerValue (var "v") (Just (var "v")) [
-            _IntegerValue_uint32>>: ("i" ~> inject _IntegerValue _IntegerValue_int32 (var "i"))])
+            _IntegerValue_uint32>>: ("i" ~> inject _IntegerValue _IntegerValue_int32 (Literals.bigintToInt32 (Literals.uint32ToBigint (var "i"))))])
           (Sets.fromList $ list [string "replace unsigned 32-bit integers with signed 32-bit integers"])),
       _IntegerType_uint64>>: (constant $
         triple
           Core.integerTypeInt64
           ("v" ~> cases _IntegerValue (var "v") (Just (var "v")) [
-            _IntegerValue_uint64>>: ("i" ~> inject _IntegerValue _IntegerValue_int64 (var "i"))])
+            _IntegerValue_uint64>>: ("i" ~> inject _IntegerValue _IntegerValue_int64 (Literals.bigintToInt64 (Literals.uint64ToBigint (var "i"))))])
           (Sets.fromList $ list [string "replace unsigned 64-bit integers with signed 64-bit integers"]))])
 
 prepareType :: TBinding (Graph -> Type -> (Type, Term -> Term, S.Set String))

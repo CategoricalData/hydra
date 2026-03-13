@@ -48,6 +48,11 @@ import qualified System.Directory as SD
 import qualified System.FilePath as FP
 
 
+-- | Options for JSON Schema code generation (was previously in Staging module)
+data JsonSchemaOptions = JsonSchemaOptions {
+  jsonSchemaOptionsShortNames :: Bool
+}
+
 -- | Write a manifest.json listing ext module namespaces.
 -- This mirrors writeManifestJson in Hydra.Generation but for hydra-ext module lists.
 writeExtManifestJson :: FilePath -> IO ()

@@ -15317,7 +15317,7 @@
                                                                             "name": "literal",
                                                                             "term": {
                                                                               "union": {
-                                                                                "field": {"name": "string", "term": {"literal": {"string": " <<~"}}},
+                                                                                "field": {"name": "string", "term": {"literal": {"string": "<<="}}},
                                                                                 "typeName": "hydra.core.Literal"}}},
                                                                           "typeName": "hydra.core.Term"}}}]}}],
                                                             "typeName": "hydra.core.AnnotatedType"}}},

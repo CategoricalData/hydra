@@ -865,7 +865,7 @@ assignOp :: Binding
 assignOp = define "AssignOp" $ T.union [
   "simple">: T.unit,     -- =
   "add">: go "AddOp",    -- +=, -=, |=, ^=
-  "mul">: go "MulOp"]    -- *=, /=, %=, <<~, >>=, &=, &^=
+  "mul">: go "MulOp"]    -- *=, /=, %=, <<=, >>=, &=, &^=
 
 -- IfStmt = "if" [ SimpleStmt ";" ] Expression Block [ "else" ( IfStmt | Block ) ] .
 ifStmt :: Binding

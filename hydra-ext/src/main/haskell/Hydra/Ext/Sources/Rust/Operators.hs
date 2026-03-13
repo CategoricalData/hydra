@@ -215,8 +215,8 @@ bitXorAssignOp = define "bitXorAssignOp" $
 
 shlAssignOp :: TBinding Op
 shlAssignOp = define "shlAssignOp" $
-  doc "Shift-left assign operator ( <<~)" $
-  Serialization.op @@ string " <<~" @@ int32 1 @@ Ast.associativityRight
+  doc "Shift-left assign operator (<<=)" $
+  Serialization.op @@ string "<<=" @@ int32 1 @@ Ast.associativityRight
 
 shrAssignOp :: TBinding Op
 shrAssignOp = define "shrAssignOp" $

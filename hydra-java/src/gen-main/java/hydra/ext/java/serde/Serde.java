@@ -324,7 +324,7 @@ public interface Serde {
       
       @Override
       public String visit(hydra.ext.java.syntax.AssignmentOperator.ShiftLeft ignored) {
-        return " <<~";
+        return "<<=";
       }
       
       @Override

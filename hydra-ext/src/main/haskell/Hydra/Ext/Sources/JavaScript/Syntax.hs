@@ -1105,7 +1105,7 @@ assignmentOperator = define "AssignmentOperator" $
     "divideAssign">: doc "/=" T.unit,
     "moduloAssign">: doc "%=" T.unit,
     "exponentiateAssign">: doc "**=" T.unit,
-    "leftShiftAssign">: doc " <<~" T.unit,
+    "leftShiftAssign">: doc "<<=" T.unit,
     "rightShiftAssign">: doc ">>=" T.unit,
     "unsignedRightShiftAssign">: doc ">>>=" T.unit,
     "bitwiseAndAssign">: doc "&=" T.unit,

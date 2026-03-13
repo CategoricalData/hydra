@@ -412,7 +412,7 @@
                                     "lambda": {
                                       "body": {
                                         "application": {
-                                          "argument": {"literal": {"string": " <<~"}},
+                                          "argument": {"literal": {"string": "<<="}},
                                           "function": {"variable": "hydra.serialization.cst"}}},
                                       "domain": [{"unit": {}}],
                                       "parameter": "_"}}}},
