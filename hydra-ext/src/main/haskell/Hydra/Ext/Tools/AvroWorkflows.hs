@@ -23,7 +23,8 @@ import qualified Hydra.Json.Model as Json
 import Hydra.Extract.Json
 import Hydra.Parsing (ParseResult(..), ParseSuccess(..), ParseError(..))
 import qualified Hydra.Json.Parser as JsonParser
-import Hydra.Ext.Staging.Avro.Coder
+import Hydra.Ext.Avro.Coder
+import Hydra.Ext.Avro.Environment
 import Hydra.Ext.Avro.SchemaJson hiding (Result)
 import Hydra.Pg.Graphson.Utils
 import qualified Hydra.Ext.Shacl.Coder as Shacl
@@ -119,7 +120,7 @@ typeApplicationTermToShaclRdf _ _cx _g = Right encode
           else pure []
         notInGraph = L.null $ L.filter (\e -> bindingTerm e == term) $ graphToBindings graf
 
-transformAvroJson :: JsonPayloadFormat -> AvroHydraAdapter -> LastMile x -> FilePath -> FilePath -> IO ()
+transformAvroJson :: JsonPayloadFormat -> Adapter Avro.Schema Type Json.Value Term -> LastMile x -> FilePath -> FilePath -> IO ()
 transformAvroJson format adapter lastMile inFile outFile = do
     putStr $ "\t" ++ inFile ++ " --> "
     contents <- readFile inFile

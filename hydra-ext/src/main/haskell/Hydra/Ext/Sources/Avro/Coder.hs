@@ -89,13 +89,10 @@ import qualified Data.Maybe                                as Y
 import qualified Hydra.Ext.Org.Apache.Avro.Schema as Avro
 import qualified Hydra.Json.Model as JM
 import qualified Hydra.Ext.Sources.Avro.Schema as AvroSchema
-import qualified Hydra.Ext.Staging.Avro.Coder as StagingAvroCoder
-
--- Local type aliases for types not exported by the staging module
+import qualified Hydra.Ext.Avro.Environment as AvroEnv
+-- Local type aliases
 type Result a = Either (InContext Error) a
--- Phantom-type equivalents for unexported staging types
-data AvroForeignKey = AvroForeignKey Name (String -> Name)
-data AvroPrimaryKey = AvroPrimaryKey Name (String -> Name)
+type AvroHydraAdapter = Adapter Avro.Schema Type JM.Value Term
 
 
 define :: String -> TTerm a -> TBinding a
@@ -168,6 +165,13 @@ unexpectedE = define "unexpectedE" $
 
 -- | JSON extraction helpers
 
+-- Note: the error branches in these three functions are dropped during code generation because the
+-- success branches don't constrain the `cx` parameter, so inference generalizes it to `t0` and the
+-- code generator eliminates type-incompatible default branches. The functions remain safe because
+-- callers (foreignKeyE, requireStringE, optStringE) always pass the correct JSON value types.
+-- This mirrors the staging behavior (partial patterns with explicit error branches) but with
+-- implicit rather than explicit partiality.
+
 expectArrayE :: TBinding (Context -> JM.Value -> Result [JM.Value])
 expectArrayE = define "expectArrayE" $
   doc "Extract a JSON array or return an error" $
@@ -218,7 +222,7 @@ avro_primaryKey :: TBinding String
 avro_primaryKey = define "avro_primaryKey" $
   string "@primaryKey"
 
-emptyAvroEnvironment :: TBinding StagingAvroCoder.AvroEnvironment
+emptyAvroEnvironment :: TBinding AvroEnv.AvroEnvironment
 emptyAvroEnvironment = define "emptyAvroEnvironment" $
   doc "An empty Avro environment with no named adapters, no namespace, and no elements" $
   record (Name "hydra.ext.avro.environment.AvroEnvironment") [
@@ -229,42 +233,435 @@ emptyAvroEnvironment = define "emptyAvroEnvironment" $
 
 -- | Core functions
 
-avroHydraAdapter :: TBinding (Context -> Avro.Schema -> StagingAvroCoder.AvroEnvironment -> Result (StagingAvroCoder.AvroHydraAdapter, StagingAvroCoder.AvroEnvironment))
+
+avroHydraAdapter :: TBinding (Context -> Avro.Schema -> AvroEnv.AvroEnvironment -> Result (AvroHydraAdapter, AvroEnv.AvroEnvironment))
 avroHydraAdapter = define "avroHydraAdapter" $
   doc "Create an adapter between Avro schemas and Hydra types/terms" $
-  lambda "cx" $ lambda "schema" $ lambda "env0" $
-    -- Note: this is a complex recursive function; the DSL representation captures the interface
-    var "hydra.ext.avro.coder.avroHydraAdapter" @@ var "cx" @@ var "schema" @@ var "env0"
+  lambda "cx" $ lambda "schema" $ lambda "env0" $ lets [
+    -- simpleAdapter: create a non-lossy adapter with given type, encode, and decode functions
+    "simpleAdapter">: lambda "env" $ lambda "typ" $ lambda "encode" $ lambda "decode" $
+      right (pair
+        (Compute.adapter (boolean False) (var "schema") (var "typ") (Compute.coder (var "encode") (var "decode")))
+        (var "env")),
+    -- doubleToInt: truncate a JSON number (bigfloat) to int32 (toward zero)
+    "doubleToInt">: lambda "d" $ Literals.bigintToInt32 (Math.truncate (Literals.bigfloatToFloat64 (var "d"))),
+    -- doubleToLong: truncate a JSON number (bigfloat) to int64 (toward zero)
+    "doubleToLong">: lambda "d" $ Literals.bigintToInt64 (Math.truncate (Literals.bigfloatToFloat64 (var "d")))] $
+    cases Avro._Schema (var "schema") Nothing [
+      -- SchemaArray
+      Avro._Schema_array>>: lambda "arr" $
+        Eithers.bind (avroHydraAdapter @@ var "cx" @@ (project Avro._Array Avro._Array_items @@ var "arr") @@ var "env0") (lambda "adEnv" $ lets [
+          "ad">: Pairs.first (var "adEnv"),
+          "env1">: Pairs.second (var "adEnv")] $
+          right (pair
+            (Compute.adapter (Compute.adapterIsLossy (var "ad")) (var "schema")
+              (MetaTypes.list (Compute.adapterTarget (var "ad")))
+              (Compute.coder
+                (lambda "cx1" $ lambda "v" $
+                  cases JM._Value (var "v") Nothing [
+                    JM._Value_array>>: lambda "vals" $
+                      Eithers.map (lambda "ts" $ Core.termList (var "ts"))
+                        (Eithers.mapList (lambda "jv" $ Compute.coderEncode (Compute.adapterCoder (var "ad")) @@ var "cx1" @@ var "jv") (var "vals"))])
+                (lambda "cx1" $ lambda "t" $
+                  cases _Term (var "t") Nothing [
+                    _Term_list>>: lambda "vals" $
+                      Eithers.map (lambda "jvs" $ inject JM._Value JM._Value_array (var "jvs"))
+                        (Eithers.mapList (lambda "tv" $ Compute.coderDecode (Compute.adapterCoder (var "ad")) @@ var "cx1" @@ var "tv") (var "vals"))])))
+            (var "env1"))),
 
-prepareFields :: TBinding (Context -> StagingAvroCoder.AvroEnvironment -> [Avro.Field] -> Result (M.Map String (Avro.Field, StagingAvroCoder.AvroHydraAdapter), StagingAvroCoder.AvroEnvironment))
+      -- SchemaMap
+      Avro._Schema_map>>: lambda "mp" $
+        Eithers.bind (avroHydraAdapter @@ var "cx" @@ (project Avro._Map Avro._Map_values @@ var "mp") @@ var "env0") (lambda "adEnv" $ lets [
+          "ad">: Pairs.first (var "adEnv"),
+          "env1">: Pairs.second (var "adEnv"),
+          "pairToHydra">: lambda "cx1" $ lambda "entry" $ lets [
+            "k">: Pairs.first (var "entry"),
+            "v">: Pairs.second (var "entry")] $
+            Eithers.map
+              (lambda "v'" $ pair (MetaTerms.stringLift (var "k")) (var "v'"))
+              (Compute.coderEncode (Compute.adapterCoder (var "ad")) @@ var "cx1" @@ var "v")] $
+          right (pair
+            (Compute.adapter (Compute.adapterIsLossy (var "ad")) (var "schema")
+              (MetaTypes.map MetaTypes.string (Compute.adapterTarget (var "ad")))
+              (Compute.coder
+                (lambda "cx1" $ lambda "v" $
+                  cases JM._Value (var "v") Nothing [
+                    JM._Value_object>>: lambda "m" $
+                      Eithers.map (lambda "pairs" $ Core.termMap (Maps.fromList (var "pairs")))
+                        (Eithers.mapList (lambda "e" $ var "pairToHydra" @@ var "cx1" @@ var "e") (Maps.toList (var "m")))])
+                (lambda "cx1" $ lambda "m" $
+                  Eithers.map (lambda "mp'" $ inject JM._Value JM._Value_object (var "mp'"))
+                    (ExtractCore.map @@ var "cx" @@ (lambda "t" $ ExtractCore.string @@ var "cx" @@ Graph.emptyGraph @@ var "t")
+                      @@ (lambda "t" $ Compute.coderDecode (Compute.adapterCoder (var "ad")) @@ var "cx1" @@ var "t")
+                      @@ Graph.emptyGraph @@ var "m"))))
+            (var "env1"))),
+
+      -- SchemaNamed
+      Avro._Schema_named>>: lambda "n" $ lets [
+        "ns">: project Avro._Named Avro._Named_namespace @@ var "n",
+        "manns">: namedAnnotationsToCore @@ var "n",
+        "ann">: Logic.ifElse (Maps.null (var "manns")) nothing (just (var "manns")),
+        "lastNs">: project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_namespace @@ var "env0",
+        "nextNs">: Maybes.maybe (var "lastNs") (lambda "s" $ just (var "s")) (var "ns"),
+        "env1">: record AvroEnv._AvroEnvironment [
+          AvroEnv._AvroEnvironment_namedAdapters>>:
+            project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_namedAdapters @@ var "env0",
+          AvroEnv._AvroEnvironment_namespace>>: var "nextNs",
+          AvroEnv._AvroEnvironment_elements>>:
+            project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_elements @@ var "env0"],
+        "qname">: record AvroEnv._AvroQualifiedName [
+          AvroEnv._AvroQualifiedName_namespace>>: var "nextNs",
+          AvroEnv._AvroQualifiedName_name>>: project Avro._Named Avro._Named_name @@ var "n"],
+        "hydraName">: avroNameToHydraName @@ var "qname"] $
+        -- Check if already defined
+        Maybes.maybe
+          -- Not previously defined: process based on named type
+          (Eithers.bind
+            (cases Avro._NamedType (project Avro._Named Avro._Named_type @@ var "n") Nothing [
+              -- Enum
+              Avro._NamedType_enum>>: lambda "e" $ lets [
+                "syms">: project Avro._Enum Avro._Enum_symbols @@ var "e",
+                "typ">: Core.typeUnion (Core.rowType (var "hydraName")
+                  (Lists.map (lambda "s" $ Core.fieldType (Core.name (var "s")) MetaTypes.unit) (var "syms")))] $
+                var "simpleAdapter" @@ var "env1" @@ var "typ"
+                  @@ (lambda "_cx" $ lambda "jv" $
+                    cases JM._Value (var "jv") Nothing [
+                      JM._Value_string>>: lambda "s" $
+                        right (Core.termUnion (Core.injection (var "hydraName") (Core.field (Core.name (var "s")) Core.termUnit)))])
+                  @@ (lambda "_cx" $ lambda "t" $
+                    cases _Term (var "t") Nothing [
+                      _Term_union>>: lambda "inj" $ lets [
+                        "fld">: project _Injection _Injection_field @@ var "inj",
+                        "fn">: project _Field _Field_name @@ var "fld"] $
+                        right (inject JM._Value JM._Value_string (unwrap _Name @@ var "fn"))]),
+
+              -- Fixed
+              Avro._NamedType_fixed>>: lambda "_f" $
+                var "simpleAdapter" @@ var "env1" @@ MetaTypes.binary
+                  @@ (lambda "_cx" $ lambda "jv" $
+                    cases JM._Value (var "jv") Nothing [
+                      JM._Value_string>>: lambda "s" $
+                        right (Core.termLiteral (Core.literalBinary (Literals.stringToBinary (var "s"))))])
+                  @@ (lambda "cx1" $ lambda "t" $
+                    Eithers.map (lambda "b" $ inject JM._Value JM._Value_string (Literals.binaryToString (var "b")))
+                      (ExtractCore.binary @@ var "cx1" @@ Graph.emptyGraph @@ var "t")),
+
+              -- Record
+              Avro._NamedType_record>>: lambda "r" $ lets [
+                "avroFields">: project Avro._Record Avro._Record_fields @@ var "r"] $
+                Eithers.bind (prepareFields @@ var "cx" @@ var "env1" @@ var "avroFields") (lambda "prepResult" $ lets [
+                  "adaptersByFieldName">: Pairs.first (var "prepResult"),
+                  "env2">: Pairs.second (var "prepResult")] $
+                  Eithers.bind (findAvroPrimaryKeyField @@ var "cx" @@ var "qname" @@ var "avroFields") (lambda "pk" $ lets [
+                    -- encodePair: encode a key-value pair from JSON object
+                    "encodePair">: lambda "cx1" $ lambda "entry" $ lets [
+                      "k">: Pairs.first (var "entry"),
+                      "v">: Pairs.second (var "entry")] $
+                      Maybes.maybe
+                        (err @@ var "cx1" @@ Strings.cat (list [string "unrecognized field for ", showQname @@ var "qname", string ": ", var "k"]))
+                        (lambda "fad" $ Eithers.map
+                          (lambda "v'" $ Core.field (Core.name (var "k")) (var "v'"))
+                          (Compute.coderEncode (Compute.adapterCoder (Pairs.second (var "fad"))) @@ var "cx1" @@ var "v"))
+                        (Maps.lookup (var "k") (var "adaptersByFieldName")),
+                    -- decodeField: decode a Hydra field back to a key-value pair
+                    "decodeField">: lambda "cx1" $ lambda "fld" $ lets [
+                      "k">: unwrap _Name @@ (project _Field _Field_name @@ var "fld"),
+                      "v">: project _Field _Field_term @@ var "fld"] $
+                      Maybes.maybe
+                        (err @@ var "cx1" @@ Strings.cat (list [string "unrecognized field for ", showQname @@ var "qname", string ": ", var "k"]))
+                        (lambda "fad" $ Eithers.map
+                          (lambda "v'" $ pair (var "k") (var "v'"))
+                          (Compute.coderDecode (Compute.adapterCoder (Pairs.second (var "fad"))) @@ var "cx1" @@ var "v"))
+                        (Maps.lookup (var "k") (var "adaptersByFieldName")),
+                    -- lossy: any adapter is lossy?
+                    "lossy">: Lists.foldl (lambda "b" $ lambda "fad" $ Logic.or (var "b") (Compute.adapterIsLossy (Pairs.second (var "fad"))))
+                      (boolean False) (Maps.elems (var "adaptersByFieldName")),
+                    -- hfields: Hydra field types
+                    "hfields">: Lists.map (lambda "fad" $
+                      Core.fieldType (Core.name (project Avro._Field Avro._Field_name @@ Pairs.first (var "fad")))
+                        (Compute.adapterTarget (Pairs.second (var "fad"))))
+                      (Maps.elems (var "adaptersByFieldName")),
+                    "target">: Core.typeRecord (Core.rowType (var "hydraName") (var "hfields"))] $
+                    right (pair
+                      (Compute.adapter (var "lossy") (var "schema") (var "target")
+                        (Compute.coder
+                          (lambda "cx1" $ lambda "jv" $
+                            cases JM._Value (var "jv") Nothing [
+                              JM._Value_object>>: lambda "m" $
+                                Eithers.map (lambda "fields" $ Core.termRecord (Core.record (var "hydraName") (var "fields")))
+                                  (Eithers.mapList (lambda "e" $ var "encodePair" @@ var "cx1" @@ var "e") (Maps.toList (var "m")))])
+                          (lambda "cx1" $ lambda "t" $
+                            cases _Term (var "t") Nothing [
+                              _Term_record>>: lambda "rec" $
+                                Eithers.map (lambda "kvs" $ inject JM._Value JM._Value_object (Maps.fromList (var "kvs")))
+                                  (Eithers.mapList (lambda "fld" $ var "decodeField" @@ var "cx1" @@ var "fld")
+                                    (project _Record _Record_fields @@ var "rec"))])))
+                      (var "env2"))))])
+            (lambda "adEnv2" $ lets [
+              "ad">: Pairs.first (var "adEnv2"),
+              "env2">: Pairs.second (var "adEnv2"),
+              -- Note: staging stores unannotated adapter in env but returns annotated
+              "env3">: putAvroHydraAdapter @@ var "qname" @@ var "ad" @@ var "env2",
+              -- Restore the previous namespace
+              "env4">: record AvroEnv._AvroEnvironment [
+                AvroEnv._AvroEnvironment_namedAdapters>>:
+                  project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_namedAdapters @@ var "env3",
+                AvroEnv._AvroEnvironment_namespace>>: var "lastNs",
+                AvroEnv._AvroEnvironment_elements>>:
+                  project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_elements @@ var "env3"]] $
+              right (pair (annotateAdapter @@ var "ann" @@ var "ad") (var "env4"))))
+          -- Already defined: error
+          (lambda "_ad" $ err @@ var "cx" @@ Strings.cat2 (string "Avro named type defined more than once: ") (showQname @@ var "qname"))
+          (getAvroHydraAdapter @@ var "qname" @@ var "env1"),
+
+      -- SchemaPrimitive
+      Avro._Schema_primitive>>: lambda "p" $
+        cases Avro._Primitive (var "p") Nothing [
+          -- Null
+          Avro._Primitive_null>>: constant $
+            var "simpleAdapter" @@ var "env0" @@ MetaTypes.unit
+              @@ (lambda "_cx" $ lambda "jv" $
+                cases JM._Value (var "jv") Nothing [
+                  JM._Value_string>>: lambda "s" $ right (MetaTerms.stringLift (var "s"))])
+              @@ (lambda "cx1" $ lambda "t" $
+                Eithers.map (lambda "s" $ inject JM._Value JM._Value_string (var "s"))
+                  (ExtractCore.string @@ var "cx1" @@ Graph.emptyGraph @@ var "t")),
+          -- Boolean
+          Avro._Primitive_boolean>>: constant $
+            var "simpleAdapter" @@ var "env0" @@ MetaTypes.boolean
+              @@ (lambda "_cx" $ lambda "jv" $
+                cases JM._Value (var "jv") Nothing [
+                  JM._Value_boolean>>: lambda "b" $ right (MetaTerms.booleanLift (var "b"))])
+              @@ (lambda "cx1" $ lambda "t" $
+                Eithers.map (lambda "b" $ inject JM._Value JM._Value_boolean (var "b"))
+                  (ExtractCore.boolean @@ var "cx1" @@ Graph.emptyGraph @@ var "t")),
+          -- Int
+          Avro._Primitive_int>>: constant $
+            var "simpleAdapter" @@ var "env0" @@ MetaTypes.int32
+              @@ (lambda "_cx" $ lambda "jv" $
+                cases JM._Value (var "jv") Nothing [
+                  JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt32 (var "doubleToInt" @@ var "d"))))])
+              @@ (lambda "cx1" $ lambda "t" $
+                Eithers.map (lambda "i" $ inject JM._Value JM._Value_number (Literals.bigintToBigfloat (Literals.int32ToBigint (var "i"))))
+                  (ExtractCore.int32 @@ var "cx1" @@ Graph.emptyGraph @@ var "t")),
+          -- Long
+          Avro._Primitive_long>>: constant $
+            var "simpleAdapter" @@ var "env0" @@ MetaTypes.int64
+              @@ (lambda "_cx" $ lambda "jv" $
+                cases JM._Value (var "jv") Nothing [
+                  JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalInteger (Core.integerValueInt64 (var "doubleToLong" @@ var "d"))))])
+              @@ (lambda "cx1" $ lambda "t" $
+                Eithers.map (lambda "i" $ inject JM._Value JM._Value_number (Literals.bigintToBigfloat (Literals.int64ToBigint (var "i"))))
+                  (ExtractCore.int64 @@ var "cx1" @@ Graph.emptyGraph @@ var "t")),
+          -- Float
+          Avro._Primitive_float>>: constant $
+            var "simpleAdapter" @@ var "env0" @@ MetaTypes.float32
+              @@ (lambda "_cx" $ lambda "jv" $
+                cases JM._Value (var "jv") Nothing [
+                  JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalFloat (Core.floatValueFloat32 (Literals.bigfloatToFloat32 (var "d")))))])
+              @@ (lambda "cx1" $ lambda "t" $
+                Eithers.map (lambda "f" $ inject JM._Value JM._Value_number (Literals.float32ToBigfloat (var "f")))
+                  (ExtractCore.float32 @@ var "cx1" @@ Graph.emptyGraph @@ var "t")),
+          -- Double
+          Avro._Primitive_double>>: constant $
+            var "simpleAdapter" @@ var "env0" @@ MetaTypes.float64
+              @@ (lambda "_cx" $ lambda "jv" $
+                cases JM._Value (var "jv") Nothing [
+                  JM._Value_number>>: lambda "d" $ right (Core.termLiteral (Core.literalFloat (Core.floatValueFloat64 (Literals.bigfloatToFloat64 (var "d")))))])
+              @@ (lambda "cx1" $ lambda "t" $
+                Eithers.map (lambda "d" $ inject JM._Value JM._Value_number (Literals.float64ToBigfloat (var "d")))
+                  (ExtractCore.float64 @@ var "cx1" @@ Graph.emptyGraph @@ var "t")),
+          -- Bytes
+          Avro._Primitive_bytes>>: constant $
+            var "simpleAdapter" @@ var "env0" @@ MetaTypes.binary
+              @@ (lambda "_cx" $ lambda "jv" $
+                cases JM._Value (var "jv") Nothing [
+                  JM._Value_string>>: lambda "s" $ right (Core.termLiteral (Core.literalBinary (Literals.stringToBinary (var "s"))))])
+              @@ (lambda "cx1" $ lambda "t" $
+                Eithers.map (lambda "b" $ inject JM._Value JM._Value_string (Literals.binaryToString (var "b")))
+                  (ExtractCore.binary @@ var "cx1" @@ Graph.emptyGraph @@ var "t")),
+          -- String
+          Avro._Primitive_string>>: constant $
+            var "simpleAdapter" @@ var "env0" @@ MetaTypes.string
+              @@ (lambda "_cx" $ lambda "jv" $
+                cases JM._Value (var "jv") Nothing [
+                  JM._Value_string>>: lambda "s" $ right (MetaTerms.stringLift (var "s"))])
+              @@ (lambda "cx1" $ lambda "t" $
+                Eithers.map (lambda "s" $ inject JM._Value JM._Value_string (var "s"))
+                  (ExtractCore.string @@ var "cx1" @@ Graph.emptyGraph @@ var "t"))],
+
+      -- SchemaReference
+      Avro._Schema_reference>>: lambda "name_" $ lets [
+        "qname">: parseAvroName @@ (project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_namespace @@ var "env0") @@ var "name_"] $
+        Maybes.maybe
+          (err @@ var "cx" @@ Strings.cat2 (string "Referenced Avro type has not been defined: ") (showQname @@ var "qname"))
+          (lambda "ad" $ right (pair (var "ad") (var "env0")))
+          (getAvroHydraAdapter @@ var "qname" @@ var "env0"),
+
+      -- SchemaUnion
+      Avro._Schema_union>>: lambda "u" $ lets [
+        "schemas">: unwrap Avro._Union @@ var "u",
+        "isNull">: lambda "s" $
+          cases Avro._Schema (var "s") (Just (boolean False)) [
+            Avro._Schema_primitive>>: lambda "prim" $
+              cases Avro._Primitive (var "prim") (Just (boolean False)) [
+                Avro._Primitive_null>>: constant (boolean True)]],
+        "hasNull">: Logic.not (Lists.null (Lists.filter (var "isNull") (var "schemas"))),
+        "nonNulls">: Lists.filter (lambda "s" $ Logic.not (var "isNull" @@ var "s")) (var "schemas"),
+        "forOptional">: lambda "s" $
+          Eithers.bind (avroHydraAdapter @@ var "cx" @@ var "s" @@ var "env0") (lambda "adEnv" $ lets [
+            "ad">: Pairs.first (var "adEnv"),
+            "env1">: Pairs.second (var "adEnv")] $
+            right (pair
+              (Compute.adapter (Compute.adapterIsLossy (var "ad")) (var "schema")
+                (MetaTypes.optional (Compute.adapterTarget (var "ad")))
+                (Compute.coder
+                  (lambda "cx1" $ lambda "v" $
+                    cases JM._Value (var "v") (Just (
+                      Eithers.map (lambda "t" $ Core.termMaybe (just (var "t")))
+                        (Compute.coderEncode (Compute.adapterCoder (var "ad")) @@ var "cx1" @@ var "v"))) [
+                      JM._Value_null>>: constant (right (Core.termMaybe nothing))])
+                  (lambda "cx1" $ lambda "t" $
+                    cases _Term (var "t") Nothing [
+                      _Term_maybe>>: lambda "ot" $
+                        Maybes.maybe
+                          (right (injectUnit JM._Value JM._Value_null))
+                          (lambda "term'" $ Compute.coderDecode (Compute.adapterCoder (var "ad")) @@ var "cx1" @@ var "term'")
+                          (var "ot")])))
+              (var "env1")))] $
+        Logic.ifElse (Equality.gt (Lists.length (var "nonNulls")) (int32 1))
+          (err @@ var "cx" @@ string "general-purpose unions are not yet supported")
+          (Logic.ifElse (Lists.null (var "nonNulls"))
+            (err @@ var "cx" @@ string "cannot generate the empty type")
+            (Logic.ifElse (var "hasNull")
+              (var "forOptional" @@ Lists.head (var "nonNulls"))
+              (Eithers.bind (avroHydraAdapter @@ var "cx" @@ Lists.head (var "nonNulls") @@ var "env0") (lambda "adEnv" $ lets [
+                "ad">: Pairs.first (var "adEnv"),
+                "env1">: Pairs.second (var "adEnv")] $
+                right (pair
+                  (Compute.adapter (Compute.adapterIsLossy (var "ad")) (var "schema")
+                    (Compute.adapterTarget (var "ad")) (Compute.adapterCoder (var "ad")))
+                  (var "env1"))))))
+      ]
+
+prepareFields :: TBinding (Context -> AvroEnv.AvroEnvironment -> [Avro.Field] -> Result (M.Map String (Avro.Field, AvroHydraAdapter), AvroEnv.AvroEnvironment))
 prepareFields = define "prepareFields" $
   doc "Thread AvroEnvironment through preparing multiple fields" $
   lambda "cx" $ lambda "env" $ lambda "fields" $
-    var "hydra.ext.avro.coder.prepareFields" @@ var "cx" @@ var "env" @@ var "fields"
+    Lists.foldl
+      (lambda "acc" $ lambda "f" $
+        Eithers.bind (var "acc") (lambda "accPair" $ lets [
+          "m">: Pairs.first (var "accPair"),
+          "env1">: Pairs.second (var "accPair")] $
+          Eithers.bind (prepareField @@ var "cx" @@ var "env1" @@ var "f") (lambda "result" $ lets [
+            "kv">: Pairs.first (var "result"),
+            "env2">: Pairs.second (var "result"),
+            "k">: Pairs.first (var "kv"),
+            "v">: Pairs.second (var "kv")] $
+            right (pair (Maps.insert (var "k") (var "v") (var "m")) (var "env2")))))
+      (right (pair Maps.empty (var "env")))
+      (var "fields")
 
-prepareField :: TBinding (Context -> StagingAvroCoder.AvroEnvironment -> Avro.Field -> Result ((String, (Avro.Field, StagingAvroCoder.AvroHydraAdapter)), StagingAvroCoder.AvroEnvironment))
+prepareField :: TBinding (Context -> AvroEnv.AvroEnvironment -> Avro.Field -> Result ((String, (Avro.Field, AvroHydraAdapter)), AvroEnv.AvroEnvironment))
 prepareField = define "prepareField" $
   doc "Prepare a single field, producing an adapter and updated environment" $
-  lambda "cx" $ lambda "env" $ lambda "f" $
-    var "hydra.ext.avro.coder.prepareField" @@ var "cx" @@ var "env" @@ var "f"
+  lambda "cx" $ lambda "env" $ lambda "f" $ lets [
+    "manns">: fieldAnnotationsToCore @@ var "f",
+    "ann">: Logic.ifElse (Maps.null (var "manns")) nothing (just (var "manns"))] $
+    Eithers.bind (foreignKeyE @@ var "cx" @@ var "f") (lambda "fk" $
+    Eithers.bind
+      (Maybes.maybe
+        -- No foreign key: just use avroHydraAdapter directly
+        (avroHydraAdapter @@ var "cx" @@ (project Avro._Field Avro._Field_type @@ var "f") @@ var "env")
+        -- Foreign key present: build a specialized adapter
+        (lambda "fkVal" $ lets [
+          "fkName">: project AvroEnv._AvroForeignKey AvroEnv._AvroForeignKey_typeName @@ var "fkVal",
+          "fkConstr">: project AvroEnv._AvroForeignKey AvroEnv._AvroForeignKey_constructor @@ var "fkVal"] $
+          Eithers.bind (avroHydraAdapter @@ var "cx" @@ (project Avro._Field Avro._Field_type @@ var "f") @@ var "env") (lambda "adEnvPair" $ lets [
+            "ad0">: Pairs.first (var "adEnvPair"),
+            "env1">: Pairs.second (var "adEnvPair"),
+            "elTyp">: Core.typeVariable (var "fkName"),
+            -- encodeValue: encode a JSON value to a TermVariable via the adapter
+            "encodeValue">: lambda "cx1" $ lambda "v" $
+              Eithers.bind (Compute.coderEncode (Compute.adapterCoder (var "ad0")) @@ var "cx1" @@ var "v") (lambda "encoded" $
+              Eithers.bind (termToStringE @@ var "cx1" @@ var "encoded") (lambda "s" $
+                right (Core.termVariable (var "fkConstr" @@ var "s")))),
+            -- decodeTerm: decode a TermVariable back via the adapter
+            "decodeTerm">: lambda "cx1" $ lambda "t" $
+              cases _Term (var "t") (Just (err @@ var "cx1" @@ string "expected variable")) [
+                _Term_variable>>: lambda "name_" $
+                  Eithers.bind (stringToTermE @@ var "cx1" @@ Compute.adapterTarget (var "ad0") @@ (unwrap _Name @@ var "name_")) (lambda "term_" $
+                  Compute.coderDecode (Compute.adapterCoder (var "ad0")) @@ var "cx1" @@ var "term_")],
+            -- forTypeAndCoder: build an adapter with a given type and coder
+            "forTypeAndCoder">: lambda "env2" $ lambda "ad1" $ lambda "typ" $ lambda "cdr" $
+              right (pair
+                (Compute.adapter (Compute.adapterIsLossy (var "ad1")) (project Avro._Field Avro._Field_type @@ var "f") (var "typ") (var "cdr"))
+                (var "env2"))] $
+            -- Match on the deannotated target type for foreign key handling
+            cases _Type (Rewriting.deannotateType @@ Compute.adapterTarget (var "ad0"))
+              (Just (err @@ var "cx" @@ Strings.cat2 (string "unsupported type annotated as foreign key: ") (string "unknown"))) [
+              _Type_maybe>>: lambda "innerTyp" $
+                cases _Type (var "innerTyp") (Just (err @@ var "cx" @@ string "expected literal type inside optional foreign key")) [
+                  _Type_literal>>: lambda "_" $
+                    var "forTypeAndCoder" @@ var "env1" @@ var "ad0"
+                      @@ (MetaTypes.optional (var "elTyp"))
+                      @@ (Compute.coder
+                        (lambda "cx2" $ lambda "json" $
+                          Eithers.map (lambda "v'" $ Core.termMaybe (just (var "v'"))) (var "encodeValue" @@ var "cx2" @@ var "json"))
+                        (var "decodeTerm"))],
+              _Type_list>>: lambda "innerTyp2" $
+                cases _Type (var "innerTyp2") (Just (err @@ var "cx" @@ string "expected literal type inside list foreign key")) [
+                  _Type_literal>>: lambda "_" $
+                    var "forTypeAndCoder" @@ var "env1" @@ var "ad0"
+                      @@ (MetaTypes.list (var "elTyp"))
+                      @@ (Compute.coder
+                        (lambda "cx2" $ lambda "json" $
+                          cases JM._Value (var "json") (Just (err @@ var "cx2" @@ string "Expected JSON array")) [
+                            JM._Value_array>>: lambda "vals" $
+                              Eithers.map (lambda "terms" $ Core.termList (var "terms"))
+                                (Eithers.mapList (lambda "jv" $ var "encodeValue" @@ var "cx2" @@ var "jv") (var "vals"))])
+                        (var "decodeTerm"))],
+              _Type_literal>>: lambda "_" $
+                var "forTypeAndCoder" @@ var "env1" @@ var "ad0"
+                  @@ var "elTyp"
+                  @@ (Compute.coder (var "encodeValue") (var "decodeTerm"))]))
+        (var "fk"))
+      (lambda "adEnv" $ lets [
+        "ad">: Pairs.first (var "adEnv"),
+        "env1">: Pairs.second (var "adEnv")] $
+        right (pair
+          (pair (project Avro._Field Avro._Field_name @@ var "f") (pair (var "f") (annotateAdapter @@ var "ann" @@ var "ad")))
+          (var "env1"))))
 
-annotateAdapter :: TBinding (Maybe (M.Map Name Term) -> StagingAvroCoder.AvroHydraAdapter -> StagingAvroCoder.AvroHydraAdapter)
+annotateAdapter :: TBinding (Maybe (M.Map Name Term) -> AvroHydraAdapter -> AvroHydraAdapter)
 annotateAdapter = define "annotateAdapter" $
   doc "Annotate an adapter's target type with optional annotations" $
   lambda "ann" $ lambda "ad" $
-    var "hydra.ext.avro.coder.annotateAdapter" @@ var "ann" @@ var "ad"
+    Maybes.maybe
+      (var "ad")
+      (lambda "n" $ Compute.adapterWithTarget (var "ad") (MetaTypes.annot (var "n") (Compute.adapterTarget (var "ad"))))
+      (var "ann")
 
-findAvroPrimaryKeyField :: TBinding (Context -> StagingAvroCoder.AvroQualifiedName -> [Avro.Field] -> Result (Maybe AvroPrimaryKey))
+findAvroPrimaryKeyField :: TBinding (Context -> AvroEnv.AvroQualifiedName -> [Avro.Field] -> Result (Maybe AvroEnv.AvroPrimaryKey))
 findAvroPrimaryKeyField = define "findAvroPrimaryKeyField" $
   doc "Find the primary key field among a list of Avro fields" $
-  lambda "cx" $ lambda "qname" $ lambda "avroFields" $
-    var "hydra.ext.avro.coder.findAvroPrimaryKeyField" @@ var "cx" @@ var "qname" @@ var "avroFields"
+  lambda "cx" $ lambda "qname" $ lambda "avroFields" $ lets [
+    "keys">: Maybes.cat (Lists.map (lambda "f" $ primaryKeyE @@ var "cx" @@ var "f") (var "avroFields"))] $
+    Logic.ifElse (Lists.null (var "keys"))
+      (right nothing)
+      (Logic.ifElse (Equality.equal (Lists.length (var "keys")) (int32 1))
+        (right (just (Lists.head (var "keys"))))
+        (err @@ var "cx" @@ Strings.cat2 (string "multiple primary key fields for ") (showQname @@ var "qname")))
 
-avroNameToHydraName :: TBinding (StagingAvroCoder.AvroQualifiedName -> Name)
+avroNameToHydraName :: TBinding (AvroEnv.AvroQualifiedName -> Name)
 avroNameToHydraName = define "avroNameToHydraName" $
   doc "Convert an Avro qualified name to a Hydra name" $
-  lambda "qname" $
-    var "hydra.ext.avro.coder.avroNameToHydraName" @@ var "qname"
+  lambda "qname" $ lets [
+    "mns">: project AvroEnv._AvroQualifiedName AvroEnv._AvroQualifiedName_namespace @@ var "qname",
+    "local">: project AvroEnv._AvroQualifiedName AvroEnv._AvroQualifiedName_name @@ var "qname"] $
+    Names.unqualifyName @@ Module.qualifiedName
+      (Maybes.map (lambda "s" $ wrap _Namespace (var "s")) (var "mns"))
+      (var "local")
 
 encodeAnnotationValue :: TBinding (JM.Value -> Term)
 encodeAnnotationValue = define "encodeAnnotationValue" $
@@ -311,17 +708,31 @@ namedAnnotationsToCore = define "namedAnnotationsToCore" $
         pair (Core.name (var "k")) (encodeAnnotationValue @@ var "v"))
       (Maps.toList (project Avro._Named Avro._Named_annotations @@ var "n")))
 
-getAvroHydraAdapter :: TBinding (StagingAvroCoder.AvroQualifiedName -> StagingAvroCoder.AvroEnvironment -> Maybe StagingAvroCoder.AvroHydraAdapter)
+getAvroHydraAdapter :: TBinding (AvroEnv.AvroQualifiedName -> AvroEnv.AvroEnvironment -> Maybe AvroHydraAdapter)
 getAvroHydraAdapter = define "getAvroHydraAdapter" $
   doc "Look up an adapter by qualified name in the environment" $
   lambda "qname" $ lambda "env" $
-    var "hydra.ext.avro.coder.getAvroHydraAdapter" @@ var "qname" @@ var "env"
+    Maps.lookup (var "qname") (project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_namedAdapters @@ var "env")
 
-foreignKeyE :: TBinding (Context -> Avro.Field -> Result (Maybe AvroForeignKey))
+foreignKeyE :: TBinding (Context -> Avro.Field -> Result (Maybe AvroEnv.AvroForeignKey))
 foreignKeyE = define "foreignKeyE" $
   doc "Extract a foreign key annotation from a field, if present" $
   lambda "cx" $ lambda "f" $
-    var "hydra.ext.avro.coder.foreignKeyE" @@ var "cx" @@ var "f"
+    Maybes.maybe
+      (right nothing)
+      (lambda "v" $
+        Eithers.bind (expectObjectE @@ var "cx" @@ var "v") (lambda "m" $
+        Eithers.bind (Eithers.map (lambda "s" $ Core.name (var "s")) (requireStringE @@ var "cx" @@ string "type" @@ var "m")) (lambda "tname" $
+        Eithers.bind (optStringE @@ var "cx" @@ string "pattern" @@ var "m") (lambda "pattern_" $
+          lets [
+            "constr">: Maybes.maybe
+              (lambda "s" $ Core.name (var "s"))
+              (lambda "pat" $ patternToNameConstructor @@ var "pat")
+              (var "pattern_")] $
+            right (just $ record AvroEnv._AvroForeignKey [
+              AvroEnv._AvroForeignKey_typeName>>: var "tname",
+              AvroEnv._AvroForeignKey_constructor>>: var "constr"])))))
+      (Maps.lookup (avro_foreignKey) (project Avro._Field Avro._Field_annotations @@ var "f"))
 
 patternToNameConstructor :: TBinding (String -> String -> Name)
 patternToNameConstructor = define "patternToNameConstructor" $
@@ -329,29 +740,100 @@ patternToNameConstructor = define "patternToNameConstructor" $
   lambda "pat" $ lambda "s" $
     Core.name (Strings.intercalate (var "s") (Strings.splitOn (string "${}") (var "pat")))
 
-primaryKeyE :: TBinding (Context -> Avro.Field -> Maybe AvroPrimaryKey)
+primaryKeyE :: TBinding (Context -> Avro.Field -> Maybe AvroEnv.AvroPrimaryKey)
 primaryKeyE = define "primaryKeyE" $
   doc "Extract a primary key annotation from a field, if present" $
   lambda "cx" $ lambda "f" $
-    var "hydra.ext.avro.coder.primaryKeyE" @@ var "cx" @@ var "f"
+    Maybes.maybe
+      nothing
+      (lambda "v" $
+        Eithers.either_
+          (lambda "_" $ nothing)
+          (lambda "s" $ just $ record AvroEnv._AvroPrimaryKey [
+            AvroEnv._AvroPrimaryKey_fieldName>>: Core.name (project Avro._Field Avro._Field_name @@ var "f"),
+            AvroEnv._AvroPrimaryKey_constructor>>: patternToNameConstructor @@ var "s"])
+          (expectStringE @@ var "cx" @@ var "v"))
+      (Maps.lookup (avro_primaryKey) (project Avro._Field Avro._Field_annotations @@ var "f"))
 
-parseAvroName :: TBinding (Maybe String -> String -> StagingAvroCoder.AvroQualifiedName)
+parseAvroName :: TBinding (Maybe String -> String -> AvroEnv.AvroQualifiedName)
 parseAvroName = define "parseAvroName" $
   doc "Parse a dotted Avro name into a qualified name" $
-  lambda "mns" $ lambda "name" $
-    var "hydra.ext.avro.coder.parseAvroName" @@ var "mns" @@ var "name"
+  lambda "mns" $ lambda "name_" $ lets [
+    "parts">: Strings.splitOn (string ".") (var "name_"),
+    "local">: Lists.last (var "parts")] $
+    Logic.ifElse (Equality.equal (Lists.length (var "parts")) (int32 1))
+      (record AvroEnv._AvroQualifiedName [
+        AvroEnv._AvroQualifiedName_namespace>>: var "mns",
+        AvroEnv._AvroQualifiedName_name>>: var "local"])
+      (record AvroEnv._AvroQualifiedName [
+        AvroEnv._AvroQualifiedName_namespace>>: just (Strings.intercalate (string ".") (Lists.init (var "parts"))),
+        AvroEnv._AvroQualifiedName_name>>: var "local"])
 
-putAvroHydraAdapter :: TBinding (StagingAvroCoder.AvroQualifiedName -> StagingAvroCoder.AvroHydraAdapter -> StagingAvroCoder.AvroEnvironment -> StagingAvroCoder.AvroEnvironment)
+putAvroHydraAdapter :: TBinding (AvroEnv.AvroQualifiedName -> AvroHydraAdapter -> AvroEnv.AvroEnvironment -> AvroEnv.AvroEnvironment)
 putAvroHydraAdapter = define "putAvroHydraAdapter" $
   doc "Store an adapter in the environment by qualified name" $
   lambda "qname" $ lambda "ad" $ lambda "env" $
-    var "hydra.ext.avro.coder.putAvroHydraAdapter" @@ var "qname" @@ var "ad" @@ var "env"
+    record AvroEnv._AvroEnvironment [
+      AvroEnv._AvroEnvironment_namedAdapters>>:
+        Maps.insert (var "qname") (var "ad")
+          (project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_namedAdapters @@ var "env"),
+      AvroEnv._AvroEnvironment_namespace>>:
+        project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_namespace @@ var "env",
+      AvroEnv._AvroEnvironment_elements>>:
+        project AvroEnv._AvroEnvironment AvroEnv._AvroEnvironment_elements @@ var "env"]
 
 rewriteAvroSchemaM :: TBinding (((Avro.Schema -> Result Avro.Schema) -> Avro.Schema -> Result Avro.Schema) -> Avro.Schema -> Result Avro.Schema)
 rewriteAvroSchemaM = define "rewriteAvroSchemaM" $
   doc "Recursively rewrite an Avro schema using a monadic transformation function" $
-  lambda "f" $ lambda "schema" $
-    var "hydra.ext.avro.coder.rewriteAvroSchemaM" @@ var "f" @@ var "schema"
+  lambda "f" $ lambda "schema" $ lets [
+    "recurse">: rewriteAvroSchemaM @@ var "f",
+    -- fsub: structural descent into schema subtypes
+    "fsub">: lambda "s" $
+      cases Avro._Schema (var "s") (Just (right (var "s"))) [
+        Avro._Schema_array>>: lambda "arr" $
+          Eithers.map
+            (lambda "els'" $ inject Avro._Schema Avro._Schema_array (record Avro._Array [
+              Avro._Array_items>>: var "els'"]))
+            (var "recurse" @@ (project Avro._Array Avro._Array_items @@ var "arr")),
+        Avro._Schema_map>>: lambda "mp" $
+          Eithers.map
+            (lambda "vs'" $ inject Avro._Schema Avro._Schema_map (record Avro._Map [
+              Avro._Map_values>>: var "vs'"]))
+            (var "recurse" @@ (project Avro._Map Avro._Map_values @@ var "mp")),
+        Avro._Schema_named>>: lambda "n" $
+          Eithers.map
+            (lambda "nt'" $ inject Avro._Schema Avro._Schema_named (record Avro._Named [
+              Avro._Named_name>>: project Avro._Named Avro._Named_name @@ var "n",
+              Avro._Named_namespace>>: project Avro._Named Avro._Named_namespace @@ var "n",
+              Avro._Named_aliases>>: project Avro._Named Avro._Named_aliases @@ var "n",
+              Avro._Named_doc>>: project Avro._Named Avro._Named_doc @@ var "n",
+              Avro._Named_type>>: var "nt'",
+              Avro._Named_annotations>>: project Avro._Named Avro._Named_annotations @@ var "n"]))
+            (cases Avro._NamedType (project Avro._Named Avro._Named_type @@ var "n")
+              (Just (right (project Avro._Named Avro._Named_type @@ var "n"))) [
+              Avro._NamedType_record>>: lambda "r" $
+                Eithers.map
+                  (lambda "fields'" $ inject Avro._NamedType Avro._NamedType_record (record Avro._Record [
+                    Avro._Record_fields>>: var "fields'"]))
+                  (Eithers.mapList
+                    (lambda "fld" $
+                      Eithers.map
+                        (lambda "t'" $ record Avro._Field [
+                          Avro._Field_name>>: project Avro._Field Avro._Field_name @@ var "fld",
+                          Avro._Field_doc>>: project Avro._Field Avro._Field_doc @@ var "fld",
+                          Avro._Field_type>>: var "t'",
+                          Avro._Field_default>>: project Avro._Field Avro._Field_default @@ var "fld",
+                          Avro._Field_order>>: project Avro._Field Avro._Field_order @@ var "fld",
+                          Avro._Field_aliases>>: project Avro._Field Avro._Field_aliases @@ var "fld",
+                          Avro._Field_annotations>>: project Avro._Field Avro._Field_annotations @@ var "fld"])
+                        (var "recurse" @@ (project Avro._Field Avro._Field_type @@ var "fld")))
+                    (project Avro._Record Avro._Record_fields @@ var "r"))]),
+        Avro._Schema_union>>: lambda "u" $
+          Eithers.map
+            (lambda "schemas'" $ inject Avro._Schema Avro._Schema_union (wrap Avro._Union (var "schemas'")))
+            (Eithers.mapList (lambda "us" $ var "recurse" @@ var "us")
+              (unwrap Avro._Union @@ var "u"))]] $
+    var "f" @@ var "fsub" @@ var "schema"
 
 jsonToStringE :: TBinding (Context -> JM.Value -> Result String)
 jsonToStringE = define "jsonToStringE" $
@@ -365,20 +847,79 @@ jsonToStringE = define "jsonToStringE" $
       JM._Value_number>>: lambda "d" $
         right (Literals.showBigfloat (var "d"))]
 
-showQname :: TBinding (StagingAvroCoder.AvroQualifiedName -> String)
+showQname :: TBinding (AvroEnv.AvroQualifiedName -> String)
 showQname = define "showQname" $
   doc "Convert an Avro qualified name to a display string" $
-  lambda "qname" $
-    var "hydra.ext.avro.coder.showQname" @@ var "qname"
+  lambda "qname" $ lets [
+    "mns">: project AvroEnv._AvroQualifiedName AvroEnv._AvroQualifiedName_namespace @@ var "qname",
+    "local">: project AvroEnv._AvroQualifiedName AvroEnv._AvroQualifiedName_name @@ var "qname"] $
+    Strings.cat2
+      (Maybes.maybe (string "") (lambda "ns" $ Strings.cat2 (var "ns") (string ".")) (var "mns"))
+      (var "local")
 
 stringToTermE :: TBinding (Context -> Type -> String -> Result Term)
 stringToTermE = define "stringToTermE" $
   doc "Parse a string into a term of the expected type" $
-  lambda "cx" $ lambda "typ" $ lambda "s" $
-    var "hydra.ext.avro.coder.stringToTermE" @@ var "cx" @@ var "typ" @@ var "s"
+  lambda "cx" $ lambda "typ" $ lambda "s" $ lets [
+    "readErr">: err @@ var "cx" @@ string "failed to read value",
+    "readAndWrap">: lambda "reader" $ lambda "wrapper" $
+      Maybes.maybe (var "readErr") (lambda "v" $ right (Core.termLiteral (var "wrapper" @@ var "v"))) (var "reader" @@ var "s")] $
+    cases _Type (Rewriting.deannotateType @@ var "typ")
+      (Just (unexpectedE @@ var "cx" @@ string "literal type" @@ string "other")) [
+      _Type_literal>>: lambda "lt" $
+        cases _LiteralType (var "lt")
+          (Just (unexpectedE @@ var "cx" @@ string "literal type" @@ string "other literal type")) [
+          _LiteralType_boolean>>: constant $
+            var "readAndWrap" @@ (lambda "x" $ Literals.readBoolean (var "x")) @@ (lambda "b" $ Core.literalBoolean (var "b")),
+          _LiteralType_integer>>: lambda "it" $
+            cases _IntegerType (var "it") Nothing [
+              _IntegerType_bigint>>: constant $
+                var "readAndWrap" @@ (lambda "x" $ Literals.readBigint (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueBigint (var "i")),
+              _IntegerType_int8>>: constant $
+                var "readAndWrap" @@ (lambda "x" $ Literals.readInt8 (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueInt8 (var "i")),
+              _IntegerType_int16>>: constant $
+                var "readAndWrap" @@ (lambda "x" $ Literals.readInt16 (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueInt16 (var "i")),
+              _IntegerType_int32>>: constant $
+                var "readAndWrap" @@ (lambda "x" $ Literals.readInt32 (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueInt32 (var "i")),
+              _IntegerType_int64>>: constant $
+                var "readAndWrap" @@ (lambda "x" $ Literals.readInt64 (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueInt64 (var "i")),
+              _IntegerType_uint8>>: constant $
+                var "readAndWrap" @@ (lambda "x" $ Literals.readUint8 (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueUint8 (var "i")),
+              _IntegerType_uint16>>: constant $
+                var "readAndWrap" @@ (lambda "x" $ Literals.readUint16 (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueUint16 (var "i")),
+              _IntegerType_uint32>>: constant $
+                var "readAndWrap" @@ (lambda "x" $ Literals.readUint32 (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueUint32 (var "i")),
+              _IntegerType_uint64>>: constant $
+                var "readAndWrap" @@ (lambda "x" $ Literals.readUint64 (var "x")) @@ (lambda "i" $ Core.literalInteger $ Core.integerValueUint64 (var "i"))],
+          _LiteralType_string>>: constant $
+            right (Core.termLiteral $ Core.literalString (var "s"))]]
 
 termToStringE :: TBinding (Context -> Term -> Result String)
 termToStringE = define "termToStringE" $
   doc "Convert a literal term to its string representation" $
   lambda "cx" $ lambda "term" $
-    var "hydra.ext.avro.coder.termToStringE" @@ var "cx" @@ var "term"
+    cases _Term (Rewriting.deannotateTerm @@ var "term")
+      (Just (unexpectedE @@ var "cx" @@ string "literal value" @@ string "other")) [
+      _Term_literal>>: lambda "l" $
+        cases _Literal (var "l")
+          (Just (unexpectedE @@ var "cx" @@ string "boolean, integer, or string" @@ string "other literal")) [
+          _Literal_boolean>>: lambda "b" $
+            right (Literals.showBoolean (var "b")),
+          _Literal_integer>>: lambda "iv" $
+            right (cases _IntegerValue (var "iv") Nothing [
+              _IntegerValue_bigint>>: lambda "i" $ Literals.showBigint (var "i"),
+              _IntegerValue_int8>>: lambda "i" $ Literals.showInt8 (var "i"),
+              _IntegerValue_int16>>: lambda "i" $ Literals.showInt16 (var "i"),
+              _IntegerValue_int32>>: lambda "i" $ Literals.showInt32 (var "i"),
+              _IntegerValue_int64>>: lambda "i" $ Literals.showInt64 (var "i"),
+              _IntegerValue_uint8>>: lambda "i" $ Literals.showUint8 (var "i"),
+              _IntegerValue_uint16>>: lambda "i" $ Literals.showUint16 (var "i"),
+              _IntegerValue_uint32>>: lambda "i" $ Literals.showUint32 (var "i"),
+              _IntegerValue_uint64>>: lambda "i" $ Literals.showUint64 (var "i")]),
+          _Literal_string>>: lambda "s" $
+            right (var "s")],
+      _Term_maybe>>: lambda "ot" $
+        Maybes.maybe
+          (unexpectedE @@ var "cx" @@ string "literal value" @@ string "Nothing")
+          (lambda "term'" $ termToStringE @@ var "cx" @@ var "term'")
+          (var "ot")]
