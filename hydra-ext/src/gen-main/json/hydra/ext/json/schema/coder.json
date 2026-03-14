@@ -719,7 +719,6 @@
   "termDependencies": [
     "hydra.formatting",
     "hydra.names",
-    "hydra.adapt.terms",
     "hydra.rewriting",
     "hydra.annotations",
     "hydra.constants",

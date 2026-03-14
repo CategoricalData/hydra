@@ -25,8 +25,6 @@ import qualified Hydra.Dsl.Meta.Module                     as Module
 import qualified Hydra.Dsl.Meta.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
-import qualified Hydra.Sources.Kernel.Terms.Adapt.Modules  as AdaptModules
-import qualified Hydra.Sources.Kernel.Terms.Adapt.Utils    as AdaptUtils
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
 import qualified Hydra.Sources.CoderUtils                  as CoderUtils
@@ -67,7 +65,6 @@ module_ = Module ns elements
       CppSerde.ns,
       Formatting.ns, Names.ns, Rewriting.ns, Schemas.ns, Lexical.ns,
       ShowCore.ns, Annotations.ns, Sorting.ns, SerializationSource.ns,
-      AdaptUtils.ns,
       moduleNamespace DecodeCore.module_, moduleNamespace EncodeCore.module_]
     (CppSyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "C++ code generator: converts Hydra modules to C++ header files"

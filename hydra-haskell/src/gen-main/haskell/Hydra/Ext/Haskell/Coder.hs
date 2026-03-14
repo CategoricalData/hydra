@@ -4,7 +4,7 @@
 
 module Hydra.Ext.Haskell.Coder where
 
-import qualified Hydra.Adapt.Modules as Modules
+import qualified Hydra.Adapt.Simple as Simple
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Classes as Classes
 import qualified Hydra.Coders as Coders
@@ -58,14 +58,14 @@ keyHaskellVar :: Core.Name
 keyHaskellVar = (Core.Name "haskellVar")
 
 -- | Adapt a Hydra type to Haskell's type system and encode it
-adaptTypeToHaskellAndEncode :: (Module.Namespaces Ast.ModuleName -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Ast.Type)
-adaptTypeToHaskellAndEncode namespaces typ cx g =  
+adaptTypeToHaskellAndEncode :: (Module.Namespaces Ast.ModuleName -> Core.Type -> Context.Context -> t0 -> Either (Context.InContext Error.Error) Ast.Type)
+adaptTypeToHaskellAndEncode namespaces typ cx g =
   let enc = (\t -> encodeType namespaces t cx g)
   in ((\x -> case x of
     Core.TypeVariable _ -> (enc typ)
     _ -> (Eithers.bind (Eithers.bimap (\_s -> Context.InContext {
       Context.inContextObject = (Error.ErrorOther (Error.OtherError _s)),
-      Context.inContextContext = cx}) (\_x -> _x) (Modules.adaptTypeToLanguage Language.haskellLanguage cx g typ)) (\adaptedType -> enc adaptedType))) (Rewriting.deannotateType typ))
+      Context.inContextContext = cx}) (\_x -> _x) (Simple.adaptTypeForLanguage Language.haskellLanguage typ)) (\adaptedType -> enc adaptedType))) (Rewriting.deannotateType typ))
 
 -- | Generate a constant name for a field (e.g., '_TypeName_fieldName')
 constantForFieldName :: (Core.Name -> Core.Name -> String)
@@ -396,7 +396,7 @@ encodeType namespaces typ cx g =
       Context.inContextContext = cx}))) (Rewriting.deannotateType typ))
 
 -- | Encode a Hydra type as a Haskell type with typeclass assertions
-encodeTypeWithClassAssertions :: (Module.Namespaces Ast.ModuleName -> M.Map Core.Name (S.Set Classes.TypeClass) -> Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Ast.Type)
+encodeTypeWithClassAssertions :: (Module.Namespaces Ast.ModuleName -> M.Map Core.Name (S.Set Classes.TypeClass) -> Core.Type -> Context.Context -> t0 -> Either (Context.InContext Error.Error) Ast.Type)
 encodeTypeWithClassAssertions namespaces explicitClasses typ cx g =  
   let classes = (Maps.union explicitClasses (getImplicitTypeClasses typ)) 
       implicitClasses = (getImplicitTypeClasses typ)

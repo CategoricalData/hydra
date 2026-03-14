@@ -25,7 +25,6 @@ import qualified Hydra.Sources.Json.Decode as JsonDecode
 import qualified Hydra.Sources.Json.Decoding as JsonDecoding
 import qualified Hydra.Sources.Json.Encode as JsonEncode
 import qualified Hydra.Sources.Json.Extract as JsonExtract
-import qualified Hydra.Sources.Json.Language as JsonLanguage
 import qualified Hydra.Sources.Json.Parser as JsonParser
 import qualified Hydra.Sources.Json.Writer as JsonWriter
 import qualified Hydra.Sources.Json.Yaml.Decode as JsonYamlDecode
@@ -58,7 +57,6 @@ jsonModules = [
   JsonDecoding.module_,
   JsonEncode.module_,
   JsonExtract.module_,
-  JsonLanguage.module_,
   JsonParser.module_,
   JsonWriter.module_]
 

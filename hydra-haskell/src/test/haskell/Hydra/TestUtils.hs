@@ -8,9 +8,6 @@ module Hydra.TestUtils (
 
 import Hydra.Kernel
 import Hydra.Generation (showError)
-import Hydra.Adapt.Literals
-import Hydra.Adapt.Terms
-import Hydra.Adapt.Utils
 import Hydra.ArbitraryCore()
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Terms
@@ -41,7 +38,6 @@ import qualified Test.Hspec as H
 import qualified Test.HUnit.Lang as HL
 import qualified Data.List as L
 import qualified Data.Map as M
-import qualified Data.Set as S
 import qualified Data.Maybe as Y
 import qualified Data.ByteString.Lazy as BS
 
@@ -87,72 +83,8 @@ testSchemaGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes hydraCoreGra
 testContext :: Context
 testContext = Context [] [] M.empty
 
-baseLanguage :: Language
-baseLanguage = hydraLanguage
-
-baseContext :: AdapterContext
-baseContext = AdapterContext testGraph baseLanguage M.empty
-
 check :: String -> H.SpecWith a -> H.SpecWith a
 check desc = H.describe $ "Check type inference for " <> desc
-
-checkAdapter :: (Eq t, Eq v, Show t, Show v)
-  => (v -> v)
-  -> (AdapterContext -> t -> Either String (SymmetricAdapter t v))
-  -> ([r] -> AdapterContext)
-  -> [r] -> t -> t -> Bool -> v -> v -> H.Expectation
-checkAdapter normalize mkAdapter mkContext variants source target lossy vs vt = do
-    let cx0 = mkContext variants :: AdapterContext
-    let g = adapterContextGraph cx0
-    case mkAdapter cx0 source of
-      Left err -> HL.assertFailure err
-      Right adapter -> do
-        let innerCoder = adapterCoder adapter
-        adapterSource adapter `H.shouldBe` source
-        adapterTarget adapter `H.shouldBe` target
-        adapterIsLossy adapter `H.shouldBe` lossy
-        case coderEncode innerCoder testContext vs of
-          Left ic -> HL.assertFailure (showError (inContextObject ic))
-          Right encoded -> normalize encoded `H.shouldBe` normalize vt
-        if lossy
-          then True `H.shouldBe` True
-          else case coderEncode innerCoder testContext vs >>= coderDecode innerCoder testContext of
-            Left ic -> HL.assertFailure (showError (inContextObject ic))
-            Right roundTripped -> roundTripped `H.shouldBe` vs
-
-checkLiteralAdapter :: [LiteralVariant] -> LiteralType -> LiteralType -> Bool -> Literal -> Literal -> H.Expectation
-checkLiteralAdapter = checkAdapter id literalAdapter context
-  where
-    context variants = withConstraints $ (languageConstraints baseLanguage) {
-        languageConstraintsLiteralVariants = variantSet,
-        languageConstraintsFloatTypes = floatVars,
-        languageConstraintsIntegerTypes = integerVars }
-      where
-        variantSet = S.fromList variants
-        floatVars = if (S.member LiteralVariantFloat variantSet)
-          then S.fromList [FloatTypeFloat32]
-          else S.empty
-        integerVars = if (S.member LiteralVariantInteger variantSet)
-          then S.fromList [IntegerTypeInt16, IntegerTypeInt32]
-          else S.empty
-
-checkFieldAdapter :: [TypeVariant] -> FieldType -> FieldType -> Bool -> Field -> Field -> H.Expectation
-checkFieldAdapter = checkAdapter id fieldAdapter termTestContext
-
-checkFloatAdapter :: [FloatType] -> FloatType -> FloatType -> Bool -> FloatValue -> FloatValue -> H.Expectation
-checkFloatAdapter = checkAdapter id floatAdapter context
-  where
-    context variants = withConstraints $ (languageConstraints baseLanguage) {
-      languageConstraintsFloatTypes = S.fromList variants }
-
-checkIntegerAdapter :: [IntegerType] -> IntegerType -> IntegerType -> Bool -> IntegerValue -> IntegerValue -> H.Expectation
-checkIntegerAdapter = checkAdapter id integerAdapter context
-  where
-    context variants = withConstraints $ (languageConstraints baseLanguage) {
-      languageConstraintsIntegerTypes = S.fromList variants }
-
-checkDataAdapter :: [TypeVariant] -> Type -> Type -> Bool -> Term -> Term -> H.Expectation
-checkDataAdapter = checkAdapter deannotateTerm termAdapter termTestContext
 
 checkSerdeRoundTrip :: (Context -> Graph -> Type -> Either (InContext Error) (Coder Term BS.ByteString))
   -> TypeApplicationTerm -> H.Expectation
@@ -251,16 +183,3 @@ mapInContextError (Right a) = Right a
 strip :: Term -> Term
 strip = deannotateTerm
 
-termTestContext :: [TypeVariant] -> AdapterContext
-termTestContext variants = withConstraints $ (languageConstraints baseLanguage) {
-    languageConstraintsTypeVariants = S.fromList variants,
-    languageConstraintsLiteralVariants = literalVars,
-    languageConstraintsFloatTypes = floatVars,
-    languageConstraintsIntegerTypes = integerVars }
-  where
-    literalVars = S.fromList [LiteralVariantFloat, LiteralVariantInteger, LiteralVariantString]
-    floatVars = S.fromList [FloatTypeFloat32]
-    integerVars = S.fromList [IntegerTypeInt16, IntegerTypeInt32, IntegerTypeBigint]
-
-withConstraints :: LanguageConstraints -> AdapterContext
-withConstraints c = baseContext { adapterContextLanguage = baseLanguage { languageConstraints = c }}

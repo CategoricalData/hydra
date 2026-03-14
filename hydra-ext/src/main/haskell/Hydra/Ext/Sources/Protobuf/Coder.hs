@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Error                      as Error
 import qualified Hydra.Dsl.Meta.Module                     as Module
 import qualified Hydra.Dsl.Meta.Util                       as Util
-import qualified Hydra.Sources.Kernel.Terms.Adapt.Modules  as AdaptModules
+import qualified Hydra.Sources.Kernel.Terms.Adapt.Simple   as AdaptSimple
 import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Constants      as Constants
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core   as ExtractCore
@@ -76,7 +76,7 @@ module_ :: Module
 module_ = Module ns elements
     [moduleNamespace ProtobufSerdeSource.module_, moduleNamespace ProtobufLanguageSource.protobufLanguageModule,
       Formatting.ns, Names.ns, Rewriting.ns, Schemas.ns, Lexical.ns, Serialization.ns,
-      Annotations.ns, Constants.ns, ExtractCore.ns, AdaptModules.ns, ShowCore.ns, ShowError.ns,
+      Annotations.ns, Constants.ns, ExtractCore.ns, AdaptSimple.ns, ShowCore.ns, ShowError.ns,
       moduleNamespace DecodeCore.module_]
     (ProtobufEnvironment.ns:Proto3Syntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Protobuf code generator: converts Hydra modules to Protocol Buffers v3 definitions"
@@ -341,9 +341,14 @@ constructModule = def "constructModule" $
     "toDef">: "td" ~> lets [
       "name">: Module.typeDefinitionName (var "td"),
       "typ">: Module.typeDefinitionType (var "td"),
-      "encodeDefEither">: "n" ~> "t" ~> asTerm encodeDefinition @@ var "cx" @@ var "g" @@ var "ns_" @@ var "n" @@ var "t"] $
+      "encodeDefEither">: "n" ~> "t" ~> asTerm encodeDefinition @@ var "cx" @@ var "g" @@ var "ns_" @@ var "n" @@ var "t",
+      "flatTyp">: asTerm flattenType @@ var "typ",
+      "enc">: var "encodeDefEither" @@ var "name"] $
       asTerm fromEitherString @@ var "cx" @@
-        (AdaptModules.adaptTypeToLanguageAndEncode @@ ProtobufLanguageSource.protobufLanguage @@ (var "encodeDefEither" @@ var "name") @@ var "cx" @@ var "g" @@ (asTerm flattenType @@ var "typ")),
+        (cases _Type (Rewriting.deannotateType @@ var "flatTyp")
+          (Just ("adaptedType" <<~ AdaptSimple.adaptTypeForLanguage @@ ProtobufLanguageSource.protobufLanguage @@ var "flatTyp" $
+            var "enc" @@ var "adaptedType")) [
+          _Type_variable>>: constant (var "enc" @@ var "flatTyp")]),
     "types">: Lists.map ("td" ~> Module.typeDefinitionType (var "td")) (var "typeDefs"),
     "structRefs">: asTerm collectStructuralTypes @@ var "types",
     "javaOptions">: list [

@@ -8065,8 +8065,6 @@
     "hydra.ext.scala.serde",
     "hydra.formatting",
     "hydra.names",
-    "hydra.adapt.utils",
-    "hydra.adapt.modules",
     "hydra.rewriting",
     "hydra.coderUtils",
     "hydra.schemas",
