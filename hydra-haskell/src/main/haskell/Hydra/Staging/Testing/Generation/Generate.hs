@@ -6,7 +6,7 @@ import Hydra.Kernel hiding (map)
 import Hydra.Testing
 import Hydra.Generation
 import Hydra.Dsl.Bootstrap (bootstrapGraph)
-import Hydra.Staging.Testing.Generation.Transform
+import Hydra.Test.Transform
 import qualified Hydra.Inference as Inference
 import Hydra.Sources.All
 import Hydra.Sources.Test.All (testModules)

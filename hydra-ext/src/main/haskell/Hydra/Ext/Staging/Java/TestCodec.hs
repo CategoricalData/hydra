@@ -9,7 +9,7 @@ import Hydra.Kernel hiding (map)
 import qualified Hydra.Show.Error as ShowError
 import Hydra.Testing
 import Hydra.Coders (LanguageName(..))
-import Hydra.Staging.Testing.Generation.Transform (collectTestCases)
+import Hydra.Test.Transform (collectTestCases)
 import Hydra.Staging.Testing.Generation.Generate (TestGenerator(..), createTestGroupLookup, generateGenerationTestSuite)
 import Hydra.Ext.Java.Coder (encodeTerm)
 import Hydra.Ext.Java.Helpers (JavaEnvironment(..), Aliases(..))
