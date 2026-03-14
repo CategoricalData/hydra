@@ -2245,6 +2245,34 @@
                                                                         "right": {"variable": "hydra.ext.protobuf.proto3.Definition"}}},
                                                                     "domain": {"variable": "hydra.core.Type"}}},
                                                                 "domain": {"variable": "hydra.core.Name"}}},
+                                                            "variables": []}]},
+                                                      {
+                                                        "name": "flatTyp",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {"variable": "typ"},
+                                                            "function": {"variable": "hydra.ext.protobuf.coder.flattenType"}}},
+                                                        "type": [
+                                                          {
+                                                            "constraints": null,
+                                                            "type": {"variable": "hydra.core.Type"},
+                                                            "variables": []}]},
+                                                      {
+                                                        "name": "enc",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {"variable": "name"},
+                                                            "function": {"variable": "encodeDefEither"}}},
+                                                        "type": [
+                                                          {
+                                                            "constraints": null,
+                                                            "type": {
+                                                              "function": {
+                                                                "codomain": {
+                                                                  "either": {
+                                                                    "left": {"literal": {"string": {}}},
+                                                                    "right": {"variable": "hydra.ext.protobuf.proto3.Definition"}}},
+                                                                "domain": {"variable": "hydra.core.Type"}}},
                                                             "variables": []}]}],
                                                     "body": {
                                                       "application": {
@@ -2252,30 +2280,54 @@
                                                           "application": {
                                                             "argument": {
                                                               "application": {
-                                                                "argument": {"variable": "typ"},
-                                                                "function": {"variable": "hydra.ext.protobuf.coder.flattenType"}}},
+                                                                "argument": {"variable": "flatTyp"},
+                                                                "function": {"variable": "hydra.rewriting.deannotateType"}}},
                                                             "function": {
-                                                              "application": {
-                                                                "argument": {"variable": "g"},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "cx"},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "name"},
-                                                                            "function": {"variable": "encodeDefEither"}}},
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.ext.protobuf.language.protobufLanguage"},
+                                                              "function": {
+                                                                "elimination": {
+                                                                  "union": {
+                                                                    "cases": [
+                                                                      {
+                                                                        "name": "variable",
+                                                                        "term": {
+                                                                          "function": {
+                                                                            "lambda": {
+                                                                              "body": {
+                                                                                "application": {"argument": {"variable": "flatTyp"}, "function": {"variable": "enc"}}},
+                                                                              "domain": [{"variable": "hydra.core.Name"}],
+                                                                              "parameter": "_"}}}}],
+                                                                    "default": [
+                                                                      {
+                                                                        "application": {
+                                                                          "argument": {
                                                                             "function": {
-                                                                              "typeApplication": {
+                                                                              "lambda": {
                                                                                 "body": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {"variable": "hydra.adapt.modules.adaptTypeToLanguageAndEncode"},
-                                                                                    "type": {"variable": "hydra.ext.protobuf.proto3.Definition"}}},
-                                                                                "type": {"variable": "hydra.context.Context"}}}}}}}}}}}}},
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "adaptedType"},
+                                                                                    "function": {"variable": "enc"}}},
+                                                                                "domain": [{"variable": "hydra.core.Type"}],
+                                                                                "parameter": "adaptedType"}}},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "flatTyp"},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "hydra.ext.protobuf.language.protobufLanguage"},
+                                                                                      "function": {"variable": "hydra.adapt.simple.adaptTypeForLanguage"}}}}},
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                          "type": {"literal": {"string": {}}}}},
+                                                                                      "type": {"variable": "hydra.core.Type"}}},
+                                                                                  "type": {"variable": "hydra.ext.protobuf.proto3.Definition"}}}}}}}],
+                                                                    "typeName": "hydra.core.Type"}}}}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {"variable": "cx"},
@@ -7606,7 +7658,7 @@
     "hydra.annotations",
     "hydra.constants",
     "hydra.extract.core",
-    "hydra.adapt.modules",
+    "hydra.adapt.simple",
     "hydra.show.core",
     "hydra.show.error",
     "hydra.decode.core"],

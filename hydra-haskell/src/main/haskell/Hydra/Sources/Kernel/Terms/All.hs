@@ -3,11 +3,7 @@ module Hydra.Sources.Kernel.Terms.All where
 
 import Hydra.Kernel
 
-import qualified Hydra.Sources.Kernel.Terms.Adapt.Literals  as AdaptLiterals
-import qualified Hydra.Sources.Kernel.Terms.Adapt.Modules   as AdaptModules
 import qualified Hydra.Sources.Kernel.Terms.Adapt.Simple    as AdaptSimple
-import qualified Hydra.Sources.Kernel.Terms.Adapt.Terms     as AdaptTerms
-import qualified Hydra.Sources.Kernel.Terms.Adapt.Utils     as AdaptUtils
 import qualified Hydra.Sources.Kernel.Terms.Annotations     as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Arity           as Arity
 import qualified Hydra.Sources.Kernel.Terms.Checking        as Checking
@@ -96,11 +92,7 @@ kernelTermsModules = kernelPrimaryTermsModules ++ kernelDecodingModules ++ kerne
 
 kernelPrimaryTermsModules :: [Module]
 kernelPrimaryTermsModules = [
-  AdaptLiterals.module_,
-  AdaptModules.module_,
   AdaptSimple.module_,
-  AdaptTerms.module_,
-  AdaptUtils.module_,
   Annotations.module_,
   Arity.module_,
   Checking.module_,

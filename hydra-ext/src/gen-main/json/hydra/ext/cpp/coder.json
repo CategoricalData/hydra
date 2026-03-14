@@ -7180,7 +7180,6 @@
     "hydra.annotations",
     "hydra.sorting",
     "hydra.serialization",
-    "hydra.adapt.utils",
     "hydra.decode.core",
     "hydra.encode.core"],
   "typeDependencies": [

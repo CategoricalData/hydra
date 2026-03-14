@@ -5,9 +5,9 @@ module Hydra.Sources.Kernel.Terms.Adapt.Simple where
 import Hydra.Kernel hiding (
   adaptFloatType, adaptDataGraph, adaptGraphSchema, adaptIntegerType, adaptLambdaDomains, adaptLiteral,
   adaptLiteralType, adaptLiteralTypesMap, adaptLiteralValue, adaptNestedTypes, adaptPrimitive,
-  adaptTerm, adaptType, adaptTypeScheme,
-  dataGraphToDefinitions, literalTypeSupported, pushTypeAppsInward, schemaGraphToDefinitions,
-  termAlternatives, typeAlternatives)
+  adaptTerm, adaptTermForLanguage, adaptType, adaptTypeForLanguage, adaptTypeScheme,
+  composeCoders, dataGraphToDefinitions, literalTypeSupported, pushTypeAppsInward, schemaGraphToDefinitions,
+  simpleLanguageAdapter, termAlternatives, typeAlternatives)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors    as Accessors
 import qualified Hydra.Dsl.Annotations       as Annotations
@@ -15,7 +15,9 @@ import qualified Hydra.Dsl.Meta.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Meta.Coders       as Coders
 import qualified Hydra.Dsl.Meta.Compute      as Compute
+import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Meta.Core         as Core
+import qualified Hydra.Dsl.Meta.Error        as Error
 import qualified Hydra.Dsl.Meta.Grammar      as Grammar
 import qualified Hydra.Dsl.Grammars          as Grammars
 import qualified Hydra.Dsl.Meta.Graph        as Graph
@@ -98,12 +100,16 @@ module_ = Module ns elements
       toBinding adaptNestedTypes,
       toBinding adaptPrimitive,
       toBinding adaptTerm,
+      toBinding adaptTermForLanguage,
       toBinding adaptType,
+      toBinding adaptTypeForLanguage,
       toBinding adaptTypeScheme,
+      toBinding composeCoders,
       toBinding dataGraphToDefinitions,
       toBinding literalTypeSupported,
       toBinding pushTypeAppsInward,
       toBinding schemaGraphToDefinitions,
+      toBinding simpleLanguageAdapter,
       toBinding termAlternatives,
       toBinding typeAlternatives]
 
@@ -782,3 +788,48 @@ typeAlternatives = define "typeAlternatives" $
         Core.typeRecord $ Core.rowType (var "tname") (var "optFields")],
     _Type_unit>>: constant $ list [
       Core.typeLiteral $ Core.literalTypeBoolean]]
+
+adaptTypeForLanguage :: TBinding (Language -> Type -> Prelude.Either String Type)
+adaptTypeForLanguage = define "adaptTypeForLanguage" $
+  doc "Adapt a type using the constraints of a given language" $
+  "lang" ~> "typ" ~>
+  "constraints" <~ Coders.languageConstraintsProjection (var "lang") $
+  "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
+  adaptType @@ var "constraints" @@ var "litmap" @@ var "typ"
+
+adaptTermForLanguage :: TBinding (Language -> Context -> Graph -> Term -> Prelude.Either String Term)
+adaptTermForLanguage = define "adaptTermForLanguage" $
+  doc "Adapt a term using the constraints of a given language" $
+  "lang" ~> "cx" ~> "g" ~> "term" ~>
+  "constraints" <~ Coders.languageConstraintsProjection (var "lang") $
+  "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
+  adaptTerm @@ var "constraints" @@ var "litmap" @@ var "cx" @@ var "g" @@ var "term"
+
+composeCoders :: TBinding (Coder a b -> Coder b c -> Coder a c)
+composeCoders = define "composeCoders" $
+  doc "Compose two coders into a single coder" $
+  "c1" ~> "c2" ~>
+  Compute.coder
+    ("cx" ~> "a" ~>
+      "b1" <<~ Compute.coderEncode (var "c1") @@ var "cx" @@ var "a" $
+      Compute.coderEncode (var "c2") @@ var "cx" @@ var "b1")
+    ("cx" ~> "c" ~>
+      "b2" <<~ Compute.coderDecode (var "c2") @@ var "cx" @@ var "c" $
+      Compute.coderDecode (var "c1") @@ var "cx" @@ var "b2")
+
+simpleLanguageAdapter :: TBinding (Language -> Context -> Graph -> Type -> Prelude.Either String (Adapter Type Type Term Term))
+simpleLanguageAdapter = define "simpleLanguageAdapter" $
+  doc "Given a target language and a source type, produce an adapter which rewrites the type and its terms according to the language's constraints. The encode direction adapts terms; the decode direction is identity." $
+  "lang" ~> "cx" ~> "g" ~> "typ" ~>
+  "constraints" <~ Coders.languageConstraintsProjection (var "lang") $
+  "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
+  "adaptedType" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ var "typ" $
+  right $ Compute.adapter
+    false
+    (var "typ")
+    (var "adaptedType")
+    (Compute.coder
+      ("cx" ~> "term" ~>
+        Eithers.bimap ("_s" ~> Ctx.inContext (Error.errorOther $ Error.otherError $ var "_s") (var "cx")) ("_x" ~> var "_x")
+          (adaptTerm @@ var "constraints" @@ var "litmap" @@ var "cx" @@ var "g" @@ var "term"))
+      ("cx" ~> "term" ~> right $ var "term"))

@@ -103,7 +103,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {
                                                                                   "typeApplication": {
-                                                                                    "body": {"variable": "hydra.adapt.utils.composeCoders"},
+                                                                                    "body": {"variable": "hydra.adapt.simple.composeCoders"},
                                                                                     "type": {"variable": "hydra.core.Term"}}},
                                                                                 "type": {"variable": "hydra.core.Term"}}},
                                                                             "type": {"variable": "hydra.ext.org.yaml.model.Node"}}}}}}}}},
@@ -208,7 +208,7 @@
                                                             "argument": {"variable": "hydra.ext.org.yaml.language.yamlLanguage"},
                                                             "function": {
                                                               "typeApplication": {
-                                                                "body": {"variable": "hydra.adapt.modules.languageAdapter"},
+                                                                "body": {"variable": "hydra.adapt.simple.simpleLanguageAdapter"},
                                                                 "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
                                             "function": {
                                               "application": {
@@ -5397,8 +5397,7 @@
           "variables": []}]}],
   "namespace": "hydra.ext.org.yaml.coder",
   "termDependencies": [
-    "hydra.adapt.modules",
-    "hydra.adapt.utils",
+    "hydra.adapt.simple",
     "hydra.extract.core",
     "hydra.literals",
     "hydra.ext.org.yaml.language",

@@ -4,8 +4,7 @@
 
 module Hydra.Ext.Org.Yaml.Coder where
 
-import qualified Hydra.Adapt.Modules as Modules
-import qualified Hydra.Adapt.Utils as Utils
+import qualified Hydra.Adapt.Simple as Simple
 import qualified Hydra.Compute as Compute
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
@@ -36,7 +35,7 @@ yamlCoder typ cx g =
   let mkTermCoder = (\t -> termCoder t cx g)
   in (Eithers.bind (Eithers.bimap (\_s -> Context.InContext {
     Context.inContextObject = (Error.ErrorOther (Error.OtherError _s)),
-    Context.inContextContext = cx}) (\_x -> _x) (Modules.languageAdapter Language.yamlLanguage cx g typ)) (\adapter -> Eithers.bind (mkTermCoder (Compute.adapterTarget adapter)) (\coder -> Right (Utils.composeCoders (Compute.adapterCoder adapter) coder))))
+    Context.inContextContext = cx}) (\_x -> _x) (Simple.simpleLanguageAdapter Language.yamlLanguage cx g typ)) (\adapter -> Eithers.bind (mkTermCoder (Compute.adapterTarget adapter)) (\coder -> Right (Simple.composeCoders (Compute.adapterCoder adapter) coder))))
 
 -- | Create a YAML coder for literal types
 literalYamlCoder :: (Core.LiteralType -> Either t0 (Compute.Coder Core.Literal Model.Scalar))

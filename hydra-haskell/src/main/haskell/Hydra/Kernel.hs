@@ -18,11 +18,7 @@ Note: the following modules are part of the kernel, but they are not default imp
 
 module Hydra.Kernel (
   module Hydra.Accessors,
-  module Hydra.Adapt.Literals,
-  module Hydra.Adapt.Modules,
   module Hydra.Adapt.Simple,
-  module Hydra.Adapt.Terms,
-  module Hydra.Adapt.Utils,
   module Hydra.Annotations,
   module Hydra.Arity,
   module Hydra.Checking,
@@ -64,11 +60,7 @@ module Hydra.Kernel (
 ) where
 
 import Hydra.Accessors
-import Hydra.Adapt.Literals
-import Hydra.Adapt.Modules
 import Hydra.Adapt.Simple
-import Hydra.Adapt.Terms hiding (maybeToList)
-import Hydra.Adapt.Utils
 import Hydra.Annotations
 import Hydra.Arity
 import Hydra.Checking

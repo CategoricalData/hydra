@@ -28,8 +28,6 @@ import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Meta.Typing                     as Typing
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
-import qualified Hydra.Sources.Kernel.Terms.Adapt.Modules  as AdaptModules
-import qualified Hydra.Sources.Kernel.Terms.Adapt.Utils    as AdaptUtils
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
 import qualified Hydra.Sources.Kernel.Types.All            as KernelTypes
 import qualified Hydra.Sources.CoderUtils                  as CoderUtils
@@ -71,7 +69,7 @@ ns = Namespace "hydra.ext.scala.coder"
 
 module_ :: Module
 module_ = Module ns elements
-    [ScalaUtilsSource.ns, ScalaPrepareSource.ns, ScalaSerdeSource.ns, Formatting.ns, Names.ns, AdaptUtils.ns, AdaptModules.ns, Rewriting.ns, CoderUtils.ns, Schemas.ns, ShowCore.ns, Annotations.ns, Constants.ns,
+    [ScalaUtilsSource.ns, ScalaPrepareSource.ns, ScalaSerdeSource.ns, Formatting.ns, Names.ns, Rewriting.ns, CoderUtils.ns, Schemas.ns, ShowCore.ns, Annotations.ns, Constants.ns,
       Inference.ns, Sorting.ns, Arity.ns, SerializationSource.ns, Reduction.ns]
     (ScalaMeta.ns:moduleNamespace ScalaLanguageSource.scalaLanguageModule:KernelTypes.kernelTypesNamespaces) $
     Just "Scala code generator: converts Hydra modules to Scala source code"
