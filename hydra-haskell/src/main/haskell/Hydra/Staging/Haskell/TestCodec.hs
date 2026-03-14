@@ -1,6 +1,6 @@
 -- | Haskell-specific test code generation using HSpec
 
-module Hydra.Staging.Testing.Generation.HaskellCodec where
+module Hydra.Staging.Haskell.TestCodec where
 
 import Hydra.Kernel hiding (map)
 import Hydra.Testing

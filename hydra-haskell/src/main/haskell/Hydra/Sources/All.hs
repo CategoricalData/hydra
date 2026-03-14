@@ -56,11 +56,11 @@ jsonModules = [
   JsonExtract.module_,
   JsonLanguage.module_,
   JsonParser.module_,
-  JsonWriter.module_,
-  JsonYamlDecode.module_,
-  JsonYamlEncode.module_]
+  JsonWriter.module_]
 
 otherModules :: [Module]
 otherModules = [
   CoderUtils.module_,
-  YamlModel.module_]
+  YamlModel.module_,
+  JsonYamlDecode.module_,
+  JsonYamlEncode.module_]

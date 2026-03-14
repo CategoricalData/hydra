@@ -38,7 +38,7 @@ import Hydra.Ext.Java.Language (javaLanguage)
 import Hydra.Ext.Python.Coder (moduleToPython)
 import Hydra.Ext.Python.Language (pythonLanguage)
 import Hydra.Staging.Testing.Generation.Generate (TestGenerator, generateGenerationTestSuite, createTestGroupLookup)
-import Hydra.Staging.Testing.Generation.HaskellCodec (haskellTestGenerator)
+import Hydra.Staging.Haskell.TestCodec (haskellTestGenerator)
 import Hydra.Ext.Staging.Java.TestCodec (javaTestGenerator)
 import Hydra.Ext.Staging.Python.TestCodec (pythonTestGenerator)
 import qualified Hydra.Sources.Test.TestSuite as TestSuite
@@ -222,7 +222,8 @@ main = do
   -- Apply filters
   let allMods = mainMods ++ coderMods
   let filtered1 = if optKernelOnly opts
-        then Prelude.filter (\m -> not $ isPrefixOf "hydra.ext." (unNamespace (moduleNamespace m))) allMods
+        then Prelude.filter (\m -> let ns = unNamespace (moduleNamespace m)
+              in not (isPrefixOf "hydra.ext." ns) && not (isPrefixOf "hydra.json.yaml." ns)) allMods
         else allMods
   let filtered2 = if optTypesOnly opts
         then Prelude.filter (\m -> any isNativeType (moduleElements m)) filtered1
