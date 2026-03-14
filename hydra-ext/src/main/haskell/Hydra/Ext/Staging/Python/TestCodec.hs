@@ -1,4 +1,4 @@
--- | Python test code generation codec, similar to HaskellCodec but for pytest
+-- | Python test code generation codec, similar to TestCodec in hydra-haskell but for pytest
 module Hydra.Ext.Staging.Python.TestCodec (
   pythonTestGenerator,
   generatePythonGenerationTests,

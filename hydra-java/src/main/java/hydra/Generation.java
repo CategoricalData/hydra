@@ -490,7 +490,7 @@ public class Generation {
     public static List<Module> filterKernelModules(List<Module> modules) {
         List<Module> result = new ArrayList<>();
         for (Module m : modules) {
-            if (!m.namespace.value.startsWith("hydra.ext.")) {
+            if (!m.namespace.value.startsWith("hydra.ext.") && !m.namespace.value.startsWith("hydra.json.yaml.")) {
                 result.add(m);
             }
         }

@@ -227,7 +227,7 @@ def strip_all_term_types(modules):
 
 def filter_kernel_modules(modules):
     """Filter modules to only kernel modules (exclude hydra.ext.* namespaces)."""
-    return [m for m in modules if not m.namespace.value.startswith("hydra.ext.")]
+    return [m for m in modules if not m.namespace.value.startswith("hydra.ext.") and not m.namespace.value.startswith("hydra.json.yaml.")]
 
 
 def filter_type_modules(modules):
