@@ -158,7 +158,7 @@
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {"variable": "hydra.ext.haskell.language.haskellLanguage"},
-                                                                            "function": {"variable": "hydra.adapt.simple.adaptTypeForLanguage"}}}}},
+                                                                            "function": {"variable": "hydra.adapt.adaptTypeForLanguage"}}}}},
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {
@@ -12045,7 +12045,7 @@
   "termDependencies": [
     "hydra.ext.haskell.serde",
     "hydra.ext.haskell.utils",
-    "hydra.adapt.simple",
+    "hydra.adapt",
     "hydra.rewriting",
     "hydra.serialization",
     "hydra.show.error"],

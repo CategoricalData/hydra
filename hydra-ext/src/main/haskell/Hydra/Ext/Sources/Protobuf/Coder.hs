@@ -25,7 +25,7 @@ import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Error                      as Error
 import qualified Hydra.Dsl.Meta.Module                     as Module
 import qualified Hydra.Dsl.Meta.Util                       as Util
-import qualified Hydra.Sources.Kernel.Terms.Adapt.Simple   as AdaptSimple
+import qualified Hydra.Sources.Kernel.Terms.Adapt           as Adapt
 import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Constants      as Constants
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core   as ExtractCore
@@ -76,7 +76,7 @@ module_ :: Module
 module_ = Module ns elements
     [moduleNamespace ProtobufSerdeSource.module_, moduleNamespace ProtobufLanguageSource.protobufLanguageModule,
       Formatting.ns, Names.ns, Rewriting.ns, Schemas.ns, Lexical.ns, Serialization.ns,
-      Annotations.ns, Constants.ns, ExtractCore.ns, AdaptSimple.ns, ShowCore.ns, ShowError.ns,
+      Annotations.ns, Constants.ns, ExtractCore.ns, Adapt.ns, ShowCore.ns, ShowError.ns,
       moduleNamespace DecodeCore.module_]
     (ProtobufEnvironment.ns:Proto3Syntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Protobuf code generator: converts Hydra modules to Protocol Buffers v3 definitions"
@@ -346,7 +346,7 @@ constructModule = def "constructModule" $
       "enc">: var "encodeDefEither" @@ var "name"] $
       asTerm fromEitherString @@ var "cx" @@
         (cases _Type (Rewriting.deannotateType @@ var "flatTyp")
-          (Just ("adaptedType" <<~ AdaptSimple.adaptTypeForLanguage @@ ProtobufLanguageSource.protobufLanguage @@ var "flatTyp" $
+          (Just ("adaptedType" <<~ Adapt.adaptTypeForLanguage @@ ProtobufLanguageSource.protobufLanguage @@ var "flatTyp" $
             var "enc" @@ var "adaptedType")) [
           _Type_variable>>: constant (var "enc" @@ var "flatTyp")]),
     "types">: Lists.map ("td" ~> Module.typeDefinitionType (var "td")) (var "typeDefs"),

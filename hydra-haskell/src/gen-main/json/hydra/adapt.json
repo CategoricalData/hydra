@@ -2,7 +2,7 @@
   "description": ["Simple, one-way adapters for types and terms"],
   "elements": [
     {
-      "name": "hydra.adapt.simple.adaptFloatType",
+      "name": "hydra.adapt.adaptFloatType",
       "term": {
         "annotated": {
           "annotation": [
@@ -53,7 +53,7 @@
                                   "term": {
                                     "application": {
                                       "argument": {"variable": "constraints"},
-                                      "function": {"variable": "hydra.adapt.simple.adaptFloatType"}}},
+                                      "function": {"variable": "hydra.adapt.adaptFloatType"}}},
                                   "type": [
                                     {
                                       "constraints": null,
@@ -164,7 +164,7 @@
               "domain": {"variable": "hydra.coders.LanguageConstraints"}}},
           "variables": []}]},
     {
-      "name": "hydra.adapt.simple.adaptDataGraph",
+      "name": "hydra.adapt.adaptDataGraph",
       "term": {
         "annotated": {
           "annotation": [
@@ -220,7 +220,7 @@
                                                                             "argument": {
                                                                               "application": {
                                                                                 "argument": {"variable": "gterm"},
-                                                                                "function": {"variable": "hydra.adapt.simple.pushTypeAppsInward"}}},
+                                                                                "function": {"variable": "hydra.adapt.pushTypeAppsInward"}}},
                                                                             "function": {"variable": "hydra.rewriting.unshadowVariables"}}},
                                                                         "type": [
                                                                           {
@@ -248,7 +248,7 @@
                                                                                                   "application": {
                                                                                                     "argument": {"variable": "tx"},
                                                                                                     "function": {"variable": "hydra.reduction.etaExpandTermNew"}}}}},
-                                                                                            "function": {"variable": "hydra.adapt.simple.pushTypeAppsInward"}}},
+                                                                                            "function": {"variable": "hydra.adapt.pushTypeAppsInward"}}},
                                                                                         "function": {
                                                                                           "application": {
                                                                                             "argument": {"variable": "doExpand"},
@@ -289,7 +289,7 @@
                                                     "term": {
                                                       "application": {
                                                         "argument": {"variable": "constraints"},
-                                                        "function": {"variable": "hydra.adapt.simple.adaptLiteralTypesMap"}}},
+                                                        "function": {"variable": "hydra.adapt.adaptLiteralTypesMap"}}},
                                                     "type": [
                                                       {
                                                         "constraints": null,
@@ -553,7 +553,7 @@
                                                                                                                                                                         "function": {
                                                                                                                                                                           "application": {
                                                                                                                                                                             "argument": {"variable": "constraints"},
-                                                                                                                                                                            "function": {"variable": "hydra.adapt.simple.adaptTypeScheme"}}}}}}},
+                                                                                                                                                                            "function": {"variable": "hydra.adapt.adaptTypeScheme"}}}}}}},
                                                                                                                                                                 "function": {
                                                                                                                                                                   "typeApplication": {
                                                                                                                                                                     "body": {
@@ -622,7 +622,7 @@
                                                                                                                                                 "argument": {"variable": "constraints"},
                                                                                                                                                 "function": {
                                                                                                                                                   "typeApplication": {
-                                                                                                                                                    "body": {"variable": "hydra.adapt.simple.adaptNestedTypes"},
+                                                                                                                                                    "body": {"variable": "hydra.adapt.adaptNestedTypes"},
                                                                                                                                                     "type": {"variable": "hydra.core.Term"}}}}}}},
                                                                                                                                         "function": {
                                                                                                                                           "typeApplication": {
@@ -967,7 +967,7 @@
                                                                                                                                                               "function": {
                                                                                                                                                                 "application": {
                                                                                                                                                                   "argument": {"variable": "constraints"},
-                                                                                                                                                                  "function": {"variable": "hydra.adapt.simple.adaptPrimitive"}}}}}}},
+                                                                                                                                                                  "function": {"variable": "hydra.adapt.adaptPrimitive"}}}}}}},
                                                                                                                                                       "function": {
                                                                                                                                                         "typeApplication": {
                                                                                                                                                           "body": {
@@ -1070,7 +1070,7 @@
                                                                                                                     "argument": {"variable": "constraints"},
                                                                                                                     "function": {
                                                                                                                       "typeApplication": {
-                                                                                                                        "body": {"variable": "hydra.adapt.simple.adaptLambdaDomains"},
+                                                                                                                        "body": {"variable": "hydra.adapt.adaptLambdaDomains"},
                                                                                                                         "type": {"variable": "hydra.core.Term"}}}}}}},
                                                                                                             "function": {
                                                                                                               "typeApplication": {
@@ -1108,7 +1108,7 @@
                                                                                                           "function": {
                                                                                                             "application": {
                                                                                                               "argument": {"variable": "constraints"},
-                                                                                                              "function": {"variable": "hydra.adapt.simple.adaptTerm"}}}}}}}}}}},
+                                                                                                              "function": {"variable": "hydra.adapt.adaptTerm"}}}}}}}}}}},
                                                                                           "function": {
                                                                                             "typeApplication": {
                                                                                               "body": {
@@ -1196,7 +1196,7 @@
                                                                                                       "argument": {"variable": "constraints"},
                                                                                                       "function": {
                                                                                                         "typeApplication": {
-                                                                                                          "body": {"variable": "hydra.adapt.simple.adaptGraphSchema"},
+                                                                                                          "body": {"variable": "hydra.adapt.adaptGraphSchema"},
                                                                                                           "type": {"variable": "hydra.core.Name"}}}}}}}}},
                                                                                           "function": {
                                                                                             "typeApplication": {
@@ -1402,7 +1402,7 @@
               "domain": {"variable": "hydra.coders.LanguageConstraints"}}},
           "variables": []}]},
     {
-      "name": "hydra.adapt.simple.adaptGraphSchema",
+      "name": "hydra.adapt.adaptGraphSchema",
       "term": {
         "typeLambda": {
           "body": {
@@ -1504,7 +1504,7 @@
                                                                           "function": {
                                                                             "application": {
                                                                               "argument": {"variable": "constraints"},
-                                                                              "function": {"variable": "hydra.adapt.simple.adaptType"}}}}}}},
+                                                                              "function": {"variable": "hydra.adapt.adaptType"}}}}}}},
                                                                   "function": {
                                                                     "typeApplication": {
                                                                       "body": {
@@ -1668,7 +1668,7 @@
               "domain": {"variable": "hydra.coders.LanguageConstraints"}}},
           "variables": ["t0"]}]},
     {
-      "name": "hydra.adapt.simple.adaptIntegerType",
+      "name": "hydra.adapt.adaptIntegerType",
       "term": {
         "annotated": {
           "annotation": [
@@ -1719,7 +1719,7 @@
                                   "term": {
                                     "application": {
                                       "argument": {"variable": "constraints"},
-                                      "function": {"variable": "hydra.adapt.simple.adaptIntegerType"}}},
+                                      "function": {"variable": "hydra.adapt.adaptIntegerType"}}},
                                   "type": [
                                     {
                                       "constraints": null,
@@ -1911,7 +1911,7 @@
               "domain": {"variable": "hydra.coders.LanguageConstraints"}}},
           "variables": []}]},
     {
-      "name": "hydra.adapt.simple.adaptLambdaDomains",
+      "name": "hydra.adapt.adaptLambdaDomains",
       "term": {
         "typeLambda": {
           "body": {
@@ -2051,7 +2051,7 @@
                                                                                                                                   "function": {
                                                                                                                                     "application": {
                                                                                                                                       "argument": {"variable": "constraints"},
-                                                                                                                                      "function": {"variable": "hydra.adapt.simple.adaptType"}}}}}}},
+                                                                                                                                      "function": {"variable": "hydra.adapt.adaptType"}}}}}}},
                                                                                                                           "function": {
                                                                                                                             "typeApplication": {
                                                                                                                               "body": {
@@ -2191,7 +2191,7 @@
               "domain": {"variable": "hydra.coders.LanguageConstraints"}}},
           "variables": ["t0"]}]},
     {
-      "name": "hydra.adapt.simple.adaptLiteral",
+      "name": "hydra.adapt.adaptLiteral",
       "term": {
         "annotated": {
           "annotation": [
@@ -2389,7 +2389,7 @@
               "domain": {"variable": "hydra.core.LiteralType"}}},
           "variables": []}]},
     {
-      "name": "hydra.adapt.simple.adaptLiteralType",
+      "name": "hydra.adapt.adaptLiteralType",
       "term": {
         "annotated": {
           "annotation": [
@@ -2449,7 +2449,7 @@
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {"variable": "constraints"},
-                                                                      "function": {"variable": "hydra.adapt.simple.adaptIntegerType"}}}}},
+                                                                      "function": {"variable": "hydra.adapt.adaptIntegerType"}}}}},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {
@@ -2483,7 +2483,7 @@
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {"variable": "constraints"},
-                                                                      "function": {"variable": "hydra.adapt.simple.adaptFloatType"}}}}},
+                                                                      "function": {"variable": "hydra.adapt.adaptFloatType"}}}}},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {
@@ -2517,7 +2517,7 @@
                                                                   "function": {
                                                                     "application": {
                                                                       "argument": {"variable": "constraints"},
-                                                                      "function": {"variable": "hydra.adapt.simple.adaptIntegerType"}}}}},
+                                                                      "function": {"variable": "hydra.adapt.adaptIntegerType"}}}}},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {
@@ -2574,7 +2574,7 @@
                                           "function": {
                                             "application": {
                                               "argument": {"variable": "constraints"},
-                                              "function": {"variable": "hydra.adapt.simple.literalTypeSupported"}}}}},
+                                              "function": {"variable": "hydra.adapt.literalTypeSupported"}}}}},
                                       "function": {
                                         "typeApplication": {
                                           "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
@@ -2595,7 +2595,7 @@
               "domain": {"variable": "hydra.coders.LanguageConstraints"}}},
           "variables": []}]},
     {
-      "name": "hydra.adapt.simple.adaptLiteralTypesMap",
+      "name": "hydra.adapt.adaptLiteralTypesMap",
       "term": {
         "annotated": {
           "annotation": [
@@ -2623,7 +2623,7 @@
                                       "function": {
                                         "application": {
                                           "argument": {"variable": "constraints"},
-                                          "function": {"variable": "hydra.adapt.simple.adaptLiteralType"}}}}},
+                                          "function": {"variable": "hydra.adapt.adaptLiteralType"}}}}},
                                   "function": {
                                     "application": {
                                       "argument": {
@@ -2724,7 +2724,7 @@
               "domain": {"variable": "hydra.coders.LanguageConstraints"}}},
           "variables": []}]},
     {
-      "name": "hydra.adapt.simple.adaptLiteralValue",
+      "name": "hydra.adapt.adaptLiteralValue",
       "term": {
         "typeLambda": {
           "body": {
@@ -2770,7 +2770,7 @@
                                                   "function": {
                                                     "application": {
                                                       "argument": {"variable": "lt2"},
-                                                      "function": {"variable": "hydra.adapt.simple.adaptLiteral"}}}}},
+                                                      "function": {"variable": "hydra.adapt.adaptLiteral"}}}}},
                                               "domain": [{"variable": "hydra.core.LiteralType"}],
                                               "parameter": "lt2"}}},
                                         "function": {
@@ -2820,7 +2820,7 @@
                   "values": {"variable": "hydra.core.LiteralType"}}}}},
           "variables": ["t0"]}]},
     {
-      "name": "hydra.adapt.simple.adaptNestedTypes",
+      "name": "hydra.adapt.adaptNestedTypes",
       "term": {
         "typeLambda": {
           "body": {
@@ -2945,7 +2945,7 @@
                                                                                                                           "function": {
                                                                                                                             "application": {
                                                                                                                               "argument": {"variable": "constraints"},
-                                                                                                                              "function": {"variable": "hydra.adapt.simple.adaptTypeScheme"}}}}}}},
+                                                                                                                              "function": {"variable": "hydra.adapt.adaptTypeScheme"}}}}}}},
                                                                                                                   "function": {
                                                                                                                     "typeApplication": {
                                                                                                                       "body": {
@@ -3150,7 +3150,7 @@
               "domain": {"variable": "hydra.coders.LanguageConstraints"}}},
           "variables": ["t0"]}]},
     {
-      "name": "hydra.adapt.simple.adaptPrimitive",
+      "name": "hydra.adapt.adaptPrimitive",
       "term": {
         "annotated": {
           "annotation": [
@@ -3232,7 +3232,7 @@
                                                 "function": {
                                                   "application": {
                                                     "argument": {"variable": "constraints"},
-                                                    "function": {"variable": "hydra.adapt.simple.adaptTypeScheme"}}}}}}},
+                                                    "function": {"variable": "hydra.adapt.adaptTypeScheme"}}}}}}},
                                         "function": {
                                           "typeApplication": {
                                             "body": {
@@ -3274,7 +3274,7 @@
               "domain": {"variable": "hydra.coders.LanguageConstraints"}}},
           "variables": []}]},
     {
-      "name": "hydra.adapt.simple.adaptTerm",
+      "name": "hydra.adapt.adaptTerm",
       "term": {
         "annotated": {
           "annotation": [
@@ -3372,7 +3372,7 @@
                                                                                                                                                   "argument": {"variable": "litmap"},
                                                                                                                                                   "function": {
                                                                                                                                                     "typeApplication": {
-                                                                                                                                                      "body": {"variable": "hydra.adapt.simple.adaptLiteralValue"},
+                                                                                                                                                      "body": {"variable": "hydra.adapt.adaptLiteralValue"},
                                                                                                                                                       "type": {"variable": "hydra.core.LiteralType"}}}}}}}}}},
                                                                                                                                     "typeName": "hydra.core.Term"}},
                                                                                                                                 "function": {
@@ -3386,7 +3386,7 @@
                                                                                                                                             "function": {
                                                                                                                                               "application": {
                                                                                                                                                 "argument": {"variable": "constraints"},
-                                                                                                                                                "function": {"variable": "hydra.adapt.simple.literalTypeSupported"}}}}},
+                                                                                                                                                "function": {"variable": "hydra.adapt.literalTypeSupported"}}}}},
                                                                                                                                         "function": {
                                                                                                                                           "typeApplication": {
                                                                                                                                             "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
@@ -3586,7 +3586,7 @@
                                                                                                   "function": {
                                                                                                     "application": {
                                                                                                       "argument": {"variable": "cx"},
-                                                                                                      "function": {"variable": "hydra.adapt.simple.termAlternatives"}}}}}}},
+                                                                                                      "function": {"variable": "hydra.adapt.termAlternatives"}}}}}}},
                                                                                           "function": {
                                                                                             "typeApplication": {
                                                                                               "body": {
@@ -3753,7 +3753,7 @@
                                                                                                                     "function": {
                                                                                                                       "application": {
                                                                                                                         "argument": {"variable": "constraints"},
-                                                                                                                        "function": {"variable": "hydra.adapt.simple.adaptType"}}}}}}},
+                                                                                                                        "function": {"variable": "hydra.adapt.adaptType"}}}}}}},
                                                                                                             "function": {
                                                                                                               "typeApplication": {
                                                                                                                 "body": {
@@ -3956,7 +3956,7 @@
               "domain": {"variable": "hydra.coders.LanguageConstraints"}}},
           "variables": []}]},
     {
-      "name": "hydra.adapt.simple.adaptTermForLanguage",
+      "name": "hydra.adapt.adaptTermForLanguage",
       "term": {
         "annotated": {
           "annotation": [
@@ -4001,7 +4001,7 @@
                                               "term": {
                                                 "application": {
                                                   "argument": {"variable": "constraints"},
-                                                  "function": {"variable": "hydra.adapt.simple.adaptLiteralTypesMap"}}},
+                                                  "function": {"variable": "hydra.adapt.adaptLiteralTypesMap"}}},
                                               "type": [
                                                 {
                                                   "constraints": null,
@@ -4025,7 +4025,7 @@
                                                           "function": {
                                                             "application": {
                                                               "argument": {"variable": "constraints"},
-                                                              "function": {"variable": "hydra.adapt.simple.adaptTerm"}}}}}}}}}}}}}}},
+                                                              "function": {"variable": "hydra.adapt.adaptTerm"}}}}}}}}}}}}}}},
                                   "domain": [{"variable": "hydra.core.Term"}],
                                   "parameter": "term"}}},
                             "domain": [{"variable": "hydra.graph.Graph"}],
@@ -4055,7 +4055,7 @@
               "domain": {"variable": "hydra.coders.Language"}}},
           "variables": []}]},
     {
-      "name": "hydra.adapt.simple.adaptType",
+      "name": "hydra.adapt.adaptType",
       "term": {
         "annotated": {
           "annotation": [
@@ -4154,7 +4154,7 @@
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "constraints"},
-                                                                                    "function": {"variable": "hydra.adapt.simple.literalTypeSupported"}}}}},
+                                                                                    "function": {"variable": "hydra.adapt.literalTypeSupported"}}}}},
                                                                             "function": {
                                                                               "typeApplication": {
                                                                                 "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
@@ -4262,7 +4262,7 @@
                                                       "term": {
                                                         "application": {
                                                           "argument": {"variable": "typ"},
-                                                          "function": {"variable": "hydra.adapt.simple.typeAlternatives"}}},
+                                                          "function": {"variable": "hydra.adapt.typeAlternatives"}}},
                                                       "type": [
                                                         {
                                                           "constraints": null,
@@ -4501,7 +4501,7 @@
               "domain": {"variable": "hydra.coders.LanguageConstraints"}}},
           "variables": []}]},
     {
-      "name": "hydra.adapt.simple.adaptTypeForLanguage",
+      "name": "hydra.adapt.adaptTypeForLanguage",
       "term": {
         "annotated": {
           "annotation": [
@@ -4540,7 +4540,7 @@
                                   "term": {
                                     "application": {
                                       "argument": {"variable": "constraints"},
-                                      "function": {"variable": "hydra.adapt.simple.adaptLiteralTypesMap"}}},
+                                      "function": {"variable": "hydra.adapt.adaptLiteralTypesMap"}}},
                                   "type": [
                                     {
                                       "constraints": null,
@@ -4558,7 +4558,7 @@
                                       "function": {
                                         "application": {
                                           "argument": {"variable": "constraints"},
-                                          "function": {"variable": "hydra.adapt.simple.adaptType"}}}}}}}}}}},
+                                          "function": {"variable": "hydra.adapt.adaptType"}}}}}}}}}}},
                       "domain": [{"variable": "hydra.core.Type"}],
                       "parameter": "typ"}}},
                 "domain": [{"variable": "hydra.coders.Language"}],
@@ -4578,7 +4578,7 @@
               "domain": {"variable": "hydra.coders.Language"}}},
           "variables": []}]},
     {
-      "name": "hydra.adapt.simple.adaptTypeScheme",
+      "name": "hydra.adapt.adaptTypeScheme",
       "term": {
         "annotated": {
           "annotation": [
@@ -4670,7 +4670,7 @@
                                                     "function": {
                                                       "application": {
                                                         "argument": {"variable": "constraints"},
-                                                        "function": {"variable": "hydra.adapt.simple.adaptType"}}}}}}},
+                                                        "function": {"variable": "hydra.adapt.adaptType"}}}}}}},
                                             "function": {
                                               "typeApplication": {
                                                 "body": {
@@ -4712,7 +4712,7 @@
               "domain": {"variable": "hydra.coders.LanguageConstraints"}}},
           "variables": []}]},
     {
-      "name": "hydra.adapt.simple.composeCoders",
+      "name": "hydra.adapt.composeCoders",
       "term": {
         "typeLambda": {
           "body": {
@@ -4932,7 +4932,7 @@
                       "function": {"variable": "hydra.compute.Coder"}}}}}}},
           "variables": ["t0", "t1", "t2"]}]},
     {
-      "name": "hydra.adapt.simple.dataGraphToDefinitions",
+      "name": "hydra.adapt.dataGraphToDefinitions",
       "term": {
         "annotated": {
           "annotation": [
@@ -5449,7 +5449,7 @@
                                                                                                                                 "function": {
                                                                                                                                   "function": {
                                                                                                                                     "elimination": {"record": {"field": "term", "typeName": "hydra.core.Binding"}}}}}},
-                                                                                                                            "function": {"variable": "hydra.adapt.simple.pushTypeAppsInward"}}}},
+                                                                                                                            "function": {"variable": "hydra.adapt.pushTypeAppsInward"}}}},
                                                                                                                       {
                                                                                                                         "name": "type",
                                                                                                                         "term": {
@@ -6459,7 +6459,7 @@
                                                                                                                                                 "function": {
                                                                                                                                                   "application": {
                                                                                                                                                     "argument": {"variable": "constraints"},
-                                                                                                                                                    "function": {"variable": "hydra.adapt.simple.adaptDataGraph"}}}}}}}}}}},
+                                                                                                                                                    "function": {"variable": "hydra.adapt.adaptDataGraph"}}}}}}}}}}},
                                                                                                                                 "function": {
                                                                                                                                   "typeApplication": {
                                                                                                                                     "body": {
@@ -6754,7 +6754,7 @@
               "domain": {"variable": "hydra.coders.LanguageConstraints"}}},
           "variables": []}]},
     {
-      "name": "hydra.adapt.simple.literalTypeSupported",
+      "name": "hydra.adapt.literalTypeSupported",
       "term": {
         "annotated": {
           "annotation": [
@@ -6897,7 +6897,7 @@
               "domain": {"variable": "hydra.coders.LanguageConstraints"}}},
           "variables": []}]},
     {
-      "name": "hydra.adapt.simple.pushTypeAppsInward",
+      "name": "hydra.adapt.pushTypeAppsInward",
       "term": {
         "annotated": {
           "annotation": [
@@ -8216,7 +8216,7 @@
               "domain": {"variable": "hydra.core.Term"}}},
           "variables": []}]},
     {
-      "name": "hydra.adapt.simple.schemaGraphToDefinitions",
+      "name": "hydra.adapt.schemaGraphToDefinitions",
       "term": {
         "annotated": {
           "annotation": [
@@ -8245,7 +8245,7 @@
                                           "term": {
                                             "application": {
                                               "argument": {"variable": "constraints"},
-                                              "function": {"variable": "hydra.adapt.simple.adaptLiteralTypesMap"}}},
+                                              "function": {"variable": "hydra.adapt.adaptLiteralTypesMap"}}},
                                           "type": [
                                             {
                                               "constraints": null,
@@ -8442,7 +8442,7 @@
                                                                     "argument": {"variable": "constraints"},
                                                                     "function": {
                                                                       "typeApplication": {
-                                                                        "body": {"variable": "hydra.adapt.simple.adaptGraphSchema"},
+                                                                        "body": {"variable": "hydra.adapt.adaptGraphSchema"},
                                                                         "type": {"variable": "hydra.core.Name"}}}}}}}}},
                                                         "function": {
                                                           "typeApplication": {
@@ -8597,7 +8597,7 @@
               "domain": {"variable": "hydra.coders.LanguageConstraints"}}},
           "variables": []}]},
     {
-      "name": "hydra.adapt.simple.simpleLanguageAdapter",
+      "name": "hydra.adapt.simpleLanguageAdapter",
       "term": {
         "typeLambda": {
           "body": {
@@ -8645,7 +8645,7 @@
                                                   "term": {
                                                     "application": {
                                                       "argument": {"variable": "constraints"},
-                                                      "function": {"variable": "hydra.adapt.simple.adaptLiteralTypesMap"}}},
+                                                      "function": {"variable": "hydra.adapt.adaptLiteralTypesMap"}}},
                                                   "type": [
                                                     {
                                                       "constraints": null,
@@ -8713,7 +8713,7 @@
                                                                                                                                             "function": {
                                                                                                                                               "application": {
                                                                                                                                                 "argument": {"variable": "constraints"},
-                                                                                                                                                "function": {"variable": "hydra.adapt.simple.adaptTerm"}}}}}}}}}}},
+                                                                                                                                                "function": {"variable": "hydra.adapt.adaptTerm"}}}}}}}}}}},
                                                                                                                             "function": {
                                                                                                                               "application": {
                                                                                                                                 "argument": {
@@ -8823,7 +8823,7 @@
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {"variable": "constraints"},
-                                                                  "function": {"variable": "hydra.adapt.simple.adaptType"}}}}}}},
+                                                                  "function": {"variable": "hydra.adapt.adaptType"}}}}}}},
                                                       "function": {
                                                         "typeApplication": {
                                                           "body": {
@@ -8888,7 +8888,7 @@
               "domain": {"variable": "hydra.coders.Language"}}},
           "variables": ["t0"]}]},
     {
-      "name": "hydra.adapt.simple.termAlternatives",
+      "name": "hydra.adapt.termAlternatives",
       "term": {
         "annotated": {
           "annotation": [
@@ -9398,7 +9398,7 @@
               "domain": {"variable": "hydra.context.Context"}}},
           "variables": []}]},
     {
-      "name": "hydra.adapt.simple.typeAlternatives",
+      "name": "hydra.adapt.typeAlternatives",
       "term": {
         "annotated": {
           "annotation": [
@@ -9604,7 +9604,7 @@
               "codomain": {"list": {"variable": "hydra.core.Type"}},
               "domain": {"variable": "hydra.core.Type"}}},
           "variables": []}]}],
-  "namespace": "hydra.adapt.simple",
+  "namespace": "hydra.adapt",
   "termDependencies": [
     "hydra.hoisting",
     "hydra.inference",

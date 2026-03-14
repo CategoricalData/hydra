@@ -7,7 +7,7 @@ import Hydra.Dsl.Bootstrap (bootstrapGraph)
 import Hydra.CodeGeneration (moduleTermDepsTransitive, moduleTypeDepsTransitive, generateSourceFiles)
 import Hydra.Lexical (elementsToGraph, graphToBindings, buildGraph)
 import Hydra.Inference (inferGraphTypes)
-import Hydra.Adapt.Simple (dataGraphToDefinitions)
+import Hydra.Adapt (dataGraphToDefinitions)
 import qualified Hydra.Schemas as Schemas
 import Hydra.Ext.Generation (mainModules, hydraExtModules)
 import Hydra.Ext.Sources.All

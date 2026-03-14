@@ -4,7 +4,7 @@
 
 module Hydra.Ext.Haskell.Coder where
 
-import qualified Hydra.Adapt.Simple as Simple
+import qualified Hydra.Adapt as Adapt
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Classes as Classes
 import qualified Hydra.Coders as Coders
@@ -65,7 +65,7 @@ adaptTypeToHaskellAndEncode namespaces typ cx g =
     Core.TypeVariable _ -> (enc typ)
     _ -> (Eithers.bind (Eithers.bimap (\_s -> Context.InContext {
       Context.inContextObject = (Error.ErrorOther (Error.OtherError _s)),
-      Context.inContextContext = cx}) (\_x -> _x) (Simple.adaptTypeForLanguage Language.haskellLanguage typ)) (\adaptedType -> enc adaptedType))) (Rewriting.deannotateType typ))
+      Context.inContextContext = cx}) (\_x -> _x) (Adapt.adaptTypeForLanguage Language.haskellLanguage typ)) (\adaptedType -> enc adaptedType))) (Rewriting.deannotateType typ))
 
 -- | Generate a constant name for a field (e.g., '_TypeName_fieldName')
 constantForFieldName :: (Core.Name -> Core.Name -> String)

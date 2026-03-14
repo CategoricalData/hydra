@@ -2,7 +2,7 @@
 
 -- | Simple, one-way adapters for types and terms
 
-module Hydra.Adapt.Simple where
+module Hydra.Adapt where
 
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Compute as Compute

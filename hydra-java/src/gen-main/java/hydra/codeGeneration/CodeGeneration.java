@@ -192,7 +192,7 @@ public interface CodeGeneration {
             hydra.lib.eithers.Bimap.apply(
               (java.util.function.Function<String, hydra.context.InContext<hydra.error.Error_>>) (s -> (hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(s)), cx))),
               (java.util.function.Function<hydra.util.Pair<java.util.Map<hydra.core.Name, hydra.core.Type>, java.util.List<java.util.List<hydra.module.TypeDefinition>>>, hydra.util.Pair<java.util.Map<hydra.core.Name, hydra.core.Type>, java.util.List<java.util.List<hydra.module.TypeDefinition>>>>) (r -> r),
-              hydra.adapt.simple.Simple.schemaGraphToDefinitions(
+              hydra.adapt.Adapt.schemaGraphToDefinitions(
                 constraints,
                 schemaGraph.get(),
                 nameLists.get(),
@@ -229,7 +229,7 @@ public interface CodeGeneration {
               hydra.lib.eithers.Bimap.apply(
                 (java.util.function.Function<String, hydra.context.InContext<hydra.error.Error_>>) (s -> (hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(s)), cx))),
                 (java.util.function.Function<hydra.util.Pair<hydra.graph.Graph, java.util.List<java.util.List<hydra.module.TermDefinition>>>, hydra.util.Pair<hydra.graph.Graph, java.util.List<java.util.List<hydra.module.TermDefinition>>>>) (r -> r),
-                hydra.adapt.simple.Simple.dataGraphToDefinitions(
+                hydra.adapt.Adapt.dataGraphToDefinitions(
                   constraints,
                   doInfer,
                   doExpand,

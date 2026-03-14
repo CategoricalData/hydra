@@ -103,7 +103,7 @@
                                                                               "typeApplication": {
                                                                                 "body": {
                                                                                   "typeApplication": {
-                                                                                    "body": {"variable": "hydra.adapt.simple.composeCoders"},
+                                                                                    "body": {"variable": "hydra.adapt.composeCoders"},
                                                                                     "type": {"variable": "hydra.core.Term"}}},
                                                                                 "type": {"variable": "hydra.core.Term"}}},
                                                                             "type": {"variable": "hydra.ext.org.yaml.model.Node"}}}}}}}}},
@@ -208,7 +208,7 @@
                                                             "argument": {"variable": "hydra.ext.org.yaml.language.yamlLanguage"},
                                                             "function": {
                                                               "typeApplication": {
-                                                                "body": {"variable": "hydra.adapt.simple.simpleLanguageAdapter"},
+                                                                "body": {"variable": "hydra.adapt.simpleLanguageAdapter"},
                                                                 "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
                                             "function": {
                                               "application": {
@@ -5397,7 +5397,7 @@
           "variables": []}]}],
   "namespace": "hydra.ext.org.yaml.coder",
   "termDependencies": [
-    "hydra.adapt.simple",
+    "hydra.adapt",
     "hydra.extract.core",
     "hydra.literals",
     "hydra.ext.org.yaml.language",

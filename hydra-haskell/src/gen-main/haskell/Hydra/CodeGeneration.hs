@@ -4,7 +4,7 @@
 
 module Hydra.CodeGeneration where
 
-import qualified Hydra.Adapt.Simple as Simple
+import qualified Hydra.Adapt as Adapt
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Context as Context
@@ -138,7 +138,7 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
                             let nameLists = (Lists.map (\m -> Lists.map (\e -> Core.bindingName e) (Lists.filter (\e -> Annotations.isNativeType e) (Module__.moduleElements m))) typeModulesToGenerate)
                             in (Eithers.bind (Eithers.bimap (\s -> Context.InContext {
                               Context.inContextObject = (Error.ErrorOther (Error.OtherError s)),
-                              Context.inContextContext = cx}) (\r -> r) (Simple.schemaGraphToDefinitions constraints schemaGraph nameLists cx)) (\schemaResult ->  
+                              Context.inContextContext = cx}) (\r -> r) (Adapt.schemaGraphToDefinitions constraints schemaGraph nameLists cx)) (\schemaResult ->  
                               let defLists = (Pairs.second schemaResult)
                               in  
                                 let schemaGraphWithTypes = Graph.Graph {
@@ -158,7 +158,7 @@ generateSourceFiles printDefinitions lang doInfer doExpand doHoistCaseStatements
                             let namespaces = (Lists.map (\m -> Module__.moduleNamespace m) termModulesToGenerate)
                             in (Eithers.bind (Eithers.bimap (\s -> Context.InContext {
                               Context.inContextObject = (Error.ErrorOther (Error.OtherError s)),
-                              Context.inContextContext = cx}) (\r -> r) (Simple.dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings dataElements dataGraph namespaces cx)) (\dataResult ->  
+                              Context.inContextContext = cx}) (\r -> r) (Adapt.dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHoistPolymorphicLetBindings dataElements dataGraph namespaces cx)) (\dataResult ->  
                               let g1 = (Pairs.first dataResult)
                               in  
                                 let defLists = (Pairs.second dataResult)
