@@ -18,8 +18,8 @@ public interface Coder {
     return new hydra.core.Name("haskellVar");
   }
   
-  static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> adaptTypeToHaskellAndEncode(hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.core.Type typ, hydra.context.Context cx, hydra.graph.Graph g) {
-    java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>> enc = (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>>) (t -> hydra.ext.haskell.coder.Coder.encodeType(
+  static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> adaptTypeToHaskellAndEncode(hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.core.Type typ, hydra.context.Context cx, T0 g) {
+    java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>> enc = (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>>) (t -> hydra.ext.haskell.coder.Coder.<T0>encodeType(
       namespaces,
       t,
       cx,
@@ -31,10 +31,8 @@ public interface Coder {
           hydra.lib.eithers.Bimap.apply(
             (java.util.function.Function<String, hydra.context.InContext<hydra.error.Error_>>) (_s -> (hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(_s)), cx))),
             (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (_x -> _x),
-            hydra.adapt.modules.Modules.adaptTypeToLanguage(
+            hydra.adapt.simple.Simple.adaptTypeForLanguage(
               hydra.ext.haskell.language.Language.haskellLanguage(),
-              cx,
-              g,
               typ)),
           (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>>) (adaptedType -> (enc).apply(adaptedType)));
       }
@@ -936,7 +934,7 @@ public interface Coder {
     return hydra.util.Either.<T1, hydra.ext.haskell.ast.Type>right(new hydra.ext.haskell.ast.Type.Variable(((hydra_ext_haskell_utils_elementReference2).apply(namespaces)).apply(name)));
   }
   
-  static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> encodeTypeWithClassAssertions(hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, java.util.Map<hydra.core.Name, java.util.Set<hydra.classes.TypeClass>> explicitClasses, hydra.core.Type typ, hydra.context.Context cx, hydra.graph.Graph g) {
+  static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type> encodeTypeWithClassAssertions(hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, java.util.Map<hydra.core.Name, java.util.Set<hydra.classes.TypeClass>> explicitClasses, hydra.core.Type typ, hydra.context.Context cx, T0 g) {
     hydra.util.Lazy<java.util.Map<hydra.core.Name, java.util.Set<hydra.classes.TypeClass>>> classes = new hydra.util.Lazy<>(() -> hydra.lib.maps.Union.apply(
       explicitClasses,
       hydra.ext.haskell.coder.Coder.getImplicitTypeClasses(typ)));
@@ -962,7 +960,7 @@ public interface Coder {
     });
     java.util.Map<hydra.core.Name, java.util.Set<hydra.classes.TypeClass>> implicitClasses = hydra.ext.haskell.coder.Coder.getImplicitTypeClasses(typ);
     return hydra.lib.eithers.Bind.apply(
-      hydra.ext.haskell.coder.Coder.adaptTypeToHaskellAndEncode(
+      hydra.ext.haskell.coder.Coder.<T0>adaptTypeToHaskellAndEncode(
         namespaces,
         typ,
         cx,
@@ -984,24 +982,24 @@ public interface Coder {
         })).get())));
   }
   
-  static <T0, T1> java.util.List<hydra.util.Pair<T0, T1>> encodeTypeWithClassAssertions_toPairs(hydra.util.Pair<T0, java.util.Set<T1>> mapEntry) {
+  static <T1, T2> java.util.List<hydra.util.Pair<T1, T2>> encodeTypeWithClassAssertions_toPairs(hydra.util.Pair<T1, java.util.Set<T2>> mapEntry) {
     return hydra.lib.lists.Map.apply(
-      (java.util.function.Function<T1, hydra.util.Pair<T0, T1>>) (v1 -> hydra.ext.haskell.coder.Coder.<T0, T1, T1>encodeTypeWithClassAssertions_toPair(
+      (java.util.function.Function<T2, hydra.util.Pair<T1, T2>>) (v1 -> hydra.ext.haskell.coder.Coder.<T1, T2, T2>encodeTypeWithClassAssertions_toPair(
         mapEntry,
         v1)),
-      hydra.lib.sets.ToList.apply(hydra.ext.haskell.coder.Coder.<T0, T1>encodeTypeWithClassAssertions_clsSet(mapEntry)));
+      hydra.lib.sets.ToList.apply(hydra.ext.haskell.coder.Coder.<T1, T2>encodeTypeWithClassAssertions_clsSet(mapEntry)));
   }
   
-  static <T0, T1> T0 encodeTypeWithClassAssertions_name(hydra.util.Pair<T0, java.util.Set<T1>> mapEntry) {
+  static <T1, T2> T1 encodeTypeWithClassAssertions_name(hydra.util.Pair<T1, java.util.Set<T2>> mapEntry) {
     return hydra.lib.pairs.First.apply(mapEntry);
   }
   
-  static <T0, T1> java.util.Set<T1> encodeTypeWithClassAssertions_clsSet(hydra.util.Pair<T0, java.util.Set<T1>> mapEntry) {
+  static <T1, T2> java.util.Set<T2> encodeTypeWithClassAssertions_clsSet(hydra.util.Pair<T1, java.util.Set<T2>> mapEntry) {
     return hydra.lib.pairs.Second.apply(mapEntry);
   }
   
-  static <T0, T1, T2> hydra.util.Pair<T0, T2> encodeTypeWithClassAssertions_toPair(hydra.util.Pair<T0, java.util.Set<T1>> mapEntry, T2 c) {
-    return (hydra.util.Pair<T0, T2>) ((hydra.util.Pair<T0, T2>) (new hydra.util.Pair<T0, T2>(hydra.ext.haskell.coder.Coder.<T0, T1>encodeTypeWithClassAssertions_name(mapEntry), c)));
+  static <T1, T2, T3> hydra.util.Pair<T1, T3> encodeTypeWithClassAssertions_toPair(hydra.util.Pair<T1, java.util.Set<T2>> mapEntry, T3 c) {
+    return (hydra.util.Pair<T1, T3>) ((hydra.util.Pair<T1, T3>) (new hydra.util.Pair<T1, T3>(hydra.ext.haskell.coder.Coder.<T1, T2>encodeTypeWithClassAssertions_name(mapEntry), c)));
   }
   
   static java.util.Set<hydra.core.Name> findOrdVariables(hydra.core.Type typ) {
