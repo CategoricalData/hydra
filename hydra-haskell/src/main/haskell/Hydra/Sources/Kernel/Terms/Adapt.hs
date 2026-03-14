@@ -1,5 +1,5 @@
 
-module Hydra.Sources.Kernel.Terms.Adapt.Simple where
+module Hydra.Sources.Kernel.Terms.Adapt where
 
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (
@@ -78,7 +78,7 @@ import qualified Hydra.Sources.Kernel.Terms.Show.Graph  as ShowGraph
 
 
 ns :: Namespace
-ns = Namespace "hydra.adapt.simple"
+ns = Namespace "hydra.adapt"
 
 module_ :: Module
 module_ = Module ns elements

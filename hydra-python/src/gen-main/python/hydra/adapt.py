@@ -122,21 +122,21 @@ def adapt_graph_schema(constraints: hydra.coders.LanguageConstraints, litmap: Fr
     return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda x1: map_pair(x1)), hydra.lib.maps.to_list(types0)), (lambda pairs: Right(hydra.lib.maps.from_list(pairs))))
 
 def adapt_lambda_domains(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], recurse: Callable[[T0], Either[str, hydra.core.Term]], term: T0):
-    def _hoist_hydra_adapt_simple_adapt_lambda_domains_1(constraints, f, litmap, v1):
+    def _hoist_hydra_adapt_adapt_lambda_domains_1(constraints, f, litmap, v1):
         match v1:
             case hydra.core.FunctionLambda(value=l):
                 return hydra.lib.eithers.bind(hydra.lib.maybes.maybe((lambda : Right(Nothing())), (lambda dom: hydra.lib.eithers.bind(adapt_type(constraints, litmap, dom), (lambda dom1: Right(Just(dom1))))), l.domain), (lambda adapted_domain: Right(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(l.parameter, adapted_domain, l.body))))))))
             
             case _:
                 return Right(cast(hydra.core.Term, hydra.core.TermFunction(f)))
-    def _hoist_hydra_adapt_simple_adapt_lambda_domains_2(constraints, litmap, rewritten, v1):
+    def _hoist_hydra_adapt_adapt_lambda_domains_2(constraints, litmap, rewritten, v1):
         match v1:
             case hydra.core.TermFunction(value=f):
-                return _hoist_hydra_adapt_simple_adapt_lambda_domains_1(constraints, f, litmap, f)
+                return _hoist_hydra_adapt_adapt_lambda_domains_1(constraints, f, litmap, f)
             
             case _:
                 return Right(rewritten)
-    return hydra.lib.eithers.bind(recurse(term), (lambda rewritten: _hoist_hydra_adapt_simple_adapt_lambda_domains_2(constraints, litmap, rewritten, rewritten)))
+    return hydra.lib.eithers.bind(recurse(term), (lambda rewritten: _hoist_hydra_adapt_adapt_lambda_domains_2(constraints, litmap, rewritten, rewritten)))
 
 def adapt_float_type(constraints: hydra.coders.LanguageConstraints, ft: hydra.core.FloatType) -> Maybe[hydra.core.FloatType]:
     r"""Attempt to adapt a floating-point type using the given language constraints."""
@@ -238,7 +238,7 @@ def adapt_type_scheme(constraints: hydra.coders.LanguageConstraints, litmap: Fro
     return hydra.lib.eithers.bind(adapt_type(constraints, litmap, t0), (lambda t1: Right(hydra.core.TypeScheme(vars0, t1, ts0.constraints))))
 
 def adapt_nested_types(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], recurse: Callable[[T0], Either[str, hydra.core.Term]], term: T0):
-    def _hoist_hydra_adapt_simple_adapt_nested_types_1(constraints, litmap, rewritten, v1):
+    def _hoist_hydra_adapt_adapt_nested_types_1(constraints, litmap, rewritten, v1):
         match v1:
             case hydra.core.TermLet(value=lt):
                 def adapt_b(b: hydra.core.Binding) -> Either[str, hydra.core.Binding]:
@@ -247,7 +247,7 @@ def adapt_nested_types(constraints: hydra.coders.LanguageConstraints, litmap: Fr
             
             case _:
                 return Right(rewritten)
-    return hydra.lib.eithers.bind(recurse(term), (lambda rewritten: _hoist_hydra_adapt_simple_adapt_nested_types_1(constraints, litmap, rewritten, rewritten)))
+    return hydra.lib.eithers.bind(recurse(term), (lambda rewritten: _hoist_hydra_adapt_adapt_nested_types_1(constraints, litmap, rewritten, rewritten)))
 
 def adapt_primitive(constraints: hydra.coders.LanguageConstraints, litmap: FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType], prim0: hydra.graph.Primitive) -> Either[str, hydra.graph.Primitive]:
     r"""Adapt a primitive to the given language constraints, prior to inference."""
@@ -256,28 +256,28 @@ def adapt_primitive(constraints: hydra.coders.LanguageConstraints, litmap: Froze
     return hydra.lib.eithers.bind(adapt_type_scheme(constraints, litmap, ts0), (lambda ts1: Right(hydra.graph.Primitive(prim0.name, ts1, prim0.implementation))))
 
 def adapt_literal(lt: hydra.core.LiteralType, l: hydra.core.Literal):
-    def _hoist_hydra_adapt_simple_adapt_literal_1(b, v1):
+    def _hoist_hydra_adapt_adapt_literal_1(b, v1):
         match v1:
             case hydra.core.LiteralTypeString():
                 return cast(hydra.core.Literal, hydra.core.LiteralString(hydra.lib.literals.binary_to_string(b)))
             
             case _:
                 raise TypeError("Unsupported LiteralType")
-    def _hoist_hydra_adapt_simple_adapt_literal_2(b, v1):
+    def _hoist_hydra_adapt_adapt_literal_2(b, v1):
         match v1:
             case hydra.core.LiteralTypeInteger(value=it):
                 return cast(hydra.core.Literal, hydra.core.LiteralInteger(hydra.literals.bigint_to_integer_value(it, hydra.lib.logic.if_else(b, (lambda : 1), (lambda : 0)))))
             
             case _:
                 raise TypeError("Unsupported LiteralType")
-    def _hoist_hydra_adapt_simple_adapt_literal_3(f, v1):
+    def _hoist_hydra_adapt_adapt_literal_3(f, v1):
         match v1:
             case hydra.core.LiteralTypeFloat(value=ft):
                 return cast(hydra.core.Literal, hydra.core.LiteralFloat(hydra.literals.bigfloat_to_float_value(ft, hydra.literals.float_value_to_bigfloat(f))))
             
             case _:
                 raise TypeError("Unsupported LiteralType")
-    def _hoist_hydra_adapt_simple_adapt_literal_4(i, v1):
+    def _hoist_hydra_adapt_adapt_literal_4(i, v1):
         match v1:
             case hydra.core.LiteralTypeInteger(value=it):
                 return cast(hydra.core.Literal, hydra.core.LiteralInteger(hydra.literals.bigint_to_integer_value(it, hydra.literals.integer_value_to_bigint(i))))
@@ -286,16 +286,16 @@ def adapt_literal(lt: hydra.core.LiteralType, l: hydra.core.Literal):
                 raise TypeError("Unsupported LiteralType")
     match l:
         case hydra.core.LiteralBinary(value=b):
-            return _hoist_hydra_adapt_simple_adapt_literal_1(b, lt)
+            return _hoist_hydra_adapt_adapt_literal_1(b, lt)
         
         case hydra.core.LiteralBoolean(value=b2):
-            return _hoist_hydra_adapt_simple_adapt_literal_2(b2, lt)
+            return _hoist_hydra_adapt_adapt_literal_2(b2, lt)
         
         case hydra.core.LiteralFloat(value=f):
-            return _hoist_hydra_adapt_simple_adapt_literal_3(f, lt)
+            return _hoist_hydra_adapt_adapt_literal_3(f, lt)
         
         case hydra.core.LiteralInteger(value=i):
-            return _hoist_hydra_adapt_simple_adapt_literal_4(i, lt)
+            return _hoist_hydra_adapt_adapt_literal_4(i, lt)
         
         case _:
             raise TypeError("Unsupported Literal")

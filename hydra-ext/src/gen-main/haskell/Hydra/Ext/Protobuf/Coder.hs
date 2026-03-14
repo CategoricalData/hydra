@@ -4,7 +4,7 @@
 
 module Hydra.Ext.Protobuf.Coder where
 
-import qualified Hydra.Adapt.Simple as Simple
+import qualified Hydra.Adapt as Adapt
 import qualified Hydra.Annotations as Annotations
 import qualified Hydra.Coders as Coders
 import qualified Hydra.Constants as Constants
@@ -212,7 +212,7 @@ constructModule cx g mod typeDefs =
                   enc = (encodeDefEither name)
               in (fromEitherString cx ((\x -> case x of
                 Core.TypeVariable _ -> (enc flatTyp)
-                _ -> (Eithers.bind (Simple.adaptTypeForLanguage Language.protobufLanguage flatTyp) (\adaptedType -> enc adaptedType))) (Rewriting.deannotateType flatTyp))))
+                _ -> (Eithers.bind (Adapt.adaptTypeForLanguage Language.protobufLanguage flatTyp) (\adaptedType -> enc adaptedType))) (Rewriting.deannotateType flatTyp))))
       types = (Lists.map (\td -> Module.typeDefinitionType td) typeDefs)
       structRefs = (collectStructuralTypes types)
       javaOptions = [

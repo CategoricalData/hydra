@@ -8,7 +8,7 @@ from decimal import Decimal
 from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Just, Left, Maybe, Nothing, Right, frozenlist
 from typing import TypeVar, cast
-import hydra.adapt.simple
+import hydra.adapt
 import hydra.annotations
 import hydra.classes
 import hydra.coders
@@ -180,7 +180,7 @@ def adapt_type_to_haskell_and_encode(namespaces: hydra.module.Namespaces[hydra.e
             return enc(typ)
         
         case _:
-            return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda _s: hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(_s))), cx)), (lambda _x: _x), hydra.adapt.simple.adapt_type_for_language(hydra.ext.haskell.language.haskell_language(), typ)), (lambda adapted_type: enc(adapted_type)))
+            return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda _s: hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(_s))), cx)), (lambda _x: _x), hydra.adapt.adapt_type_for_language(hydra.ext.haskell.language.haskell_language(), typ)), (lambda adapted_type: enc(adapted_type)))
 
 def constant_for_field_name(tname: hydra.core.Name, fname: hydra.core.Name) -> str:
     r"""Generate a constant name for a field (e.g., '_TypeName_fieldName')."""

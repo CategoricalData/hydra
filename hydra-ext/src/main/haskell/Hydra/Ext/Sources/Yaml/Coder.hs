@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Yaml                       as Yaml
 import qualified Hydra.Dsl.Terms                           as Terms
 import qualified Hydra.Dsl.Types                           as Types
-import qualified Hydra.Sources.Kernel.Terms.Adapt.Simple   as AdaptSimple
+import qualified Hydra.Sources.Kernel.Terms.Adapt           as Adapt
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core   as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Literals       as HydraLiterals
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
@@ -48,7 +48,7 @@ define = definitionInNamespace ns
 
 module_ :: Module
 module_ = Module ns elements
-    [AdaptSimple.ns,
+    [Adapt.ns,
      ExtractCore.ns, HydraLiterals.ns, YamlLanguage.ns, Rewriting.ns]
     (KernelTypes.kernelTypesNamespaces L.++ [Namespace "hydra.ext.org.yaml.model"]) $
     Just "YAML encoding and decoding for Hydra terms"
@@ -67,9 +67,9 @@ yamlCoder = define "yamlCoder" $
   doc "Create a YAML coder for a given type" $
   "typ" ~> "cx" ~> "g" ~>
   "mkTermCoder" <~ ("t" ~> termCoder @@ var "t" @@ var "cx" @@ var "g") $
-  "adapter" <<~ liftStringError (var "cx") (AdaptSimple.simpleLanguageAdapter @@ YamlLanguage.yamlLanguage @@ var "cx" @@ var "g" @@ var "typ") $
+  "adapter" <<~ liftStringError (var "cx") (Adapt.simpleLanguageAdapter @@ YamlLanguage.yamlLanguage @@ var "cx" @@ var "g" @@ var "typ") $
   "coder" <<~ var "mkTermCoder" @@ (Compute.adapterTarget $ var "adapter") $
-  right $ AdaptSimple.composeCoders @@ (Compute.adapterCoder $ var "adapter") @@ var "coder"
+  right $ Adapt.composeCoders @@ (Compute.adapterCoder $ var "adapter") @@ var "coder"
 
 literalYamlCoder :: TBinding (LiteralType -> Either (InContext Error) (Coder Literal YM.Scalar))
 literalYamlCoder = define "literalYamlCoder" $

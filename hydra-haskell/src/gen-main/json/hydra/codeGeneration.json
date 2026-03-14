@@ -2135,7 +2135,7 @@
                                                                                                                                                                                                         "function": {
                                                                                                                                                                                                           "application": {
                                                                                                                                                                                                             "argument": {"variable": "constraints"},
-                                                                                                                                                                                                            "function": {"variable": "hydra.adapt.simple.dataGraphToDefinitions"}}}}}}}}}}}}}}}}}}},
+                                                                                                                                                                                                            "function": {"variable": "hydra.adapt.dataGraphToDefinitions"}}}}}}}}}}}}}}}}}}},
                                                                                                                                                                         "function": {
                                                                                                                                                                           "application": {
                                                                                                                                                                             "argument": {
@@ -2655,7 +2655,7 @@
                                                                                                                                                                           "function": {
                                                                                                                                                                             "application": {
                                                                                                                                                                               "argument": {"variable": "constraints"},
-                                                                                                                                                                              "function": {"variable": "hydra.adapt.simple.schemaGraphToDefinitions"}}}}}}}}},
+                                                                                                                                                                              "function": {"variable": "hydra.adapt.schemaGraphToDefinitions"}}}}}}}}},
                                                                                                                                                               "function": {
                                                                                                                                                                 "application": {
                                                                                                                                                                   "argument": {
@@ -5721,7 +5721,7 @@
           "variables": []}]}],
   "namespace": "hydra.codeGeneration",
   "termDependencies": [
-    "hydra.adapt.simple",
+    "hydra.adapt",
     "hydra.annotations",
     "hydra.inference",
     "hydra.json.decode",

@@ -68,7 +68,7 @@ import qualified Data.Maybe                  as Y
 
 -- Dependencies on other term modules
 import qualified Hydra.Sources.Json.Decode                  as JsonDecode
-import qualified Hydra.Sources.Kernel.Terms.Adapt.Simple    as AdaptSimple
+import qualified Hydra.Sources.Kernel.Terms.Adapt           as Adapt
 import qualified Hydra.Sources.Kernel.Terms.Annotations     as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Inference       as Inference
 import qualified Hydra.Sources.Kernel.Terms.Lexical         as Lexical
@@ -90,7 +90,7 @@ ns = Namespace "hydra.codeGeneration"
 
 module_ :: Module
 module_ = Module ns elements
-    [AdaptSimple.ns, Annotations.ns, Inference.ns, JsonDecode.ns, Lexical.ns, Names.ns,
+    [Adapt.ns, Annotations.ns, Inference.ns, JsonDecode.ns, Lexical.ns, Names.ns,
      Rewriting.ns, Schemas.ns, ShowCore.ns, ShowError.ns,
      Namespace "hydra.decoding", Namespace "hydra.encoding",
      Namespace "hydra.json.decode", Namespace "hydra.json.encode", Namespace "hydra.json.writer",
@@ -282,7 +282,7 @@ generateSourceFiles = define "generateSourceFiles" $
           (Lists.filter ("e" ~> Annotations.isNativeType @@ var "e") (Module.moduleElements $ var "m")))
         (var "typeModulesToGenerate") $
       "schemaResult" <<~ Eithers.bimap ("s" ~> Ctx.inContext (Error.errorOther $ Error.otherError (var "s")) (var "cx")) ("r" ~> var "r")
-        (AdaptSimple.schemaGraphToDefinitions @@ var "constraints" @@ var "schemaGraph" @@ var "nameLists" @@ var "cx") $
+        (Adapt.schemaGraphToDefinitions @@ var "constraints" @@ var "schemaGraph" @@ var "nameLists" @@ var "cx") $
       "defLists" <~ Pairs.second (var "schemaResult") $
       "schemaGraphWithTypes" <~ Graph.graphWithSchemaTypes (var "schemaGraph") (var "schemaTypes2") $
       Eithers.map ("xs" ~> Lists.concat (var "xs")) $
@@ -298,7 +298,7 @@ generateSourceFiles = define "generateSourceFiles" $
     (right (TTerm (Terms.list []) :: TTerm [(String, String)]))
     ("namespaces" <~ Lists.map ("m" ~> Module.moduleNamespace (var "m")) (var "termModulesToGenerate") $
       "dataResult" <<~ Eithers.bimap ("s" ~> Ctx.inContext (Error.errorOther $ Error.otherError (var "s")) (var "cx")) ("r" ~> var "r")
-        (AdaptSimple.dataGraphToDefinitions
+        (Adapt.dataGraphToDefinitions
           @@ var "constraints"
           @@ var "doInfer" @@ var "doExpand" @@ var "doHoistCaseStatements" @@ var "doHoistPolymorphicLetBindings"
           @@ var "dataElements" @@ var "dataGraph" @@ var "namespaces" @@ var "cx") $

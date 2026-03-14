@@ -2316,7 +2316,7 @@
                                                                                   "function": {
                                                                                     "application": {
                                                                                       "argument": {"variable": "hydra.ext.protobuf.language.protobufLanguage"},
-                                                                                      "function": {"variable": "hydra.adapt.simple.adaptTypeForLanguage"}}}}},
+                                                                                      "function": {"variable": "hydra.adapt.adaptTypeForLanguage"}}}}},
                                                                               "function": {
                                                                                 "typeApplication": {
                                                                                   "body": {
@@ -7658,7 +7658,7 @@
     "hydra.annotations",
     "hydra.constants",
     "hydra.extract.core",
-    "hydra.adapt.simple",
+    "hydra.adapt",
     "hydra.show.core",
     "hydra.show.error",
     "hydra.decode.core"],

@@ -31,7 +31,7 @@ public interface Coder {
           hydra.lib.eithers.Bimap.apply(
             (java.util.function.Function<String, hydra.context.InContext<hydra.error.Error_>>) (_s -> (hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(_s)), cx))),
             (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (_x -> _x),
-            hydra.adapt.simple.Simple.adaptTypeForLanguage(
+            hydra.adapt.Adapt.adaptTypeForLanguage(
               hydra.ext.haskell.language.Language.haskellLanguage(),
               typ)),
           (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.haskell.ast.Type>>) (adaptedType -> (enc).apply(adaptedType)));

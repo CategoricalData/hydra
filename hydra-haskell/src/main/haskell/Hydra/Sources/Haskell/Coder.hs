@@ -48,7 +48,7 @@ import qualified Hydra.Dsl.Tests                           as Tests
 import qualified Hydra.Dsl.Types                           as Types
 import qualified Hydra.Sources.Decode.Core                 as DecodeCore
 import qualified Hydra.Sources.Encode.Core                 as EncodeCore
-import qualified Hydra.Sources.Kernel.Terms.Adapt.Simple   as AdaptSimple
+import qualified Hydra.Sources.Kernel.Terms.Adapt           as Adapt
 import qualified Hydra.Sources.Kernel.Terms.All            as KernelTerms
 import qualified Hydra.Sources.Kernel.Terms.Annotations    as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Arity          as Arity
@@ -110,7 +110,7 @@ haskellCoderDefinition = definitionInModule module_
 module_ :: Module
 module_ = Module ns elements
     [HaskellSerde.ns, HaskellUtils.ns,
-      AdaptSimple.ns, Rewriting.ns, Serialization.ns, ShowError.ns]
+      Adapt.ns, Rewriting.ns, Serialization.ns, ShowError.ns]
     (HaskellAst.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Functions for encoding Hydra modules as Haskell modules"
   where
@@ -161,7 +161,7 @@ adaptTypeToHaskellAndEncode = haskellCoderDefinition "adaptTypeToHaskellAndEncod
   "enc" <~ ("t" ~> encodeType @@ var "namespaces" @@ var "t" @@ var "cx" @@ var "g") $
   cases _Type (Rewriting.deannotateType @@ var "typ")
     (Just (
-      "adaptedType" <<~ liftStringError (var "cx") (AdaptSimple.adaptTypeForLanguage @@ HaskellLanguage.haskellLanguage @@ var "typ") $
+      "adaptedType" <<~ liftStringError (var "cx") (Adapt.adaptTypeForLanguage @@ HaskellLanguage.haskellLanguage @@ var "typ") $
       var "enc" @@ var "adaptedType")) [
     _Type_variable>>: constant (var "enc" @@ var "typ")]
 

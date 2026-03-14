@@ -3,7 +3,7 @@ module Hydra.Sources.Kernel.Terms.All where
 
 import Hydra.Kernel
 
-import qualified Hydra.Sources.Kernel.Terms.Adapt.Simple    as AdaptSimple
+import qualified Hydra.Sources.Kernel.Terms.Adapt           as Adapt
 import qualified Hydra.Sources.Kernel.Terms.Annotations     as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Arity           as Arity
 import qualified Hydra.Sources.Kernel.Terms.Checking        as Checking
@@ -92,7 +92,7 @@ kernelTermsModules = kernelPrimaryTermsModules ++ kernelDecodingModules ++ kerne
 
 kernelPrimaryTermsModules :: [Module]
 kernelPrimaryTermsModules = [
-  AdaptSimple.module_,
+  Adapt.module_,
   Annotations.module_,
   Arity.module_,
   Checking.module_,
