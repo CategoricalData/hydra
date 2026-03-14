@@ -16,7 +16,6 @@ import hydra.ext.java.coder
 import hydra.ext.java.helpers
 import hydra.ext.java.serde
 import hydra.formatting
-import hydra.inference
 import hydra.lexical
 import hydra.lib.eithers
 import hydra.lib.equality
@@ -29,8 +28,8 @@ import hydra.module
 import hydra.rewriting
 import hydra.serialization
 import hydra.show.error
+import hydra.test.utils
 import hydra.testing
-import hydra.typing
 import hydra.util
 
 T0 = TypeVar("T0")
@@ -150,38 +149,6 @@ def generate_test_file_with_java_codec(codec: hydra.testing.TestCodec, test_modu
     
     return hydra.lib.eithers.map((lambda test_body: (test_module_content := build_java_test_module(codec, test_module, test_group, test_body), ns_ := test_module.namespace, parts := hydra.lib.strings.split_on(".", ns_.value), dir_parts := hydra.lib.lists.drop(1, hydra.lib.lists.init(parts)), class_name_ := hydra.lib.strings.cat2(hydra.formatting.capitalize(hydra.lib.lists.last(parts)), "Test"), file_name := hydra.lib.strings.cat2(class_name_, ".java"), file_path := hydra.lib.strings.cat((hydra.lib.strings.intercalate("/", dir_parts), "/", file_name)), (file_path, test_module_content))[7]), generate_java_test_group_hierarchy(g, codec, (), test_group))
 
-def infer_term(g: hydra.graph.Graph, term: hydra.core.Term) -> Either[str, hydra.core.Term]:
-    r"""Run type inference on a single term."""
-    
-    return hydra.lib.eithers.bimap((lambda ic: hydra.show.error.error(ic.object)), (lambda x: x.term), hydra.inference.infer_in_graph_context(hydra.lexical.empty_context(), g, term))
-
-def infer_test_case(g: hydra.graph.Graph, tcm: hydra.testing.TestCaseWithMetadata):
-    r"""Run type inference on the terms in a test case."""
-    
-    name_ = tcm.name
-    tcase = tcm.case
-    desc = tcm.description
-    tags_ = tcm.tags
-    def _hoist_body_1(v1):
-        match v1:
-            case hydra.testing.TestCaseDelegatedEvaluation(value=del_case):
-                input_ = del_case.input
-                output_ = del_case.output
-                return hydra.lib.eithers.bind(infer_term(g, input_), (lambda inferred_input: hydra.lib.eithers.map((lambda inferred_output: cast(hydra.testing.TestCase, hydra.testing.TestCaseDelegatedEvaluation(hydra.testing.DelegatedEvaluationTestCase(inferred_input, inferred_output)))), infer_term(g, output_))))
-            
-            case _:
-                return Right(tcase)
-    return hydra.lib.eithers.map((lambda inferred_case: hydra.testing.TestCaseWithMetadata(name_, inferred_case, desc, tags_)), _hoist_body_1(tcase))
-
-def infer_test_group_terms(g: hydra.graph.Graph, tg: hydra.testing.TestGroup) -> Either[str, hydra.testing.TestGroup]:
-    r"""Run type inference on all terms in a TestGroup to ensure lambdas have domain types."""
-    
-    name_ = tg.name
-    desc = tg.description
-    subgroups = tg.subgroups
-    cases_ = tg.cases
-    return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda sg: infer_test_group_terms(g, sg)), subgroups), (lambda inferred_subgroups: hydra.lib.eithers.map((lambda inferred_cases: hydra.testing.TestGroup(name_, desc, inferred_subgroups, inferred_cases)), hydra.lib.eithers.map_list((lambda tc: infer_test_case(g, tc)), cases_))))
-
 # Template for Java import statements.
 java_import_template = "import {namespace};"
 
@@ -218,4 +185,4 @@ def java_test_codec() -> hydra.testing.TestCodec:
 def generate_java_test_file(test_module: hydra.module.Module, test_group: hydra.testing.TestGroup, g: hydra.graph.Graph) -> Either[str, tuple[str, str]]:
     r"""Generate a Java test file for a test group, with type inference."""
     
-    return hydra.lib.eithers.bind(infer_test_group_terms(g, test_group), (lambda inferred_test_group: generate_test_file_with_java_codec(java_test_codec(), test_module, inferred_test_group, g)))
+    return hydra.lib.eithers.bind(hydra.test.utils.infer_test_group_terms(g, test_group), (lambda inferred_test_group: generate_test_file_with_java_codec(java_test_codec(), test_module, inferred_test_group, g)))
