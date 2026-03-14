@@ -248,6 +248,7 @@
     "hydra.json.parser",
     "hydra.json.writer",
     "hydra.coderUtils",
+    "hydra.test.transform",
     "hydra.test.utils",
     "hydra.ext.org.yaml.model",
     "hydra.json.yaml.decode",

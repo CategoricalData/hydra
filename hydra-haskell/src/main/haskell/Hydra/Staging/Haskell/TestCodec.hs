@@ -8,7 +8,7 @@ module Hydra.Staging.Haskell.TestCodec where
 import Hydra.Kernel hiding (map)
 import Hydra.Testing
 import Hydra.Generation (showError)
-import Hydra.Staging.Testing.Generation.Transform (addGenerationPrefix)
+import Hydra.Test.Transform (addGenerationPrefix)
 import Hydra.Staging.Testing.Generation.Generate (TestGenerator(..), generateGenerationTestSuite)
 import Hydra.Ext.Haskell.Utils (namespacesForModule, sanitizeHaskellName)
 import qualified Hydra.Ext.Haskell.TestCodec as Generated

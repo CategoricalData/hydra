@@ -30,6 +30,7 @@ import qualified Hydra.Sources.Json.Parser as JsonParser
 import qualified Hydra.Sources.Json.Writer as JsonWriter
 import qualified Hydra.Sources.Json.Yaml.Decode as JsonYamlDecode
 import qualified Hydra.Sources.Json.Yaml.Encode as JsonYamlEncode
+import qualified Hydra.Sources.Test.Transform as TestTransform
 import qualified Hydra.Sources.Test.Utils as TestUtils
 import qualified Hydra.Sources.Yaml.Model as YamlModel
 
@@ -64,6 +65,7 @@ jsonModules = [
 otherModules :: [Module]
 otherModules = [
   CoderUtils.module_,
+  TestTransform.module_,
   TestUtils.module_,
   YamlModel.module_,
   JsonYamlDecode.module_,
