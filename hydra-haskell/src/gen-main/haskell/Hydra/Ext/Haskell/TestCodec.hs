@@ -9,7 +9,6 @@ import qualified Hydra.Constants as Constants
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Decode.Core as Core_
-import qualified Hydra.Error as Error
 import qualified Hydra.Ext.Haskell.Ast as Ast
 import qualified Hydra.Ext.Haskell.Coder as Coder
 import qualified Hydra.Ext.Haskell.Serde as Serde
@@ -17,6 +16,7 @@ import qualified Hydra.Ext.Haskell.Utils as Utils
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Graph as Graph
 import qualified Hydra.Inference as Inference
+import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Eithers as Eithers
 import qualified Hydra.Lib.Equality as Equality
 import qualified Hydra.Lib.Lists as Lists
@@ -33,6 +33,7 @@ import qualified Hydra.Names as Names
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Serialization as Serialization
+import qualified Hydra.Show.Error as Error
 import qualified Hydra.Substitution as Substitution
 import qualified Hydra.Testing as Testing
 import qualified Hydra.Typing as Typing
@@ -46,17 +47,11 @@ import qualified Data.Set as S
 
 -- | Convert a Hydra term to a Haskell expression string
 termToHaskell :: (Module.Namespaces Ast.ModuleName -> Core.Term -> Graph.Graph -> Either String String)
-termToHaskell namespaces term g = (Eithers.bimap (\ic -> Error.unOtherError (Context.inContextObject ic)) (\arg_ -> (\arg_ -> Serialization.printExpr (Serialization.parenthesize arg_)) (Serde.expressionToExpr arg_)) (Coder.encodeTerm 0 namespaces term (Context.Context {
-  Context.contextTrace = [],
-  Context.contextMessages = [],
-  Context.contextOther = Maps.empty}) g))
+termToHaskell namespaces term g = (Eithers.bimap (\ic -> Error.error (Context.inContextObject ic)) (\arg_ -> (\arg_ -> Serialization.printExpr (Serialization.parenthesize arg_)) (Serde.expressionToExpr arg_)) (Coder.encodeTerm 0 namespaces term Lexical.emptyContext g))
 
 -- | Convert a Hydra type to a Haskell type expression string
 typeToHaskell :: (Module.Namespaces Ast.ModuleName -> Core.Type -> t0 -> Either String String)
-typeToHaskell namespaces typ g = (Eithers.bimap (\ic -> Error.unOtherError (Context.inContextObject ic)) (\arg_ -> (\arg_ -> Serialization.printExpr (Serialization.parenthesize arg_)) (Serde.typeToExpr arg_)) (Coder.encodeType namespaces typ (Context.Context {
-  Context.contextTrace = [],
-  Context.contextMessages = [],
-  Context.contextOther = Maps.empty}) g))
+typeToHaskell namespaces typ g = (Eithers.bimap (\ic -> Error.error (Context.inContextObject ic)) (\arg_ -> (\arg_ -> Serialization.printExpr (Serialization.parenthesize arg_)) (Serde.typeToExpr arg_)) (Coder.encodeType namespaces typ Lexical.emptyContext g))
 
 -- | Create a Haskell TestCodec that uses the real Haskell coder
 haskellTestCodec :: (Module.Namespaces Ast.ModuleName -> Testing.TestCodec)
@@ -191,10 +186,7 @@ generateTypeAnnotationFor g namespaces inputTerm outputTerm = (Logic.ifElse (Log
 
 -- | Try to infer the type of a term, returning Nothing if inference fails
 tryInferTypeOf :: (Graph.Graph -> Core.Term -> Maybe (Core.Term, Core.TypeScheme))
-tryInferTypeOf g term = (Eithers.either (\_ -> Nothing) (\result -> Just (Pairs.first result)) (Inference.inferTypeOf (Context.Context {
-  Context.contextTrace = [],
-  Context.contextMessages = [],
-  Context.contextOther = Maps.empty}) g term))
+tryInferTypeOf g term = (Eithers.either (\_ -> Nothing) (\result -> Just (Pairs.first result)) (Inference.inferTypeOf Lexical.emptyContext g term))
 
 -- | Check if a term contains any trivially polymorphic sub-terms
 containsTriviallyPolymorphic :: (Core.Term -> Bool)
@@ -302,10 +294,7 @@ buildNamespacesForTestGroup mod tgroup graph_ =
               Module.moduleTermDependencies = (Module.moduleTermDependencies mod),
               Module.moduleTypeDependencies = (Module.moduleTypeDependencies mod),
               Module.moduleDescription = (Module.moduleDescription mod)}
-  in (Eithers.bind (Eithers.bimap (\ic -> Error.unOtherError (Context.inContextObject ic)) (\a -> a) (Utils.namespacesForModule tempModule (Context.Context {
-    Context.contextTrace = [],
-    Context.contextMessages = [],
-    Context.contextOther = Maps.empty}) graph_)) (\baseNamespaces ->  
+  in (Eithers.bind (Eithers.bimap (\ic -> Error.error (Context.inContextObject ic)) (\a -> a) (Utils.namespacesForModule tempModule Lexical.emptyContext graph_)) (\baseNamespaces ->  
     let encodedNames = (Sets.unions (Lists.map (\t -> extractEncodedTermVariableNames graph_ t) testTerms))
     in (Right (addNamespacesToNamespaces baseNamespaces encodedNames))))
 

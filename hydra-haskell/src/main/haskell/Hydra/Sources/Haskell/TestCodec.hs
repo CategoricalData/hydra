@@ -68,7 +68,6 @@ import qualified Hydra.Sources.Kernel.Terms.Inference      as Inference
 import qualified Hydra.Sources.Kernel.Terms.Languages      as Languages
 import qualified Hydra.Sources.Kernel.Terms.Lexical        as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
-import qualified Hydra.Sources.Kernel.Terms.Monads         as Monads
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
@@ -76,6 +75,7 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Accessors as ShowAccessors
+import qualified Hydra.Sources.Kernel.Terms.Show.Error     as ShowError
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
 import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
@@ -114,7 +114,7 @@ module_ :: Module
 module_ = Module ns elements
     [Namespace "hydra.ext.haskell.coder", HaskellSerdeSource.ns, HaskellUtilsSource.ns,
      SerializationSource.ns, TestUtils.ns, Formatting.ns, Names.ns,
-     Inference.ns, Constants.ns, Rewriting.ns, Substitution.ns, Schemas.ns]
+     Inference.ns, Constants.ns, Rewriting.ns, Substitution.ns, Schemas.ns, ShowError.ns, Lexical.ns]
     (HaskellAst.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Haskell test code generation codec for HSpec-based generation tests"
   where
@@ -151,9 +151,9 @@ termToHaskell = define "termToHaskell" $
   doc "Convert a Hydra term to a Haskell expression string" $
   lambda "namespaces" $ lambda "term" $ lambda "g" $
     Eithers.bimap
-      ("ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic"))
+      ("ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic"))
       (Serialization.printExpr <.> Serialization.parenthesize <.> HaskellSerdeSource.expressionToExpr)
-      (HaskellCoderSource.encodeTerm @@ int32 0 @@ var "namespaces" @@ var "term" @@ Ctx.emptyContext @@ var "g")
+      (HaskellCoderSource.encodeTerm @@ int32 0 @@ var "namespaces" @@ var "term" @@ asTerm Lexical.emptyContext @@ var "g")
 
 
 -- | Convert a Hydra type to a Haskell type expression string
@@ -162,9 +162,9 @@ typeToHaskell = define "typeToHaskell" $
   doc "Convert a Hydra type to a Haskell type expression string" $
   lambda "namespaces" $ lambda "typ" $ lambda "g" $
     Eithers.bimap
-      ("ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic"))
+      ("ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic"))
       (Serialization.printExpr <.> Serialization.parenthesize <.> HaskellSerdeSource.typeToExpr)
-      (HaskellCoderSource.encodeType @@ var "namespaces" @@ var "typ" @@ Ctx.emptyContext @@ var "g")
+      (HaskellCoderSource.encodeType @@ var "namespaces" @@ var "typ" @@ asTerm Lexical.emptyContext @@ var "g")
 
 
 -- | Create a Haskell TestCodec that uses the real Haskell coder
@@ -380,7 +380,7 @@ tryInferTypeOf = define "tryInferTypeOf" $
     Eithers.either_
       (lambda "_" $ nothing)
       (lambda "result" $ just (Pairs.first (var "result")))
-      (Inference.inferTypeOf @@ Ctx.emptyContext @@ var "g" @@ var "term")
+      (Inference.inferTypeOf @@ asTerm Lexical.emptyContext @@ var "g" @@ var "term")
 
 
 -- | Check if a term contains any trivially polymorphic sub-terms
@@ -545,9 +545,9 @@ buildNamespacesForTestGroup = define "buildNamespacesForTestGroup" $
       _Module_description>>: project _Module _Module_description @@ var "mod"]] $
     Eithers.bind
       (Eithers.bimap
-        (lambda "ic" $ Error.unOtherError @@ Ctx.inContextObject (var "ic"))
+        (lambda "ic" $ ShowError.error_ @@ Ctx.inContextObject (var "ic"))
         (lambda "a" $ var "a")
-        (HaskellUtilsSource.namespacesForModule @@ var "tempModule" @@ Ctx.emptyContext @@ var "graph_"))
+        (HaskellUtilsSource.namespacesForModule @@ var "tempModule" @@ asTerm Lexical.emptyContext @@ var "graph_"))
       (lambda "baseNamespaces" $ lets [
         "encodedNames">: Sets.unions (Lists.map (lambda "t" $ extractEncodedTermVariableNames @@ var "graph_" @@ var "t") (var "testTerms"))] $
         right (addNamespacesToNamespaces @@ var "baseNamespaces" @@ var "encodedNames"))

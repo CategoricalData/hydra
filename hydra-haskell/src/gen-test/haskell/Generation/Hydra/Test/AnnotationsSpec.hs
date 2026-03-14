@@ -1,8 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
 
--- DEBUG: Focus namespace = (Namespace {unNamespace = "generation.hydra.test.annotations"},ModuleName {unModuleName = "Annotations"})
--- DEBUG: Namespace mappings:
--- [(Namespace {unNamespace = "hydra.annotations"},ModuleName {unModuleName = "Annotations"}),(Namespace {unNamespace = "hydra.core"},ModuleName {unModuleName = "Core"}),(Namespace {unNamespace = "hydra.lexical"},ModuleName {unModuleName = "Lexical"})]
+-- DEBUG: Focus namespace = (see generated module)
+-- DEBUG: Namespace mappings: (see generated module)
 
 module Generation.Hydra.Test.AnnotationsSpec where
 

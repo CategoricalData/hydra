@@ -69,7 +69,6 @@ import qualified Hydra.Sources.Kernel.Terms.Inference      as Inference
 import qualified Hydra.Sources.Kernel.Terms.Languages      as Languages
 import qualified Hydra.Sources.Kernel.Terms.Lexical        as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Literals       as Literals
-import qualified Hydra.Sources.Kernel.Terms.Monads         as Monads
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Reduction      as Reduction
 import qualified Hydra.Sources.Kernel.Terms.Reflect        as Reflect
@@ -77,6 +76,7 @@ import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting
 import qualified Hydra.Sources.Kernel.Terms.Schemas        as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as Serialization
 import qualified Hydra.Sources.Kernel.Terms.Show.Accessors as ShowAccessors
+import qualified Hydra.Sources.Kernel.Terms.Show.Error     as ShowError
 import qualified Hydra.Sources.Kernel.Terms.Show.Core      as ShowCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Graph     as ShowGraph
 import qualified Hydra.Sources.Kernel.Terms.Show.Meta      as ShowMeta
@@ -105,7 +105,7 @@ ns = Namespace "hydra.test.utils"
 
 module_ :: Module
 module_ = Module ns elements
-    [Inference.ns]
+    [Inference.ns, ShowError.ns, Lexical.ns]
     KernelTypes.kernelTypesNamespaces $
     Just "Shared utility functions for test code generation codecs"
   where
@@ -167,6 +167,6 @@ inferTerm = define "inferTerm" $
   doc "Run type inference on a single term" $
   lambda "g" $ lambda "term" $
     Eithers.bimap
-      ("ic" ~> Error.unOtherError @@ Ctx.inContextObject (var "ic"))
+      ("ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic"))
       ("x" ~> Typing.inferenceResultTerm (var "x"))
-      (Inference.inferInGraphContext @@ Ctx.emptyContext @@ var "g" @@ var "term")
+      (Inference.inferInGraphContext @@ asTerm Lexical.emptyContext @@ var "g" @@ var "term")

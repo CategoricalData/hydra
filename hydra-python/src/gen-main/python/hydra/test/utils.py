@@ -9,17 +9,17 @@ from hydra.dsl.python import Either, Right, frozenlist
 from typing import cast
 import hydra.context
 import hydra.core
-import hydra.error
 import hydra.inference
+import hydra.lexical
 import hydra.lib.eithers
-import hydra.lib.maps
+import hydra.show.error
 import hydra.testing
 import hydra.typing
 
 def infer_term(g: hydra.graph.Graph, term: hydra.core.Term) -> Either[str, hydra.core.Term]:
     r"""Run type inference on a single term."""
     
-    return hydra.lib.eithers.bimap((lambda ic: ic.object.value), (lambda x: x.term), hydra.inference.infer_in_graph_context(hydra.context.Context((), (), hydra.lib.maps.empty()), g, term))
+    return hydra.lib.eithers.bimap((lambda ic: hydra.show.error.error(ic.object)), (lambda x: x.term), hydra.inference.infer_in_graph_context(hydra.lexical.empty_context(), g, term))
 
 def infer_test_case(g: hydra.graph.Graph, tcm: hydra.testing.TestCaseWithMetadata):
     r"""Run type inference on the terms in a test case."""
