@@ -612,4 +612,4 @@ def simple_language_adapter(lang: hydra.coders.Language, cx: T0, g: hydra.graph.
     @lru_cache(1)
     def litmap() -> FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType]:
         return adapt_literal_types_map(constraints)
-    return hydra.lib.eithers.bind(adapt_type(constraints, litmap(), typ), (lambda adapted_type: Right(hydra.compute.Adapter(False, typ, adapted_type, hydra.compute.Coder((lambda cx2, term: hydra.lib.eithers.bimap((lambda _s: hydra.context.InContext(hydra.error.OtherError(_s), cx2)), (lambda _x: _x), adapt_term(constraints, litmap(), cx2, g, term))), (lambda cx2, term: Right(term)))))))
+    return hydra.lib.eithers.bind(adapt_type(constraints, litmap(), typ), (lambda adapted_type: Right(hydra.compute.Adapter(False, typ, adapted_type, hydra.compute.Coder((lambda cx2, term: hydra.lib.eithers.bimap((lambda _s: hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(_s))), cx2)), (lambda _x: _x), adapt_term(constraints, litmap(), cx2, g, term))), (lambda cx2, term: Right(term)))))))

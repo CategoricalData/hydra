@@ -8,7 +8,7 @@ from decimal import Decimal
 from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Just, Left, Maybe, Nothing, Right, frozenlist
 from typing import TypeVar, cast
-import hydra.adapt.modules
+import hydra.adapt.simple
 import hydra.annotations
 import hydra.classes
 import hydra.coders
@@ -46,6 +46,7 @@ import hydra.util
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
 T2 = TypeVar("T2")
+T3 = TypeVar("T3")
 
 def encode_type(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], typ: hydra.core.Type, cx: hydra.context.Context, g: T0):
     r"""Encode a Hydra type as a Haskell type."""
@@ -169,7 +170,7 @@ def encode_type(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.Module
         case _:
             return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2("unexpected type: ", hydra.show.core.type(typ))))), cx))
 
-def adapt_type_to_haskell_and_encode(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], typ: hydra.core.Type, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.haskell.ast.Type]:
+def adapt_type_to_haskell_and_encode(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], typ: hydra.core.Type, cx: hydra.context.Context, g: T0) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.haskell.ast.Type]:
     r"""Adapt a Hydra type to Haskell's type system and encode it."""
     
     def enc(t: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.haskell.ast.Type]:
@@ -179,7 +180,7 @@ def adapt_type_to_haskell_and_encode(namespaces: hydra.module.Namespaces[hydra.e
             return enc(typ)
         
         case _:
-            return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda _s: hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(_s))), cx)), (lambda _x: _x), hydra.adapt.modules.adapt_type_to_language(hydra.ext.haskell.language.haskell_language(), cx, g, typ)), (lambda adapted_type: enc(adapted_type)))
+            return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda _s: hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(_s))), cx)), (lambda _x: _x), hydra.adapt.simple.adapt_type_for_language(hydra.ext.haskell.language.haskell_language(), typ)), (lambda adapted_type: enc(adapted_type)))
 
 def constant_for_field_name(tname: hydra.core.Name, fname: hydra.core.Name) -> str:
     r"""Generate a constant name for a field (e.g., '_TypeName_fieldName')."""
@@ -468,7 +469,7 @@ def get_implicit_type_classes(typ: hydra.core.Type) -> FrozenDict[hydra.core.Nam
         return (name, hydra.lib.sets.from_list((hydra.classes.TypeClass.ORDERING,)))
     return hydra.lib.maps.from_list(hydra.lib.lists.map((lambda x1: to_pair(x1)), hydra.lib.sets.to_list(find_ord_variables(typ))))
 
-def encode_type_with_class_assertions(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], explicit_classes: FrozenDict[hydra.core.Name, frozenset[hydra.classes.TypeClass]], typ: hydra.core.Type, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.haskell.ast.Type]:
+def encode_type_with_class_assertions(namespaces: hydra.module.Namespaces[hydra.ext.haskell.ast.ModuleName], explicit_classes: FrozenDict[hydra.core.Name, frozenset[hydra.classes.TypeClass]], typ: hydra.core.Type, cx: hydra.context.Context, g: T0) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.haskell.ast.Type]:
     r"""Encode a Hydra type as a Haskell type with typeclass assertions."""
     
     @lru_cache(1)
@@ -504,14 +505,14 @@ def encode_type_with_class_assertions(namespaces: hydra.module.Namespaces[hydra.
     @lru_cache(1)
     def assert_pairs() -> frozenlist[tuple[hydra.core.Name, hydra.classes.TypeClass]]:
         return hydra.lib.lists.concat(hydra.lib.lists.map((lambda x1: to_pairs(x1)), hydra.lib.maps.to_list(classes())))
-    def to_pairs(map_entry: tuple[T0, frozenset[T1]]) -> frozenlist[tuple[T0, T1]]:
+    def to_pairs(map_entry: tuple[T1, frozenset[T2]]) -> frozenlist[tuple[T1, T2]]:
         @lru_cache(1)
-        def name() -> T0:
+        def name() -> frozenset[T2]:
             return hydra.lib.pairs.first(map_entry)
         @lru_cache(1)
-        def cls_set() -> frozenset[T1]:
+        def cls_set() -> frozenset[T2]:
             return hydra.lib.pairs.second(map_entry)
-        def to_pair(c: T2) -> tuple[T0, T2]:
+        def to_pair(c: T3) -> tuple[T1, T3]:
             return (name(), c)
         return hydra.lib.lists.map((lambda x1: to_pair(x1)), hydra.lib.sets.to_list(cls_set()))
     return hydra.lib.eithers.bind(adapt_type_to_haskell_and_encode(namespaces, typ, cx, g), (lambda htyp: hydra.lib.logic.if_else(hydra.lib.lists.null(assert_pairs()), (lambda : Right(htyp)), (lambda : (encoded := hydra.lib.lists.map((lambda x1: encode_assertion(x1)), assert_pairs()), hassert := hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(encoded), 1), (lambda : hydra.lib.lists.head(encoded)), (lambda : cast(hydra.ext.haskell.ast.Assertion, hydra.ext.haskell.ast.AssertionTuple(encoded)))), Right(cast(hydra.ext.haskell.ast.Type, hydra.ext.haskell.ast.TypeCtx(hydra.ext.haskell.ast.ContextType(hassert, htyp)))))[2]))))

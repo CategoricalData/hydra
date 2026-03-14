@@ -59,7 +59,7 @@ keyHaskellVar = (Core.Name "haskellVar")
 
 -- | Adapt a Hydra type to Haskell's type system and encode it
 adaptTypeToHaskellAndEncode :: (Module.Namespaces Ast.ModuleName -> Core.Type -> Context.Context -> t0 -> Either (Context.InContext Error.Error) Ast.Type)
-adaptTypeToHaskellAndEncode namespaces typ cx g =
+adaptTypeToHaskellAndEncode namespaces typ cx g =  
   let enc = (\t -> encodeType namespaces t cx g)
   in ((\x -> case x of
     Core.TypeVariable _ -> (enc typ)

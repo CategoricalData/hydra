@@ -55,191 +55,185 @@
     {
       "name": "hydra.ext.haskell.coder.adaptTypeToHaskellAndEncode",
       "term": {
-        "annotated": {
-          "annotation": [
-            {
-              "@key": "description",
-              "@value": {
-                "literal": {
-                  "string": "Adapt a Hydra type to Haskell's type system and encode it"}}}],
+        "typeLambda": {
           "body": {
-            "function": {
-              "lambda": {
-                "body": {
-                  "function": {
-                    "lambda": {
-                      "body": {
-                        "function": {
-                          "lambda": {
-                            "body": {
-                              "function": {
-                                "lambda": {
-                                  "body": {
-                                    "let": {
-                                      "bindings": [
-                                        {
-                                          "name": "enc",
-                                          "term": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "application": {
-                                                    "argument": {"variable": "g"},
-                                                    "function": {
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "Adapt a Hydra type to Haskell's type system and encode it"}}}],
+              "body": {
+                "function": {
+                  "lambda": {
+                    "body": {
+                      "function": {
+                        "lambda": {
+                          "body": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "let": {
+                                          "bindings": [
+                                            {
+                                              "name": "enc",
+                                              "term": {
+                                                "function": {
+                                                  "lambda": {
+                                                    "body": {
                                                       "application": {
-                                                        "argument": {"variable": "cx"},
+                                                        "argument": {"variable": "g"},
                                                         "function": {
                                                           "application": {
-                                                            "argument": {"variable": "t"},
+                                                            "argument": {"variable": "cx"},
                                                             "function": {
                                                               "application": {
-                                                                "argument": {"variable": "namespaces"},
+                                                                "argument": {"variable": "t"},
                                                                 "function": {
-                                                                  "typeApplication": {
-                                                                    "body": {"variable": "hydra.ext.haskell.coder.encodeType"},
-                                                                    "type": {"variable": "hydra.graph.Graph"}}}}}}}}}}},
-                                                "domain": [{"variable": "hydra.core.Type"}],
-                                                "parameter": "t"}}},
-                                          "type": [
-                                            {
-                                              "constraints": null,
-                                              "type": {
-                                                "function": {
-                                                  "codomain": {
-                                                    "either": {
-                                                      "left": {
-                                                        "application": {
-                                                          "argument": {"variable": "hydra.error.Error"},
-                                                          "function": {"variable": "hydra.context.InContext"}}},
-                                                      "right": {"variable": "hydra.ext.haskell.ast.Type"}}},
-                                                  "domain": {"variable": "hydra.core.Type"}}},
-                                              "variables": []}]}],
-                                      "body": {
-                                        "application": {
-                                          "argument": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "namespaces"},
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {"variable": "hydra.ext.haskell.coder.encodeType"},
+                                                                        "type": {"variable": "t0"}}}}}}}}}}},
+                                                    "domain": [{"variable": "hydra.core.Type"}],
+                                                    "parameter": "t"}}},
+                                              "type": [
+                                                {
+                                                  "constraints": null,
+                                                  "type": {
+                                                    "function": {
+                                                      "codomain": {
+                                                        "either": {
+                                                          "left": {
+                                                            "application": {
+                                                              "argument": {"variable": "hydra.error.Error"},
+                                                              "function": {"variable": "hydra.context.InContext"}}},
+                                                          "right": {"variable": "hydra.ext.haskell.ast.Type"}}},
+                                                      "domain": {"variable": "hydra.core.Type"}}},
+                                                  "variables": []}]}],
+                                          "body": {
                                             "application": {
-                                              "argument": {"variable": "typ"},
-                                              "function": {"variable": "hydra.rewriting.deannotateType"}}},
-                                          "function": {
-                                            "function": {
-                                              "elimination": {
-                                                "union": {
-                                                  "cases": [
-                                                    {
-                                                      "name": "variable",
-                                                      "term": {
-                                                        "function": {
-                                                          "lambda": {
-                                                            "body": {
-                                                              "application": {"argument": {"variable": "typ"}, "function": {"variable": "enc"}}},
-                                                            "domain": [{"variable": "hydra.core.Name"}],
-                                                            "parameter": "_"}}}}],
-                                                  "default": [
-                                                    {
-                                                      "application": {
-                                                        "argument": {
-                                                          "function": {
-                                                            "lambda": {
-                                                              "body": {
-                                                                "application": {
-                                                                  "argument": {"variable": "adaptedType"},
-                                                                  "function": {"variable": "enc"}}},
-                                                              "domain": [{"variable": "hydra.core.Type"}],
-                                                              "parameter": "adaptedType"}}},
-                                                        "function": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {"variable": "typ"},
+                                                  "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {
+                                                    "union": {
+                                                      "cases": [
+                                                        {
+                                                          "name": "variable",
+                                                          "term": {
+                                                            "function": {
+                                                              "lambda": {
+                                                                "body": {
+                                                                  "application": {"argument": {"variable": "typ"}, "function": {"variable": "enc"}}},
+                                                                "domain": [{"variable": "hydra.core.Name"}],
+                                                                "parameter": "_"}}}}],
+                                                      "default": [
+                                                        {
                                                           "application": {
                                                             "argument": {
+                                                              "function": {
+                                                                "lambda": {
+                                                                  "body": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "adaptedType"},
+                                                                      "function": {"variable": "enc"}}},
+                                                                  "domain": [{"variable": "hydra.core.Type"}],
+                                                                  "parameter": "adaptedType"}}},
+                                                            "function": {
                                                               "application": {
                                                                 "argument": {
                                                                   "application": {
-                                                                    "argument": {"variable": "typ"},
-                                                                    "function": {
+                                                                    "argument": {
                                                                       "application": {
-                                                                        "argument": {"variable": "g"},
+                                                                        "argument": {"variable": "typ"},
                                                                         "function": {
                                                                           "application": {
-                                                                            "argument": {"variable": "cx"},
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.ext.haskell.language.haskellLanguage"},
-                                                                                "function": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {"variable": "hydra.adapt.modules.adaptTypeToLanguage"},
-                                                                                    "type": {"variable": "hydra.context.Context"}}}}}}}}}}},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "function": {
-                                                                        "lambda": {
-                                                                          "body": {"variable": "_x"},
-                                                                          "domain": [{"variable": "hydra.core.Type"}],
-                                                                          "parameter": "_x"}}},
+                                                                            "argument": {"variable": "hydra.ext.haskell.language.haskellLanguage"},
+                                                                            "function": {"variable": "hydra.adapt.simple.adaptTypeForLanguage"}}}}},
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {
                                                                           "function": {
                                                                             "lambda": {
-                                                                              "body": {
-                                                                                "typeApplication": {
-                                                                                  "body": {
-                                                                                    "record": {
-                                                                                      "fields": [
-                                                                                        {
-                                                                                          "name": "object",
-                                                                                          "term": {
-                                                                                            "union": {
-                                                                                              "field": {
-                                                                                                "name": "other",
-                                                                                                "term": {
-                                                                                                  "wrap": {"body": {"variable": "_s"}, "typeName": "hydra.error.OtherError"}}},
-                                                                                              "typeName": "hydra.error.Error"}}},
-                                                                                        {"name": "context", "term": {"variable": "cx"}}],
-                                                                                      "typeName": "hydra.context.InContext"}},
-                                                                                  "type": {"variable": "hydra.error.Error"}}},
-                                                                              "domain": [{"literal": {"string": {}}}],
-                                                                              "parameter": "_s"}}},
+                                                                              "body": {"variable": "_x"},
+                                                                              "domain": [{"variable": "hydra.core.Type"}],
+                                                                              "parameter": "_x"}}},
                                                                         "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "record": {
+                                                                                          "fields": [
+                                                                                            {
+                                                                                              "name": "object",
+                                                                                              "term": {
+                                                                                                "union": {
+                                                                                                  "field": {
+                                                                                                    "name": "other",
+                                                                                                    "term": {
+                                                                                                      "wrap": {"body": {"variable": "_s"}, "typeName": "hydra.error.OtherError"}}},
+                                                                                                  "typeName": "hydra.error.Error"}}},
+                                                                                            {"name": "context", "term": {"variable": "cx"}}],
+                                                                                          "typeName": "hydra.context.InContext"}},
+                                                                                      "type": {"variable": "hydra.error.Error"}}},
+                                                                                  "domain": [{"literal": {"string": {}}}],
+                                                                                  "parameter": "_s"}}},
+                                                                            "function": {
                                                                               "typeApplication": {
                                                                                 "body": {
                                                                                   "typeApplication": {
                                                                                     "body": {
                                                                                       "typeApplication": {
-                                                                                        "body": {"function": {"primitive": "hydra.lib.eithers.bimap"}},
-                                                                                        "type": {"literal": {"string": {}}}}},
-                                                                                    "type": {"variable": "hydra.core.Type"}}},
-                                                                                "type": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "hydra.error.Error"},
-                                                                                    "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                            "type": {"variable": "hydra.core.Type"}}}}}}}}},
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"function": {"primitive": "hydra.lib.eithers.bimap"}},
+                                                                                            "type": {"literal": {"string": {}}}}},
+                                                                                        "type": {"variable": "hydra.core.Type"}}},
+                                                                                    "type": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "hydra.error.Error"},
+                                                                                        "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                "type": {"variable": "hydra.core.Type"}}}}}}}}},
+                                                                "function": {
                                                                   "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
-                                                                        "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
-                                                                        "type": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.error.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                    "type": {"variable": "hydra.core.Type"}}},
-                                                                "type": {"variable": "hydra.ext.haskell.ast.Type"}}}}}}}],
-                                                  "typeName": "hydra.core.Type"}}}}}}}},
-                                  "domain": [{"variable": "hydra.graph.Graph"}],
-                                  "parameter": "g"}}},
-                            "domain": [{"variable": "hydra.context.Context"}],
-                            "parameter": "cx"}}},
-                      "domain": [{"variable": "hydra.core.Type"}],
-                      "parameter": "typ"}}},
-                "domain": [
-                  {
-                    "application": {
-                      "argument": {"variable": "hydra.ext.haskell.ast.ModuleName"},
-                      "function": {"variable": "hydra.module.Namespaces"}}}],
-                "parameter": "namespaces"}}}}},
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                            "type": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "hydra.error.Error"},
+                                                                                "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                        "type": {"variable": "hydra.core.Type"}}},
+                                                                    "type": {"variable": "hydra.ext.haskell.ast.Type"}}}}}}}],
+                                                      "typeName": "hydra.core.Type"}}}}}}}},
+                                      "domain": [{"variable": "t0"}],
+                                      "parameter": "g"}}},
+                                "domain": [{"variable": "hydra.context.Context"}],
+                                "parameter": "cx"}}},
+                          "domain": [{"variable": "hydra.core.Type"}],
+                          "parameter": "typ"}}},
+                    "domain": [
+                      {
+                        "application": {
+                          "argument": {"variable": "hydra.ext.haskell.ast.ModuleName"},
+                          "function": {"variable": "hydra.module.Namespaces"}}}],
+                    "parameter": "namespaces"}}}}},
+          "parameter": "t0"}},
       "type": [
         {
           "constraints": null,
@@ -258,14 +252,14 @@
                                   "argument": {"variable": "hydra.error.Error"},
                                   "function": {"variable": "hydra.context.InContext"}}},
                               "right": {"variable": "hydra.ext.haskell.ast.Type"}}},
-                          "domain": {"variable": "hydra.graph.Graph"}}},
+                          "domain": {"variable": "t0"}}},
                       "domain": {"variable": "hydra.context.Context"}}},
                   "domain": {"variable": "hydra.core.Type"}}},
               "domain": {
                 "application": {
                   "argument": {"variable": "hydra.ext.haskell.ast.ModuleName"},
                   "function": {"variable": "hydra.module.Namespaces"}}}}},
-          "variables": []}]},
+          "variables": ["t0"]}]},
     {
       "name": "hydra.ext.haskell.coder.constantForFieldName",
       "term": {
@@ -6730,536 +6724,542 @@
     {
       "name": "hydra.ext.haskell.coder.encodeTypeWithClassAssertions",
       "term": {
-        "annotated": {
-          "annotation": [
-            {
-              "@key": "description",
-              "@value": {
-                "literal": {
-                  "string": "Encode a Hydra type as a Haskell type with typeclass assertions"}}}],
+        "typeLambda": {
           "body": {
-            "function": {
-              "lambda": {
-                "body": {
-                  "function": {
-                    "lambda": {
-                      "body": {
-                        "function": {
-                          "lambda": {
-                            "body": {
-                              "function": {
-                                "lambda": {
-                                  "body": {
-                                    "function": {
-                                      "lambda": {
-                                        "body": {
-                                          "let": {
-                                            "bindings": [
-                                              {
-                                                "name": "classes",
-                                                "term": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {"variable": "typ"},
-                                                        "function": {"variable": "hydra.ext.haskell.coder.getImplicitTypeClasses"}}},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {"variable": "explicitClasses"},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {
-                                                              "typeApplication": {
-                                                                "body": {"function": {"primitive": "hydra.lib.maps.union"}},
-                                                                "type": {"variable": "hydra.core.Name"}}},
-                                                            "type": {"set": {"variable": "hydra.classes.TypeClass"}}}}}}}},
-                                                "type": [
+            "annotated": {
+              "annotation": [
+                {
+                  "@key": "description",
+                  "@value": {
+                    "literal": {
+                      "string": "Encode a Hydra type as a Haskell type with typeclass assertions"}}}],
+              "body": {
+                "function": {
+                  "lambda": {
+                    "body": {
+                      "function": {
+                        "lambda": {
+                          "body": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "function": {
+                                    "lambda": {
+                                      "body": {
+                                        "function": {
+                                          "lambda": {
+                                            "body": {
+                                              "let": {
+                                                "bindings": [
                                                   {
-                                                    "constraints": null,
-                                                    "type": {
-                                                      "map": {
-                                                        "keys": {"variable": "hydra.core.Name"},
-                                                        "values": {"set": {"variable": "hydra.classes.TypeClass"}}}},
-                                                    "variables": []}]},
-                                              {
-                                                "name": "implicitClasses",
-                                                "term": {
-                                                  "application": {
-                                                    "argument": {"variable": "typ"},
-                                                    "function": {"variable": "hydra.ext.haskell.coder.getImplicitTypeClasses"}}},
-                                                "type": [
-                                                  {
-                                                    "constraints": null,
-                                                    "type": {
-                                                      "map": {
-                                                        "keys": {"variable": "hydra.core.Name"},
-                                                        "values": {"set": {"variable": "hydra.classes.TypeClass"}}}},
-                                                    "variables": []}]},
-                                              {
-                                                "name": "encodeAssertion",
-                                                "term": {
-                                                  "function": {
-                                                    "lambda": {
-                                                      "body": {
-                                                        "let": {
-                                                          "bindings": [
-                                                            {
-                                                              "name": "name",
-                                                              "term": {
-                                                                "application": {
-                                                                  "argument": {"variable": "pair"},
-                                                                  "function": {
-                                                                    "typeApplication": {
-                                                                      "body": {
-                                                                        "typeApplication": {
-                                                                          "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
-                                                                          "type": {"variable": "hydra.core.Name"}}},
-                                                                      "type": {"variable": "hydra.classes.TypeClass"}}}}},
-                                                              "type": [
-                                                                {
-                                                                  "constraints": null,
-                                                                  "type": {"variable": "hydra.core.Name"},
-                                                                  "variables": []}]},
-                                                            {
-                                                              "name": "cls",
-                                                              "term": {
-                                                                "application": {
-                                                                  "argument": {"variable": "pair"},
-                                                                  "function": {
-                                                                    "typeApplication": {
-                                                                      "body": {
-                                                                        "typeApplication": {
-                                                                          "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
-                                                                          "type": {"variable": "hydra.core.Name"}}},
-                                                                      "type": {"variable": "hydra.classes.TypeClass"}}}}},
-                                                              "type": [
-                                                                {
-                                                                  "constraints": null,
-                                                                  "type": {"variable": "hydra.classes.TypeClass"},
-                                                                  "variables": []}]},
-                                                            {
-                                                              "name": "hname",
-                                                              "term": {
-                                                                "application": {
-                                                                  "argument": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "cls"},
-                                                                      "function": {
-                                                                        "function": {
-                                                                          "elimination": {
-                                                                            "union": {
-                                                                              "cases": [
-                                                                                {
-                                                                                  "name": "equality",
-                                                                                  "term": {
-                                                                                    "function": {
-                                                                                      "lambda": {
-                                                                                        "body": {"literal": {"string": "Eq"}},
-                                                                                        "domain": [{"unit": {}}],
-                                                                                        "parameter": "_"}}}},
-                                                                                {
-                                                                                  "name": "ordering",
-                                                                                  "term": {
-                                                                                    "function": {
-                                                                                      "lambda": {
-                                                                                        "body": {"literal": {"string": "Ord"}},
-                                                                                        "domain": [{"unit": {}}],
-                                                                                        "parameter": "_"}}}}],
-                                                                              "default": null,
-                                                                              "typeName": "hydra.classes.TypeClass"}}}}}},
-                                                                  "function": {"variable": "hydra.ext.haskell.utils.rawName"}}},
-                                                              "type": [
-                                                                {
-                                                                  "constraints": null,
-                                                                  "type": {"variable": "hydra.ext.haskell.ast.Name"},
-                                                                  "variables": []}]},
-                                                            {
-                                                              "name": "htype",
-                                                              "term": {
-                                                                "union": {
-                                                                  "field": {
-                                                                    "name": "variable",
-                                                                    "term": {
-                                                                      "application": {
-                                                                        "argument": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "name"},
-                                                                            "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
-                                                                        "function": {"variable": "hydra.ext.haskell.utils.rawName"}}}},
-                                                                  "typeName": "hydra.ext.haskell.ast.Type"}},
-                                                              "type": [
-                                                                {
-                                                                  "constraints": null,
-                                                                  "type": {"variable": "hydra.ext.haskell.ast.Type"},
-                                                                  "variables": []}]}],
-                                                          "body": {
-                                                            "union": {
-                                                              "field": {
-                                                                "name": "class",
-                                                                "term": {
-                                                                  "record": {
-                                                                    "fields": [
-                                                                      {"name": "name", "term": {"variable": "hname"}},
-                                                                      {"name": "types", "term": {"list": [{"variable": "htype"}]}}],
-                                                                    "typeName": "hydra.ext.haskell.ast.ClassAssertion"}}},
-                                                              "typeName": "hydra.ext.haskell.ast.Assertion"}}}},
-                                                      "domain": [
-                                                        {
-                                                          "pair": {
-                                                            "first": {"variable": "hydra.core.Name"},
-                                                            "second": {"variable": "hydra.classes.TypeClass"}}}],
-                                                      "parameter": "pair"}}},
-                                                "type": [
-                                                  {
-                                                    "constraints": null,
-                                                    "type": {
-                                                      "function": {
-                                                        "codomain": {"variable": "hydra.ext.haskell.ast.Assertion"},
-                                                        "domain": {
-                                                          "pair": {
-                                                            "first": {"variable": "hydra.core.Name"},
-                                                            "second": {"variable": "hydra.classes.TypeClass"}}}}},
-                                                    "variables": []}]},
-                                              {
-                                                "name": "assertPairs",
-                                                "term": {
-                                                  "application": {
-                                                    "argument": {
+                                                    "name": "classes",
+                                                    "term": {
                                                       "application": {
                                                         "argument": {
                                                           "application": {
-                                                            "argument": {"variable": "classes"},
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {"function": {"primitive": "hydra.lib.maps.toList"}},
-                                                                    "type": {"variable": "hydra.core.Name"}}},
-                                                                "type": {"set": {"variable": "hydra.classes.TypeClass"}}}}}},
+                                                            "argument": {"variable": "typ"},
+                                                            "function": {"variable": "hydra.ext.haskell.coder.getImplicitTypeClasses"}}},
                                                         "function": {
                                                           "application": {
-                                                            "argument": {
-                                                              "typeApplication": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {"variable": "toPairs"},
-                                                                    "type": {"variable": "hydra.core.Name"}}},
-                                                                "type": {"variable": "hydra.classes.TypeClass"}}},
+                                                            "argument": {"variable": "explicitClasses"},
                                                             "function": {
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "typeApplication": {
-                                                                    "body": {"function": {"primitive": "hydra.lib.lists.map"}},
-                                                                    "type": {
-                                                                      "pair": {
-                                                                        "first": {"variable": "hydra.core.Name"},
-                                                                        "second": {"set": {"variable": "hydra.classes.TypeClass"}}}}}},
-                                                                "type": {
-                                                                  "list": {
-                                                                    "pair": {
-                                                                      "first": {"variable": "hydra.core.Name"},
-                                                                      "second": {"variable": "hydra.classes.TypeClass"}}}}}}}}}},
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                                                    "body": {"function": {"primitive": "hydra.lib.maps.union"}},
+                                                                    "type": {"variable": "hydra.core.Name"}}},
+                                                                "type": {"set": {"variable": "hydra.classes.TypeClass"}}}}}}}},
+                                                    "type": [
+                                                      {
+                                                        "constraints": null,
                                                         "type": {
-                                                          "pair": {
-                                                            "first": {"variable": "hydra.core.Name"},
-                                                            "second": {"variable": "hydra.classes.TypeClass"}}}}}}},
-                                                "type": [
+                                                          "map": {
+                                                            "keys": {"variable": "hydra.core.Name"},
+                                                            "values": {"set": {"variable": "hydra.classes.TypeClass"}}}},
+                                                        "variables": []}]},
                                                   {
-                                                    "constraints": null,
-                                                    "type": {
-                                                      "list": {
-                                                        "pair": {
-                                                          "first": {"variable": "hydra.core.Name"},
-                                                          "second": {"variable": "hydra.classes.TypeClass"}}}},
-                                                    "variables": []}]},
-                                              {
-                                                "name": "toPairs",
-                                                "term": {
-                                                  "typeLambda": {
-                                                    "body": {
-                                                      "typeLambda": {
-                                                        "body": {
-                                                          "function": {
-                                                            "lambda": {
-                                                              "body": {
-                                                                "let": {
-                                                                  "bindings": [
-                                                                    {
-                                                                      "name": "name",
-                                                                      "term": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "mapEntry"},
-                                                                          "function": {
-                                                                            "typeApplication": {
-                                                                              "body": {
-                                                                                "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
-                                                                                  "type": {"variable": "t0"}}},
-                                                                              "type": {"set": {"variable": "t1"}}}}}},
-                                                                      "type": [{"constraints": null, "type": {"variable": "t0"}, "variables": []}]},
-                                                                    {
-                                                                      "name": "clsSet",
-                                                                      "term": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "mapEntry"},
-                                                                          "function": {
-                                                                            "typeApplication": {
-                                                                              "body": {
-                                                                                "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
-                                                                                  "type": {"variable": "t0"}}},
-                                                                              "type": {"set": {"variable": "t1"}}}}}},
-                                                                      "type": [
-                                                                        {
-                                                                          "constraints": null,
-                                                                          "type": {"set": {"variable": "t1"}},
-                                                                          "variables": []}]},
-                                                                    {
-                                                                      "name": "toPair",
-                                                                      "term": {
-                                                                        "typeLambda": {
-                                                                          "body": {
-                                                                            "function": {
-                                                                              "lambda": {
-                                                                                "body": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {
-                                                                                          "pair": {"@first": {"variable": "name"}, "@second": {"variable": "c"}}},
-                                                                                        "type": {"variable": "t0"}}},
-                                                                                    "type": {"variable": "t2"}}},
-                                                                                "domain": [{"variable": "t2"}],
-                                                                                "parameter": "c"}}},
-                                                                          "parameter": "t2"}},
-                                                                      "type": [
-                                                                        {
-                                                                          "constraints": null,
-                                                                          "type": {
-                                                                            "function": {
-                                                                              "codomain": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t2"}}},
-                                                                              "domain": {"variable": "t2"}}},
-                                                                          "variables": ["t2"]}]}],
-                                                                  "body": {
-                                                                    "application": {
-                                                                      "argument": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "clsSet"},
-                                                                          "function": {
-                                                                            "typeApplication": {
-                                                                              "body": {"function": {"primitive": "hydra.lib.sets.toList"}},
-                                                                              "type": {"variable": "t1"}}}}},
-                                                                      "function": {
-                                                                        "application": {
-                                                                          "argument": {
-                                                                            "typeApplication": {"body": {"variable": "toPair"}, "type": {"variable": "t1"}}},
-                                                                          "function": {
-                                                                            "typeApplication": {
-                                                                              "body": {
-                                                                                "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
-                                                                                  "type": {"variable": "t1"}}},
-                                                                              "type": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}}}}}}}}},
-                                                              "domain": [
-                                                                {
-                                                                  "pair": {"first": {"variable": "t0"}, "second": {"set": {"variable": "t1"}}}}],
-                                                              "parameter": "mapEntry"}}},
-                                                        "parameter": "t1"}},
-                                                    "parameter": "t0"}},
-                                                "type": [
+                                                    "name": "implicitClasses",
+                                                    "term": {
+                                                      "application": {
+                                                        "argument": {"variable": "typ"},
+                                                        "function": {"variable": "hydra.ext.haskell.coder.getImplicitTypeClasses"}}},
+                                                    "type": [
+                                                      {
+                                                        "constraints": null,
+                                                        "type": {
+                                                          "map": {
+                                                            "keys": {"variable": "hydra.core.Name"},
+                                                            "values": {"set": {"variable": "hydra.classes.TypeClass"}}}},
+                                                        "variables": []}]},
                                                   {
-                                                    "constraints": [[{"@key": "t1", "@value": {"classes": ["ordering"]}}]],
-                                                    "type": {
+                                                    "name": "encodeAssertion",
+                                                    "term": {
                                                       "function": {
-                                                        "codomain": {
-                                                          "list": {"pair": {"first": {"variable": "t0"}, "second": {"variable": "t1"}}}},
-                                                        "domain": {
-                                                          "pair": {"first": {"variable": "t0"}, "second": {"set": {"variable": "t1"}}}}}},
-                                                    "variables": ["t0", "t1"]}]}],
-                                            "body": {
-                                              "application": {
-                                                "argument": {
-                                                  "function": {
-                                                    "lambda": {
-                                                      "body": {
-                                                        "application": {
-                                                          "argument": {
+                                                        "lambda": {
+                                                          "body": {
                                                             "let": {
                                                               "bindings": [
                                                                 {
-                                                                  "name": "encoded",
+                                                                  "name": "name",
                                                                   "term": {
                                                                     "application": {
-                                                                      "argument": {"variable": "assertPairs"},
+                                                                      "argument": {"variable": "pair"},
                                                                       "function": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "encodeAssertion"},
-                                                                          "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {
                                                                             "typeApplication": {
-                                                                              "body": {
-                                                                                "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
-                                                                                  "type": {
-                                                                                    "pair": {
-                                                                                      "first": {"variable": "hydra.core.Name"},
-                                                                                      "second": {"variable": "hydra.classes.TypeClass"}}}}},
-                                                                              "type": {"variable": "hydra.ext.haskell.ast.Assertion"}}}}}}},
+                                                                              "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                              "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.classes.TypeClass"}}}}},
                                                                   "type": [
                                                                     {
                                                                       "constraints": null,
-                                                                      "type": {"list": {"variable": "hydra.ext.haskell.ast.Assertion"}},
+                                                                      "type": {"variable": "hydra.core.Name"},
                                                                       "variables": []}]},
                                                                 {
-                                                                  "name": "hassert",
+                                                                  "name": "cls",
+                                                                  "term": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "pair"},
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                              "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {"variable": "hydra.classes.TypeClass"}}}}},
+                                                                  "type": [
+                                                                    {
+                                                                      "constraints": null,
+                                                                      "type": {"variable": "hydra.classes.TypeClass"},
+                                                                      "variables": []}]},
+                                                                {
+                                                                  "name": "hname",
                                                                   "term": {
                                                                     "application": {
                                                                       "argument": {
-                                                                        "union": {
-                                                                          "field": {"name": "tuple", "term": {"variable": "encoded"}},
-                                                                          "typeName": "hydra.ext.haskell.ast.Assertion"}},
-                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "cls"},
+                                                                          "function": {
+                                                                            "function": {
+                                                                              "elimination": {
+                                                                                "union": {
+                                                                                  "cases": [
+                                                                                    {
+                                                                                      "name": "equality",
+                                                                                      "term": {
+                                                                                        "function": {
+                                                                                          "lambda": {
+                                                                                            "body": {"literal": {"string": "Eq"}},
+                                                                                            "domain": [{"unit": {}}],
+                                                                                            "parameter": "_"}}}},
+                                                                                    {
+                                                                                      "name": "ordering",
+                                                                                      "term": {
+                                                                                        "function": {
+                                                                                          "lambda": {
+                                                                                            "body": {"literal": {"string": "Ord"}},
+                                                                                            "domain": [{"unit": {}}],
+                                                                                            "parameter": "_"}}}}],
+                                                                                  "default": null,
+                                                                                  "typeName": "hydra.classes.TypeClass"}}}}}},
+                                                                      "function": {"variable": "hydra.ext.haskell.utils.rawName"}}},
+                                                                  "type": [
+                                                                    {
+                                                                      "constraints": null,
+                                                                      "type": {"variable": "hydra.ext.haskell.ast.Name"},
+                                                                      "variables": []}]},
+                                                                {
+                                                                  "name": "htype",
+                                                                  "term": {
+                                                                    "union": {
+                                                                      "field": {
+                                                                        "name": "variable",
+                                                                        "term": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "name"},
+                                                                                "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
+                                                                            "function": {"variable": "hydra.ext.haskell.utils.rawName"}}}},
+                                                                      "typeName": "hydra.ext.haskell.ast.Type"}},
+                                                                  "type": [
+                                                                    {
+                                                                      "constraints": null,
+                                                                      "type": {"variable": "hydra.ext.haskell.ast.Type"},
+                                                                      "variables": []}]}],
+                                                              "body": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "class",
+                                                                    "term": {
+                                                                      "record": {
+                                                                        "fields": [
+                                                                          {"name": "name", "term": {"variable": "hname"}},
+                                                                          {"name": "types", "term": {"list": [{"variable": "htype"}]}}],
+                                                                        "typeName": "hydra.ext.haskell.ast.ClassAssertion"}}},
+                                                                  "typeName": "hydra.ext.haskell.ast.Assertion"}}}},
+                                                          "domain": [
+                                                            {
+                                                              "pair": {
+                                                                "first": {"variable": "hydra.core.Name"},
+                                                                "second": {"variable": "hydra.classes.TypeClass"}}}],
+                                                          "parameter": "pair"}}},
+                                                    "type": [
+                                                      {
+                                                        "constraints": null,
+                                                        "type": {
+                                                          "function": {
+                                                            "codomain": {"variable": "hydra.ext.haskell.ast.Assertion"},
+                                                            "domain": {
+                                                              "pair": {
+                                                                "first": {"variable": "hydra.core.Name"},
+                                                                "second": {"variable": "hydra.classes.TypeClass"}}}}},
+                                                        "variables": []}]},
+                                                  {
+                                                    "name": "assertPairs",
+                                                    "term": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "classes"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"function": {"primitive": "hydra.lib.maps.toList"}},
+                                                                        "type": {"variable": "hydra.core.Name"}}},
+                                                                    "type": {"set": {"variable": "hydra.classes.TypeClass"}}}}}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"variable": "toPairs"},
+                                                                        "type": {"variable": "hydra.core.Name"}}},
+                                                                    "type": {"variable": "hydra.classes.TypeClass"}}},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                        "type": {
+                                                                          "pair": {
+                                                                            "first": {"variable": "hydra.core.Name"},
+                                                                            "second": {"set": {"variable": "hydra.classes.TypeClass"}}}}}},
+                                                                    "type": {
+                                                                      "list": {
+                                                                        "pair": {
+                                                                          "first": {"variable": "hydra.core.Name"},
+                                                                          "second": {"variable": "hydra.classes.TypeClass"}}}}}}}}}},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                                            "type": {
+                                                              "pair": {
+                                                                "first": {"variable": "hydra.core.Name"},
+                                                                "second": {"variable": "hydra.classes.TypeClass"}}}}}}},
+                                                    "type": [
+                                                      {
+                                                        "constraints": null,
+                                                        "type": {
+                                                          "list": {
+                                                            "pair": {
+                                                              "first": {"variable": "hydra.core.Name"},
+                                                              "second": {"variable": "hydra.classes.TypeClass"}}}},
+                                                        "variables": []}]},
+                                                  {
+                                                    "name": "toPairs",
+                                                    "term": {
+                                                      "typeLambda": {
+                                                        "body": {
+                                                          "typeLambda": {
+                                                            "body": {
+                                                              "function": {
+                                                                "lambda": {
+                                                                  "body": {
+                                                                    "let": {
+                                                                      "bindings": [
+                                                                        {
+                                                                          "name": "name",
+                                                                          "term": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "mapEntry"},
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                      "type": {"variable": "t1"}}},
+                                                                                  "type": {"set": {"variable": "t2"}}}}}},
+                                                                          "type": [{"constraints": null, "type": {"variable": "t1"}, "variables": []}]},
+                                                                        {
+                                                                          "name": "clsSet",
+                                                                          "term": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "mapEntry"},
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                      "type": {"variable": "t1"}}},
+                                                                                  "type": {"set": {"variable": "t2"}}}}}},
+                                                                          "type": [
+                                                                            {
+                                                                              "constraints": null,
+                                                                              "type": {"set": {"variable": "t2"}},
+                                                                              "variables": []}]},
+                                                                        {
+                                                                          "name": "toPair",
+                                                                          "term": {
+                                                                            "typeLambda": {
+                                                                              "body": {
+                                                                                "function": {
+                                                                                  "lambda": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {
+                                                                                              "pair": {"@first": {"variable": "name"}, "@second": {"variable": "c"}}},
+                                                                                            "type": {"variable": "t1"}}},
+                                                                                        "type": {"variable": "t3"}}},
+                                                                                    "domain": [{"variable": "t3"}],
+                                                                                    "parameter": "c"}}},
+                                                                              "parameter": "t3"}},
+                                                                          "type": [
+                                                                            {
+                                                                              "constraints": null,
+                                                                              "type": {
+                                                                                "function": {
+                                                                                  "codomain": {"pair": {"first": {"variable": "t1"}, "second": {"variable": "t3"}}},
+                                                                                  "domain": {"variable": "t3"}}},
+                                                                              "variables": ["t3"]}]}],
+                                                                      "body": {
                                                                         "application": {
                                                                           "argument": {
                                                                             "application": {
-                                                                              "argument": {"variable": "encoded"},
+                                                                              "argument": {"variable": "clsSet"},
                                                                               "function": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.head"}},
-                                                                                  "type": {"variable": "hydra.ext.haskell.ast.Assertion"}}}}},
+                                                                                  "body": {"function": {"primitive": "hydra.lib.sets.toList"}},
+                                                                                  "type": {"variable": "t2"}}}}},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "typeApplication": {"body": {"variable": "toPair"}, "type": {"variable": "t2"}}},
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                      "type": {"variable": "t2"}}},
+                                                                                  "type": {"pair": {"first": {"variable": "t1"}, "second": {"variable": "t2"}}}}}}}}}}},
+                                                                  "domain": [
+                                                                    {
+                                                                      "pair": {"first": {"variable": "t1"}, "second": {"set": {"variable": "t2"}}}}],
+                                                                  "parameter": "mapEntry"}}},
+                                                            "parameter": "t2"}},
+                                                        "parameter": "t1"}},
+                                                    "type": [
+                                                      {
+                                                        "constraints": [[{"@key": "t2", "@value": {"classes": ["ordering"]}}]],
+                                                        "type": {
+                                                          "function": {
+                                                            "codomain": {
+                                                              "list": {"pair": {"first": {"variable": "t1"}, "second": {"variable": "t2"}}}},
+                                                            "domain": {
+                                                              "pair": {"first": {"variable": "t1"}, "second": {"set": {"variable": "t2"}}}}}},
+                                                        "variables": ["t1", "t2"]}]}],
+                                                "body": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "function": {
+                                                        "lambda": {
+                                                          "body": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "let": {
+                                                                  "bindings": [
+                                                                    {
+                                                                      "name": "encoded",
+                                                                      "term": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "assertPairs"},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "encodeAssertion"},
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                      "type": {
+                                                                                        "pair": {
+                                                                                          "first": {"variable": "hydra.core.Name"},
+                                                                                          "second": {"variable": "hydra.classes.TypeClass"}}}}},
+                                                                                  "type": {"variable": "hydra.ext.haskell.ast.Assertion"}}}}}}},
+                                                                      "type": [
+                                                                        {
+                                                                          "constraints": null,
+                                                                          "type": {"list": {"variable": "hydra.ext.haskell.ast.Assertion"}},
+                                                                          "variables": []}]},
+                                                                    {
+                                                                      "name": "hassert",
+                                                                      "term": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "union": {
+                                                                              "field": {"name": "tuple", "term": {"variable": "encoded"}},
+                                                                              "typeName": "hydra.ext.haskell.ast.Assertion"}},
                                                                           "function": {
                                                                             "application": {
                                                                               "argument": {
                                                                                 "application": {
-                                                                                  "argument": {"literal": {"integer": {"int32": 1}}},
+                                                                                  "argument": {"variable": "encoded"},
                                                                                   "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"function": {"primitive": "hydra.lib.lists.head"}},
+                                                                                      "type": {"variable": "hydra.ext.haskell.ast.Assertion"}}}}},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {
                                                                                     "application": {
-                                                                                      "argument": {
+                                                                                      "argument": {"literal": {"integer": {"int32": 1}}},
+                                                                                      "function": {
                                                                                         "application": {
-                                                                                          "argument": {"variable": "encoded"},
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "argument": {"variable": "encoded"},
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.length"}},
+                                                                                                  "type": {"variable": "hydra.ext.haskell.ast.Assertion"}}}}},
                                                                                           "function": {
                                                                                             "typeApplication": {
-                                                                                              "body": {"function": {"primitive": "hydra.lib.lists.length"}},
-                                                                                              "type": {"variable": "hydra.ext.haskell.ast.Assertion"}}}}},
-                                                                                      "function": {
-                                                                                        "typeApplication": {
-                                                                                          "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
-                                                                                          "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                                              "function": {
-                                                                                "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
-                                                                                  "type": {"variable": "hydra.ext.haskell.ast.Assertion"}}}}}}}}},
-                                                                  "type": [
-                                                                    {
-                                                                      "constraints": null,
-                                                                      "type": {"variable": "hydra.ext.haskell.ast.Assertion"},
-                                                                      "variables": []}]}],
-                                                              "body": {
-                                                                "typeApplication": {
+                                                                                              "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                                                              "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                                      "type": {"variable": "hydra.ext.haskell.ast.Assertion"}}}}}}}}},
+                                                                      "type": [
+                                                                        {
+                                                                          "constraints": null,
+                                                                          "type": {"variable": "hydra.ext.haskell.ast.Assertion"},
+                                                                          "variables": []}]}],
                                                                   "body": {
                                                                     "typeApplication": {
                                                                       "body": {
-                                                                        "either": {
-                                                                          "@right": {
-                                                                            "union": {
-                                                                              "field": {
-                                                                                "name": "ctx",
-                                                                                "term": {
-                                                                                  "record": {
-                                                                                    "fields": [
-                                                                                      {"name": "ctx", "term": {"variable": "hassert"}},
-                                                                                      {"name": "type", "term": {"variable": "htyp"}}],
-                                                                                    "typeName": "hydra.ext.haskell.ast.ContextType"}}},
-                                                                              "typeName": "hydra.ext.haskell.ast.Type"}}}},
-                                                                      "type": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "hydra.error.Error"},
-                                                                          "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                  "type": {"variable": "hydra.ext.haskell.ast.Type"}}}}},
-                                                          "function": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "typeApplication": {
-                                                                  "body": {
-                                                                    "typeApplication": {
-                                                                      "body": {"either": {"@right": {"variable": "htyp"}}},
-                                                                      "type": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "hydra.error.Error"},
-                                                                          "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                  "type": {"variable": "hydra.ext.haskell.ast.Type"}}},
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "either": {
+                                                                              "@right": {
+                                                                                "union": {
+                                                                                  "field": {
+                                                                                    "name": "ctx",
+                                                                                    "term": {
+                                                                                      "record": {
+                                                                                        "fields": [
+                                                                                          {"name": "ctx", "term": {"variable": "hassert"}},
+                                                                                          {"name": "type", "term": {"variable": "htyp"}}],
+                                                                                        "typeName": "hydra.ext.haskell.ast.ContextType"}}},
+                                                                                  "typeName": "hydra.ext.haskell.ast.Type"}}}},
+                                                                          "type": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "hydra.error.Error"},
+                                                                              "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                      "type": {"variable": "hydra.ext.haskell.ast.Type"}}}}},
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "assertPairs"},
-                                                                      "function": {
-                                                                        "typeApplication": {
-                                                                          "body": {"function": {"primitive": "hydra.lib.lists.null"}},
-                                                                          "type": {
-                                                                            "pair": {
-                                                                              "first": {"variable": "hydra.core.Name"},
-                                                                              "second": {"variable": "hydra.classes.TypeClass"}}}}}}},
-                                                                  "function": {
                                                                     "typeApplication": {
-                                                                      "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
-                                                                      "type": {
-                                                                        "either": {
-                                                                          "left": {
+                                                                      "body": {
+                                                                        "typeApplication": {
+                                                                          "body": {"either": {"@right": {"variable": "htyp"}}},
+                                                                          "type": {
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.error.Error"},
-                                                                              "function": {"variable": "hydra.context.InContext"}}},
-                                                                          "right": {"variable": "hydra.ext.haskell.ast.Type"}}}}}}}}}}},
-                                                      "domain": [{"variable": "hydra.ext.haskell.ast.Type"}],
-                                                      "parameter": "htyp"}}},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {
+                                                                              "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                      "type": {"variable": "hydra.ext.haskell.ast.Type"}}},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "assertPairs"},
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {"function": {"primitive": "hydra.lib.lists.null"}},
+                                                                              "type": {
+                                                                                "pair": {
+                                                                                  "first": {"variable": "hydra.core.Name"},
+                                                                                  "second": {"variable": "hydra.classes.TypeClass"}}}}}}},
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                          "type": {
+                                                                            "either": {
+                                                                              "left": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "hydra.error.Error"},
+                                                                                  "function": {"variable": "hydra.context.InContext"}}},
+                                                                              "right": {"variable": "hydra.ext.haskell.ast.Type"}}}}}}}}}}},
+                                                          "domain": [{"variable": "hydra.ext.haskell.ast.Type"}],
+                                                          "parameter": "htyp"}}},
+                                                    "function": {
                                                       "application": {
-                                                        "argument": {"variable": "g"},
-                                                        "function": {
+                                                        "argument": {
                                                           "application": {
-                                                            "argument": {"variable": "cx"},
+                                                            "argument": {"variable": "g"},
                                                             "function": {
                                                               "application": {
-                                                                "argument": {"variable": "typ"},
+                                                                "argument": {"variable": "cx"},
                                                                 "function": {
                                                                   "application": {
-                                                                    "argument": {"variable": "namespaces"},
-                                                                    "function": {"variable": "hydra.ext.haskell.coder.adaptTypeToHaskellAndEncode"}}}}}}}}},
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {
+                                                                    "argument": {"variable": "typ"},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "namespaces"},
+                                                                        "function": {
+                                                                          "typeApplication": {
+                                                                            "body": {"variable": "hydra.ext.haskell.coder.adaptTypeToHaskellAndEncode"},
+                                                                            "type": {"variable": "t0"}}}}}}}}}}},
+                                                        "function": {
                                                           "typeApplication": {
                                                             "body": {
                                                               "typeApplication": {
-                                                                "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
-                                                                "type": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "hydra.error.Error"},
-                                                                    "function": {"variable": "hydra.context.InContext"}}}}},
-                                                            "type": {"variable": "hydra.ext.haskell.ast.Type"}}},
-                                                        "type": {"variable": "hydra.ext.haskell.ast.Type"}}}}}}}}},
-                                        "domain": [{"variable": "hydra.graph.Graph"}],
-                                        "parameter": "g"}}},
-                                  "domain": [{"variable": "hydra.context.Context"}],
-                                  "parameter": "cx"}}},
-                            "domain": [{"variable": "hydra.core.Type"}],
-                            "parameter": "typ"}}},
-                      "domain": [
-                        {
-                          "map": {
-                            "keys": {"variable": "hydra.core.Name"},
-                            "values": {"set": {"variable": "hydra.classes.TypeClass"}}}}],
-                      "parameter": "explicitClasses"}}},
-                "domain": [
-                  {
-                    "application": {
-                      "argument": {"variable": "hydra.ext.haskell.ast.ModuleName"},
-                      "function": {"variable": "hydra.module.Namespaces"}}}],
-                "parameter": "namespaces"}}}}},
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                    "type": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "hydra.error.Error"},
+                                                                        "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                "type": {"variable": "hydra.ext.haskell.ast.Type"}}},
+                                                            "type": {"variable": "hydra.ext.haskell.ast.Type"}}}}}}}}},
+                                            "domain": [{"variable": "t0"}],
+                                            "parameter": "g"}}},
+                                      "domain": [{"variable": "hydra.context.Context"}],
+                                      "parameter": "cx"}}},
+                                "domain": [{"variable": "hydra.core.Type"}],
+                                "parameter": "typ"}}},
+                          "domain": [
+                            {
+                              "map": {
+                                "keys": {"variable": "hydra.core.Name"},
+                                "values": {"set": {"variable": "hydra.classes.TypeClass"}}}}],
+                          "parameter": "explicitClasses"}}},
+                    "domain": [
+                      {
+                        "application": {
+                          "argument": {"variable": "hydra.ext.haskell.ast.ModuleName"},
+                          "function": {"variable": "hydra.module.Namespaces"}}}],
+                    "parameter": "namespaces"}}}}},
+          "parameter": "t0"}},
       "type": [
         {
           "constraints": null,
@@ -7280,7 +7280,7 @@
                                       "argument": {"variable": "hydra.error.Error"},
                                       "function": {"variable": "hydra.context.InContext"}}},
                                   "right": {"variable": "hydra.ext.haskell.ast.Type"}}},
-                              "domain": {"variable": "hydra.graph.Graph"}}},
+                              "domain": {"variable": "t0"}}},
                           "domain": {"variable": "hydra.context.Context"}}},
                       "domain": {"variable": "hydra.core.Type"}}},
                   "domain": {
@@ -7291,7 +7291,7 @@
                 "application": {
                   "argument": {"variable": "hydra.ext.haskell.ast.ModuleName"},
                   "function": {"variable": "hydra.module.Namespaces"}}}}},
-          "variables": []}]},
+          "variables": ["t0"]}]},
     {
       "name": "hydra.ext.haskell.coder.findOrdVariables",
       "term": {
@@ -9096,7 +9096,10 @@
                                                                                                                                     "function": {
                                                                                                                                       "application": {
                                                                                                                                         "argument": {"variable": "namespaces"},
-                                                                                                                                        "function": {"variable": "hydra.ext.haskell.coder.encodeTypeWithClassAssertions"}}}}}}}}}}},
+                                                                                                                                        "function": {
+                                                                                                                                          "typeApplication": {
+                                                                                                                                            "body": {"variable": "hydra.ext.haskell.coder.encodeTypeWithClassAssertions"},
+                                                                                                                                            "type": {"variable": "hydra.graph.Graph"}}}}}}}}}}}}},
                                                                                                                     "function": {
                                                                                                                       "typeApplication": {
                                                                                                                         "body": {
@@ -9576,7 +9579,10 @@
                                                                                     "function": {
                                                                                       "application": {
                                                                                         "argument": {"variable": "namespaces"},
-                                                                                        "function": {"variable": "hydra.ext.haskell.coder.adaptTypeToHaskellAndEncode"}}}}}}}}},
+                                                                                        "function": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"variable": "hydra.ext.haskell.coder.adaptTypeToHaskellAndEncode"},
+                                                                                            "type": {"variable": "hydra.graph.Graph"}}}}}}}}}}},
                                                                         "function": {
                                                                           "typeApplication": {
                                                                             "body": {
@@ -9759,7 +9765,10 @@
                                                                                                   "function": {
                                                                                                     "application": {
                                                                                                       "argument": {"variable": "namespaces"},
-                                                                                                      "function": {"variable": "hydra.ext.haskell.coder.adaptTypeToHaskellAndEncode"}}}}}}}}},
+                                                                                                      "function": {
+                                                                                                        "typeApplication": {
+                                                                                                          "body": {"variable": "hydra.ext.haskell.coder.adaptTypeToHaskellAndEncode"},
+                                                                                                          "type": {"variable": "hydra.graph.Graph"}}}}}}}}}}},
                                                                                       "function": {
                                                                                         "typeApplication": {
                                                                                           "body": {
@@ -10124,7 +10133,10 @@
                                                                                                                     "function": {
                                                                                                                       "application": {
                                                                                                                         "argument": {"variable": "namespaces"},
-                                                                                                                        "function": {"variable": "hydra.ext.haskell.coder.adaptTypeToHaskellAndEncode"}}}}}}}}},
+                                                                                                                        "function": {
+                                                                                                                          "typeApplication": {
+                                                                                                                            "body": {"variable": "hydra.ext.haskell.coder.adaptTypeToHaskellAndEncode"},
+                                                                                                                            "type": {"variable": "hydra.graph.Graph"}}}}}}}}}}},
                                                                                                         "function": {
                                                                                                           "typeApplication": {
                                                                                                             "body": {
@@ -10912,7 +10924,10 @@
                                                                                                     "function": {
                                                                                                       "application": {
                                                                                                         "argument": {"variable": "namespaces"},
-                                                                                                        "function": {"variable": "hydra.ext.haskell.coder.adaptTypeToHaskellAndEncode"}}}}}}}}},
+                                                                                                        "function": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {"variable": "hydra.ext.haskell.coder.adaptTypeToHaskellAndEncode"},
+                                                                                                            "type": {"variable": "hydra.graph.Graph"}}}}}}}}}}},
                                                                                         "function": {
                                                                                           "typeApplication": {
                                                                                             "body": {
@@ -12030,7 +12045,7 @@
   "termDependencies": [
     "hydra.ext.haskell.serde",
     "hydra.ext.haskell.utils",
-    "hydra.adapt.modules",
+    "hydra.adapt.simple",
     "hydra.rewriting",
     "hydra.serialization",
     "hydra.show.error"],
