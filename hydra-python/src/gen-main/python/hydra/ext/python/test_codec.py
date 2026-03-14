@@ -16,7 +16,6 @@ import hydra.ext.python.helpers
 import hydra.ext.python.names
 import hydra.ext.python.serde
 import hydra.ext.python.utils
-import hydra.inference
 import hydra.lexical
 import hydra.lib.chars
 import hydra.lib.eithers
@@ -31,8 +30,8 @@ import hydra.lib.strings
 import hydra.module
 import hydra.serialization
 import hydra.show.error
+import hydra.test.utils
 import hydra.testing
-import hydra.typing
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
@@ -106,38 +105,6 @@ def generate_test_file_with_python_codec(codec: hydra.testing.TestCodec, test_mo
     
     return hydra.lib.eithers.map((lambda test_body: (test_module_content := build_python_test_module(codec, test_module, test_group, test_body, namespaces_), ns_ := test_module.namespace, parts := hydra.lib.strings.split_on(".", ns_.value), dir_parts := hydra.lib.lists.init(parts), file_name := hydra.lib.strings.cat(("test_", hydra.lib.lists.last(parts), ".py")), file_path := hydra.lib.strings.cat((hydra.lib.strings.intercalate("/", dir_parts), "/", file_name)), (file_path, test_module_content))[6]), generate_python_test_group_hierarchy(g, namespaces_, codec, (), test_group))
 
-def infer_term(g: hydra.graph.Graph, term: hydra.core.Term) -> Either[str, hydra.core.Term]:
-    r"""Run type inference on a single term."""
-    
-    return hydra.lib.eithers.bimap((lambda ic: hydra.show.error.error(ic.object)), (lambda x: x.term), hydra.inference.infer_in_graph_context(hydra.lexical.empty_context(), g, term))
-
-def infer_test_case(g: hydra.graph.Graph, tcm: hydra.testing.TestCaseWithMetadata):
-    r"""Run type inference on the terms in a test case."""
-    
-    name_ = tcm.name
-    tcase = tcm.case
-    desc = tcm.description
-    tags_ = tcm.tags
-    def _hoist_body_1(v1):
-        match v1:
-            case hydra.testing.TestCaseDelegatedEvaluation(value=del_case):
-                input_ = del_case.input
-                output_ = del_case.output
-                return hydra.lib.eithers.bind(infer_term(g, input_), (lambda inferred_input: hydra.lib.eithers.bind(infer_term(g, output_), (lambda inferred_output: Right(cast(hydra.testing.TestCase, hydra.testing.TestCaseDelegatedEvaluation(hydra.testing.DelegatedEvaluationTestCase(inferred_input, inferred_output))))))))
-            
-            case _:
-                return Right(tcase)
-    return hydra.lib.eithers.map((lambda inferred_case: hydra.testing.TestCaseWithMetadata(name_, inferred_case, desc, tags_)), _hoist_body_1(tcase))
-
-def infer_test_group_terms(g: hydra.graph.Graph, tg: hydra.testing.TestGroup) -> Either[str, hydra.testing.TestGroup]:
-    r"""Run type inference on all terms in a TestGroup to ensure lambdas have domain types."""
-    
-    name_ = tg.name
-    desc = tg.description
-    subgroups = tg.subgroups
-    cases_ = tg.cases
-    return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda sg: infer_test_group_terms(g, sg)), subgroups), (lambda inferred_subgroups: hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda tc: infer_test_case(g, tc)), cases_), (lambda inferred_cases: Right(hydra.testing.TestGroup(name_, desc, inferred_subgroups, inferred_cases))))))
-
 def namespaces_for_python_module(mod: hydra.module.Module, graph_: hydra.graph.Graph) -> Either[T0, hydra.module.Namespaces[hydra.ext.python.syntax.DottedName]]:
     r"""Build namespaces for a Python module, resolving all imports and primitives."""
     
@@ -184,7 +151,7 @@ def python_test_codec_with_context(namespaces_: hydra.module.Namespaces[hydra.ex
 def generate_python_test_file(test_module: hydra.module.Module, test_group: hydra.testing.TestGroup, g: hydra.graph.Graph) -> Either[str, tuple[str, str]]:
     r"""Generate a Python test file for a test group, with type inference."""
     
-    return hydra.lib.eithers.bind(infer_test_group_terms(g, test_group), (lambda inferred_test_group: hydra.lib.eithers.bind(namespaces_for_python_module(test_module, g), (lambda namespaces_: generate_test_file_with_python_codec(python_test_codec_with_context(namespaces_, g), test_module, inferred_test_group, namespaces_, g)))))
+    return hydra.lib.eithers.bind(hydra.test.utils.infer_test_group_terms(g, test_group), (lambda inferred_test_group: hydra.lib.eithers.bind(namespaces_for_python_module(test_module, g), (lambda namespaces_: generate_test_file_with_python_codec(python_test_codec_with_context(namespaces_, g), test_module, inferred_test_group, namespaces_, g)))))
 
 def term_to_python(namespaces_: hydra.module.Namespaces[hydra.ext.python.syntax.DottedName], term: hydra.core.Term, g: hydra.graph.Graph) -> Either[str, str]:
     r"""Convert a Hydra term to a Python expression string."""

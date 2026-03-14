@@ -15,7 +15,6 @@ import qualified Hydra.Ext.Python.Serde as Serde
 import qualified Hydra.Ext.Python.Syntax as Syntax
 import qualified Hydra.Ext.Python.Utils as Utils
 import qualified Hydra.Graph as Graph
-import qualified Hydra.Inference as Inference
 import qualified Hydra.Lexical as Lexical
 import qualified Hydra.Lib.Chars as Chars
 import qualified Hydra.Lib.Eithers as Eithers
@@ -30,8 +29,8 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Serialization as Serialization
 import qualified Hydra.Show.Error as Error
+import qualified Hydra.Test.Utils as Utils_
 import qualified Hydra.Testing as Testing
-import qualified Hydra.Typing as Typing
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -260,41 +259,4 @@ buildPythonTestModule codec testModule testGroup testBody namespaces_ =
 
 -- | Generate a Python test file for a test group, with type inference
 generatePythonTestFile :: (Module.Module -> Testing.TestGroup -> Graph.Graph -> Either String (String, String))
-generatePythonTestFile testModule testGroup g = (Eithers.bind (inferTestGroupTerms g testGroup) (\inferredTestGroup -> Eithers.bind (namespacesForPythonModule testModule g) (\namespaces_ -> generateTestFileWithPythonCodec (pythonTestCodecWithContext namespaces_ g) testModule inferredTestGroup namespaces_ g)))
-
--- | Run type inference on all terms in a TestGroup to ensure lambdas have domain types
-inferTestGroupTerms :: (Graph.Graph -> Testing.TestGroup -> Either String Testing.TestGroup)
-inferTestGroupTerms g tg =  
-  let name_ = (Testing.testGroupName tg) 
-      desc = (Testing.testGroupDescription tg)
-      subgroups = (Testing.testGroupSubgroups tg)
-      cases_ = (Testing.testGroupCases tg)
-  in (Eithers.bind (Eithers.mapList (\sg -> inferTestGroupTerms g sg) subgroups) (\inferredSubgroups -> Eithers.bind (Eithers.mapList (\tc -> inferTestCase g tc) cases_) (\inferredCases -> Right (Testing.TestGroup {
-    Testing.testGroupName = name_,
-    Testing.testGroupDescription = desc,
-    Testing.testGroupSubgroups = inferredSubgroups,
-    Testing.testGroupCases = inferredCases}))))
-
--- | Run type inference on the terms in a test case
-inferTestCase :: (Graph.Graph -> Testing.TestCaseWithMetadata -> Either String Testing.TestCaseWithMetadata)
-inferTestCase g tcm =  
-  let name_ = (Testing.testCaseWithMetadataName tcm) 
-      tcase = (Testing.testCaseWithMetadataCase tcm)
-      desc = (Testing.testCaseWithMetadataDescription tcm)
-      tags_ = (Testing.testCaseWithMetadataTags tcm)
-  in (Eithers.map (\inferredCase -> Testing.TestCaseWithMetadata {
-    Testing.testCaseWithMetadataName = name_,
-    Testing.testCaseWithMetadataCase = inferredCase,
-    Testing.testCaseWithMetadataDescription = desc,
-    Testing.testCaseWithMetadataTags = tags_}) ((\x -> case x of
-    Testing.TestCaseDelegatedEvaluation v0 ->  
-      let input_ = (Testing.delegatedEvaluationTestCaseInput v0) 
-          output_ = (Testing.delegatedEvaluationTestCaseOutput v0)
-      in (Eithers.bind (inferTerm g input_) (\inferredInput -> Eithers.bind (inferTerm g output_) (\inferredOutput -> Right (Testing.TestCaseDelegatedEvaluation (Testing.DelegatedEvaluationTestCase {
-        Testing.delegatedEvaluationTestCaseInput = inferredInput,
-        Testing.delegatedEvaluationTestCaseOutput = inferredOutput})))))
-    _ -> (Right tcase)) tcase))
-
--- | Run type inference on a single term
-inferTerm :: (Graph.Graph -> Core.Term -> Either String Core.Term)
-inferTerm g term = (Eithers.bimap (\ic -> Error.error (Context.inContextObject ic)) (\x -> Typing.inferenceResultTerm x) (Inference.inferInGraphContext Lexical.emptyContext g term))
+generatePythonTestFile testModule testGroup g = (Eithers.bind (Utils_.inferTestGroupTerms g testGroup) (\inferredTestGroup -> Eithers.bind (namespacesForPythonModule testModule g) (\namespaces_ -> generateTestFileWithPythonCodec (pythonTestCodecWithContext namespaces_ g) testModule inferredTestGroup namespaces_ g)))

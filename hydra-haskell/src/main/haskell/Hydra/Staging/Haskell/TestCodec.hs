@@ -1,365 +1,42 @@
--- | Haskell-specific test code generation using HSpec
+-- | Haskell test code generation codec for HSpec-based generation tests.
+-- This thin wrapper delegates all codec logic to the generated module,
+-- and only adds the TestGenerator (which involves IO infrastructure)
+-- and the aggregator file generator (which uses System.FilePath).
 
 module Hydra.Staging.Haskell.TestCodec where
 
 import Hydra.Kernel hiding (map)
 import Hydra.Testing
 import Hydra.Generation (showError)
-import Hydra.Coders (LanguageName(..))
-import Hydra.Staging.Testing.Generation.Transform (collectTestCases, addGenerationPrefix)
-import Hydra.Staging.Testing.Generation.Generate (TestGenerator(..), createTestGroupLookup, generateGenerationTestSuite)
-import qualified Hydra.Ext.Haskell.Coder as HaskellCoder
+import Hydra.Staging.Testing.Generation.Transform (addGenerationPrefix)
+import Hydra.Staging.Testing.Generation.Generate (TestGenerator(..), generateGenerationTestSuite)
 import Hydra.Ext.Haskell.Utils (namespacesForModule, sanitizeHaskellName)
-import qualified Hydra.Ext.Haskell.Serde as HaskellSerde
-import Hydra.Serialization (printExpr, parenthesize)
+import qualified Hydra.Ext.Haskell.TestCodec as Generated
 import qualified Hydra.Ext.Haskell.Ast as H
-import qualified Hydra.Names as Names
-import qualified Hydra.Util as Util
-import qualified Hydra.Show.Core as ShowCore
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Lib.Strings as Strings
-import qualified Hydra.Lib.Lists as Lists
 
-import qualified Data.Map as M
 import qualified Data.List as L
-import qualified Data.Set as S
-import qualified Hydra.Rewriting as Rewriting
-import qualified Hydra.Inference as Inference
-import qualified Hydra.Substitution as Substitution
-import qualified Hydra.Typing as Typing
-import qualified Hydra.Decode.Core as DecodeCore
-import Data.Char (toUpper)
+import qualified Data.Map as M
 import qualified System.FilePath as FP
+import Data.Char (toUpper)
 
-
--- | Extract all variable names from term-encoded terms in a given term.
--- This recursively decodes encoded terms and extracts the variable names.
-extractEncodedTermVariableNames :: Graph -> Term -> S.Set Name
-extractEncodedTermVariableNames graf term =
-  Rewriting.foldOverTerm TraversalOrderPre collectNames S.empty term
-  where
-    collectNames :: S.Set Name -> Term -> S.Set Name
-    collectNames names t
-      | isEncodedTerm (Rewriting.deannotateTerm t) =
-          case DecodeCore.term graf t of
-            Right decodedTerm ->
-              -- Recursively extract variable names from the decoded term
-              S.union names (Rewriting.termDependencyNames True True True decodedTerm)
-            Left _ -> names
-      | otherwise = names
-
--- | Add namespaces from a set of names to existing namespaces
-addNamespacesToNamespaces :: Namespaces H.ModuleName -> S.Set Name -> Namespaces H.ModuleName
-addNamespacesToNamespaces ns0 names =
-  let newNamespaces = S.fromList $ mapMaybe Names.namespaceOf $ S.toList names
-      toModuleName namespace =
-        let parts = Strings.splitOn "." (unNamespace namespace)
-            lastPart = L.last parts
-        in H.ModuleName (Formatting.capitalize lastPart)
-      toPair ns = (ns, toModuleName ns)
-      newMappings = M.fromList $ map toPair $ S.toList newNamespaces
-  in ns0 { namespacesMapping = M.union (namespacesMapping ns0) newMappings }
-  where
-    mapMaybe f = foldr (\x acc -> maybe acc (:acc) (f x)) []
-
-termToHaskell :: Namespaces H.ModuleName -> Term -> Graph -> Either String String
-termToHaskell namespaces term g = case HaskellCoder.encodeTerm 0 namespaces term emptyContext g of
-  Left ic -> Left $ showError (inContextObject ic)
-  Right result -> Right $ printExpr . parenthesize . HaskellSerde.expressionToExpr $ result
-
-typeToHaskell :: Namespaces H.ModuleName -> Type -> Graph -> Either String String
-typeToHaskell namespaces typ g = case HaskellCoder.encodeType namespaces typ emptyContext g of
-  Left ic -> Left $ showError (inContextObject ic)
-  Right result -> Right $ printExpr . parenthesize . HaskellSerde.typeToExpr $ result
-
--- | Create a Haskell TestCodec that uses the real Haskell coder
-haskellTestCodec :: Namespaces H.ModuleName -> TestCodec
-haskellTestCodec namespaces = TestCodec {
-    testCodecLanguage = LanguageName "haskell",
-    testCodecFileExtension = FileExtension "hs",
-    testCodecEncodeTerm = termToHaskell namespaces,
-    testCodecEncodeType = typeToHaskell namespaces,
-    testCodecFormatTestName = id,  -- Keep test names as-is
-    testCodecFormatModuleName = namespaceToModuleName,
-    testCodecTestCaseTemplate = haskellTestCaseTemplate,
-    testCodecTestGroupTemplate = haskellTestGroupTemplate,
-    testCodecModuleTemplate = haskellModuleTemplate,
-    testCodecImportTemplate = haskellImportTemplate,
-    testCodecFindImports = findHaskellImports namespaces}
-
--- Templates for Haskell test generation
-haskellTestCaseTemplate :: String
-haskellTestCaseTemplate = unlines [
-  "  H.it {name} $ H.shouldBe",
-  "    ({input})",
-  "    ({output})"]
-
-haskellTestGroupTemplate :: String
-haskellTestGroupTemplate = "spec = H.describe {groupName} $ do"
-
-haskellModuleTemplate :: String
-haskellModuleTemplate = unlines [
-  "-- " ++ warningAutoGeneratedFile,
-  "",
-  "module {moduleName} where",
-  "",
-  "{imports}",
-  "",
-  "spec :: H.Spec",
-  "{testGroup}",
-  "{testCases}"]
-
-haskellImportTemplate :: String
-haskellImportTemplate = "import qualified {namespace} as {alias}"
-
--- | Find necessary imports for Haskell based on referenced names
-findHaskellImports :: Namespaces H.ModuleName -> S.Set Name -> [String]
-findHaskellImports namespaces names = L.map makeImport (M.toList filteredMapping)
-  where
-    -- Filter out test module namespaces (hydra.test.*) which aren't in main library
-    isTestNamespace (Namespace ns) = "hydra.test." `L.isPrefixOf` ns
-    filteredMapping = M.filterWithKey (\ns _ -> not (isTestNamespace ns)) (namespacesMapping namespaces)
-    makeImport (ns, alias) =
-      "import qualified " ++ nsToModuleName ns ++ " as " ++ H.unModuleName alias
-    nsToModuleName (Namespace ns) =
-      Strings.intercalate "." $ Lists.map Formatting.capitalize (Strings.splitOn "." ns)
-
--- | Generate test hierarchy preserving the structure with H.describe blocks for subgroups
-generateTestGroupHierarchy :: Graph -> Namespaces H.ModuleName -> TestCodec -> Int -> TestGroup -> Either String String
-generateTestGroupHierarchy g namespaces codec depth testGroup = do
-  -- Generate test cases at the current level with proper indentation
-  testCaseLinesRaw <- mapM (generateTestCaseWithCodec g namespaces codec depth) (testGroupCases testGroup)
-  let indent = replicate (depth * 2) ' '
-      indentTestCase = L.map (indent ++)
-      testCaseLines = fmap indentTestCase testCaseLinesRaw
-      testCasesStr = L.intercalate "\n" (concat testCaseLines)
-
-  -- Generate H.describe blocks for each subgroup
-  subgroupStrs <- mapM generateSubgroupBlock (testGroupSubgroups testGroup)
-  let subgroupsStr = L.intercalate "\n" subgroupStrs
-
-  -- Combine test cases and subgroups
-  return $ testCasesStr ++ (if null testCasesStr || null subgroupsStr then "" else "\n") ++ subgroupsStr
-  where
-    generateSubgroupBlock :: TestGroup -> Either String String
-    generateSubgroupBlock subgroup = do
-      let indent = replicate (depth * 2) ' '
-      -- Recursively generate content for this subgroup at depth+1 (nested inside this H.describe)
-      subgroupContent <- generateTestGroupHierarchy g namespaces codec (depth + 1) subgroup
-      let groupName = testGroupName subgroup
-      -- Generate the H.describe block with proper indentation
-      return $ indent ++ "H.describe " ++ show groupName ++ " $ do\n" ++ subgroupContent
-
--- | Generic test file generation using a TestCodec
-generateTestFileWithCodec :: TestCodec -> Module -> TestGroup -> Namespaces H.ModuleName -> Graph -> Either String (FilePath, String)
-generateTestFileWithCodec codec testModule testGroup namespaces g = do
-  -- Generate test hierarchy preserving the structure
-  testBody <- generateTestGroupHierarchy g namespaces codec 1 testGroup
-
-  -- Build the complete test module
-  let testModuleContent = buildTestModuleWithCodec codec testModule testGroup testBody namespaces
-
-  -- Use the codec's file extension for the path
-  -- Append "Spec" to the namespace for hspec-discover compatibility
-  let FileExtension ext = testCodecFileExtension codec
-  let Namespace ns = moduleNamespace testModule
-  let specNs = Namespace (ns ++ "Spec")
-  let filePath = Names.namespaceToFilePath Util.CaseConventionPascal
-                   (FileExtension ext)
-                   specNs
-
-  return (filePath, testModuleContent)
-
--- | Generate a single test case using a TestCodec
-generateTestCaseWithCodec :: Graph -> Namespaces H.ModuleName -> TestCodec -> Int -> TestCaseWithMetadata -> Either String [String]
-generateTestCaseWithCodec g namespaces codec depth (TestCaseWithMetadata name tcase _ _) = case tcase of
-  TestCaseDelegatedEvaluation (DelegatedEvaluationTestCase input output) -> do
-    inputCode <- testCodecEncodeTerm codec input g
-    outputCode <- testCodecEncodeTerm codec output g
-
-    let formattedName = testCodecFormatTestName codec name
-        indentLines n s = L.intercalate ("\n" ++ replicate n ' ') (L.lines s)
-        continuationIndent = depth * 2 + 4
-        indentedInputCode = indentLines continuationIndent inputCode
-        indentedOutputCode = indentLines continuationIndent outputCode
-
-    typeAnnotation <- generateTypeAnnotationFor g namespaces input output
-    let (finalInputCode, finalOutputCode) = case typeAnnotation of
-          Just anno -> (indentedInputCode, indentedOutputCode ++ anno)
-          Nothing -> (indentedInputCode, indentedOutputCode)
-
-    return [
-      "H.it " ++ show formattedName ++ " $ H.shouldBe",
-      "  (" ++ finalInputCode ++ ")",
-      "  (" ++ finalOutputCode ++ ")"]
-
-  _ -> return []  -- Skip non-delegated tests (shouldn't happen after transform)
-
--- | Generate a type annotation for polymorphic output values
--- Adds annotations when BOTH:
--- 1. The inferred type has free type variables that GHC cannot resolve
--- 2. The output has no concrete values to guide type inference (empty list, etc.)
---
--- The annotation is derived from the INPUT term's inferred type, since the input
--- is the expression being evaluated and its result type should match the output type.
--- Free type variables are replaced with Int32.
-generateTypeAnnotationFor :: Graph -> Namespaces H.ModuleName -> Term -> Term -> Either String (Maybe String)
-generateTypeAnnotationFor g namespaces inputTerm outputTerm = do
-  -- Only consider annotation if output has no concrete values to guide inference
-  if not needsAnnotation
-    then return Nothing
-    else do
-      -- Infer the type of the input expression (which gives us the result/output type)
-      -- Use tryInferTypeOf to gracefully handle inference failures (e.g., when schema types
-      -- like Graph conflict with polymorphic type variables)
-      let mresult = tryInferTypeOf g inputTerm
-      case mresult of
-        Nothing -> return Nothing  -- Inference failed; skip annotation
-        Just (_, typeScheme) -> do
-          let typ = typeSchemeType typeScheme
-              -- Check if there are any free type variables that need grounding
-              freeVars = S.toList $ S.difference
-                (Rewriting.freeVariablesInType typ)
-                schemaVars
-          -- Either types ALWAYS need annotations (one branch is always unconstrained),
-          -- while other polymorphic types only need annotations if they have free variables.
-          if isEitherTerm outputTerm || not (null freeVars)
-            then do
-              -- Replace free type variables with Int32
-              let int32Type = TypeLiteral (LiteralTypeInteger IntegerTypeInt32)
-                  subst = Typing.TypeSubst $ M.fromList [(v, int32Type) | v <- freeVars]
-                  groundedType = Substitution.substInType subst typ
-              -- Encode the type as Haskell
-              typeStr <- typeToHaskell namespaces groundedType g
-              return $ Just (" :: " ++ typeStr)
-            else return Nothing
-  where
-    schemaVars = S.fromList $ M.keys $ graphSchemaTypes g
-    needsAnnotation = containsTriviallyPolymorphic outputTerm
-    isEitherTerm (TermEither _) = True
-    isEitherTerm _ = False
-
--- | Try to infer the type of a term, returning Nothing if inference fails
--- This allows graceful degradation when type inference encounters issues
--- (e.g., schema types being unified with polymorphic type variables)
-tryInferTypeOf :: Graph -> Term -> Maybe (Term, TypeScheme)
-tryInferTypeOf g term =
-  let cx = Context [] [] M.empty
-  in case Inference.inferTypeOf cx g term of
-    Left _ -> Nothing
-    Right (result, _cx') -> Just result
-
--- | Check if a term CONTAINS any trivially polymorphic sub-terms (empty list, Nothing, etc.)
--- This recursively searches through the term structure to find any parts that would
--- cause GHC to need type annotations.
-containsTriviallyPolymorphic :: Term -> Bool
-containsTriviallyPolymorphic term = case term of
-  TermList [] -> True  -- Empty list
-  TermList xs -> any containsTriviallyPolymorphic xs  -- Check list elements
-  TermSet s -> S.null s || any containsTriviallyPolymorphic (S.toList s)  -- Empty set or elements
-  TermMap m -> M.null m || any containsTriviallyPolymorphic (M.keys m) || any containsTriviallyPolymorphic (M.elems m)
-  TermMaybe Nothing -> True  -- Nothing value
-  TermMaybe (Just x) -> containsTriviallyPolymorphic x  -- Check content
-  -- Either values ALWAYS need type annotations because one branch is unconstrained.
-  -- Even `Right 5` needs an annotation because the Left type is ambiguous.
-  TermEither _ -> True
-  TermUnion inj -> containsTriviallyPolymorphic (fieldTerm $ injectionField inj)
-  TermPair (a, b) -> containsTriviallyPolymorphic a || containsTriviallyPolymorphic b
-  TermRecord fields -> any (containsTriviallyPolymorphic . fieldTerm) (recordFields fields)
-  TermApplication app -> containsTriviallyPolymorphic (applicationFunction app) ||
-                         containsTriviallyPolymorphic (applicationArgument app)
-  _ -> False
-
--- | Build the complete test module using a TestCodec
-buildTestModuleWithCodec :: TestCodec -> Module -> TestGroup -> String -> Namespaces H.ModuleName -> String
-buildTestModuleWithCodec codec testModule testGroup testBody namespaces = header ++ testBody ++ "\n"
-  where
-    -- Append "Spec" to module name for hspec-discover compatibility
-    Namespace ns = moduleNamespace testModule
-    specNs = Namespace (ns ++ "Spec")
-    moduleNameString = testCodecFormatModuleName codec specNs
-    groupName = testGroupName testGroup
-
-    -- Use the codec's findImports to determine necessary imports
-    -- For now, we'll pass an empty set since we're not tracking names yet
-    -- TODO: collect names from test cases
-    domainImports = testCodecFindImports codec S.empty
-
-    -- Standard imports that are always needed for Haskell
-    standardImports = [
-      "import Hydra.Kernel",
-      "import qualified Test.Hspec as H",
-      "import qualified Data.List as L",
-      "import qualified Data.Map as M",
-      "import qualified Data.Set as S",
-      "import qualified Data.Maybe as Y"]
-
-    allImports = standardImports ++ domainImports
-
-    -- Debug comments showing namespace configuration
-    debugComments = [
-        "-- DEBUG: Focus namespace = " ++ show (namespacesFocus namespaces),
-        "-- DEBUG: Namespace mappings:",
-        "-- " ++ show (M.toList $ namespacesMapping namespaces)
-      ]
-
-    header = unlines ([
-        "-- " ++ warningAutoGeneratedFile,
-        ""
-      ] ++ debugComments ++ [
-        "",
-        "module " ++ moduleNameString ++ " where",
-        ""
-      ] ++ allImports ++ [
-        "",
-        "spec :: H.Spec",
-        "spec = H.describe " ++ show groupName ++ " $ do"
-      ])
-
--- | Convert namespace to Haskell module name
--- Uses the same logic as the Haskell coder's importName function
-namespaceToModuleName :: Namespace -> String
-namespaceToModuleName (Namespace ns) =
-  Strings.intercalate "." $ Lists.map Formatting.capitalize (Strings.splitOn "." ns)
-
--- | Generate generation test file for a test group using the Haskell codec
-generateHaskellTestFile :: Module -> TestGroup -> Graph -> Either String (FilePath, String)
-generateHaskellTestFile testModule testGroup g = do
-  -- Build proper namespaces that include all primitives referenced in test terms
-  namespaces <- buildNamespacesForTestGroup testModule testGroup g
-
-  -- Generate test file using the codec
-  generateTestFileWithCodec (haskellTestCodec namespaces) testModule testGroup namespaces g
-  where
-    buildNamespacesForTestGroup mod tgroup graph = do
-      let testCases = collectTestCases tgroup
-          testTerms = concatMap extractTestTerms testCases
-          testBindings = zipWith (\i term -> Binding (Name $ "_test_" ++ show i) term Nothing) ([0..] :: [Integer]) testTerms
-          tempModule = mod { moduleElements = testBindings }
-      -- Get initial namespaces from the module
-      baseNamespaces <- mapInContextError $ namespacesForModule tempModule (Context [] [] M.empty) graph
-      -- Extract additional namespaces from term-encoded variable references
-      let encodedNames = S.unions $ map (extractEncodedTermVariableNames graph) testTerms
-      -- Add the encoded term namespaces to the base namespaces
-      return $ addNamespacesToNamespaces baseNamespaces encodedNames
-    extractTestTerms (TestCaseWithMetadata _ tcase _ _) = case tcase of
-      TestCaseDelegatedEvaluation (DelegatedEvaluationTestCase input output) -> [input, output]
-      _ -> []
-    mapInContextError (Left ic) = Left (showError (inContextObject ic))
-    mapInContextError (Right a) = Right a
 
 -- | Haskell-specific test generator
--- Provides the complete Haskell implementation of the TestGenerator abstraction
 haskellTestGenerator :: TestGenerator H.ModuleName
 haskellTestGenerator = TestGenerator {
   testGenNamespacesForModule = \m g -> do
     case namespacesForModule m emptyContext g of
       Left ic -> Left (showError (inContextObject ic))
       Right ns -> Right ns,
-  testGenCreateCodec = haskellTestCodec,
-  testGenGenerateTestFile = generateHaskellTestFile,
+  testGenCreateCodec = Generated.haskellTestCodec,
+  testGenGenerateTestFile = Generated.generateHaskellTestFile,
   testGenAggregatorFile = Just generateHaskellAggregatorSpec
 }
+
+-- | Main entry point for generating Haskell generation tests
+generateHaskellGenerationTests :: FilePath -> [Module] -> (Namespace -> Maybe TestGroup) -> IO Bool
+generateHaskellGenerationTests = generateGenerationTestSuite haskellTestGenerator
 
 -- | Generate an aggregator spec file that imports all generated test modules (Haskell/HSpec style)
 generateHaskellAggregatorSpec :: FilePath -> [Module] -> (FilePath, String)

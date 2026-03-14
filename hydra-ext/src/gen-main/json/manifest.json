@@ -5,6 +5,7 @@
     "hydra.ext.haskell.language",
     "hydra.ext.haskell.operators",
     "hydra.ext.haskell.serde",
+    "hydra.ext.haskell.testCodec",
     "hydra.ext.haskell.utils",
     "hydra.ext.java.helpers",
     "hydra.ext.java.language",

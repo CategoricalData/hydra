@@ -1,8 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
 
--- DEBUG: Focus namespace = (Namespace {unNamespace = "generation.hydra.test.lib.maps"},ModuleName {unModuleName = "Maps"})
--- DEBUG: Namespace mappings:
--- [(Namespace {unNamespace = "hydra.lib.equality"},ModuleName {unModuleName = "Equality"}),(Namespace {unNamespace = "hydra.lib.maps"},ModuleName {unModuleName = "Maps"}),(Namespace {unNamespace = "hydra.lib.math"},ModuleName {unModuleName = "Math"}),(Namespace {unNamespace = "hydra.lib.strings"},ModuleName {unModuleName = "Strings"})]
+-- DEBUG: Focus namespace = (see generated module)
+-- DEBUG: Namespace mappings: (see generated module)
 
 module Generation.Hydra.Test.Lib.MapsSpec where
 

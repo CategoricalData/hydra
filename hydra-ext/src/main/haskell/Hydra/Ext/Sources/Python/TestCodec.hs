@@ -102,6 +102,7 @@ import qualified Hydra.Ext.Sources.Python.Coder as PyCoderSource
 import qualified Hydra.Ext.Sources.Python.Serde as PySerde
 import qualified Hydra.Ext.Sources.Python.Names as PyNames
 import qualified Hydra.Ext.Sources.Python.Utils as PyUtils
+import qualified Hydra.Sources.Test.Utils as TestUtils
 import qualified Hydra.Sources.Kernel.Terms.Lexical         as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Serialization  as SerializationSource
 import Hydra.Testing (TestCodec(..))
@@ -117,7 +118,7 @@ ns = Namespace "hydra.ext.python.testCodec"
 
 module_ :: Module
 module_ = Module ns elements
-    [PyCoderSource.ns, PySerde.ns, PyNames.ns, PyUtils.ns, SerializationSource.ns, Formatting.ns, Names.ns, Inference.ns, Constants.ns, Rewriting.ns, Lexical.ns, ShowError.ns]
+    [PyCoderSource.ns, PySerde.ns, PyNames.ns, PyUtils.ns, SerializationSource.ns, Formatting.ns, Names.ns, TestUtils.ns, Constants.ns, Rewriting.ns, Lexical.ns, ShowError.ns]
     (PyHelpersSource.ns:PySyntax.ns:KernelTypes.kernelTypesNamespaces) $
     Just "Python test code generation codec for pytest-based generation tests"
   where
@@ -149,11 +150,7 @@ module_ = Module ns elements
       -- Test file generation
       toBinding generateTestFileWithPythonCodec,
       toBinding buildPythonTestModule,
-      toBinding generatePythonTestFile,
-      -- Type inference on test groups
-      toBinding inferTestGroupTerms,
-      toBinding inferTestCase,
-      toBinding inferTerm]
+      toBinding generatePythonTestFile]
 
 
 -- | Initial empty metadata for running encoding
@@ -473,7 +470,7 @@ generatePythonTestFile = define "generatePythonTestFile" $
   doc "Generate a Python test file for a test group, with type inference" $
   lambda "testModule" $ lambda "testGroup" $ lambda "g" $
     Eithers.bind
-      (inferTestGroupTerms @@ var "g" @@ var "testGroup")
+      (TestUtils.inferTestGroupTerms @@ var "g" @@ var "testGroup")
       (lambda "inferredTestGroup" $
         Eithers.bind
           (namespacesForPythonModule @@ var "testModule" @@ var "g")
@@ -486,50 +483,3 @@ generatePythonTestFile = define "generatePythonTestFile" $
               @@ var "g"))
 
 
--- | Run type inference on all terms in a TestGroup
-inferTestGroupTerms :: TBinding (Graph -> TestGroup -> Either String TestGroup)
-inferTestGroupTerms = define "inferTestGroupTerms" $
-  doc "Run type inference on all terms in a TestGroup to ensure lambdas have domain types" $
-  lambda "g" $ lambda "tg" $ lets [
-    "name_">: project _TestGroup _TestGroup_name @@ var "tg",
-    "desc">: project _TestGroup _TestGroup_description @@ var "tg",
-    "subgroups">: project _TestGroup _TestGroup_subgroups @@ var "tg",
-    "cases_">: project _TestGroup _TestGroup_cases @@ var "tg"] $
-    "inferredSubgroups" <<~ Eithers.mapList (lambda "sg" $ inferTestGroupTerms @@ var "g" @@ var "sg") (var "subgroups") $
-    "inferredCases" <<~ Eithers.mapList (lambda "tc" $ inferTestCase @@ var "g" @@ var "tc") (var "cases_") $
-    right (Testing.testGroup (var "name_") (var "desc") (var "inferredSubgroups") (var "inferredCases"))
-
-
--- | Run type inference on the terms in a test case
-inferTestCase :: TBinding (Graph -> TestCaseWithMetadata -> Either String TestCaseWithMetadata)
-inferTestCase = define "inferTestCase" $
-  doc "Run type inference on the terms in a test case" $
-  lambda "g" $ lambda "tcm" $ lets [
-    "name_">: project _TestCaseWithMetadata _TestCaseWithMetadata_name @@ var "tcm",
-    "tcase">: project _TestCaseWithMetadata _TestCaseWithMetadata_case @@ var "tcm",
-    "desc">: project _TestCaseWithMetadata _TestCaseWithMetadata_description @@ var "tcm",
-    "tags_">: project _TestCaseWithMetadata _TestCaseWithMetadata_tags @@ var "tcm"] $
-    Eithers.map
-      (lambda "inferredCase" $
-        Testing.testCaseWithMetadata (var "name_") (var "inferredCase") (var "desc") (var "tags_"))
-      (cases _TestCase (var "tcase") (Just (right (var "tcase"))) [
-        _TestCase_delegatedEvaluation>>: lambda "delCase" $ lets [
-          "input_">: project _DelegatedEvaluationTestCase _DelegatedEvaluationTestCase_input @@ var "delCase",
-          "output_">: project _DelegatedEvaluationTestCase _DelegatedEvaluationTestCase_output @@ var "delCase"] $
-          "inferredInput" <<~ (inferTerm @@ var "g" @@ var "input_") $
-          "inferredOutput" <<~ (inferTerm @@ var "g" @@ var "output_") $
-          right (inject _TestCase _TestCase_delegatedEvaluation
-                (record _DelegatedEvaluationTestCase [
-                  _DelegatedEvaluationTestCase_input>>: var "inferredInput",
-                  _DelegatedEvaluationTestCase_output>>: var "inferredOutput"]))])
-
-
--- | Run type inference on a single term
-inferTerm :: TBinding (Graph -> Term -> Either String Term)
-inferTerm = define "inferTerm" $
-  doc "Run type inference on a single term" $
-  lambda "g" $ lambda "term" $
-    Eithers.bimap
-      ("ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic"))
-      ("x" ~> Typing.inferenceResultTerm (var "x"))
-      (Inference.inferInGraphContext @@ asTerm Lexical.emptyContext @@ var "g" @@ var "term")

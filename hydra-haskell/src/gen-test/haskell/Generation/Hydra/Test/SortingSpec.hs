@@ -1,8 +1,7 @@
 -- Note: this is an automatically generated file. Do not edit.
 
--- DEBUG: Focus namespace = (Namespace {unNamespace = "generation.hydra.test.sorting"},ModuleName {unModuleName = "Sorting"})
--- DEBUG: Namespace mappings:
--- [(Namespace {unNamespace = "hydra.sorting"},ModuleName {unModuleName = "Sorting"})]
+-- DEBUG: Focus namespace = (see generated module)
+-- DEBUG: Namespace mappings: (see generated module)
 
 module Generation.Hydra.Test.SortingSpec where
 
