@@ -27,27 +27,7 @@
                                     "argument": {"variable": "g"},
                                     "function": {
                                       "application": {
-                                        "argument": {
-                                          "record": {
-                                            "fields": [
-                                              {
-                                                "name": "trace",
-                                                "term": {
-                                                  "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}},
-                                              {
-                                                "name": "messages",
-                                                "term": {
-                                                  "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}},
-                                              {
-                                                "name": "other",
-                                                "term": {
-                                                  "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {
-                                                        "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
-                                                        "type": {"variable": "hydra.core.Name"}}},
-                                                    "type": {"variable": "hydra.core.Term"}}}}],
-                                            "typeName": "hydra.context.Context"}},
+                                        "argument": {"variable": "hydra.lexical.emptyContext"},
                                         "function": {
                                           "application": {
                                             "argument": {"variable": "term"},
@@ -98,12 +78,12 @@
                                                           "body": {
                                                             "function": {
                                                               "elimination": {"record": {"field": "object", "typeName": "hydra.context.InContext"}}}},
-                                                          "type": {"variable": "hydra.error.OtherError"}}}}},
-                                                  "function": {"function": {"elimination": {"wrap": "hydra.error.OtherError"}}}}},
+                                                          "type": {"variable": "hydra.error.Error"}}}}},
+                                                  "function": {"variable": "hydra.show.error.error"}}},
                                               "domain": [
                                                 {
                                                   "application": {
-                                                    "argument": {"variable": "hydra.error.OtherError"},
+                                                    "argument": {"variable": "hydra.error.Error"},
                                                     "function": {"variable": "hydra.context.InContext"}}}],
                                               "parameter": "ic"}}},
                                         "function": {
@@ -117,7 +97,7 @@
                                                         "body": {"function": {"primitive": "hydra.lib.eithers.bimap"}},
                                                         "type": {
                                                           "application": {
-                                                            "argument": {"variable": "hydra.error.OtherError"},
+                                                            "argument": {"variable": "hydra.error.Error"},
                                                             "function": {"variable": "hydra.context.InContext"}}}}},
                                                     "type": {"variable": "hydra.ext.haskell.ast.Expression"}}},
                                                 "type": {"literal": {"string": {}}}}},
@@ -179,27 +159,7 @@
                                         "argument": {"variable": "g"},
                                         "function": {
                                           "application": {
-                                            "argument": {
-                                              "record": {
-                                                "fields": [
-                                                  {
-                                                    "name": "trace",
-                                                    "term": {
-                                                      "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}},
-                                                  {
-                                                    "name": "messages",
-                                                    "term": {
-                                                      "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}},
-                                                  {
-                                                    "name": "other",
-                                                    "term": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
-                                                            "type": {"variable": "hydra.core.Name"}}},
-                                                        "type": {"variable": "hydra.core.Term"}}}}],
-                                                "typeName": "hydra.context.Context"}},
+                                            "argument": {"variable": "hydra.lexical.emptyContext"},
                                             "function": {
                                               "application": {
                                                 "argument": {"variable": "typ"},
@@ -250,12 +210,12 @@
                                                               "body": {
                                                                 "function": {
                                                                   "elimination": {"record": {"field": "object", "typeName": "hydra.context.InContext"}}}},
-                                                              "type": {"variable": "hydra.error.OtherError"}}}}},
-                                                      "function": {"function": {"elimination": {"wrap": "hydra.error.OtherError"}}}}},
+                                                              "type": {"variable": "hydra.error.Error"}}}}},
+                                                      "function": {"variable": "hydra.show.error.error"}}},
                                                   "domain": [
                                                     {
                                                       "application": {
-                                                        "argument": {"variable": "hydra.error.OtherError"},
+                                                        "argument": {"variable": "hydra.error.Error"},
                                                         "function": {"variable": "hydra.context.InContext"}}}],
                                                   "parameter": "ic"}}},
                                             "function": {
@@ -269,7 +229,7 @@
                                                             "body": {"function": {"primitive": "hydra.lib.eithers.bimap"}},
                                                             "type": {
                                                               "application": {
-                                                                "argument": {"variable": "hydra.error.OtherError"},
+                                                                "argument": {"variable": "hydra.error.Error"},
                                                                 "function": {"variable": "hydra.context.InContext"}}}}},
                                                         "type": {"variable": "hydra.ext.haskell.ast.Type"}}},
                                                     "type": {"literal": {"string": {}}}}},
@@ -2073,27 +2033,7 @@
                                   "argument": {"variable": "g"},
                                   "function": {
                                     "application": {
-                                      "argument": {
-                                        "record": {
-                                          "fields": [
-                                            {
-                                              "name": "trace",
-                                              "term": {
-                                                "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}},
-                                            {
-                                              "name": "messages",
-                                              "term": {
-                                                "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}},
-                                            {
-                                              "name": "other",
-                                              "term": {
-                                                "typeApplication": {
-                                                  "body": {
-                                                    "typeApplication": {
-                                                      "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
-                                                      "type": {"variable": "hydra.core.Name"}}},
-                                                  "type": {"variable": "hydra.core.Term"}}}}],
-                                          "typeName": "hydra.context.Context"}},
+                                      "argument": {"variable": "hydra.lexical.emptyContext"},
                                       "function": {"variable": "hydra.inference.inferTypeOf"}}}}}}},
                           "function": {
                             "application": {
@@ -2139,7 +2079,7 @@
                                         "domain": [
                                           {
                                             "application": {
-                                              "argument": {"variable": "hydra.error.OtherError"},
+                                              "argument": {"variable": "hydra.error.Error"},
                                               "function": {"variable": "hydra.context.InContext"}}}],
                                         "parameter": "_"}}},
                                   "function": {
@@ -2151,7 +2091,7 @@
                                               "body": {"function": {"primitive": "hydra.lib.eithers.either"}},
                                               "type": {
                                                 "application": {
-                                                  "argument": {"variable": "hydra.error.OtherError"},
+                                                  "argument": {"variable": "hydra.error.Error"},
                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                           "type": {
                                             "pair": {
@@ -3875,27 +3815,7 @@
                                                 "argument": {"variable": "graph_"},
                                                 "function": {
                                                   "application": {
-                                                    "argument": {
-                                                      "record": {
-                                                        "fields": [
-                                                          {
-                                                            "name": "trace",
-                                                            "term": {
-                                                              "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}},
-                                                          {
-                                                            "name": "messages",
-                                                            "term": {
-                                                              "typeApplication": {"body": {"list": []}, "type": {"literal": {"string": {}}}}}},
-                                                          {
-                                                            "name": "other",
-                                                            "term": {
-                                                              "typeApplication": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
-                                                                    "type": {"variable": "hydra.core.Name"}}},
-                                                                "type": {"variable": "hydra.core.Term"}}}}],
-                                                        "typeName": "hydra.context.Context"}},
+                                                    "argument": {"variable": "hydra.lexical.emptyContext"},
                                                     "function": {
                                                       "application": {
                                                         "argument": {"variable": "tempModule"},
@@ -3927,12 +3847,12 @@
                                                                       "body": {
                                                                         "function": {
                                                                           "elimination": {"record": {"field": "object", "typeName": "hydra.context.InContext"}}}},
-                                                                      "type": {"variable": "hydra.error.OtherError"}}}}},
-                                                              "function": {"function": {"elimination": {"wrap": "hydra.error.OtherError"}}}}},
+                                                                      "type": {"variable": "hydra.error.Error"}}}}},
+                                                              "function": {"variable": "hydra.show.error.error"}}},
                                                           "domain": [
                                                             {
                                                               "application": {
-                                                                "argument": {"variable": "hydra.error.OtherError"},
+                                                                "argument": {"variable": "hydra.error.Error"},
                                                                 "function": {"variable": "hydra.context.InContext"}}}],
                                                           "parameter": "ic"}}},
                                                     "function": {
@@ -3946,7 +3866,7 @@
                                                                     "body": {"function": {"primitive": "hydra.lib.eithers.bimap"}},
                                                                     "type": {
                                                                       "application": {
-                                                                        "argument": {"variable": "hydra.error.OtherError"},
+                                                                        "argument": {"variable": "hydra.error.Error"},
                                                                         "function": {"variable": "hydra.context.InContext"}}}}},
                                                                 "type": {
                                                                   "application": {
@@ -4140,7 +4060,9 @@
     "hydra.constants",
     "hydra.rewriting",
     "hydra.substitution",
-    "hydra.schemas"],
+    "hydra.schemas",
+    "hydra.show.error",
+    "hydra.lexical"],
   "typeDependencies": [
     "hydra.ext.haskell.ast",
     "hydra.accessors",

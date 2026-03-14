@@ -8,24 +8,24 @@ package hydra.ext.haskell.testCodec;
 public interface TestCodec {
   static hydra.util.Either<String, String> termToHaskell(hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.core.Term term, hydra.graph.Graph g) {
     return hydra.lib.eithers.Bimap.apply(
-      (java.util.function.Function<hydra.context.InContext<hydra.error.OtherError>, String>) (ic -> (((java.util.function.Function<hydra.context.InContext<hydra.error.OtherError>, hydra.error.OtherError>) (projected -> projected.object)).apply(ic)).value),
+      (java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, String>) (ic -> hydra.show.error.Error_.error(((java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, hydra.error.Error_>) (projected -> projected.object)).apply(ic))),
       (java.util.function.Function<hydra.ext.haskell.ast.Expression, String>) (arg_ -> hydra.serialization.Serialization.printExpr(hydra.serialization.Serialization.parenthesize(hydra.ext.haskell.serde.Serde.expressionToExpr(arg_)))),
       hydra.ext.haskell.coder.Coder.encodeTerm(
         0,
         namespaces,
         term,
-        new hydra.context.Context((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply()))),
+        hydra.lexical.Lexical.emptyContext(),
         g));
   }
   
   static <T0> hydra.util.Either<String, String> typeToHaskell(hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.core.Type typ, T0 g) {
     return hydra.lib.eithers.Bimap.apply(
-      (java.util.function.Function<hydra.context.InContext<hydra.error.OtherError>, String>) (ic -> (((java.util.function.Function<hydra.context.InContext<hydra.error.OtherError>, hydra.error.OtherError>) (projected -> projected.object)).apply(ic)).value),
+      (java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, String>) (ic -> hydra.show.error.Error_.error(((java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, hydra.error.Error_>) (projected -> projected.object)).apply(ic))),
       (java.util.function.Function<hydra.ext.haskell.ast.Type, String>) (arg_ -> hydra.serialization.Serialization.printExpr(hydra.serialization.Serialization.parenthesize(hydra.ext.haskell.serde.Serde.typeToExpr(arg_)))),
       hydra.ext.haskell.coder.Coder.<T0>encodeType(
         namespaces,
         typ,
-        new hydra.context.Context((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply()))),
+        hydra.lexical.Lexical.emptyContext(),
         g));
   }
   
@@ -306,10 +306,10 @@ public interface TestCodec {
   
   static hydra.util.Maybe<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>> tryInferTypeOf(hydra.graph.Graph g, hydra.core.Term term) {
     return hydra.lib.eithers.Either.apply(
-      (java.util.function.Function<hydra.context.InContext<hydra.error.OtherError>, hydra.util.Maybe<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>>>) (ignored -> (hydra.util.Maybe<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>>) (hydra.util.Maybe.<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>>nothing())),
+      (java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>>>) (ignored -> (hydra.util.Maybe<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>>) (hydra.util.Maybe.<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>>nothing())),
       (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>, hydra.context.Context>, hydra.util.Maybe<hydra.util.Pair<hydra.core.Term, hydra.core.TypeScheme>>>) (result -> hydra.util.Maybe.just(hydra.lib.pairs.First.apply(result))),
       hydra.inference.Inference.inferTypeOf(
-        new hydra.context.Context((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply()))),
+        hydra.lexical.Lexical.emptyContext(),
         g,
         term));
   }
@@ -572,11 +572,11 @@ public interface TestCodec {
     hydra.module.Module tempModule = new hydra.module.Module((mod).namespace, testBindings.get(), (mod).termDependencies, (mod).typeDependencies, (mod).description);
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.Bimap.apply(
-        (java.util.function.Function<hydra.context.InContext<hydra.error.OtherError>, String>) (ic -> (((java.util.function.Function<hydra.context.InContext<hydra.error.OtherError>, hydra.error.OtherError>) (projected -> projected.object)).apply(ic)).value),
+        (java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, String>) (ic -> hydra.show.error.Error_.error(((java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, hydra.error.Error_>) (projected -> projected.object)).apply(ic))),
         (java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>>) (a -> a),
         hydra.ext.haskell.utils.Utils.namespacesForModule(
           tempModule,
-          new hydra.context.Context((java.util.List<String>) (java.util.List.<String>of()), (java.util.List<String>) (java.util.List.<String>of()), (java.util.Map<hydra.core.Name, hydra.core.Term>) ((java.util.Map<hydra.core.Name, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Term>apply()))),
+          hydra.lexical.Lexical.emptyContext(),
           graph_)),
       (java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>, hydra.util.Either<String, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>>>) (baseNamespaces -> {
         hydra.util.Lazy<java.util.Set<hydra.core.Name>> encodedNames = new hydra.util.Lazy<>(() -> hydra.lib.sets.Unions.apply(hydra.lib.lists.Map.apply(
