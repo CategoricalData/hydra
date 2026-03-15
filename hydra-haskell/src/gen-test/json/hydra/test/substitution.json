@@ -1714,5 +1714,4 @@
     "hydra.topology",
     "hydra.typing",
     "hydra.util",
-    "hydra.variants",
-    "hydra.workflow"]}
+    "hydra.variants"]}

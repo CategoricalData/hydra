@@ -101,6 +101,7 @@
     "hydra.ext.pegasus.pdl",
     "hydra.ext.org.ansi.sql.syntax",
     "hydra.ext.org.stacspec.items",
+    "hydra.ext.workflow",
     "hydra.demos.genpg.transform",
     "hydra.ext.cpp.coder",
     "hydra.ext.cpp.environment",

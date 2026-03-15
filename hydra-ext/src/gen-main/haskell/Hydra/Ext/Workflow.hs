@@ -2,7 +2,7 @@
 
 -- | A model for Hydra transformation workflows
 
-module Hydra.Workflow where
+module Hydra.Ext.Workflow where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Module as Module
@@ -22,7 +22,7 @@ data HydraSchemaSpec =
     hydraSchemaSpecTypeName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
 
-_HydraSchemaSpec = (Core.Name "hydra.workflow.HydraSchemaSpec")
+_HydraSchemaSpec = (Core.Name "hydra.ext.workflow.HydraSchemaSpec")
 
 _HydraSchemaSpec_modules = (Core.Name "modules")
 
@@ -38,7 +38,7 @@ data SchemaSpec =
   SchemaSpecProvided 
   deriving (Eq, Ord, Read, Show)
 
-_SchemaSpec = (Core.Name "hydra.workflow.SchemaSpec")
+_SchemaSpec = (Core.Name "hydra.ext.workflow.SchemaSpec")
 
 _SchemaSpec_hydra = (Core.Name "hydra")
 
@@ -59,7 +59,7 @@ data TransformWorkflow =
     transformWorkflowDestDir :: String}
   deriving (Eq, Ord, Read, Show)
 
-_TransformWorkflow = (Core.Name "hydra.workflow.TransformWorkflow")
+_TransformWorkflow = (Core.Name "hydra.ext.workflow.TransformWorkflow")
 
 _TransformWorkflow_name = (Core.Name "name")
 

@@ -25,7 +25,6 @@ import qualified Hydra.Sources.Kernel.Types.Testing     as Testing
 import qualified Hydra.Sources.Kernel.Types.Topology    as Topology
 import qualified Hydra.Sources.Kernel.Types.Typing      as Typing
 import qualified Hydra.Sources.Kernel.Types.Util        as Util
-import qualified Hydra.Sources.Kernel.Types.Workflow    as Workflow
 
 
 kernelTypesModules :: [Module]
@@ -51,8 +50,7 @@ kernelTypesModules = [
   Topology.module_,
   Typing.module_,
   Util.module_,
-  Variants.module_,
-  Workflow.module_]
+  Variants.module_]
 
 -- | Namespaces of all kernel type modules
 kernelTypesNamespaces :: [Namespace]

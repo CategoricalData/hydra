@@ -63,7 +63,6 @@ import qualified Hydra.Sources.Decode.Topology      as DecodeTopology
 import qualified Hydra.Sources.Decode.Typing        as DecodeTyping
 import qualified Hydra.Sources.Decode.Util          as DecodeUtil
 import qualified Hydra.Sources.Decode.Variants      as DecodeVariants
-import qualified Hydra.Sources.Decode.Workflow      as DecodeWorkflow
 
 -- Secondary, generated encoding modules
 import qualified Hydra.Sources.Encode.Accessors     as EncodeAccessors
@@ -85,7 +84,6 @@ import qualified Hydra.Sources.Encode.Topology      as EncodeTopology
 import qualified Hydra.Sources.Encode.Typing        as EncodeTyping
 import qualified Hydra.Sources.Encode.Util          as EncodeUtil
 import qualified Hydra.Sources.Encode.Variants      as EncodeVariants
-import qualified Hydra.Sources.Encode.Workflow      as EncodeWorkflow
 
 
 kernelTermsModules :: [Module]
@@ -153,8 +151,7 @@ kernelDecodingModules = [
   DecodeTopology.module_,
   DecodeTyping.module_,
   DecodeUtil.module_,
-  DecodeVariants.module_,
-  DecodeWorkflow.module_]
+  DecodeVariants.module_]
 
 kernelEncodingModules :: [Module]
 kernelEncodingModules = [
@@ -176,5 +173,4 @@ kernelEncodingModules = [
   EncodeTopology.module_,
   EncodeTyping.module_,
   EncodeUtil.module_,
-  EncodeVariants.module_,
-  EncodeWorkflow.module_]
+  EncodeVariants.module_]

@@ -1,6 +1,6 @@
-module Hydra.Sources.Kernel.Types.Workflow where
+module Hydra.Ext.Sources.Workflow where
 
--- Standard type-level kernel imports
+-- Standard imports for type-level sources outside of the kernel
 import           Hydra.Kernel
 import           Hydra.Dsl.Annotations (doc)
 import           Hydra.Dsl.Bootstrap
@@ -12,7 +12,7 @@ import qualified Hydra.Sources.Kernel.Types.Module as Module
 
 
 ns :: Namespace
-ns = Namespace "hydra.workflow"
+ns = Namespace "hydra.ext.workflow"
 
 define :: String -> Type -> Binding
 define = defineType ns

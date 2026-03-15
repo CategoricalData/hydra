@@ -6149,7 +6149,6 @@
     "hydra.typing",
     "hydra.util",
     "hydra.variants",
-    "hydra.workflow",
     "hydra.pg.model",
     "hydra.tabular",
     "hydra.relational"]}

@@ -91,7 +91,6 @@ pyright src/gen-main/python/hydra/tabular.py
 pyright src/gen-main/python/hydra/testing.py
 pyright src/gen-main/python/hydra/topology.py
 pyright src/gen-main/python/hydra/typing.py
-pyright src/gen-main/python/hydra/workflow.py
 
 # Kernel terms (generated)
 pyright src/gen-main/python/hydra/adapt/literals.py
@@ -154,7 +153,6 @@ from hydra.tabular import *
 from hydra.testing import *
 from hydra.topology import *
 from hydra.typing import *
-from hydra.workflow import *
 
 # terms
 # TODO: adapt, decode, describe, encode, extract, show
