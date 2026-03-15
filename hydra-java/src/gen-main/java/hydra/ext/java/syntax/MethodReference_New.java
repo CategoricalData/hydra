@@ -13,9 +13,9 @@ public class MethodReference_New implements Serializable, Comparable<MethodRefer
   
   public final hydra.ext.java.syntax.ClassType classType;
   
-  public final java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments;
   
-  public MethodReference_New (hydra.ext.java.syntax.ClassType classType, java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments) {
+  public MethodReference_New (hydra.ext.java.syntax.ClassType classType, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments) {
     this.classType = classType;
     this.typeArguments = typeArguments;
   }
@@ -55,7 +55,7 @@ public class MethodReference_New implements Serializable, Comparable<MethodRefer
     return new MethodReference_New(classType, typeArguments);
   }
   
-  public MethodReference_New withTypeArguments(java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments) {
+  public MethodReference_New withTypeArguments(hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments) {
     return new MethodReference_New(classType, typeArguments);
   }
 }

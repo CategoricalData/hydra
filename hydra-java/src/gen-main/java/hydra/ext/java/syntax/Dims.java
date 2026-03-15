@@ -9,9 +9,9 @@ public class Dims implements Serializable, Comparable<Dims> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<java.util.List<hydra.ext.java.syntax.Annotation>> value;
+  public final hydra.util.ConsList<hydra.util.ConsList<hydra.ext.java.syntax.Annotation>> value;
   
-  public Dims (java.util.List<java.util.List<hydra.ext.java.syntax.Annotation>> value) {
+  public Dims (hydra.util.ConsList<hydra.util.ConsList<hydra.ext.java.syntax.Annotation>> value) {
     this.value = value;
   }
   

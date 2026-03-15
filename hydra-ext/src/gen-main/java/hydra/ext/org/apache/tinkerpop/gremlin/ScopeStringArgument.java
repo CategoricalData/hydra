@@ -13,9 +13,9 @@ public class ScopeStringArgument implements Serializable, Comparable<ScopeString
   
   public final hydra.ext.org.apache.tinkerpop.gremlin.TraversalScopeArgument scope;
   
-  public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> strings;
+  public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> strings;
   
-  public ScopeStringArgument (hydra.ext.org.apache.tinkerpop.gremlin.TraversalScopeArgument scope, java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> strings) {
+  public ScopeStringArgument (hydra.ext.org.apache.tinkerpop.gremlin.TraversalScopeArgument scope, hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> strings) {
     this.scope = scope;
     this.strings = strings;
   }
@@ -55,7 +55,7 @@ public class ScopeStringArgument implements Serializable, Comparable<ScopeString
     return new ScopeStringArgument(scope, strings);
   }
   
-  public ScopeStringArgument withStrings(java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> strings) {
+  public ScopeStringArgument withStrings(hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> strings) {
     return new ScopeStringArgument(scope, strings);
   }
 }

@@ -9,9 +9,9 @@ public class List implements Serializable, Comparable<List> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.python.syntax.StarNamedExpression> value;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.StarNamedExpression> value;
   
-  public List (java.util.List<hydra.ext.python.syntax.StarNamedExpression> value) {
+  public List (hydra.util.ConsList<hydra.ext.python.syntax.StarNamedExpression> value) {
     this.value = value;
   }
   

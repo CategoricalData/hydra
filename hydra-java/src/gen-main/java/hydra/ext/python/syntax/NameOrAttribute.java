@@ -9,9 +9,9 @@ public class NameOrAttribute implements Serializable, Comparable<NameOrAttribute
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.python.syntax.Name> value;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.Name> value;
   
-  public NameOrAttribute (java.util.List<hydra.ext.python.syntax.Name> value) {
+  public NameOrAttribute (hydra.util.ConsList<hydra.ext.python.syntax.Name> value) {
     this.value = value;
   }
   

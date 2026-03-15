@@ -78,9 +78,9 @@ public abstract class AnnotatedRhs implements Serializable, Comparable<Annotated
   }
   
   public static final class Star extends hydra.ext.python.syntax.AnnotatedRhs implements Serializable {
-    public final java.util.List<hydra.ext.python.syntax.StarExpression> value;
+    public final hydra.util.ConsList<hydra.ext.python.syntax.StarExpression> value;
     
-    public Star (java.util.List<hydra.ext.python.syntax.StarExpression> value) {
+    public Star (hydra.util.ConsList<hydra.ext.python.syntax.StarExpression> value) {
       this.value = value;
     }
     

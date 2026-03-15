@@ -15,11 +15,11 @@ public class NonArithmeticOperatorExpression implements Serializable, Comparable
   
   public final hydra.ext.cypher.openCypher.Atom atom;
   
-  public final java.util.List<hydra.ext.cypher.openCypher.ListOperatorExpressionOrPropertyLookup> listsAndLookups;
+  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.ListOperatorExpressionOrPropertyLookup> listsAndLookups;
   
   public final hydra.util.Maybe<hydra.ext.cypher.openCypher.NodeLabels> labels;
   
-  public NonArithmeticOperatorExpression (hydra.ext.cypher.openCypher.Atom atom, java.util.List<hydra.ext.cypher.openCypher.ListOperatorExpressionOrPropertyLookup> listsAndLookups, hydra.util.Maybe<hydra.ext.cypher.openCypher.NodeLabels> labels) {
+  public NonArithmeticOperatorExpression (hydra.ext.cypher.openCypher.Atom atom, hydra.util.ConsList<hydra.ext.cypher.openCypher.ListOperatorExpressionOrPropertyLookup> listsAndLookups, hydra.util.Maybe<hydra.ext.cypher.openCypher.NodeLabels> labels) {
     this.atom = atom;
     this.listsAndLookups = listsAndLookups;
     this.labels = labels;
@@ -68,7 +68,7 @@ public class NonArithmeticOperatorExpression implements Serializable, Comparable
     return new NonArithmeticOperatorExpression(atom, listsAndLookups, labels);
   }
   
-  public NonArithmeticOperatorExpression withListsAndLookups(java.util.List<hydra.ext.cypher.openCypher.ListOperatorExpressionOrPropertyLookup> listsAndLookups) {
+  public NonArithmeticOperatorExpression withListsAndLookups(hydra.util.ConsList<hydra.ext.cypher.openCypher.ListOperatorExpressionOrPropertyLookup> listsAndLookups) {
     return new NonArithmeticOperatorExpression(atom, listsAndLookups, labels);
   }
   

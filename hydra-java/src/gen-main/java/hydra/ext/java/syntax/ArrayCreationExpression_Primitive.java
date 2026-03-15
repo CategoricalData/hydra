@@ -15,11 +15,11 @@ public class ArrayCreationExpression_Primitive implements Serializable, Comparab
   
   public final hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type;
   
-  public final java.util.List<hydra.ext.java.syntax.DimExpr> dimExprs;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.DimExpr> dimExprs;
   
   public final hydra.util.Maybe<hydra.ext.java.syntax.Dims> dims;
   
-  public ArrayCreationExpression_Primitive (hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type, java.util.List<hydra.ext.java.syntax.DimExpr> dimExprs, hydra.util.Maybe<hydra.ext.java.syntax.Dims> dims) {
+  public ArrayCreationExpression_Primitive (hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type, hydra.util.ConsList<hydra.ext.java.syntax.DimExpr> dimExprs, hydra.util.Maybe<hydra.ext.java.syntax.Dims> dims) {
     this.type = type;
     this.dimExprs = dimExprs;
     this.dims = dims;
@@ -68,7 +68,7 @@ public class ArrayCreationExpression_Primitive implements Serializable, Comparab
     return new ArrayCreationExpression_Primitive(type, dimExprs, dims);
   }
   
-  public ArrayCreationExpression_Primitive withDimExprs(java.util.List<hydra.ext.java.syntax.DimExpr> dimExprs) {
+  public ArrayCreationExpression_Primitive withDimExprs(hydra.util.ConsList<hydra.ext.java.syntax.DimExpr> dimExprs) {
     return new ArrayCreationExpression_Primitive(type, dimExprs, dims);
   }
   

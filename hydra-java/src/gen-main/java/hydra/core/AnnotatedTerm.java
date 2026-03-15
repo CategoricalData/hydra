@@ -22,9 +22,9 @@ public class AnnotatedTerm implements Serializable, Comparable<AnnotatedTerm> {
   /**
    * The annotation as a map from keys to values
    */
-  public final java.util.Map<hydra.core.Name, hydra.core.Term> annotation;
+  public final hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> annotation;
   
-  public AnnotatedTerm (hydra.core.Term body, java.util.Map<hydra.core.Name, hydra.core.Term> annotation) {
+  public AnnotatedTerm (hydra.core.Term body, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> annotation) {
     this.body = body;
     this.annotation = annotation;
   }
@@ -64,7 +64,7 @@ public class AnnotatedTerm implements Serializable, Comparable<AnnotatedTerm> {
     return new AnnotatedTerm(body, annotation);
   }
   
-  public AnnotatedTerm withAnnotation(java.util.Map<hydra.core.Name, hydra.core.Term> annotation) {
+  public AnnotatedTerm withAnnotation(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> annotation) {
     return new AnnotatedTerm(body, annotation);
   }
 }

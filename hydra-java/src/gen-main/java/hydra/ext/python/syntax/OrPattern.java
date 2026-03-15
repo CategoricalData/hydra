@@ -9,9 +9,9 @@ public class OrPattern implements Serializable, Comparable<OrPattern> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.python.syntax.ClosedPattern> value;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.ClosedPattern> value;
   
-  public OrPattern (java.util.List<hydra.ext.python.syntax.ClosedPattern> value) {
+  public OrPattern (hydra.util.ConsList<hydra.ext.python.syntax.ClosedPattern> value) {
     this.value = value;
   }
   

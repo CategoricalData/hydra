@@ -17,7 +17,7 @@ public class AnnotationTypeElementDeclaration implements Serializable, Comparabl
   
   public static final hydra.core.Name DEFAULT = new hydra.core.Name("default");
   
-  public final java.util.List<hydra.ext.java.syntax.AnnotationTypeElementModifier> modifiers;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.AnnotationTypeElementModifier> modifiers;
   
   public final hydra.ext.java.syntax.UnannType type;
   
@@ -27,7 +27,7 @@ public class AnnotationTypeElementDeclaration implements Serializable, Comparabl
   
   public final hydra.util.Maybe<hydra.ext.java.syntax.DefaultValue> default_;
   
-  public AnnotationTypeElementDeclaration (java.util.List<hydra.ext.java.syntax.AnnotationTypeElementModifier> modifiers, hydra.ext.java.syntax.UnannType type, hydra.ext.java.syntax.Identifier identifier, hydra.util.Maybe<hydra.ext.java.syntax.Dims> dims, hydra.util.Maybe<hydra.ext.java.syntax.DefaultValue> default_) {
+  public AnnotationTypeElementDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.AnnotationTypeElementModifier> modifiers, hydra.ext.java.syntax.UnannType type, hydra.ext.java.syntax.Identifier identifier, hydra.util.Maybe<hydra.ext.java.syntax.Dims> dims, hydra.util.Maybe<hydra.ext.java.syntax.DefaultValue> default_) {
     this.modifiers = modifiers;
     this.type = type;
     this.identifier = identifier;
@@ -88,7 +88,7 @@ public class AnnotationTypeElementDeclaration implements Serializable, Comparabl
       other.default_.hashCode());
   }
   
-  public AnnotationTypeElementDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.AnnotationTypeElementModifier> modifiers) {
+  public AnnotationTypeElementDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.AnnotationTypeElementModifier> modifiers) {
     return new AnnotationTypeElementDeclaration(modifiers, type, identifier, dims, default_);
   }
   

@@ -15,11 +15,11 @@ public class CaseExpression implements Serializable, Comparable<CaseExpression> 
   
   public final hydra.util.Maybe<hydra.ext.cypher.openCypher.Expression> expression;
   
-  public final java.util.List<hydra.ext.cypher.openCypher.CaseAlternative> alternatives;
+  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.CaseAlternative> alternatives;
   
   public final hydra.util.Maybe<hydra.ext.cypher.openCypher.Expression> else_;
   
-  public CaseExpression (hydra.util.Maybe<hydra.ext.cypher.openCypher.Expression> expression, java.util.List<hydra.ext.cypher.openCypher.CaseAlternative> alternatives, hydra.util.Maybe<hydra.ext.cypher.openCypher.Expression> else_) {
+  public CaseExpression (hydra.util.Maybe<hydra.ext.cypher.openCypher.Expression> expression, hydra.util.ConsList<hydra.ext.cypher.openCypher.CaseAlternative> alternatives, hydra.util.Maybe<hydra.ext.cypher.openCypher.Expression> else_) {
     this.expression = expression;
     this.alternatives = alternatives;
     this.else_ = else_;
@@ -70,7 +70,7 @@ public class CaseExpression implements Serializable, Comparable<CaseExpression> 
     return new CaseExpression(expression, alternatives, else_);
   }
   
-  public CaseExpression withAlternatives(java.util.List<hydra.ext.cypher.openCypher.CaseAlternative> alternatives) {
+  public CaseExpression withAlternatives(hydra.util.ConsList<hydra.ext.cypher.openCypher.CaseAlternative> alternatives) {
     return new CaseExpression(expression, alternatives, else_);
   }
   

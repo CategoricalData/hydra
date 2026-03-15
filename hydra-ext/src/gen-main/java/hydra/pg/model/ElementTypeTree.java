@@ -16,9 +16,9 @@ public class ElementTypeTree<T> implements Serializable, Comparable<ElementTypeT
   
   public final hydra.pg.model.ElementType<T> self;
   
-  public final java.util.List<hydra.pg.model.ElementTypeTree<T>> dependencies;
+  public final hydra.util.ConsList<hydra.pg.model.ElementTypeTree<T>> dependencies;
   
-  public ElementTypeTree (hydra.pg.model.ElementType<T> self, java.util.List<hydra.pg.model.ElementTypeTree<T>> dependencies) {
+  public ElementTypeTree (hydra.pg.model.ElementType<T> self, hydra.util.ConsList<hydra.pg.model.ElementTypeTree<T>> dependencies) {
     this.self = self;
     this.dependencies = dependencies;
   }
@@ -58,7 +58,7 @@ public class ElementTypeTree<T> implements Serializable, Comparable<ElementTypeT
     return new ElementTypeTree(self, dependencies);
   }
   
-  public ElementTypeTree withDependencies(java.util.List<hydra.pg.model.ElementTypeTree<T>> dependencies) {
+  public ElementTypeTree withDependencies(hydra.util.ConsList<hydra.pg.model.ElementTypeTree<T>> dependencies) {
     return new ElementTypeTree(self, dependencies);
   }
 }

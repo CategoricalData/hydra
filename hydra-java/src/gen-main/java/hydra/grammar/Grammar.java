@@ -12,9 +12,9 @@ public class Grammar implements Serializable, Comparable<Grammar> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.grammar.Production> value;
+  public final hydra.util.ConsList<hydra.grammar.Production> value;
   
-  public Grammar (java.util.List<hydra.grammar.Production> value) {
+  public Grammar (hydra.util.ConsList<hydra.grammar.Production> value) {
     this.value = value;
   }
   

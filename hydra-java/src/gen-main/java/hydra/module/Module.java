@@ -28,24 +28,24 @@ public class Module implements Serializable, Comparable<Module> {
   /**
    * The elements defined in this module
    */
-  public final java.util.List<hydra.core.Binding> elements;
+  public final hydra.util.ConsList<hydra.core.Binding> elements;
   
   /**
    * Any modules which the term expressions of this module directly depend upon
    */
-  public final java.util.List<hydra.module.Namespace> termDependencies;
+  public final hydra.util.ConsList<hydra.module.Namespace> termDependencies;
   
   /**
    * Any modules which the type expressions of this module directly depend upon
    */
-  public final java.util.List<hydra.module.Namespace> typeDependencies;
+  public final hydra.util.ConsList<hydra.module.Namespace> typeDependencies;
   
   /**
    * An optional human-readable description of the module
    */
   public final hydra.util.Maybe<String> description;
   
-  public Module (hydra.module.Namespace namespace, java.util.List<hydra.core.Binding> elements, java.util.List<hydra.module.Namespace> termDependencies, java.util.List<hydra.module.Namespace> typeDependencies, hydra.util.Maybe<String> description) {
+  public Module (hydra.module.Namespace namespace, hydra.util.ConsList<hydra.core.Binding> elements, hydra.util.ConsList<hydra.module.Namespace> termDependencies, hydra.util.ConsList<hydra.module.Namespace> typeDependencies, hydra.util.Maybe<String> description) {
     this.namespace = namespace;
     this.elements = elements;
     this.termDependencies = termDependencies;
@@ -112,15 +112,15 @@ public class Module implements Serializable, Comparable<Module> {
     return new Module(namespace, elements, termDependencies, typeDependencies, description);
   }
   
-  public Module withElements(java.util.List<hydra.core.Binding> elements) {
+  public Module withElements(hydra.util.ConsList<hydra.core.Binding> elements) {
     return new Module(namespace, elements, termDependencies, typeDependencies, description);
   }
   
-  public Module withTermDependencies(java.util.List<hydra.module.Namespace> termDependencies) {
+  public Module withTermDependencies(hydra.util.ConsList<hydra.module.Namespace> termDependencies) {
     return new Module(namespace, elements, termDependencies, typeDependencies, description);
   }
   
-  public Module withTypeDependencies(java.util.List<hydra.module.Namespace> typeDependencies) {
+  public Module withTypeDependencies(hydra.util.ConsList<hydra.module.Namespace> typeDependencies) {
     return new Module(namespace, elements, termDependencies, typeDependencies, description);
   }
   

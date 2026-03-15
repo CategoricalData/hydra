@@ -29,9 +29,9 @@ public class VertexType<T> implements Serializable, Comparable<VertexType<T>> {
   /**
    * A list of property types. The types are ordered for the sake of applications in which property order is significant.
    */
-  public final java.util.List<hydra.pg.model.PropertyType<T>> properties;
+  public final hydra.util.ConsList<hydra.pg.model.PropertyType<T>> properties;
   
-  public VertexType (hydra.pg.model.VertexLabel label, T id, java.util.List<hydra.pg.model.PropertyType<T>> properties) {
+  public VertexType (hydra.pg.model.VertexLabel label, T id, hydra.util.ConsList<hydra.pg.model.PropertyType<T>> properties) {
     this.label = label;
     this.id = id;
     this.properties = properties;
@@ -82,7 +82,7 @@ public class VertexType<T> implements Serializable, Comparable<VertexType<T>> {
     return new VertexType(label, id, properties);
   }
   
-  public VertexType withProperties(java.util.List<hydra.pg.model.PropertyType<T>> properties) {
+  public VertexType withProperties(hydra.util.ConsList<hydra.pg.model.PropertyType<T>> properties) {
     return new VertexType(label, id, properties);
   }
 }

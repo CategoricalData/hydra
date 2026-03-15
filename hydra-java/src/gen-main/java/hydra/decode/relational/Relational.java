@@ -63,7 +63,7 @@ public interface Relational {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.ColumnSchema<T0>> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "name",
@@ -97,7 +97,7 @@ public interface Relational {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.ForeignKey> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "foreignRelation",
@@ -109,7 +109,7 @@ public interface Relational {
             (java.util.function.Function<hydra.relational.RelationName, hydra.util.Either<hydra.error.DecodingError, hydra.relational.ForeignKey>>) (field_foreignRelation -> hydra.lib.eithers.Bind.apply(
               hydra.extract.helpers.Helpers.requireField(
                 "keys",
-                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.Map<hydra.relational.ColumnName, hydra.relational.ColumnName>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.Map<hydra.relational.ColumnName, hydra.relational.ColumnName>>>) (v2 -> hydra.extract.helpers.Helpers.decodeMap(
+                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.PersistentMap<hydra.relational.ColumnName, hydra.relational.ColumnName>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.PersistentMap<hydra.relational.ColumnName, hydra.relational.ColumnName>>>) (v2 -> hydra.extract.helpers.Helpers.decodeMap(
                   (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.relational.ColumnName>>>) (p0 -> p1 -> hydra.decode.relational.Relational.columnName(
                     p0,
                     p1)),
@@ -120,7 +120,7 @@ public interface Relational {
                   v2))),
                 fieldMap,
                 cx),
-              (java.util.function.Function<java.util.Map<hydra.relational.ColumnName, hydra.relational.ColumnName>, hydra.util.Either<hydra.error.DecodingError, hydra.relational.ForeignKey>>) (field_keys -> hydra.util.Either.<hydra.error.DecodingError, hydra.relational.ForeignKey>right(new hydra.relational.ForeignKey(field_foreignRelation, field_keys))))));
+              (java.util.function.Function<hydra.util.PersistentMap<hydra.relational.ColumnName, hydra.relational.ColumnName>, hydra.util.Either<hydra.error.DecodingError, hydra.relational.ForeignKey>>) (field_keys -> hydra.util.Either.<hydra.error.DecodingError, hydra.relational.ForeignKey>right(new hydra.relational.ForeignKey(field_foreignRelation, field_keys))))));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(
@@ -140,7 +140,7 @@ public interface Relational {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.PrimaryKey> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.eithers.Map.apply(
-            (java.util.function.Function<java.util.List<hydra.relational.ColumnName>, hydra.relational.PrimaryKey>) (b -> new hydra.relational.PrimaryKey(b)),
+            (java.util.function.Function<hydra.util.ConsList<hydra.relational.ColumnName>, hydra.relational.PrimaryKey>) (b -> new hydra.relational.PrimaryKey(b)),
             hydra.extract.helpers.Helpers.decodeList(
               (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.relational.ColumnName>>>) (p0 -> p1 -> hydra.decode.relational.Relational.columnName(
                 p0,
@@ -166,7 +166,7 @@ public interface Relational {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.Relation<T0>> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.eithers.Map.apply(
-            (java.util.function.Function<java.util.List<hydra.relational.Row<T0>>, hydra.relational.Relation<T0>>) (b -> (hydra.relational.Relation<T0>) (new hydra.relational.Relation(b))),
+            (java.util.function.Function<hydra.util.ConsList<hydra.relational.Row<T0>>, hydra.relational.Relation<T0>>) (b -> (hydra.relational.Relation<T0>) (new hydra.relational.Relation(b))),
             hydra.extract.helpers.Helpers.decodeList(
               (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.relational.Row<T0>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.relational.Row<T0>>>) (v2 -> hydra.decode.relational.Relational.<T0>row(
                 v,
@@ -238,7 +238,7 @@ public interface Relational {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.RelationSchema<T0>> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "name",
@@ -250,7 +250,7 @@ public interface Relational {
             (java.util.function.Function<hydra.relational.RelationName, hydra.util.Either<hydra.error.DecodingError, hydra.relational.RelationSchema<T0>>>) (field_name -> hydra.lib.eithers.Bind.apply(
               hydra.extract.helpers.Helpers.requireField(
                 "columns",
-                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.relational.ColumnSchema<T0>>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.relational.ColumnSchema<T0>>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
+                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.relational.ColumnSchema<T0>>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.relational.ColumnSchema<T0>>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
                   (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.relational.ColumnSchema<T0>>>>) (v12 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.relational.ColumnSchema<T0>>>) (v22 -> hydra.decode.relational.Relational.<T0>columnSchema(
                     t,
                     v12,
@@ -259,10 +259,10 @@ public interface Relational {
                   v2))),
                 fieldMap,
                 cx),
-              (java.util.function.Function<java.util.List<hydra.relational.ColumnSchema<T0>>, hydra.util.Either<hydra.error.DecodingError, hydra.relational.RelationSchema<T0>>>) (field_columns -> hydra.lib.eithers.Bind.apply(
+              (java.util.function.Function<hydra.util.ConsList<hydra.relational.ColumnSchema<T0>>, hydra.util.Either<hydra.error.DecodingError, hydra.relational.RelationSchema<T0>>>) (field_columns -> hydra.lib.eithers.Bind.apply(
                 hydra.extract.helpers.Helpers.requireField(
                   "primaryKeys",
-                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.relational.PrimaryKey>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.relational.PrimaryKey>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
+                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.relational.PrimaryKey>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.relational.PrimaryKey>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
                     (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.relational.PrimaryKey>>>) (p0 -> p1 -> hydra.decode.relational.Relational.primaryKey(
                       p0,
                       p1)),
@@ -270,10 +270,10 @@ public interface Relational {
                     v2))),
                   fieldMap,
                   cx),
-                (java.util.function.Function<java.util.List<hydra.relational.PrimaryKey>, hydra.util.Either<hydra.error.DecodingError, hydra.relational.RelationSchema<T0>>>) (field_primaryKeys -> hydra.lib.eithers.Bind.apply(
+                (java.util.function.Function<hydra.util.ConsList<hydra.relational.PrimaryKey>, hydra.util.Either<hydra.error.DecodingError, hydra.relational.RelationSchema<T0>>>) (field_primaryKeys -> hydra.lib.eithers.Bind.apply(
                   hydra.extract.helpers.Helpers.requireField(
                     "foreignKeys",
-                    (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.relational.ForeignKey>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.relational.ForeignKey>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
+                    (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.relational.ForeignKey>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.relational.ForeignKey>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
                       (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.relational.ForeignKey>>>) (p0 -> p1 -> hydra.decode.relational.Relational.foreignKey(
                         p0,
                         p1)),
@@ -281,7 +281,7 @@ public interface Relational {
                       v2))),
                     fieldMap,
                     cx),
-                  (java.util.function.Function<java.util.List<hydra.relational.ForeignKey>, hydra.util.Either<hydra.error.DecodingError, hydra.relational.RelationSchema<T0>>>) (field_foreignKeys -> hydra.util.Either.<hydra.error.DecodingError, hydra.relational.RelationSchema<T0>>right((hydra.relational.RelationSchema<T0>) (new hydra.relational.RelationSchema<T0>(field_name, field_columns, field_primaryKeys, field_foreignKeys)))))))))));
+                  (java.util.function.Function<hydra.util.ConsList<hydra.relational.ForeignKey>, hydra.util.Either<hydra.error.DecodingError, hydra.relational.RelationSchema<T0>>>) (field_foreignKeys -> hydra.util.Either.<hydra.error.DecodingError, hydra.relational.RelationSchema<T0>>right((hydra.relational.RelationSchema<T0>) (new hydra.relational.RelationSchema<T0>(field_name, field_columns, field_primaryKeys, field_foreignKeys)))))))))));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(
@@ -301,9 +301,9 @@ public interface Relational {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.Relationship<T0>> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.eithers.Map.apply(
-            (java.util.function.Function<java.util.Set<java.util.Map<hydra.relational.ColumnName, T0>>, hydra.relational.Relationship<T0>>) (b -> (hydra.relational.Relationship<T0>) (new hydra.relational.Relationship(b))),
+            (java.util.function.Function<hydra.util.PersistentSet<hydra.util.PersistentMap<hydra.relational.ColumnName, T0>>, hydra.relational.Relationship<T0>>) (b -> (hydra.relational.Relationship<T0>) (new hydra.relational.Relationship(b))),
             hydra.extract.helpers.Helpers.decodeSet(
-              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.Map<hydra.relational.ColumnName, T0>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.Map<hydra.relational.ColumnName, T0>>>) (v2 -> hydra.extract.helpers.Helpers.decodeMap(
+              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.PersistentMap<hydra.relational.ColumnName, T0>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.PersistentMap<hydra.relational.ColumnName, T0>>>) (v2 -> hydra.extract.helpers.Helpers.decodeMap(
                 (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.relational.ColumnName>>>) (p0 -> p1 -> hydra.decode.relational.Relational.columnName(
                   p0,
                   p1)),
@@ -331,7 +331,7 @@ public interface Relational {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.Row<T0>> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.eithers.Map.apply(
-            (java.util.function.Function<java.util.List<T0>, hydra.relational.Row<T0>>) (b -> (hydra.relational.Row<T0>) (new hydra.relational.Row(b))),
+            (java.util.function.Function<hydra.util.ConsList<T0>, hydra.relational.Row<T0>>) (b -> (hydra.relational.Row<T0>) (new hydra.relational.Row(b))),
             hydra.extract.helpers.Helpers.<T0>decodeList(
               v,
               cx,

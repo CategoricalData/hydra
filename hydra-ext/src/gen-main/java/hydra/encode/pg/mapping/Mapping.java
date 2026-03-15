@@ -7,7 +7,7 @@ package hydra.encode.pg.mapping;
  */
 public interface Mapping {
   static hydra.core.Term annotationSchema(hydra.pg.mapping.AnnotationSchema x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.mapping.AnnotationSchema"), java.util.List.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.mapping.AnnotationSchema"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("vertexLabel"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).vertexLabel))),
       new hydra.core.Field(new hydra.core.Name("edgeLabel"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).edgeLabel))),
       new hydra.core.Field(new hydra.core.Name("vertexId"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).vertexId))),
@@ -26,7 +26,7 @@ public interface Mapping {
   }
   
   static hydra.core.Term edgeSpec(hydra.pg.mapping.EdgeSpec x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.mapping.EdgeSpec"), java.util.List.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.mapping.EdgeSpec"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("label"), hydra.encode.pg.model.Model.edgeLabel((x).label)),
       new hydra.core.Field(new hydra.core.Name("id"), hydra.encode.pg.mapping.Mapping.valueSpec((x).id)),
       new hydra.core.Field(new hydra.core.Name("out"), hydra.encode.pg.mapping.Mapping.valueSpec((x).out)),
@@ -51,7 +51,7 @@ public interface Mapping {
   }
   
   static hydra.core.Term propertySpec(hydra.pg.mapping.PropertySpec x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.mapping.PropertySpec"), java.util.List.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.mapping.PropertySpec"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("key"), hydra.encode.pg.model.Model.propertyKey((x).key)),
       new hydra.core.Field(new hydra.core.Name("value"), hydra.encode.pg.mapping.Mapping.valueSpec((x).value)))));
   }
@@ -71,7 +71,7 @@ public interface Mapping {
   }
   
   static hydra.core.Term vertexSpec(hydra.pg.mapping.VertexSpec x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.mapping.VertexSpec"), java.util.List.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.mapping.VertexSpec"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("label"), hydra.encode.pg.model.Model.vertexLabel((x).label)),
       new hydra.core.Field(new hydra.core.Name("id"), hydra.encode.pg.mapping.Mapping.valueSpec((x).id)),
       new hydra.core.Field(new hydra.core.Name("properties"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(

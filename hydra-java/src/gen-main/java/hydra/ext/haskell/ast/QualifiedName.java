@@ -17,14 +17,14 @@ public class QualifiedName implements Serializable, Comparable<QualifiedName> {
   /**
    * The qualifier parts
    */
-  public final java.util.List<hydra.ext.haskell.ast.NamePart> qualifiers;
+  public final hydra.util.ConsList<hydra.ext.haskell.ast.NamePart> qualifiers;
   
   /**
    * The unqualified name part
    */
   public final hydra.ext.haskell.ast.NamePart unqualified;
   
-  public QualifiedName (java.util.List<hydra.ext.haskell.ast.NamePart> qualifiers, hydra.ext.haskell.ast.NamePart unqualified) {
+  public QualifiedName (hydra.util.ConsList<hydra.ext.haskell.ast.NamePart> qualifiers, hydra.ext.haskell.ast.NamePart unqualified) {
     this.qualifiers = qualifiers;
     this.unqualified = unqualified;
   }
@@ -60,7 +60,7 @@ public class QualifiedName implements Serializable, Comparable<QualifiedName> {
     return ((Comparable) unqualified).compareTo(other.unqualified);
   }
   
-  public QualifiedName withQualifiers(java.util.List<hydra.ext.haskell.ast.NamePart> qualifiers) {
+  public QualifiedName withQualifiers(hydra.util.ConsList<hydra.ext.haskell.ast.NamePart> qualifiers) {
     return new QualifiedName(qualifiers, unqualified);
   }
   

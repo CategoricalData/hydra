@@ -17,7 +17,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.AlphaConversionTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "term",
@@ -73,7 +73,7 @@ public interface Testing {
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
           hydra.core.Name tname = ((inj).value).typeName;
-          hydra.util.Lazy<java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.EvaluationStyle>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(java.util.List.of(
+          hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.EvaluationStyle>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.EvaluationStyle>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.EvaluationStyle>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.EvaluationStyle>>>(new hydra.core.Name("eager"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.EvaluationStyle>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<java.lang.Void, hydra.testing.EvaluationStyle>) (t -> new hydra.testing.EvaluationStyle.Eager()),
               hydra.extract.helpers.Helpers.decodeUnit(
@@ -85,7 +85,7 @@ public interface Testing {
                 cx,
                 input)))))))));
           return hydra.lib.maybes.Maybe.applyLazy(
-            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.EvaluationStyle>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.EvaluationStyle>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "no such field ",
               (fname).value,
               " in union type ",
@@ -112,7 +112,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.CaseConversionTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "fromConvention",
@@ -210,7 +210,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.DelegatedEvaluationTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "input",
@@ -246,7 +246,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.EtaExpansionTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "input",
@@ -282,7 +282,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.DeannotateTermTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "input",
@@ -318,7 +318,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.DeannotateTypeTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "input",
@@ -354,7 +354,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.FlattenLetTermsTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "input",
@@ -394,7 +394,7 @@ public interface Testing {
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
           hydra.core.Name tname = ((inj).value).typeName;
-          hydra.util.Lazy<java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.FoldOperation>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(java.util.List.of(
+          hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.FoldOperation>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.FoldOperation>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.FoldOperation>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.FoldOperation>>>(new hydra.core.Name("sumInt32Literals"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.FoldOperation>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<java.lang.Void, hydra.testing.FoldOperation>) (t -> new hydra.testing.FoldOperation.SumInt32Literals()),
               hydra.extract.helpers.Helpers.decodeUnit(
@@ -411,7 +411,7 @@ public interface Testing {
                 cx,
                 input)))))))));
           return hydra.lib.maybes.Maybe.applyLazy(
-            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.FoldOperation>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.FoldOperation>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "no such field ",
               (fname).value,
               " in union type ",
@@ -438,7 +438,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.FoldOverTermTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "input",
@@ -490,7 +490,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.FreeVariablesTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "input",
@@ -502,7 +502,7 @@ public interface Testing {
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.FreeVariablesTestCase>>) (field_input -> hydra.lib.eithers.Bind.apply(
               hydra.extract.helpers.Helpers.requireField(
                 "output",
-                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.Set<hydra.core.Name>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.Set<hydra.core.Name>>>) (v2 -> hydra.extract.helpers.Helpers.decodeSet(
+                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.PersistentSet<hydra.core.Name>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.PersistentSet<hydra.core.Name>>>) (v2 -> hydra.extract.helpers.Helpers.decodeSet(
                   (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.core.Name>>>) (p0 -> p1 -> hydra.decode.core.Core.name(
                     p0,
                     p1)),
@@ -510,7 +510,7 @@ public interface Testing {
                   v2))),
                 fieldMap,
                 cx),
-              (java.util.function.Function<java.util.Set<hydra.core.Name>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.FreeVariablesTestCase>>) (field_output -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.FreeVariablesTestCase>right(new hydra.testing.FreeVariablesTestCase(field_input, field_output))))));
+              (java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.FreeVariablesTestCase>>) (field_output -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.FreeVariablesTestCase>right(new hydra.testing.FreeVariablesTestCase(field_input, field_output))))));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(
@@ -533,7 +533,7 @@ public interface Testing {
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
           hydra.core.Name tname = ((inj).value).typeName;
-          hydra.util.Lazy<java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.HoistPredicate>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(java.util.List.of(
+          hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.HoistPredicate>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.HoistPredicate>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.HoistPredicate>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.HoistPredicate>>>(new hydra.core.Name("caseStatements"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.HoistPredicate>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<java.lang.Void, hydra.testing.HoistPredicate>) (t -> new hydra.testing.HoistPredicate.CaseStatements()),
               hydra.extract.helpers.Helpers.decodeUnit(
@@ -555,7 +555,7 @@ public interface Testing {
                 cx,
                 input)))))))));
           return hydra.lib.maybes.Maybe.applyLazy(
-            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.HoistPredicate>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.HoistPredicate>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "no such field ",
               (fname).value,
               " in union type ",
@@ -582,7 +582,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.HoistLetBindingsTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "input",
@@ -618,7 +618,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.HoistPolymorphicLetBindingsTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "input",
@@ -654,7 +654,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.HoistSubtermsTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "predicate",
@@ -698,7 +698,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.HoistCaseStatementsTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "input",
@@ -738,7 +738,7 @@ public interface Testing {
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
           hydra.core.Name tname = ((inj).value).typeName;
-          hydra.util.Lazy<java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TermRewriter>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(java.util.List.of(
+          hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TermRewriter>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TermRewriter>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TermRewriter>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TermRewriter>>>(new hydra.core.Name("replaceFooWithBar"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TermRewriter>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<java.lang.Void, hydra.testing.TermRewriter>) (t -> new hydra.testing.TermRewriter.ReplaceFooWithBar()),
               hydra.extract.helpers.Helpers.decodeUnit(
@@ -750,7 +750,7 @@ public interface Testing {
                 cx,
                 input)))))))));
           return hydra.lib.maybes.Maybe.applyLazy(
-            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.TermRewriter>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.TermRewriter>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "no such field ",
               (fname).value,
               " in union type ",
@@ -777,7 +777,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.RewriteTermTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "input",
@@ -825,13 +825,13 @@ public interface Testing {
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
           hydra.core.Name tname = ((inj).value).typeName;
-          hydra.util.Lazy<java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TypeRewriter>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(java.util.List.of((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TypeRewriter>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TypeRewriter>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TypeRewriter>>>(new hydra.core.Name("replaceStringWithInt32"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TypeRewriter>>) (input -> hydra.lib.eithers.Map.apply(
+          hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TypeRewriter>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TypeRewriter>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TypeRewriter>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TypeRewriter>>>(new hydra.core.Name("replaceStringWithInt32"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TypeRewriter>>) (input -> hydra.lib.eithers.Map.apply(
             (java.util.function.Function<java.lang.Void, hydra.testing.TypeRewriter>) (t -> new hydra.testing.TypeRewriter.ReplaceStringWithInt32()),
             hydra.extract.helpers.Helpers.decodeUnit(
               cx,
               input)))))))));
           return hydra.lib.maybes.Maybe.applyLazy(
-            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.TypeRewriter>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.TypeRewriter>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "no such field ",
               (fname).value,
               " in union type ",
@@ -858,7 +858,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.RewriteTypeTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "input",
@@ -902,7 +902,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.EvaluationTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "evaluationStyle",
@@ -946,7 +946,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.InferenceFailureTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "input",
@@ -974,7 +974,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.InferenceTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "input",
@@ -1010,7 +1010,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.JsonDecodeTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "type",
@@ -1083,7 +1083,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.JsonEncodeTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "term",
@@ -1157,7 +1157,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.JsonRoundtripTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "type",
@@ -1193,7 +1193,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.LiftLambdaAboveLetTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "input",
@@ -1238,7 +1238,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.ParserTestCase<T0>> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "input",
@@ -1348,7 +1348,7 @@ public interface Testing {
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
           hydra.core.Name tname = ((inj).value).typeName;
-          hydra.util.Lazy<java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCase>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(java.util.List.of(
+          hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCase>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCase>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCase>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCase>>>(new hydra.core.Name("alphaConversion"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCase>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<hydra.testing.AlphaConversionTestCase, hydra.testing.TestCase>) (t -> new hydra.testing.TestCase.AlphaConversion(t)),
               hydra.decode.testing.Testing.alphaConversionTestCase(
@@ -1540,7 +1540,7 @@ public interface Testing {
                 cx,
                 input)))))))));
           return hydra.lib.maybes.Maybe.applyLazy(
-            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.TestCase>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.TestCase>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "no such field ",
               (fname).value,
               " in union type ",
@@ -1567,7 +1567,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCaseWithMetadata> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "name",
@@ -1644,7 +1644,7 @@ public interface Testing {
                 (java.util.function.Function<hydra.util.Maybe<String>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCaseWithMetadata>>) (field_description -> hydra.lib.eithers.Bind.apply(
                   hydra.extract.helpers.Helpers.requireField(
                     "tags",
-                    (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.testing.Tag>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.testing.Tag>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
+                    (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.testing.Tag>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.testing.Tag>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
                       (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.Tag>>>) (p0 -> p1 -> hydra.decode.testing.Testing.tag(
                         p0,
                         p1)),
@@ -1652,7 +1652,7 @@ public interface Testing {
                       v2))),
                     fieldMap,
                     cx),
-                  (java.util.function.Function<java.util.List<hydra.testing.Tag>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCaseWithMetadata>>) (field_tags -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.TestCaseWithMetadata>right(new hydra.testing.TestCaseWithMetadata(field_name, field_case, field_description, field_tags))))))))));
+                  (java.util.function.Function<hydra.util.ConsList<hydra.testing.Tag>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCaseWithMetadata>>) (field_tags -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.TestCaseWithMetadata>right(new hydra.testing.TestCaseWithMetadata(field_name, field_case, field_description, field_tags))))))))));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(
@@ -1671,7 +1671,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestGroup> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "name",
@@ -1740,7 +1740,7 @@ public interface Testing {
               (java.util.function.Function<hydra.util.Maybe<String>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestGroup>>) (field_description -> hydra.lib.eithers.Bind.apply(
                 hydra.extract.helpers.Helpers.requireField(
                   "subgroups",
-                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.testing.TestGroup>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.testing.TestGroup>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
+                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.testing.TestGroup>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.testing.TestGroup>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
                     (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestGroup>>>) (p0 -> p1 -> hydra.decode.testing.Testing.testGroup(
                       p0,
                       p1)),
@@ -1748,10 +1748,10 @@ public interface Testing {
                     v2))),
                   fieldMap,
                   cx),
-                (java.util.function.Function<java.util.List<hydra.testing.TestGroup>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestGroup>>) (field_subgroups -> hydra.lib.eithers.Bind.apply(
+                (java.util.function.Function<hydra.util.ConsList<hydra.testing.TestGroup>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestGroup>>) (field_subgroups -> hydra.lib.eithers.Bind.apply(
                   hydra.extract.helpers.Helpers.requireField(
                     "cases",
-                    (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.testing.TestCaseWithMetadata>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.testing.TestCaseWithMetadata>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
+                    (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.testing.TestCaseWithMetadata>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.testing.TestCaseWithMetadata>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
                       (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestCaseWithMetadata>>>) (p0 -> p1 -> hydra.decode.testing.Testing.testCaseWithMetadata(
                         p0,
                         p1)),
@@ -1759,7 +1759,7 @@ public interface Testing {
                       v2))),
                     fieldMap,
                     cx),
-                  (java.util.function.Function<java.util.List<hydra.testing.TestCaseWithMetadata>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestGroup>>) (field_cases -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.TestGroup>right(new hydra.testing.TestGroup(field_name, field_description, field_subgroups, field_cases))))))))));
+                  (java.util.function.Function<hydra.util.ConsList<hydra.testing.TestCaseWithMetadata>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TestGroup>>) (field_cases -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.TestGroup>right(new hydra.testing.TestGroup(field_name, field_description, field_subgroups, field_cases))))))))));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(
@@ -1778,7 +1778,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.TypeCheckingTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "input",
@@ -1822,7 +1822,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.TypeCheckingFailureTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "input",
@@ -1850,11 +1850,11 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.TopologicalSortBindingsTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "bindings",
-              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Term>>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Term>>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
+              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Term>>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Term>>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
                 (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Pair<hydra.core.Name, hydra.core.Term>>>>) (v12 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Pair<hydra.core.Name, hydra.core.Term>>>) (v22 -> hydra.extract.helpers.Helpers.decodePair(
                   (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.core.Name>>>) (p0 -> p1 -> hydra.decode.core.Core.name(
                     p0,
@@ -1868,11 +1868,11 @@ public interface Testing {
                 v2))),
               fieldMap,
               cx),
-            (java.util.function.Function<java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Term>>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TopologicalSortBindingsTestCase>>) (field_bindings -> hydra.lib.eithers.Bind.apply(
+            (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Term>>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TopologicalSortBindingsTestCase>>) (field_bindings -> hydra.lib.eithers.Bind.apply(
               hydra.extract.helpers.Helpers.requireField(
                 "expected",
-                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Term>>>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Term>>>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
-                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Term>>>>>) (v12 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Term>>>>) (v22 -> hydra.extract.helpers.Helpers.decodeList(
+                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Term>>>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Term>>>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
+                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Term>>>>>) (v12 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Term>>>>) (v22 -> hydra.extract.helpers.Helpers.decodeList(
                     (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Pair<hydra.core.Name, hydra.core.Term>>>>) (v13 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Pair<hydra.core.Name, hydra.core.Term>>>) (v23 -> hydra.extract.helpers.Helpers.decodePair(
                       (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.core.Name>>>) (p0 -> p1 -> hydra.decode.core.Core.name(
                         p0,
@@ -1888,7 +1888,7 @@ public interface Testing {
                   v2))),
                 fieldMap,
                 cx),
-              (java.util.function.Function<java.util.List<java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Term>>>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TopologicalSortBindingsTestCase>>) (field_expected -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.TopologicalSortBindingsTestCase>right(new hydra.testing.TopologicalSortBindingsTestCase(field_bindings, field_expected))))));
+              (java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Term>>>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TopologicalSortBindingsTestCase>>) (field_expected -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.TopologicalSortBindingsTestCase>right(new hydra.testing.TopologicalSortBindingsTestCase(field_bindings, field_expected))))));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(
@@ -1907,12 +1907,12 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.TopologicalSortTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "adjacencyList",
-              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.util.Pair<Integer, java.util.List<Integer>>>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.util.Pair<Integer, java.util.List<Integer>>>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
-                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Pair<Integer, java.util.List<Integer>>>>>) (v12 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Pair<Integer, java.util.List<Integer>>>>) (v22 -> hydra.extract.helpers.Helpers.decodePair(
+              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
+                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>>>>) (v12 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>>>) (v22 -> hydra.extract.helpers.Helpers.decodePair(
                   (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>>) (cx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>) (raw2 -> hydra.lib.eithers.Either.apply(
                     (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, Integer>>) (err -> hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError(err))),
                     (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
@@ -1949,7 +1949,7 @@ public interface Testing {
                     hydra.lexical.Lexical.stripAndDereferenceTermEither(
                       cx2,
                       raw2)))),
-                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<Integer>>>>) (v13 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<Integer>>>) (v23 -> hydra.extract.helpers.Helpers.decodeList(
+                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<Integer>>>>) (v13 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<Integer>>>) (v23 -> hydra.extract.helpers.Helpers.decodeList(
                     (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>>) (cx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>) (raw2 -> hydra.lib.eithers.Either.apply(
                       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, Integer>>) (err -> hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError(err))),
                       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
@@ -1994,12 +1994,12 @@ public interface Testing {
                 v2))),
               fieldMap,
               cx),
-            (java.util.function.Function<java.util.List<hydra.util.Pair<Integer, java.util.List<Integer>>>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TopologicalSortTestCase>>) (field_adjacencyList -> hydra.lib.eithers.Bind.apply(
+            (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TopologicalSortTestCase>>) (field_adjacencyList -> hydra.lib.eithers.Bind.apply(
               hydra.extract.helpers.Helpers.requireField(
                 "expected",
-                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Either<java.util.List<java.util.List<Integer>>, java.util.List<Integer>>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Either<java.util.List<java.util.List<Integer>>, java.util.List<Integer>>>>) (v2 -> hydra.extract.helpers.Helpers.decodeEither(
-                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<java.util.List<Integer>>>>>) (v12 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<java.util.List<Integer>>>>) (v22 -> hydra.extract.helpers.Helpers.decodeList(
-                    (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<Integer>>>>) (v13 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<Integer>>>) (v23 -> hydra.extract.helpers.Helpers.decodeList(
+                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Either<hydra.util.ConsList<hydra.util.ConsList<Integer>>, hydra.util.ConsList<Integer>>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Either<hydra.util.ConsList<hydra.util.ConsList<Integer>>, hydra.util.ConsList<Integer>>>>) (v2 -> hydra.extract.helpers.Helpers.decodeEither(
+                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.util.ConsList<Integer>>>>>) (v12 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.util.ConsList<Integer>>>>) (v22 -> hydra.extract.helpers.Helpers.decodeList(
+                    (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<Integer>>>>) (v13 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<Integer>>>) (v23 -> hydra.extract.helpers.Helpers.decodeList(
                       (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>>) (cx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>) (raw2 -> hydra.lib.eithers.Either.apply(
                         (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, Integer>>) (err -> hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError(err))),
                         (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
@@ -2040,7 +2040,7 @@ public interface Testing {
                       v23))),
                     v12,
                     v22))),
-                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<Integer>>>>) (v12 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<Integer>>>) (v22 -> hydra.extract.helpers.Helpers.decodeList(
+                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<Integer>>>>) (v12 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<Integer>>>) (v22 -> hydra.extract.helpers.Helpers.decodeList(
                     (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>>) (cx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>) (raw2 -> hydra.lib.eithers.Either.apply(
                       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, Integer>>) (err -> hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError(err))),
                       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
@@ -2083,7 +2083,7 @@ public interface Testing {
                   v2))),
                 fieldMap,
                 cx),
-              (java.util.function.Function<hydra.util.Either<java.util.List<java.util.List<Integer>>, java.util.List<Integer>>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TopologicalSortTestCase>>) (field_expected -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.TopologicalSortTestCase>right(new hydra.testing.TopologicalSortTestCase(field_adjacencyList, field_expected))))));
+              (java.util.function.Function<hydra.util.Either<hydra.util.ConsList<hydra.util.ConsList<Integer>>, hydra.util.ConsList<Integer>>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TopologicalSortTestCase>>) (field_expected -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.TopologicalSortTestCase>right(new hydra.testing.TopologicalSortTestCase(field_adjacencyList, field_expected))))));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(
@@ -2102,12 +2102,12 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.TopologicalSortSCCTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "adjacencyList",
-              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.util.Pair<Integer, java.util.List<Integer>>>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.util.Pair<Integer, java.util.List<Integer>>>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
-                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Pair<Integer, java.util.List<Integer>>>>>) (v12 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Pair<Integer, java.util.List<Integer>>>>) (v22 -> hydra.extract.helpers.Helpers.decodePair(
+              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
+                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>>>>) (v12 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>>>) (v22 -> hydra.extract.helpers.Helpers.decodePair(
                   (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>>) (cx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>) (raw2 -> hydra.lib.eithers.Either.apply(
                     (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, Integer>>) (err -> hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError(err))),
                     (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
@@ -2144,7 +2144,7 @@ public interface Testing {
                     hydra.lexical.Lexical.stripAndDereferenceTermEither(
                       cx2,
                       raw2)))),
-                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<Integer>>>>) (v13 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<Integer>>>) (v23 -> hydra.extract.helpers.Helpers.decodeList(
+                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<Integer>>>>) (v13 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<Integer>>>) (v23 -> hydra.extract.helpers.Helpers.decodeList(
                     (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>>) (cx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>) (raw2 -> hydra.lib.eithers.Either.apply(
                       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, Integer>>) (err -> hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError(err))),
                       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
@@ -2189,11 +2189,11 @@ public interface Testing {
                 v2))),
               fieldMap,
               cx),
-            (java.util.function.Function<java.util.List<hydra.util.Pair<Integer, java.util.List<Integer>>>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TopologicalSortSCCTestCase>>) (field_adjacencyList -> hydra.lib.eithers.Bind.apply(
+            (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TopologicalSortSCCTestCase>>) (field_adjacencyList -> hydra.lib.eithers.Bind.apply(
               hydra.extract.helpers.Helpers.requireField(
                 "expected",
-                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<java.util.List<Integer>>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<java.util.List<Integer>>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
-                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<Integer>>>>) (v12 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<Integer>>>) (v22 -> hydra.extract.helpers.Helpers.decodeList(
+                (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.util.ConsList<Integer>>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.util.ConsList<Integer>>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
+                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<Integer>>>>) (v12 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<Integer>>>) (v22 -> hydra.extract.helpers.Helpers.decodeList(
                     (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>>) (cx2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>) (raw2 -> hydra.lib.eithers.Either.apply(
                       (java.util.function.Function<String, hydra.util.Either<hydra.error.DecodingError, Integer>>) (err -> hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError(err))),
                       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, Integer>>) (stripped2 -> (stripped2).accept(new hydra.core.Term.PartialVisitor<>() {
@@ -2236,7 +2236,7 @@ public interface Testing {
                   v2))),
                 fieldMap,
                 cx),
-              (java.util.function.Function<java.util.List<java.util.List<Integer>>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TopologicalSortSCCTestCase>>) (field_expected -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.TopologicalSortSCCTestCase>right(new hydra.testing.TopologicalSortSCCTestCase(field_adjacencyList, field_expected))))));
+              (java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<Integer>>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.TopologicalSortSCCTestCase>>) (field_expected -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.TopologicalSortSCCTestCase>right(new hydra.testing.TopologicalSortSCCTestCase(field_adjacencyList, field_expected))))));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(
@@ -2255,7 +2255,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.SerializationTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "input",
@@ -2314,7 +2314,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.SimplifyTermTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "input",
@@ -2350,7 +2350,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.NormalizeTypeVariablesTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "input",
@@ -2386,7 +2386,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.TypeReductionTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "input",
@@ -2422,7 +2422,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.WriterTestCase<T0>> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "input",
@@ -2479,11 +2479,11 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.SubstInTypeTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "substitution",
-              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Type>>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Type>>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
+              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Type>>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Type>>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
                 (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Pair<hydra.core.Name, hydra.core.Type>>>>) (v12 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Pair<hydra.core.Name, hydra.core.Type>>>) (v22 -> hydra.extract.helpers.Helpers.decodePair(
                   (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.core.Name>>>) (p0 -> p1 -> hydra.decode.core.Core.name(
                     p0,
@@ -2497,7 +2497,7 @@ public interface Testing {
                 v2))),
               fieldMap,
               cx),
-            (java.util.function.Function<java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Type>>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.SubstInTypeTestCase>>) (field_substitution -> hydra.lib.eithers.Bind.apply(
+            (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Type>>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.SubstInTypeTestCase>>) (field_substitution -> hydra.lib.eithers.Bind.apply(
               hydra.extract.helpers.Helpers.requireField(
                 "input",
                 (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.core.Type>>>) (p0 -> p1 -> hydra.decode.core.Core.type(
@@ -2532,7 +2532,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.VariableOccursInTypeTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "variable",
@@ -2599,7 +2599,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.UnshadowVariablesTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "input",
@@ -2635,11 +2635,11 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.UnifyTypesTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "schemaTypes",
-              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.core.Name>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.core.Name>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
+              (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.core.Name>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.core.Name>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
                 (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.core.Name>>>) (p0 -> p1 -> hydra.decode.core.Core.name(
                   p0,
                   p1)),
@@ -2647,7 +2647,7 @@ public interface Testing {
                 v2))),
               fieldMap,
               cx),
-            (java.util.function.Function<java.util.List<hydra.core.Name>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.UnifyTypesTestCase>>) (field_schemaTypes -> hydra.lib.eithers.Bind.apply(
+            (java.util.function.Function<hydra.util.ConsList<hydra.core.Name>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.UnifyTypesTestCase>>) (field_schemaTypes -> hydra.lib.eithers.Bind.apply(
               hydra.extract.helpers.Helpers.requireField(
                 "left",
                 (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.core.Type>>>) (p0 -> p1 -> hydra.decode.core.Core.type(
@@ -2719,7 +2719,7 @@ public interface Testing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.testing.JoinTypesTestCase> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "left",
@@ -2739,11 +2739,11 @@ public interface Testing {
               (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.error.DecodingError, hydra.testing.JoinTypesTestCase>>) (field_right -> hydra.lib.eithers.Bind.apply(
                 hydra.extract.helpers.Helpers.requireField(
                   "expected",
-                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Either<java.lang.Void, java.util.List<hydra.typing.TypeConstraint>>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Either<java.lang.Void, java.util.List<hydra.typing.TypeConstraint>>>>) (v2 -> hydra.extract.helpers.Helpers.decodeEither(
+                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Either<java.lang.Void, hydra.util.ConsList<hydra.typing.TypeConstraint>>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Either<java.lang.Void, hydra.util.ConsList<hydra.typing.TypeConstraint>>>>) (v2 -> hydra.extract.helpers.Helpers.decodeEither(
                     (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.lang.Void>>>) (p0 -> p1 -> hydra.extract.helpers.Helpers.decodeUnit(
                       p0,
                       p1)),
-                    (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.typing.TypeConstraint>>>>) (v12 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.typing.TypeConstraint>>>) (v22 -> hydra.extract.helpers.Helpers.decodeList(
+                    (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.typing.TypeConstraint>>>>) (v12 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.typing.TypeConstraint>>>) (v22 -> hydra.extract.helpers.Helpers.decodeList(
                       (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.typing.TypeConstraint>>>) (p0 -> p1 -> hydra.decode.typing.Typing.typeConstraint(
                         p0,
                         p1)),
@@ -2753,7 +2753,7 @@ public interface Testing {
                     v2))),
                   fieldMap,
                   cx),
-                (java.util.function.Function<hydra.util.Either<java.lang.Void, java.util.List<hydra.typing.TypeConstraint>>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.JoinTypesTestCase>>) (field_expected -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.JoinTypesTestCase>right(new hydra.testing.JoinTypesTestCase(field_left, field_right, field_expected))))))));
+                (java.util.function.Function<hydra.util.Either<java.lang.Void, hydra.util.ConsList<hydra.typing.TypeConstraint>>, hydra.util.Either<hydra.error.DecodingError, hydra.testing.JoinTypesTestCase>>) (field_expected -> hydra.util.Either.<hydra.error.DecodingError, hydra.testing.JoinTypesTestCase>right(new hydra.testing.JoinTypesTestCase(field_left, field_right, field_expected))))))));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(

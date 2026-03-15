@@ -13,13 +13,13 @@ public class DataPropertyDomain implements Serializable, Comparable<DataProperty
   
   public static final hydra.core.Name DOMAIN = new hydra.core.Name("domain");
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
   public final hydra.ext.org.w3.owl.syntax.DataPropertyExpression property;
   
   public final hydra.ext.org.w3.owl.syntax.ClassExpression domain;
   
-  public DataPropertyDomain (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.DataPropertyExpression property, hydra.ext.org.w3.owl.syntax.ClassExpression domain) {
+  public DataPropertyDomain (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.DataPropertyExpression property, hydra.ext.org.w3.owl.syntax.ClassExpression domain) {
     this.annotations = annotations;
     this.property = property;
     this.domain = domain;
@@ -62,7 +62,7 @@ public class DataPropertyDomain implements Serializable, Comparable<DataProperty
     return ((Comparable) domain).compareTo(other.domain);
   }
   
-  public DataPropertyDomain withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public DataPropertyDomain withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new DataPropertyDomain(annotations, property, domain);
   }
   

@@ -9,9 +9,9 @@ public class StringLiteral1 implements Serializable, Comparable<StringLiteral1> 
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.io.shex.syntax.StringLiteral1_Elmt> value;
+  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.StringLiteral1_Elmt> value;
   
-  public StringLiteral1 (java.util.List<hydra.ext.io.shex.syntax.StringLiteral1_Elmt> value) {
+  public StringLiteral1 (hydra.util.ConsList<hydra.ext.io.shex.syntax.StringLiteral1_Elmt> value) {
     this.value = value;
   }
   

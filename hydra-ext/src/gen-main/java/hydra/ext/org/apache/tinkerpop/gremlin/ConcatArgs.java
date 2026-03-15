@@ -38,9 +38,9 @@ public abstract class ConcatArgs implements Serializable, Comparable<ConcatArgs>
   }
   
   public static final class Traversal extends hydra.ext.org.apache.tinkerpop.gremlin.ConcatArgs implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
     
-    public Traversal (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
+    public Traversal (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
       this.value = value;
     }
     
@@ -80,9 +80,9 @@ public abstract class ConcatArgs implements Serializable, Comparable<ConcatArgs>
   }
   
   public static final class String_ extends hydra.ext.org.apache.tinkerpop.gremlin.ConcatArgs implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
     
-    public String_ (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
+    public String_ (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
     

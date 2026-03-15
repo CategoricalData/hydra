@@ -7,25 +7,25 @@ package hydra.ext.python.language;
  */
 public interface Language {
   static hydra.coders.Language pythonLanguage() {
-    hydra.util.Lazy<java.util.Set<hydra.variants.EliminationVariant>> eliminationVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(java.util.List.of(
+    hydra.util.Lazy<hydra.util.PersistentSet<hydra.variants.EliminationVariant>> eliminationVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(
       new hydra.variants.EliminationVariant.Record(),
       new hydra.variants.EliminationVariant.Union(),
       new hydra.variants.EliminationVariant.Wrap())));
-    hydra.util.Lazy<java.util.Set<hydra.core.FloatType>> floatTypes = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(java.util.List.of(
+    hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.FloatType>> floatTypes = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(
       new hydra.core.FloatType.Bigfloat(),
       new hydra.core.FloatType.Float64())));
-    hydra.util.Lazy<java.util.Set<hydra.variants.FunctionVariant>> functionVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(java.util.List.of(
+    hydra.util.Lazy<hydra.util.PersistentSet<hydra.variants.FunctionVariant>> functionVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(
       new hydra.variants.FunctionVariant.Elimination(),
       new hydra.variants.FunctionVariant.Lambda(),
       new hydra.variants.FunctionVariant.Primitive())));
-    hydra.util.Lazy<java.util.Set<hydra.core.IntegerType>> integerTypes = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(java.util.List.of(new hydra.core.IntegerType.Bigint())));
-    hydra.util.Lazy<java.util.Set<hydra.variants.LiteralVariant>> literalVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(java.util.List.of(
+    hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.IntegerType>> integerTypes = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(new hydra.core.IntegerType.Bigint())));
+    hydra.util.Lazy<hydra.util.PersistentSet<hydra.variants.LiteralVariant>> literalVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(
       new hydra.variants.LiteralVariant.Binary(),
       new hydra.variants.LiteralVariant.Boolean_(),
       new hydra.variants.LiteralVariant.Float_(),
       new hydra.variants.LiteralVariant.Integer_(),
       new hydra.variants.LiteralVariant.String_())));
-    hydra.util.Lazy<java.util.Set<hydra.variants.TermVariant>> termVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(java.util.List.of(
+    hydra.util.Lazy<hydra.util.PersistentSet<hydra.variants.TermVariant>> termVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(
       new hydra.variants.TermVariant.Annotated(),
       new hydra.variants.TermVariant.Application(),
       new hydra.variants.TermVariant.Either(),
@@ -44,7 +44,7 @@ public interface Language {
       new hydra.variants.TermVariant.Unit(),
       new hydra.variants.TermVariant.Variable(),
       new hydra.variants.TermVariant.Wrap())));
-    hydra.util.Lazy<java.util.Set<hydra.variants.TypeVariant>> typeVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(java.util.List.of(
+    hydra.util.Lazy<hydra.util.PersistentSet<hydra.variants.TypeVariant>> typeVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(
       new hydra.variants.TypeVariant.Annotated(),
       new hydra.variants.TypeVariant.Application(),
       new hydra.variants.TypeVariant.Either(),
@@ -68,12 +68,12 @@ public interface Language {
     return true;
   }
   
-  static java.util.Set<String> pythonReservedWords() {
-    java.util.List<String> hydraPythonKeywords = java.util.List.of(
+  static hydra.util.PersistentSet<String> pythonReservedWords() {
+    hydra.util.ConsList<String> hydraPythonKeywords = hydra.util.ConsList.of(
       "Node",
       "FrozenDict");
-    java.util.List<String> pythonBuiltInFunctions = java.util.List.of("range");
-    java.util.List<String> pythonKeywords = java.util.List.of(
+    hydra.util.ConsList<String> pythonBuiltInFunctions = hydra.util.ConsList.of("range");
+    hydra.util.ConsList<String> pythonKeywords = hydra.util.ConsList.of(
       "False",
       "None",
       "True",
@@ -109,7 +109,7 @@ public interface Language {
       "while",
       "with",
       "yield");
-    return hydra.lib.sets.FromList.apply(hydra.lib.lists.Concat.apply(java.util.List.of(
+    return hydra.lib.sets.FromList.apply(hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
       pythonKeywords,
       pythonBuiltInFunctions,
       hydraPythonKeywords)));

@@ -13,9 +13,9 @@ public class IriRange_Sequence implements Serializable, Comparable<IriRange_Sequ
   
   public final hydra.ext.io.shex.syntax.Iri Iri;
   
-  public final hydra.util.Maybe<java.util.List<hydra.ext.io.shex.syntax.Exclusion>> Sequence;
+  public final hydra.util.Maybe<hydra.util.ConsList<hydra.ext.io.shex.syntax.Exclusion>> Sequence;
   
-  public IriRange_Sequence (hydra.ext.io.shex.syntax.Iri Iri, hydra.util.Maybe<java.util.List<hydra.ext.io.shex.syntax.Exclusion>> Sequence) {
+  public IriRange_Sequence (hydra.ext.io.shex.syntax.Iri Iri, hydra.util.Maybe<hydra.util.ConsList<hydra.ext.io.shex.syntax.Exclusion>> Sequence) {
     this.Iri = Iri;
     this.Sequence = Sequence;
   }
@@ -55,7 +55,7 @@ public class IriRange_Sequence implements Serializable, Comparable<IriRange_Sequ
     return new IriRange_Sequence(Iri, Sequence);
   }
   
-  public IriRange_Sequence withSequence(hydra.util.Maybe<java.util.List<hydra.ext.io.shex.syntax.Exclusion>> Sequence) {
+  public IriRange_Sequence withSequence(hydra.util.Maybe<hydra.util.ConsList<hydra.ext.io.shex.syntax.Exclusion>> Sequence) {
     return new IriRange_Sequence(Iri, Sequence);
   }
 }

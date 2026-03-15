@@ -11,11 +11,11 @@ public class EnumBody_Element implements Serializable, Comparable<EnumBody_Eleme
   
   public static final hydra.core.Name BODY_DECLARATIONS = new hydra.core.Name("bodyDeclarations");
   
-  public final java.util.List<hydra.ext.java.syntax.EnumConstant> constants;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.EnumConstant> constants;
   
-  public final java.util.List<hydra.ext.java.syntax.ClassBodyDeclaration> bodyDeclarations;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.ClassBodyDeclaration> bodyDeclarations;
   
-  public EnumBody_Element (java.util.List<hydra.ext.java.syntax.EnumConstant> constants, java.util.List<hydra.ext.java.syntax.ClassBodyDeclaration> bodyDeclarations) {
+  public EnumBody_Element (hydra.util.ConsList<hydra.ext.java.syntax.EnumConstant> constants, hydra.util.ConsList<hydra.ext.java.syntax.ClassBodyDeclaration> bodyDeclarations) {
     this.constants = constants;
     this.bodyDeclarations = bodyDeclarations;
   }
@@ -53,11 +53,11 @@ public class EnumBody_Element implements Serializable, Comparable<EnumBody_Eleme
       other.bodyDeclarations.hashCode());
   }
   
-  public EnumBody_Element withConstants(java.util.List<hydra.ext.java.syntax.EnumConstant> constants) {
+  public EnumBody_Element withConstants(hydra.util.ConsList<hydra.ext.java.syntax.EnumConstant> constants) {
     return new EnumBody_Element(constants, bodyDeclarations);
   }
   
-  public EnumBody_Element withBodyDeclarations(java.util.List<hydra.ext.java.syntax.ClassBodyDeclaration> bodyDeclarations) {
+  public EnumBody_Element withBodyDeclarations(hydra.util.ConsList<hydra.ext.java.syntax.ClassBodyDeclaration> bodyDeclarations) {
     return new EnumBody_Element(constants, bodyDeclarations);
   }
 }

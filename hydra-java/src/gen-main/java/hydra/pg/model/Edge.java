@@ -43,9 +43,9 @@ public class Edge<V> implements Serializable, Comparable<Edge<V>> {
   /**
    * A key/value map of edge properties
    */
-  public final java.util.Map<hydra.pg.model.PropertyKey, V> properties;
+  public final hydra.util.PersistentMap<hydra.pg.model.PropertyKey, V> properties;
   
-  public Edge (hydra.pg.model.EdgeLabel label, V id, V out, V in, java.util.Map<hydra.pg.model.PropertyKey, V> properties) {
+  public Edge (hydra.pg.model.EdgeLabel label, V id, V out, V in, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, V> properties) {
     this.label = label;
     this.id = id;
     this.out = out;
@@ -118,7 +118,7 @@ public class Edge<V> implements Serializable, Comparable<Edge<V>> {
     return new Edge(label, id, out, in, properties);
   }
   
-  public Edge withProperties(java.util.Map<hydra.pg.model.PropertyKey, V> properties) {
+  public Edge withProperties(hydra.util.PersistentMap<hydra.pg.model.PropertyKey, V> properties) {
     return new Edge(label, id, out, in, properties);
   }
 }

@@ -62,7 +62,7 @@ public class PythonModuleMetadata implements Serializable, Comparable<PythonModu
   /**
    * Type variables used in the module
    */
-  public final java.util.Set<hydra.core.Name> typeVariables;
+  public final hydra.util.PersistentSet<hydra.core.Name> typeVariables;
   
   public final Boolean usesAnnotated;
   
@@ -104,7 +104,7 @@ public class PythonModuleMetadata implements Serializable, Comparable<PythonModu
   
   public final Boolean usesTypeVar;
   
-  public PythonModuleMetadata (hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces, java.util.Set<hydra.core.Name> typeVariables, Boolean usesAnnotated, Boolean usesCallable, Boolean usesCast, Boolean usesLruCache, Boolean usesTypeAlias, Boolean usesDataclass, Boolean usesDecimal, Boolean usesEither, Boolean usesEnum, Boolean usesFrozenDict, Boolean usesFrozenList, Boolean usesGeneric, Boolean usesJust, Boolean usesLeft, Boolean usesMaybe, Boolean usesName, Boolean usesNode, Boolean usesNothing, Boolean usesRight, Boolean usesTypeVar) {
+  public PythonModuleMetadata (hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces, hydra.util.PersistentSet<hydra.core.Name> typeVariables, Boolean usesAnnotated, Boolean usesCallable, Boolean usesCast, Boolean usesLruCache, Boolean usesTypeAlias, Boolean usesDataclass, Boolean usesDecimal, Boolean usesEither, Boolean usesEnum, Boolean usesFrozenDict, Boolean usesFrozenList, Boolean usesGeneric, Boolean usesJust, Boolean usesLeft, Boolean usesMaybe, Boolean usesName, Boolean usesNode, Boolean usesNothing, Boolean usesRight, Boolean usesTypeVar) {
     this.namespaces = namespaces;
     this.typeVariables = typeVariables;
     this.usesAnnotated = usesAnnotated;
@@ -284,7 +284,7 @@ public class PythonModuleMetadata implements Serializable, Comparable<PythonModu
     return new PythonModuleMetadata(namespaces, typeVariables, usesAnnotated, usesCallable, usesCast, usesLruCache, usesTypeAlias, usesDataclass, usesDecimal, usesEither, usesEnum, usesFrozenDict, usesFrozenList, usesGeneric, usesJust, usesLeft, usesMaybe, usesName, usesNode, usesNothing, usesRight, usesTypeVar);
   }
   
-  public PythonModuleMetadata withTypeVariables(java.util.Set<hydra.core.Name> typeVariables) {
+  public PythonModuleMetadata withTypeVariables(hydra.util.PersistentSet<hydra.core.Name> typeVariables) {
     return new PythonModuleMetadata(namespaces, typeVariables, usesAnnotated, usesCallable, usesCast, usesLruCache, usesTypeAlias, usesDataclass, usesDecimal, usesEither, usesEnum, usesFrozenDict, usesFrozenList, usesGeneric, usesJust, usesLeft, usesMaybe, usesName, usesNode, usesNothing, usesRight, usesTypeVar);
   }
   

@@ -9,9 +9,9 @@ public class ElementValueArrayInitializer implements Serializable, Comparable<El
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.java.syntax.ElementValue> value;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.ElementValue> value;
   
-  public ElementValueArrayInitializer (java.util.List<hydra.ext.java.syntax.ElementValue> value) {
+  public ElementValueArrayInitializer (hydra.util.ConsList<hydra.ext.java.syntax.ElementValue> value) {
     this.value = value;
   }
   

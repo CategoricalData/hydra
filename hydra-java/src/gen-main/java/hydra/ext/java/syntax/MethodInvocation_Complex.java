@@ -15,11 +15,11 @@ public class MethodInvocation_Complex implements Serializable, Comparable<Method
   
   public final hydra.ext.java.syntax.MethodInvocation_Variant variant;
   
-  public final java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments;
   
   public final hydra.ext.java.syntax.Identifier identifier;
   
-  public MethodInvocation_Complex (hydra.ext.java.syntax.MethodInvocation_Variant variant, java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.Identifier identifier) {
+  public MethodInvocation_Complex (hydra.ext.java.syntax.MethodInvocation_Variant variant, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.Identifier identifier) {
     this.variant = variant;
     this.typeArguments = typeArguments;
     this.identifier = identifier;
@@ -66,7 +66,7 @@ public class MethodInvocation_Complex implements Serializable, Comparable<Method
     return new MethodInvocation_Complex(variant, typeArguments, identifier);
   }
   
-  public MethodInvocation_Complex withTypeArguments(java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments) {
+  public MethodInvocation_Complex withTypeArguments(hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments) {
     return new MethodInvocation_Complex(variant, typeArguments, identifier);
   }
   

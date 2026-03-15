@@ -29,9 +29,9 @@ public class CaseStatement implements Serializable, Comparable<CaseStatement> {
   /**
    * A list of case alternatives, one per union field
    */
-  public final java.util.List<hydra.core.Field> cases;
+  public final hydra.util.ConsList<hydra.core.Field> cases;
   
-  public CaseStatement (hydra.core.Name typeName, hydra.util.Maybe<hydra.core.Term> default_, java.util.List<hydra.core.Field> cases) {
+  public CaseStatement (hydra.core.Name typeName, hydra.util.Maybe<hydra.core.Term> default_, hydra.util.ConsList<hydra.core.Field> cases) {
     this.typeName = typeName;
     this.default_ = default_;
     this.cases = cases;
@@ -84,7 +84,7 @@ public class CaseStatement implements Serializable, Comparable<CaseStatement> {
     return new CaseStatement(typeName, default_, cases);
   }
   
-  public CaseStatement withCases(java.util.List<hydra.core.Field> cases) {
+  public CaseStatement withCases(hydra.util.ConsList<hydra.core.Field> cases) {
     return new CaseStatement(typeName, default_, cases);
   }
 }

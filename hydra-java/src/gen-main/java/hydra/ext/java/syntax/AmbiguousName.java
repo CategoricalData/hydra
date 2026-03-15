@@ -9,9 +9,9 @@ public class AmbiguousName implements Serializable, Comparable<AmbiguousName> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.java.syntax.Identifier> value;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.Identifier> value;
   
-  public AmbiguousName (java.util.List<hydra.ext.java.syntax.Identifier> value) {
+  public AmbiguousName (hydra.util.ConsList<hydra.ext.java.syntax.Identifier> value) {
     this.value = value;
   }
   

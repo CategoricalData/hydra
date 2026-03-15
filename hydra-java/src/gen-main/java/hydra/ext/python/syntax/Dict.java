@@ -9,9 +9,9 @@ public class Dict implements Serializable, Comparable<Dict> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.python.syntax.DoubleStarredKvpair> value;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.DoubleStarredKvpair> value;
   
-  public Dict (java.util.List<hydra.ext.python.syntax.DoubleStarredKvpair> value) {
+  public Dict (hydra.util.ConsList<hydra.ext.python.syntax.DoubleStarredKvpair> value) {
     this.value = value;
   }
   

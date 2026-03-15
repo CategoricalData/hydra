@@ -78,9 +78,9 @@ public abstract class IriRange implements Serializable, Comparable<IriRange> {
   }
   
   public static final class Sequence2 extends hydra.ext.io.shex.syntax.IriRange implements Serializable {
-    public final java.util.List<hydra.ext.io.shex.syntax.Exclusion> value;
+    public final hydra.util.ConsList<hydra.ext.io.shex.syntax.Exclusion> value;
     
-    public Sequence2 (java.util.List<hydra.ext.io.shex.syntax.Exclusion> value) {
+    public Sequence2 (hydra.util.ConsList<hydra.ext.io.shex.syntax.Exclusion> value) {
       this.value = value;
     }
     

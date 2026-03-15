@@ -12,9 +12,9 @@ public class Relationship<V> implements Serializable, Comparable<Relationship<V>
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.Set<java.util.Map<hydra.relational.ColumnName, V>> value;
+  public final hydra.util.PersistentSet<hydra.util.PersistentMap<hydra.relational.ColumnName, V>> value;
   
-  public Relationship (java.util.Set<java.util.Map<hydra.relational.ColumnName, V>> value) {
+  public Relationship (hydra.util.PersistentSet<hydra.util.PersistentMap<hydra.relational.ColumnName, V>> value) {
     this.value = value;
   }
   

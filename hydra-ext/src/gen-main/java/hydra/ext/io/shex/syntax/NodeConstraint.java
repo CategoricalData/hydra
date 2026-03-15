@@ -70,9 +70,9 @@ public abstract class NodeConstraint implements Serializable, Comparable<NodeCon
   }
   
   public static final class Sequence extends hydra.ext.io.shex.syntax.NodeConstraint implements Serializable {
-    public final java.util.List<hydra.ext.io.shex.syntax.XsFacet> value;
+    public final hydra.util.ConsList<hydra.ext.io.shex.syntax.XsFacet> value;
     
-    public Sequence (java.util.List<hydra.ext.io.shex.syntax.XsFacet> value) {
+    public Sequence (hydra.util.ConsList<hydra.ext.io.shex.syntax.XsFacet> value) {
       this.value = value;
     }
     
@@ -272,9 +272,9 @@ public abstract class NodeConstraint implements Serializable, Comparable<NodeCon
   }
   
   public static final class ListOfXsFacet extends hydra.ext.io.shex.syntax.NodeConstraint implements Serializable {
-    public final java.util.List<hydra.ext.io.shex.syntax.XsFacet> value;
+    public final hydra.util.ConsList<hydra.ext.io.shex.syntax.XsFacet> value;
     
-    public ListOfXsFacet (java.util.List<hydra.ext.io.shex.syntax.XsFacet> value) {
+    public ListOfXsFacet (hydra.util.ConsList<hydra.ext.io.shex.syntax.XsFacet> value) {
       this.value = value;
     }
     

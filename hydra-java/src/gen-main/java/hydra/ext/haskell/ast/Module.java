@@ -24,14 +24,14 @@ public class Module implements Serializable, Comparable<Module> {
   /**
    * Import statements
    */
-  public final java.util.List<hydra.ext.haskell.ast.Import> imports;
+  public final hydra.util.ConsList<hydra.ext.haskell.ast.Import> imports;
   
   /**
    * Module declarations
    */
-  public final java.util.List<hydra.ext.haskell.ast.DeclarationWithComments> declarations;
+  public final hydra.util.ConsList<hydra.ext.haskell.ast.DeclarationWithComments> declarations;
   
-  public Module (hydra.util.Maybe<hydra.ext.haskell.ast.ModuleHead> head, java.util.List<hydra.ext.haskell.ast.Import> imports, java.util.List<hydra.ext.haskell.ast.DeclarationWithComments> declarations) {
+  public Module (hydra.util.Maybe<hydra.ext.haskell.ast.ModuleHead> head, hydra.util.ConsList<hydra.ext.haskell.ast.Import> imports, hydra.util.ConsList<hydra.ext.haskell.ast.DeclarationWithComments> declarations) {
     this.head = head;
     this.imports = imports;
     this.declarations = declarations;
@@ -82,11 +82,11 @@ public class Module implements Serializable, Comparable<Module> {
     return new Module(head, imports, declarations);
   }
   
-  public Module withImports(java.util.List<hydra.ext.haskell.ast.Import> imports) {
+  public Module withImports(hydra.util.ConsList<hydra.ext.haskell.ast.Import> imports) {
     return new Module(head, imports, declarations);
   }
   
-  public Module withDeclarations(java.util.List<hydra.ext.haskell.ast.DeclarationWithComments> declarations) {
+  public Module withDeclarations(hydra.util.ConsList<hydra.ext.haskell.ast.DeclarationWithComments> declarations) {
     return new Module(head, imports, declarations);
   }
 }

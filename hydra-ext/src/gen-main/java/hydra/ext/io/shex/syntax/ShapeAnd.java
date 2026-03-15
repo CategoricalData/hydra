@@ -13,9 +13,9 @@ public class ShapeAnd implements Serializable, Comparable<ShapeAnd> {
   
   public final hydra.ext.io.shex.syntax.ShapeNot ShapeNot;
   
-  public final java.util.List<hydra.ext.io.shex.syntax.ShapeNot> listOfSequence;
+  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.ShapeNot> listOfSequence;
   
-  public ShapeAnd (hydra.ext.io.shex.syntax.ShapeNot ShapeNot, java.util.List<hydra.ext.io.shex.syntax.ShapeNot> listOfSequence) {
+  public ShapeAnd (hydra.ext.io.shex.syntax.ShapeNot ShapeNot, hydra.util.ConsList<hydra.ext.io.shex.syntax.ShapeNot> listOfSequence) {
     this.ShapeNot = ShapeNot;
     this.listOfSequence = listOfSequence;
   }
@@ -55,7 +55,7 @@ public class ShapeAnd implements Serializable, Comparable<ShapeAnd> {
     return new ShapeAnd(ShapeNot, listOfSequence);
   }
   
-  public ShapeAnd withListOfSequence(java.util.List<hydra.ext.io.shex.syntax.ShapeNot> listOfSequence) {
+  public ShapeAnd withListOfSequence(hydra.util.ConsList<hydra.ext.io.shex.syntax.ShapeNot> listOfSequence) {
     return new ShapeAnd(ShapeNot, listOfSequence);
   }
 }

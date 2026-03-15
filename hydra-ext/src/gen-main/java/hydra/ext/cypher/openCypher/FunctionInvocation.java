@@ -17,9 +17,9 @@ public class FunctionInvocation implements Serializable, Comparable<FunctionInvo
   
   public final Boolean distinct;
   
-  public final java.util.List<hydra.ext.cypher.openCypher.Expression> arguments;
+  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.Expression> arguments;
   
-  public FunctionInvocation (hydra.ext.cypher.openCypher.QualifiedName name, Boolean distinct, java.util.List<hydra.ext.cypher.openCypher.Expression> arguments) {
+  public FunctionInvocation (hydra.ext.cypher.openCypher.QualifiedName name, Boolean distinct, hydra.util.ConsList<hydra.ext.cypher.openCypher.Expression> arguments) {
     this.name = name;
     this.distinct = distinct;
     this.arguments = arguments;
@@ -70,7 +70,7 @@ public class FunctionInvocation implements Serializable, Comparable<FunctionInvo
     return new FunctionInvocation(name, distinct, arguments);
   }
   
-  public FunctionInvocation withArguments(java.util.List<hydra.ext.cypher.openCypher.Expression> arguments) {
+  public FunctionInvocation withArguments(hydra.util.ConsList<hydra.ext.cypher.openCypher.Expression> arguments) {
     return new FunctionInvocation(name, distinct, arguments);
   }
 }

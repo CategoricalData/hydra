@@ -21,7 +21,7 @@ public interface Grammar {
   }
   
   static hydra.core.Term labeledPattern(hydra.grammar.LabeledPattern x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.grammar.LabeledPattern"), java.util.List.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.grammar.LabeledPattern"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("label"), hydra.encode.grammar.Grammar.label((x).label)),
       new hydra.core.Field(new hydra.core.Name("pattern"), hydra.encode.grammar.Grammar.pattern((x).pattern)))));
   }
@@ -90,7 +90,7 @@ public interface Grammar {
   }
   
   static hydra.core.Term production(hydra.grammar.Production x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.grammar.Production"), java.util.List.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.grammar.Production"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("symbol"), hydra.encode.grammar.Grammar.symbol((x).symbol)),
       new hydra.core.Field(new hydra.core.Name("pattern"), hydra.encode.grammar.Grammar.pattern((x).pattern)))));
   }

@@ -16,13 +16,13 @@ public class ObjectPropertyRange implements Serializable, Comparable<ObjectPrope
   
   public static final hydra.core.Name RANGE = new hydra.core.Name("range");
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
   public final hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property;
   
   public final hydra.ext.org.w3.owl.syntax.ClassExpression range;
   
-  public ObjectPropertyRange (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property, hydra.ext.org.w3.owl.syntax.ClassExpression range) {
+  public ObjectPropertyRange (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property, hydra.ext.org.w3.owl.syntax.ClassExpression range) {
     this.annotations = annotations;
     this.property = property;
     this.range = range;
@@ -65,7 +65,7 @@ public class ObjectPropertyRange implements Serializable, Comparable<ObjectPrope
     return ((Comparable) range).compareTo(other.range);
   }
   
-  public ObjectPropertyRange withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public ObjectPropertyRange withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new ObjectPropertyRange(annotations, property, range);
   }
   

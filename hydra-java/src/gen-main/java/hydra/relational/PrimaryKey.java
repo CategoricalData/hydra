@@ -12,9 +12,9 @@ public class PrimaryKey implements Serializable, Comparable<PrimaryKey> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.relational.ColumnName> value;
+  public final hydra.util.ConsList<hydra.relational.ColumnName> value;
   
-  public PrimaryKey (java.util.List<hydra.relational.ColumnName> value) {
+  public PrimaryKey (hydra.util.ConsList<hydra.relational.ColumnName> value) {
     this.value = value;
   }
   

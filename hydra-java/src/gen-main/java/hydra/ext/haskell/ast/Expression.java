@@ -301,9 +301,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
    * A 'do' expression
    */
   public static final class Do extends hydra.ext.haskell.ast.Expression implements Serializable {
-    public final java.util.List<hydra.ext.haskell.ast.Statement> value;
+    public final hydra.util.ConsList<hydra.ext.haskell.ast.Statement> value;
     
-    public Do (java.util.List<hydra.ext.haskell.ast.Statement> value) {
+    public Do (hydra.util.ConsList<hydra.ext.haskell.ast.Statement> value) {
       this.value = value;
     }
     
@@ -604,9 +604,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
    * A list expression
    */
   public static final class List extends hydra.ext.haskell.ast.Expression implements Serializable {
-    public final java.util.List<hydra.ext.haskell.ast.Expression> value;
+    public final hydra.util.ConsList<hydra.ext.haskell.ast.Expression> value;
     
-    public List (java.util.List<hydra.ext.haskell.ast.Expression> value) {
+    public List (hydra.util.ConsList<hydra.ext.haskell.ast.Expression> value) {
       this.value = value;
     }
     
@@ -778,9 +778,9 @@ public abstract class Expression implements Serializable, Comparable<Expression>
    * A tuple expression
    */
   public static final class Tuple extends hydra.ext.haskell.ast.Expression implements Serializable {
-    public final java.util.List<hydra.ext.haskell.ast.Expression> value;
+    public final hydra.util.ConsList<hydra.ext.haskell.ast.Expression> value;
     
-    public Tuple (java.util.List<hydra.ext.haskell.ast.Expression> value) {
+    public Tuple (hydra.util.ConsList<hydra.ext.haskell.ast.Expression> value) {
       this.value = value;
     }
     

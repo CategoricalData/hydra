@@ -7,7 +7,7 @@ package hydra.test.testTypes;
  */
 public interface TestTypes {
   static hydra.core.Type testTypeBuddyListA() {
-    return new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("a"), new hydra.core.Type.Record(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeBuddyListAName(), java.util.List.of(
+    return new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("a"), new hydra.core.Type.Record(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeBuddyListAName(), hydra.util.ConsList.of(
       new hydra.core.FieldType(new hydra.core.Name("head"), new hydra.core.Type.Variable(new hydra.core.Name("a"))),
       new hydra.core.FieldType(new hydra.core.Name("tail"), new hydra.core.Type.Maybe(new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(hydra.test.testTypes.TestTypes.testTypeBuddyListBName()), new hydra.core.Type.Variable(new hydra.core.Name("a")))))))))));
   }
@@ -17,7 +17,7 @@ public interface TestTypes {
   }
   
   static hydra.core.Type testTypeBuddyListB() {
-    return new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("a"), new hydra.core.Type.Record(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeBuddyListBName(), java.util.List.of(
+    return new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("a"), new hydra.core.Type.Record(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeBuddyListBName(), hydra.util.ConsList.of(
       new hydra.core.FieldType(new hydra.core.Name("head"), new hydra.core.Type.Variable(new hydra.core.Name("a"))),
       new hydra.core.FieldType(new hydra.core.Name("tail"), new hydra.core.Type.Maybe(new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(hydra.test.testTypes.TestTypes.testTypeBuddyListAName()), new hydra.core.Type.Variable(new hydra.core.Name("a")))))))))));
   }
@@ -27,7 +27,7 @@ public interface TestTypes {
   }
   
   static hydra.core.Type testTypeComparison() {
-    return new hydra.core.Type.Union(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeComparisonName(), java.util.List.of(
+    return new hydra.core.Type.Union(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeComparisonName(), hydra.util.ConsList.of(
       new hydra.core.FieldType(new hydra.core.Name("lessThan"), new hydra.core.Type.Unit()),
       new hydra.core.FieldType(new hydra.core.Name("equalTo"), new hydra.core.Type.Unit()),
       new hydra.core.FieldType(new hydra.core.Name("greaterThan"), new hydra.core.Type.Unit()))));
@@ -38,7 +38,7 @@ public interface TestTypes {
   }
   
   static hydra.core.Type testTypeEither() {
-    return new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("a"), new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("b"), new hydra.core.Type.Union(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeEitherName(), java.util.List.of(
+    return new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("a"), new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("b"), new hydra.core.Type.Union(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeEitherName(), hydra.util.ConsList.of(
       new hydra.core.FieldType(new hydra.core.Name("left"), new hydra.core.Type.Variable(new hydra.core.Name("a"))),
       new hydra.core.FieldType(new hydra.core.Name("right"), new hydra.core.Type.Variable(new hydra.core.Name("b"))))))))));
   }
@@ -48,7 +48,7 @@ public interface TestTypes {
   }
   
   static hydra.core.Type testTypeHydraLiteralType() {
-    return new hydra.core.Type.Union(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeHydraLiteralTypeName(), java.util.List.of(
+    return new hydra.core.Type.Union(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeHydraLiteralTypeName(), hydra.util.ConsList.of(
       new hydra.core.FieldType(new hydra.core.Name("boolean"), new hydra.core.Type.Literal(new hydra.core.LiteralType.Boolean_())),
       new hydra.core.FieldType(new hydra.core.Name("string"), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())))));
   }
@@ -58,7 +58,7 @@ public interface TestTypes {
   }
   
   static hydra.core.Type testTypeHydraType() {
-    return new hydra.core.Type.Union(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeHydraTypeName(), java.util.List.of(
+    return new hydra.core.Type.Union(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeHydraTypeName(), hydra.util.ConsList.of(
       new hydra.core.FieldType(new hydra.core.Name("literal"), new hydra.core.Type.Variable(hydra.test.testTypes.TestTypes.testTypeHydraLiteralTypeName())),
       new hydra.core.FieldType(new hydra.core.Name("list"), new hydra.core.Type.Variable(hydra.test.testTypes.TestTypes.testTypeHydraTypeName())))));
   }
@@ -68,7 +68,7 @@ public interface TestTypes {
   }
   
   static hydra.core.Type testTypeIntList() {
-    return new hydra.core.Type.Record(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeIntListName(), java.util.List.of(
+    return new hydra.core.Type.Record(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeIntListName(), hydra.util.ConsList.of(
       new hydra.core.FieldType(new hydra.core.Name("head"), new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int32()))),
       new hydra.core.FieldType(new hydra.core.Name("tail"), new hydra.core.Type.Maybe(new hydra.core.Type.Variable(hydra.test.testTypes.TestTypes.testTypeIntListName()))))));
   }
@@ -78,7 +78,7 @@ public interface TestTypes {
   }
   
   static hydra.core.Type testTypeLatLon() {
-    return new hydra.core.Type.Record(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeLatLonName(), java.util.List.of(
+    return new hydra.core.Type.Record(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeLatLonName(), hydra.util.ConsList.of(
       new hydra.core.FieldType(new hydra.core.Name("lat"), new hydra.core.Type.Literal(new hydra.core.LiteralType.Float_(new hydra.core.FloatType.Float32()))),
       new hydra.core.FieldType(new hydra.core.Name("lon"), new hydra.core.Type.Literal(new hydra.core.LiteralType.Float_(new hydra.core.FloatType.Float32()))))));
   }
@@ -88,7 +88,7 @@ public interface TestTypes {
   }
   
   static hydra.core.Type testTypeLatLonPoly() {
-    return new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("a"), new hydra.core.Type.Record(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeLatLonPolyName(), java.util.List.of(
+    return new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("a"), new hydra.core.Type.Record(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeLatLonPolyName(), hydra.util.ConsList.of(
       new hydra.core.FieldType(new hydra.core.Name("lat"), new hydra.core.Type.Variable(new hydra.core.Name("a"))),
       new hydra.core.FieldType(new hydra.core.Name("lon"), new hydra.core.Type.Variable(new hydra.core.Name("a"))))))));
   }
@@ -98,7 +98,7 @@ public interface TestTypes {
   }
   
   static hydra.core.Type testTypeList() {
-    return new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("a"), new hydra.core.Type.Record(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeListName(), java.util.List.of(
+    return new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("a"), new hydra.core.Type.Record(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeListName(), hydra.util.ConsList.of(
       new hydra.core.FieldType(new hydra.core.Name("head"), new hydra.core.Type.Variable(new hydra.core.Name("a"))),
       new hydra.core.FieldType(new hydra.core.Name("tail"), new hydra.core.Type.Maybe(new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(hydra.test.testTypes.TestTypes.testTypeListName()), new hydra.core.Type.Variable(new hydra.core.Name("a")))))))))));
   }
@@ -108,7 +108,7 @@ public interface TestTypes {
   }
   
   static hydra.core.Type testTypeNumber() {
-    return new hydra.core.Type.Union(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeNumberName(), java.util.List.of(
+    return new hydra.core.Type.Union(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeNumberName(), hydra.util.ConsList.of(
       new hydra.core.FieldType(new hydra.core.Name("int"), new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int32()))),
       new hydra.core.FieldType(new hydra.core.Name("float"), new hydra.core.Type.Literal(new hydra.core.LiteralType.Float_(new hydra.core.FloatType.Float32()))))));
   }
@@ -118,7 +118,7 @@ public interface TestTypes {
   }
   
   static hydra.core.Type testTypePerson() {
-    return new hydra.core.Type.Record(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypePersonName(), java.util.List.of(
+    return new hydra.core.Type.Record(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypePersonName(), hydra.util.ConsList.of(
       new hydra.core.FieldType(new hydra.core.Name("firstName"), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())),
       new hydra.core.FieldType(new hydra.core.Name("lastName"), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())),
       new hydra.core.FieldType(new hydra.core.Name("age"), new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int32()))))));
@@ -129,7 +129,7 @@ public interface TestTypes {
   }
   
   static hydra.core.Type testTypePersonOrSomething() {
-    return new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("a"), new hydra.core.Type.Union(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypePersonOrSomethingName(), java.util.List.of(
+    return new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("a"), new hydra.core.Type.Union(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypePersonOrSomethingName(), hydra.util.ConsList.of(
       new hydra.core.FieldType(new hydra.core.Name("person"), new hydra.core.Type.Variable(hydra.test.testTypes.TestTypes.testTypePersonName())),
       new hydra.core.FieldType(new hydra.core.Name("other"), new hydra.core.Type.Variable(new hydra.core.Name("a"))))))));
   }
@@ -147,7 +147,7 @@ public interface TestTypes {
   }
   
   static hydra.core.Type testTypeSimpleNumber() {
-    return new hydra.core.Type.Union(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeSimpleNumberName(), java.util.List.of(
+    return new hydra.core.Type.Union(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeSimpleNumberName(), hydra.util.ConsList.of(
       new hydra.core.FieldType(new hydra.core.Name("int"), new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int32()))),
       new hydra.core.FieldType(new hydra.core.Name("float"), new hydra.core.Type.Literal(new hydra.core.LiteralType.Float_(new hydra.core.FloatType.Float32()))))));
   }
@@ -173,7 +173,7 @@ public interface TestTypes {
   }
   
   static hydra.core.Type testTypeTimestamp() {
-    return new hydra.core.Type.Union(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeTimestampName(), java.util.List.of(
+    return new hydra.core.Type.Union(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeTimestampName(), hydra.util.ConsList.of(
       new hydra.core.FieldType(new hydra.core.Name("unixTimeMillis"), new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Uint64()))),
       new hydra.core.FieldType(new hydra.core.Name("date"), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())))));
   }
@@ -183,7 +183,7 @@ public interface TestTypes {
   }
   
   static hydra.core.Type testTypeTriple() {
-    return new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("a"), new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("b"), new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("c"), new hydra.core.Type.Record(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeTripleName(), java.util.List.of(
+    return new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("a"), new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("b"), new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("c"), new hydra.core.Type.Record(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeTripleName(), hydra.util.ConsList.of(
       new hydra.core.FieldType(new hydra.core.Name("first"), new hydra.core.Type.Variable(new hydra.core.Name("a"))),
       new hydra.core.FieldType(new hydra.core.Name("second"), new hydra.core.Type.Variable(new hydra.core.Name("b"))),
       new hydra.core.FieldType(new hydra.core.Name("third"), new hydra.core.Type.Variable(new hydra.core.Name("c"))))))))))));
@@ -194,7 +194,7 @@ public interface TestTypes {
   }
   
   static hydra.core.Type testTypeUnionMonomorphic() {
-    return new hydra.core.Type.Union(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeUnionMonomorphicName(), java.util.List.of(
+    return new hydra.core.Type.Union(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeUnionMonomorphicName(), hydra.util.ConsList.of(
       new hydra.core.FieldType(new hydra.core.Name("bool"), new hydra.core.Type.Literal(new hydra.core.LiteralType.Boolean_())),
       new hydra.core.FieldType(new hydra.core.Name("string"), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())),
       new hydra.core.FieldType(new hydra.core.Name("unit"), new hydra.core.Type.Unit()))));
@@ -205,7 +205,7 @@ public interface TestTypes {
   }
   
   static hydra.core.Type testTypeUnionPolymorphicRecursive() {
-    return new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("a"), new hydra.core.Type.Union(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeUnionPolymorphicRecursiveName(), java.util.List.of(
+    return new hydra.core.Type.Forall(new hydra.core.ForallType(new hydra.core.Name("a"), new hydra.core.Type.Union(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeUnionPolymorphicRecursiveName(), hydra.util.ConsList.of(
       new hydra.core.FieldType(new hydra.core.Name("bool"), new hydra.core.Type.Literal(new hydra.core.LiteralType.Boolean_())),
       new hydra.core.FieldType(new hydra.core.Name("value"), new hydra.core.Type.Variable(new hydra.core.Name("a"))),
       new hydra.core.FieldType(new hydra.core.Name("other"), new hydra.core.Type.Application(new hydra.core.ApplicationType(new hydra.core.Type.Variable(hydra.test.testTypes.TestTypes.testTypeUnionPolymorphicRecursiveName()), new hydra.core.Type.Variable(new hydra.core.Name("a"))))))))));
@@ -216,7 +216,7 @@ public interface TestTypes {
   }
   
   static hydra.core.Type testTypeUnit() {
-    return new hydra.core.Type.Record(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeUnitName(), (java.util.List<hydra.core.FieldType>) (java.util.List.<hydra.core.FieldType>of())));
+    return new hydra.core.Type.Record(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeUnitName(), (hydra.util.ConsList<hydra.core.FieldType>) (hydra.util.ConsList.<hydra.core.FieldType>of())));
   }
   
   static hydra.core.Name testTypeUnitName() {
@@ -236,7 +236,7 @@ public interface TestTypes {
   }
   
   static hydra.core.Type eitherStringOrInt8Type() {
-    return new hydra.core.Type.Union(new hydra.core.RowType(hydra.test.testTypes.TestTypes.eitherStringOrInt8TypeName(), java.util.List.of(
+    return new hydra.core.Type.Union(new hydra.core.RowType(hydra.test.testTypes.TestTypes.eitherStringOrInt8TypeName(), hydra.util.ConsList.of(
       new hydra.core.FieldType(new hydra.core.Name("left"), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())),
       new hydra.core.FieldType(new hydra.core.Name("right"), new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int8()))))));
   }
@@ -290,7 +290,7 @@ public interface TestTypes {
   }
   
   static hydra.core.Type stringOrIntType() {
-    return new hydra.core.Type.Union(new hydra.core.RowType(hydra.test.testTypes.TestTypes.stringOrIntName(), java.util.List.of(
+    return new hydra.core.Type.Union(new hydra.core.RowType(hydra.test.testTypes.TestTypes.stringOrIntName(), hydra.util.ConsList.of(
       new hydra.core.FieldType(new hydra.core.Name("left"), new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())),
       new hydra.core.FieldType(new hydra.core.Name("right"), new hydra.core.Type.Literal(new hydra.core.LiteralType.Integer_(new hydra.core.IntegerType.Int32()))))));
   }

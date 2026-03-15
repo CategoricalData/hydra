@@ -29,9 +29,9 @@ public class VertexSpec implements Serializable, Comparable<VertexSpec> {
   /**
    * Zero or more property specifications for each target vertex
    */
-  public final java.util.List<hydra.pg.mapping.PropertySpec> properties;
+  public final hydra.util.ConsList<hydra.pg.mapping.PropertySpec> properties;
   
-  public VertexSpec (hydra.pg.model.VertexLabel label, hydra.pg.mapping.ValueSpec id, java.util.List<hydra.pg.mapping.PropertySpec> properties) {
+  public VertexSpec (hydra.pg.model.VertexLabel label, hydra.pg.mapping.ValueSpec id, hydra.util.ConsList<hydra.pg.mapping.PropertySpec> properties) {
     this.label = label;
     this.id = id;
     this.properties = properties;
@@ -82,7 +82,7 @@ public class VertexSpec implements Serializable, Comparable<VertexSpec> {
     return new VertexSpec(label, id, properties);
   }
   
-  public VertexSpec withProperties(java.util.List<hydra.pg.mapping.PropertySpec> properties) {
+  public VertexSpec withProperties(hydra.util.ConsList<hydra.pg.mapping.PropertySpec> properties) {
     return new VertexSpec(label, id, properties);
   }
 }

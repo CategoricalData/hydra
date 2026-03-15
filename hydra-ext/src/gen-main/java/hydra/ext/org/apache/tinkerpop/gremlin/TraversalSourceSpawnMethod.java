@@ -184,9 +184,9 @@ public abstract class TraversalSourceSpawnMethod implements Serializable, Compar
   }
   
   public static final class E extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceSpawnMethod implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
     
-    public E (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
+    public E (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
       this.value = value;
     }
     
@@ -226,9 +226,9 @@ public abstract class TraversalSourceSpawnMethod implements Serializable, Compar
   }
   
   public static final class V extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceSpawnMethod implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
     
-    public V (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
+    public V (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
       this.value = value;
     }
     
@@ -348,9 +348,9 @@ public abstract class TraversalSourceSpawnMethod implements Serializable, Compar
   }
   
   public static final class Inject extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceSpawnMethod implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
     
-    public Inject (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
+    public Inject (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
       this.value = value;
     }
     
@@ -472,9 +472,9 @@ public abstract class TraversalSourceSpawnMethod implements Serializable, Compar
   }
   
   public static final class Union extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalSourceSpawnMethod implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
     
-    public Union (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
+    public Union (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
       this.value = value;
     }
     

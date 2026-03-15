@@ -9,9 +9,9 @@ public class SlashNoDefault implements Serializable, Comparable<SlashNoDefault> 
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.python.syntax.ParamNoDefault> value;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault> value;
   
-  public SlashNoDefault (java.util.List<hydra.ext.python.syntax.ParamNoDefault> value) {
+  public SlashNoDefault (hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault> value) {
     this.value = value;
   }
   

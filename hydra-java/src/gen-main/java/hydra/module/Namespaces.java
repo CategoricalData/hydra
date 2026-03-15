@@ -22,9 +22,9 @@ public class Namespaces<N> implements Serializable, Comparable<Namespaces<N>> {
   /**
    * A mapping of namespaces to values
    */
-  public final java.util.Map<hydra.module.Namespace, N> mapping;
+  public final hydra.util.PersistentMap<hydra.module.Namespace, N> mapping;
   
-  public Namespaces (hydra.util.Pair<hydra.module.Namespace, N> focus, java.util.Map<hydra.module.Namespace, N> mapping) {
+  public Namespaces (hydra.util.Pair<hydra.module.Namespace, N> focus, hydra.util.PersistentMap<hydra.module.Namespace, N> mapping) {
     this.focus = focus;
     this.mapping = mapping;
   }
@@ -64,7 +64,7 @@ public class Namespaces<N> implements Serializable, Comparable<Namespaces<N>> {
     return new Namespaces(focus, mapping);
   }
   
-  public Namespaces withMapping(java.util.Map<hydra.module.Namespace, N> mapping) {
+  public Namespaces withMapping(hydra.util.PersistentMap<hydra.module.Namespace, N> mapping) {
     return new Namespaces(focus, mapping);
   }
 }

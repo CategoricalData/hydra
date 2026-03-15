@@ -15,15 +15,15 @@ public class UnqualifiedClassInstanceCreationExpression implements Serializable,
   
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
-  public final java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments;
   
   public final hydra.ext.java.syntax.ClassOrInterfaceTypeToInstantiate classOrInterface;
   
-  public final java.util.List<hydra.ext.java.syntax.Expression> arguments;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.Expression> arguments;
   
   public final hydra.util.Maybe<hydra.ext.java.syntax.ClassBody> body;
   
-  public UnqualifiedClassInstanceCreationExpression (java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.ClassOrInterfaceTypeToInstantiate classOrInterface, java.util.List<hydra.ext.java.syntax.Expression> arguments, hydra.util.Maybe<hydra.ext.java.syntax.ClassBody> body) {
+  public UnqualifiedClassInstanceCreationExpression (hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.ClassOrInterfaceTypeToInstantiate classOrInterface, hydra.util.ConsList<hydra.ext.java.syntax.Expression> arguments, hydra.util.Maybe<hydra.ext.java.syntax.ClassBody> body) {
     this.typeArguments = typeArguments;
     this.classOrInterface = classOrInterface;
     this.arguments = arguments;
@@ -77,7 +77,7 @@ public class UnqualifiedClassInstanceCreationExpression implements Serializable,
       other.body.hashCode());
   }
   
-  public UnqualifiedClassInstanceCreationExpression withTypeArguments(java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments) {
+  public UnqualifiedClassInstanceCreationExpression withTypeArguments(hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments) {
     return new UnqualifiedClassInstanceCreationExpression(typeArguments, classOrInterface, arguments, body);
   }
   
@@ -85,7 +85,7 @@ public class UnqualifiedClassInstanceCreationExpression implements Serializable,
     return new UnqualifiedClassInstanceCreationExpression(typeArguments, classOrInterface, arguments, body);
   }
   
-  public UnqualifiedClassInstanceCreationExpression withArguments(java.util.List<hydra.ext.java.syntax.Expression> arguments) {
+  public UnqualifiedClassInstanceCreationExpression withArguments(hydra.util.ConsList<hydra.ext.java.syntax.Expression> arguments) {
     return new UnqualifiedClassInstanceCreationExpression(typeArguments, classOrInterface, arguments, body);
   }
   

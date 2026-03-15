@@ -29,9 +29,9 @@ public class ModuleHead implements Serializable, Comparable<ModuleHead> {
   /**
    * Export list
    */
-  public final java.util.List<hydra.ext.haskell.ast.Export> exports;
+  public final hydra.util.ConsList<hydra.ext.haskell.ast.Export> exports;
   
-  public ModuleHead (hydra.util.Maybe<String> comments, hydra.ext.haskell.ast.ModuleName name, java.util.List<hydra.ext.haskell.ast.Export> exports) {
+  public ModuleHead (hydra.util.Maybe<String> comments, hydra.ext.haskell.ast.ModuleName name, hydra.util.ConsList<hydra.ext.haskell.ast.Export> exports) {
     this.comments = comments;
     this.name = name;
     this.exports = exports;
@@ -84,7 +84,7 @@ public class ModuleHead implements Serializable, Comparable<ModuleHead> {
     return new ModuleHead(comments, name, exports);
   }
   
-  public ModuleHead withExports(java.util.List<hydra.ext.haskell.ast.Export> exports) {
+  public ModuleHead withExports(hydra.util.ConsList<hydra.ext.haskell.ast.Export> exports) {
     return new ModuleHead(comments, name, exports);
   }
 }

@@ -11,11 +11,11 @@ public class ModularCompilationUnit implements Serializable, Comparable<ModularC
   
   public static final hydra.core.Name MODULE = new hydra.core.Name("module");
   
-  public final java.util.List<hydra.ext.java.syntax.ImportDeclaration> imports;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.ImportDeclaration> imports;
   
   public final hydra.ext.java.syntax.ModuleDeclaration module;
   
-  public ModularCompilationUnit (java.util.List<hydra.ext.java.syntax.ImportDeclaration> imports, hydra.ext.java.syntax.ModuleDeclaration module) {
+  public ModularCompilationUnit (hydra.util.ConsList<hydra.ext.java.syntax.ImportDeclaration> imports, hydra.ext.java.syntax.ModuleDeclaration module) {
     this.imports = imports;
     this.module = module;
   }
@@ -51,7 +51,7 @@ public class ModularCompilationUnit implements Serializable, Comparable<ModularC
     return ((Comparable) module).compareTo(other.module);
   }
   
-  public ModularCompilationUnit withImports(java.util.List<hydra.ext.java.syntax.ImportDeclaration> imports) {
+  public ModularCompilationUnit withImports(hydra.util.ConsList<hydra.ext.java.syntax.ImportDeclaration> imports) {
     return new ModularCompilationUnit(imports, module);
   }
   

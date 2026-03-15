@@ -38,9 +38,9 @@ public abstract class Block implements Serializable, Comparable<Block> {
   }
   
   public static final class Indented extends hydra.ext.python.syntax.Block implements Serializable {
-    public final java.util.List<java.util.List<hydra.ext.python.syntax.Statement>> value;
+    public final hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>> value;
     
-    public Indented (java.util.List<java.util.List<hydra.ext.python.syntax.Statement>> value) {
+    public Indented (hydra.util.ConsList<hydra.util.ConsList<hydra.ext.python.syntax.Statement>> value) {
       this.value = value;
     }
     
@@ -80,9 +80,9 @@ public abstract class Block implements Serializable, Comparable<Block> {
   }
   
   public static final class Simple extends hydra.ext.python.syntax.Block implements Serializable {
-    public final java.util.List<hydra.ext.python.syntax.SimpleStatement> value;
+    public final hydra.util.ConsList<hydra.ext.python.syntax.SimpleStatement> value;
     
-    public Simple (java.util.List<hydra.ext.python.syntax.SimpleStatement> value) {
+    public Simple (hydra.util.ConsList<hydra.ext.python.syntax.SimpleStatement> value) {
       this.value = value;
     }
     

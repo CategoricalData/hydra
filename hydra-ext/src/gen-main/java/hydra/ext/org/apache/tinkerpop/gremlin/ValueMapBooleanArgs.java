@@ -13,9 +13,9 @@ public class ValueMapBooleanArgs implements Serializable, Comparable<ValueMapBoo
   
   public final hydra.ext.org.apache.tinkerpop.gremlin.BooleanArgument value;
   
-  public final hydra.util.Maybe<java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument>> keys;
+  public final hydra.util.Maybe<hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument>> keys;
   
-  public ValueMapBooleanArgs (hydra.ext.org.apache.tinkerpop.gremlin.BooleanArgument value, hydra.util.Maybe<java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument>> keys) {
+  public ValueMapBooleanArgs (hydra.ext.org.apache.tinkerpop.gremlin.BooleanArgument value, hydra.util.Maybe<hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument>> keys) {
     this.value = value;
     this.keys = keys;
   }
@@ -55,7 +55,7 @@ public class ValueMapBooleanArgs implements Serializable, Comparable<ValueMapBoo
     return new ValueMapBooleanArgs(value, keys);
   }
   
-  public ValueMapBooleanArgs withKeys(hydra.util.Maybe<java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument>> keys) {
+  public ValueMapBooleanArgs withKeys(hydra.util.Maybe<hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument>> keys) {
     return new ValueMapBooleanArgs(value, keys);
   }
 }

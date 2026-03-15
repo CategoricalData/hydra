@@ -19,11 +19,11 @@ public class BracketedTripleExpr implements Serializable, Comparable<BracketedTr
   
   public final hydra.util.Maybe<hydra.ext.io.shex.syntax.Cardinality> Cardinality;
   
-  public final java.util.List<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation;
+  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation;
   
   public final hydra.ext.io.shex.syntax.SemanticActions SemanticActions;
   
-  public BracketedTripleExpr (hydra.ext.io.shex.syntax.InnerTripleExpr InnerTripleExpr, hydra.util.Maybe<hydra.ext.io.shex.syntax.Cardinality> Cardinality, java.util.List<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation, hydra.ext.io.shex.syntax.SemanticActions SemanticActions) {
+  public BracketedTripleExpr (hydra.ext.io.shex.syntax.InnerTripleExpr InnerTripleExpr, hydra.util.Maybe<hydra.ext.io.shex.syntax.Cardinality> Cardinality, hydra.util.ConsList<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation, hydra.ext.io.shex.syntax.SemanticActions SemanticActions) {
     this.InnerTripleExpr = InnerTripleExpr;
     this.Cardinality = Cardinality;
     this.listOfAnnotation = listOfAnnotation;
@@ -83,7 +83,7 @@ public class BracketedTripleExpr implements Serializable, Comparable<BracketedTr
     return new BracketedTripleExpr(InnerTripleExpr, Cardinality, listOfAnnotation, SemanticActions);
   }
   
-  public BracketedTripleExpr withListOfAnnotation(java.util.List<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation) {
+  public BracketedTripleExpr withListOfAnnotation(hydra.util.ConsList<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation) {
     return new BracketedTripleExpr(InnerTripleExpr, Cardinality, listOfAnnotation, SemanticActions);
   }
   

@@ -15,11 +15,11 @@ public class MultiElementGroup implements Serializable, Comparable<MultiElementG
   
   public final hydra.ext.io.shex.syntax.UnaryTripleExpr UnaryTripleExpr;
   
-  public final java.util.List<hydra.ext.io.shex.syntax.UnaryTripleExpr> listOfSequence;
+  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.UnaryTripleExpr> listOfSequence;
   
   public final hydra.util.Maybe<java.lang.Void> Semi;
   
-  public MultiElementGroup (hydra.ext.io.shex.syntax.UnaryTripleExpr UnaryTripleExpr, java.util.List<hydra.ext.io.shex.syntax.UnaryTripleExpr> listOfSequence, hydra.util.Maybe<java.lang.Void> Semi) {
+  public MultiElementGroup (hydra.ext.io.shex.syntax.UnaryTripleExpr UnaryTripleExpr, hydra.util.ConsList<hydra.ext.io.shex.syntax.UnaryTripleExpr> listOfSequence, hydra.util.Maybe<java.lang.Void> Semi) {
     this.UnaryTripleExpr = UnaryTripleExpr;
     this.listOfSequence = listOfSequence;
     this.Semi = Semi;
@@ -68,7 +68,7 @@ public class MultiElementGroup implements Serializable, Comparable<MultiElementG
     return new MultiElementGroup(UnaryTripleExpr, listOfSequence, Semi);
   }
   
-  public MultiElementGroup withListOfSequence(java.util.List<hydra.ext.io.shex.syntax.UnaryTripleExpr> listOfSequence) {
+  public MultiElementGroup withListOfSequence(hydra.util.ConsList<hydra.ext.io.shex.syntax.UnaryTripleExpr> listOfSequence) {
     return new MultiElementGroup(UnaryTripleExpr, listOfSequence, Semi);
   }
   

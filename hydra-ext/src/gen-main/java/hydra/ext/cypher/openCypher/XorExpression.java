@@ -9,9 +9,9 @@ public class XorExpression implements Serializable, Comparable<XorExpression> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.cypher.openCypher.AndExpression> value;
+  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.AndExpression> value;
   
-  public XorExpression (java.util.List<hydra.ext.cypher.openCypher.AndExpression> value) {
+  public XorExpression (hydra.util.ConsList<hydra.ext.cypher.openCypher.AndExpression> value) {
     this.value = value;
   }
   

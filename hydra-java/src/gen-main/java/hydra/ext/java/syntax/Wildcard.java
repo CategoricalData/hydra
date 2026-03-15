@@ -11,11 +11,11 @@ public class Wildcard implements Serializable, Comparable<Wildcard> {
   
   public static final hydra.core.Name WILDCARD = new hydra.core.Name("wildcard");
   
-  public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations;
   
   public final hydra.util.Maybe<hydra.ext.java.syntax.WildcardBounds> wildcard;
   
-  public Wildcard (java.util.List<hydra.ext.java.syntax.Annotation> annotations, hydra.util.Maybe<hydra.ext.java.syntax.WildcardBounds> wildcard) {
+  public Wildcard (hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations, hydra.util.Maybe<hydra.ext.java.syntax.WildcardBounds> wildcard) {
     this.annotations = annotations;
     this.wildcard = wildcard;
   }
@@ -53,7 +53,7 @@ public class Wildcard implements Serializable, Comparable<Wildcard> {
       other.wildcard.hashCode());
   }
   
-  public Wildcard withAnnotations(java.util.List<hydra.ext.java.syntax.Annotation> annotations) {
+  public Wildcard withAnnotations(hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {
     return new Wildcard(annotations, wildcard);
   }
   

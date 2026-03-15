@@ -38,9 +38,9 @@ public abstract class TypeArgumentsOrDiamond implements Serializable, Comparable
   }
   
   public static final class Arguments extends hydra.ext.java.syntax.TypeArgumentsOrDiamond implements Serializable {
-    public final java.util.List<hydra.ext.java.syntax.TypeArgument> value;
+    public final hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> value;
     
-    public Arguments (java.util.List<hydra.ext.java.syntax.TypeArgument> value) {
+    public Arguments (hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> value) {
       this.value = value;
     }
     

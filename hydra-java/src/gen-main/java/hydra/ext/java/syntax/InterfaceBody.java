@@ -9,9 +9,9 @@ public class InterfaceBody implements Serializable, Comparable<InterfaceBody> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.java.syntax.InterfaceMemberDeclaration> value;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.InterfaceMemberDeclaration> value;
   
-  public InterfaceBody (java.util.List<hydra.ext.java.syntax.InterfaceMemberDeclaration> value) {
+  public InterfaceBody (hydra.util.ConsList<hydra.ext.java.syntax.InterfaceMemberDeclaration> value) {
     this.value = value;
   }
   

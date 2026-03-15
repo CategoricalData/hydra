@@ -9,9 +9,9 @@ public class StartActions implements Serializable, Comparable<StartActions> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.io.shex.syntax.CodeDecl> value;
+  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.CodeDecl> value;
   
-  public StartActions (java.util.List<hydra.ext.io.shex.syntax.CodeDecl> value) {
+  public StartActions (hydra.util.ConsList<hydra.ext.io.shex.syntax.CodeDecl> value) {
     this.value = value;
   }
   

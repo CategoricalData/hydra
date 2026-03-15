@@ -9,9 +9,9 @@ public class Set implements Serializable, Comparable<Set> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.cypher.openCypher.SetItem> value;
+  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.SetItem> value;
   
-  public Set (java.util.List<hydra.ext.cypher.openCypher.SetItem> value) {
+  public Set (hydra.util.ConsList<hydra.ext.cypher.openCypher.SetItem> value) {
     this.value = value;
   }
   

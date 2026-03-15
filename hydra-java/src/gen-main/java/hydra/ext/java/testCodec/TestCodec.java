@@ -11,7 +11,7 @@ public interface TestCodec {
       (java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, String>) (ic -> hydra.show.error.Error_.error(((java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, hydra.error.Error_>) (projected -> projected.object)).apply(ic))),
       (java.util.function.Function<hydra.ext.java.syntax.Expression, String>) (arg_ -> hydra.serialization.Serialization.printExpr(hydra.serialization.Serialization.parenthesize(hydra.ext.java.serde.Serde.writeExpression(arg_)))),
       hydra.ext.java.coder.Coder.encodeTerm(
-        new hydra.ext.java.helpers.JavaEnvironment(new hydra.ext.java.helpers.Aliases(new hydra.module.Namespace("test"), (java.util.Map<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>) ((java.util.Map<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>) (hydra.lib.maps.Empty.<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())), g),
+        new hydra.ext.java.helpers.JavaEnvironment(new hydra.ext.java.helpers.Aliases(new hydra.module.Namespace("test"), (hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>) ((hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>) (hydra.lib.maps.Empty.<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())), g),
         term,
         hydra.lexical.Lexical.emptyContext(),
         g));
@@ -26,7 +26,7 @@ public interface TestCodec {
       p0,
       p1)), p0 -> p1 -> hydra.ext.java.testCodec.TestCodec.<hydra.core.Type, hydra.graph.Graph, String>typeToJava(
       p0,
-      p1), hydra.ext.java.testCodec.TestCodec::formatJavaTestName, hydra.ext.java.testCodec.TestCodec::namespaceToJavaClassName, hydra.ext.java.testCodec.TestCodec.javaTestCaseTemplate(), hydra.ext.java.testCodec.TestCodec.javaTestGroupTemplate(), hydra.ext.java.testCodec.TestCodec.javaModuleTemplate(), hydra.ext.java.testCodec.TestCodec.javaImportTemplate(), (java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.List<String>>) (_names -> hydra.ext.java.testCodec.TestCodec.findJavaImports()));
+      p1), hydra.ext.java.testCodec.TestCodec::formatJavaTestName, hydra.ext.java.testCodec.TestCodec::namespaceToJavaClassName, hydra.ext.java.testCodec.TestCodec.javaTestCaseTemplate(), hydra.ext.java.testCodec.TestCodec.javaTestGroupTemplate(), hydra.ext.java.testCodec.TestCodec.javaModuleTemplate(), hydra.ext.java.testCodec.TestCodec.javaImportTemplate(), (java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, hydra.util.ConsList<String>>) (_names -> hydra.ext.java.testCodec.TestCodec.findJavaImports()));
   }
   
   static String formatJavaTestName(String name) {
@@ -78,7 +78,7 @@ public interface TestCodec {
   static String javaTestCaseTemplate() {
     return hydra.lib.strings.Intercalate.apply(
       "\n",
-      java.util.List.of(
+      hydra.util.ConsList.of(
         "    @Test",
         "    public void {name}() {",
         "        assertEquals({output}, {input});",
@@ -92,7 +92,7 @@ public interface TestCodec {
   static String javaModuleTemplate() {
     return hydra.lib.strings.Intercalate.apply(
       "\n",
-      java.util.List.of(
+      hydra.util.ConsList.of(
         hydra.lib.strings.Cat2.apply(
           "// ",
           hydra.constants.Constants.warningAutoGeneratedFile()),
@@ -110,30 +110,30 @@ public interface TestCodec {
     return "import {namespace};";
   }
   
-  static java.util.List<String> findJavaImports() {
-    return java.util.List.of(
+  static hydra.util.ConsList<String> findJavaImports() {
+    return hydra.util.ConsList.of(
       "import org.junit.jupiter.api.Test;",
       "import static org.junit.jupiter.api.Assertions.*;",
       "import java.util.*;");
   }
   
-  static hydra.util.Either<String, String> generateJavaTestGroupHierarchy(hydra.graph.Graph g, hydra.testing.TestCodec codec, java.util.List<String> groupPath, hydra.testing.TestGroup testGroup) {
-    java.util.List<hydra.testing.TestCaseWithMetadata> cases_ = (testGroup).cases;
-    java.util.List<hydra.testing.TestGroup> subgroups = (testGroup).subgroups;
+  static hydra.util.Either<String, String> generateJavaTestGroupHierarchy(hydra.graph.Graph g, hydra.testing.TestCodec codec, hydra.util.ConsList<String> groupPath, hydra.testing.TestGroup testGroup) {
+    hydra.util.ConsList<hydra.testing.TestCaseWithMetadata> cases_ = (testGroup).cases;
+    hydra.util.ConsList<hydra.testing.TestGroup> subgroups = (testGroup).subgroups;
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.Map.apply(
-        (java.util.function.Function<java.util.List<java.util.List<String>>, String>) (lines_ -> hydra.lib.strings.Intercalate.apply(
+        (java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<String>>, String>) (lines_ -> hydra.lib.strings.Intercalate.apply(
           "\n\n",
           hydra.lib.lists.Concat.apply(lines_))),
         hydra.lib.eithers.MapList.apply(
-          (java.util.function.Function<hydra.testing.TestCaseWithMetadata, hydra.util.Either<String, java.util.List<String>>>) (tc -> hydra.ext.java.testCodec.TestCodec.generateJavaTestCase(
+          (java.util.function.Function<hydra.testing.TestCaseWithMetadata, hydra.util.Either<String, hydra.util.ConsList<String>>>) (tc -> hydra.ext.java.testCodec.TestCodec.generateJavaTestCase(
             g,
             codec,
             groupPath,
             tc)),
           cases_)),
       (java.util.function.Function<String, hydra.util.Either<String, String>>) (testCasesStr -> hydra.lib.eithers.Map.apply(
-        (java.util.function.Function<String, String>) (subgroupsStr -> hydra.lib.strings.Cat.apply(java.util.List.of(
+        (java.util.function.Function<String, String>) (subgroupsStr -> hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
           testCasesStr,
           hydra.lib.logic.IfElse.lazy(
             hydra.lib.logic.Or.apply(
@@ -147,7 +147,7 @@ public interface TestCodec {
             () -> "\n\n"),
           subgroupsStr))),
         hydra.lib.eithers.Map.apply(
-          (java.util.function.Function<java.util.List<String>, String>) (blocks -> hydra.lib.strings.Intercalate.apply(
+          (java.util.function.Function<hydra.util.ConsList<String>, String>) (blocks -> hydra.lib.strings.Intercalate.apply(
             "\n\n",
             blocks)),
           hydra.lib.eithers.MapList.apply(
@@ -157,7 +157,7 @@ public interface TestCodec {
                 "    // ",
                 groupName);
               return hydra.lib.eithers.Map.apply(
-                (java.util.function.Function<String, String>) (content -> hydra.lib.strings.Cat.apply(java.util.List.of(
+                (java.util.function.Function<String, String>) (content -> hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
                   header,
                   "\n\n",
                   content))),
@@ -166,23 +166,23 @@ public interface TestCodec {
                   codec,
                   hydra.lib.lists.Concat2.apply(
                     groupPath,
-                    java.util.List.of(groupName)),
+                    hydra.util.ConsList.of(groupName)),
                   subgroup));
             }),
             subgroups)))));
   }
   
-  static hydra.util.Either<String, java.util.List<String>> generateJavaTestCase(hydra.graph.Graph g, hydra.testing.TestCodec codec, java.util.List<String> groupPath, hydra.testing.TestCaseWithMetadata tcm) {
+  static hydra.util.Either<String, hydra.util.ConsList<String>> generateJavaTestCase(hydra.graph.Graph g, hydra.testing.TestCodec codec, hydra.util.ConsList<String> groupPath, hydra.testing.TestCaseWithMetadata tcm) {
     String name_ = (tcm).name;
     hydra.testing.TestCase tcase = (tcm).case_;
     return (tcase).accept(new hydra.testing.TestCase.PartialVisitor<>() {
       @Override
-      public hydra.util.Either<String, java.util.List<String>> otherwise(hydra.testing.TestCase instance) {
-        return hydra.util.Either.<String, java.util.List<String>>right((java.util.List<String>) (java.util.List.<String>of()));
+      public hydra.util.Either<String, hydra.util.ConsList<String>> otherwise(hydra.testing.TestCase instance) {
+        return hydra.util.Either.<String, hydra.util.ConsList<String>>right((hydra.util.ConsList<String>) (hydra.util.ConsList.<String>of()));
       }
       
       @Override
-      public hydra.util.Either<String, java.util.List<String>> visit(hydra.testing.TestCase.DelegatedEvaluation delCase) {
+      public hydra.util.Either<String, hydra.util.ConsList<String>> visit(hydra.testing.TestCase.DelegatedEvaluation delCase) {
         hydra.core.Term output_ = ((delCase).value).output;
         String assertType = hydra.ext.java.testCodec.TestCodec.getAssertionType(output_);
         hydra.util.Lazy<String> fullName = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
@@ -192,10 +192,10 @@ public interface TestCodec {
             "_",
             hydra.lib.lists.Concat2.apply(
               groupPath,
-              java.util.List.of(name_)))));
+              hydra.util.ConsList.of(name_)))));
         String formattedName = ((codec).formatTestName).apply(fullName.get());
         hydra.core.Term input_ = ((delCase).value).input;
-        hydra.util.Lazy<java.util.List<hydra.core.Name>> typeVars = new hydra.util.Lazy<>(() -> hydra.lib.lists.Sort.apply(hydra.lib.lists.Filter.apply(
+        hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> typeVars = new hydra.util.Lazy<>(() -> hydra.lib.lists.Sort.apply(hydra.lib.lists.Filter.apply(
           hydra.ext.java.testCodec.TestCodec::isInferenceVar,
           hydra.lib.sets.ToList.apply(hydra.lib.sets.Union.apply(
             hydra.rewriting.Rewriting.freeTypeVariablesInTerm(input_),
@@ -203,7 +203,7 @@ public interface TestCodec {
         hydra.util.Lazy<String> typeParamsStr = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(typeVars.get()),
           () -> "",
-          () -> hydra.lib.strings.Cat.apply(java.util.List.of(
+          () -> hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
             "<",
             hydra.lib.strings.Intercalate.apply(
               ", ",
@@ -213,16 +213,16 @@ public interface TestCodec {
             "> "))));
         return hydra.lib.eithers.Bind.apply(
           (((codec).encodeTerm).apply(input_)).apply(g),
-          (java.util.function.Function<String, hydra.util.Either<String, java.util.List<String>>>) (inputCode -> hydra.lib.eithers.Map.apply(
-            (java.util.function.Function<String, java.util.List<String>>) (outputCode -> {
-              java.util.List<String> assertionLines = hydra.ext.java.testCodec.TestCodec.generateAssertion(
+          (java.util.function.Function<String, hydra.util.Either<String, hydra.util.ConsList<String>>>) (inputCode -> hydra.lib.eithers.Map.apply(
+            (java.util.function.Function<String, hydra.util.ConsList<String>>) (outputCode -> {
+              hydra.util.ConsList<String> assertionLines = hydra.ext.java.testCodec.TestCodec.generateAssertion(
                 assertType,
                 outputCode,
                 inputCode);
               return hydra.lib.lists.Concat2.apply(
-                java.util.List.of(
+                hydra.util.ConsList.of(
                   "    @Test",
-                  hydra.lib.strings.Cat.apply(java.util.List.of(
+                  hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
                     "    public ",
                     typeParamsStr.get(),
                     "void ",
@@ -230,7 +230,7 @@ public interface TestCodec {
                     "() {"))),
                 hydra.lib.lists.Concat2.apply(
                   assertionLines,
-                  java.util.List.of("    }")));
+                  hydra.util.ConsList.of("    }")));
             }),
             (((codec).encodeTerm).apply(output_)).apply(g))));
       }
@@ -276,18 +276,18 @@ public interface TestCodec {
     });
   }
   
-  static java.util.List<String> generateAssertion(String assertType, String outputCode, String inputCode) {
+  static hydra.util.ConsList<String> generateAssertion(String assertType, String outputCode, String inputCode) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Equal.apply(
         assertType,
         "assertArrayEquals"),
-      () -> java.util.List.of(
+      () -> hydra.util.ConsList.of(
         "        assertArrayEquals(",
-        hydra.lib.strings.Cat.apply(java.util.List.of(
+        hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
           "            ",
           outputCode,
           ",")),
-        hydra.lib.strings.Cat.apply(java.util.List.of(
+        hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
           "            ",
           inputCode,
           ");"))),
@@ -295,7 +295,7 @@ public interface TestCodec {
         hydra.lib.equality.Equal.apply(
           assertType,
           "assertBigDecimalEquals"),
-        () -> java.util.List.of(hydra.lib.strings.Cat.apply(java.util.List.of(
+        () -> hydra.util.ConsList.of(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
           "        assertEquals(0, (",
           outputCode,
           ").compareTo(",
@@ -305,24 +305,24 @@ public interface TestCodec {
           hydra.lib.equality.Equal.apply(
             assertType,
             "assertDoubleEquals"),
-          () -> java.util.List.of(
+          () -> hydra.util.ConsList.of(
             "        assertEquals(",
-            hydra.lib.strings.Cat.apply(java.util.List.of(
+            hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "            ",
               outputCode,
               ",")),
-            hydra.lib.strings.Cat.apply(java.util.List.of(
+            hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "            ",
               inputCode,
               ",")),
             "            1e-15);"),
-          () -> java.util.List.of(
+          () -> hydra.util.ConsList.of(
             "        assertEquals(",
-            hydra.lib.strings.Cat.apply(java.util.List.of(
+            hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "            ",
               outputCode,
               ",")),
-            hydra.lib.strings.Cat.apply(java.util.List.of(
+            hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "            ",
               inputCode,
               ");"))))));
@@ -330,7 +330,7 @@ public interface TestCodec {
   
   static Boolean isInferenceVar(hydra.core.Name n) {
     String s = (n).value;
-    java.util.List<Integer> chars = hydra.lib.strings.ToList.apply(s);
+    hydra.util.ConsList<Integer> chars = hydra.lib.strings.ToList.apply(s);
     return hydra.lib.logic.And.apply(
       hydra.lib.equality.Equal.apply(
         hydra.lib.strings.CharAt.apply(
@@ -358,19 +358,19 @@ public interface TestCodec {
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<String, hydra.util.Pair<String, String>>) (testBody -> {
         hydra.module.Namespace ns_ = (testModule).namespace;
-        java.util.List<String> parts = hydra.lib.strings.SplitOn.apply(
+        hydra.util.ConsList<String> parts = hydra.lib.strings.SplitOn.apply(
           ".",
           (ns_).value);
         hydra.util.Lazy<String> className_ = new hydra.util.Lazy<>(() -> hydra.lib.strings.Cat2.apply(
           hydra.formatting.Formatting.capitalize(hydra.lib.lists.Last.apply(parts)),
           "Test"));
-        hydra.util.Lazy<java.util.List<String>> dirParts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Drop.apply(
+        hydra.util.Lazy<hydra.util.ConsList<String>> dirParts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Drop.apply(
           1,
           hydra.lib.lists.Init.apply(parts)));
         String fileName = hydra.lib.strings.Cat2.apply(
           className_.get(),
           ".java");
-        String filePath = hydra.lib.strings.Cat.apply(java.util.List.of(
+        String filePath = hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
           hydra.lib.strings.Intercalate.apply(
             "/",
             dirParts.get()),
@@ -386,13 +386,13 @@ public interface TestCodec {
       hydra.ext.java.testCodec.TestCodec.generateJavaTestGroupHierarchy(
         g,
         codec,
-        (java.util.List<String>) (java.util.List.<String>of()),
+        (hydra.util.ConsList<String>) (hydra.util.ConsList.<String>of()),
         testGroup));
   }
   
   static <T0> String buildJavaTestModule(T0 codec, hydra.module.Module testModule, hydra.testing.TestGroup testGroup, String testBody) {
     hydra.module.Namespace ns_ = (testModule).namespace;
-    java.util.List<String> parts = hydra.lib.strings.SplitOn.apply(
+    hydra.util.ConsList<String> parts = hydra.lib.strings.SplitOn.apply(
       ".",
       (ns_).value);
     hydra.util.Lazy<String> className_ = new hydra.util.Lazy<>(() -> hydra.lib.strings.Cat2.apply(
@@ -402,12 +402,12 @@ public interface TestCodec {
     hydra.util.Lazy<String> packageName = new hydra.util.Lazy<>(() -> hydra.lib.strings.Intercalate.apply(
       ".",
       hydra.lib.lists.Init.apply(parts)));
-    java.util.List<String> standardImports = java.util.List.of(
+    hydra.util.ConsList<String> standardImports = hydra.util.ConsList.of(
       "import org.junit.jupiter.api.Test;",
       "import static org.junit.jupiter.api.Assertions.*;",
       "import java.util.*;",
       "import hydra.util.*;");
-    String header = hydra.lib.strings.Cat.apply(java.util.List.of(
+    String header = hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
       hydra.lib.strings.Cat2.apply(
         "// ",
         hydra.constants.Constants.warningAutoGeneratedFile()),
@@ -416,7 +416,7 @@ public interface TestCodec {
         "// ",
         groupName_),
       "\n\n",
-      hydra.lib.strings.Cat.apply(java.util.List.of(
+      hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
         "package ",
         packageName.get(),
         ";\n\n")),
@@ -424,11 +424,11 @@ public interface TestCodec {
         "\n",
         standardImports),
       "\n\n",
-      hydra.lib.strings.Cat.apply(java.util.List.of(
+      hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
         "public class ",
         className_.get(),
         " {\n\n"))));
-    return hydra.lib.strings.Cat.apply(java.util.List.of(
+    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
       header,
       testBody,
       "\n}\n"));

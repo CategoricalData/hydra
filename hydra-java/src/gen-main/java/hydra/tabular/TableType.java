@@ -16,9 +16,9 @@ public class TableType implements Serializable, Comparable<TableType> {
   
   public final hydra.relational.RelationName name;
   
-  public final java.util.List<hydra.tabular.ColumnType> columns;
+  public final hydra.util.ConsList<hydra.tabular.ColumnType> columns;
   
-  public TableType (hydra.relational.RelationName name, java.util.List<hydra.tabular.ColumnType> columns) {
+  public TableType (hydra.relational.RelationName name, hydra.util.ConsList<hydra.tabular.ColumnType> columns) {
     this.name = name;
     this.columns = columns;
   }
@@ -58,7 +58,7 @@ public class TableType implements Serializable, Comparable<TableType> {
     return new TableType(name, columns);
   }
   
-  public TableType withColumns(java.util.List<hydra.tabular.ColumnType> columns) {
+  public TableType withColumns(hydra.util.ConsList<hydra.tabular.ColumnType> columns) {
     return new TableType(name, columns);
   }
 }

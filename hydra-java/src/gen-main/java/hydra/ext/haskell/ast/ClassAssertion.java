@@ -22,9 +22,9 @@ public class ClassAssertion implements Serializable, Comparable<ClassAssertion> 
   /**
    * The types to which the class is applied
    */
-  public final java.util.List<hydra.ext.haskell.ast.Type> types;
+  public final hydra.util.ConsList<hydra.ext.haskell.ast.Type> types;
   
-  public ClassAssertion (hydra.ext.haskell.ast.Name name, java.util.List<hydra.ext.haskell.ast.Type> types) {
+  public ClassAssertion (hydra.ext.haskell.ast.Name name, hydra.util.ConsList<hydra.ext.haskell.ast.Type> types) {
     this.name = name;
     this.types = types;
   }
@@ -64,7 +64,7 @@ public class ClassAssertion implements Serializable, Comparable<ClassAssertion> 
     return new ClassAssertion(name, types);
   }
   
-  public ClassAssertion withTypes(java.util.List<hydra.ext.haskell.ast.Type> types) {
+  public ClassAssertion withTypes(hydra.util.ConsList<hydra.ext.haskell.ast.Type> types) {
     return new ClassAssertion(name, types);
   }
 }

@@ -11,11 +11,11 @@ public class DisjointClasses implements Serializable, Comparable<DisjointClasses
   
   public static final hydra.core.Name CLASSES = new hydra.core.Name("classes");
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> classes;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ClassExpression> classes;
   
-  public DisjointClasses (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> classes) {
+  public DisjointClasses (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ClassExpression> classes) {
     this.annotations = annotations;
     this.classes = classes;
   }
@@ -53,11 +53,11 @@ public class DisjointClasses implements Serializable, Comparable<DisjointClasses
       other.classes.hashCode());
   }
   
-  public DisjointClasses withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public DisjointClasses withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new DisjointClasses(annotations, classes);
   }
   
-  public DisjointClasses withClasses(java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> classes) {
+  public DisjointClasses withClasses(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ClassExpression> classes) {
     return new DisjointClasses(annotations, classes);
   }
 }

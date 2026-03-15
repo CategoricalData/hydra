@@ -9,9 +9,9 @@ public class Block implements Serializable, Comparable<Block> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.java.syntax.BlockStatement> value;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement> value;
   
-  public Block (java.util.List<hydra.ext.java.syntax.BlockStatement> value) {
+  public Block (hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement> value) {
     this.value = value;
   }
   

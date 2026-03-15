@@ -17,7 +17,7 @@ public interface Parsing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseError> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "message",
@@ -104,7 +104,7 @@ public interface Parsing {
           hydra.core.Term fterm = (field).term;
           hydra.core.Name tname = ((inj).value).typeName;
           return hydra.lib.maybes.Maybe.applyLazy(
-            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.parsing.ParseResult<T0>>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.parsing.ParseResult<T0>>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "no such field ",
               (fname).value,
               " in union type ",
@@ -125,8 +125,8 @@ public interface Parsing {
         raw));
   }
   
-  static <T0> java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseResult<T0>>>> parseResult_variantMap(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, T0>>> a, hydra.graph.Graph cx, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseError>>> hydra_decode_parsing_parseError2) {
-    return hydra.lib.maps.FromList.apply(java.util.List.of(
+  static <T0> hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseResult<T0>>>> parseResult_variantMap(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, T0>>> a, hydra.graph.Graph cx, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseError>>> hydra_decode_parsing_parseError2) {
+    return hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
       (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseResult<T0>>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseResult<T0>>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseResult<T0>>>>(new hydra.core.Name("success"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseResult<T0>>>) (input -> hydra.lib.eithers.Map.apply(
         (java.util.function.Function<hydra.parsing.ParseSuccess<T0>, hydra.parsing.ParseResult<T0>>) (t -> (hydra.parsing.ParseResult<T0>) (new hydra.parsing.ParseResult.Success(t))),
         hydra.decode.parsing.Parsing.<T0>parseSuccess(
@@ -149,7 +149,7 @@ public interface Parsing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseSuccess<T0>> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "value",

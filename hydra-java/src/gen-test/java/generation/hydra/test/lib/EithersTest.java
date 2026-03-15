@@ -255,11 +255,11 @@ public class EithersTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2),
 
-            hydra.lib.eithers.Lefts.apply(java.util.List.of(
+            hydra.lib.eithers.Lefts.apply(hydra.util.ConsList.of(
   hydra.util.Either.<Integer, String>left(1),
   hydra.util.Either.<Integer, String>right("a"),
   hydra.util.Either.<Integer, String>left(2),
@@ -273,11 +273,11 @@ public class EithersTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2),
 
-            hydra.lib.eithers.Lefts.apply(java.util.List.of(
+            hydra.lib.eithers.Lefts.apply(hydra.util.ConsList.of(
   hydra.util.Either.<Integer, T4>left(1),
   hydra.util.Either.<Integer, T4>left(2))));
 
@@ -289,9 +289,9 @@ public class EithersTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
-            hydra.lib.eithers.Lefts.apply(java.util.List.of(
+            hydra.lib.eithers.Lefts.apply(hydra.util.ConsList.of(
   hydra.util.Either.<T4, String>right("a"),
   hydra.util.Either.<T4, String>right("b"))));
 
@@ -303,9 +303,9 @@ public class EithersTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
-            hydra.lib.eithers.Lefts.apply((java.util.List<hydra.util.Either<T0, T1>>) (java.util.List.<hydra.util.Either<T0, T1>>of())));
+            hydra.lib.eithers.Lefts.apply((hydra.util.ConsList<hydra.util.Either<T0, T1>>) (hydra.util.ConsList.<hydra.util.Either<T0, T1>>of())));
 
     }
 
@@ -317,11 +317,11 @@ public class EithersTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "a",
   "b"),
 
-            hydra.lib.eithers.Rights.apply(java.util.List.of(
+            hydra.lib.eithers.Rights.apply(hydra.util.ConsList.of(
   hydra.util.Either.<Integer, String>left(1),
   hydra.util.Either.<Integer, String>right("a"),
   hydra.util.Either.<Integer, String>left(2),
@@ -335,11 +335,11 @@ public class EithersTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "a",
   "b"),
 
-            hydra.lib.eithers.Rights.apply(java.util.List.of(
+            hydra.lib.eithers.Rights.apply(hydra.util.ConsList.of(
   hydra.util.Either.<T4, String>right("a"),
   hydra.util.Either.<T4, String>right("b"))));
 
@@ -351,9 +351,9 @@ public class EithersTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
-            hydra.lib.eithers.Rights.apply(java.util.List.of(
+            hydra.lib.eithers.Rights.apply(hydra.util.ConsList.of(
   hydra.util.Either.<Integer, T4>left(1),
   hydra.util.Either.<Integer, T4>left(2))));
 
@@ -365,9 +365,9 @@ public class EithersTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
-            hydra.lib.eithers.Rights.apply((java.util.List<hydra.util.Either<T0, T1>>) (java.util.List.<hydra.util.Either<T0, T1>>of())));
+            hydra.lib.eithers.Rights.apply((hydra.util.ConsList<hydra.util.Either<T0, T1>>) (hydra.util.ConsList.<hydra.util.Either<T0, T1>>of())));
 
     }
 
@@ -379,13 +379,13 @@ public class EithersTest {
 
         assertEquals(
 
-            (hydra.util.Pair<java.util.List<Integer>, java.util.List<String>>) ((hydra.util.Pair<java.util.List<Integer>, java.util.List<String>>) (new hydra.util.Pair<java.util.List<Integer>, java.util.List<String>>(java.util.List.of(
+            (hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.util.ConsList<String>>) ((hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.util.ConsList<String>>) (new hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.util.ConsList<String>>(hydra.util.ConsList.of(
   1,
-  2), java.util.List.of(
+  2), hydra.util.ConsList.of(
   "a",
   "b")))),
 
-            hydra.lib.eithers.PartitionEithers.apply(java.util.List.of(
+            hydra.lib.eithers.PartitionEithers.apply(hydra.util.ConsList.of(
   hydra.util.Either.<Integer, String>left(1),
   hydra.util.Either.<Integer, String>right("a"),
   hydra.util.Either.<Integer, String>left(2),
@@ -399,11 +399,11 @@ public class EithersTest {
 
         assertEquals(
 
-            (hydra.util.Pair<java.util.List<Integer>, java.util.List<T1>>) ((hydra.util.Pair<java.util.List<Integer>, java.util.List<T1>>) (new hydra.util.Pair<java.util.List<Integer>, java.util.List<T1>>(java.util.List.of(
+            (hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.util.ConsList<T1>>) ((hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.util.ConsList<T1>>) (new hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.util.ConsList<T1>>(hydra.util.ConsList.of(
   1,
-  2), (java.util.List<T1>) (java.util.List.<T1>of())))),
+  2), (hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>of())))),
 
-            hydra.lib.eithers.PartitionEithers.apply(java.util.List.of(
+            hydra.lib.eithers.PartitionEithers.apply(hydra.util.ConsList.of(
   hydra.util.Either.<Integer, T4>left(1),
   hydra.util.Either.<Integer, T4>left(2))));
 
@@ -415,11 +415,11 @@ public class EithersTest {
 
         assertEquals(
 
-            (hydra.util.Pair<java.util.List<T0>, java.util.List<String>>) ((hydra.util.Pair<java.util.List<T0>, java.util.List<String>>) (new hydra.util.Pair<java.util.List<T0>, java.util.List<String>>((java.util.List<T0>) (java.util.List.<T0>of()), java.util.List.of(
+            (hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.ConsList<String>>) ((hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.ConsList<String>>) (new hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.ConsList<String>>((hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()), hydra.util.ConsList.of(
   "a",
   "b")))),
 
-            hydra.lib.eithers.PartitionEithers.apply(java.util.List.of(
+            hydra.lib.eithers.PartitionEithers.apply(hydra.util.ConsList.of(
   hydra.util.Either.<T4, String>right("a"),
   hydra.util.Either.<T4, String>right("b"))));
 
@@ -431,9 +431,9 @@ public class EithersTest {
 
         assertEquals(
 
-            (hydra.util.Pair<java.util.List<T0>, java.util.List<T1>>) ((hydra.util.Pair<java.util.List<T0>, java.util.List<T1>>) (new hydra.util.Pair<java.util.List<T0>, java.util.List<T1>>((java.util.List<T0>) (java.util.List.<T0>of()), (java.util.List<T1>) (java.util.List.<T1>of())))),
+            (hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.ConsList<T1>>) ((hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.ConsList<T1>>) (new hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.ConsList<T1>>((hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()), (hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>of())))),
 
-            hydra.lib.eithers.PartitionEithers.apply((java.util.List<hydra.util.Either<T0, T1>>) (java.util.List.<hydra.util.Either<T0, T1>>of())));
+            hydra.lib.eithers.PartitionEithers.apply((hydra.util.ConsList<hydra.util.Either<T0, T1>>) (hydra.util.ConsList.<hydra.util.Either<T0, T1>>of())));
 
     }
 
@@ -479,7 +479,7 @@ public class EithersTest {
 
         assertEquals(
 
-            hydra.util.Either.<T1, java.util.List<Integer>>right(java.util.List.of(
+            hydra.util.Either.<T1, hydra.util.ConsList<Integer>>right(hydra.util.ConsList.of(
   2,
   4,
   6)),
@@ -493,7 +493,7 @@ public class EithersTest {
     () -> hydra.util.Either.<String, Integer>right(hydra.lib.math.Mul.apply(
       x,
       2)))),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -517,7 +517,7 @@ public class EithersTest {
     () -> hydra.util.Either.<String, Integer>right(hydra.lib.math.Mul.apply(
       x,
       2)))),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     0,
     3)));
@@ -530,7 +530,7 @@ public class EithersTest {
 
         assertEquals(
 
-            hydra.util.Either.<T1, java.util.List<T0>>right((java.util.List<T0>) (java.util.List.<T0>of())),
+            hydra.util.Either.<T1, hydra.util.ConsList<T0>>right((hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of())),
 
             hydra.lib.eithers.MapList.apply(
   (java.util.function.Function<Integer, hydra.util.Either<String, Integer>>) (x -> hydra.lib.logic.IfElse.lazy(
@@ -541,7 +541,7 @@ public class EithersTest {
     () -> hydra.util.Either.<String, Integer>right(hydra.lib.math.Mul.apply(
       x,
       2)))),
-  (java.util.List<Integer>) (java.util.List.<Integer>of())));
+  (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of())));
 
     }
 

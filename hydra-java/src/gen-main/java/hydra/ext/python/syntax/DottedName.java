@@ -9,9 +9,9 @@ public class DottedName implements Serializable, Comparable<DottedName> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.python.syntax.Name> value;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.Name> value;
   
-  public DottedName (java.util.List<hydra.ext.python.syntax.Name> value) {
+  public DottedName (hydra.util.ConsList<hydra.ext.python.syntax.Name> value) {
     this.value = value;
   }
   

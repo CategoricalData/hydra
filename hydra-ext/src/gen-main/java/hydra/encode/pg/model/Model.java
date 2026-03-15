@@ -7,14 +7,14 @@ package hydra.encode.pg.model;
  */
 public interface Model {
   static <T0> hydra.core.Term adjacentEdge(java.util.function.Function<T0, hydra.core.Term> v, hydra.pg.model.AdjacentEdge<T0> x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.model.AdjacentEdge"), java.util.List.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.model.AdjacentEdge"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("label"), hydra.encode.pg.model.Model.edgeLabel(((java.util.function.Function<hydra.pg.model.AdjacentEdge<T0>, hydra.pg.model.EdgeLabel>) (projected -> projected.label)).apply(x))),
       new hydra.core.Field(new hydra.core.Name("id"), (v).apply(((java.util.function.Function<hydra.pg.model.AdjacentEdge<T0>, T0>) (projected -> projected.id)).apply(x))),
       new hydra.core.Field(new hydra.core.Name("vertex"), (v).apply(((java.util.function.Function<hydra.pg.model.AdjacentEdge<T0>, T0>) (projected -> projected.vertex)).apply(x))),
       new hydra.core.Field(new hydra.core.Name("properties"), new hydra.core.Term.Map(hydra.lib.maps.Bimap.apply(
         hydra.encode.pg.model.Model::propertyKey,
         v,
-        ((java.util.function.Function<hydra.pg.model.AdjacentEdge<T0>, java.util.Map<hydra.pg.model.PropertyKey, T0>>) (projected -> projected.properties)).apply(x)))))));
+        ((java.util.function.Function<hydra.pg.model.AdjacentEdge<T0>, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T0>>) (projected -> projected.properties)).apply(x)))))));
   }
   
   static hydra.core.Term direction(hydra.pg.model.Direction v1) {
@@ -42,7 +42,7 @@ public interface Model {
   }
   
   static <T0> hydra.core.Term edge(java.util.function.Function<T0, hydra.core.Term> v, hydra.pg.model.Edge<T0> x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.model.Edge"), java.util.List.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.model.Edge"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("label"), hydra.encode.pg.model.Model.edgeLabel(((java.util.function.Function<hydra.pg.model.Edge<T0>, hydra.pg.model.EdgeLabel>) (projected -> projected.label)).apply(x))),
       new hydra.core.Field(new hydra.core.Name("id"), (v).apply(((java.util.function.Function<hydra.pg.model.Edge<T0>, T0>) (projected -> projected.id)).apply(x))),
       new hydra.core.Field(new hydra.core.Name("out"), (v).apply(((java.util.function.Function<hydra.pg.model.Edge<T0>, T0>) (projected -> projected.out)).apply(x))),
@@ -50,7 +50,7 @@ public interface Model {
       new hydra.core.Field(new hydra.core.Name("properties"), new hydra.core.Term.Map(hydra.lib.maps.Bimap.apply(
         hydra.encode.pg.model.Model::propertyKey,
         v,
-        ((java.util.function.Function<hydra.pg.model.Edge<T0>, java.util.Map<hydra.pg.model.PropertyKey, T0>>) (projected -> projected.properties)).apply(x)))))));
+        ((java.util.function.Function<hydra.pg.model.Edge<T0>, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T0>>) (projected -> projected.properties)).apply(x)))))));
   }
   
   static hydra.core.Term edgeLabel(hydra.pg.model.EdgeLabel x) {
@@ -58,7 +58,7 @@ public interface Model {
   }
   
   static <T0> hydra.core.Term edgeType(java.util.function.Function<T0, hydra.core.Term> t, hydra.pg.model.EdgeType<T0> x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.model.EdgeType"), java.util.List.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.model.EdgeType"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("label"), hydra.encode.pg.model.Model.edgeLabel(((java.util.function.Function<hydra.pg.model.EdgeType<T0>, hydra.pg.model.EdgeLabel>) (projected -> projected.label)).apply(x))),
       new hydra.core.Field(new hydra.core.Name("id"), (t).apply(((java.util.function.Function<hydra.pg.model.EdgeType<T0>, T0>) (projected -> projected.id)).apply(x))),
       new hydra.core.Field(new hydra.core.Name("out"), hydra.encode.pg.model.Model.vertexLabel(((java.util.function.Function<hydra.pg.model.EdgeType<T0>, hydra.pg.model.VertexLabel>) (projected -> projected.out)).apply(x))),
@@ -67,7 +67,7 @@ public interface Model {
         (java.util.function.Function<hydra.pg.model.PropertyType<T0>, hydra.core.Term>) (v1 -> hydra.encode.pg.model.Model.<T0>propertyType(
           t,
           v1)),
-        ((java.util.function.Function<hydra.pg.model.EdgeType<T0>, java.util.List<hydra.pg.model.PropertyType<T0>>>) (projected -> projected.properties)).apply(x)))))));
+        ((java.util.function.Function<hydra.pg.model.EdgeType<T0>, hydra.util.ConsList<hydra.pg.model.PropertyType<T0>>>) (projected -> projected.properties)).apply(x)))))));
   }
   
   static <T0> hydra.core.Term element(java.util.function.Function<T0, hydra.core.Term> v, hydra.pg.model.Element<T0> v1) {
@@ -103,7 +103,7 @@ public interface Model {
   }
   
   static <T0> hydra.core.Term elementTree(java.util.function.Function<T0, hydra.core.Term> v, hydra.pg.model.ElementTree<T0> x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.model.ElementTree"), java.util.List.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.model.ElementTree"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("self"), hydra.encode.pg.model.Model.<T0>element(
         v,
         ((java.util.function.Function<hydra.pg.model.ElementTree<T0>, hydra.pg.model.Element<T0>>) (projected -> projected.self)).apply(x))),
@@ -111,7 +111,7 @@ public interface Model {
         (java.util.function.Function<hydra.pg.model.ElementTree<T0>, hydra.core.Term>) (v1 -> hydra.encode.pg.model.Model.<T0>elementTree(
           v,
           v1)),
-        ((java.util.function.Function<hydra.pg.model.ElementTree<T0>, java.util.List<hydra.pg.model.ElementTree<T0>>>) (projected -> projected.dependencies)).apply(x)))))));
+        ((java.util.function.Function<hydra.pg.model.ElementTree<T0>, hydra.util.ConsList<hydra.pg.model.ElementTree<T0>>>) (projected -> projected.dependencies)).apply(x)))))));
   }
   
   static <T0> hydra.core.Term elementType(java.util.function.Function<T0, hydra.core.Term> t, hydra.pg.model.ElementType<T0> v1) {
@@ -133,7 +133,7 @@ public interface Model {
   }
   
   static <T0> hydra.core.Term elementTypeTree(java.util.function.Function<T0, hydra.core.Term> t, hydra.pg.model.ElementTypeTree<T0> x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.model.ElementTypeTree"), java.util.List.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.model.ElementTypeTree"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("self"), hydra.encode.pg.model.Model.<T0>elementType(
         t,
         ((java.util.function.Function<hydra.pg.model.ElementTypeTree<T0>, hydra.pg.model.ElementType<T0>>) (projected -> projected.self)).apply(x))),
@@ -141,39 +141,39 @@ public interface Model {
         (java.util.function.Function<hydra.pg.model.ElementTypeTree<T0>, hydra.core.Term>) (v1 -> hydra.encode.pg.model.Model.<T0>elementTypeTree(
           t,
           v1)),
-        ((java.util.function.Function<hydra.pg.model.ElementTypeTree<T0>, java.util.List<hydra.pg.model.ElementTypeTree<T0>>>) (projected -> projected.dependencies)).apply(x)))))));
+        ((java.util.function.Function<hydra.pg.model.ElementTypeTree<T0>, hydra.util.ConsList<hydra.pg.model.ElementTypeTree<T0>>>) (projected -> projected.dependencies)).apply(x)))))));
   }
   
   static <T0> hydra.core.Term graph(java.util.function.Function<T0, hydra.core.Term> v, hydra.pg.model.Graph<T0> x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.model.Graph"), java.util.List.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.model.Graph"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("vertices"), new hydra.core.Term.Map(hydra.lib.maps.Bimap.apply(
         v,
         (java.util.function.Function<hydra.pg.model.Vertex<T0>, hydra.core.Term>) (v1 -> hydra.encode.pg.model.Model.<T0>vertex(
           v,
           v1)),
-        ((java.util.function.Function<hydra.pg.model.Graph<T0>, java.util.Map<T0, hydra.pg.model.Vertex<T0>>>) (projected -> projected.vertices)).apply(x)))),
+        ((java.util.function.Function<hydra.pg.model.Graph<T0>, hydra.util.PersistentMap<T0, hydra.pg.model.Vertex<T0>>>) (projected -> projected.vertices)).apply(x)))),
       new hydra.core.Field(new hydra.core.Name("edges"), new hydra.core.Term.Map(hydra.lib.maps.Bimap.apply(
         v,
         (java.util.function.Function<hydra.pg.model.Edge<T0>, hydra.core.Term>) (v1 -> hydra.encode.pg.model.Model.<T0>edge(
           v,
           v1)),
-        ((java.util.function.Function<hydra.pg.model.Graph<T0>, java.util.Map<T0, hydra.pg.model.Edge<T0>>>) (projected -> projected.edges)).apply(x)))))));
+        ((java.util.function.Function<hydra.pg.model.Graph<T0>, hydra.util.PersistentMap<T0, hydra.pg.model.Edge<T0>>>) (projected -> projected.edges)).apply(x)))))));
   }
   
   static <T0> hydra.core.Term graphSchema(java.util.function.Function<T0, hydra.core.Term> t, hydra.pg.model.GraphSchema<T0> x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.model.GraphSchema"), java.util.List.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.model.GraphSchema"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("vertices"), new hydra.core.Term.Map(hydra.lib.maps.Bimap.apply(
         hydra.encode.pg.model.Model::vertexLabel,
         (java.util.function.Function<hydra.pg.model.VertexType<T0>, hydra.core.Term>) (v1 -> hydra.encode.pg.model.Model.<T0>vertexType(
           t,
           v1)),
-        ((java.util.function.Function<hydra.pg.model.GraphSchema<T0>, java.util.Map<hydra.pg.model.VertexLabel, hydra.pg.model.VertexType<T0>>>) (projected -> projected.vertices)).apply(x)))),
+        ((java.util.function.Function<hydra.pg.model.GraphSchema<T0>, hydra.util.PersistentMap<hydra.pg.model.VertexLabel, hydra.pg.model.VertexType<T0>>>) (projected -> projected.vertices)).apply(x)))),
       new hydra.core.Field(new hydra.core.Name("edges"), new hydra.core.Term.Map(hydra.lib.maps.Bimap.apply(
         hydra.encode.pg.model.Model::edgeLabel,
         (java.util.function.Function<hydra.pg.model.EdgeType<T0>, hydra.core.Term>) (v1 -> hydra.encode.pg.model.Model.<T0>edgeType(
           t,
           v1)),
-        ((java.util.function.Function<hydra.pg.model.GraphSchema<T0>, java.util.Map<hydra.pg.model.EdgeLabel, hydra.pg.model.EdgeType<T0>>>) (projected -> projected.edges)).apply(x)))))));
+        ((java.util.function.Function<hydra.pg.model.GraphSchema<T0>, hydra.util.PersistentMap<hydra.pg.model.EdgeLabel, hydra.pg.model.EdgeType<T0>>>) (projected -> projected.edges)).apply(x)))))));
   }
   
   static hydra.core.Term label(hydra.pg.model.Label v1) {
@@ -191,21 +191,21 @@ public interface Model {
   }
   
   static <T0> hydra.core.Term lazyGraph(java.util.function.Function<T0, hydra.core.Term> v, hydra.pg.model.LazyGraph<T0> x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.model.LazyGraph"), java.util.List.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.model.LazyGraph"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("vertices"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
         (java.util.function.Function<hydra.pg.model.Vertex<T0>, hydra.core.Term>) (v1 -> hydra.encode.pg.model.Model.<T0>vertex(
           v,
           v1)),
-        ((java.util.function.Function<hydra.pg.model.LazyGraph<T0>, java.util.List<hydra.pg.model.Vertex<T0>>>) (projected -> projected.vertices)).apply(x)))),
+        ((java.util.function.Function<hydra.pg.model.LazyGraph<T0>, hydra.util.ConsList<hydra.pg.model.Vertex<T0>>>) (projected -> projected.vertices)).apply(x)))),
       new hydra.core.Field(new hydra.core.Name("edges"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
         (java.util.function.Function<hydra.pg.model.Edge<T0>, hydra.core.Term>) (v1 -> hydra.encode.pg.model.Model.<T0>edge(
           v,
           v1)),
-        ((java.util.function.Function<hydra.pg.model.LazyGraph<T0>, java.util.List<hydra.pg.model.Edge<T0>>>) (projected -> projected.edges)).apply(x)))))));
+        ((java.util.function.Function<hydra.pg.model.LazyGraph<T0>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>) (projected -> projected.edges)).apply(x)))))));
   }
   
   static <T0> hydra.core.Term property(java.util.function.Function<T0, hydra.core.Term> v, hydra.pg.model.Property<T0> x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.model.Property"), java.util.List.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.model.Property"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("key"), hydra.encode.pg.model.Model.propertyKey(((java.util.function.Function<hydra.pg.model.Property<T0>, hydra.pg.model.PropertyKey>) (projected -> projected.key)).apply(x))),
       new hydra.core.Field(new hydra.core.Name("value"), (v).apply(((java.util.function.Function<hydra.pg.model.Property<T0>, T0>) (projected -> projected.value)).apply(x))))));
   }
@@ -215,20 +215,20 @@ public interface Model {
   }
   
   static <T0> hydra.core.Term propertyType(java.util.function.Function<T0, hydra.core.Term> t, hydra.pg.model.PropertyType<T0> x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.model.PropertyType"), java.util.List.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.model.PropertyType"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("key"), hydra.encode.pg.model.Model.propertyKey(((java.util.function.Function<hydra.pg.model.PropertyType<T0>, hydra.pg.model.PropertyKey>) (projected -> projected.key)).apply(x))),
       new hydra.core.Field(new hydra.core.Name("value"), (t).apply(((java.util.function.Function<hydra.pg.model.PropertyType<T0>, T0>) (projected -> projected.value)).apply(x))),
       new hydra.core.Field(new hydra.core.Name("required"), new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(((java.util.function.Function<hydra.pg.model.PropertyType<T0>, Boolean>) (projected -> projected.required)).apply(x)))))));
   }
   
   static <T0> hydra.core.Term vertex(java.util.function.Function<T0, hydra.core.Term> v, hydra.pg.model.Vertex<T0> x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.model.Vertex"), java.util.List.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.model.Vertex"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("label"), hydra.encode.pg.model.Model.vertexLabel(((java.util.function.Function<hydra.pg.model.Vertex<T0>, hydra.pg.model.VertexLabel>) (projected -> projected.label)).apply(x))),
       new hydra.core.Field(new hydra.core.Name("id"), (v).apply(((java.util.function.Function<hydra.pg.model.Vertex<T0>, T0>) (projected -> projected.id)).apply(x))),
       new hydra.core.Field(new hydra.core.Name("properties"), new hydra.core.Term.Map(hydra.lib.maps.Bimap.apply(
         hydra.encode.pg.model.Model::propertyKey,
         v,
-        ((java.util.function.Function<hydra.pg.model.Vertex<T0>, java.util.Map<hydra.pg.model.PropertyKey, T0>>) (projected -> projected.properties)).apply(x)))))));
+        ((java.util.function.Function<hydra.pg.model.Vertex<T0>, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T0>>) (projected -> projected.properties)).apply(x)))))));
   }
   
   static hydra.core.Term vertexLabel(hydra.pg.model.VertexLabel x) {
@@ -236,18 +236,18 @@ public interface Model {
   }
   
   static <T0> hydra.core.Term vertexType(java.util.function.Function<T0, hydra.core.Term> t, hydra.pg.model.VertexType<T0> x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.model.VertexType"), java.util.List.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.model.VertexType"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("label"), hydra.encode.pg.model.Model.vertexLabel(((java.util.function.Function<hydra.pg.model.VertexType<T0>, hydra.pg.model.VertexLabel>) (projected -> projected.label)).apply(x))),
       new hydra.core.Field(new hydra.core.Name("id"), (t).apply(((java.util.function.Function<hydra.pg.model.VertexType<T0>, T0>) (projected -> projected.id)).apply(x))),
       new hydra.core.Field(new hydra.core.Name("properties"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
         (java.util.function.Function<hydra.pg.model.PropertyType<T0>, hydra.core.Term>) (v1 -> hydra.encode.pg.model.Model.<T0>propertyType(
           t,
           v1)),
-        ((java.util.function.Function<hydra.pg.model.VertexType<T0>, java.util.List<hydra.pg.model.PropertyType<T0>>>) (projected -> projected.properties)).apply(x)))))));
+        ((java.util.function.Function<hydra.pg.model.VertexType<T0>, hydra.util.ConsList<hydra.pg.model.PropertyType<T0>>>) (projected -> projected.properties)).apply(x)))))));
   }
   
   static <T0> hydra.core.Term vertexWithAdjacentEdges(java.util.function.Function<T0, hydra.core.Term> v, hydra.pg.model.VertexWithAdjacentEdges<T0> x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.model.VertexWithAdjacentEdges"), java.util.List.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.pg.model.VertexWithAdjacentEdges"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("vertex"), hydra.encode.pg.model.Model.<T0>vertex(
         v,
         ((java.util.function.Function<hydra.pg.model.VertexWithAdjacentEdges<T0>, hydra.pg.model.Vertex<T0>>) (projected -> projected.vertex)).apply(x))),
@@ -255,11 +255,11 @@ public interface Model {
         (java.util.function.Function<hydra.pg.model.AdjacentEdge<T0>, hydra.core.Term>) (v1 -> hydra.encode.pg.model.Model.<T0>adjacentEdge(
           v,
           v1)),
-        ((java.util.function.Function<hydra.pg.model.VertexWithAdjacentEdges<T0>, java.util.List<hydra.pg.model.AdjacentEdge<T0>>>) (projected -> projected.ins)).apply(x)))),
+        ((java.util.function.Function<hydra.pg.model.VertexWithAdjacentEdges<T0>, hydra.util.ConsList<hydra.pg.model.AdjacentEdge<T0>>>) (projected -> projected.ins)).apply(x)))),
       new hydra.core.Field(new hydra.core.Name("outs"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
         (java.util.function.Function<hydra.pg.model.AdjacentEdge<T0>, hydra.core.Term>) (v1 -> hydra.encode.pg.model.Model.<T0>adjacentEdge(
           v,
           v1)),
-        ((java.util.function.Function<hydra.pg.model.VertexWithAdjacentEdges<T0>, java.util.List<hydra.pg.model.AdjacentEdge<T0>>>) (projected -> projected.outs)).apply(x)))))));
+        ((java.util.function.Function<hydra.pg.model.VertexWithAdjacentEdges<T0>, hydra.util.ConsList<hydra.pg.model.AdjacentEdge<T0>>>) (projected -> projected.outs)).apply(x)))))));
   }
 }

@@ -11,11 +11,11 @@ public class SameIndividual implements Serializable, Comparable<SameIndividual> 
   
   public static final hydra.core.Name INDIVIDUALS = new hydra.core.Name("individuals");
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.Individual> individuals;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Individual> individuals;
   
-  public SameIndividual (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, java.util.List<hydra.ext.org.w3.owl.syntax.Individual> individuals) {
+  public SameIndividual (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Individual> individuals) {
     this.annotations = annotations;
     this.individuals = individuals;
   }
@@ -53,11 +53,11 @@ public class SameIndividual implements Serializable, Comparable<SameIndividual> 
       other.individuals.hashCode());
   }
   
-  public SameIndividual withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public SameIndividual withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new SameIndividual(annotations, individuals);
   }
   
-  public SameIndividual withIndividuals(java.util.List<hydra.ext.org.w3.owl.syntax.Individual> individuals) {
+  public SameIndividual withIndividuals(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Individual> individuals) {
     return new SameIndividual(annotations, individuals);
   }
 }

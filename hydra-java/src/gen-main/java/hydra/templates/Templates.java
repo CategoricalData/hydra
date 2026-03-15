@@ -6,7 +6,7 @@ package hydra.templates;
  * A utility which instantiates a nonrecursive type with default values
  */
 public interface Templates {
-  static hydra.util.Either<hydra.context.InContext<hydra.error.DecodingError>, java.util.Map<hydra.core.Name, hydra.core.Type>> graphToSchema(hydra.context.Context cx, hydra.graph.Graph graph, java.util.List<hydra.core.Binding> els) {
+  static hydra.util.Either<hydra.context.InContext<hydra.error.DecodingError>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>> graphToSchema(hydra.context.Context cx, hydra.graph.Graph graph, hydra.util.ConsList<hydra.core.Binding> els) {
     java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.error.DecodingError>, hydra.util.Pair<hydra.core.Name, hydra.core.Type>>> toPair = (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.error.DecodingError>, hydra.util.Pair<hydra.core.Name, hydra.core.Type>>>) (el -> {
       hydra.core.Name name = (el).name;
       return hydra.lib.eithers.Bind.apply(
@@ -22,10 +22,10 @@ public interface Templates {
       hydra.lib.eithers.MapList.apply(
         toPair,
         els),
-      (java.util.function.Function<java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Type>>, hydra.util.Either<hydra.context.InContext<hydra.error.DecodingError>, java.util.Map<hydra.core.Name, hydra.core.Type>>>) (pairs -> hydra.util.Either.<hydra.context.InContext<hydra.error.DecodingError>, java.util.Map<hydra.core.Name, hydra.core.Type>>right(hydra.lib.maps.FromList.apply(pairs))));
+      (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Type>>, hydra.util.Either<hydra.context.InContext<hydra.error.DecodingError>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>>>) (pairs -> hydra.util.Either.<hydra.context.InContext<hydra.error.DecodingError>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>>right(hydra.lib.maps.FromList.apply(pairs))));
   }
   
-  static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> instantiateTemplate(hydra.context.Context cx, Boolean minimal, java.util.Map<hydra.core.Name, hydra.core.Type> schema, hydra.core.Type t) {
+  static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> instantiateTemplate(hydra.context.Context cx, Boolean minimal, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> schema, hydra.core.Type t) {
     java.util.function.Function<hydra.core.FloatType, hydra.core.FloatValue> forFloat = (java.util.function.Function<hydra.core.FloatType, hydra.core.FloatValue>) (ft -> (ft).accept(new hydra.core.FloatType.PartialVisitor<>() {
       @Override
       public hydra.core.FloatValue visit(hydra.core.FloatType.Bigfloat ignored) {
@@ -144,10 +144,10 @@ public interface Templates {
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Type.List et) {
         return hydra.lib.logic.IfElse.lazy(
           minimal,
-          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.List((java.util.List<hydra.core.Term>) (java.util.List.<hydra.core.Term>of()))),
+          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.List((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>of()))),
           () -> hydra.lib.eithers.Bind.apply(
             (inst).apply((et).value),
-            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (e -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.List(java.util.List.of(e))))));
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (e -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.List(hydra.util.ConsList.of(e))))));
       }
       
       @Override
@@ -161,7 +161,7 @@ public interface Templates {
         hydra.core.Type vt = ((mt).value).values;
         return hydra.lib.logic.IfElse.lazy(
           minimal,
-          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.Map((java.util.Map<hydra.core.Term, hydra.core.Term>) ((java.util.Map<hydra.core.Term, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Term, hydra.core.Term>apply())))),
+          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.Map((hydra.util.PersistentMap<hydra.core.Term, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Term, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Term, hydra.core.Term>apply())))),
           () -> hydra.lib.eithers.Bind.apply(
             (inst).apply(kt),
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (ke -> hydra.lib.eithers.Bind.apply(
@@ -183,7 +183,7 @@ public interface Templates {
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Type.Record rt) {
-        java.util.List<hydra.core.FieldType> fields = ((rt).value).fields;
+        hydra.util.ConsList<hydra.core.FieldType> fields = ((rt).value).fields;
         hydra.core.Name tname = ((rt).value).typeName;
         java.util.function.Function<hydra.core.FieldType, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>> toField = (java.util.function.Function<hydra.core.FieldType, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>>) (ft -> hydra.lib.eithers.Bind.apply(
           (inst).apply((ft).type),
@@ -192,17 +192,17 @@ public interface Templates {
           hydra.lib.eithers.MapList.apply(
             toField,
             fields),
-          (java.util.function.Function<java.util.List<hydra.core.Field>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (dfields -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.Record(new hydra.core.Record(tname, dfields)))));
+          (java.util.function.Function<hydra.util.ConsList<hydra.core.Field>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (dfields -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.Record(new hydra.core.Record(tname, dfields)))));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Type.Set et) {
         return hydra.lib.logic.IfElse.lazy(
           minimal,
-          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.Set((java.util.Set<hydra.core.Term>) (hydra.lib.sets.Empty.<hydra.core.Term>apply()))),
+          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.Set((hydra.util.PersistentSet<hydra.core.Term>) (hydra.lib.sets.Empty.<hydra.core.Term>apply()))),
           () -> hydra.lib.eithers.Bind.apply(
             (inst).apply((et).value),
-            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (e -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.Set(hydra.lib.sets.FromList.apply(java.util.List.of(e)))))));
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (e -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.Set(hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(e)))))));
       }
       
       @Override

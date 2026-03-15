@@ -36,9 +36,9 @@ public class AdjacentEdge<V> implements Serializable, Comparable<AdjacentEdge<V>
   /**
    * A key/value map of edge properties
    */
-  public final java.util.Map<hydra.pg.model.PropertyKey, V> properties;
+  public final hydra.util.PersistentMap<hydra.pg.model.PropertyKey, V> properties;
   
-  public AdjacentEdge (hydra.pg.model.EdgeLabel label, V id, V vertex, java.util.Map<hydra.pg.model.PropertyKey, V> properties) {
+  public AdjacentEdge (hydra.pg.model.EdgeLabel label, V id, V vertex, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, V> properties) {
     this.label = label;
     this.id = id;
     this.vertex = vertex;
@@ -100,7 +100,7 @@ public class AdjacentEdge<V> implements Serializable, Comparable<AdjacentEdge<V>
     return new AdjacentEdge(label, id, vertex, properties);
   }
   
-  public AdjacentEdge withProperties(java.util.Map<hydra.pg.model.PropertyKey, V> properties) {
+  public AdjacentEdge withProperties(hydra.util.PersistentMap<hydra.pg.model.PropertyKey, V> properties) {
     return new AdjacentEdge(label, id, vertex, properties);
   }
 }

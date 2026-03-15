@@ -668,9 +668,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
   }
   
   public static final class List extends hydra.pg.graphson.syntax.Value implements Serializable {
-    public final java.util.List<hydra.pg.graphson.syntax.Value> value;
+    public final hydra.util.ConsList<hydra.pg.graphson.syntax.Value> value;
     
-    public List (java.util.List<hydra.pg.graphson.syntax.Value> value) {
+    public List (hydra.util.ConsList<hydra.pg.graphson.syntax.Value> value) {
       this.value = value;
     }
     
@@ -865,9 +865,9 @@ public abstract class Value implements Serializable, Comparable<Value> {
   }
   
   public static final class Set extends hydra.pg.graphson.syntax.Value implements Serializable {
-    public final java.util.List<hydra.pg.graphson.syntax.Value> value;
+    public final hydra.util.ConsList<hydra.pg.graphson.syntax.Value> value;
     
-    public Set (java.util.List<hydra.pg.graphson.syntax.Value> value) {
+    public Set (hydra.util.ConsList<hydra.pg.graphson.syntax.Value> value) {
       this.value = value;
     }
     

@@ -13,13 +13,13 @@ public class AnnotationPropertyRange implements Serializable, Comparable<Annotat
   
   public static final hydra.core.Name IRI = new hydra.core.Name("iri");
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
   public final hydra.ext.org.w3.owl.syntax.AnnotationProperty property;
   
   public final hydra.ext.org.w3.rdf.syntax.Iri iri;
   
-  public AnnotationPropertyRange (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.AnnotationProperty property, hydra.ext.org.w3.rdf.syntax.Iri iri) {
+  public AnnotationPropertyRange (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.AnnotationProperty property, hydra.ext.org.w3.rdf.syntax.Iri iri) {
     this.annotations = annotations;
     this.property = property;
     this.iri = iri;
@@ -62,7 +62,7 @@ public class AnnotationPropertyRange implements Serializable, Comparable<Annotat
     return ((Comparable) iri).compareTo(other.iri);
   }
   
-  public AnnotationPropertyRange withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public AnnotationPropertyRange withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new AnnotationPropertyRange(annotations, property, iri);
   }
   

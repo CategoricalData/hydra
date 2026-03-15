@@ -78,9 +78,9 @@ public abstract class TraversalPredicateOrStringLiteralVarargs implements Serial
   }
   
   public static final class String_ extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalPredicateOrStringLiteralVarargs implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
     
-    public String_ (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
+    public String_ (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
     

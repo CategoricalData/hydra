@@ -13,9 +13,9 @@ public class Slices implements Serializable, Comparable<Slices> {
   
   public final hydra.ext.python.syntax.Slice head;
   
-  public final java.util.List<hydra.ext.python.syntax.SliceOrStarredExpression> tail;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.SliceOrStarredExpression> tail;
   
-  public Slices (hydra.ext.python.syntax.Slice head, java.util.List<hydra.ext.python.syntax.SliceOrStarredExpression> tail) {
+  public Slices (hydra.ext.python.syntax.Slice head, hydra.util.ConsList<hydra.ext.python.syntax.SliceOrStarredExpression> tail) {
     this.head = head;
     this.tail = tail;
   }
@@ -55,7 +55,7 @@ public class Slices implements Serializable, Comparable<Slices> {
     return new Slices(head, tail);
   }
   
-  public Slices withTail(java.util.List<hydra.ext.python.syntax.SliceOrStarredExpression> tail) {
+  public Slices withTail(hydra.util.ConsList<hydra.ext.python.syntax.SliceOrStarredExpression> tail) {
     return new Slices(head, tail);
   }
 }

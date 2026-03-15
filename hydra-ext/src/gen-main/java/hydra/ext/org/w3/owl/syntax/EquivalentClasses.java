@@ -11,11 +11,11 @@ public class EquivalentClasses implements Serializable, Comparable<EquivalentCla
   
   public static final hydra.core.Name CLASSES = new hydra.core.Name("classes");
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> classes;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ClassExpression> classes;
   
-  public EquivalentClasses (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> classes) {
+  public EquivalentClasses (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ClassExpression> classes) {
     this.annotations = annotations;
     this.classes = classes;
   }
@@ -53,11 +53,11 @@ public class EquivalentClasses implements Serializable, Comparable<EquivalentCla
       other.classes.hashCode());
   }
   
-  public EquivalentClasses withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public EquivalentClasses withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new EquivalentClasses(annotations, classes);
   }
   
-  public EquivalentClasses withClasses(java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> classes) {
+  public EquivalentClasses withClasses(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ClassExpression> classes) {
     return new EquivalentClasses(annotations, classes);
   }
 }

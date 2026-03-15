@@ -11,11 +11,11 @@ public class TransitiveObjectProperty implements Serializable, Comparable<Transi
   
   public static final hydra.core.Name PROPERTY = new hydra.core.Name("property");
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
   public final hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property;
   
-  public TransitiveObjectProperty (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property) {
+  public TransitiveObjectProperty (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property) {
     this.annotations = annotations;
     this.property = property;
   }
@@ -51,7 +51,7 @@ public class TransitiveObjectProperty implements Serializable, Comparable<Transi
     return ((Comparable) property).compareTo(other.property);
   }
   
-  public TransitiveObjectProperty withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public TransitiveObjectProperty withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new TransitiveObjectProperty(annotations, property);
   }
   

@@ -25,7 +25,7 @@ public class FunctionDefRaw implements Serializable, Comparable<FunctionDefRaw> 
   
   public final hydra.ext.python.syntax.Name name;
   
-  public final java.util.List<hydra.ext.python.syntax.TypeParameter> typeParams;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter> typeParams;
   
   public final hydra.util.Maybe<hydra.ext.python.syntax.Parameters> params;
   
@@ -35,7 +35,7 @@ public class FunctionDefRaw implements Serializable, Comparable<FunctionDefRaw> 
   
   public final hydra.ext.python.syntax.Block block;
   
-  public FunctionDefRaw (Boolean async, hydra.ext.python.syntax.Name name, java.util.List<hydra.ext.python.syntax.TypeParameter> typeParams, hydra.util.Maybe<hydra.ext.python.syntax.Parameters> params, hydra.util.Maybe<hydra.ext.python.syntax.Expression> returnType, hydra.util.Maybe<hydra.ext.python.syntax.FuncTypeComment> funcTypeComment, hydra.ext.python.syntax.Block block) {
+  public FunctionDefRaw (Boolean async, hydra.ext.python.syntax.Name name, hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter> typeParams, hydra.util.Maybe<hydra.ext.python.syntax.Parameters> params, hydra.util.Maybe<hydra.ext.python.syntax.Expression> returnType, hydra.util.Maybe<hydra.ext.python.syntax.FuncTypeComment> funcTypeComment, hydra.ext.python.syntax.Block block) {
     this.async = async;
     this.name = name;
     this.typeParams = typeParams;
@@ -120,7 +120,7 @@ public class FunctionDefRaw implements Serializable, Comparable<FunctionDefRaw> 
     return new FunctionDefRaw(async, name, typeParams, params, returnType, funcTypeComment, block);
   }
   
-  public FunctionDefRaw withTypeParams(java.util.List<hydra.ext.python.syntax.TypeParameter> typeParams) {
+  public FunctionDefRaw withTypeParams(hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter> typeParams) {
     return new FunctionDefRaw(async, name, typeParams, params, returnType, funcTypeComment, block);
   }
   

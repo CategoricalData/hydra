@@ -13,13 +13,13 @@ public class CatchFormalParameter implements Serializable, Comparable<CatchForma
   
   public static final hydra.core.Name ID = new hydra.core.Name("id");
   
-  public final java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers;
   
   public final hydra.ext.java.syntax.CatchType type;
   
   public final hydra.ext.java.syntax.VariableDeclaratorId id;
   
-  public CatchFormalParameter (java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers, hydra.ext.java.syntax.CatchType type, hydra.ext.java.syntax.VariableDeclaratorId id) {
+  public CatchFormalParameter (hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers, hydra.ext.java.syntax.CatchType type, hydra.ext.java.syntax.VariableDeclaratorId id) {
     this.modifiers = modifiers;
     this.type = type;
     this.id = id;
@@ -62,7 +62,7 @@ public class CatchFormalParameter implements Serializable, Comparable<CatchForma
     return ((Comparable) id).compareTo(other.id);
   }
   
-  public CatchFormalParameter withModifiers(java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers) {
+  public CatchFormalParameter withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers) {
     return new CatchFormalParameter(modifiers, type, id);
   }
   

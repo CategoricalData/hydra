@@ -9,9 +9,9 @@ public class Disjunction implements Serializable, Comparable<Disjunction> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.python.syntax.Conjunction> value;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.Conjunction> value;
   
-  public Disjunction (java.util.List<hydra.ext.python.syntax.Conjunction> value) {
+  public Disjunction (hydra.util.ConsList<hydra.ext.python.syntax.Conjunction> value) {
     this.value = value;
   }
   

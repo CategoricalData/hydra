@@ -9,9 +9,9 @@ public class ClassBody implements Serializable, Comparable<ClassBody> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.java.syntax.ClassBodyDeclarationWithComments> value;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.ClassBodyDeclarationWithComments> value;
   
-  public ClassBody (java.util.List<hydra.ext.java.syntax.ClassBodyDeclarationWithComments> value) {
+  public ClassBody (hydra.util.ConsList<hydra.ext.java.syntax.ClassBodyDeclarationWithComments> value) {
     this.value = value;
   }
   

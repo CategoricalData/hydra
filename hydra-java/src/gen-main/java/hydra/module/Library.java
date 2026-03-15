@@ -29,9 +29,9 @@ public class Library implements Serializable, Comparable<Library> {
   /**
    * The primitives defined in this library
    */
-  public final java.util.List<hydra.graph.Primitive> primitives;
+  public final hydra.util.ConsList<hydra.graph.Primitive> primitives;
   
-  public Library (hydra.module.Namespace namespace, String prefix, java.util.List<hydra.graph.Primitive> primitives) {
+  public Library (hydra.module.Namespace namespace, String prefix, hydra.util.ConsList<hydra.graph.Primitive> primitives) {
     this.namespace = namespace;
     this.prefix = prefix;
     this.primitives = primitives;
@@ -82,7 +82,7 @@ public class Library implements Serializable, Comparable<Library> {
     return new Library(namespace, prefix, primitives);
   }
   
-  public Library withPrimitives(java.util.List<hydra.graph.Primitive> primitives) {
+  public Library withPrimitives(hydra.util.ConsList<hydra.graph.Primitive> primitives) {
     return new Library(namespace, prefix, primitives);
   }
 }

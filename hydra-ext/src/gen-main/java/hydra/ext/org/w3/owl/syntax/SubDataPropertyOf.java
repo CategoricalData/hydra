@@ -13,13 +13,13 @@ public class SubDataPropertyOf implements Serializable, Comparable<SubDataProper
   
   public static final hydra.core.Name SUPER_PROPERTY = new hydra.core.Name("superProperty");
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
   public final hydra.ext.org.w3.owl.syntax.DataPropertyExpression subProperty;
   
   public final hydra.ext.org.w3.owl.syntax.DataPropertyExpression superProperty;
   
-  public SubDataPropertyOf (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.DataPropertyExpression subProperty, hydra.ext.org.w3.owl.syntax.DataPropertyExpression superProperty) {
+  public SubDataPropertyOf (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.DataPropertyExpression subProperty, hydra.ext.org.w3.owl.syntax.DataPropertyExpression superProperty) {
     this.annotations = annotations;
     this.subProperty = subProperty;
     this.superProperty = superProperty;
@@ -62,7 +62,7 @@ public class SubDataPropertyOf implements Serializable, Comparable<SubDataProper
     return ((Comparable) superProperty).compareTo(other.superProperty);
   }
   
-  public SubDataPropertyOf withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public SubDataPropertyOf withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new SubDataPropertyOf(annotations, subProperty, superProperty);
   }
   

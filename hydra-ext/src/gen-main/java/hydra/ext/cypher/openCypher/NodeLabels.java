@@ -9,9 +9,9 @@ public class NodeLabels implements Serializable, Comparable<NodeLabels> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.cypher.openCypher.NodeLabel> value;
+  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.NodeLabel> value;
   
-  public NodeLabels (java.util.List<hydra.ext.cypher.openCypher.NodeLabel> value) {
+  public NodeLabels (hydra.util.ConsList<hydra.ext.cypher.openCypher.NodeLabel> value) {
     this.value = value;
   }
   

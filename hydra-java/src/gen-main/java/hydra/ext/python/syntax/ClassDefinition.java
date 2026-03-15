@@ -21,13 +21,13 @@ public class ClassDefinition implements Serializable, Comparable<ClassDefinition
   
   public final hydra.ext.python.syntax.Name name;
   
-  public final java.util.List<hydra.ext.python.syntax.TypeParameter> typeParams;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter> typeParams;
   
   public final hydra.util.Maybe<hydra.ext.python.syntax.Args> arguments;
   
   public final hydra.ext.python.syntax.Block body;
   
-  public ClassDefinition (hydra.util.Maybe<hydra.ext.python.syntax.Decorators> decorators, hydra.ext.python.syntax.Name name, java.util.List<hydra.ext.python.syntax.TypeParameter> typeParams, hydra.util.Maybe<hydra.ext.python.syntax.Args> arguments, hydra.ext.python.syntax.Block body) {
+  public ClassDefinition (hydra.util.Maybe<hydra.ext.python.syntax.Decorators> decorators, hydra.ext.python.syntax.Name name, hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter> typeParams, hydra.util.Maybe<hydra.ext.python.syntax.Args> arguments, hydra.ext.python.syntax.Block body) {
     this.decorators = decorators;
     this.name = name;
     this.typeParams = typeParams;
@@ -96,7 +96,7 @@ public class ClassDefinition implements Serializable, Comparable<ClassDefinition
     return new ClassDefinition(decorators, name, typeParams, arguments, body);
   }
   
-  public ClassDefinition withTypeParams(java.util.List<hydra.ext.python.syntax.TypeParameter> typeParams) {
+  public ClassDefinition withTypeParams(hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter> typeParams) {
     return new ClassDefinition(decorators, name, typeParams, arguments, body);
   }
   

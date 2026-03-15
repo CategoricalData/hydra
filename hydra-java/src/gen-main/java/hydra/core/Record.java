@@ -22,9 +22,9 @@ public class Record implements Serializable, Comparable<Record> {
   /**
    * The fields of the record, as a list of name/term pairs
    */
-  public final java.util.List<hydra.core.Field> fields;
+  public final hydra.util.ConsList<hydra.core.Field> fields;
   
-  public Record (hydra.core.Name typeName, java.util.List<hydra.core.Field> fields) {
+  public Record (hydra.core.Name typeName, hydra.util.ConsList<hydra.core.Field> fields) {
     this.typeName = typeName;
     this.fields = fields;
   }
@@ -64,7 +64,7 @@ public class Record implements Serializable, Comparable<Record> {
     return new Record(typeName, fields);
   }
   
-  public Record withFields(java.util.List<hydra.core.Field> fields) {
+  public Record withFields(hydra.util.ConsList<hydra.core.Field> fields) {
     return new Record(typeName, fields);
   }
 }

@@ -9,9 +9,9 @@ public class KeywordPatterns implements Serializable, Comparable<KeywordPatterns
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.python.syntax.KeywordPattern> value;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.KeywordPattern> value;
   
-  public KeywordPatterns (java.util.List<hydra.ext.python.syntax.KeywordPattern> value) {
+  public KeywordPatterns (hydra.util.ConsList<hydra.ext.python.syntax.KeywordPattern> value) {
     this.value = value;
   }
   

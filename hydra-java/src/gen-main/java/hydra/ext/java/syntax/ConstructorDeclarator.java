@@ -15,15 +15,15 @@ public class ConstructorDeclarator implements Serializable, Comparable<Construct
   
   public static final hydra.core.Name FORMAL_PARAMETERS = new hydra.core.Name("formalParameters");
   
-  public final java.util.List<hydra.ext.java.syntax.TypeParameter> parameters;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> parameters;
   
   public final hydra.ext.java.syntax.SimpleTypeName name;
   
   public final hydra.util.Maybe<hydra.ext.java.syntax.ReceiverParameter> receiverParameter;
   
-  public final java.util.List<hydra.ext.java.syntax.FormalParameter> formalParameters;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.FormalParameter> formalParameters;
   
-  public ConstructorDeclarator (java.util.List<hydra.ext.java.syntax.TypeParameter> parameters, hydra.ext.java.syntax.SimpleTypeName name, hydra.util.Maybe<hydra.ext.java.syntax.ReceiverParameter> receiverParameter, java.util.List<hydra.ext.java.syntax.FormalParameter> formalParameters) {
+  public ConstructorDeclarator (hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> parameters, hydra.ext.java.syntax.SimpleTypeName name, hydra.util.Maybe<hydra.ext.java.syntax.ReceiverParameter> receiverParameter, hydra.util.ConsList<hydra.ext.java.syntax.FormalParameter> formalParameters) {
     this.parameters = parameters;
     this.name = name;
     this.receiverParameter = receiverParameter;
@@ -77,7 +77,7 @@ public class ConstructorDeclarator implements Serializable, Comparable<Construct
       other.formalParameters.hashCode());
   }
   
-  public ConstructorDeclarator withParameters(java.util.List<hydra.ext.java.syntax.TypeParameter> parameters) {
+  public ConstructorDeclarator withParameters(hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> parameters) {
     return new ConstructorDeclarator(parameters, name, receiverParameter, formalParameters);
   }
   
@@ -89,7 +89,7 @@ public class ConstructorDeclarator implements Serializable, Comparable<Construct
     return new ConstructorDeclarator(parameters, name, receiverParameter, formalParameters);
   }
   
-  public ConstructorDeclarator withFormalParameters(java.util.List<hydra.ext.java.syntax.FormalParameter> formalParameters) {
+  public ConstructorDeclarator withFormalParameters(hydra.util.ConsList<hydra.ext.java.syntax.FormalParameter> formalParameters) {
     return new ConstructorDeclarator(parameters, name, receiverParameter, formalParameters);
   }
 }

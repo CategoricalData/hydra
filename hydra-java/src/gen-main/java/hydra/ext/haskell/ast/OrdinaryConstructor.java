@@ -22,9 +22,9 @@ public class OrdinaryConstructor implements Serializable, Comparable<OrdinaryCon
   /**
    * The types of the positional fields
    */
-  public final java.util.List<hydra.ext.haskell.ast.Type> fields;
+  public final hydra.util.ConsList<hydra.ext.haskell.ast.Type> fields;
   
-  public OrdinaryConstructor (hydra.ext.haskell.ast.Name name, java.util.List<hydra.ext.haskell.ast.Type> fields) {
+  public OrdinaryConstructor (hydra.ext.haskell.ast.Name name, hydra.util.ConsList<hydra.ext.haskell.ast.Type> fields) {
     this.name = name;
     this.fields = fields;
   }
@@ -64,7 +64,7 @@ public class OrdinaryConstructor implements Serializable, Comparable<OrdinaryCon
     return new OrdinaryConstructor(name, fields);
   }
   
-  public OrdinaryConstructor withFields(java.util.List<hydra.ext.haskell.ast.Type> fields) {
+  public OrdinaryConstructor withFields(hydra.util.ConsList<hydra.ext.haskell.ast.Type> fields) {
     return new OrdinaryConstructor(name, fields);
   }
 }

@@ -9,9 +9,9 @@ public class PositionalPatterns implements Serializable, Comparable<PositionalPa
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.python.syntax.Pattern> value;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.Pattern> value;
   
-  public PositionalPatterns (java.util.List<hydra.ext.python.syntax.Pattern> value) {
+  public PositionalPatterns (hydra.util.ConsList<hydra.ext.python.syntax.Pattern> value) {
     this.value = value;
   }
   

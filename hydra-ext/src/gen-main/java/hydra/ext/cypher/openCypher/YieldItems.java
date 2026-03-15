@@ -11,11 +11,11 @@ public class YieldItems implements Serializable, Comparable<YieldItems> {
   
   public static final hydra.core.Name WHERE = new hydra.core.Name("where");
   
-  public final java.util.List<hydra.ext.cypher.openCypher.YieldItem> items;
+  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.YieldItem> items;
   
   public final hydra.util.Maybe<hydra.ext.cypher.openCypher.Where> where;
   
-  public YieldItems (java.util.List<hydra.ext.cypher.openCypher.YieldItem> items, hydra.util.Maybe<hydra.ext.cypher.openCypher.Where> where) {
+  public YieldItems (hydra.util.ConsList<hydra.ext.cypher.openCypher.YieldItem> items, hydra.util.Maybe<hydra.ext.cypher.openCypher.Where> where) {
     this.items = items;
     this.where = where;
   }
@@ -53,7 +53,7 @@ public class YieldItems implements Serializable, Comparable<YieldItems> {
       other.where.hashCode());
   }
   
-  public YieldItems withItems(java.util.List<hydra.ext.cypher.openCypher.YieldItem> items) {
+  public YieldItems withItems(hydra.util.ConsList<hydra.ext.cypher.openCypher.YieldItem> items) {
     return new YieldItems(items, where);
   }
   

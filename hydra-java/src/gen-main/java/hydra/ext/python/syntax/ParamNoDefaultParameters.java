@@ -13,13 +13,13 @@ public class ParamNoDefaultParameters implements Serializable, Comparable<ParamN
   
   public static final hydra.core.Name STAR_ETC = new hydra.core.Name("starEtc");
   
-  public final java.util.List<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault;
   
-  public final java.util.List<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault;
   
   public final hydra.util.Maybe<hydra.ext.python.syntax.StarEtc> starEtc;
   
-  public ParamNoDefaultParameters (java.util.List<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault, java.util.List<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault, hydra.util.Maybe<hydra.ext.python.syntax.StarEtc> starEtc) {
+  public ParamNoDefaultParameters (hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault, hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault, hydra.util.Maybe<hydra.ext.python.syntax.StarEtc> starEtc) {
     this.paramNoDefault = paramNoDefault;
     this.paramWithDefault = paramWithDefault;
     this.starEtc = starEtc;
@@ -66,11 +66,11 @@ public class ParamNoDefaultParameters implements Serializable, Comparable<ParamN
       other.starEtc.hashCode());
   }
   
-  public ParamNoDefaultParameters withParamNoDefault(java.util.List<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault) {
+  public ParamNoDefaultParameters withParamNoDefault(hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault) {
     return new ParamNoDefaultParameters(paramNoDefault, paramWithDefault, starEtc);
   }
   
-  public ParamNoDefaultParameters withParamWithDefault(java.util.List<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault) {
+  public ParamNoDefaultParameters withParamWithDefault(hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault) {
     return new ParamNoDefaultParameters(paramNoDefault, paramWithDefault, starEtc);
   }
   

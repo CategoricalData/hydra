@@ -182,9 +182,9 @@ public abstract class SelectArgs implements Serializable, Comparable<SelectArgs>
   }
   
   public static final class Strings extends hydra.ext.org.apache.tinkerpop.gremlin.SelectArgs implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringArgument> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringArgument> value;
     
-    public Strings (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringArgument> value) {
+    public Strings (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringArgument> value) {
       this.value = value;
     }
     

@@ -17,9 +17,9 @@ public class TraversalStrategy implements Serializable, Comparable<TraversalStra
   
   public final hydra.ext.org.apache.tinkerpop.gremlin.Identifier class_;
   
-  public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.Configuration> configurations;
+  public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.Configuration> configurations;
   
-  public TraversalStrategy (Boolean new_, hydra.ext.org.apache.tinkerpop.gremlin.Identifier class_, java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.Configuration> configurations) {
+  public TraversalStrategy (Boolean new_, hydra.ext.org.apache.tinkerpop.gremlin.Identifier class_, hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.Configuration> configurations) {
     this.new_ = new_;
     this.class_ = class_;
     this.configurations = configurations;
@@ -70,7 +70,7 @@ public class TraversalStrategy implements Serializable, Comparable<TraversalStra
     return new TraversalStrategy(new_, class_, configurations);
   }
   
-  public TraversalStrategy withConfigurations(java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.Configuration> configurations) {
+  public TraversalStrategy withConfigurations(hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.Configuration> configurations) {
     return new TraversalStrategy(new_, class_, configurations);
   }
 }

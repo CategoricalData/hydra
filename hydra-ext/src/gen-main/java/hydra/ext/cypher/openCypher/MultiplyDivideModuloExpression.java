@@ -13,9 +13,9 @@ public class MultiplyDivideModuloExpression implements Serializable, Comparable<
   
   public final hydra.ext.cypher.openCypher.PowerOfExpression left;
   
-  public final java.util.List<hydra.ext.cypher.openCypher.MultiplyDivideModuloRightHandSide> right;
+  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.MultiplyDivideModuloRightHandSide> right;
   
-  public MultiplyDivideModuloExpression (hydra.ext.cypher.openCypher.PowerOfExpression left, java.util.List<hydra.ext.cypher.openCypher.MultiplyDivideModuloRightHandSide> right) {
+  public MultiplyDivideModuloExpression (hydra.ext.cypher.openCypher.PowerOfExpression left, hydra.util.ConsList<hydra.ext.cypher.openCypher.MultiplyDivideModuloRightHandSide> right) {
     this.left = left;
     this.right = right;
   }
@@ -55,7 +55,7 @@ public class MultiplyDivideModuloExpression implements Serializable, Comparable<
     return new MultiplyDivideModuloExpression(left, right);
   }
   
-  public MultiplyDivideModuloExpression withRight(java.util.List<hydra.ext.cypher.openCypher.MultiplyDivideModuloRightHandSide> right) {
+  public MultiplyDivideModuloExpression withRight(hydra.util.ConsList<hydra.ext.cypher.openCypher.MultiplyDivideModuloRightHandSide> right) {
     return new MultiplyDivideModuloExpression(left, right);
   }
 }

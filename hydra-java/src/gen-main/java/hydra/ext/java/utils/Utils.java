@@ -59,7 +59,7 @@ public interface Utils {
   }
   
   static hydra.ext.java.syntax.Expression javaPrimaryToJavaExpression(hydra.ext.java.syntax.Primary p) {
-    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(java.util.List.of(new hydra.ext.java.syntax.ConditionalAndExpression(java.util.List.of(new hydra.ext.java.syntax.InclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.ExclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.AndExpression(java.util.List.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(new hydra.ext.java.syntax.MultiplicativeExpression.Unary(new hydra.ext.java.syntax.UnaryExpression.Other(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Postfix(new hydra.ext.java.syntax.PostfixExpression.Primary(p)))))))))))))))))))));
+    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ConditionalAndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.InclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ExclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.AndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(new hydra.ext.java.syntax.MultiplicativeExpression.Unary(new hydra.ext.java.syntax.UnaryExpression.Other(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Postfix(new hydra.ext.java.syntax.PostfixExpression.Primary(p)))))))))))))))))))));
   }
   
   static hydra.ext.java.syntax.UnaryExpression javaPostfixExpressionToJavaUnaryExpression(hydra.ext.java.syntax.PostfixExpression pe) {
@@ -67,7 +67,7 @@ public interface Utils {
   }
   
   static hydra.ext.java.syntax.Expression javaPostfixExpressionToJavaExpression(hydra.ext.java.syntax.PostfixExpression pe) {
-    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(java.util.List.of(new hydra.ext.java.syntax.ConditionalAndExpression(java.util.List.of(new hydra.ext.java.syntax.InclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.ExclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.AndExpression(java.util.List.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(new hydra.ext.java.syntax.MultiplicativeExpression.Unary(new hydra.ext.java.syntax.UnaryExpression.Other(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Postfix(pe))))))))))))))))))));
+    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ConditionalAndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.InclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ExclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.AndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(new hydra.ext.java.syntax.MultiplicativeExpression.Unary(new hydra.ext.java.syntax.UnaryExpression.Other(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Postfix(pe))))))))))))))))))));
   }
   
   static hydra.ext.java.syntax.RelationalExpression javaPostfixExpressionToJavaRelationalExpression(hydra.ext.java.syntax.PostfixExpression pe) {
@@ -79,7 +79,7 @@ public interface Utils {
   }
   
   static hydra.ext.java.syntax.Expression javaUnaryExpressionToJavaExpression(hydra.ext.java.syntax.UnaryExpression ue) {
-    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(java.util.List.of(new hydra.ext.java.syntax.ConditionalAndExpression(java.util.List.of(new hydra.ext.java.syntax.InclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.ExclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.AndExpression(java.util.List.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(new hydra.ext.java.syntax.MultiplicativeExpression.Unary(ue))))))))))))))))));
+    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ConditionalAndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.InclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ExclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.AndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(new hydra.ext.java.syntax.MultiplicativeExpression.Unary(ue))))))))))))))))));
   }
   
   static hydra.ext.java.syntax.Expression javaRelationalExpressionToJavaExpression(hydra.ext.java.syntax.RelationalExpression re) {
@@ -87,7 +87,7 @@ public interface Utils {
   }
   
   static hydra.ext.java.syntax.UnaryExpression javaRelationalExpressionToJavaUnaryExpression(hydra.ext.java.syntax.RelationalExpression re) {
-    return new hydra.ext.java.syntax.UnaryExpression.Other(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Postfix(new hydra.ext.java.syntax.PostfixExpression.Primary(new hydra.ext.java.syntax.Primary.NoNewArray(new hydra.ext.java.syntax.PrimaryNoNewArray.Parens(new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(java.util.List.of(new hydra.ext.java.syntax.ConditionalAndExpression(java.util.List.of(new hydra.ext.java.syntax.InclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.ExclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.AndExpression(java.util.List.of(new hydra.ext.java.syntax.EqualityExpression.Unary(re)))))))))))))))))));
+    return new hydra.ext.java.syntax.UnaryExpression.Other(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Postfix(new hydra.ext.java.syntax.PostfixExpression.Primary(new hydra.ext.java.syntax.Primary.NoNewArray(new hydra.ext.java.syntax.PrimaryNoNewArray.Parens(new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ConditionalAndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.InclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ExclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.AndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.EqualityExpression.Unary(re)))))))))))))))))));
   }
   
   static hydra.ext.java.syntax.RelationalExpression javaMultiplicativeExpressionToJavaRelationalExpression(hydra.ext.java.syntax.MultiplicativeExpression me) {
@@ -103,7 +103,7 @@ public interface Utils {
   }
   
   static hydra.ext.java.syntax.Expression javaLiteralToJavaExpression(hydra.ext.java.syntax.Literal lit) {
-    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(java.util.List.of(new hydra.ext.java.syntax.ConditionalAndExpression(java.util.List.of(new hydra.ext.java.syntax.InclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.ExclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.AndExpression(java.util.List.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(new hydra.ext.java.syntax.MultiplicativeExpression.Unary(new hydra.ext.java.syntax.UnaryExpression.Other(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Postfix(new hydra.ext.java.syntax.PostfixExpression.Primary(new hydra.ext.java.syntax.Primary.NoNewArray(new hydra.ext.java.syntax.PrimaryNoNewArray.Literal(lit)))))))))))))))))))))));
+    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ConditionalAndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.InclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ExclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.AndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(new hydra.ext.java.syntax.MultiplicativeExpression.Unary(new hydra.ext.java.syntax.UnaryExpression.Other(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Postfix(new hydra.ext.java.syntax.PostfixExpression.Primary(new hydra.ext.java.syntax.Primary.NoNewArray(new hydra.ext.java.syntax.PrimaryNoNewArray.Literal(lit)))))))))))))))))))))));
   }
   
   static hydra.ext.java.syntax.ExpressionName javaIdentifierToJavaExpressionName(hydra.ext.java.syntax.Identifier id) {
@@ -111,7 +111,7 @@ public interface Utils {
   }
   
   static hydra.ext.java.syntax.Expression javaIdentifierToJavaExpression(hydra.ext.java.syntax.Identifier id) {
-    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(java.util.List.of(new hydra.ext.java.syntax.ConditionalAndExpression(java.util.List.of(new hydra.ext.java.syntax.InclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.ExclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.AndExpression(java.util.List.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(new hydra.ext.java.syntax.MultiplicativeExpression.Unary(new hydra.ext.java.syntax.UnaryExpression.Other(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Postfix(new hydra.ext.java.syntax.PostfixExpression.Name(new hydra.ext.java.syntax.ExpressionName((hydra.util.Maybe<hydra.ext.java.syntax.AmbiguousName>) (hydra.util.Maybe.<hydra.ext.java.syntax.AmbiguousName>nothing()), id))))))))))))))))))))));
+    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ConditionalAndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.InclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ExclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.AndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(new hydra.ext.java.syntax.MultiplicativeExpression.Unary(new hydra.ext.java.syntax.UnaryExpression.Other(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Postfix(new hydra.ext.java.syntax.PostfixExpression.Name(new hydra.ext.java.syntax.ExpressionName((hydra.util.Maybe<hydra.ext.java.syntax.AmbiguousName>) (hydra.util.Maybe.<hydra.ext.java.syntax.AmbiguousName>nothing()), id))))))))))))))))))))));
   }
   
   static hydra.ext.java.syntax.RelationalExpression javaIdentifierToJavaRelationalExpression(hydra.ext.java.syntax.Identifier id) {
@@ -123,15 +123,15 @@ public interface Utils {
   }
   
   static hydra.ext.java.syntax.Expression javaExpressionNameToJavaExpression(hydra.ext.java.syntax.ExpressionName en) {
-    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(java.util.List.of(new hydra.ext.java.syntax.ConditionalAndExpression(java.util.List.of(new hydra.ext.java.syntax.InclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.ExclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.AndExpression(java.util.List.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(new hydra.ext.java.syntax.MultiplicativeExpression.Unary(new hydra.ext.java.syntax.UnaryExpression.Other(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Postfix(new hydra.ext.java.syntax.PostfixExpression.Name(en)))))))))))))))))))));
+    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ConditionalAndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.InclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ExclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.AndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(new hydra.ext.java.syntax.MultiplicativeExpression.Unary(new hydra.ext.java.syntax.UnaryExpression.Other(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Postfix(new hydra.ext.java.syntax.PostfixExpression.Name(en)))))))))))))))))))));
   }
   
   static hydra.ext.java.syntax.Expression javaFieldAccessToJavaExpression(hydra.ext.java.syntax.FieldAccess fa) {
-    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(java.util.List.of(new hydra.ext.java.syntax.ConditionalAndExpression(java.util.List.of(new hydra.ext.java.syntax.InclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.ExclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.AndExpression(java.util.List.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(new hydra.ext.java.syntax.MultiplicativeExpression.Unary(new hydra.ext.java.syntax.UnaryExpression.Other(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Postfix(new hydra.ext.java.syntax.PostfixExpression.Primary(new hydra.ext.java.syntax.Primary.NoNewArray(new hydra.ext.java.syntax.PrimaryNoNewArray.FieldAccess(fa)))))))))))))))))))))));
+    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ConditionalAndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.InclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ExclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.AndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(new hydra.ext.java.syntax.MultiplicativeExpression.Unary(new hydra.ext.java.syntax.UnaryExpression.Other(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Postfix(new hydra.ext.java.syntax.PostfixExpression.Primary(new hydra.ext.java.syntax.Primary.NoNewArray(new hydra.ext.java.syntax.PrimaryNoNewArray.FieldAccess(fa)))))))))))))))))))))));
   }
   
   static hydra.ext.java.syntax.Expression javaCastExpressionToJavaExpression(hydra.ext.java.syntax.CastExpression ce) {
-    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(java.util.List.of(new hydra.ext.java.syntax.ConditionalAndExpression(java.util.List.of(new hydra.ext.java.syntax.InclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.ExclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.AndExpression(java.util.List.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(new hydra.ext.java.syntax.MultiplicativeExpression.Unary(new hydra.ext.java.syntax.UnaryExpression.Other(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Cast(ce))))))))))))))))))));
+    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ConditionalAndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.InclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ExclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.AndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(new hydra.ext.java.syntax.MultiplicativeExpression.Unary(new hydra.ext.java.syntax.UnaryExpression.Other(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Cast(ce))))))))))))))))))));
   }
   
   static hydra.ext.java.syntax.Primary javaMethodInvocationToJavaPrimary(hydra.ext.java.syntax.MethodInvocation mi) {
@@ -139,7 +139,7 @@ public interface Utils {
   }
   
   static hydra.ext.java.syntax.Expression javaMethodInvocationToJavaExpression(hydra.ext.java.syntax.MethodInvocation mi) {
-    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(java.util.List.of(new hydra.ext.java.syntax.ConditionalAndExpression(java.util.List.of(new hydra.ext.java.syntax.InclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.ExclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.AndExpression(java.util.List.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(new hydra.ext.java.syntax.MultiplicativeExpression.Unary(new hydra.ext.java.syntax.UnaryExpression.Other(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Postfix(new hydra.ext.java.syntax.PostfixExpression.Primary(new hydra.ext.java.syntax.Primary.NoNewArray(new hydra.ext.java.syntax.PrimaryNoNewArray.MethodInvocation(mi)))))))))))))))))))))));
+    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ConditionalAndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.InclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ExclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.AndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(new hydra.ext.java.syntax.MultiplicativeExpression.Unary(new hydra.ext.java.syntax.UnaryExpression.Other(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Postfix(new hydra.ext.java.syntax.PostfixExpression.Primary(new hydra.ext.java.syntax.Primary.NoNewArray(new hydra.ext.java.syntax.PrimaryNoNewArray.MethodInvocation(mi)))))))))))))))))))))));
   }
   
   static hydra.ext.java.syntax.PostfixExpression javaMethodInvocationToJavaPostfixExpression(hydra.ext.java.syntax.MethodInvocation mi) {
@@ -151,15 +151,15 @@ public interface Utils {
   }
   
   static hydra.ext.java.syntax.Expression javaConditionalAndExpressionToJavaExpression(hydra.ext.java.syntax.ConditionalAndExpression cae) {
-    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(java.util.List.of(cae)))));
+    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(hydra.util.ConsList.of(cae)))));
   }
   
   static hydra.ext.java.syntax.InclusiveOrExpression javaEqualityExpressionToJavaInclusiveOrExpression(hydra.ext.java.syntax.EqualityExpression ee) {
-    return new hydra.ext.java.syntax.InclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.ExclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.AndExpression(java.util.List.of(ee))))));
+    return new hydra.ext.java.syntax.InclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ExclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.AndExpression(hydra.util.ConsList.of(ee))))));
   }
   
   static hydra.ext.java.syntax.Expression javaEqualityExpressionToJavaExpression(hydra.ext.java.syntax.EqualityExpression ee) {
-    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(java.util.List.of(new hydra.ext.java.syntax.ConditionalAndExpression(java.util.List.of(new hydra.ext.java.syntax.InclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.ExclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.AndExpression(java.util.List.of(ee)))))))))))));
+    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ConditionalAndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.InclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ExclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.AndExpression(hydra.util.ConsList.of(ee)))))))))))));
   }
   
   static hydra.ext.java.syntax.EqualityExpression javaPostfixExpressionToJavaEqualityExpression(hydra.ext.java.syntax.PostfixExpression pe) {
@@ -167,11 +167,11 @@ public interface Utils {
   }
   
   static hydra.ext.java.syntax.InclusiveOrExpression javaPostfixExpressionToJavaInclusiveOrExpression(hydra.ext.java.syntax.PostfixExpression pe) {
-    return new hydra.ext.java.syntax.InclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.ExclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.AndExpression(java.util.List.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(new hydra.ext.java.syntax.MultiplicativeExpression.Unary(new hydra.ext.java.syntax.UnaryExpression.Other(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Postfix(pe)))))))))))));
+    return new hydra.ext.java.syntax.InclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ExclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.AndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(new hydra.ext.java.syntax.MultiplicativeExpression.Unary(new hydra.ext.java.syntax.UnaryExpression.Other(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Postfix(pe)))))))))))));
   }
   
   static hydra.ext.java.syntax.Expression javaAdditiveExpressionToJavaExpression(hydra.ext.java.syntax.AdditiveExpression ae) {
-    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(java.util.List.of(new hydra.ext.java.syntax.ConditionalAndExpression(java.util.List.of(new hydra.ext.java.syntax.InclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.ExclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.AndExpression(java.util.List.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(ae))))))))))))))));
+    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ConditionalAndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.InclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ExclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.AndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(ae))))))))))))))));
   }
   
   static hydra.ext.java.syntax.UnaryExpression javaExpressionToJavaUnaryExpression(hydra.ext.java.syntax.Expression e) {
@@ -179,7 +179,7 @@ public interface Utils {
   }
   
   static hydra.ext.java.syntax.Type javaPrimitiveTypeToJavaType(hydra.ext.java.syntax.PrimitiveType pt) {
-    return new hydra.ext.java.syntax.Type.Primitive(new hydra.ext.java.syntax.PrimitiveTypeWithAnnotations(pt, (java.util.List<hydra.ext.java.syntax.Annotation>) (java.util.List.<hydra.ext.java.syntax.Annotation>of())));
+    return new hydra.ext.java.syntax.Type.Primitive(new hydra.ext.java.syntax.PrimitiveTypeWithAnnotations(pt, (hydra.util.ConsList<hydra.ext.java.syntax.Annotation>) (hydra.util.ConsList.<hydra.ext.java.syntax.Annotation>of())));
   }
   
   static hydra.ext.java.syntax.Type javaClassTypeToJavaType(hydra.ext.java.syntax.ClassType ct) {
@@ -190,26 +190,26 @@ public interface Utils {
     return new hydra.ext.java.syntax.Type.Reference(new hydra.ext.java.syntax.ReferenceType.Variable(tv));
   }
   
-  static hydra.ext.java.syntax.Type javaRefType(java.util.List<hydra.ext.java.syntax.ReferenceType> args, hydra.util.Maybe<hydra.ext.java.syntax.PackageName> pkg, String id) {
+  static hydra.ext.java.syntax.Type javaRefType(hydra.util.ConsList<hydra.ext.java.syntax.ReferenceType> args, hydra.util.Maybe<hydra.ext.java.syntax.PackageName> pkg, String id) {
     return new hydra.ext.java.syntax.Type.Reference(new hydra.ext.java.syntax.ReferenceType.ClassOrInterface(new hydra.ext.java.syntax.ClassOrInterfaceType.Class_(hydra.ext.java.utils.Utils.javaClassType(
       args,
       pkg,
       id))));
   }
   
-  static hydra.ext.java.syntax.ClassType javaClassType(java.util.List<hydra.ext.java.syntax.ReferenceType> args, hydra.util.Maybe<hydra.ext.java.syntax.PackageName> pkg, String id) {
+  static hydra.ext.java.syntax.ClassType javaClassType(hydra.util.ConsList<hydra.ext.java.syntax.ReferenceType> args, hydra.util.Maybe<hydra.ext.java.syntax.PackageName> pkg, String id) {
     hydra.util.Lazy<hydra.ext.java.syntax.ClassTypeQualifier> qual = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cases.applyLazy(
       pkg,
       () -> new hydra.ext.java.syntax.ClassTypeQualifier.None(),
       (java.util.function.Function<hydra.ext.java.syntax.PackageName, hydra.ext.java.syntax.ClassTypeQualifier>) (p -> new hydra.ext.java.syntax.ClassTypeQualifier.Package_(p))));
-    hydra.util.Lazy<java.util.List<hydra.ext.java.syntax.TypeArgument>> targs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+    hydra.util.Lazy<hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>> targs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.TypeArgument>) (rt -> new hydra.ext.java.syntax.TypeArgument.Reference(rt)),
       args));
-    return new hydra.ext.java.syntax.ClassType((java.util.List<hydra.ext.java.syntax.Annotation>) (java.util.List.<hydra.ext.java.syntax.Annotation>of()), qual.get(), hydra.ext.java.utils.Utils.javaTypeIdentifier(id), targs.get());
+    return new hydra.ext.java.syntax.ClassType((hydra.util.ConsList<hydra.ext.java.syntax.Annotation>) (hydra.util.ConsList.<hydra.ext.java.syntax.Annotation>of()), qual.get(), hydra.ext.java.utils.Utils.javaTypeIdentifier(id), targs.get());
   }
   
   static hydra.ext.java.syntax.ReferenceType javaTypeVariable(String v) {
-    return new hydra.ext.java.syntax.ReferenceType.Variable(new hydra.ext.java.syntax.TypeVariable((java.util.List<hydra.ext.java.syntax.Annotation>) (java.util.List.<hydra.ext.java.syntax.Annotation>of()), hydra.ext.java.utils.Utils.javaTypeIdentifier(hydra.formatting.Formatting.capitalize(v))));
+    return new hydra.ext.java.syntax.ReferenceType.Variable(new hydra.ext.java.syntax.TypeVariable((hydra.util.ConsList<hydra.ext.java.syntax.Annotation>) (hydra.util.ConsList.<hydra.ext.java.syntax.Annotation>of()), hydra.ext.java.utils.Utils.javaTypeIdentifier(hydra.formatting.Formatting.capitalize(v))));
   }
   
   static hydra.ext.java.syntax.Type javaBooleanType() {
@@ -229,11 +229,11 @@ public interface Utils {
   }
   
   static hydra.ext.java.syntax.CastExpression javaCastExpression(hydra.ext.java.syntax.ReferenceType rt, hydra.ext.java.syntax.UnaryExpression expr) {
-    return new hydra.ext.java.syntax.CastExpression.NotPlusMinus(new hydra.ext.java.syntax.CastExpression_NotPlusMinus(new hydra.ext.java.syntax.CastExpression_RefAndBounds(rt, (java.util.List<hydra.ext.java.syntax.AdditionalBound>) (java.util.List.<hydra.ext.java.syntax.AdditionalBound>of())), expr));
+    return new hydra.ext.java.syntax.CastExpression.NotPlusMinus(new hydra.ext.java.syntax.CastExpression_NotPlusMinus(new hydra.ext.java.syntax.CastExpression_RefAndBounds(rt, (hydra.util.ConsList<hydra.ext.java.syntax.AdditionalBound>) (hydra.util.ConsList.<hydra.ext.java.syntax.AdditionalBound>of())), expr));
   }
   
   static hydra.ext.java.syntax.CastExpression javaCastPrimitive(hydra.ext.java.syntax.PrimitiveType pt, hydra.ext.java.syntax.UnaryExpression expr) {
-    return new hydra.ext.java.syntax.CastExpression.Primitive(new hydra.ext.java.syntax.CastExpression_Primitive(new hydra.ext.java.syntax.PrimitiveTypeWithAnnotations(pt, (java.util.List<hydra.ext.java.syntax.Annotation>) (java.util.List.<hydra.ext.java.syntax.Annotation>of())), expr));
+    return new hydra.ext.java.syntax.CastExpression.Primitive(new hydra.ext.java.syntax.CastExpression_Primitive(new hydra.ext.java.syntax.PrimitiveTypeWithAnnotations(pt, (hydra.util.ConsList<hydra.ext.java.syntax.Annotation>) (hydra.util.ConsList.<hydra.ext.java.syntax.Annotation>of())), expr));
   }
   
   static hydra.ext.java.syntax.Statement javaReturnStatement(hydra.util.Maybe<hydra.ext.java.syntax.Expression> mex) {
@@ -252,7 +252,7 @@ public interface Utils {
     return new hydra.ext.java.syntax.Statement.WithoutTrailing(new hydra.ext.java.syntax.StatementWithoutTrailingSubstatement.Expression(new hydra.ext.java.syntax.ExpressionStatement(new hydra.ext.java.syntax.StatementExpression.Assignment(new hydra.ext.java.syntax.Assignment(lhs, new hydra.ext.java.syntax.AssignmentOperator.Simple(), rhs)))));
   }
   
-  static hydra.ext.java.syntax.Block javaStatementsToBlock(java.util.List<hydra.ext.java.syntax.Statement> stmts) {
+  static hydra.ext.java.syntax.Block javaStatementsToBlock(hydra.util.ConsList<hydra.ext.java.syntax.Statement> stmts) {
     return new hydra.ext.java.syntax.Block(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.ext.java.syntax.Statement, hydra.ext.java.syntax.BlockStatement>) (s -> new hydra.ext.java.syntax.BlockStatement.Statement(s)),
       stmts));
@@ -266,14 +266,14 @@ public interface Utils {
     return new hydra.ext.java.syntax.Expression.Lambda(new hydra.ext.java.syntax.LambdaExpression(new hydra.ext.java.syntax.LambdaParameters.Single(hydra.ext.java.utils.Utils.variableToJavaIdentifier(v)), new hydra.ext.java.syntax.LambdaBody.Block(block)));
   }
   
-  static hydra.ext.java.syntax.MethodBody javaMethodBody(hydra.util.Maybe<java.util.List<hydra.ext.java.syntax.BlockStatement>> mstmts) {
+  static hydra.ext.java.syntax.MethodBody javaMethodBody(hydra.util.Maybe<hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>> mstmts) {
     return hydra.lib.maybes.Cases.applyLazy(
       mstmts,
       () -> new hydra.ext.java.syntax.MethodBody.None(),
-      (java.util.function.Function<java.util.List<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.syntax.MethodBody>) (stmts -> new hydra.ext.java.syntax.MethodBody.Block(new hydra.ext.java.syntax.Block(stmts))));
+      (java.util.function.Function<hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>, hydra.ext.java.syntax.MethodBody>) (stmts -> new hydra.ext.java.syntax.MethodBody.Block(new hydra.ext.java.syntax.Block(stmts))));
   }
   
-  static hydra.ext.java.syntax.MethodHeader javaMethodHeader(java.util.List<hydra.ext.java.syntax.TypeParameter> tparams, String methodName, java.util.List<hydra.ext.java.syntax.FormalParameter> params, hydra.ext.java.syntax.Result result) {
+  static hydra.ext.java.syntax.MethodHeader javaMethodHeader(hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> tparams, String methodName, hydra.util.ConsList<hydra.ext.java.syntax.FormalParameter> params, hydra.ext.java.syntax.Result result) {
     return new hydra.ext.java.syntax.MethodHeader(tparams, result, new hydra.ext.java.syntax.MethodDeclarator(new hydra.ext.java.syntax.Identifier(methodName), (hydra.util.Maybe<hydra.ext.java.syntax.ReceiverParameter>) (hydra.util.Maybe.<hydra.ext.java.syntax.ReceiverParameter>nothing()), params), (hydra.util.Maybe<hydra.ext.java.syntax.Throws>) (hydra.util.Maybe.<hydra.ext.java.syntax.Throws>nothing()));
   }
   
@@ -285,12 +285,12 @@ public interface Utils {
     return new hydra.ext.java.syntax.ClassBodyDeclaration.ClassMember(new hydra.ext.java.syntax.ClassMemberDeclaration.Interface(new hydra.ext.java.syntax.InterfaceDeclaration.NormalInterface(nid)));
   }
   
-  static hydra.ext.java.syntax.ClassBodyDeclaration javaMemberField(java.util.List<hydra.ext.java.syntax.FieldModifier> mods, hydra.ext.java.syntax.Type jt, hydra.ext.java.syntax.VariableDeclarator v) {
-    return new hydra.ext.java.syntax.ClassBodyDeclaration.ClassMember(new hydra.ext.java.syntax.ClassMemberDeclaration.Field(new hydra.ext.java.syntax.FieldDeclaration(mods, new hydra.ext.java.syntax.UnannType(jt), java.util.List.of(v))));
+  static hydra.ext.java.syntax.ClassBodyDeclaration javaMemberField(hydra.util.ConsList<hydra.ext.java.syntax.FieldModifier> mods, hydra.ext.java.syntax.Type jt, hydra.ext.java.syntax.VariableDeclarator v) {
+    return new hydra.ext.java.syntax.ClassBodyDeclaration.ClassMember(new hydra.ext.java.syntax.ClassMemberDeclaration.Field(new hydra.ext.java.syntax.FieldDeclaration(mods, new hydra.ext.java.syntax.UnannType(jt), hydra.util.ConsList.of(v))));
   }
   
   static hydra.ext.java.syntax.FormalParameter javaTypeToJavaFormalParameter(hydra.ext.java.syntax.Type jt, hydra.core.Name fname) {
-    return new hydra.ext.java.syntax.FormalParameter.Simple(new hydra.ext.java.syntax.FormalParameter_Simple((java.util.List<hydra.ext.java.syntax.VariableModifier>) (java.util.List.<hydra.ext.java.syntax.VariableModifier>of()), new hydra.ext.java.syntax.UnannType(jt), hydra.ext.java.utils.Utils.fieldNameToJavaVariableDeclaratorId(fname)));
+    return new hydra.ext.java.syntax.FormalParameter.Simple(new hydra.ext.java.syntax.FormalParameter_Simple((hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier>) (hydra.util.ConsList.<hydra.ext.java.syntax.VariableModifier>of()), new hydra.ext.java.syntax.UnannType(jt), hydra.ext.java.utils.Utils.fieldNameToJavaVariableDeclaratorId(fname)));
   }
   
   static hydra.ext.java.syntax.Result javaTypeToJavaResult(hydra.ext.java.syntax.Type jt) {
@@ -306,7 +306,7 @@ public interface Utils {
       
       @Override
       public hydra.ext.java.syntax.TypeArgument visit(hydra.ext.java.syntax.Type.Primitive ignored) {
-        return new hydra.ext.java.syntax.TypeArgument.Wildcard(new hydra.ext.java.syntax.Wildcard((java.util.List<hydra.ext.java.syntax.Annotation>) (java.util.List.<hydra.ext.java.syntax.Annotation>of()), (hydra.util.Maybe<hydra.ext.java.syntax.WildcardBounds>) (hydra.util.Maybe.<hydra.ext.java.syntax.WildcardBounds>nothing())));
+        return new hydra.ext.java.syntax.TypeArgument.Wildcard(new hydra.ext.java.syntax.Wildcard((hydra.util.ConsList<hydra.ext.java.syntax.Annotation>) (hydra.util.ConsList.<hydra.ext.java.syntax.Annotation>of()), (hydra.util.Maybe<hydra.ext.java.syntax.WildcardBounds>) (hydra.util.Maybe.<hydra.ext.java.syntax.WildcardBounds>nothing())));
       }
     });
   }
@@ -316,23 +316,23 @@ public interface Utils {
   }
   
   static hydra.ext.java.syntax.ClassOrInterfaceTypeToInstantiate javaConstructorName(hydra.ext.java.syntax.Identifier id, hydra.util.Maybe<hydra.ext.java.syntax.TypeArgumentsOrDiamond> targs) {
-    return new hydra.ext.java.syntax.ClassOrInterfaceTypeToInstantiate(java.util.List.of(new hydra.ext.java.syntax.AnnotatedIdentifier((java.util.List<hydra.ext.java.syntax.Annotation>) (java.util.List.<hydra.ext.java.syntax.Annotation>of()), id)), targs);
+    return new hydra.ext.java.syntax.ClassOrInterfaceTypeToInstantiate(hydra.util.ConsList.of(new hydra.ext.java.syntax.AnnotatedIdentifier((hydra.util.ConsList<hydra.ext.java.syntax.Annotation>) (hydra.util.ConsList.<hydra.ext.java.syntax.Annotation>of()), id)), targs);
   }
   
-  static hydra.ext.java.syntax.Expression javaConstructorCall(hydra.ext.java.syntax.ClassOrInterfaceTypeToInstantiate ci, java.util.List<hydra.ext.java.syntax.Expression> args, hydra.util.Maybe<hydra.ext.java.syntax.ClassBody> mbody) {
-    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(java.util.List.of(new hydra.ext.java.syntax.ConditionalAndExpression(java.util.List.of(new hydra.ext.java.syntax.InclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.ExclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.AndExpression(java.util.List.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(new hydra.ext.java.syntax.MultiplicativeExpression.Unary(new hydra.ext.java.syntax.UnaryExpression.Other(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Postfix(new hydra.ext.java.syntax.PostfixExpression.Primary(new hydra.ext.java.syntax.Primary.NoNewArray(new hydra.ext.java.syntax.PrimaryNoNewArray.ClassInstance(new hydra.ext.java.syntax.ClassInstanceCreationExpression((hydra.util.Maybe<hydra.ext.java.syntax.ClassInstanceCreationExpression_Qualifier>) (hydra.util.Maybe.<hydra.ext.java.syntax.ClassInstanceCreationExpression_Qualifier>nothing()), new hydra.ext.java.syntax.UnqualifiedClassInstanceCreationExpression((java.util.List<hydra.ext.java.syntax.TypeArgument>) (java.util.List.<hydra.ext.java.syntax.TypeArgument>of()), ci, args, mbody)))))))))))))))))))))))));
+  static hydra.ext.java.syntax.Expression javaConstructorCall(hydra.ext.java.syntax.ClassOrInterfaceTypeToInstantiate ci, hydra.util.ConsList<hydra.ext.java.syntax.Expression> args, hydra.util.Maybe<hydra.ext.java.syntax.ClassBody> mbody) {
+    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ConditionalAndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.InclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ExclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.AndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(new hydra.ext.java.syntax.MultiplicativeExpression.Unary(new hydra.ext.java.syntax.UnaryExpression.Other(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Postfix(new hydra.ext.java.syntax.PostfixExpression.Primary(new hydra.ext.java.syntax.Primary.NoNewArray(new hydra.ext.java.syntax.PrimaryNoNewArray.ClassInstance(new hydra.ext.java.syntax.ClassInstanceCreationExpression((hydra.util.Maybe<hydra.ext.java.syntax.ClassInstanceCreationExpression_Qualifier>) (hydra.util.Maybe.<hydra.ext.java.syntax.ClassInstanceCreationExpression_Qualifier>nothing()), new hydra.ext.java.syntax.UnqualifiedClassInstanceCreationExpression((hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>) (hydra.util.ConsList.<hydra.ext.java.syntax.TypeArgument>of()), ci, args, mbody)))))))))))))))))))))))));
   }
   
   static hydra.ext.java.syntax.Expression javaThis() {
-    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(java.util.List.of(new hydra.ext.java.syntax.ConditionalAndExpression(java.util.List.of(new hydra.ext.java.syntax.InclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.ExclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.AndExpression(java.util.List.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(new hydra.ext.java.syntax.MultiplicativeExpression.Unary(new hydra.ext.java.syntax.UnaryExpression.Other(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Postfix(new hydra.ext.java.syntax.PostfixExpression.Primary(new hydra.ext.java.syntax.Primary.NoNewArray(new hydra.ext.java.syntax.PrimaryNoNewArray.This()))))))))))))))))))))));
+    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ConditionalAndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.InclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ExclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.AndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(new hydra.ext.java.syntax.MultiplicativeExpression.Unary(new hydra.ext.java.syntax.UnaryExpression.Other(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Postfix(new hydra.ext.java.syntax.PostfixExpression.Primary(new hydra.ext.java.syntax.Primary.NoNewArray(new hydra.ext.java.syntax.PrimaryNoNewArray.This()))))))))))))))))))))));
   }
   
   static hydra.ext.java.syntax.TypeParameter javaTypeParameter(String v) {
-    return new hydra.ext.java.syntax.TypeParameter((java.util.List<hydra.ext.java.syntax.TypeParameterModifier>) (java.util.List.<hydra.ext.java.syntax.TypeParameterModifier>of()), hydra.ext.java.utils.Utils.javaTypeIdentifier(v), (hydra.util.Maybe<hydra.ext.java.syntax.TypeBound>) (hydra.util.Maybe.<hydra.ext.java.syntax.TypeBound>nothing()));
+    return new hydra.ext.java.syntax.TypeParameter((hydra.util.ConsList<hydra.ext.java.syntax.TypeParameterModifier>) (hydra.util.ConsList.<hydra.ext.java.syntax.TypeParameterModifier>of()), hydra.ext.java.utils.Utils.javaTypeIdentifier(v), (hydra.util.Maybe<hydra.ext.java.syntax.TypeBound>) (hydra.util.Maybe.<hydra.ext.java.syntax.TypeBound>nothing()));
   }
   
   static hydra.ext.java.syntax.TypeArgument javaTypeIdentifierToJavaTypeArgument(hydra.ext.java.syntax.TypeIdentifier id) {
-    return new hydra.ext.java.syntax.TypeArgument.Reference(new hydra.ext.java.syntax.ReferenceType.Variable(new hydra.ext.java.syntax.TypeVariable((java.util.List<hydra.ext.java.syntax.Annotation>) (java.util.List.<hydra.ext.java.syntax.Annotation>of()), id)));
+    return new hydra.ext.java.syntax.TypeArgument.Reference(new hydra.ext.java.syntax.ReferenceType.Variable(new hydra.ext.java.syntax.TypeVariable((hydra.util.ConsList<hydra.ext.java.syntax.Annotation>) (hydra.util.ConsList.<hydra.ext.java.syntax.Annotation>of()), id)));
   }
   
   static hydra.ext.java.syntax.TypeArgument typeParameterToTypeArgument(hydra.ext.java.syntax.TypeParameter tp) {
@@ -348,7 +348,7 @@ public interface Utils {
   }
   
   static hydra.ext.java.syntax.Expression fieldNameToJavaExpression(hydra.core.Name fname) {
-    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(java.util.List.of(new hydra.ext.java.syntax.ConditionalAndExpression(java.util.List.of(new hydra.ext.java.syntax.InclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.ExclusiveOrExpression(java.util.List.of(new hydra.ext.java.syntax.AndExpression(java.util.List.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(new hydra.ext.java.syntax.MultiplicativeExpression.Unary(new hydra.ext.java.syntax.UnaryExpression.Other(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Postfix(new hydra.ext.java.syntax.PostfixExpression.Name(hydra.ext.java.utils.Utils.javaIdentifierToJavaExpressionName(hydra.ext.java.utils.Utils.fieldNameToJavaIdentifier(fname)))))))))))))))))))))));
+    return new hydra.ext.java.syntax.Expression.Assignment(new hydra.ext.java.syntax.AssignmentExpression.Conditional(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ConditionalAndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.InclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ExclusiveOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.AndExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.EqualityExpression.Unary(new hydra.ext.java.syntax.RelationalExpression.Simple(new hydra.ext.java.syntax.ShiftExpression.Unary(new hydra.ext.java.syntax.AdditiveExpression.Unary(new hydra.ext.java.syntax.MultiplicativeExpression.Unary(new hydra.ext.java.syntax.UnaryExpression.Other(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Postfix(new hydra.ext.java.syntax.PostfixExpression.Name(hydra.ext.java.utils.Utils.javaIdentifierToJavaExpressionName(hydra.ext.java.utils.Utils.fieldNameToJavaIdentifier(fname)))))))))))))))))))))));
   }
   
   static hydra.ext.java.syntax.VariableDeclaratorId fieldNameToJavaVariableDeclaratorId(hydra.core.Name fname) {
@@ -362,7 +362,7 @@ public interface Utils {
   }
   
   static hydra.ext.java.syntax.ExpressionName fieldExpression(hydra.ext.java.syntax.Identifier varId, hydra.ext.java.syntax.Identifier fieldId) {
-    return new hydra.ext.java.syntax.ExpressionName(hydra.util.Maybe.just(new hydra.ext.java.syntax.AmbiguousName(java.util.List.of(varId))), fieldId);
+    return new hydra.ext.java.syntax.ExpressionName(hydra.util.Maybe.just(new hydra.ext.java.syntax.AmbiguousName(hydra.util.ConsList.of(varId))), fieldId);
   }
   
   static hydra.ext.java.syntax.Identifier variableToJavaIdentifier(hydra.core.Name name) {
@@ -376,7 +376,7 @@ public interface Utils {
   }
   
   static hydra.ext.java.syntax.BlockStatement varDeclarationStatement(hydra.ext.java.syntax.Identifier id, hydra.ext.java.syntax.Expression rhs) {
-    return new hydra.ext.java.syntax.BlockStatement.LocalVariableDeclaration(new hydra.ext.java.syntax.LocalVariableDeclarationStatement(new hydra.ext.java.syntax.LocalVariableDeclaration((java.util.List<hydra.ext.java.syntax.VariableModifier>) (java.util.List.<hydra.ext.java.syntax.VariableModifier>of()), new hydra.ext.java.syntax.LocalVariableType.Var(), java.util.List.of(hydra.ext.java.utils.Utils.javaVariableDeclarator(
+    return new hydra.ext.java.syntax.BlockStatement.LocalVariableDeclaration(new hydra.ext.java.syntax.LocalVariableDeclarationStatement(new hydra.ext.java.syntax.LocalVariableDeclaration((hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier>) (hydra.util.ConsList.<hydra.ext.java.syntax.VariableModifier>of()), new hydra.ext.java.syntax.LocalVariableType.Var(), hydra.util.ConsList.of(hydra.ext.java.utils.Utils.javaVariableDeclarator(
       id,
       hydra.util.Maybe.just(new hydra.ext.java.syntax.VariableInitializer.Expression(rhs)))))));
   }
@@ -408,7 +408,7 @@ public interface Utils {
   }
   
   static hydra.ext.java.syntax.PackageDeclaration javaPackageDeclaration(hydra.module.Namespace ns) {
-    return new hydra.ext.java.syntax.PackageDeclaration((java.util.List<hydra.ext.java.syntax.PackageModifier>) (java.util.List.<hydra.ext.java.syntax.PackageModifier>of()), hydra.lib.lists.Map.apply(
+    return new hydra.ext.java.syntax.PackageDeclaration((hydra.util.ConsList<hydra.ext.java.syntax.PackageModifier>) (hydra.util.ConsList.<hydra.ext.java.syntax.PackageModifier>of()), hydra.lib.lists.Map.apply(
       (java.util.function.Function<String, hydra.ext.java.syntax.Identifier>) (s -> new hydra.ext.java.syntax.Identifier(s)),
       hydra.lib.strings.SplitOn.apply(
         ".",
@@ -419,25 +419,25 @@ public interface Utils {
     return new hydra.ext.java.syntax.Annotation.Marker(new hydra.ext.java.syntax.MarkerAnnotation(hydra.ext.java.utils.Utils.javaTypeName(new hydra.ext.java.syntax.Identifier("Override"))));
   }
   
-  static hydra.ext.java.syntax.MethodInvocation methodInvocation(hydra.util.Maybe<hydra.util.Either<hydra.ext.java.syntax.ExpressionName, hydra.ext.java.syntax.Primary>> lhs, hydra.ext.java.syntax.Identifier methodName, java.util.List<hydra.ext.java.syntax.Expression> args) {
+  static hydra.ext.java.syntax.MethodInvocation methodInvocation(hydra.util.Maybe<hydra.util.Either<hydra.ext.java.syntax.ExpressionName, hydra.ext.java.syntax.Primary>> lhs, hydra.ext.java.syntax.Identifier methodName, hydra.util.ConsList<hydra.ext.java.syntax.Expression> args) {
     hydra.util.Lazy<hydra.ext.java.syntax.MethodInvocation_Header> header = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cases.applyLazy(
       lhs,
       () -> new hydra.ext.java.syntax.MethodInvocation_Header.Simple(new hydra.ext.java.syntax.MethodName(methodName)),
       (java.util.function.Function<hydra.util.Either<hydra.ext.java.syntax.ExpressionName, hydra.ext.java.syntax.Primary>, hydra.ext.java.syntax.MethodInvocation_Header>) (either -> new hydra.ext.java.syntax.MethodInvocation_Header.Complex(new hydra.ext.java.syntax.MethodInvocation_Complex(hydra.lib.eithers.Either.apply(
         (java.util.function.Function<hydra.ext.java.syntax.ExpressionName, hydra.ext.java.syntax.MethodInvocation_Variant>) (en -> new hydra.ext.java.syntax.MethodInvocation_Variant.Expression(en)),
         (java.util.function.Function<hydra.ext.java.syntax.Primary, hydra.ext.java.syntax.MethodInvocation_Variant>) (p -> new hydra.ext.java.syntax.MethodInvocation_Variant.Primary(p)),
-        either), (java.util.List<hydra.ext.java.syntax.TypeArgument>) (java.util.List.<hydra.ext.java.syntax.TypeArgument>of()), methodName)))));
+        either), (hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>) (hydra.util.ConsList.<hydra.ext.java.syntax.TypeArgument>of()), methodName)))));
     return new hydra.ext.java.syntax.MethodInvocation(header.get(), args);
   }
   
-  static hydra.ext.java.syntax.MethodInvocation methodInvocationStatic(hydra.ext.java.syntax.Identifier self, hydra.ext.java.syntax.Identifier methodName, java.util.List<hydra.ext.java.syntax.Expression> args) {
+  static hydra.ext.java.syntax.MethodInvocation methodInvocationStatic(hydra.ext.java.syntax.Identifier self, hydra.ext.java.syntax.Identifier methodName, hydra.util.ConsList<hydra.ext.java.syntax.Expression> args) {
     return hydra.ext.java.utils.Utils.methodInvocation(
       hydra.util.Maybe.just(hydra.util.Either.<hydra.ext.java.syntax.ExpressionName, hydra.ext.java.syntax.Primary>left(hydra.ext.java.utils.Utils.javaIdentifierToJavaExpressionName(self))),
       methodName,
       args);
   }
   
-  static hydra.ext.java.syntax.ClassBodyDeclaration methodDeclaration(java.util.List<hydra.ext.java.syntax.MethodModifier> mods, java.util.List<hydra.ext.java.syntax.TypeParameter> tparams, java.util.List<hydra.ext.java.syntax.Annotation> anns, String methodName, java.util.List<hydra.ext.java.syntax.FormalParameter> params, hydra.ext.java.syntax.Result result, hydra.util.Maybe<java.util.List<hydra.ext.java.syntax.BlockStatement>> stmts) {
+  static hydra.ext.java.syntax.ClassBodyDeclaration methodDeclaration(hydra.util.ConsList<hydra.ext.java.syntax.MethodModifier> mods, hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> tparams, hydra.util.ConsList<hydra.ext.java.syntax.Annotation> anns, String methodName, hydra.util.ConsList<hydra.ext.java.syntax.FormalParameter> params, hydra.ext.java.syntax.Result result, hydra.util.Maybe<hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>> stmts) {
     return hydra.ext.java.utils.Utils.javaMethodDeclarationToJavaClassBodyDeclaration(new hydra.ext.java.syntax.MethodDeclaration(anns, mods, hydra.ext.java.utils.Utils.javaMethodHeader(
       tparams,
       methodName,
@@ -445,7 +445,7 @@ public interface Utils {
       result), hydra.ext.java.utils.Utils.javaMethodBody(stmts)));
   }
   
-  static hydra.ext.java.syntax.InterfaceMemberDeclaration interfaceMethodDeclaration(java.util.List<hydra.ext.java.syntax.InterfaceMethodModifier> mods, java.util.List<hydra.ext.java.syntax.TypeParameter> tparams, String methodName, java.util.List<hydra.ext.java.syntax.FormalParameter> params, hydra.ext.java.syntax.Result result, hydra.util.Maybe<java.util.List<hydra.ext.java.syntax.BlockStatement>> stmts) {
+  static hydra.ext.java.syntax.InterfaceMemberDeclaration interfaceMethodDeclaration(hydra.util.ConsList<hydra.ext.java.syntax.InterfaceMethodModifier> mods, hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> tparams, String methodName, hydra.util.ConsList<hydra.ext.java.syntax.FormalParameter> params, hydra.ext.java.syntax.Result result, hydra.util.Maybe<hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>> stmts) {
     return new hydra.ext.java.syntax.InterfaceMemberDeclaration.InterfaceMethod(new hydra.ext.java.syntax.InterfaceMethodDeclaration(mods, hydra.ext.java.utils.Utils.javaMethodHeader(
       tparams,
       methodName,
@@ -467,7 +467,7 @@ public interface Utils {
     return new hydra.ext.java.syntax.RelationalExpression.Instanceof(new hydra.ext.java.syntax.RelationalExpression_InstanceOf(lhs, rhs));
   }
   
-  static hydra.ext.java.syntax.Statement javaThrowIllegalArgumentException(java.util.List<hydra.ext.java.syntax.Expression> args) {
+  static hydra.ext.java.syntax.Statement javaThrowIllegalArgumentException(hydra.util.ConsList<hydra.ext.java.syntax.Expression> args) {
     return hydra.ext.java.utils.Utils.javaThrowStatement(hydra.ext.java.utils.Utils.javaConstructorCall(
       hydra.ext.java.utils.Utils.javaConstructorName(
         new hydra.ext.java.syntax.Identifier("IllegalArgumentException"),
@@ -476,7 +476,7 @@ public interface Utils {
       (hydra.util.Maybe<hydra.ext.java.syntax.ClassBody>) (hydra.util.Maybe.<hydra.ext.java.syntax.ClassBody>nothing())));
   }
   
-  static hydra.ext.java.syntax.Statement javaThrowIllegalStateException(java.util.List<hydra.ext.java.syntax.Expression> args) {
+  static hydra.ext.java.syntax.Statement javaThrowIllegalStateException(hydra.util.ConsList<hydra.ext.java.syntax.Expression> args) {
     return hydra.ext.java.utils.Utils.javaThrowStatement(hydra.ext.java.utils.Utils.javaConstructorCall(
       hydra.ext.java.utils.Utils.javaConstructorName(
         new hydra.ext.java.syntax.Identifier("IllegalStateException"),
@@ -485,9 +485,9 @@ public interface Utils {
       (hydra.util.Maybe<hydra.ext.java.syntax.ClassBody>) (hydra.util.Maybe.<hydra.ext.java.syntax.ClassBody>nothing())));
   }
   
-  static hydra.ext.java.syntax.AdditiveExpression addExpressions(java.util.List<hydra.ext.java.syntax.MultiplicativeExpression> exprs) {
+  static hydra.ext.java.syntax.AdditiveExpression addExpressions(hydra.util.ConsList<hydra.ext.java.syntax.MultiplicativeExpression> exprs) {
     hydra.util.Lazy<hydra.ext.java.syntax.AdditiveExpression> first = new hydra.util.Lazy<>(() -> new hydra.ext.java.syntax.AdditiveExpression.Unary(hydra.lib.lists.Head.apply(exprs)));
-    hydra.util.Lazy<java.util.List<hydra.ext.java.syntax.MultiplicativeExpression>> rest = new hydra.util.Lazy<>(() -> hydra.lib.lists.Tail.apply(exprs));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.ext.java.syntax.MultiplicativeExpression>> rest = new hydra.util.Lazy<>(() -> hydra.lib.lists.Tail.apply(exprs));
     return hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<hydra.ext.java.syntax.AdditiveExpression, java.util.function.Function<hydra.ext.java.syntax.MultiplicativeExpression, hydra.ext.java.syntax.AdditiveExpression>>) (ae -> (java.util.function.Function<hydra.ext.java.syntax.MultiplicativeExpression, hydra.ext.java.syntax.AdditiveExpression>) (me -> new hydra.ext.java.syntax.AdditiveExpression.Plus(new hydra.ext.java.syntax.AdditiveExpression_Binary(ae, me)))),
       first.get(),
@@ -531,7 +531,7 @@ public interface Utils {
     return (hydra.util.Pair<hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier>) ((hydra.util.Pair<hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier>) (new hydra.util.Pair<hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier>(jid.get(), pkg.get())));
   }
   
-  static hydra.ext.java.syntax.ClassType nameToJavaClassType(hydra.ext.java.helpers.Aliases aliases, Boolean qualify, java.util.List<hydra.ext.java.syntax.TypeArgument> args, hydra.core.Name name, hydra.util.Maybe<String> mlocal) {
+  static hydra.ext.java.syntax.ClassType nameToJavaClassType(hydra.ext.java.helpers.Aliases aliases, Boolean qualify, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> args, hydra.core.Name name, hydra.util.Maybe<String> mlocal) {
     hydra.util.Pair<hydra.ext.java.syntax.TypeIdentifier, hydra.ext.java.syntax.ClassTypeQualifier> result = hydra.ext.java.utils.Utils.nameToQualifiedJavaName(
       aliases,
       qualify,
@@ -539,10 +539,10 @@ public interface Utils {
       mlocal);
     hydra.util.Lazy<hydra.ext.java.syntax.TypeIdentifier> id = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(result));
     hydra.util.Lazy<hydra.ext.java.syntax.ClassTypeQualifier> pkg = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(result));
-    return new hydra.ext.java.syntax.ClassType((java.util.List<hydra.ext.java.syntax.Annotation>) (java.util.List.<hydra.ext.java.syntax.Annotation>of()), pkg.get(), id.get(), args);
+    return new hydra.ext.java.syntax.ClassType((hydra.util.ConsList<hydra.ext.java.syntax.Annotation>) (hydra.util.ConsList.<hydra.ext.java.syntax.Annotation>of()), pkg.get(), id.get(), args);
   }
   
-  static hydra.ext.java.syntax.ReferenceType nameToJavaReferenceType(hydra.ext.java.helpers.Aliases aliases, Boolean qualify, java.util.List<hydra.ext.java.syntax.TypeArgument> args, hydra.core.Name name, hydra.util.Maybe<String> mlocal) {
+  static hydra.ext.java.syntax.ReferenceType nameToJavaReferenceType(hydra.ext.java.helpers.Aliases aliases, Boolean qualify, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> args, hydra.core.Name name, hydra.util.Maybe<String> mlocal) {
     return new hydra.ext.java.syntax.ReferenceType.ClassOrInterface(new hydra.ext.java.syntax.ClassOrInterfaceType.Class_(hydra.ext.java.utils.Utils.nameToJavaClassType(
       aliases,
       qualify,
@@ -562,19 +562,19 @@ public interface Utils {
         ns_,
         () -> new hydra.ext.java.syntax.Identifier(local),
         (java.util.function.Function<hydra.module.Namespace, hydra.ext.java.syntax.Identifier>) (gname -> {
-          hydra.util.Lazy<java.util.List<String>> parts = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cases.applyLazy(
+          hydra.util.Lazy<hydra.util.ConsList<String>> parts = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cases.applyLazy(
             hydra.lib.maps.Lookup.apply(
               gname,
               (aliases).packages),
             () -> hydra.lib.strings.SplitOn.apply(
               ".",
               (gname).value),
-            (java.util.function.Function<hydra.ext.java.syntax.PackageName, java.util.List<String>>) (pkgName -> hydra.lib.lists.Map.apply(
+            (java.util.function.Function<hydra.ext.java.syntax.PackageName, hydra.util.ConsList<String>>) (pkgName -> hydra.lib.lists.Map.apply(
               (java.util.function.Function<hydra.ext.java.syntax.Identifier, String>) (i -> (i).value),
               (pkgName).value))));
-          hydra.util.Lazy<java.util.List<String>> allParts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
+          hydra.util.Lazy<hydra.util.ConsList<String>> allParts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
             parts.get(),
-            java.util.List.of(hydra.ext.java.utils.Utils.sanitizeJavaName(local))));
+            hydra.util.ConsList.of(hydra.ext.java.utils.Utils.sanitizeJavaName(local))));
           return new hydra.ext.java.syntax.Identifier(hydra.lib.strings.Intercalate.apply(
             ".",
             allParts.get()));
@@ -590,7 +590,7 @@ public interface Utils {
   }
   
   static hydra.ext.java.syntax.Type javaTypeFromTypeName(hydra.ext.java.helpers.Aliases aliases, hydra.core.Name elName) {
-    return hydra.ext.java.utils.Utils.javaTypeVariableToType(new hydra.ext.java.syntax.TypeVariable((java.util.List<hydra.ext.java.syntax.Annotation>) (java.util.List.<hydra.ext.java.syntax.Annotation>of()), hydra.ext.java.utils.Utils.nameToJavaTypeIdentifier(
+    return hydra.ext.java.utils.Utils.javaTypeVariableToType(new hydra.ext.java.syntax.TypeVariable((hydra.util.ConsList<hydra.ext.java.syntax.Annotation>) (hydra.util.ConsList.<hydra.ext.java.syntax.Annotation>of()), hydra.ext.java.utils.Utils.nameToJavaTypeIdentifier(
       aliases,
       false,
       elName)));
@@ -613,7 +613,7 @@ public interface Utils {
   }
   
   static hydra.ext.java.syntax.PrimitiveTypeWithAnnotations javaBytePrimitiveType() {
-    return new hydra.ext.java.syntax.PrimitiveTypeWithAnnotations(new hydra.ext.java.syntax.PrimitiveType.Numeric(new hydra.ext.java.syntax.NumericType.Integral(new hydra.ext.java.syntax.IntegralType.Byte_())), (java.util.List<hydra.ext.java.syntax.Annotation>) (java.util.List.<hydra.ext.java.syntax.Annotation>of()));
+    return new hydra.ext.java.syntax.PrimitiveTypeWithAnnotations(new hydra.ext.java.syntax.PrimitiveType.Numeric(new hydra.ext.java.syntax.NumericType.Integral(new hydra.ext.java.syntax.IntegralType.Byte_())), (hydra.util.ConsList<hydra.ext.java.syntax.Annotation>) (hydra.util.ConsList.<hydra.ext.java.syntax.Annotation>of()));
   }
   
   static hydra.ext.java.syntax.ReferenceType visitorTypeVariable() {
@@ -657,11 +657,11 @@ public interface Utils {
     hydra.ext.java.syntax.VariableDeclarator vdec = hydra.ext.java.utils.Utils.javaVariableDeclarator(
       id,
       hydra.util.Maybe.just(init_));
-    return new hydra.ext.java.syntax.BlockStatement.LocalVariableDeclaration(new hydra.ext.java.syntax.LocalVariableDeclarationStatement(new hydra.ext.java.syntax.LocalVariableDeclaration((java.util.List<hydra.ext.java.syntax.VariableModifier>) (java.util.List.<hydra.ext.java.syntax.VariableModifier>of()), new hydra.ext.java.syntax.LocalVariableType.Type(new hydra.ext.java.syntax.UnannType(jtype)), java.util.List.of(vdec))));
+    return new hydra.ext.java.syntax.BlockStatement.LocalVariableDeclaration(new hydra.ext.java.syntax.LocalVariableDeclarationStatement(new hydra.ext.java.syntax.LocalVariableDeclaration((hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier>) (hydra.util.ConsList.<hydra.ext.java.syntax.VariableModifier>of()), new hydra.ext.java.syntax.LocalVariableType.Type(new hydra.ext.java.syntax.UnannType(jtype)), hydra.util.ConsList.of(vdec))));
   }
   
   static hydra.ext.java.syntax.BlockStatement finalVarDeclarationStatement(hydra.ext.java.syntax.Identifier id, hydra.ext.java.syntax.Expression rhs) {
-    return new hydra.ext.java.syntax.BlockStatement.LocalVariableDeclaration(new hydra.ext.java.syntax.LocalVariableDeclarationStatement(new hydra.ext.java.syntax.LocalVariableDeclaration(java.util.List.of(new hydra.ext.java.syntax.VariableModifier.Final()), new hydra.ext.java.syntax.LocalVariableType.Var(), java.util.List.of(hydra.ext.java.utils.Utils.javaVariableDeclarator(
+    return new hydra.ext.java.syntax.BlockStatement.LocalVariableDeclaration(new hydra.ext.java.syntax.LocalVariableDeclarationStatement(new hydra.ext.java.syntax.LocalVariableDeclaration(hydra.util.ConsList.of(new hydra.ext.java.syntax.VariableModifier.Final()), new hydra.ext.java.syntax.LocalVariableType.Var(), hydra.util.ConsList.of(hydra.ext.java.utils.Utils.javaVariableDeclarator(
       id,
       hydra.util.Maybe.just(new hydra.ext.java.syntax.VariableInitializer.Expression(rhs)))))));
   }
@@ -671,10 +671,10 @@ public interface Utils {
   }
   
   static hydra.ext.java.syntax.Annotation suppressWarningsUncheckedAnnotation() {
-    return new hydra.ext.java.syntax.Annotation.SingleElement(new hydra.ext.java.syntax.SingleElementAnnotation(hydra.ext.java.utils.Utils.javaTypeName(new hydra.ext.java.syntax.Identifier("SuppressWarnings")), hydra.util.Maybe.just(new hydra.ext.java.syntax.ElementValue.ConditionalExpression(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(java.util.List.of(new hydra.ext.java.syntax.ConditionalAndExpression(java.util.List.of(hydra.ext.java.utils.Utils.javaPostfixExpressionToJavaInclusiveOrExpression(new hydra.ext.java.syntax.PostfixExpression.Primary(hydra.ext.java.utils.Utils.javaLiteralToJavaPrimary(hydra.ext.java.utils.Utils.javaString("unchecked")))))))))))));
+    return new hydra.ext.java.syntax.Annotation.SingleElement(new hydra.ext.java.syntax.SingleElementAnnotation(hydra.ext.java.utils.Utils.javaTypeName(new hydra.ext.java.syntax.Identifier("SuppressWarnings")), hydra.util.Maybe.just(new hydra.ext.java.syntax.ElementValue.ConditionalExpression(new hydra.ext.java.syntax.ConditionalExpression.Simple(new hydra.ext.java.syntax.ConditionalOrExpression(hydra.util.ConsList.of(new hydra.ext.java.syntax.ConditionalAndExpression(hydra.util.ConsList.of(hydra.ext.java.utils.Utils.javaPostfixExpressionToJavaInclusiveOrExpression(new hydra.ext.java.syntax.PostfixExpression.Primary(hydra.ext.java.utils.Utils.javaLiteralToJavaPrimary(hydra.ext.java.utils.Utils.javaString("unchecked")))))))))))));
   }
   
-  static hydra.ext.java.syntax.MethodInvocation methodInvocationStaticWithTypeArgs(hydra.ext.java.syntax.Identifier self, hydra.ext.java.syntax.Identifier methodName, java.util.List<hydra.ext.java.syntax.TypeArgument> targs, java.util.List<hydra.ext.java.syntax.Expression> args) {
+  static hydra.ext.java.syntax.MethodInvocation methodInvocationStaticWithTypeArgs(hydra.ext.java.syntax.Identifier self, hydra.ext.java.syntax.Identifier methodName, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> targs, hydra.util.ConsList<hydra.ext.java.syntax.Expression> args) {
     hydra.ext.java.syntax.MethodInvocation_Header header = new hydra.ext.java.syntax.MethodInvocation_Header.Complex(new hydra.ext.java.syntax.MethodInvocation_Complex(new hydra.ext.java.syntax.MethodInvocation_Variant.Expression(hydra.ext.java.utils.Utils.javaIdentifierToJavaExpressionName(self)), targs, methodName));
     return new hydra.ext.java.syntax.MethodInvocation(header, args);
   }
@@ -682,13 +682,13 @@ public interface Utils {
   static hydra.ext.java.syntax.Expression javaArrayCreation(hydra.ext.java.syntax.PrimitiveTypeWithAnnotations primType, hydra.util.Maybe<hydra.ext.java.syntax.ArrayInitializer> minit) {
     hydra.util.Lazy<hydra.ext.java.syntax.ArrayInitializer> init_ = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cases.applyLazy(
       minit,
-      () -> new hydra.ext.java.syntax.ArrayInitializer((java.util.List<java.util.List<hydra.ext.java.syntax.VariableInitializer>>) (java.util.List.<java.util.List<hydra.ext.java.syntax.VariableInitializer>>of())),
+      () -> new hydra.ext.java.syntax.ArrayInitializer((hydra.util.ConsList<hydra.util.ConsList<hydra.ext.java.syntax.VariableInitializer>>) (hydra.util.ConsList.<hydra.util.ConsList<hydra.ext.java.syntax.VariableInitializer>>of())),
       (java.util.function.Function<hydra.ext.java.syntax.ArrayInitializer, hydra.ext.java.syntax.ArrayInitializer>) (i -> i)));
-    return hydra.ext.java.utils.Utils.javaPrimaryToJavaExpression(new hydra.ext.java.syntax.Primary.ArrayCreation(new hydra.ext.java.syntax.ArrayCreationExpression.PrimitiveArray(new hydra.ext.java.syntax.ArrayCreationExpression_PrimitiveArray(primType, (java.util.List<hydra.ext.java.syntax.Dims>) (java.util.List.<hydra.ext.java.syntax.Dims>of()), init_.get()))));
+    return hydra.ext.java.utils.Utils.javaPrimaryToJavaExpression(new hydra.ext.java.syntax.Primary.ArrayCreation(new hydra.ext.java.syntax.ArrayCreationExpression.PrimitiveArray(new hydra.ext.java.syntax.ArrayCreationExpression_PrimitiveArray(primType, (hydra.util.ConsList<hydra.ext.java.syntax.Dims>) (hydra.util.ConsList.<hydra.ext.java.syntax.Dims>of()), init_.get()))));
   }
   
-  static hydra.ext.java.syntax.ArrayInitializer javaArrayInitializer(java.util.List<hydra.ext.java.syntax.Expression> exprs) {
-    return new hydra.ext.java.syntax.ArrayInitializer(java.util.List.of(hydra.lib.lists.Map.apply(
+  static hydra.ext.java.syntax.ArrayInitializer javaArrayInitializer(hydra.util.ConsList<hydra.ext.java.syntax.Expression> exprs) {
+    return new hydra.ext.java.syntax.ArrayInitializer(hydra.util.ConsList.of(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.ext.java.syntax.Expression, hydra.ext.java.syntax.VariableInitializer>) (e -> new hydra.ext.java.syntax.VariableInitializer.Expression(e)),
       exprs)));
   }
@@ -707,71 +707,71 @@ public interface Utils {
   }
   
   static hydra.ext.java.helpers.Aliases importAliasesForModule(hydra.module.Module mod) {
-    return new hydra.ext.java.helpers.Aliases((mod).namespace, (java.util.Map<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>) ((java.util.Map<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>) (hydra.lib.maps.Empty.<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (java.util.Map<hydra.core.Name, hydra.core.Name>) ((java.util.Map<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), (java.util.Set<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()));
+    return new hydra.ext.java.helpers.Aliases((mod).namespace, (hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>) ((hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>) (hydra.lib.maps.Empty.<hydra.module.Namespace, hydra.ext.java.syntax.PackageName>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()));
   }
   
-  static hydra.ext.java.syntax.ClassDeclaration javaClassDeclaration(hydra.ext.java.helpers.Aliases aliases, java.util.List<hydra.ext.java.syntax.TypeParameter> tparams, hydra.core.Name elName, java.util.List<hydra.ext.java.syntax.ClassModifier> mods, hydra.util.Maybe<hydra.core.Name> supname, java.util.List<hydra.ext.java.syntax.InterfaceType> impls, java.util.List<hydra.ext.java.syntax.ClassBodyDeclarationWithComments> bodyDecls) {
+  static hydra.ext.java.syntax.ClassDeclaration javaClassDeclaration(hydra.ext.java.helpers.Aliases aliases, hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> tparams, hydra.core.Name elName, hydra.util.ConsList<hydra.ext.java.syntax.ClassModifier> mods, hydra.util.Maybe<hydra.core.Name> supname, hydra.util.ConsList<hydra.ext.java.syntax.InterfaceType> impls, hydra.util.ConsList<hydra.ext.java.syntax.ClassBodyDeclarationWithComments> bodyDecls) {
     hydra.util.Lazy<hydra.util.Maybe<hydra.ext.java.syntax.ClassType>> extends_ = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Map.apply(
       (java.util.function.Function<hydra.core.Name, hydra.ext.java.syntax.ClassType>) (n -> hydra.ext.java.utils.Utils.nameToJavaClassType(
         aliases,
         true,
-        (java.util.List<hydra.ext.java.syntax.TypeArgument>) (java.util.List.<hydra.ext.java.syntax.TypeArgument>of()),
+        (hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>) (hydra.util.ConsList.<hydra.ext.java.syntax.TypeArgument>of()),
         n,
         (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()))),
       supname));
     return new hydra.ext.java.syntax.ClassDeclaration.Normal(new hydra.ext.java.syntax.NormalClassDeclaration(mods, hydra.ext.java.utils.Utils.javaDeclName(elName), tparams, extends_.get(), impls, new hydra.ext.java.syntax.ClassBody(bodyDecls)));
   }
   
-  static hydra.ext.java.syntax.ClassBodyDeclaration makeConstructor(hydra.ext.java.helpers.Aliases aliases, hydra.core.Name elName, Boolean private_, java.util.List<hydra.ext.java.syntax.FormalParameter> params, java.util.List<hydra.ext.java.syntax.BlockStatement> stmts) {
+  static hydra.ext.java.syntax.ClassBodyDeclaration makeConstructor(hydra.ext.java.helpers.Aliases aliases, hydra.core.Name elName, Boolean private_, hydra.util.ConsList<hydra.ext.java.syntax.FormalParameter> params, hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement> stmts) {
     hydra.util.Lazy<hydra.ext.java.syntax.ConstructorBody> body = new hydra.util.Lazy<>(() -> new hydra.ext.java.syntax.ConstructorBody((hydra.util.Maybe<hydra.ext.java.syntax.ExplicitConstructorInvocation>) (hydra.util.Maybe.<hydra.ext.java.syntax.ExplicitConstructorInvocation>nothing()), stmts));
     hydra.ext.java.syntax.SimpleTypeName nm = new hydra.ext.java.syntax.SimpleTypeName(hydra.ext.java.utils.Utils.nameToJavaTypeIdentifier(
       aliases,
       false,
       elName));
-    hydra.util.Lazy<hydra.ext.java.syntax.ConstructorDeclarator> cons = new hydra.util.Lazy<>(() -> new hydra.ext.java.syntax.ConstructorDeclarator((java.util.List<hydra.ext.java.syntax.TypeParameter>) (java.util.List.<hydra.ext.java.syntax.TypeParameter>of()), nm, (hydra.util.Maybe<hydra.ext.java.syntax.ReceiverParameter>) (hydra.util.Maybe.<hydra.ext.java.syntax.ReceiverParameter>nothing()), params));
-    hydra.util.Lazy<java.util.List<hydra.ext.java.syntax.ConstructorModifier>> mods = new hydra.util.Lazy<>(() -> java.util.List.of(hydra.lib.logic.IfElse.lazy(
+    hydra.util.Lazy<hydra.ext.java.syntax.ConstructorDeclarator> cons = new hydra.util.Lazy<>(() -> new hydra.ext.java.syntax.ConstructorDeclarator((hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter>) (hydra.util.ConsList.<hydra.ext.java.syntax.TypeParameter>of()), nm, (hydra.util.Maybe<hydra.ext.java.syntax.ReceiverParameter>) (hydra.util.Maybe.<hydra.ext.java.syntax.ReceiverParameter>nothing()), params));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.ext.java.syntax.ConstructorModifier>> mods = new hydra.util.Lazy<>(() -> hydra.util.ConsList.of(hydra.lib.logic.IfElse.lazy(
       private_,
       () -> new hydra.ext.java.syntax.ConstructorModifier.Private(),
       () -> new hydra.ext.java.syntax.ConstructorModifier.Public())));
     return new hydra.ext.java.syntax.ClassBodyDeclaration.ConstructorDeclaration(new hydra.ext.java.syntax.ConstructorDeclaration(mods.get(), cons.get(), (hydra.util.Maybe<hydra.ext.java.syntax.Throws>) (hydra.util.Maybe.<hydra.ext.java.syntax.Throws>nothing()), body.get()));
   }
   
-  static hydra.ext.java.syntax.ClassBodyDeclaration toAcceptMethod(Boolean abstract_, java.util.List<hydra.ext.java.syntax.TypeParameter> vtparams) {
-    hydra.util.Lazy<java.util.List<hydra.ext.java.syntax.Annotation>> anns = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
+  static hydra.ext.java.syntax.ClassBodyDeclaration toAcceptMethod(Boolean abstract_, hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> vtparams) {
+    hydra.util.Lazy<hydra.util.ConsList<hydra.ext.java.syntax.Annotation>> anns = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
       abstract_,
-      () -> (java.util.List<hydra.ext.java.syntax.Annotation>) (java.util.List.<hydra.ext.java.syntax.Annotation>of()),
-      () -> java.util.List.of(hydra.ext.java.utils.Utils.overrideAnnotation())));
+      () -> (hydra.util.ConsList<hydra.ext.java.syntax.Annotation>) (hydra.util.ConsList.<hydra.ext.java.syntax.Annotation>of()),
+      () -> hydra.util.ConsList.of(hydra.ext.java.utils.Utils.overrideAnnotation())));
     hydra.ext.java.syntax.Expression returnExpr = hydra.ext.java.utils.Utils.javaMethodInvocationToJavaExpression(hydra.ext.java.utils.Utils.methodInvocationStatic(
       new hydra.ext.java.syntax.Identifier("visitor"),
       new hydra.ext.java.syntax.Identifier(hydra.ext.java.names.Names.visitMethodName()),
-      java.util.List.of(hydra.ext.java.utils.Utils.javaThis())));
-    hydra.util.Lazy<hydra.util.Maybe<java.util.List<hydra.ext.java.syntax.BlockStatement>>> body = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
+      hydra.util.ConsList.of(hydra.ext.java.utils.Utils.javaThis())));
+    hydra.util.Lazy<hydra.util.Maybe<hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>>> body = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
       abstract_,
-      () -> (hydra.util.Maybe<java.util.List<hydra.ext.java.syntax.BlockStatement>>) (hydra.util.Maybe.<java.util.List<hydra.ext.java.syntax.BlockStatement>>nothing()),
-      () -> hydra.util.Maybe.just(java.util.List.of(new hydra.ext.java.syntax.BlockStatement.Statement(hydra.ext.java.utils.Utils.javaReturnStatement(hydra.util.Maybe.just(returnExpr)))))));
-    hydra.util.Lazy<java.util.List<hydra.ext.java.syntax.MethodModifier>> mods = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
+      () -> (hydra.util.Maybe<hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>>) (hydra.util.Maybe.<hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement>>nothing()),
+      () -> hydra.util.Maybe.just(hydra.util.ConsList.of(new hydra.ext.java.syntax.BlockStatement.Statement(hydra.ext.java.utils.Utils.javaReturnStatement(hydra.util.Maybe.just(returnExpr)))))));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.ext.java.syntax.MethodModifier>> mods = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
       abstract_,
-      () -> java.util.List.of(
+      () -> hydra.util.ConsList.of(
         new hydra.ext.java.syntax.MethodModifier.Public(),
         new hydra.ext.java.syntax.MethodModifier.Abstract()),
-      () -> java.util.List.of(new hydra.ext.java.syntax.MethodModifier.Public())));
-    hydra.util.Lazy<java.util.List<hydra.ext.java.syntax.TypeArgument>> typeArgs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+      () -> hydra.util.ConsList.of(new hydra.ext.java.syntax.MethodModifier.Public())));
+    hydra.util.Lazy<hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>> typeArgs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.ext.java.syntax.TypeParameter, hydra.ext.java.syntax.TypeArgument>) (tp -> new hydra.ext.java.syntax.TypeArgument.Reference(hydra.ext.java.utils.Utils.typeParameterToReferenceType(tp))),
       vtparams));
-    hydra.util.Lazy<hydra.ext.java.syntax.Type> ref = new hydra.util.Lazy<>(() -> hydra.ext.java.utils.Utils.javaClassTypeToJavaType(new hydra.ext.java.syntax.ClassType((java.util.List<hydra.ext.java.syntax.Annotation>) (java.util.List.<hydra.ext.java.syntax.Annotation>of()), new hydra.ext.java.syntax.ClassTypeQualifier.None(), hydra.ext.java.utils.Utils.javaTypeIdentifier(hydra.ext.java.names.Names.visitorName()), hydra.lib.lists.Concat2.apply(
+    hydra.util.Lazy<hydra.ext.java.syntax.Type> ref = new hydra.util.Lazy<>(() -> hydra.ext.java.utils.Utils.javaClassTypeToJavaType(new hydra.ext.java.syntax.ClassType((hydra.util.ConsList<hydra.ext.java.syntax.Annotation>) (hydra.util.ConsList.<hydra.ext.java.syntax.Annotation>of()), new hydra.ext.java.syntax.ClassTypeQualifier.None(), hydra.ext.java.utils.Utils.javaTypeIdentifier(hydra.ext.java.names.Names.visitorName()), hydra.lib.lists.Concat2.apply(
       typeArgs.get(),
-      java.util.List.of(new hydra.ext.java.syntax.TypeArgument.Reference(hydra.ext.java.utils.Utils.visitorTypeVariable()))))));
+      hydra.util.ConsList.of(new hydra.ext.java.syntax.TypeArgument.Reference(hydra.ext.java.utils.Utils.visitorTypeVariable()))))));
     hydra.ext.java.syntax.FormalParameter param = hydra.ext.java.utils.Utils.javaTypeToJavaFormalParameter(
       ref.get(),
       new hydra.core.Name("visitor"));
     hydra.ext.java.syntax.Result result = hydra.ext.java.utils.Utils.javaTypeToJavaResult(new hydra.ext.java.syntax.Type.Reference(hydra.ext.java.utils.Utils.visitorTypeVariable()));
-    java.util.List<hydra.ext.java.syntax.TypeParameter> tparams = java.util.List.of(hydra.ext.java.utils.Utils.javaTypeParameter(hydra.ext.java.names.Names.visitorReturnParameter()));
+    hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> tparams = hydra.util.ConsList.of(hydra.ext.java.utils.Utils.javaTypeParameter(hydra.ext.java.names.Names.visitorReturnParameter()));
     return hydra.ext.java.utils.Utils.methodDeclaration(
       mods.get(),
       tparams,
       anns.get(),
       hydra.ext.java.names.Names.acceptMethodName(),
-      java.util.List.of(param),
+      hydra.util.ConsList.of(param),
       result,
       body.get());
   }
@@ -783,15 +783,15 @@ public interface Utils {
         return ((rt).value).accept(new hydra.ext.java.syntax.ReferenceType.PartialVisitor<>() {
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.ext.java.syntax.ReferenceType.ClassOrInterface cit) {
-            return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type>right(new hydra.ext.java.syntax.Type.Reference(new hydra.ext.java.syntax.ReferenceType.Array(new hydra.ext.java.syntax.ArrayType(new hydra.ext.java.syntax.Dims(java.util.List.of((java.util.List<hydra.ext.java.syntax.Annotation>) (java.util.List.<hydra.ext.java.syntax.Annotation>of()))), new hydra.ext.java.syntax.ArrayType_Variant.ClassOrInterface((cit).value)))));
+            return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type>right(new hydra.ext.java.syntax.Type.Reference(new hydra.ext.java.syntax.ReferenceType.Array(new hydra.ext.java.syntax.ArrayType(new hydra.ext.java.syntax.Dims(hydra.util.ConsList.of((hydra.util.ConsList<hydra.ext.java.syntax.Annotation>) (hydra.util.ConsList.<hydra.ext.java.syntax.Annotation>of()))), new hydra.ext.java.syntax.ArrayType_Variant.ClassOrInterface((cit).value)))));
           }
           
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.ext.java.syntax.ReferenceType.Array at) {
-            java.util.List<java.util.List<hydra.ext.java.syntax.Annotation>> oldDims = (((at).value).dims).value;
+            hydra.util.ConsList<hydra.util.ConsList<hydra.ext.java.syntax.Annotation>> oldDims = (((at).value).dims).value;
             hydra.util.Lazy<hydra.ext.java.syntax.Dims> newDims = new hydra.util.Lazy<>(() -> new hydra.ext.java.syntax.Dims(hydra.lib.lists.Concat2.apply(
               oldDims,
-              java.util.List.of((java.util.List<hydra.ext.java.syntax.Annotation>) (java.util.List.<hydra.ext.java.syntax.Annotation>of())))));
+              hydra.util.ConsList.of((hydra.util.ConsList<hydra.ext.java.syntax.Annotation>) (hydra.util.ConsList.<hydra.ext.java.syntax.Annotation>of())))));
             hydra.ext.java.syntax.ArrayType_Variant variant = ((at).value).variant;
             return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type>right(new hydra.ext.java.syntax.Type.Reference(new hydra.ext.java.syntax.ReferenceType.Array(new hydra.ext.java.syntax.ArrayType(newDims.get(), variant))));
           }
@@ -836,19 +836,19 @@ public interface Utils {
         return ((cit).value).accept(new hydra.ext.java.syntax.ClassOrInterfaceType.PartialVisitor<>() {
           @Override
           public hydra.ext.java.syntax.ReferenceType visit(hydra.ext.java.syntax.ClassOrInterfaceType.Class_ ct) {
-            java.util.List<hydra.ext.java.syntax.Annotation> anns = ((ct).value).annotations;
+            hydra.util.ConsList<hydra.ext.java.syntax.Annotation> anns = ((ct).value).annotations;
             hydra.ext.java.syntax.TypeIdentifier id = ((ct).value).identifier;
             hydra.ext.java.syntax.ClassTypeQualifier qual = ((ct).value).qualifier;
-            return new hydra.ext.java.syntax.ReferenceType.ClassOrInterface(new hydra.ext.java.syntax.ClassOrInterfaceType.Class_(new hydra.ext.java.syntax.ClassType(anns, qual, id, (java.util.List<hydra.ext.java.syntax.TypeArgument>) (java.util.List.<hydra.ext.java.syntax.TypeArgument>of()))));
+            return new hydra.ext.java.syntax.ReferenceType.ClassOrInterface(new hydra.ext.java.syntax.ClassOrInterfaceType.Class_(new hydra.ext.java.syntax.ClassType(anns, qual, id, (hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>) (hydra.util.ConsList.<hydra.ext.java.syntax.TypeArgument>of()))));
           }
           
           @Override
           public hydra.ext.java.syntax.ReferenceType visit(hydra.ext.java.syntax.ClassOrInterfaceType.Interface it) {
             hydra.ext.java.syntax.ClassType ct = ((it).value).value;
-            java.util.List<hydra.ext.java.syntax.Annotation> anns = (ct).annotations;
+            hydra.util.ConsList<hydra.ext.java.syntax.Annotation> anns = (ct).annotations;
             hydra.ext.java.syntax.TypeIdentifier id = (ct).identifier;
             hydra.ext.java.syntax.ClassTypeQualifier qual = (ct).qualifier;
-            return new hydra.ext.java.syntax.ReferenceType.ClassOrInterface(new hydra.ext.java.syntax.ClassOrInterfaceType.Interface(new hydra.ext.java.syntax.InterfaceType(new hydra.ext.java.syntax.ClassType(anns, qual, id, (java.util.List<hydra.ext.java.syntax.TypeArgument>) (java.util.List.<hydra.ext.java.syntax.TypeArgument>of())))));
+            return new hydra.ext.java.syntax.ReferenceType.ClassOrInterface(new hydra.ext.java.syntax.ClassOrInterfaceType.Interface(new hydra.ext.java.syntax.InterfaceType(new hydra.ext.java.syntax.ClassType(anns, qual, id, (hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>) (hydra.util.ConsList.<hydra.ext.java.syntax.TypeArgument>of())))));
           }
         });
       }
@@ -865,13 +865,13 @@ public interface Utils {
             return ((cit).value).accept(new hydra.ext.java.syntax.ClassOrInterfaceType.PartialVisitor<>() {
               @Override
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.ext.java.syntax.ClassOrInterfaceType.Class_ ct) {
-                java.util.List<hydra.ext.java.syntax.Annotation> anns = ((ct).value).annotations;
-                java.util.List<hydra.ext.java.syntax.TypeArgument> args = ((ct).value).arguments;
+                hydra.util.ConsList<hydra.ext.java.syntax.Annotation> anns = ((ct).value).annotations;
+                hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> args = ((ct).value).arguments;
                 hydra.ext.java.syntax.TypeIdentifier id = ((ct).value).identifier;
                 hydra.ext.java.syntax.ClassTypeQualifier qual = ((ct).value).qualifier;
                 return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type>right(new hydra.ext.java.syntax.Type.Reference(new hydra.ext.java.syntax.ReferenceType.ClassOrInterface(new hydra.ext.java.syntax.ClassOrInterfaceType.Class_(new hydra.ext.java.syntax.ClassType(anns, qual, id, hydra.lib.lists.Concat2.apply(
                   args,
-                  java.util.List.of(new hydra.ext.java.syntax.TypeArgument.Reference(rt))))))));
+                  hydra.util.ConsList.of(new hydra.ext.java.syntax.TypeArgument.Reference(rt))))))));
               }
               
               @Override
@@ -935,7 +935,7 @@ public interface Utils {
       (aliases).inScopeJavaVars), (aliases).varRenames, (aliases).lambdaVars, (aliases).typeVarSubst, (aliases).trustedTypeVars, (aliases).methodCodomain, (aliases).thunkedVars);
   }
   
-  static hydra.ext.java.helpers.Aliases addInScopeVars(java.util.List<hydra.core.Name> names, hydra.ext.java.helpers.Aliases aliases) {
+  static hydra.ext.java.helpers.Aliases addInScopeVars(hydra.util.ConsList<hydra.core.Name> names, hydra.ext.java.helpers.Aliases aliases) {
     return hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<hydra.ext.java.helpers.Aliases, java.util.function.Function<hydra.core.Name, hydra.ext.java.helpers.Aliases>>) (a -> (java.util.function.Function<hydra.core.Name, hydra.ext.java.helpers.Aliases>) (n -> hydra.ext.java.utils.Utils.addInScopeVar(
         n,

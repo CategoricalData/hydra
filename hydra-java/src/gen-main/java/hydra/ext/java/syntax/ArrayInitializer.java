@@ -9,9 +9,9 @@ public class ArrayInitializer implements Serializable, Comparable<ArrayInitializ
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<java.util.List<hydra.ext.java.syntax.VariableInitializer>> value;
+  public final hydra.util.ConsList<hydra.util.ConsList<hydra.ext.java.syntax.VariableInitializer>> value;
   
-  public ArrayInitializer (java.util.List<java.util.List<hydra.ext.java.syntax.VariableInitializer>> value) {
+  public ArrayInitializer (hydra.util.ConsList<hydra.util.ConsList<hydra.ext.java.syntax.VariableInitializer>> value) {
     this.value = value;
   }
   

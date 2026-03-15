@@ -17,13 +17,13 @@ public class SlashNoDefaultParameters implements Serializable, Comparable<SlashN
   
   public final hydra.ext.python.syntax.SlashNoDefault slash;
   
-  public final java.util.List<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault;
   
-  public final java.util.List<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault;
   
   public final hydra.util.Maybe<hydra.ext.python.syntax.StarEtc> starEtc;
   
-  public SlashNoDefaultParameters (hydra.ext.python.syntax.SlashNoDefault slash, java.util.List<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault, java.util.List<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault, hydra.util.Maybe<hydra.ext.python.syntax.StarEtc> starEtc) {
+  public SlashNoDefaultParameters (hydra.ext.python.syntax.SlashNoDefault slash, hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault, hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault, hydra.util.Maybe<hydra.ext.python.syntax.StarEtc> starEtc) {
     this.slash = slash;
     this.paramNoDefault = paramNoDefault;
     this.paramWithDefault = paramWithDefault;
@@ -81,11 +81,11 @@ public class SlashNoDefaultParameters implements Serializable, Comparable<SlashN
     return new SlashNoDefaultParameters(slash, paramNoDefault, paramWithDefault, starEtc);
   }
   
-  public SlashNoDefaultParameters withParamNoDefault(java.util.List<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault) {
+  public SlashNoDefaultParameters withParamNoDefault(hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault) {
     return new SlashNoDefaultParameters(slash, paramNoDefault, paramWithDefault, starEtc);
   }
   
-  public SlashNoDefaultParameters withParamWithDefault(java.util.List<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault) {
+  public SlashNoDefaultParameters withParamWithDefault(hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault) {
     return new SlashNoDefaultParameters(slash, paramNoDefault, paramWithDefault, starEtc);
   }
   

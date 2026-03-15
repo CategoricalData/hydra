@@ -19,7 +19,7 @@ public class SubstInTypeTestCase implements Serializable, Comparable<SubstInType
   /**
    * The type substitution as a list of (name, type) pairs
    */
-  public final java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Type>> substitution;
+  public final hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Type>> substitution;
   
   /**
    * The type to substitute into
@@ -31,7 +31,7 @@ public class SubstInTypeTestCase implements Serializable, Comparable<SubstInType
    */
   public final hydra.core.Type output;
   
-  public SubstInTypeTestCase (java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Type>> substitution, hydra.core.Type input, hydra.core.Type output) {
+  public SubstInTypeTestCase (hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Type>> substitution, hydra.core.Type input, hydra.core.Type output) {
     this.substitution = substitution;
     this.input = input;
     this.output = output;
@@ -74,7 +74,7 @@ public class SubstInTypeTestCase implements Serializable, Comparable<SubstInType
     return ((Comparable) output).compareTo(other.output);
   }
   
-  public SubstInTypeTestCase withSubstitution(java.util.List<hydra.util.Pair<hydra.core.Name, hydra.core.Type>> substitution) {
+  public SubstInTypeTestCase withSubstitution(hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Type>> substitution) {
     return new SubstInTypeTestCase(substitution, input, output);
   }
   

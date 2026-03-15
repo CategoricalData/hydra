@@ -9,9 +9,9 @@ public class Conjunction implements Serializable, Comparable<Conjunction> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.python.syntax.Inversion> value;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.Inversion> value;
   
-  public Conjunction (java.util.List<hydra.ext.python.syntax.Inversion> value) {
+  public Conjunction (hydra.util.ConsList<hydra.ext.python.syntax.Inversion> value) {
     this.value = value;
   }
   

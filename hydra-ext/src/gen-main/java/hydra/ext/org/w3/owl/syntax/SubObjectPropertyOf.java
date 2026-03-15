@@ -13,13 +13,13 @@ public class SubObjectPropertyOf implements Serializable, Comparable<SubObjectPr
   
   public static final hydra.core.Name SUPER_PROPERTY = new hydra.core.Name("superProperty");
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> subProperty;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> subProperty;
   
   public final hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression superProperty;
   
-  public SubObjectPropertyOf (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, java.util.List<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> subProperty, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression superProperty) {
+  public SubObjectPropertyOf (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> subProperty, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression superProperty) {
     this.annotations = annotations;
     this.subProperty = subProperty;
     this.superProperty = superProperty;
@@ -64,11 +64,11 @@ public class SubObjectPropertyOf implements Serializable, Comparable<SubObjectPr
     return ((Comparable) superProperty).compareTo(other.superProperty);
   }
   
-  public SubObjectPropertyOf withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public SubObjectPropertyOf withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new SubObjectPropertyOf(annotations, subProperty, superProperty);
   }
   
-  public SubObjectPropertyOf withSubProperty(java.util.List<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> subProperty) {
+  public SubObjectPropertyOf withSubProperty(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> subProperty) {
     return new SubObjectPropertyOf(annotations, subProperty, superProperty);
   }
   

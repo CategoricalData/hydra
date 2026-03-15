@@ -86,9 +86,9 @@ public abstract class Statement implements Serializable, Comparable<Statement> {
   }
   
   public static final class Simple extends hydra.ext.python.syntax.Statement implements Serializable {
-    public final java.util.List<hydra.ext.python.syntax.SimpleStatement> value;
+    public final hydra.util.ConsList<hydra.ext.python.syntax.SimpleStatement> value;
     
-    public Simple (java.util.List<hydra.ext.python.syntax.SimpleStatement> value) {
+    public Simple (hydra.util.ConsList<hydra.ext.python.syntax.SimpleStatement> value) {
       this.value = value;
     }
     

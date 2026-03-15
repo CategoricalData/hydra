@@ -9,9 +9,9 @@ public class Graph implements Serializable, Comparable<Graph> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.Set<hydra.ext.org.w3.rdf.syntax.Triple> value;
+  public final hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Triple> value;
   
-  public Graph (java.util.Set<hydra.ext.org.w3.rdf.syntax.Triple> value) {
+  public Graph (hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Triple> value) {
     this.value = value;
   }
   

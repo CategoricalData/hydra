@@ -26,7 +26,7 @@ public interface Serde {
   
   static hydra.ast.Expr applicationPatternToExpr(hydra.ext.haskell.ast.ApplicationPattern appPat) {
     hydra.ext.haskell.ast.Name name = (appPat).name;
-    java.util.List<hydra.ext.haskell.ast.Pattern> pats = (appPat).args;
+    hydra.util.ConsList<hydra.ext.haskell.ast.Pattern> pats = (appPat).args;
     return hydra.serialization.Serialization.spaceSep(hydra.lib.lists.Cons.apply(
       hydra.ext.haskell.serde.Serde.nameToExpr(name),
       hydra.lib.lists.Map.apply(
@@ -53,9 +53,9 @@ public interface Serde {
   }
   
   static hydra.ast.Expr caseExpressionToExpr(hydra.ext.haskell.ast.CaseExpression caseExpr) {
-    java.util.List<hydra.ext.haskell.ast.Alternative> alts = (caseExpr).alternatives;
+    hydra.util.ConsList<hydra.ext.haskell.ast.Alternative> alts = (caseExpr).alternatives;
     hydra.ext.haskell.ast.Expression cs = (caseExpr).case_;
-    hydra.ast.Expr lhs = hydra.serialization.Serialization.spaceSep(java.util.List.of(
+    hydra.ast.Expr lhs = hydra.serialization.Serialization.spaceSep(hydra.util.ConsList.of(
       hydra.serialization.Serialization.cst("case"),
       hydra.ext.haskell.serde.Serde.expressionToExpr(cs)));
     hydra.ast.Op ofOp = new hydra.ast.Op(new hydra.ast.Symbol("of"), new hydra.ast.Padding(new hydra.ast.Ws.Space(), new hydra.ast.Ws.BreakAndIndent("  ")), new hydra.ast.Precedence(0), new hydra.ast.Associativity.None());
@@ -74,10 +74,10 @@ public interface Serde {
   
   static hydra.ast.Expr classAssertionToExpr(hydra.ext.haskell.ast.ClassAssertion clsAsrt) {
     hydra.ext.haskell.ast.Name name = (clsAsrt).name;
-    java.util.List<hydra.ext.haskell.ast.Type> types = (clsAsrt).types;
+    hydra.util.ConsList<hydra.ext.haskell.ast.Type> types = (clsAsrt).types;
     return hydra.serialization.Serialization.spaceSep(hydra.lib.lists.Cons.apply(
       hydra.ext.haskell.serde.Serde.nameToExpr(name),
-      java.util.List.of(hydra.serialization.Serialization.commaSep(
+      hydra.util.ConsList.of(hydra.serialization.Serialization.commaSep(
         hydra.serialization.Serialization.halfBlockStyle(),
         hydra.lib.lists.Map.apply(
           hydra.ext.haskell.serde.Serde::typeToExpr,
@@ -89,21 +89,21 @@ public interface Serde {
       @Override
       public hydra.ast.Expr visit(hydra.ext.haskell.ast.Constructor.Ordinary ord) {
         hydra.ext.haskell.ast.Name name = ((ord).value).name;
-        java.util.List<hydra.ext.haskell.ast.Type> types = ((ord).value).fields;
+        hydra.util.ConsList<hydra.ext.haskell.ast.Type> types = ((ord).value).fields;
         return hydra.serialization.Serialization.spaceSep(hydra.lib.lists.Cons.apply(
           hydra.ext.haskell.serde.Serde.nameToExpr(name),
-          java.util.List.of(hydra.serialization.Serialization.spaceSep(hydra.lib.lists.Map.apply(
+          hydra.util.ConsList.of(hydra.serialization.Serialization.spaceSep(hydra.lib.lists.Map.apply(
             hydra.ext.haskell.serde.Serde::typeToExpr,
             types)))));
       }
       
       @Override
       public hydra.ast.Expr visit(hydra.ext.haskell.ast.Constructor.Record rec) {
-        java.util.List<hydra.ext.haskell.ast.FieldWithComments> fields = ((rec).value).fields;
+        hydra.util.ConsList<hydra.ext.haskell.ast.FieldWithComments> fields = ((rec).value).fields;
         hydra.ext.haskell.ast.Name name = ((rec).value).name;
         return hydra.serialization.Serialization.spaceSep(hydra.lib.lists.Cons.apply(
           hydra.ext.haskell.serde.Serde.nameToExpr(name),
-          java.util.List.of(hydra.serialization.Serialization.curlyBracesList(
+          hydra.util.ConsList.of(hydra.serialization.Serialization.curlyBracesList(
             (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()),
             hydra.serialization.Serialization.halfBlockStyle(),
             hydra.lib.lists.Map.apply(
@@ -120,7 +120,7 @@ public interface Serde {
       () -> hydra.ext.haskell.serde.Serde.constructorToExpr(body),
       (java.util.function.Function<String, hydra.ast.Expr>) (c -> hydra.serialization.Serialization.newlineSep(hydra.lib.lists.Cons.apply(
         hydra.serialization.Serialization.cst(hydra.ext.haskell.serde.Serde.toHaskellComments(c)),
-        java.util.List.of(hydra.ext.haskell.serde.Serde.constructorToExpr(body))))),
+        hydra.util.ConsList.of(hydra.ext.haskell.serde.Serde.constructorToExpr(body))))),
       mc);
   }
   
@@ -146,7 +146,7 @@ public interface Serde {
         hydra.ext.haskell.ast.Variable op = ((appHead).value).operand;
         return hydra.serialization.Serialization.spaceSep(hydra.lib.lists.Cons.apply(
           hydra.ext.haskell.serde.Serde.declarationHeadToExpr(fun),
-          java.util.List.of(hydra.ext.haskell.serde.Serde.variableToExpr(op))));
+          hydra.util.ConsList.of(hydra.ext.haskell.serde.Serde.variableToExpr(op))));
       }
       
       @Override
@@ -160,34 +160,34 @@ public interface Serde {
     return (decl).accept(new hydra.ext.haskell.ast.Declaration.PartialVisitor<>() {
       @Override
       public hydra.ast.Expr visit(hydra.ext.haskell.ast.Declaration.Data dataDecl) {
-        java.util.List<hydra.ext.haskell.ast.ConstructorWithComments> cons = ((dataDecl).value).constructors;
+        hydra.util.ConsList<hydra.ext.haskell.ast.ConstructorWithComments> cons = ((dataDecl).value).constructors;
         hydra.util.Lazy<hydra.ast.Expr> constructors = new hydra.util.Lazy<>(() -> hydra.serialization.Serialization.orSep(
           hydra.serialization.Serialization.halfBlockStyle(),
           hydra.lib.lists.Map.apply(
             hydra.ext.haskell.serde.Serde::constructorWithCommentsToExpr,
             cons)));
-        java.util.List<hydra.ext.haskell.ast.Deriving> deriv = ((dataDecl).value).deriving;
-        hydra.util.Lazy<java.util.List<hydra.ext.haskell.ast.Name>> derivCat = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
+        hydra.util.ConsList<hydra.ext.haskell.ast.Deriving> deriv = ((dataDecl).value).deriving;
+        hydra.util.Lazy<hydra.util.ConsList<hydra.ext.haskell.ast.Name>> derivCat = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
           wrapped -> (wrapped).value,
           deriv)));
-        hydra.util.Lazy<java.util.List<hydra.ast.Expr>> derivingClause = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
+        hydra.util.Lazy<hydra.util.ConsList<hydra.ast.Expr>> derivingClause = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(derivCat.get()),
-          () -> (java.util.List<hydra.ast.Expr>) (java.util.List.<hydra.ast.Expr>of()),
-          () -> java.util.List.of(hydra.serialization.Serialization.spaceSep(hydra.lib.lists.Cons.apply(
+          () -> (hydra.util.ConsList<hydra.ast.Expr>) (hydra.util.ConsList.<hydra.ast.Expr>of()),
+          () -> hydra.util.ConsList.of(hydra.serialization.Serialization.spaceSep(hydra.lib.lists.Cons.apply(
             hydra.serialization.Serialization.cst("deriving"),
-            java.util.List.of(hydra.serialization.Serialization.parenList(
+            hydra.util.ConsList.of(hydra.serialization.Serialization.parenList(
               false,
               hydra.lib.lists.Map.apply(
                 hydra.ext.haskell.serde.Serde::nameToExpr,
                 derivCat.get()))))))));
         hydra.ext.haskell.ast.DeclarationHead hd = ((dataDecl).value).head;
         hydra.ext.haskell.ast.DataOrNewtype kw = ((dataDecl).value).keyword;
-        hydra.util.Lazy<java.util.List<hydra.ast.Expr>> mainParts = new hydra.util.Lazy<>(() -> java.util.List.of(
+        hydra.util.Lazy<hydra.util.ConsList<hydra.ast.Expr>> mainParts = new hydra.util.Lazy<>(() -> hydra.util.ConsList.of(
           hydra.serialization.Serialization.spaceSep(hydra.lib.lists.Cons.apply(
             hydra.ext.haskell.serde.Serde.dataOrNewtypeToExpr(kw),
             hydra.lib.lists.Cons.apply(
               hydra.ext.haskell.serde.Serde.declarationHeadToExpr(hd),
-              java.util.List.of(hydra.serialization.Serialization.cst("="))))),
+              hydra.util.ConsList.of(hydra.serialization.Serialization.cst("="))))),
           constructors.get()));
         return hydra.serialization.Serialization.indentBlock(hydra.lib.lists.Concat2.apply(
           mainParts.get(),
@@ -204,7 +204,7 @@ public interface Serde {
             hydra.ext.haskell.serde.Serde.declarationHeadToExpr(hd),
             hydra.lib.lists.Cons.apply(
               hydra.serialization.Serialization.cst("="),
-              java.util.List.of(hydra.ext.haskell.serde.Serde.typeToExpr(typ))))));
+              hydra.util.ConsList.of(hydra.ext.haskell.serde.Serde.typeToExpr(typ))))));
       }
       
       @Override
@@ -223,7 +223,7 @@ public interface Serde {
             hydra.ext.haskell.operators.Operators.typeOp(),
             hydra.ext.haskell.serde.Serde.nameToExpr(name),
             hydra.ext.haskell.serde.Serde.typeToExpr(htype)),
-          java.util.List.of(hydra.ext.haskell.serde.Serde.valueBindingToExpr(vb))));
+          hydra.util.ConsList.of(hydra.ext.haskell.serde.Serde.valueBindingToExpr(vb))));
       }
     });
   }
@@ -235,7 +235,7 @@ public interface Serde {
       () -> hydra.ext.haskell.serde.Serde.declarationToExpr(body),
       (java.util.function.Function<String, hydra.ast.Expr>) (c -> hydra.serialization.Serialization.newlineSep(hydra.lib.lists.Cons.apply(
         hydra.serialization.Serialization.cst(hydra.ext.haskell.serde.Serde.toHaskellComments(c)),
-        java.util.List.of(hydra.ext.haskell.serde.Serde.declarationToExpr(body))))),
+        hydra.util.ConsList.of(hydra.ext.haskell.serde.Serde.declarationToExpr(body))))),
       mc);
   }
   
@@ -282,7 +282,7 @@ public interface Serde {
       
       @Override
       public hydra.ast.Expr visit(hydra.ext.haskell.ast.Expression.Let letExpr) {
-        java.util.List<hydra.ext.haskell.ast.LocalBinding> bindings = ((letExpr).value).bindings;
+        hydra.util.ConsList<hydra.ext.haskell.ast.LocalBinding> bindings = ((letExpr).value).bindings;
         java.util.function.Function<hydra.ext.haskell.ast.LocalBinding, hydra.ast.Expr> encodeBinding = (java.util.function.Function<hydra.ext.haskell.ast.LocalBinding, hydra.ast.Expr>) (binding -> hydra.serialization.Serialization.indentSubsequentLines(
           "      ",
           hydra.ext.haskell.serde.Serde.localBindingToExpr(binding)));
@@ -292,14 +292,14 @@ public interface Serde {
           hydra.lib.lists.Cons.apply(
             hydra.serialization.Serialization.spaceSep(hydra.lib.lists.Cons.apply(
               hydra.serialization.Serialization.cst("let"),
-              java.util.List.of(hydra.serialization.Serialization.customIndentBlock(
+              hydra.util.ConsList.of(hydra.serialization.Serialization.customIndentBlock(
                 "    ",
                 hydra.lib.lists.Map.apply(
                   encodeBinding,
                   bindings))))),
-            java.util.List.of(hydra.serialization.Serialization.spaceSep(hydra.lib.lists.Cons.apply(
+            hydra.util.ConsList.of(hydra.serialization.Serialization.spaceSep(hydra.lib.lists.Cons.apply(
               hydra.serialization.Serialization.cst("in"),
-              java.util.List.of(hydra.ext.haskell.serde.Serde.expressionToExpr(inner))))))));
+              hydra.util.ConsList.of(hydra.ext.haskell.serde.Serde.expressionToExpr(inner))))))));
       }
       
       @Override
@@ -341,7 +341,7 @@ public interface Serde {
         hydra.ext.haskell.serde.Serde.nameToExpr(fn),
         hydra.ext.haskell.serde.Serde.expressionToExpr(val));
     });
-    java.util.List<hydra.ext.haskell.ast.FieldUpdate> updates = (constructRecord).fields;
+    hydra.util.ConsList<hydra.ext.haskell.ast.FieldUpdate> updates = (constructRecord).fields;
     hydra.util.Lazy<hydra.ast.Expr> body = new hydra.util.Lazy<>(() -> hydra.serialization.Serialization.commaSep(
       hydra.serialization.Serialization.halfBlockStyle(),
       hydra.lib.lists.Map.apply(
@@ -350,7 +350,7 @@ public interface Serde {
     hydra.ext.haskell.ast.Name name = (constructRecord).name;
     return hydra.serialization.Serialization.spaceSep(hydra.lib.lists.Cons.apply(
       hydra.ext.haskell.serde.Serde.nameToExpr(name),
-      java.util.List.of(hydra.serialization.Serialization.brackets(
+      hydra.util.ConsList.of(hydra.serialization.Serialization.brackets(
         hydra.serialization.Serialization.curlyBraces(),
         hydra.serialization.Serialization.halfBlockStyle(),
         body.get()))));
@@ -363,7 +363,7 @@ public interface Serde {
       hydra.ext.haskell.serde.Serde.nameToExpr(name),
       hydra.lib.lists.Cons.apply(
         hydra.serialization.Serialization.cst("::"),
-        java.util.List.of(hydra.ext.haskell.serde.Serde.typeToExpr(typ)))));
+        hydra.util.ConsList.of(hydra.ext.haskell.serde.Serde.typeToExpr(typ)))));
   }
   
   static hydra.ast.Expr fieldWithCommentsToExpr(hydra.ext.haskell.ast.FieldWithComments fieldWithComments) {
@@ -373,7 +373,7 @@ public interface Serde {
       () -> hydra.ext.haskell.serde.Serde.fieldToExpr(field),
       (java.util.function.Function<String, hydra.ast.Expr>) (c -> hydra.serialization.Serialization.newlineSep(hydra.lib.lists.Cons.apply(
         hydra.serialization.Serialization.cst(hydra.ext.haskell.serde.Serde.toHaskellComments(c)),
-        java.util.List.of(hydra.ext.haskell.serde.Serde.fieldToExpr(field))))),
+        hydra.util.ConsList.of(hydra.ext.haskell.serde.Serde.fieldToExpr(field))))),
       mc);
   }
   
@@ -383,17 +383,17 @@ public interface Serde {
     hydra.util.Lazy<hydra.ast.Expr> body = new hydra.util.Lazy<>(() -> hydra.serialization.Serialization.newlineSep(hydra.lib.lists.Cons.apply(
       hydra.serialization.Serialization.spaceSep(hydra.lib.lists.Cons.apply(
         hydra.serialization.Serialization.cst("then"),
-        java.util.List.of(hydra.ext.haskell.serde.Serde.expressionToExpr(ethen)))),
-      java.util.List.of(hydra.serialization.Serialization.spaceSep(hydra.lib.lists.Cons.apply(
+        hydra.util.ConsList.of(hydra.ext.haskell.serde.Serde.expressionToExpr(ethen)))),
+      hydra.util.ConsList.of(hydra.serialization.Serialization.spaceSep(hydra.lib.lists.Cons.apply(
         hydra.serialization.Serialization.cst("else"),
-        java.util.List.of(hydra.ext.haskell.serde.Serde.expressionToExpr(eelse))))))));
+        hydra.util.ConsList.of(hydra.ext.haskell.serde.Serde.expressionToExpr(eelse))))))));
     hydra.ext.haskell.ast.Expression eif = (ifExpr).condition;
     hydra.ast.Op ifOp = new hydra.ast.Op(new hydra.ast.Symbol(""), new hydra.ast.Padding(new hydra.ast.Ws.None(), new hydra.ast.Ws.BreakAndIndent("  ")), new hydra.ast.Precedence(0), new hydra.ast.Associativity.None());
     return hydra.serialization.Serialization.ifx(
       ifOp,
       hydra.serialization.Serialization.spaceSep(hydra.lib.lists.Cons.apply(
         hydra.serialization.Serialization.cst("if"),
-        java.util.List.of(hydra.ext.haskell.serde.Serde.expressionToExpr(eif)))),
+        hydra.util.ConsList.of(hydra.ext.haskell.serde.Serde.expressionToExpr(eif)))),
       body.get());
   }
   
@@ -407,7 +407,7 @@ public interface Serde {
       public hydra.ast.Expr visit(hydra.ext.haskell.ast.SpecImport.Hiding names) {
         return hydra.serialization.Serialization.spaceSep(hydra.lib.lists.Cons.apply(
           hydra.serialization.Serialization.cst("hiding "),
-          java.util.List.of(hydra.serialization.Serialization.parens(hydra.serialization.Serialization.commaSep(
+          hydra.util.ConsList.of(hydra.serialization.Serialization.parens(hydra.serialization.Serialization.commaSep(
             hydra.serialization.Serialization.inlineStyle(),
             hydra.lib.lists.Map.apply(
               hydra.ext.haskell.serde.Serde::importExportSpecToExpr,
@@ -419,7 +419,7 @@ public interface Serde {
     hydra.util.Maybe<hydra.ext.haskell.ast.SpecImport> mspec = (import_).spec;
     String name = (modName).value;
     Boolean qual = (import_).qualified;
-    hydra.util.Lazy<java.util.List<hydra.ast.Expr>> parts = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cat.apply(java.util.List.of(
+    hydra.util.Lazy<hydra.util.ConsList<hydra.ast.Expr>> parts = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
       hydra.util.Maybe.just(hydra.serialization.Serialization.cst("import")),
       hydra.lib.logic.IfElse.lazy(
         qual,
@@ -438,7 +438,7 @@ public interface Serde {
   }
   
   static hydra.ast.Expr lambdaExpressionToExpr(hydra.ext.haskell.ast.LambdaExpression lambdaExpr) {
-    java.util.List<hydra.ext.haskell.ast.Pattern> bindings = (lambdaExpr).bindings;
+    hydra.util.ConsList<hydra.ext.haskell.ast.Pattern> bindings = (lambdaExpr).bindings;
     hydra.ext.haskell.ast.Expression inner = (lambdaExpr).inner;
     hydra.ast.Expr body = hydra.ext.haskell.serde.Serde.expressionToExpr(inner);
     hydra.util.Lazy<hydra.ast.Expr> head = new hydra.util.Lazy<>(() -> hydra.serialization.Serialization.spaceSep(hydra.lib.lists.Map.apply(
@@ -455,7 +455,7 @@ public interface Serde {
   static hydra.ast.Expr literalToExpr(hydra.ext.haskell.ast.Literal lit) {
     java.util.function.Function<Boolean, java.util.function.Function<String, String>> parensIfNeg = (java.util.function.Function<Boolean, java.util.function.Function<String, String>>) (b -> (java.util.function.Function<String, String>) (e -> hydra.lib.logic.IfElse.lazy(
       b,
-      () -> hydra.lib.strings.Cat.apply(java.util.List.of(
+      () -> hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
         "(",
         e,
         ")")),
@@ -522,7 +522,7 @@ public interface Serde {
       hydra.serialization.Serialization.cst("module"),
       hydra.lib.lists.Cons.apply(
         hydra.serialization.Serialization.cst(mname),
-        java.util.List.of(hydra.serialization.Serialization.cst("where"))))));
+        hydra.util.ConsList.of(hydra.serialization.Serialization.cst("where"))))));
     hydra.util.Maybe<String> mc = (moduleHead).comments;
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> head.get(),
@@ -530,29 +530,29 @@ public interface Serde {
         hydra.serialization.Serialization.cst(hydra.ext.haskell.serde.Serde.toHaskellComments(c)),
         hydra.lib.lists.Cons.apply(
           hydra.serialization.Serialization.cst(""),
-          java.util.List.of(head.get()))))),
+          hydra.util.ConsList.of(head.get()))))),
       mc);
   }
   
   static hydra.ast.Expr moduleToExpr(hydra.ext.haskell.ast.Module module) {
-    java.util.List<hydra.ext.haskell.ast.DeclarationWithComments> decls = (module).declarations;
-    hydra.util.Lazy<java.util.List<hydra.ast.Expr>> declLines = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+    hydra.util.ConsList<hydra.ext.haskell.ast.DeclarationWithComments> decls = (module).declarations;
+    hydra.util.Lazy<hydra.util.ConsList<hydra.ast.Expr>> declLines = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       hydra.ext.haskell.serde.Serde::declarationWithCommentsToExpr,
       decls));
     hydra.util.Maybe<hydra.ext.haskell.ast.ModuleHead> mh = (module).head;
-    hydra.util.Lazy<java.util.List<hydra.ast.Expr>> headerLine = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
-      () -> (java.util.List<hydra.ast.Expr>) (java.util.List.<hydra.ast.Expr>of()),
-      (java.util.function.Function<hydra.ext.haskell.ast.ModuleHead, java.util.List<hydra.ast.Expr>>) (h -> java.util.List.of(hydra.ext.haskell.serde.Serde.moduleHeadToExpr(h))),
+    hydra.util.Lazy<hydra.util.ConsList<hydra.ast.Expr>> headerLine = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
+      () -> (hydra.util.ConsList<hydra.ast.Expr>) (hydra.util.ConsList.<hydra.ast.Expr>of()),
+      (java.util.function.Function<hydra.ext.haskell.ast.ModuleHead, hydra.util.ConsList<hydra.ast.Expr>>) (h -> hydra.util.ConsList.of(hydra.ext.haskell.serde.Serde.moduleHeadToExpr(h))),
       mh));
-    java.util.List<hydra.ext.haskell.ast.Import> imports = (module).imports;
-    hydra.util.Lazy<java.util.List<hydra.ast.Expr>> importLines = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
+    hydra.util.ConsList<hydra.ext.haskell.ast.Import> imports = (module).imports;
+    hydra.util.Lazy<hydra.util.ConsList<hydra.ast.Expr>> importLines = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(imports),
-      () -> (java.util.List<hydra.ast.Expr>) (java.util.List.<hydra.ast.Expr>of()),
-      () -> java.util.List.of(hydra.serialization.Serialization.newlineSep(hydra.lib.lists.Map.apply(
+      () -> (hydra.util.ConsList<hydra.ast.Expr>) (hydra.util.ConsList.<hydra.ast.Expr>of()),
+      () -> hydra.util.ConsList.of(hydra.serialization.Serialization.newlineSep(hydra.lib.lists.Map.apply(
         hydra.ext.haskell.serde.Serde::importToExpr,
         imports)))));
-    java.util.List<hydra.ast.Expr> warning = java.util.List.of(hydra.serialization.Serialization.cst(hydra.ext.haskell.serde.Serde.toSimpleComments(hydra.constants.Constants.warningAutoGeneratedFile())));
-    return hydra.serialization.Serialization.doubleNewlineSep(hydra.lib.lists.Concat.apply(java.util.List.of(
+    hydra.util.ConsList<hydra.ast.Expr> warning = hydra.util.ConsList.of(hydra.serialization.Serialization.cst(hydra.ext.haskell.serde.Serde.toSimpleComments(hydra.constants.Constants.warningAutoGeneratedFile())));
+    return hydra.serialization.Serialization.doubleNewlineSep(hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
       warning,
       headerLine.get(),
       importLines.get(),
@@ -575,7 +575,7 @@ public interface Serde {
       
       @Override
       public String visit(hydra.ext.haskell.ast.Name.Parens qn) {
-        return hydra.lib.strings.Cat.apply(java.util.List.of(
+        return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
           "(",
           hydra.ext.haskell.serde.Serde.writeQualifiedName((qn).value),
           ")"));
@@ -645,7 +645,7 @@ public interface Serde {
       hydra.ext.haskell.serde.Serde.nameToExpr(name),
       hydra.lib.lists.Cons.apply(
         hydra.serialization.Serialization.cst("::"),
-        java.util.List.of(hydra.ext.haskell.serde.Serde.typeToExpr(typ)))));
+        hydra.util.ConsList.of(hydra.ext.haskell.serde.Serde.typeToExpr(typ)))));
   }
   
   static hydra.ast.Expr typeToExpr(hydra.ext.haskell.ast.Type htype) {
@@ -684,7 +684,7 @@ public interface Serde {
       public hydra.ast.Expr visit(hydra.ext.haskell.ast.Type.List htype_) {
         return hydra.serialization.Serialization.bracketList(
           hydra.serialization.Serialization.inlineStyle(),
-          java.util.List.of(hydra.ext.haskell.serde.Serde.typeToExpr((htype_).value)));
+          hydra.util.ConsList.of(hydra.ext.haskell.serde.Serde.typeToExpr((htype_).value)));
       }
       
       @Override
@@ -717,10 +717,10 @@ public interface Serde {
         return hydra.lib.maybes.Maybe.applyLazy(
           () -> body,
           (java.util.function.Function<hydra.ext.haskell.ast.LocalBindings, hydra.ast.Expr>) (localBindings -> {
-            java.util.List<hydra.ext.haskell.ast.LocalBinding> bindings = (localBindings).value;
+            hydra.util.ConsList<hydra.ext.haskell.ast.LocalBinding> bindings = (localBindings).value;
             return hydra.serialization.Serialization.indentBlock(hydra.lib.lists.Cons.apply(
               body,
-              java.util.List.of(hydra.serialization.Serialization.indentBlock(hydra.lib.lists.Cons.apply(
+              hydra.util.ConsList.of(hydra.serialization.Serialization.indentBlock(hydra.lib.lists.Cons.apply(
                 hydra.serialization.Serialization.cst("where"),
                 hydra.lib.lists.Map.apply(
                   hydra.ext.haskell.serde.Serde::localBindingToExpr,
@@ -757,13 +757,13 @@ public interface Serde {
   
   static String writeQualifiedName(hydra.ext.haskell.ast.QualifiedName qname) {
     java.util.function.Function<hydra.ext.haskell.ast.NamePart, String> h = (java.util.function.Function<hydra.ext.haskell.ast.NamePart, String>) (namePart -> (namePart).value);
-    java.util.List<hydra.ext.haskell.ast.NamePart> qualifiers = (qname).qualifiers;
+    hydra.util.ConsList<hydra.ext.haskell.ast.NamePart> qualifiers = (qname).qualifiers;
     hydra.ext.haskell.ast.NamePart unqual = (qname).unqualified;
-    hydra.util.Lazy<java.util.List<String>> allParts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
+    hydra.util.Lazy<hydra.util.ConsList<String>> allParts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat2.apply(
       hydra.lib.lists.Map.apply(
         h,
         qualifiers),
-      java.util.List.of((h).apply(unqual))));
+      hydra.util.ConsList.of((h).apply(unqual))));
     return hydra.lib.strings.Intercalate.apply(
       ".",
       allParts.get());

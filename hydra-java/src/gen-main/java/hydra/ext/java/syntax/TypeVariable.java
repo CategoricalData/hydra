@@ -11,11 +11,11 @@ public class TypeVariable implements Serializable, Comparable<TypeVariable> {
   
   public static final hydra.core.Name IDENTIFIER = new hydra.core.Name("identifier");
   
-  public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations;
   
   public final hydra.ext.java.syntax.TypeIdentifier identifier;
   
-  public TypeVariable (java.util.List<hydra.ext.java.syntax.Annotation> annotations, hydra.ext.java.syntax.TypeIdentifier identifier) {
+  public TypeVariable (hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations, hydra.ext.java.syntax.TypeIdentifier identifier) {
     this.annotations = annotations;
     this.identifier = identifier;
   }
@@ -51,7 +51,7 @@ public class TypeVariable implements Serializable, Comparable<TypeVariable> {
     return ((Comparable) identifier).compareTo(other.identifier);
   }
   
-  public TypeVariable withAnnotations(java.util.List<hydra.ext.java.syntax.Annotation> annotations) {
+  public TypeVariable withAnnotations(hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {
     return new TypeVariable(annotations, identifier);
   }
   

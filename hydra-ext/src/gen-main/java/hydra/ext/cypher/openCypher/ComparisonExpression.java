@@ -13,9 +13,9 @@ public class ComparisonExpression implements Serializable, Comparable<Comparison
   
   public final hydra.ext.cypher.openCypher.StringListNullPredicateExpression left;
   
-  public final java.util.List<hydra.ext.cypher.openCypher.PartialComparisonExpression> right;
+  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.PartialComparisonExpression> right;
   
-  public ComparisonExpression (hydra.ext.cypher.openCypher.StringListNullPredicateExpression left, java.util.List<hydra.ext.cypher.openCypher.PartialComparisonExpression> right) {
+  public ComparisonExpression (hydra.ext.cypher.openCypher.StringListNullPredicateExpression left, hydra.util.ConsList<hydra.ext.cypher.openCypher.PartialComparisonExpression> right) {
     this.left = left;
     this.right = right;
   }
@@ -55,7 +55,7 @@ public class ComparisonExpression implements Serializable, Comparable<Comparison
     return new ComparisonExpression(left, right);
   }
   
-  public ComparisonExpression withRight(java.util.List<hydra.ext.cypher.openCypher.PartialComparisonExpression> right) {
+  public ComparisonExpression withRight(hydra.util.ConsList<hydra.ext.cypher.openCypher.PartialComparisonExpression> right) {
     return new ComparisonExpression(left, right);
   }
 }

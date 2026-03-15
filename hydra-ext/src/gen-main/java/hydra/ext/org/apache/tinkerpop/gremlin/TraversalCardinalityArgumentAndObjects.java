@@ -13,9 +13,9 @@ public class TraversalCardinalityArgumentAndObjects implements Serializable, Com
   
   public final hydra.ext.org.apache.tinkerpop.gremlin.TraversalCardinalityArgument cardinality;
   
-  public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> objects;
+  public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> objects;
   
-  public TraversalCardinalityArgumentAndObjects (hydra.ext.org.apache.tinkerpop.gremlin.TraversalCardinalityArgument cardinality, java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> objects) {
+  public TraversalCardinalityArgumentAndObjects (hydra.ext.org.apache.tinkerpop.gremlin.TraversalCardinalityArgument cardinality, hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> objects) {
     this.cardinality = cardinality;
     this.objects = objects;
   }
@@ -55,7 +55,7 @@ public class TraversalCardinalityArgumentAndObjects implements Serializable, Com
     return new TraversalCardinalityArgumentAndObjects(cardinality, objects);
   }
   
-  public TraversalCardinalityArgumentAndObjects withObjects(java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> objects) {
+  public TraversalCardinalityArgumentAndObjects withObjects(hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> objects) {
     return new TraversalCardinalityArgumentAndObjects(cardinality, objects);
   }
 }

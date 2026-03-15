@@ -15,11 +15,11 @@ public class ArrayCreationExpression_PrimitiveArray implements Serializable, Com
   
   public final hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type;
   
-  public final java.util.List<hydra.ext.java.syntax.Dims> dims;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.Dims> dims;
   
   public final hydra.ext.java.syntax.ArrayInitializer array;
   
-  public ArrayCreationExpression_PrimitiveArray (hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type, java.util.List<hydra.ext.java.syntax.Dims> dims, hydra.ext.java.syntax.ArrayInitializer array) {
+  public ArrayCreationExpression_PrimitiveArray (hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type, hydra.util.ConsList<hydra.ext.java.syntax.Dims> dims, hydra.ext.java.syntax.ArrayInitializer array) {
     this.type = type;
     this.dims = dims;
     this.array = array;
@@ -66,7 +66,7 @@ public class ArrayCreationExpression_PrimitiveArray implements Serializable, Com
     return new ArrayCreationExpression_PrimitiveArray(type, dims, array);
   }
   
-  public ArrayCreationExpression_PrimitiveArray withDims(java.util.List<hydra.ext.java.syntax.Dims> dims) {
+  public ArrayCreationExpression_PrimitiveArray withDims(hydra.util.ConsList<hydra.ext.java.syntax.Dims> dims) {
     return new ArrayCreationExpression_PrimitiveArray(type, dims, array);
   }
   

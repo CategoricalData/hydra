@@ -52,9 +52,9 @@ public abstract class Node implements Serializable, Comparable<Node> {
    * A mapping from nodes to nodes
    */
   public static final class Mapping extends hydra.ext.org.yaml.model.Node implements Serializable {
-    public final java.util.Map<hydra.ext.org.yaml.model.Node, hydra.ext.org.yaml.model.Node> value;
+    public final hydra.util.PersistentMap<hydra.ext.org.yaml.model.Node, hydra.ext.org.yaml.model.Node> value;
     
-    public Mapping (java.util.Map<hydra.ext.org.yaml.model.Node, hydra.ext.org.yaml.model.Node> value) {
+    public Mapping (hydra.util.PersistentMap<hydra.ext.org.yaml.model.Node, hydra.ext.org.yaml.model.Node> value) {
       this.value = value;
     }
     
@@ -140,9 +140,9 @@ public abstract class Node implements Serializable, Comparable<Node> {
    * A sequence of nodes
    */
   public static final class Sequence extends hydra.ext.org.yaml.model.Node implements Serializable {
-    public final java.util.List<hydra.ext.org.yaml.model.Node> value;
+    public final hydra.util.ConsList<hydra.ext.org.yaml.model.Node> value;
     
-    public Sequence (java.util.List<hydra.ext.org.yaml.model.Node> value) {
+    public Sequence (hydra.util.ConsList<hydra.ext.org.yaml.model.Node> value) {
       this.value = value;
     }
     

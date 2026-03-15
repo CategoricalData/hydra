@@ -9,9 +9,9 @@ public class ConditionalAndExpression implements Serializable, Comparable<Condit
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.java.syntax.InclusiveOrExpression> value;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.InclusiveOrExpression> value;
   
-  public ConditionalAndExpression (java.util.List<hydra.ext.java.syntax.InclusiveOrExpression> value) {
+  public ConditionalAndExpression (hydra.util.ConsList<hydra.ext.java.syntax.InclusiveOrExpression> value) {
     this.value = value;
   }
   

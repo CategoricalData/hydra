@@ -13,9 +13,9 @@ public class PrimitiveTypeWithAnnotations implements Serializable, Comparable<Pr
   
   public final hydra.ext.java.syntax.PrimitiveType type;
   
-  public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations;
   
-  public PrimitiveTypeWithAnnotations (hydra.ext.java.syntax.PrimitiveType type, java.util.List<hydra.ext.java.syntax.Annotation> annotations) {
+  public PrimitiveTypeWithAnnotations (hydra.ext.java.syntax.PrimitiveType type, hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {
     this.type = type;
     this.annotations = annotations;
   }
@@ -55,7 +55,7 @@ public class PrimitiveTypeWithAnnotations implements Serializable, Comparable<Pr
     return new PrimitiveTypeWithAnnotations(type, annotations);
   }
   
-  public PrimitiveTypeWithAnnotations withAnnotations(java.util.List<hydra.ext.java.syntax.Annotation> annotations) {
+  public PrimitiveTypeWithAnnotations withAnnotations(hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {
     return new PrimitiveTypeWithAnnotations(type, annotations);
   }
 }

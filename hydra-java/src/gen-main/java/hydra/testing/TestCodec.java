@@ -85,9 +85,9 @@ public class TestCodec implements Serializable, Comparable<TestCodec> {
   /**
    * A function that determines the necessary imports for a given set of dependencies
    */
-  public final java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.List<String>> findImports;
+  public final java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, hydra.util.ConsList<String>> findImports;
   
-  public TestCodec (hydra.coders.LanguageName language, hydra.module.FileExtension fileExtension, java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.graph.Graph, hydra.util.Either<String, String>>> encodeTerm, java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.graph.Graph, hydra.util.Either<String, String>>> encodeType, java.util.function.Function<String, String> formatTestName, java.util.function.Function<hydra.module.Namespace, String> formatModuleName, String testCaseTemplate, String testGroupTemplate, String moduleTemplate, String importTemplate, java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.List<String>> findImports) {
+  public TestCodec (hydra.coders.LanguageName language, hydra.module.FileExtension fileExtension, java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.graph.Graph, hydra.util.Either<String, String>>> encodeTerm, java.util.function.Function<hydra.core.Type, java.util.function.Function<hydra.graph.Graph, hydra.util.Either<String, String>>> encodeType, java.util.function.Function<String, String> formatTestName, java.util.function.Function<hydra.module.Namespace, String> formatModuleName, String testCaseTemplate, String testGroupTemplate, String moduleTemplate, String importTemplate, java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, hydra.util.ConsList<String>> findImports) {
     this.language = language;
     this.fileExtension = fileExtension;
     this.encodeTerm = encodeTerm;
@@ -234,7 +234,7 @@ public class TestCodec implements Serializable, Comparable<TestCodec> {
     return new TestCodec(language, fileExtension, encodeTerm, encodeType, formatTestName, formatModuleName, testCaseTemplate, testGroupTemplate, moduleTemplate, importTemplate, findImports);
   }
   
-  public TestCodec withFindImports(java.util.function.Function<java.util.Set<hydra.core.Name>, java.util.List<String>> findImports) {
+  public TestCodec withFindImports(java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, hydra.util.ConsList<String>> findImports) {
     return new TestCodec(language, fileExtension, encodeTerm, encodeType, formatTestName, formatModuleName, testCaseTemplate, testGroupTemplate, moduleTemplate, importTemplate, findImports);
   }
 }

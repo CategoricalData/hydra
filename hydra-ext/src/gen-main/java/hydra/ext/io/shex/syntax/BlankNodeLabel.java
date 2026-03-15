@@ -15,11 +15,11 @@ public class BlankNodeLabel implements Serializable, Comparable<BlankNodeLabel> 
   
   public final hydra.ext.io.shex.syntax.BlankNodeLabel_Alts alts;
   
-  public final hydra.util.Maybe<java.util.List<hydra.ext.io.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt>> ListOfAlts;
+  public final hydra.util.Maybe<hydra.util.ConsList<hydra.ext.io.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt>> ListOfAlts;
   
   public final hydra.ext.io.shex.syntax.PnChars PnChars;
   
-  public BlankNodeLabel (hydra.ext.io.shex.syntax.BlankNodeLabel_Alts alts, hydra.util.Maybe<java.util.List<hydra.ext.io.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt>> ListOfAlts, hydra.ext.io.shex.syntax.PnChars PnChars) {
+  public BlankNodeLabel (hydra.ext.io.shex.syntax.BlankNodeLabel_Alts alts, hydra.util.Maybe<hydra.util.ConsList<hydra.ext.io.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt>> ListOfAlts, hydra.ext.io.shex.syntax.PnChars PnChars) {
     this.alts = alts;
     this.ListOfAlts = ListOfAlts;
     this.PnChars = PnChars;
@@ -66,7 +66,7 @@ public class BlankNodeLabel implements Serializable, Comparable<BlankNodeLabel> 
     return new BlankNodeLabel(alts, ListOfAlts, PnChars);
   }
   
-  public BlankNodeLabel withListOfAlts(hydra.util.Maybe<java.util.List<hydra.ext.io.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt>> ListOfAlts) {
+  public BlankNodeLabel withListOfAlts(hydra.util.Maybe<hydra.util.ConsList<hydra.ext.io.shex.syntax.BlankNodeLabel_ListOfAlts_Option_Elmt>> ListOfAlts) {
     return new BlankNodeLabel(alts, ListOfAlts, PnChars);
   }
   

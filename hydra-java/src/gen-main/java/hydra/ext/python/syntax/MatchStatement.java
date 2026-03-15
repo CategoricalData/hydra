@@ -13,9 +13,9 @@ public class MatchStatement implements Serializable, Comparable<MatchStatement> 
   
   public final hydra.ext.python.syntax.SubjectExpression subject;
   
-  public final java.util.List<hydra.ext.python.syntax.CaseBlock> cases;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.CaseBlock> cases;
   
-  public MatchStatement (hydra.ext.python.syntax.SubjectExpression subject, java.util.List<hydra.ext.python.syntax.CaseBlock> cases) {
+  public MatchStatement (hydra.ext.python.syntax.SubjectExpression subject, hydra.util.ConsList<hydra.ext.python.syntax.CaseBlock> cases) {
     this.subject = subject;
     this.cases = cases;
   }
@@ -55,7 +55,7 @@ public class MatchStatement implements Serializable, Comparable<MatchStatement> 
     return new MatchStatement(subject, cases);
   }
   
-  public MatchStatement withCases(java.util.List<hydra.ext.python.syntax.CaseBlock> cases) {
+  public MatchStatement withCases(hydra.util.ConsList<hydra.ext.python.syntax.CaseBlock> cases) {
     return new MatchStatement(subject, cases);
   }
 }

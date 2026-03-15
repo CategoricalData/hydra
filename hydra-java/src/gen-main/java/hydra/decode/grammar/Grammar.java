@@ -64,7 +64,7 @@ public interface Grammar {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Grammar> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.eithers.Map.apply(
-            (java.util.function.Function<java.util.List<hydra.grammar.Production>, hydra.grammar.Grammar>) (b -> new hydra.grammar.Grammar(b)),
+            (java.util.function.Function<hydra.util.ConsList<hydra.grammar.Production>, hydra.grammar.Grammar>) (b -> new hydra.grammar.Grammar(b)),
             hydra.extract.helpers.Helpers.decodeList(
               (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Production>>>) (p0 -> p1 -> hydra.decode.grammar.Grammar.production(
                 p0,
@@ -135,7 +135,7 @@ public interface Grammar {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.grammar.LabeledPattern> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "label",
@@ -175,9 +175,9 @@ public interface Grammar {
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
           hydra.core.Name tname = ((inj).value).typeName;
-          hydra.util.Lazy<java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Pattern>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(java.util.List.of(
+          hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Pattern>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Pattern>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Pattern>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Pattern>>>(new hydra.core.Name("alternatives"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Pattern>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<java.util.List<hydra.grammar.Pattern>, hydra.grammar.Pattern>) (t -> new hydra.grammar.Pattern.Alternatives(t)),
+              (java.util.function.Function<hydra.util.ConsList<hydra.grammar.Pattern>, hydra.grammar.Pattern>) (t -> new hydra.grammar.Pattern.Alternatives(t)),
               hydra.extract.helpers.Helpers.decodeList(
                 (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Pattern>>>) (p0 -> p1 -> hydra.decode.grammar.Grammar.pattern(
                   p0,
@@ -225,7 +225,7 @@ public interface Grammar {
                 cx,
                 input)))))),
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Pattern>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Pattern>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Pattern>>>(new hydra.core.Name("sequence"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Pattern>>) (input -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<java.util.List<hydra.grammar.Pattern>, hydra.grammar.Pattern>) (t -> new hydra.grammar.Pattern.Sequence(t)),
+              (java.util.function.Function<hydra.util.ConsList<hydra.grammar.Pattern>, hydra.grammar.Pattern>) (t -> new hydra.grammar.Pattern.Sequence(t)),
               hydra.extract.helpers.Helpers.decodeList(
                 (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Pattern>>>) (p0 -> p1 -> hydra.decode.grammar.Grammar.pattern(
                   p0,
@@ -238,7 +238,7 @@ public interface Grammar {
                 cx,
                 input)))))))));
           return hydra.lib.maybes.Maybe.applyLazy(
-            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.grammar.Pattern>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.grammar.Pattern>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "no such field ",
               (fname).value,
               " in union type ",
@@ -265,7 +265,7 @@ public interface Grammar {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.grammar.Production> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "symbol",

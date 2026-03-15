@@ -11,11 +11,11 @@ public class ParamWithDefaultParameters implements Serializable, Comparable<Para
   
   public static final hydra.core.Name STAR_ETC = new hydra.core.Name("starEtc");
   
-  public final java.util.List<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault;
   
   public final hydra.util.Maybe<hydra.ext.python.syntax.StarEtc> starEtc;
   
-  public ParamWithDefaultParameters (java.util.List<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault, hydra.util.Maybe<hydra.ext.python.syntax.StarEtc> starEtc) {
+  public ParamWithDefaultParameters (hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault, hydra.util.Maybe<hydra.ext.python.syntax.StarEtc> starEtc) {
     this.paramWithDefault = paramWithDefault;
     this.starEtc = starEtc;
   }
@@ -53,7 +53,7 @@ public class ParamWithDefaultParameters implements Serializable, Comparable<Para
       other.starEtc.hashCode());
   }
   
-  public ParamWithDefaultParameters withParamWithDefault(java.util.List<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault) {
+  public ParamWithDefaultParameters withParamWithDefault(hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault) {
     return new ParamWithDefaultParameters(paramWithDefault, starEtc);
   }
   

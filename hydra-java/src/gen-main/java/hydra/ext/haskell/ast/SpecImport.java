@@ -44,9 +44,9 @@ public abstract class SpecImport implements Serializable, Comparable<SpecImport>
    * A list of imports to include
    */
   public static final class List extends hydra.ext.haskell.ast.SpecImport implements Serializable {
-    public final java.util.List<hydra.ext.haskell.ast.ImportExportSpec> value;
+    public final hydra.util.ConsList<hydra.ext.haskell.ast.ImportExportSpec> value;
     
-    public List (java.util.List<hydra.ext.haskell.ast.ImportExportSpec> value) {
+    public List (hydra.util.ConsList<hydra.ext.haskell.ast.ImportExportSpec> value) {
       this.value = value;
     }
     
@@ -89,9 +89,9 @@ public abstract class SpecImport implements Serializable, Comparable<SpecImport>
    * A list of imports to exclude
    */
   public static final class Hiding extends hydra.ext.haskell.ast.SpecImport implements Serializable {
-    public final java.util.List<hydra.ext.haskell.ast.ImportExportSpec> value;
+    public final hydra.util.ConsList<hydra.ext.haskell.ast.ImportExportSpec> value;
     
-    public Hiding (java.util.List<hydra.ext.haskell.ast.ImportExportSpec> value) {
+    public Hiding (hydra.util.ConsList<hydra.ext.haskell.ast.ImportExportSpec> value) {
       this.value = value;
     }
     

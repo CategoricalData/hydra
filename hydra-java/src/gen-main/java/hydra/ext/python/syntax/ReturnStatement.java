@@ -9,9 +9,9 @@ public class ReturnStatement implements Serializable, Comparable<ReturnStatement
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.python.syntax.StarExpression> value;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.StarExpression> value;
   
-  public ReturnStatement (java.util.List<hydra.ext.python.syntax.StarExpression> value) {
+  public ReturnStatement (hydra.util.ConsList<hydra.ext.python.syntax.StarExpression> value) {
     this.value = value;
   }
   

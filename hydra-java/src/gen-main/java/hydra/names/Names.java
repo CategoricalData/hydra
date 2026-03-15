@@ -6,7 +6,7 @@ package hydra.names;
  * Functions for working with qualified names.
  */
 public interface Names {
-  static String compactName(java.util.Map<hydra.module.Namespace, String> namespaces, hydra.core.Name name) {
+  static String compactName(hydra.util.PersistentMap<hydra.module.Namespace, String> namespaces, hydra.core.Name name) {
     hydra.module.QualifiedName qualName = hydra.names.Names.qualifyName(name);
     String local = (qualName).local;
     hydra.util.Maybe<hydra.module.Namespace> mns = (qualName).namespace;
@@ -14,7 +14,7 @@ public interface Names {
       () -> (name).value,
       (java.util.function.Function<hydra.module.Namespace, String>) (ns -> hydra.lib.maybes.Maybe.applyLazy(
         () -> local,
-        (java.util.function.Function<String, String>) (pre -> hydra.lib.strings.Cat.apply(java.util.List.of(
+        (java.util.function.Function<String, String>) (pre -> hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
           pre,
           ":",
           local))),
@@ -33,7 +33,7 @@ public interface Names {
   }
   
   static String namespaceToFilePath(hydra.util.CaseConvention caseConv, hydra.module.FileExtension ext, hydra.module.Namespace ns) {
-    hydra.util.Lazy<java.util.List<String>> parts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+    hydra.util.Lazy<hydra.util.ConsList<String>> parts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       (java.util.function.Function<String, String>) (v1 -> hydra.formatting.Formatting.convertCase(
         new hydra.util.CaseConvention.Camel(),
         caseConv,
@@ -51,14 +51,14 @@ public interface Names {
   }
   
   static hydra.core.Name qname(hydra.module.Namespace ns, String name) {
-    return new hydra.core.Name(hydra.lib.strings.Cat.apply(java.util.List.of(
+    return new hydra.core.Name(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
       (ns).value,
       ".",
       name)));
   }
   
   static hydra.module.QualifiedName qualifyName(hydra.core.Name name) {
-    hydra.util.Lazy<java.util.List<String>> parts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Reverse.apply(hydra.lib.strings.SplitOn.apply(
+    hydra.util.Lazy<hydra.util.ConsList<String>> parts = new hydra.util.Lazy<>(() -> hydra.lib.lists.Reverse.apply(hydra.lib.strings.SplitOn.apply(
       ".",
       (name).value)));
     return hydra.lib.logic.IfElse.lazy(
@@ -71,7 +71,7 @@ public interface Names {
         hydra.lib.lists.Reverse.apply(hydra.lib.lists.Tail.apply(parts.get()))))), hydra.lib.lists.Head.apply(parts.get())));
   }
   
-  static String uniqueLabel(java.util.Set<String> visited, String l) {
+  static String uniqueLabel(hydra.util.PersistentSet<String> visited, String l) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.sets.Member.apply(
         l,

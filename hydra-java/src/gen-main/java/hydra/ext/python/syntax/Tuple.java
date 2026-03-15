@@ -9,9 +9,9 @@ public class Tuple implements Serializable, Comparable<Tuple> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.python.syntax.StarNamedExpression> value;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.StarNamedExpression> value;
   
-  public Tuple (java.util.List<hydra.ext.python.syntax.StarNamedExpression> value) {
+  public Tuple (hydra.util.ConsList<hydra.ext.python.syntax.StarNamedExpression> value) {
     this.value = value;
   }
   

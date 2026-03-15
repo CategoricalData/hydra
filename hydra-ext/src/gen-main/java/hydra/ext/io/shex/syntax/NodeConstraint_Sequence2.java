@@ -13,9 +13,9 @@ public class NodeConstraint_Sequence2 implements Serializable, Comparable<NodeCo
   
   public final hydra.ext.io.shex.syntax.NonLiteralKind NonLiteralKind;
   
-  public final java.util.List<hydra.ext.io.shex.syntax.StringFacet> listOfStringFacet;
+  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.StringFacet> listOfStringFacet;
   
-  public NodeConstraint_Sequence2 (hydra.ext.io.shex.syntax.NonLiteralKind NonLiteralKind, java.util.List<hydra.ext.io.shex.syntax.StringFacet> listOfStringFacet) {
+  public NodeConstraint_Sequence2 (hydra.ext.io.shex.syntax.NonLiteralKind NonLiteralKind, hydra.util.ConsList<hydra.ext.io.shex.syntax.StringFacet> listOfStringFacet) {
     this.NonLiteralKind = NonLiteralKind;
     this.listOfStringFacet = listOfStringFacet;
   }
@@ -55,7 +55,7 @@ public class NodeConstraint_Sequence2 implements Serializable, Comparable<NodeCo
     return new NodeConstraint_Sequence2(NonLiteralKind, listOfStringFacet);
   }
   
-  public NodeConstraint_Sequence2 withListOfStringFacet(java.util.List<hydra.ext.io.shex.syntax.StringFacet> listOfStringFacet) {
+  public NodeConstraint_Sequence2 withListOfStringFacet(hydra.util.ConsList<hydra.ext.io.shex.syntax.StringFacet> listOfStringFacet) {
     return new NodeConstraint_Sequence2(NonLiteralKind, listOfStringFacet);
   }
 }

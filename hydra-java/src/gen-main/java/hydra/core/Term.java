@@ -389,9 +389,9 @@ public abstract class Term implements Serializable, Comparable<Term> {
    * A list
    */
   public static final class List extends hydra.core.Term implements Serializable {
-    public final java.util.List<hydra.core.Term> value;
+    public final hydra.util.ConsList<hydra.core.Term> value;
     
-    public List (java.util.List<hydra.core.Term> value) {
+    public List (hydra.util.ConsList<hydra.core.Term> value) {
       this.value = value;
     }
     
@@ -477,9 +477,9 @@ public abstract class Term implements Serializable, Comparable<Term> {
    * A map of keys to values
    */
   public static final class Map extends hydra.core.Term implements Serializable {
-    public final java.util.Map<hydra.core.Term, hydra.core.Term> value;
+    public final hydra.util.PersistentMap<hydra.core.Term, hydra.core.Term> value;
     
-    public Map (java.util.Map<hydra.core.Term, hydra.core.Term> value) {
+    public Map (hydra.util.PersistentMap<hydra.core.Term, hydra.core.Term> value) {
       this.value = value;
     }
     
@@ -653,9 +653,9 @@ public abstract class Term implements Serializable, Comparable<Term> {
    * A set of values
    */
   public static final class Set extends hydra.core.Term implements Serializable {
-    public final java.util.Set<hydra.core.Term> value;
+    public final hydra.util.PersistentSet<hydra.core.Term> value;
     
-    public Set (java.util.Set<hydra.core.Term> value) {
+    public Set (hydra.util.PersistentSet<hydra.core.Term> value) {
       this.value = value;
     }
     

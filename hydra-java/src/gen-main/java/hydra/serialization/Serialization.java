@@ -10,7 +10,7 @@ public interface Serialization {
     return new hydra.ast.Brackets(new hydra.ast.Symbol("<"), new hydra.ast.Symbol(">"));
   }
   
-  static hydra.ast.Expr angleBracesList(hydra.ast.BlockStyle style, java.util.List<hydra.ast.Expr> els) {
+  static hydra.ast.Expr angleBracesList(hydra.ast.BlockStyle style, hydra.util.ConsList<hydra.ast.Expr> els) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(els),
       () -> hydra.serialization.Serialization.cst("<>"),
@@ -22,7 +22,7 @@ public interface Serialization {
           els)));
   }
   
-  static hydra.ast.Expr bracesListAdaptive(java.util.List<hydra.ast.Expr> els) {
+  static hydra.ast.Expr bracesListAdaptive(hydra.util.ConsList<hydra.ast.Expr> els) {
     hydra.util.Lazy<hydra.ast.Expr> inlineList = new hydra.util.Lazy<>(() -> hydra.serialization.Serialization.curlyBracesList(
       (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()),
       hydra.serialization.Serialization.inlineStyle(),
@@ -38,7 +38,7 @@ public interface Serialization {
       () -> inlineList.get());
   }
   
-  static hydra.ast.Expr bracketList(hydra.ast.BlockStyle style, java.util.List<hydra.ast.Expr> els) {
+  static hydra.ast.Expr bracketList(hydra.ast.BlockStyle style, hydra.util.ConsList<hydra.ast.Expr> els) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(els),
       () -> hydra.serialization.Serialization.cst("[]"),
@@ -50,7 +50,7 @@ public interface Serialization {
           els)));
   }
   
-  static hydra.ast.Expr bracketListAdaptive(java.util.List<hydra.ast.Expr> els) {
+  static hydra.ast.Expr bracketListAdaptive(hydra.util.ConsList<hydra.ast.Expr> els) {
     hydra.ast.Expr inlineList = hydra.serialization.Serialization.bracketList(
       hydra.serialization.Serialization.inlineStyle(),
       els);
@@ -68,7 +68,7 @@ public interface Serialization {
     return new hydra.ast.Expr.Brackets(new hydra.ast.BracketExpr(br, e, style));
   }
   
-  static hydra.ast.Expr commaSep(hydra.ast.BlockStyle v1, java.util.List<hydra.ast.Expr> v2) {
+  static hydra.ast.Expr commaSep(hydra.ast.BlockStyle v1, hydra.util.ConsList<hydra.ast.Expr> v2) {
     return hydra.serialization.Serialization.symbolSep(
       ",",
       v1,
@@ -79,14 +79,14 @@ public interface Serialization {
     return hydra.serialization.Serialization.curlyBracesList(
       (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()),
       style,
-      java.util.List.of(e));
+      hydra.util.ConsList.of(e));
   }
   
   static hydra.ast.Brackets curlyBraces() {
     return new hydra.ast.Brackets(new hydra.ast.Symbol("{"), new hydra.ast.Symbol("}"));
   }
   
-  static hydra.ast.Expr curlyBracesList(hydra.util.Maybe<String> msymb, hydra.ast.BlockStyle style, java.util.List<hydra.ast.Expr> els) {
+  static hydra.ast.Expr curlyBracesList(hydra.util.Maybe<String> msymb, hydra.ast.BlockStyle style, hydra.util.ConsList<hydra.ast.Expr> els) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(els),
       () -> hydra.serialization.Serialization.cst("{}"),
@@ -115,7 +115,7 @@ public interface Serialization {
         hydra.lib.strings.Lines.apply(s))));
   }
   
-  static hydra.ast.Expr customIndentBlock(String idt, java.util.List<hydra.ast.Expr> els) {
+  static hydra.ast.Expr customIndentBlock(String idt, hydra.util.ConsList<hydra.ast.Expr> els) {
     hydra.ast.Op idtOp = new hydra.ast.Op(hydra.serialization.Serialization.sym(""), new hydra.ast.Padding(new hydra.ast.Ws.Space(), new hydra.ast.Ws.BreakAndIndent(idt)), new hydra.ast.Precedence(0), new hydra.ast.Associativity.None());
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> hydra.serialization.Serialization.cst(""),
@@ -133,13 +133,13 @@ public interface Serialization {
       hydra.lib.lists.SafeHead.apply(els));
   }
   
-  static hydra.ast.Expr dotSep(java.util.List<hydra.ast.Expr> v1) {
+  static hydra.ast.Expr dotSep(hydra.util.ConsList<hydra.ast.Expr> v1) {
     return hydra.serialization.Serialization.sep(
       new hydra.ast.Op(hydra.serialization.Serialization.sym("."), new hydra.ast.Padding(new hydra.ast.Ws.None(), new hydra.ast.Ws.None()), new hydra.ast.Precedence(0), new hydra.ast.Associativity.None()),
       v1);
   }
   
-  static hydra.ast.Expr doubleNewlineSep(java.util.List<hydra.ast.Expr> v1) {
+  static hydra.ast.Expr doubleNewlineSep(hydra.util.ConsList<hydra.ast.Expr> v1) {
     return hydra.serialization.Serialization.sep(
       new hydra.ast.Op(hydra.serialization.Serialization.sym(""), new hydra.ast.Padding(new hydra.ast.Ws.Break(), new hydra.ast.Ws.Break()), new hydra.ast.Precedence(0), new hydra.ast.Associativity.None()),
       v1);
@@ -285,7 +285,7 @@ public interface Serialization {
       v1);
   }
   
-  static hydra.ast.Expr indentBlock(java.util.List<hydra.ast.Expr> v1) {
+  static hydra.ast.Expr indentBlock(hydra.util.ConsList<hydra.ast.Expr> v1) {
     return hydra.serialization.Serialization.customIndentBlock(
       hydra.serialization.Serialization.doubleSpace(),
       v1);
@@ -296,17 +296,17 @@ public interface Serialization {
   }
   
   static hydra.ast.Expr infixWs(String op, hydra.ast.Expr l, hydra.ast.Expr r) {
-    return hydra.serialization.Serialization.spaceSep(java.util.List.of(
+    return hydra.serialization.Serialization.spaceSep(hydra.util.ConsList.of(
       l,
       hydra.serialization.Serialization.cst(op),
       r));
   }
   
-  static hydra.ast.Expr infixWsList(String op, java.util.List<hydra.ast.Expr> opers) {
+  static hydra.ast.Expr infixWsList(String op, hydra.util.ConsList<hydra.ast.Expr> opers) {
     hydra.ast.Expr opExpr = hydra.serialization.Serialization.cst(op);
-    java.util.function.Function<java.util.List<hydra.ast.Expr>, java.util.function.Function<hydra.ast.Expr, java.util.List<hydra.ast.Expr>>> foldFun = (java.util.function.Function<java.util.List<hydra.ast.Expr>, java.util.function.Function<hydra.ast.Expr, java.util.List<hydra.ast.Expr>>>) (e -> (java.util.function.Function<hydra.ast.Expr, java.util.List<hydra.ast.Expr>>) (r -> hydra.lib.logic.IfElse.lazy(
+    java.util.function.Function<hydra.util.ConsList<hydra.ast.Expr>, java.util.function.Function<hydra.ast.Expr, hydra.util.ConsList<hydra.ast.Expr>>> foldFun = (java.util.function.Function<hydra.util.ConsList<hydra.ast.Expr>, java.util.function.Function<hydra.ast.Expr, hydra.util.ConsList<hydra.ast.Expr>>>) (e -> (java.util.function.Function<hydra.ast.Expr, hydra.util.ConsList<hydra.ast.Expr>>) (r -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(e),
-      () -> java.util.List.of(r),
+      () -> hydra.util.ConsList.of(r),
       () -> hydra.lib.lists.Cons.apply(
         r,
         hydra.lib.lists.Cons.apply(
@@ -314,7 +314,7 @@ public interface Serialization {
           e)))));
     return hydra.serialization.Serialization.spaceSep(hydra.lib.lists.Foldl.apply(
       foldFun,
-      (java.util.List<hydra.ast.Expr>) (java.util.List.<hydra.ast.Expr>of()),
+      (hydra.util.ConsList<hydra.ast.Expr>) (hydra.util.ConsList.<hydra.ast.Expr>of()),
       hydra.lib.lists.Reverse.apply(opers)));
   }
   
@@ -322,7 +322,7 @@ public interface Serialization {
     return new hydra.ast.BlockStyle((hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), false, false);
   }
   
-  static hydra.ast.Expr newlineSep(java.util.List<hydra.ast.Expr> v1) {
+  static hydra.ast.Expr newlineSep(hydra.util.ConsList<hydra.ast.Expr> v1) {
     return hydra.serialization.Serialization.sep(
       new hydra.ast.Op(hydra.serialization.Serialization.sym(""), new hydra.ast.Padding(new hydra.ast.Ws.None(), new hydra.ast.Ws.Break()), new hydra.ast.Precedence(0), new hydra.ast.Associativity.None()),
       v1);
@@ -332,7 +332,7 @@ public interface Serialization {
     return new hydra.ast.Padding(new hydra.ast.Ws.None(), new hydra.ast.Ws.None());
   }
   
-  static hydra.ast.Expr noSep(java.util.List<hydra.ast.Expr> v1) {
+  static hydra.ast.Expr noSep(hydra.util.ConsList<hydra.ast.Expr> v1) {
     return hydra.serialization.Serialization.sep(
       new hydra.ast.Op(hydra.serialization.Serialization.sym(""), new hydra.ast.Padding(new hydra.ast.Ws.None(), new hydra.ast.Ws.None()), new hydra.ast.Precedence(0), new hydra.ast.Associativity.None()),
       v1);
@@ -353,7 +353,7 @@ public interface Serialization {
       () -> new hydra.ast.Ws.Space())), new hydra.ast.Precedence(0), new hydra.ast.Associativity.None());
   }
   
-  static hydra.ast.Expr orSep(hydra.ast.BlockStyle style, java.util.List<hydra.ast.Expr> l) {
+  static hydra.ast.Expr orSep(hydra.ast.BlockStyle style, hydra.util.ConsList<hydra.ast.Expr> l) {
     Boolean newlines = (style).newlineBeforeContent;
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> hydra.serialization.Serialization.cst(""),
@@ -369,7 +369,7 @@ public interface Serialization {
       hydra.lib.lists.SafeHead.apply(l));
   }
   
-  static hydra.ast.Expr parenList(Boolean newlines, java.util.List<hydra.ast.Expr> els) {
+  static hydra.ast.Expr parenList(Boolean newlines, hydra.util.ConsList<hydra.ast.Expr> els) {
     hydra.util.Lazy<hydra.ast.BlockStyle> style = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.logic.And.apply(
         newlines,
@@ -584,11 +584,11 @@ public interface Serialization {
       @Override
       public String visit(hydra.ast.Expr.Indent indentExpr) {
         hydra.ast.Expr expr = ((indentExpr).value).expr;
-        java.util.List<String> lns = hydra.lib.strings.Lines.apply(hydra.serialization.Serialization.printExpr(expr));
+        hydra.util.ConsList<String> lns = hydra.lib.strings.Lines.apply(hydra.serialization.Serialization.printExpr(expr));
         hydra.ast.IndentStyle style = ((indentExpr).value).style;
-        hydra.util.Lazy<java.util.List<String>> ilns = new hydra.util.Lazy<>(() -> (style).accept(new hydra.ast.IndentStyle.PartialVisitor<>() {
+        hydra.util.Lazy<hydra.util.ConsList<String>> ilns = new hydra.util.Lazy<>(() -> (style).accept(new hydra.ast.IndentStyle.PartialVisitor<>() {
           @Override
-          public java.util.List<String> visit(hydra.ast.IndentStyle.AllLines idt2) {
+          public hydra.util.ConsList<String> visit(hydra.ast.IndentStyle.AllLines idt2) {
             return hydra.lib.lists.Map.apply(
               (java.util.function.Function<String, String>) (line -> hydra.lib.strings.Cat2.apply(
                 (idt2).value,
@@ -597,7 +597,7 @@ public interface Serialization {
           }
           
           @Override
-          public java.util.List<String> visit(hydra.ast.IndentStyle.SubsequentLines idt2) {
+          public hydra.util.ConsList<String> visit(hydra.ast.IndentStyle.SubsequentLines idt2) {
             return hydra.lib.logic.IfElse.lazy(
               hydra.lib.equality.Equal.apply(
                 hydra.lib.lists.Length.apply(lns),
@@ -677,14 +677,14 @@ public interface Serialization {
     });
   }
   
-  static hydra.ast.Expr semicolonSep(java.util.List<hydra.ast.Expr> v1) {
+  static hydra.ast.Expr semicolonSep(hydra.util.ConsList<hydra.ast.Expr> v1) {
     return hydra.serialization.Serialization.symbolSep(
       ";",
       hydra.serialization.Serialization.inlineStyle(),
       v1);
   }
   
-  static hydra.ast.Expr sep(hydra.ast.Op op, java.util.List<hydra.ast.Expr> els) {
+  static hydra.ast.Expr sep(hydra.ast.Op op, hydra.util.ConsList<hydra.ast.Expr> els) {
     return hydra.lib.maybes.Maybe.applyLazy(
       () -> hydra.serialization.Serialization.cst(""),
       (java.util.function.Function<hydra.ast.Expr, hydra.ast.Expr>) (h -> hydra.lib.lists.Foldl.apply(
@@ -699,7 +699,7 @@ public interface Serialization {
       hydra.lib.lists.SafeHead.apply(els));
   }
   
-  static hydra.ast.Expr spaceSep(java.util.List<hydra.ast.Expr> v1) {
+  static hydra.ast.Expr spaceSep(hydra.util.ConsList<hydra.ast.Expr> v1) {
     return hydra.serialization.Serialization.sep(
       new hydra.ast.Op(hydra.serialization.Serialization.sym(""), new hydra.ast.Padding(new hydra.ast.Ws.Space(), new hydra.ast.Ws.None()), new hydra.ast.Precedence(0), new hydra.ast.Associativity.None()),
       v1);
@@ -721,10 +721,10 @@ public interface Serialization {
     return new hydra.ast.Symbol(s);
   }
   
-  static hydra.ast.Expr symbolSep(String symb, hydra.ast.BlockStyle style, java.util.List<hydra.ast.Expr> l) {
+  static hydra.ast.Expr symbolSep(String symb, hydra.ast.BlockStyle style, hydra.util.ConsList<hydra.ast.Expr> l) {
     hydra.util.Lazy<Integer> breakCount = new hydra.util.Lazy<>(() -> hydra.lib.lists.Length.apply(hydra.lib.lists.Filter.apply(
       (java.util.function.Function<Boolean, Boolean>) (x_ -> x_),
-      java.util.List.of(
+      hydra.util.ConsList.of(
         (style).newlineBeforeContent,
         (style).newlineAfterContent))));
     hydra.util.Lazy<hydra.ast.Ws> break_ = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
@@ -757,11 +757,11 @@ public interface Serialization {
     return new hydra.ast.Expr.Indent(new hydra.ast.IndentedExpression(new hydra.ast.IndentStyle.AllLines("    "), e));
   }
   
-  static hydra.ast.Expr tabIndentDoubleSpace(java.util.List<hydra.ast.Expr> exprs) {
+  static hydra.ast.Expr tabIndentDoubleSpace(hydra.util.ConsList<hydra.ast.Expr> exprs) {
     return hydra.serialization.Serialization.tabIndent(hydra.serialization.Serialization.doubleNewlineSep(exprs));
   }
   
-  static hydra.ast.Expr tabIndentSingleSpace(java.util.List<hydra.ast.Expr> exprs) {
+  static hydra.ast.Expr tabIndentSingleSpace(hydra.util.ConsList<hydra.ast.Expr> exprs) {
     return hydra.serialization.Serialization.tabIndent(hydra.serialization.Serialization.newlineSep(exprs));
   }
   
@@ -786,13 +786,13 @@ public interface Serialization {
   }
   
   static hydra.ast.Expr withComma(hydra.ast.Expr e) {
-    return hydra.serialization.Serialization.noSep(java.util.List.of(
+    return hydra.serialization.Serialization.noSep(hydra.util.ConsList.of(
       e,
       hydra.serialization.Serialization.cst(",")));
   }
   
   static hydra.ast.Expr withSemi(hydra.ast.Expr e) {
-    return hydra.serialization.Serialization.noSep(java.util.List.of(
+    return hydra.serialization.Serialization.noSep(hydra.util.ConsList.of(
       e,
       hydra.serialization.Serialization.cst(";")));
   }

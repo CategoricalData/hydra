@@ -15,7 +15,7 @@ public class EnhancedForCond implements Serializable, Comparable<EnhancedForCond
   
   public static final hydra.core.Name EXPRESSION = new hydra.core.Name("expression");
   
-  public final java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers;
   
   public final hydra.ext.java.syntax.LocalVariableType type;
   
@@ -23,7 +23,7 @@ public class EnhancedForCond implements Serializable, Comparable<EnhancedForCond
   
   public final hydra.ext.java.syntax.Expression expression;
   
-  public EnhancedForCond (java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers, hydra.ext.java.syntax.LocalVariableType type, hydra.ext.java.syntax.VariableDeclaratorId id, hydra.ext.java.syntax.Expression expression) {
+  public EnhancedForCond (hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers, hydra.ext.java.syntax.LocalVariableType type, hydra.ext.java.syntax.VariableDeclaratorId id, hydra.ext.java.syntax.Expression expression) {
     this.modifiers = modifiers;
     this.type = type;
     this.id = id;
@@ -73,7 +73,7 @@ public class EnhancedForCond implements Serializable, Comparable<EnhancedForCond
     return ((Comparable) expression).compareTo(other.expression);
   }
   
-  public EnhancedForCond withModifiers(java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers) {
+  public EnhancedForCond withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers) {
     return new EnhancedForCond(modifiers, type, id, expression);
   }
   

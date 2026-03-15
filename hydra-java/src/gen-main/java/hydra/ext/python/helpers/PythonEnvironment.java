@@ -32,7 +32,7 @@ public class PythonEnvironment implements Serializable, Comparable<PythonEnviron
   /**
    * Type variables in scope, with their Python names
    */
-  public final hydra.util.Pair<java.util.List<hydra.core.Name>, java.util.Map<hydra.core.Name, hydra.ext.python.syntax.Name>> boundTypeVariables;
+  public final hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>> boundTypeVariables;
   
   /**
    * Graph context for type inference
@@ -42,7 +42,7 @@ public class PythonEnvironment implements Serializable, Comparable<PythonEnviron
   /**
    * Set of nullary bindings (need call syntax)
    */
-  public final java.util.Set<hydra.core.Name> nullaryBindings;
+  public final hydra.util.PersistentSet<hydra.core.Name> nullaryBindings;
   
   /**
    * Target Python version
@@ -57,9 +57,9 @@ public class PythonEnvironment implements Serializable, Comparable<PythonEnviron
   /**
    * Variables that are inline let bindings (walrus operators)
    */
-  public final java.util.Set<hydra.core.Name> inlineVariables;
+  public final hydra.util.PersistentSet<hydra.core.Name> inlineVariables;
   
-  public PythonEnvironment (hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces, hydra.util.Pair<java.util.List<hydra.core.Name>, java.util.Map<hydra.core.Name, hydra.ext.python.syntax.Name>> boundTypeVariables, hydra.graph.Graph graph, java.util.Set<hydra.core.Name> nullaryBindings, hydra.ext.python.helpers.PythonVersion version, Boolean skipCasts, java.util.Set<hydra.core.Name> inlineVariables) {
+  public PythonEnvironment (hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces, hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>> boundTypeVariables, hydra.graph.Graph graph, hydra.util.PersistentSet<hydra.core.Name> nullaryBindings, hydra.ext.python.helpers.PythonVersion version, Boolean skipCasts, hydra.util.PersistentSet<hydra.core.Name> inlineVariables) {
     this.namespaces = namespaces;
     this.boundTypeVariables = boundTypeVariables;
     this.graph = graph;
@@ -136,7 +136,7 @@ public class PythonEnvironment implements Serializable, Comparable<PythonEnviron
     return new PythonEnvironment(namespaces, boundTypeVariables, graph, nullaryBindings, version, skipCasts, inlineVariables);
   }
   
-  public PythonEnvironment withBoundTypeVariables(hydra.util.Pair<java.util.List<hydra.core.Name>, java.util.Map<hydra.core.Name, hydra.ext.python.syntax.Name>> boundTypeVariables) {
+  public PythonEnvironment withBoundTypeVariables(hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>> boundTypeVariables) {
     return new PythonEnvironment(namespaces, boundTypeVariables, graph, nullaryBindings, version, skipCasts, inlineVariables);
   }
   
@@ -144,7 +144,7 @@ public class PythonEnvironment implements Serializable, Comparable<PythonEnviron
     return new PythonEnvironment(namespaces, boundTypeVariables, graph, nullaryBindings, version, skipCasts, inlineVariables);
   }
   
-  public PythonEnvironment withNullaryBindings(java.util.Set<hydra.core.Name> nullaryBindings) {
+  public PythonEnvironment withNullaryBindings(hydra.util.PersistentSet<hydra.core.Name> nullaryBindings) {
     return new PythonEnvironment(namespaces, boundTypeVariables, graph, nullaryBindings, version, skipCasts, inlineVariables);
   }
   
@@ -156,7 +156,7 @@ public class PythonEnvironment implements Serializable, Comparable<PythonEnviron
     return new PythonEnvironment(namespaces, boundTypeVariables, graph, nullaryBindings, version, skipCasts, inlineVariables);
   }
   
-  public PythonEnvironment withInlineVariables(java.util.Set<hydra.core.Name> inlineVariables) {
+  public PythonEnvironment withInlineVariables(hydra.util.PersistentSet<hydra.core.Name> inlineVariables) {
     return new PythonEnvironment(namespaces, boundTypeVariables, graph, nullaryBindings, version, skipCasts, inlineVariables);
   }
 }

@@ -13,9 +13,9 @@ public class NodeConstraint_Sequence3 implements Serializable, Comparable<NodeCo
   
   public final hydra.ext.io.shex.syntax.Datatype Datatype;
   
-  public final java.util.List<hydra.ext.io.shex.syntax.XsFacet> listOfXsFacet;
+  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.XsFacet> listOfXsFacet;
   
-  public NodeConstraint_Sequence3 (hydra.ext.io.shex.syntax.Datatype Datatype, java.util.List<hydra.ext.io.shex.syntax.XsFacet> listOfXsFacet) {
+  public NodeConstraint_Sequence3 (hydra.ext.io.shex.syntax.Datatype Datatype, hydra.util.ConsList<hydra.ext.io.shex.syntax.XsFacet> listOfXsFacet) {
     this.Datatype = Datatype;
     this.listOfXsFacet = listOfXsFacet;
   }
@@ -55,7 +55,7 @@ public class NodeConstraint_Sequence3 implements Serializable, Comparable<NodeCo
     return new NodeConstraint_Sequence3(Datatype, listOfXsFacet);
   }
   
-  public NodeConstraint_Sequence3 withListOfXsFacet(java.util.List<hydra.ext.io.shex.syntax.XsFacet> listOfXsFacet) {
+  public NodeConstraint_Sequence3 withListOfXsFacet(hydra.util.ConsList<hydra.ext.io.shex.syntax.XsFacet> listOfXsFacet) {
     return new NodeConstraint_Sequence3(Datatype, listOfXsFacet);
   }
 }
