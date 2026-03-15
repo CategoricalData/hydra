@@ -38,7 +38,7 @@ import           Hydra.Dsl.Meta.Phantoms hiding (
   integerValue, lambda, list, literal, map, pair, set, record, string, unit, wrap, uint8, uint16, uint32, uint64)
 import qualified Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Prims             as Prims
-import qualified Hydra.Dsl.Tabular           as Tabular
+import qualified Hydra.Dsl.Meta.Tabular           as Tabular
 import qualified Hydra.Dsl.Meta.Testing      as Testing
 import qualified Hydra.Dsl.Terms             as Terms
 import qualified Hydra.Dsl.Tests             as Tests

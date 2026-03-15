@@ -46,7 +46,7 @@ import qualified Hydra.Dsl.Meta.Module       as Module
 import qualified Hydra.Dsl.Meta.Parsing      as Parsing
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Prims             as Prims
-import qualified Hydra.Dsl.Tabular           as Tabular
+import qualified Hydra.Dsl.Meta.Tabular           as Tabular
 import qualified Hydra.Dsl.Meta.Testing      as Testing
 import qualified Hydra.Dsl.Terms             as Terms
 import qualified Hydra.Dsl.Tests             as Tests

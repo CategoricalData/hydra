@@ -40,7 +40,7 @@ import           Hydra.Dsl.Meta.Phantoms     as Phantoms hiding (
   elimination, field, fieldType, floatType, floatValue, function, injection, integerType, integerValue, lambda, literal,
   literalType, record, term, type_, typeScheme, wrap)
 import qualified Hydra.Dsl.Prims             as Prims
-import qualified Hydra.Dsl.Tabular           as Tabular
+import qualified Hydra.Dsl.Meta.Tabular           as Tabular
 import qualified Hydra.Dsl.Meta.Testing      as Testing
 import qualified Hydra.Dsl.Terms             as Terms
 import qualified Hydra.Dsl.Tests             as Tests
