@@ -4,7 +4,6 @@ import Hydra.Kernel
 import qualified Hydra.Show.Error as ShowError
 import qualified Hydra.Pg.Model as Pg
 import Hydra.Ext.Dsl.Pg.Mappings
-import Hydra.Dsl.Tabular
 import Hydra.Lib.Literals
 import qualified Hydra.Extract.Core as ExtractCore
 import qualified Hydra.Show.Core as ShowCore
