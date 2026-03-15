@@ -41,7 +41,7 @@ public interface Grammars {
     }));
     return hydra.lib.lists.Reverse.apply(hydra.lib.pairs.First.apply(hydra.lib.lists.Foldl.apply(
       nextName,
-      (hydra.util.Pair<hydra.util.ConsList<String>, hydra.util.PersistentMap<String, Integer>>) ((hydra.util.Pair<hydra.util.ConsList<String>, hydra.util.PersistentMap<String, Integer>>) (new hydra.util.Pair<hydra.util.ConsList<String>, hydra.util.PersistentMap<String, Integer>>((hydra.util.ConsList<String>) (hydra.util.ConsList.<String>of()), (hydra.util.PersistentMap<String, Integer>) ((hydra.util.PersistentMap<String, Integer>) (hydra.lib.maps.Empty.<String, Integer>apply()))))),
+      (hydra.util.Pair<hydra.util.ConsList<String>, hydra.util.PersistentMap<String, Integer>>) ((hydra.util.Pair<hydra.util.ConsList<String>, hydra.util.PersistentMap<String, Integer>>) (new hydra.util.Pair<hydra.util.ConsList<String>, hydra.util.PersistentMap<String, Integer>>((hydra.util.ConsList<String>) (hydra.util.ConsList.<String>empty()), (hydra.util.PersistentMap<String, Integer>) ((hydra.util.PersistentMap<String, Integer>) (hydra.lib.maps.Empty.<String, Integer>apply()))))),
       pats)));
   }
   
@@ -77,7 +77,7 @@ public interface Grammars {
           typ.get());
       }),
       elementPairs.get()));
-    return new hydra.module.Module(ns, elements.get(), (hydra.util.ConsList<hydra.module.Namespace>) (hydra.util.ConsList.<hydra.module.Namespace>of()), (hydra.util.ConsList<hydra.module.Namespace>) (hydra.util.ConsList.<hydra.module.Namespace>of()), desc);
+    return new hydra.module.Module(ns, elements.get(), (hydra.util.ConsList<hydra.module.Namespace>) (hydra.util.ConsList.<hydra.module.Namespace>empty()), (hydra.util.ConsList<hydra.module.Namespace>) (hydra.util.ConsList.<hydra.module.Namespace>empty()), desc);
   }
   
   static Boolean isComplex(hydra.grammar.Pattern pat) {
@@ -154,7 +154,7 @@ public interface Grammars {
       p))));
     hydra.util.Lazy<hydra.util.ConsList<hydra.util.Pair<String, hydra.core.Type>>> trivial = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
       omitTrivial,
-      () -> (hydra.util.ConsList<hydra.util.Pair<String, hydra.core.Type>>) (hydra.util.ConsList.<hydra.util.Pair<String, hydra.core.Type>>of()),
+      () -> (hydra.util.ConsList<hydra.util.Pair<String, hydra.core.Type>>) (hydra.util.ConsList.<hydra.util.Pair<String, hydra.core.Type>>empty()),
       () -> hydra.util.ConsList.of((hydra.util.Pair<String, hydra.core.Type>) ((hydra.util.Pair<String, hydra.core.Type>) (new hydra.util.Pair<String, hydra.core.Type>(lname, new hydra.core.Type.Unit()))))));
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.grammar.Pattern, hydra.util.ConsList<hydra.util.Pair<String, hydra.core.Type>>>> forPat = new java.util.concurrent.atomic.AtomicReference<>();
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<Boolean, java.util.function.Function<java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.core.Type>, java.util.function.Function<hydra.util.ConsList<hydra.grammar.Pattern>, hydra.util.ConsList<hydra.util.Pair<String, hydra.core.Type>>>>>> forRecordOrUnion = new java.util.concurrent.atomic.AtomicReference<>();
@@ -171,7 +171,7 @@ public interface Grammars {
       
       @Override
       public hydra.util.ConsList<hydra.util.Pair<String, hydra.core.Type>> visit(hydra.grammar.Pattern.Ignored ignored) {
-        return (hydra.util.ConsList<hydra.util.Pair<String, hydra.core.Type>>) (hydra.util.ConsList.<hydra.util.Pair<String, hydra.core.Type>>of());
+        return (hydra.util.ConsList<hydra.util.Pair<String, hydra.core.Type>>) (hydra.util.ConsList.<hydra.util.Pair<String, hydra.core.Type>>empty());
       }
       
       @Override

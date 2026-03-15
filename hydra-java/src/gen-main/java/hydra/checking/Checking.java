@@ -183,7 +183,7 @@ public interface Checking {
           hydra.checking.Checking.typeOf(
             cx,
             tx,
-            (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()),
+            (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
             term)),
         (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.lang.Void>>) (t0 -> hydra.lib.logic.IfElse.lazy(
           hydra.checking.Checking.typesEffectivelyEqual(
@@ -583,7 +583,7 @@ public interface Checking {
       hydra.checking.Checking.typeOf(
         cx,
         tx,
-        (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()),
+        (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
         fun),
       (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>) (result1 -> {
         hydra.util.Lazy<hydra.context.Context> cx2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(result1));
@@ -592,7 +592,7 @@ public interface Checking {
           hydra.checking.Checking.typeOf(
             cx2.get(),
             tx,
-            (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()),
+            (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
             arg),
           (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>) (result2 -> {
             hydra.util.Lazy<hydra.context.Context> cx3 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(result2));
@@ -626,7 +626,7 @@ public interface Checking {
         (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>) (e -> hydra.checking.Checking.typeOf(
           cx,
           tx,
-          (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()),
+          (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
           e)),
         dflt),
       (java.util.function.Function<hydra.util.Maybe<hydra.util.Pair<hydra.core.Type, hydra.context.Context>>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>) (dfltResult -> {
@@ -644,7 +644,7 @@ public interface Checking {
                 hydra.checking.Checking.typeOf(
                   cxA.get(),
                   tx,
-                  (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()),
+                  (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
                   term),
                 (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>>>) (tResult -> {
                   hydra.util.Lazy<hydra.context.Context> cxB = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(tResult));
@@ -654,7 +654,7 @@ public interface Checking {
                     hydra.lib.lists.Pure.apply(t.get())), cxB.get()))));
                 }));
             })))),
-          hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>>right((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()), cx2.get())))),
+          hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>>right((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()), cx2.get())))),
           cterms.get()));
         hydra.util.Lazy<hydra.util.Maybe<hydra.core.Type>> tdflt = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Map.apply(
           (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.core.Type>) ((java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.core.Type>) (hydra.lib.pairs.First::apply)),
@@ -677,7 +677,7 @@ public interface Checking {
                       cods.get(),
                       hydra.lib.lists.Pure.apply((ft).codomain)), cx3.get()))))));
                 })))),
-              hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>>right((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()), cx3.get())))),
+              hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>>right((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()), cx3.get())))),
               tcterms.get()));
             return hydra.lib.eithers.Bind.apply(
               fcodsResult.get(),
@@ -713,7 +713,7 @@ public interface Checking {
           hydra.checking.Checking.typeOf(
             cx,
             tx,
-            (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()),
+            (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
             leftTerm),
           (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>) (result -> {
             hydra.util.Lazy<hydra.context.Context> cx2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(result));
@@ -726,7 +726,7 @@ public interface Checking {
           hydra.checking.Checking.typeOf(
             cx,
             tx,
-            (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()),
+            (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
             rightTerm),
           (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>) (result -> {
             hydra.util.Lazy<hydra.context.Context> cx2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(result));
@@ -786,7 +786,7 @@ public interface Checking {
             hydra.checking.Checking.typeOf(
               cx,
               new hydra.graph.Graph((tx).boundTerms, types2.get(), (tx).classConstraints, (tx).lambdaVariables, (tx).metadata, (tx).primitives, (tx).schemaTypes, (tx).typeVariables),
-              (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()),
+              (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
               body),
             (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>) (codResult -> {
               hydra.util.Lazy<hydra.core.Type> cod = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(codResult));
@@ -829,7 +829,7 @@ public interface Checking {
               types.get(),
               hydra.lib.lists.Pure.apply(btype)), null))))));
         })))),
-      hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, java.lang.Void>>right((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, java.lang.Void>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, java.lang.Void>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, java.lang.Void>((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()), null)))),
+      hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, java.lang.Void>>right((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, java.lang.Void>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, java.lang.Void>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, java.lang.Void>((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()), null)))),
       bs));
     return hydra.lib.eithers.Bind.apply(
       btypesResult.get(),
@@ -846,7 +846,7 @@ public interface Checking {
           hydra.checking.Checking.typeOf(
             cx,
             tx2.get(),
-            (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()),
+            (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
             body),
           (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>) (tResult -> {
             hydra.util.Lazy<hydra.context.Context> cx2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(tResult));
@@ -882,7 +882,7 @@ public interface Checking {
                 hydra.checking.Checking.typeOf(
                   cxA.get(),
                   tx,
-                  (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()),
+                  (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
                   term),
                 (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>>>) (tResult -> {
                   hydra.util.Lazy<hydra.context.Context> cxB = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(tResult));
@@ -892,7 +892,7 @@ public interface Checking {
                     hydra.lib.lists.Pure.apply(t.get())), cxB.get()))));
                 }));
             })))),
-          hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>>right((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()), cx)))),
+          hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>>right((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()), cx)))),
           els));
         return hydra.lib.eithers.Bind.apply(
           foldResult.get(),
@@ -947,7 +947,7 @@ public interface Checking {
                   hydra.checking.Checking.typeOf(
                     cxA.get(),
                     tx,
-                    (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()),
+                    (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
                     hydra.lib.pairs.First.apply(p)),
                   (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>>>) (tResult -> {
                     hydra.util.Lazy<hydra.context.Context> cxB = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(tResult));
@@ -957,7 +957,7 @@ public interface Checking {
                       hydra.lib.lists.Pure.apply(t.get())), cxB.get()))));
                   }));
               })))),
-            hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>>right((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()), cx)))),
+            hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>>right((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()), cx)))),
             pairs.get()));
           return hydra.lib.eithers.Bind.apply(
             keyFoldResult.get(),
@@ -981,7 +981,7 @@ public interface Checking {
                           hydra.checking.Checking.typeOf(
                             cxA.get(),
                             tx,
-                            (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()),
+                            (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
                             hydra.lib.pairs.Second.apply(p)),
                           (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>>>) (tResult -> {
                             hydra.util.Lazy<hydra.context.Context> cxB = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(tResult));
@@ -991,7 +991,7 @@ public interface Checking {
                               hydra.lib.lists.Pure.apply(t.get())), cxB.get()))));
                           }));
                       })))),
-                    hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>>right((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()), cx2.get())))),
+                    hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>>right((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()), cx2.get())))),
                     pairs.get()));
                   return hydra.lib.eithers.Bind.apply(
                     valFoldResult.get(),
@@ -1023,7 +1023,7 @@ public interface Checking {
       hydra.checking.Checking.typeOf(
         cx,
         tx,
-        (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()),
+        (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
         term),
       (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>) (tResult -> {
         hydra.util.Lazy<hydra.context.Context> cx2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(tResult));
@@ -1064,7 +1064,7 @@ public interface Checking {
             hydra.checking.Checking.typeOf(
               cx,
               tx,
-              (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()),
+              (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
               pairFst.get()),
             (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>) (result1 -> {
               hydra.util.Lazy<hydra.context.Context> cx2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(result1));
@@ -1073,7 +1073,7 @@ public interface Checking {
                 hydra.checking.Checking.typeOf(
                   cx2.get(),
                   tx,
-                  (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()),
+                  (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
                   pairSnd.get()),
                 (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>) (result2 -> {
                   hydra.util.Lazy<hydra.context.Context> cx3 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(result2));
@@ -1161,7 +1161,7 @@ public interface Checking {
             hydra.checking.Checking.typeOf(
               cxA.get(),
               tx,
-              (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()),
+              (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
               term),
             (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>>>) (tResult -> {
               hydra.util.Lazy<hydra.context.Context> cxB = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(tResult));
@@ -1171,7 +1171,7 @@ public interface Checking {
                 hydra.lib.lists.Pure.apply(t.get())), cxB.get()))));
             }));
         })))),
-      hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>>right((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()), cx)))),
+      hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>>right((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()), cx)))),
       hydra.lib.lists.Map.apply(
         projected -> projected.term,
         fields)));
@@ -1206,7 +1206,7 @@ public interface Checking {
                 hydra.checking.Checking.typeOf(
                   cxA.get(),
                   tx,
-                  (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()),
+                  (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
                   term),
                 (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>>>) (tResult -> {
                   hydra.util.Lazy<hydra.context.Context> cxB = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(tResult));
@@ -1216,7 +1216,7 @@ public interface Checking {
                     hydra.lib.lists.Pure.apply(t.get())), cxB.get()))));
                 }));
             })))),
-          hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>>right((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()), cx)))),
+          hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>>right((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Type>, hydra.context.Context>((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()), cx)))),
           hydra.lib.sets.ToList.apply(els)));
         return hydra.lib.eithers.Bind.apply(
           foldResult.get(),
@@ -1257,7 +1257,7 @@ public interface Checking {
       hydra.checking.Checking.typeOf(
         cx,
         tx2.get(),
-        (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()),
+        (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
         body),
       (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>) (result1 -> {
         hydra.util.Lazy<hydra.context.Context> cx2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(result1));
@@ -1345,7 +1345,7 @@ public interface Checking {
       hydra.checking.Checking.typeOf(
         cx,
         tx,
-        (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()),
+        (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
         body),
       (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.core.Type, hydra.context.Context>>>) (result -> {
         hydra.util.Lazy<hydra.context.Context> cx2 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(result));

@@ -186,7 +186,7 @@ public interface TestCodec {
     return (tcase).accept(new hydra.testing.TestCase.PartialVisitor<>() {
       @Override
       public hydra.util.Either<String, hydra.util.ConsList<String>> otherwise(hydra.testing.TestCase instance) {
-        return hydra.util.Either.<String, hydra.util.ConsList<String>>right((hydra.util.ConsList<String>) (hydra.util.ConsList.<String>of()));
+        return hydra.util.Either.<String, hydra.util.ConsList<String>>right((hydra.util.ConsList<String>) (hydra.util.ConsList.<String>empty()));
       }
       
       @Override
@@ -602,7 +602,7 @@ public interface TestCodec {
     return ((tcm).case_).accept(new hydra.testing.TestCase.PartialVisitor<>() {
       @Override
       public hydra.util.ConsList<hydra.core.Term> otherwise(hydra.testing.TestCase instance) {
-        return (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>of());
+        return (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty());
       }
       
       @Override

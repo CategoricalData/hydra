@@ -48,7 +48,7 @@ public interface CoderUtils {
           args))).apply(lhs);
       }
     }))));
-    return ((go.get()).apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>of()))).apply(term);
+    return ((go.get()).apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()))).apply(term);
   }
   
   static hydra.util.Pair<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>> gatherArgs(hydra.core.Term term, hydra.util.ConsList<hydra.core.Term> args) {
@@ -135,7 +135,7 @@ public interface CoderUtils {
       public Boolean otherwise(hydra.core.Term instance) {
         hydra.util.Lazy<hydra.core.Term> baseTerm = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(hydra.coderUtils.CoderUtils.gatherArgs(
           term,
-          (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>of()))));
+          (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()))));
         return (baseTerm.get()).accept(new hydra.core.Term.PartialVisitor<>() {
           @Override
           public Boolean otherwise(hydra.core.Term instance) {
@@ -648,7 +648,7 @@ public interface CoderUtils {
       hydra.checking.Checking.typeOf(
         cx,
         g,
-        (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()),
+        (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
         term));
   }
   
@@ -681,11 +681,11 @@ public interface CoderUtils {
       setTC,
       true,
       env,
-      (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>of()),
-      (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>of()),
-      (hydra.util.ConsList<hydra.core.Binding>) (hydra.util.ConsList.<hydra.core.Binding>of()),
-      (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()),
-      (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()),
+      (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()),
+      (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()),
+      (hydra.util.ConsList<hydra.core.Binding>) (hydra.util.ConsList.<hydra.core.Binding>empty()),
+      (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
+      (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()),
       term);
   }
   

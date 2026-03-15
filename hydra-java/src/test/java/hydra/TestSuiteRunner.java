@@ -9,6 +9,7 @@ import hydra.testing.*;
 import hydra.tools.PrettyPrinter;
 import hydra.lib.Libraries;
 import hydra.tools.PrimitiveFunction;
+import hydra.util.ConsList;
 import hydra.util.Maybe;
 import hydra.util.Pair;
 
@@ -1374,7 +1375,7 @@ public class TestSuiteRunner {
         // Comparison: enum with lessThan, equalTo, greaterThan
         Name comparisonName = new Name("hydra.util.Comparison");
         types.put(comparisonName,
-            new Type.Union(new RowType(comparisonName, List.of(
+            new Type.Union(new RowType(comparisonName, ConsList.of(
                 new FieldType(new Name("lessThan"), new Type.Unit()),
                 new FieldType(new Name("equalTo"), new Type.Unit()),
                 new FieldType(new Name("greaterThan"), new Type.Unit())))));
@@ -1382,7 +1383,7 @@ public class TestSuiteRunner {
         // CaseConvention: enum with camel, pascal, lowerSnake, upperSnake
         Name caseConventionName = new Name("hydra.util.CaseConvention");
         types.put(caseConventionName,
-            new Type.Union(new RowType(caseConventionName, List.of(
+            new Type.Union(new RowType(caseConventionName, ConsList.of(
                 new FieldType(new Name("camel"), new Type.Unit()),
                 new FieldType(new Name("pascal"), new Type.Unit()),
                 new FieldType(new Name("lowerSnake"), new Type.Unit()),
@@ -1391,7 +1392,7 @@ public class TestSuiteRunner {
         // Precision: union with arbitrary (unit) and bits (int32)
         Name precisionName = new Name("hydra.util.Precision");
         types.put(precisionName,
-            new Type.Union(new RowType(precisionName, List.of(
+            new Type.Union(new RowType(precisionName, ConsList.of(
                 new FieldType(new Name("arbitrary"), new Type.Unit()),
                 new FieldType(new Name("bits"), new Type.Literal(new LiteralType.Integer_(new IntegerType.Int32())))))));
 

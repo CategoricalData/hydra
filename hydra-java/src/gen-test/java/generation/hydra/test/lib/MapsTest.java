@@ -192,7 +192,7 @@ public class MapsTest {
 
         assertEquals(
 
-            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty()),
 
             hydra.lib.maps.Elems.apply((hydra.util.PersistentMap<T2, T3>) ((hydra.util.PersistentMap<T2, T3>) (hydra.util.PersistentMap.<T2, T3>empty()))));
 
@@ -446,7 +446,7 @@ public class MapsTest {
 
             (hydra.util.PersistentMap<T0, T1>) ((hydra.util.PersistentMap<T0, T1>) (hydra.util.PersistentMap.<T0, T1>empty())),
 
-            hydra.lib.maps.FromList.apply((hydra.util.ConsList<hydra.util.Pair<T0, T1>>) (hydra.util.ConsList.<hydra.util.Pair<T0, T1>>of())));
+            hydra.lib.maps.FromList.apply((hydra.util.ConsList<hydra.util.Pair<T0, T1>>) (hydra.util.ConsList.<hydra.util.Pair<T0, T1>>empty())));
 
     }
 
@@ -582,7 +582,7 @@ public class MapsTest {
 
         assertEquals(
 
-            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty()),
 
             hydra.lib.maps.Keys.apply((hydra.util.PersistentMap<T2, T3>) ((hydra.util.PersistentMap<T2, T3>) (hydra.util.PersistentMap.<T2, T3>empty()))));
 
@@ -1006,7 +1006,7 @@ public class MapsTest {
 
         assertEquals(
 
-            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty()),
 
             hydra.lib.maps.ToList.apply((hydra.util.PersistentMap<T2, T3>) ((hydra.util.PersistentMap<T2, T3>) (hydra.util.PersistentMap.<T2, T3>empty()))));
 

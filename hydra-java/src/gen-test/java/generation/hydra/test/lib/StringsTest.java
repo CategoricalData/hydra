@@ -47,7 +47,7 @@ public class StringsTest {
 
             "",
 
-            hydra.lib.strings.Cat.apply((hydra.util.ConsList<String>) (hydra.util.ConsList.<String>of())));
+            hydra.lib.strings.Cat.apply((hydra.util.ConsList<String>) (hydra.util.ConsList.<String>empty())));
 
     }
 
@@ -369,7 +369,7 @@ public class StringsTest {
 
             "",
 
-            hydra.lib.strings.FromList.apply((hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of())));
+            hydra.lib.strings.FromList.apply((hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty())));
 
     }
 
@@ -507,7 +507,7 @@ public class StringsTest {
 
             hydra.lib.strings.Intercalate.apply(
   ",",
-  (hydra.util.ConsList<String>) (hydra.util.ConsList.<String>of())));
+  (hydra.util.ConsList<String>) (hydra.util.ConsList.<String>empty())));
 
     }
 
@@ -697,7 +697,7 @@ public class StringsTest {
 
         assertEquals(
 
-            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty()),
 
             hydra.lib.strings.Lines.apply(""));
 
@@ -1173,7 +1173,7 @@ public class StringsTest {
 
         assertEquals(
 
-            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty()),
 
             hydra.lib.strings.ToList.apply(""));
 
@@ -1476,7 +1476,7 @@ public class StringsTest {
 
             "",
 
-            hydra.lib.strings.Unlines.apply((hydra.util.ConsList<String>) (hydra.util.ConsList.<String>of())));
+            hydra.lib.strings.Unlines.apply((hydra.util.ConsList<String>) (hydra.util.ConsList.<String>empty())));
 
     }
 

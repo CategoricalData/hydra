@@ -133,7 +133,7 @@ public interface Parsers {
   static <T0> hydra.parsing.Parser<hydra.util.ConsList<T0>> many(hydra.parsing.Parser<T0> p) {
     return hydra.parsers.Parsers.<hydra.util.ConsList<T0>>alt(
       hydra.parsers.Parsers.<T0>some(p),
-      hydra.parsers.Parsers.<hydra.util.ConsList<T0>>pure((hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of())));
+      hydra.parsers.Parsers.<hydra.util.ConsList<T0>>pure((hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty())));
   }
   
   static <T0, T1> hydra.parsing.Parser<T1> map(java.util.function.Function<T0, T1> f, hydra.parsing.Parser<T0> pa) {
@@ -197,7 +197,7 @@ public interface Parsers {
       hydra.parsers.Parsers.<T0, T1>sepBy1(
         p,
         sep),
-      hydra.parsers.Parsers.<hydra.util.ConsList<T0>>pure((hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of())));
+      hydra.parsers.Parsers.<hydra.util.ConsList<T0>>pure((hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty())));
   }
   
   static <T0, T1> hydra.parsing.Parser<hydra.util.ConsList<T0>> sepBy1(hydra.parsing.Parser<T0> p, hydra.parsing.Parser<T1> sep) {

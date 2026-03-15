@@ -3653,41 +3653,49 @@ encodeTermInternal = def "encodeTermInternal" $
               (JavaUtilsSource.methodInvocation @@ just (right
                 (JavaUtilsSource.javaExpressionToJavaPrimary @@ var "castExpr")) @@ JavaDsl.identifier (string "get") @@ list ([] :: [TTerm Java.Expression]))))),
 
-      -- TermList: ConsList.of(elements)
+      -- TermList: ConsList.empty() or ConsList.of(elements)
       _Term_list>>: lambda "els" $
-        "jels" <<~ (Eithers.mapList (var "encode") (var "els")) $
-        "targs" <<~ (Logic.ifElse (Lists.null (var "jels"))
-          (takeTypeArgs @@ string "list" @@ int32 1 @@ var "tyapps" @@ var "cx" @@ var "g")
-          (right (list ([] :: [TTerm Java.TypeArgument])))) $
-        right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
-          (JavaUtilsSource.methodInvocationStaticWithTypeArgs
-            @@ JavaDsl.identifier (string "hydra.util.ConsList")
-            @@ JavaDsl.identifier (string "of")
-            @@ var "targs" @@ var "jels")),
+        Logic.ifElse (Lists.null (var "els"))
+          ("targs" <<~ (takeTypeArgs @@ string "list" @@ int32 1 @@ var "tyapps" @@ var "cx" @@ var "g") $
+            right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
+              (JavaUtilsSource.methodInvocationStaticWithTypeArgs
+                @@ JavaDsl.identifier (string "hydra.util.ConsList")
+                @@ JavaDsl.identifier (string "empty")
+                @@ var "targs" @@ list ([] :: [TTerm Java.Expression]))))
+          ("jels" <<~ (Eithers.mapList (var "encode") (var "els")) $
+            right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
+              (JavaUtilsSource.methodInvocationStatic
+                @@ JavaDsl.identifier (string "hydra.util.ConsList")
+                @@ JavaDsl.identifier (string "of")
+                @@ var "jels"))),
 
       -- TermLiteral: direct encoding
       _Term_literal>>: lambda "l" $
         right (encodeLiteral @@ var "l"),
 
-      -- TermMap: PersistentMap.ofEntries(PersistentMap.entry(k,v), ...)
+      -- TermMap: PersistentMap.empty() or PersistentMap.ofEntries(PersistentMap.entry(k,v), ...)
       _Term_map>>: lambda "m" $
-        "jkeys" <<~ (Eithers.mapList (var "encode") (Maps.keys (var "m"))) $
-        "jvals" <<~ (Eithers.mapList (var "encode") (Maps.elems (var "m"))) $
-        "pairExprs" <~ Lists.map
-          (lambda "kv" $ JavaUtilsSource.javaMethodInvocationToJavaExpression @@
-            (JavaUtilsSource.methodInvocationStatic
-              @@ JavaDsl.identifier (string "hydra.util.PersistentMap")
-              @@ JavaDsl.identifier (string "entry")
-              @@ list [Pairs.first (var "kv"), Pairs.second (var "kv")]))
-          (Lists.zip (var "jkeys") (var "jvals")) $
-        "targs" <<~ (Logic.ifElse (Maps.null (var "m"))
-          (takeTypeArgs @@ string "map" @@ int32 2 @@ var "tyapps" @@ var "cx" @@ var "g")
-          (right (list ([] :: [TTerm Java.TypeArgument])))) $
-        right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
-          (JavaUtilsSource.methodInvocationStaticWithTypeArgs
-            @@ JavaDsl.identifier (string "hydra.util.PersistentMap")
-            @@ JavaDsl.identifier (string "ofEntries")
-            @@ var "targs" @@ var "pairExprs")),
+        Logic.ifElse (Maps.null (var "m"))
+          ("targs" <<~ (takeTypeArgs @@ string "map" @@ int32 2 @@ var "tyapps" @@ var "cx" @@ var "g") $
+            right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
+              (JavaUtilsSource.methodInvocationStaticWithTypeArgs
+                @@ JavaDsl.identifier (string "hydra.util.PersistentMap")
+                @@ JavaDsl.identifier (string "empty")
+                @@ var "targs" @@ list ([] :: [TTerm Java.Expression]))))
+          ("jkeys" <<~ (Eithers.mapList (var "encode") (Maps.keys (var "m"))) $
+            "jvals" <<~ (Eithers.mapList (var "encode") (Maps.elems (var "m"))) $
+            "pairExprs" <~ Lists.map
+              (lambda "kv" $ JavaUtilsSource.javaMethodInvocationToJavaExpression @@
+                (JavaUtilsSource.methodInvocationStatic
+                  @@ JavaDsl.identifier (string "hydra.util.PersistentMap")
+                  @@ JavaDsl.identifier (string "entry")
+                  @@ list [Pairs.first (var "kv"), Pairs.second (var "kv")]))
+              (Lists.zip (var "jkeys") (var "jvals")) $
+            right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
+              (JavaUtilsSource.methodInvocationStatic
+                @@ JavaDsl.identifier (string "hydra.util.PersistentMap")
+                @@ JavaDsl.identifier (string "ofEntries")
+                @@ var "pairExprs"))),
 
       -- TermMaybe: Maybe.nothing() or Maybe.just(x)
       _Term_maybe>>: lambda "mt" $
@@ -3791,18 +3799,22 @@ encodeTermInternal = def "encodeTermInternal" $
           @@ (JavaUtilsSource.javaConstructorName @@ var "consId" @@ var "mtargs")
           @@ var "fieldExprs" @@ nothing),
 
-      -- TermSet: PersistentSet.of(elements)
+      -- TermSet: PersistentSet.empty() or PersistentSet.of(elements)
       _Term_set>>: lambda "s" $
-        "slist" <~ Sets.toList (var "s") $
-        "jels" <<~ (Eithers.mapList (var "encode") (var "slist")) $
-        "targs" <<~ (Logic.ifElse (Sets.null (var "s"))
-          (takeTypeArgs @@ string "set" @@ int32 1 @@ var "tyapps" @@ var "cx" @@ var "g")
-          (right (list ([] :: [TTerm Java.TypeArgument])))) $
-        right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
-          (JavaUtilsSource.methodInvocationStaticWithTypeArgs
-            @@ JavaDsl.identifier (string "hydra.util.PersistentSet")
-            @@ JavaDsl.identifier (string "of")
-            @@ var "targs" @@ var "jels")),
+        Logic.ifElse (Sets.null (var "s"))
+          ("targs" <<~ (takeTypeArgs @@ string "set" @@ int32 1 @@ var "tyapps" @@ var "cx" @@ var "g") $
+            right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
+              (JavaUtilsSource.methodInvocationStaticWithTypeArgs
+                @@ JavaDsl.identifier (string "hydra.util.PersistentSet")
+                @@ JavaDsl.identifier (string "empty")
+                @@ var "targs" @@ list ([] :: [TTerm Java.Expression]))))
+          ("slist" <~ Sets.toList (var "s") $
+            "jels" <<~ (Eithers.mapList (var "encode") (var "slist")) $
+            right (JavaUtilsSource.javaMethodInvocationToJavaExpression @@
+              (JavaUtilsSource.methodInvocationStatic
+                @@ JavaDsl.identifier (string "hydra.util.PersistentSet")
+                @@ JavaDsl.identifier (string "of")
+                @@ var "jels"))),
 
       -- TermTypeLambda: enter type lambda scope
       _Term_typeLambda>>: lambda "tl" $

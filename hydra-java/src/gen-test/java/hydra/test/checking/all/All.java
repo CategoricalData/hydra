@@ -13,6 +13,6 @@ public interface All {
       hydra.test.checking.collections.Collections.allTests(),
       hydra.test.checking.failures.Failures.allTests(),
       hydra.test.checking.fundamentals.Fundamentals.allTests(),
-      hydra.test.checking.nominalTypes.NominalTypes.allTests()), (hydra.util.ConsList<hydra.testing.TestCaseWithMetadata>) (hydra.util.ConsList.<hydra.testing.TestCaseWithMetadata>of()));
+      hydra.test.checking.nominalTypes.NominalTypes.allTests()), (hydra.util.ConsList<hydra.testing.TestCaseWithMetadata>) (hydra.util.ConsList.<hydra.testing.TestCaseWithMetadata>empty()));
   }
 }

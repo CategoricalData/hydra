@@ -187,9 +187,8 @@ substInContext = define "substInContext" $
   lambdas ["subst", "cx"] $
     "newBoundTypes" <~ Maps.map (substInTypeScheme @@ var "subst") (Graph.graphBoundTypes $ var "cx") $
     "newClassConstraints" <~ substInClassConstraints @@ var "subst" @@ (Graph.graphClassConstraints $ var "cx") $
-    Graph.graphWithClassConstraints
-      (Graph.graphWithBoundTypes (var "cx") (var "newBoundTypes"))
-      (var "newClassConstraints")
+    "cx2" <~ Graph.graphWithBoundTypes (var "cx") (var "newBoundTypes") $
+    Graph.graphWithClassConstraints (var "cx2") (var "newClassConstraints")
 
 substituteInTerm :: TBinding (TermSubst -> Term -> Term)
 substituteInTerm = define "substituteInTerm" $

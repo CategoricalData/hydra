@@ -30,7 +30,7 @@ public interface Utils {
             hydra.lib.pairs.Second.apply(acc)))));
         }
       })))).apply(v1))).apply(el))),
-      (hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>((hydra.util.ConsList<hydra.pg.model.Vertex<T0>>) (hydra.util.ConsList.<hydra.pg.model.Vertex<T0>>of()), (hydra.util.ConsList<hydra.pg.model.Edge<T0>>) (hydra.util.ConsList.<hydra.pg.model.Edge<T0>>of())))),
+      (hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<T0>>, hydra.util.ConsList<hydra.pg.model.Edge<T0>>>((hydra.util.ConsList<hydra.pg.model.Vertex<T0>>) (hydra.util.ConsList.<hydra.pg.model.Vertex<T0>>empty()), (hydra.util.ConsList<hydra.pg.model.Edge<T0>>) (hydra.util.ConsList.<hydra.pg.model.Edge<T0>>empty())))),
       els);
   }
   
@@ -44,7 +44,7 @@ public interface Utils {
   
   static <T0> hydra.util.PersistentMap<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>> elementsToVerticesWithAdjacentEdges_vertexMap0(hydra.util.ConsList<hydra.pg.model.Vertex<T0>> vertices) {
     return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.pg.model.Vertex<T0>, hydra.util.Pair<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>>>) (v -> (hydra.util.Pair<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>>) ((hydra.util.Pair<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>>) (new hydra.util.Pair<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>>(((java.util.function.Function<hydra.pg.model.Vertex<T0>, T0>) (projected -> projected.id)).apply(v), (hydra.pg.model.VertexWithAdjacentEdges<T0>) (new hydra.pg.model.VertexWithAdjacentEdges<T0>(v, (hydra.util.ConsList<hydra.pg.model.AdjacentEdge<T0>>) (hydra.util.ConsList.<hydra.pg.model.AdjacentEdge<T0>>of()), (hydra.util.ConsList<hydra.pg.model.AdjacentEdge<T0>>) (hydra.util.ConsList.<hydra.pg.model.AdjacentEdge<T0>>of()))))))),
+      (java.util.function.Function<hydra.pg.model.Vertex<T0>, hydra.util.Pair<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>>>) (v -> (hydra.util.Pair<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>>) ((hydra.util.Pair<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>>) (new hydra.util.Pair<T0, hydra.pg.model.VertexWithAdjacentEdges<T0>>(((java.util.function.Function<hydra.pg.model.Vertex<T0>, T0>) (projected -> projected.id)).apply(v), (hydra.pg.model.VertexWithAdjacentEdges<T0>) (new hydra.pg.model.VertexWithAdjacentEdges<T0>(v, (hydra.util.ConsList<hydra.pg.model.AdjacentEdge<T0>>) (hydra.util.ConsList.<hydra.pg.model.AdjacentEdge<T0>>empty()), (hydra.util.ConsList<hydra.pg.model.AdjacentEdge<T0>>) (hydra.util.ConsList.<hydra.pg.model.AdjacentEdge<T0>>empty()))))))),
       vertices));
   }
   

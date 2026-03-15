@@ -144,7 +144,7 @@ public interface Templates {
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Type.List et) {
         return hydra.lib.logic.IfElse.lazy(
           minimal,
-          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.List((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>of()))),
+          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.List((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()))),
           () -> hydra.lib.eithers.Bind.apply(
             (inst).apply((et).value),
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (e -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.List(hydra.util.ConsList.of(e))))));

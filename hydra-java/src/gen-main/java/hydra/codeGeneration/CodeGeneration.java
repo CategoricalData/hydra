@@ -36,7 +36,7 @@ public interface CodeGeneration {
         return ((java.util.function.Supplier<hydra.util.PersistentSet<hydra.module.Namespace>>) (() -> {
           hydra.util.Lazy<hydra.util.PersistentSet<hydra.module.Namespace>> nextDeps = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
             (java.util.function.Function<hydra.module.Namespace, hydra.util.ConsList<hydra.module.Namespace>>) (nsv -> hydra.lib.maybes.Maybe.applyLazy(
-              () -> (hydra.util.ConsList<hydra.module.Namespace>) (hydra.util.ConsList.<hydra.module.Namespace>of()),
+              () -> (hydra.util.ConsList<hydra.module.Namespace>) (hydra.util.ConsList.<hydra.module.Namespace>empty()),
               (java.util.function.Function<hydra.module.Module, hydra.util.ConsList<hydra.module.Namespace>>) (depMod -> (getDeps).apply(depMod)),
               hydra.lib.maps.Lookup.apply(
                 nsv,
@@ -179,7 +179,7 @@ public interface CodeGeneration {
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(typeModulesToGenerate.get()),
-        () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.util.Pair<T0, T1>>>right((hydra.util.ConsList<hydra.util.Pair<T0, T1>>) (hydra.util.ConsList.<hydra.util.Pair<T0, T1>>of())),
+        () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.util.Pair<T0, T1>>>right((hydra.util.ConsList<hydra.util.Pair<T0, T1>>) (hydra.util.ConsList.<hydra.util.Pair<T0, T1>>empty())),
         () -> ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.util.Pair<T0, T1>>>>) (() -> {
           hydra.util.Lazy<hydra.util.ConsList<hydra.util.ConsList<hydra.core.Name>>> nameLists = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
             (java.util.function.Function<hydra.module.Module, hydra.util.ConsList<hydra.core.Name>>) (m -> hydra.lib.lists.Map.apply(
@@ -220,7 +220,7 @@ public interface CodeGeneration {
       (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<T0, T1>>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.util.Pair<T0, T1>>>>) (schemaFiles -> hydra.lib.eithers.Bind.apply(
         hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(termModulesToGenerate.get()),
-          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.util.Pair<T0, T1>>>right((hydra.util.ConsList<hydra.util.Pair<T0, T1>>) (hydra.util.ConsList.<hydra.util.Pair<T0, T1>>of())),
+          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.util.Pair<T0, T1>>>right((hydra.util.ConsList<hydra.util.Pair<T0, T1>>) (hydra.util.ConsList.<hydra.util.Pair<T0, T1>>empty())),
           () -> ((java.util.function.Supplier<hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.util.Pair<T0, T1>>>>) (() -> {
             hydra.util.Lazy<hydra.util.ConsList<hydra.module.Namespace>> namespaces = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
               (java.util.function.Function<hydra.module.Module, hydra.module.Namespace>) (m -> (m).namespace),
@@ -531,7 +531,7 @@ public interface CodeGeneration {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<Boolean, java.util.function.Function<Boolean, java.util.function.Function<hydra.util.ConsList<Integer>, hydra.util.ConsList<Integer>>>>> go = new java.util.concurrent.atomic.AtomicReference<>();
     go.set((java.util.function.Function<Boolean, java.util.function.Function<Boolean, java.util.function.Function<hydra.util.ConsList<Integer>, hydra.util.ConsList<Integer>>>>) (inStr -> (java.util.function.Function<Boolean, java.util.function.Function<hydra.util.ConsList<Integer>, hydra.util.ConsList<Integer>>>) (esc -> (java.util.function.Function<hydra.util.ConsList<Integer>, hydra.util.ConsList<Integer>>) (bytes -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(bytes),
-      () -> (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of()),
+      () -> (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty()),
       () -> ((java.util.function.Supplier<hydra.util.ConsList<Integer>>) (() -> {
         hydra.util.Lazy<Integer> b = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(bytes));
         return ((java.util.function.Supplier<hydra.util.ConsList<Integer>>) (() -> {

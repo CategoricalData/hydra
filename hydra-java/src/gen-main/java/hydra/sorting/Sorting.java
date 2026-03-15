@@ -33,7 +33,7 @@ public interface Sorting {
   
   static <T0, T1> hydra.util.ConsList<T1> adjacencyListToMap_existing(T0 k, hydra.util.PersistentMap<T0, hydra.util.ConsList<T1>> mp) {
     return hydra.lib.maybes.Maybe.applyLazy(
-      () -> (hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>of()),
+      () -> (hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>empty()),
       (java.util.function.Function<hydra.util.ConsList<T1>, hydra.util.ConsList<T1>>) (hydra.lib.equality.Identity::apply),
       hydra.lib.maps.Lookup.apply(
         k,
@@ -161,7 +161,7 @@ public interface Sorting {
   static <T0> hydra.util.PersistentSet<T0> propagateTags_reachable(hydra.util.PersistentMap<T0, hydra.util.ConsList<T0>> adjMap, T0 node) {
     return hydra.sorting.Sorting.<T0>findReachableNodes(
       (java.util.function.Function<T0, hydra.util.PersistentSet<T0>>) (n -> hydra.lib.sets.FromList.apply(hydra.lib.maybes.Maybe.applyLazy(
-        () -> (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
+        () -> (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty()),
         (java.util.function.Function<hydra.util.ConsList<T0>, hydra.util.ConsList<T0>>) (hydra.lib.equality.Identity::apply),
         hydra.lib.maps.Lookup.apply(
           n,

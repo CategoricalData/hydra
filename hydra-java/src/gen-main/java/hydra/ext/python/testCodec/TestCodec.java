@@ -16,7 +16,7 @@ public interface TestCodec {
       (java.util.function.Function<hydra.ext.python.syntax.Expression, String>) (arg_ -> hydra.serialization.Serialization.printExpr(hydra.ext.python.serde.Serde.encodeExpression(arg_))),
       hydra.ext.python.coder.Coder.encodeTermInline(
         hydra.lexical.Lexical.emptyContext(),
-        new hydra.ext.python.helpers.PythonEnvironment(namespaces_, (hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>of()), (hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.ext.python.syntax.Name>apply()))))), graph0, (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), hydra.ext.python.utils.Utils.targetPythonVersion(), skipCasts, (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())),
+        new hydra.ext.python.helpers.PythonEnvironment(namespaces_, (hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()), (hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.ext.python.syntax.Name>apply()))))), graph0, (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), hydra.ext.python.utils.Utils.targetPythonVersion(), skipCasts, (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())),
         skipCasts,
         term));
   }
@@ -35,7 +35,7 @@ public interface TestCodec {
       (java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, String>) (ic -> hydra.show.error.Error_.error(((java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, hydra.error.Error_>) (projected -> projected.object)).apply(ic))),
       (java.util.function.Function<hydra.ext.python.syntax.Expression, String>) (arg_ -> hydra.serialization.Serialization.printExpr(hydra.ext.python.serde.Serde.encodeExpression(arg_))),
       hydra.ext.python.coder.Coder.encodeType(
-        new hydra.ext.python.helpers.PythonEnvironment(namespaces_, (hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>of()), (hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.ext.python.syntax.Name>apply()))))), g, (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), hydra.ext.python.utils.Utils.targetPythonVersion(), false, (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())),
+        new hydra.ext.python.helpers.PythonEnvironment(namespaces_, (hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>>((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()), (hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.ext.python.syntax.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.ext.python.syntax.Name>apply()))))), g, (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()), hydra.ext.python.utils.Utils.targetPythonVersion(), false, (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())),
         typ));
   }
   
@@ -208,7 +208,7 @@ public interface TestCodec {
     return (tcase).accept(new hydra.testing.TestCase.PartialVisitor<>() {
       @Override
       public hydra.util.Either<String, hydra.util.ConsList<String>> otherwise(hydra.testing.TestCase instance) {
-        return hydra.util.Either.<String, hydra.util.ConsList<String>>right((hydra.util.ConsList<String>) (hydra.util.ConsList.<String>of()));
+        return hydra.util.Either.<String, hydra.util.ConsList<String>>right((hydra.util.ConsList<String>) (hydra.util.ConsList.<String>empty()));
       }
       
       @Override
@@ -273,7 +273,7 @@ public interface TestCodec {
         g,
         namespaces_,
         codec,
-        (hydra.util.ConsList<String>) (hydra.util.ConsList.<String>of()),
+        (hydra.util.ConsList<String>) (hydra.util.ConsList.<String>empty()),
         testGroup));
   }
   

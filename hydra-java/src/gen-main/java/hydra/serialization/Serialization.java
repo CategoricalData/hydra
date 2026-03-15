@@ -314,7 +314,7 @@ public interface Serialization {
           e)))));
     return hydra.serialization.Serialization.spaceSep(hydra.lib.lists.Foldl.apply(
       foldFun,
-      (hydra.util.ConsList<hydra.ast.Expr>) (hydra.util.ConsList.<hydra.ast.Expr>of()),
+      (hydra.util.ConsList<hydra.ast.Expr>) (hydra.util.ConsList.<hydra.ast.Expr>empty()),
       hydra.lib.lists.Reverse.apply(opers)));
   }
   

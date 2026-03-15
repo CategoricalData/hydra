@@ -701,28 +701,13 @@ public interface Adapt {
     java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.util.ConsList<hydra.core.Binding>> normalizeBindings = (java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.util.ConsList<hydra.core.Binding>>) (bindings -> hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.core.Binding, hydra.core.Binding>) (b -> new hydra.core.Binding((b).name, hydra.adapt.Adapt.pushTypeAppsInward((b).term), (b).type)),
       bindings));
-    java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.graph.Graph> rebuildGraph = (java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.graph.Graph>) (bindings -> new hydra.graph.Graph((hydra.lexical.Lexical.buildGraph(
-      bindings,
-      (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-      (graph0).primitives)).boundTerms, (hydra.lexical.Lexical.buildGraph(
-      bindings,
-      (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-      (graph0).primitives)).boundTypes, (hydra.lexical.Lexical.buildGraph(
-      bindings,
-      (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-      (graph0).primitives)).classConstraints, (hydra.lexical.Lexical.buildGraph(
-      bindings,
-      (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-      (graph0).primitives)).lambdaVariables, (hydra.lexical.Lexical.buildGraph(
-      bindings,
-      (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-      (graph0).primitives)).metadata, (hydra.lexical.Lexical.buildGraph(
-      bindings,
-      (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-      (graph0).primitives)).primitives, (graph0).schemaTypes, (hydra.lexical.Lexical.buildGraph(
-      bindings,
-      (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-      (graph0).primitives)).typeVariables));
+    java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.graph.Graph> rebuildGraph = (java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.graph.Graph>) (bindings -> {
+      hydra.util.Lazy<hydra.graph.Graph> g = new hydra.util.Lazy<>(() -> hydra.lexical.Lexical.buildGraph(
+        bindings,
+        (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
+        (graph0).primitives));
+      return new hydra.graph.Graph((g.get()).boundTerms, (g.get()).boundTypes, (g.get()).classConstraints, (g.get()).lambdaVariables, (g.get()).metadata, (g.get()).primitives, (graph0).schemaTypes, (g.get()).typeVariables);
+    });
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.logic.IfElse.lazy(
         doInfer,
@@ -768,7 +753,7 @@ public interface Adapt {
                     () -> acc,
                     (java.util.function.Function<hydra.module.Namespace, hydra.util.PersistentMap<hydra.module.Namespace, hydra.util.ConsList<hydra.core.Binding>>>) (ns -> {
                       hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> existing = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
-                        () -> (hydra.util.ConsList<hydra.core.Binding>) (hydra.util.ConsList.<hydra.core.Binding>of()),
+                        () -> (hydra.util.ConsList<hydra.core.Binding>) (hydra.util.ConsList.<hydra.core.Binding>empty()),
                         (java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.util.ConsList<hydra.core.Binding>>) (hydra.lib.equality.Identity::apply),
                         hydra.lib.maps.Lookup.apply(
                           ns,
@@ -789,7 +774,7 @@ public interface Adapt {
                 hydra.util.Lazy<hydra.util.ConsList<hydra.util.ConsList<hydra.module.TermDefinition>>> defsGrouped = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
                   (java.util.function.Function<hydra.module.Namespace, hydra.util.ConsList<hydra.module.TermDefinition>>) (ns -> {
                     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> elsForNs = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
-                      () -> (hydra.util.ConsList<hydra.core.Binding>) (hydra.util.ConsList.<hydra.core.Binding>of()),
+                      () -> (hydra.util.ConsList<hydra.core.Binding>) (hydra.util.ConsList.<hydra.core.Binding>empty()),
                       (java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.util.ConsList<hydra.core.Binding>>) (hydra.lib.equality.Identity::apply),
                       hydra.lib.maps.Lookup.apply(
                         ns,
@@ -799,28 +784,11 @@ public interface Adapt {
                       elsForNs.get()));
                   }),
                   namespaces));
-                return hydra.util.Either.<String, hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.util.ConsList<hydra.module.TermDefinition>>>>right((hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.util.ConsList<hydra.module.TermDefinition>>>) ((hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.util.ConsList<hydra.module.TermDefinition>>>) (new hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.util.ConsList<hydra.module.TermDefinition>>>(new hydra.graph.Graph((hydra.lexical.Lexical.buildGraph(
+                hydra.util.Lazy<hydra.graph.Graph> g = new hydra.util.Lazy<>(() -> hydra.lexical.Lexical.buildGraph(
                   bins5,
                   (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-                  (adapted.get()).primitives)).boundTerms, (hydra.lexical.Lexical.buildGraph(
-                  bins5,
-                  (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-                  (adapted.get()).primitives)).boundTypes, (hydra.lexical.Lexical.buildGraph(
-                  bins5,
-                  (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-                  (adapted.get()).primitives)).classConstraints, (hydra.lexical.Lexical.buildGraph(
-                  bins5,
-                  (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-                  (adapted.get()).primitives)).lambdaVariables, (hydra.lexical.Lexical.buildGraph(
-                  bins5,
-                  (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-                  (adapted.get()).primitives)).metadata, (hydra.lexical.Lexical.buildGraph(
-                  bins5,
-                  (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-                  (adapted.get()).primitives)).primitives, (adapted.get()).schemaTypes, (hydra.lexical.Lexical.buildGraph(
-                  bins5,
-                  (hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.util.Maybe<hydra.core.Term>>apply())),
-                  (adapted.get()).primitives)).typeVariables), defsGrouped.get()))));
+                  (adapted.get()).primitives));
+                return hydra.util.Either.<String, hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.util.ConsList<hydra.module.TermDefinition>>>>right((hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.util.ConsList<hydra.module.TermDefinition>>>) ((hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.util.ConsList<hydra.module.TermDefinition>>>) (new hydra.util.Pair<hydra.graph.Graph, hydra.util.ConsList<hydra.util.ConsList<hydra.module.TermDefinition>>>(new hydra.graph.Graph((g.get()).boundTerms, (g.get()).boundTypes, (g.get()).classConstraints, (g.get()).lambdaVariables, (g.get()).metadata, (g.get()).primitives, (adapted.get()).schemaTypes, (g.get()).typeVariables), defsGrouped.get()))));
               }));
           }))))));
   }
@@ -1097,7 +1065,7 @@ public interface Adapt {
     return (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Either<String, hydra.util.ConsList<hydra.core.Term>> otherwise(hydra.core.Term instance) {
-        return hydra.util.Either.<String, hydra.util.ConsList<hydra.core.Term>>right((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>of()));
+        return hydra.util.Either.<String, hydra.util.ConsList<hydra.core.Term>>right((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()));
       }
       
       @Override
@@ -1109,7 +1077,7 @@ public interface Adapt {
       @Override
       public hydra.util.Either<String, hydra.util.ConsList<hydra.core.Term>> visit(hydra.core.Term.Maybe ot) {
         return hydra.util.Either.<String, hydra.util.ConsList<hydra.core.Term>>right(hydra.util.ConsList.of(new hydra.core.Term.List(hydra.lib.maybes.Maybe.applyLazy(
-          () -> (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>of()),
+          () -> (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()),
           (java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>) (term2 -> hydra.util.ConsList.of(term2)),
           (ot).value))));
       }
@@ -1171,7 +1139,7 @@ public interface Adapt {
     return (type).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.ConsList<hydra.core.Type> otherwise(hydra.core.Type instance) {
-        return (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of());
+        return (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty());
       }
       
       @Override

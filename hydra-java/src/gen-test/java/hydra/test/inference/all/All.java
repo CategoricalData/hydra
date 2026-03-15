@@ -14,6 +14,6 @@ public interface All {
       hydra.test.inference.failures.Failures.allTests(),
       hydra.test.inference.fundamentals.Fundamentals.allTests(),
       hydra.test.inference.kernelExamples.KernelExamples.allTests(),
-      hydra.test.inference.nominalTypes.NominalTypes.allTests()), (hydra.util.ConsList<hydra.testing.TestCaseWithMetadata>) (hydra.util.ConsList.<hydra.testing.TestCaseWithMetadata>of()));
+      hydra.test.inference.nominalTypes.NominalTypes.allTests()), (hydra.util.ConsList<hydra.testing.TestCaseWithMetadata>) (hydra.util.ConsList.<hydra.testing.TestCaseWithMetadata>empty()));
   }
 }
