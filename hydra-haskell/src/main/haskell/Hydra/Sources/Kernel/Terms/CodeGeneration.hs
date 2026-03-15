@@ -555,4 +555,4 @@ decodeModuleFromJson = define "decodeModuleFromJson" $
           (stripModuleTypeSchemes @@ var "mod")
           (var "mod")))
         (decoderFor _Module @@ var "graph" @@ var "term"))
-    (JsonDecode.fromJson @@ var "schemaMap" @@ var "modType" @@ var "jsonVal")
+    (JsonDecode.fromJson @@ var "schemaMap" @@ Core.nameLift _Module @@ var "modType" @@ var "jsonVal")

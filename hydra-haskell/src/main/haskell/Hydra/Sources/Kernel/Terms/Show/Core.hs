@@ -402,8 +402,7 @@ type_ :: TBinding (Type -> String)
 type_ = define "type" $
   doc "Show a type as a string" $
   "typ" ~>
-  "showRowType" <~ ("rt" ~>
-    "flds" <~ Core.rowTypeFields (var "rt") $
+  "showRowType" <~ ("flds" ~>
     "fieldStrs" <~ Lists.map fieldType (var "flds") $
     Strings.cat $ list [
       string "{",
@@ -492,9 +491,7 @@ type_ = define "type" $
     _Type_unit>>: constant $ string "unit",
     _Type_variable>>: "name" ~> unwrap _Name @@ var "name",
     _Type_wrap>>: "wt" ~>
-      "tname" <~ unwrap _Name @@ (Core.wrappedTypeTypeName $ var "wt") $
-      "typ1" <~ Core.wrappedTypeBody (var "wt") $
-      Strings.cat $ list [string "wrap[", var "tname", string "](", type_ @@ var "typ1", string ")"]]
+      Strings.cat $ list [string "wrap(", type_ @@ var "wt", string ")"]]
 
 typeScheme :: TBinding (TypeScheme -> String)
 typeScheme = define "typeScheme" $

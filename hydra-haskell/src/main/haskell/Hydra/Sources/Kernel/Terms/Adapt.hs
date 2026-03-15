@@ -759,7 +759,7 @@ termAlternatives = define "termAlternatives" $
           (nothing)) $
       "rt" <<~ Eithers.bimap formatError ("x" ~> var "x") (Schemas.requireUnionType @@ var "cx" @@ var "graph" @@ var "tname") $
       right $ list [
-        Core.termRecord $ Core.record (var "tname") (Lists.map (var "forFieldType") (Core.rowTypeFields $ var "rt"))],
+        Core.termRecord $ Core.record (var "tname") (Lists.map (var "forFieldType") (var "rt"))],
     _Term_unit>>: constant $ right $ list [
       Core.termLiteral $ Core.literalBoolean true],
     _Term_wrap>>: "wt" ~>
@@ -778,12 +778,10 @@ typeAlternatives = define "typeAlternatives" $
     _Type_maybe>>: "ot" ~> list [
       Core.typeList $ var "ot"],
     _Type_union>>: "rt" ~>
-      "tname" <~ Core.rowTypeTypeName (var "rt") $
-      "fields" <~ Core.rowTypeFields (var "rt") $
       "toOptField" <~ ("f" ~> Core.fieldType (Core.fieldTypeName $ var "f") (MetaTypes.optional $ Core.fieldTypeType $ var "f")) $
-      "optFields" <~ Lists.map (var "toOptField") (var "fields") $
+      "optFields" <~ Lists.map (var "toOptField") (var "rt") $
       list [
-        Core.typeRecord $ Core.rowType (var "tname") (var "optFields")],
+        Core.typeRecord (var "optFields")],
     _Type_unit>>: constant $ list [
       Core.typeLiteral $ Core.literalTypeBoolean]]
 

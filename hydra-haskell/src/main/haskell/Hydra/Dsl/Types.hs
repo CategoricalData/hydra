@@ -6,7 +6,6 @@ import Prelude hiding (maybe, product)
 import Hydra.Core
 import Hydra.Dsl.AsType
 import Hydra.Dsl.Meta.Common
-import Hydra.Constants
 
 import qualified Data.List as L
 import qualified Data.Map as M
@@ -209,16 +208,10 @@ product [a] = a
 product [a, b] = pair a b
 product (a:rest) = pair a (product rest)
 
--- | Create a record type with the given fields and the default type name
+-- | Create a record type with the given fields
 -- Example: record ["name">: string, "age">: int32]
--- Use 'recordWithName' to specify a custom type name
 record :: [FieldType] -> Type
-record = recordWithName placeholderName
-
--- | Create a record type with the given fields and a provided type name
--- Example: recordWithName (Name "Person") ["name" >: string, "age" >: int32]
-recordWithName :: Name -> [FieldType] -> Type
-recordWithName tname fields = TypeRecord $ RowType tname fields
+record = TypeRecord
 
 -- | Set type
 -- Example: set string
@@ -249,12 +242,12 @@ uint64 = integer IntegerTypeUint64
 unit :: Type
 unit = TypeUnit
 
--- | Create a union type with the given variants and the default type name
+-- | Create a union type with the given variants
 -- Example: union ["success">: int32, "failure">: string]
 -- This creates a tagged union type (sum type with named variants)
 -- Similar to sum [int32, string] but with named branches
 union :: [FieldType] -> Type
-union fields = TypeUnion $ RowType placeholderName fields
+union = TypeUnion
 
 -- | Create a type variable with the given name
 -- Example: variable "a"
@@ -266,13 +259,7 @@ variable = TypeVariable . Name
 var :: String -> Type
 var = variable
 
--- | Create a wrapped type (newtype) with a provided base type and the default type name
+-- | Create a wrapped type (newtype) with a provided base type
 -- Example: wrap string
--- Creates a newtype with placeholder name; use 'wrapWithName' for custom names
 wrap :: AsType a => a -> Type
-wrap = wrapWithName placeholderName
-
--- | Create a wrapped type (newtype) with a provided base type and type name
--- Example: wrapWithName (Name "Email") string
-wrapWithName :: AsType a => Name -> a -> Type
-wrapWithName name t = TypeWrap $ WrappedType name (asType t)
+wrap = TypeWrap . asType

@@ -55,6 +55,7 @@ import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
 import qualified Hydra.Sources.Decode.Core as DecodeCore
+import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 
 
@@ -63,7 +64,7 @@ ns = Namespace "hydra.templates"
 
 module_ :: Module
 module_ = Module ns elements
-    [moduleNamespace DecodeCore.module_, ShowCore.ns]
+    [Constants.ns, moduleNamespace DecodeCore.module_, ShowCore.ns]
     kernelTypesNamespaces $
     Just "A utility which instantiates a nonrecursive type with default values"
   where
@@ -85,13 +86,14 @@ graphToSchema = define "graphToSchema" $
   Eithers.bind (Eithers.mapList (var "toPair") (var "els")) (
     "pairs" ~> right (Maps.fromList (var "pairs")))
 
-instantiateTemplate :: TBinding (Context -> Bool -> M.Map Name Type -> Type -> Either (InContext Error) Term)
+instantiateTemplate :: TBinding (Context -> Bool -> M.Map Name Type -> Name -> Type -> Either (InContext Error) Term)
 instantiateTemplate = define "instantiateTemplate" $
   doc ("Given a graph schema and a nonrecursive type, instantiate it with default values."
     <> " If the minimal flag is set, the smallest possible term is produced; otherwise, exactly one subterm"
-    <> " is produced for constructors which do not otherwise require one, e.g. in lists and optionals") $
-  "cx" ~> "minimal" ~> "schema" ~> "t" ~>
-  "inst" <~ instantiateTemplate @@ var "cx" @@ var "minimal" @@ var "schema" $
+    <> " is produced for constructors which do not otherwise require one, e.g. in lists and optionals."
+    <> " The name parameter provides the element name for nominal type construction.") $
+  "cx" ~> "minimal" ~> "schema" ~> "tname" ~> "t" ~>
+  "inst" <~ ("tn" ~> instantiateTemplate @@ var "cx" @@ var "minimal" @@ var "schema" @@ var "tn") $
   "noPoly" <~ Ctx.failInContext (Error.errorOther $ Error.otherError (string "Polymorphic and function types are not currently supported")) (var "cx") $
   "forFloat" <~ ("ft" ~> cases _FloatType (var "ft")
     Nothing [
@@ -118,13 +120,13 @@ instantiateTemplate = define "instantiateTemplate" $
     _LiteralType_string>>: constant (Core.literalString (string ""))]) $
   cases _Type (var "t")
     Nothing [
-    _Type_annotated>>: "at" ~> var "inst" @@ (Core.annotatedTypeBody (var "at")),
+    _Type_annotated>>: "at" ~> var "inst" @@ var "tname" @@ (Core.annotatedTypeBody (var "at")),
     _Type_application>>: constant (var "noPoly"),
     _Type_function>>: constant (var "noPoly"),
     _Type_forall>>: constant (var "noPoly"),
     _Type_list>>: "et" ~> Logic.ifElse (var "minimal")
       (right (Core.termList (list ([] :: [TTerm Term]))))
-      (Eithers.bind (var "inst" @@ var "et") (
+      (Eithers.bind (var "inst" @@ var "tname" @@ var "et") (
         "e" ~> right (Core.termList (list [var "e"])))),
     _Type_literal>>: "lt" ~> right (Core.termLiteral (var "forLiteral" @@ var "lt")),
     _Type_map>>: "mt" ~>
@@ -132,34 +134,30 @@ instantiateTemplate = define "instantiateTemplate" $
       "vt" <~ Core.mapTypeValues (var "mt") $
       Logic.ifElse (var "minimal")
         (right (Core.termMap Maps.empty))
-        (Eithers.bind (var "inst" @@ var "kt") (
+        (Eithers.bind (var "inst" @@ var "tname" @@ var "kt") (
           "ke" ~>
-          Eithers.bind (var "inst" @@ var "vt") (
+          Eithers.bind (var "inst" @@ var "tname" @@ var "vt") (
             "ve" ~> right (Core.termMap (Maps.singleton (var "ke") (var "ve")))))),
     _Type_maybe>>: "ot" ~> Logic.ifElse (var "minimal")
       (right (Core.termMaybe nothing))
-      (Eithers.bind (var "inst" @@ var "ot") (
+      (Eithers.bind (var "inst" @@ var "tname" @@ var "ot") (
         "e" ~> right (Core.termMaybe (just (var "e"))))),
     _Type_record>>: "rt" ~>
-      "tname" <~ Core.rowTypeTypeName (var "rt") $
-      "fields" <~ Core.rowTypeFields (var "rt") $
       "toField" <~ ("ft" ~>
-        Eithers.bind (var "inst" @@ (Core.fieldTypeType (var "ft"))) (
+        Eithers.bind (var "inst" @@ var "tname" @@ (Core.fieldTypeType (var "ft"))) (
           "e" ~> right (Core.field (Core.fieldTypeName (var "ft")) (var "e")))) $
-      Eithers.bind (Eithers.mapList (var "toField") (var "fields")) (
+      Eithers.bind (Eithers.mapList (var "toField") (var "rt")) (
         "dfields" ~> right (Core.termRecord (Core.record (var "tname") (var "dfields")))),
     _Type_set>>: "et" ~> Logic.ifElse (var "minimal")
       (right (Core.termSet Sets.empty))
-      (Eithers.bind (var "inst" @@ var "et") (
+      (Eithers.bind (var "inst" @@ var "tname" @@ var "et") (
         "e" ~> right (Core.termSet (Sets.fromList (list [var "e"]))))),
-    _Type_variable>>: "tname" ~>
+    _Type_variable>>: "vname" ~>
       Maybes.maybe
-        (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat2 (string "Type variable ") (Strings.cat2 (ShowCore.term @@ (Core.termVariable (var "tname"))) (string " not found in schema")))) (var "cx"))
-        (var "inst")
-        (Maps.lookup (var "tname") (var "schema")),
+        (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat2 (string "Type variable ") (Strings.cat2 (ShowCore.term @@ (Core.termVariable (var "vname"))) (string " not found in schema")))) (var "cx"))
+        (var "inst" @@ var "vname")
+        (Maps.lookup (var "vname") (var "schema")),
     _Type_wrap>>: "wt" ~>
-      "tname" <~ Core.wrappedTypeTypeName (var "wt") $
-      "t'" <~ Core.wrappedTypeBody (var "wt") $
-      Eithers.bind (var "inst" @@ var "t'") (
+      Eithers.bind (var "inst" @@ var "tname" @@ var "wt") (
         "e" ~> right (Core.termWrap (Core.wrappedTerm (var "tname") (var "e"))))]
 

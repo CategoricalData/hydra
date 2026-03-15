@@ -252,7 +252,7 @@ dependencyNamespaces = define "dependencyNamespaces" $
               (decoderFor _Term @@ var "graph" @@ var "term"))))
         (right (Sets.unions (list [var "dataNames", var "schemaNames"]))))) $
   Eithers.map ("namesList" ~> Sets.fromList (Maybes.cat (Lists.map (Names.namespaceOf) (
-      Sets.toList (Sets.delete (Constants.placeholderName) (Sets.unions (var "namesList")))))))
+      Sets.toList (Sets.unions (var "namesList"))))))
     (Eithers.mapList (var "depNames") (var "els"))
 
 dereferenceType :: TBinding (Context -> Graph -> Name -> Either (InContext Error) (Maybe Type))
@@ -385,8 +385,8 @@ fieldTypes = define "fieldTypes" $
   match _Type (Just (Ctx.failInContext (Error.errorOther $ Error.otherError (
     Strings.cat (list [string "expected record or union type but found ", ShowCore.type_ @@ var "t"]))) (var "cx"))) [
     _Type_forall>>: "ft" ~> fieldTypes @@ var "cx" @@ var "graph" @@ Core.forallTypeBody (var "ft"),
-    _Type_record>>: "rt" ~> right (var "toMap" @@ Core.rowTypeFields (var "rt")),
-    _Type_union>>: "rt" ~> right (var "toMap" @@ Core.rowTypeFields (var "rt")),
+    _Type_record>>: "rt" ~> right (var "toMap" @@ var "rt"),
+    _Type_union>>: "rt" ~> right (var "toMap" @@ var "rt"),
     _Type_variable>>: "name" ~>
       Eithers.bind (Lexical.requireElement @@ var "cx" @@ var "graph" @@ var "name") (
         "el" ~>
@@ -523,12 +523,12 @@ instantiateTypeScheme = define "instantiateTypeScheme" $
       (var "renamedConstraints"))
     (var "cx2")
 
-isEnumRowType :: TBinding (RowType -> Bool)
+isEnumRowType :: TBinding ([FieldType] -> Bool)
 isEnumRowType = define "isEnumRowType" $
   doc "Check if a row type represents an enum (all fields are unit-typed)" $
   "rt" ~> Lists.foldl (binaryFunction Logic.and) true $
     Lists.map ("f" ~> isUnitType @@ (Rewriting.deannotateType @@ (Core.fieldTypeType (var "f")))) $
-      Core.rowTypeFields $ var "rt"
+      var "rt"
 
 isEncodedType :: TBinding (Term -> Bool)
 isEncodedType = define "isEncodedType" $
@@ -599,8 +599,7 @@ isType = define "isType" $
       isType @@ (Core.applicationTypeFunction (var "a")),
     _Type_forall>>: "l" ~>
       isType @@ (Core.forallTypeBody (var "l")),
-    _Type_union>>: "rt" ~>
-      Equality.equal (string (unName _Type)) (Core.unName (Core.rowTypeTypeName (var "rt"))),
+    _Type_union>>: "rt" ~> false,
     _Type_variable>>: "v" ~> Equality.equal (var "v") (Core.nameLift _Type)]
 
 isUnitTerm :: TBinding (Term -> Bool)
@@ -674,7 +673,7 @@ partitionDefinitions = define "partitionDefinitions" $
     (Maybes.cat $ Lists.map (var "getType") (var "defs"))
     (Maybes.cat $ Lists.map (var "getTerm") (var "defs"))
 
-requireRecordType :: TBinding (Context -> Graph -> Name -> Either (InContext Error) RowType)
+requireRecordType :: TBinding (Context -> Graph -> Name -> Either (InContext Error) [FieldType])
 requireRecordType = define "requireRecordType" $
   doc "Require a name to resolve to a record type" $
   "cx" ~> "graph" ~> "name" ~>
@@ -682,7 +681,7 @@ requireRecordType = define "requireRecordType" $
     _Type_record>>: "rt" ~> just (var "rt")]) $
   requireRowType @@ var "cx" @@ string "record type" @@ var "toRecord" @@ var "graph" @@ var "name"
 
-requireRowType :: TBinding (Context -> String -> (Type -> Maybe RowType) -> Graph -> Name -> Either (InContext Error) RowType)
+requireRowType :: TBinding (Context -> String -> (Type -> Maybe [FieldType]) -> Graph -> Name -> Either (InContext Error) [FieldType])
 requireRowType = define "requireRowType" $
   doc "Require a name to resolve to a row type" $
   "cx" ~> "label" ~> "getter" ~> "graph" ~> "name" ~>
@@ -736,7 +735,7 @@ requireUnionField_ = define "requireUnionField" $
   "withRowType" <~ ("rt" ~>
     "matches" <~ (Lists.filter
       ("ft" ~> Equality.equal (Core.fieldTypeName $ var "ft") (var "fname"))
-      (Core.rowTypeFields $ var "rt")) $
+      (var "rt")) $
     Logic.ifElse (Lists.null $ var "matches")
       (Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat $ list [
         string "no field \"",
@@ -746,7 +745,7 @@ requireUnionField_ = define "requireUnionField" $
       (right $ Core.fieldTypeType $ Lists.head $ var "matches")) $
   Eithers.bind (requireUnionType @@ var "cx" @@ var "graph" @@ var "tname") (var "withRowType")
 
-requireUnionType :: TBinding (Context -> Graph -> Name -> Either (InContext Error) RowType)
+requireUnionType :: TBinding (Context -> Graph -> Name -> Either (InContext Error) [FieldType])
 requireUnionType = define "requireUnionType" $
   doc "Require a name to resolve to a union type" $
   "cx" ~> "graph" ~> "name" ~>

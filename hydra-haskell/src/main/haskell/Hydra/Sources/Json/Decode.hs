@@ -112,10 +112,10 @@ module_ = Module ns elements
 
 -- | Decode a JSON Value to a Term given a Type and type lookup table.
 -- Returns Left with an error message for type mismatches or invalid JSON.
-fromJson :: TBinding (M.Map Name Type -> Type -> Value -> Either String Term)
+fromJson :: TBinding (M.Map Name Type -> Name -> Type -> Value -> Either String Term)
 fromJson = define "fromJson" $
-  doc "Decode a JSON value to a Hydra term given a type. Returns Left for type mismatches." $
-  "types" ~> "typ" ~> "value" ~>
+  doc "Decode a JSON value to a Hydra term given a type and type name. Returns Left for type mismatches." $
+  "types" ~> "tname" ~> "typ" ~> "value" ~>
   "stripped" <~ (Rewriting.deannotateType @@ var "typ") $
   cases _Type (var "stripped")
     (Just $ left $ Strings.cat $ list [
@@ -127,7 +127,7 @@ fromJson = define "fromJson" $
 
     -- Lists
     _Type_list>>: "elemType" ~>
-      "decodeElem" <~ ("v" ~> fromJson @@ var "types" @@ var "elemType" @@ var "v") $
+      "decodeElem" <~ ("v" ~> fromJson @@ var "types" @@ var "tname" @@ var "elemType" @@ var "v") $
       "arrResult" <~ (expectArray @@ var "value") $
       Eithers.either_
         ("err" ~> left $ var "err")
@@ -138,7 +138,7 @@ fromJson = define "fromJson" $
 
     -- Sets
     _Type_set>>: "elemType" ~>
-      "decodeElem" <~ ("v" ~> fromJson @@ var "types" @@ var "elemType" @@ var "v") $
+      "decodeElem" <~ ("v" ~> fromJson @@ var "types" @@ var "tname" @@ var "elemType" @@ var "v") $
       "arrResult" <~ (expectArray @@ var "value") $
       Eithers.either_
         ("err" ~> left $ var "err")
@@ -152,7 +152,7 @@ fromJson = define "fromJson" $
       -- Helper to decode Just case (single element array)
       "decodeJust" <~ ("arr" ~>
         Eithers.map ("v" ~> Core.termMaybe $ just $ var "v")
-          (fromJson @@ var "types" @@ var "innerType" @@ (Lists.head $ var "arr"))) $
+          (fromJson @@ var "types" @@ var "tname" @@ var "innerType" @@ (Lists.head $ var "arr"))) $
       -- Decode array based on length: 0 -> Nothing, 1 -> Just, else error
       "decodeMaybeArray" <~ ("arr" ~>
         "len" <~ (Lists.length $ var "arr") $
@@ -179,12 +179,11 @@ fromJson = define "fromJson" $
             -- Use empty object as default for missing optional fields
             "defaultVal" <~ Json.valueNull $
             "jsonVal" <~ (Maybes.fromMaybe (var "defaultVal") (var "mval")) $
-            "decoded" <~ (fromJson @@ var "types" @@ var "ftype" @@ var "jsonVal") $
+            "decoded" <~ (fromJson @@ var "types" @@ var "tname" @@ var "ftype" @@ var "jsonVal") $
             Eithers.map ("v" ~> Core.field (var "fname") (var "v")) (var "decoded")) $
-          "fields" <~ (Core.rowTypeFields $ var "rt") $
-          "decodedFields" <~ (Eithers.mapList (var "decodeField") (var "fields")) $
+          "decodedFields" <~ (Eithers.mapList (var "decodeField") (var "rt")) $
           Eithers.map
-            ("fs" ~> Core.termRecord $ Core.record (Core.rowTypeTypeName $ var "rt") (var "fs"))
+            ("fs" ~> Core.termRecord $ Core.record (var "tname") (var "fs"))
             (var "decodedFields"))
         (var "objResult"),
 
@@ -193,10 +192,10 @@ fromJson = define "fromJson" $
       -- Helper to decode a field once found
       "decodeVariant" <~ ("key" ~> "val" ~> "ftype" ~>
         "jsonVal" <~ (Maybes.fromMaybe Json.valueNull (var "val")) $
-        "decoded" <~ (fromJson @@ var "types" @@ var "ftype" @@ var "jsonVal") $
+        "decoded" <~ (fromJson @@ var "types" @@ var "tname" @@ var "ftype" @@ var "jsonVal") $
         Eithers.map
           ("v" ~> Core.termUnion $ Core.injection
-            (Core.rowTypeTypeName $ var "rt")
+            (var "tname")
             (Core.field (Core.name $ var "key") (var "v")))
           (var "decoded")) $
       -- Helper to check if a field matches and decode it
@@ -217,7 +216,7 @@ fromJson = define "fromJson" $
         var "findAndDecode"
           @@ (Lists.head $ Maps.keys $ var "obj")
           @@ (Maps.lookup (Lists.head $ Maps.keys $ var "obj") (var "obj"))
-          @@ (Core.rowTypeFields $ var "rt")) $
+          @@ var "rt") $
       -- Process the union object
       "processUnion" <~ ("obj" ~>
         Logic.ifElse (Equality.equal (Lists.length $ Maps.keys $ var "obj") (int32 1))
@@ -236,24 +235,11 @@ fromJson = define "fromJson" $
 
     -- Wrapped types (look up in type table and extract inner type if needed)
     _Type_wrap>>: "wn" ~>
-      -- Extract inner type from a looked-up type (handles nested wraps)
-      "extractInnerType" <~ ("lt" ~>
-        cases _Type (var "lt") (Just $ var "lt") [
-          _Type_wrap>>: "wt" ~> Core.wrappedTypeBody $ var "wt"]) $
-      -- Decode using the inner type and wrap the result
-      "decodeAndWrap" <~ ("lt" ~>
-        "innerType" <~ (var "extractInnerType" @@ var "lt") $
-        "decoded" <~ (fromJson @@ var "types" @@ var "innerType" @@ var "value") $
-        Eithers.map
-          ("v" ~> Core.termWrap $ Core.wrappedTerm (Core.wrappedTypeTypeName $ var "wn") (var "v"))
-          (var "decoded")) $
-      "lookedUp" <~ (Maps.lookup (Core.wrappedTypeTypeName $ var "wn") (var "types")) $
-      Maybes.maybe
-        (left $ Strings.cat $ list [
-          string "unknown wrapped type: ",
-          Core.unName $ Core.wrappedTypeTypeName $ var "wn"])
-        ("lt" ~> var "decodeAndWrap" @@ var "lt")
-        (var "lookedUp"),
+      -- TypeWrap now directly holds the inner Type; decode with it and wrap the result
+      "decoded" <~ (fromJson @@ var "types" @@ var "tname" @@ var "wn" @@ var "value") $
+      Eithers.map
+        ("v" ~> Core.termWrap $ Core.wrappedTerm (var "tname") (var "v"))
+        (var "decoded"),
 
     -- Map -> array of {@key, @value}
     _Type_map>>: "mt" ~>
@@ -275,8 +261,8 @@ fromJson = define "fromJson" $
                   ("kj" ~> Maybes.maybe
                     (left $ string "missing @value in map entry")
                     ("vj" ~>
-                      "decodedKey" <~ (fromJson @@ var "types" @@ var "keyType" @@ var "kj") $
-                      "decodedVal" <~ (fromJson @@ var "types" @@ var "valType" @@ var "vj") $
+                      "decodedKey" <~ (fromJson @@ var "types" @@ var "tname" @@ var "keyType" @@ var "kj") $
+                      "decodedVal" <~ (fromJson @@ var "types" @@ var "tname" @@ var "valType" @@ var "vj") $
                       Eithers.either_
                         ("err" ~> left $ var "err")
                         ("k" ~> Eithers.map ("v" ~> pair (var "k") (var "v")) (var "decodedVal"))
@@ -303,8 +289,8 @@ fromJson = define "fromJson" $
             ("fj" ~> Maybes.maybe
               (left $ string "missing @second in pair")
               ("sj" ~>
-                "decodedFirst" <~ (fromJson @@ var "types" @@ var "firstType" @@ var "fj") $
-                "decodedSecond" <~ (fromJson @@ var "types" @@ var "secondType" @@ var "sj") $
+                "decodedFirst" <~ (fromJson @@ var "types" @@ var "tname" @@ var "firstType" @@ var "fj") $
+                "decodedSecond" <~ (fromJson @@ var "types" @@ var "tname" @@ var "secondType" @@ var "sj") $
                 Eithers.either_
                   ("err" ~> left $ var "err")
                   ("f" ~> Eithers.map ("s" ~> Core.termPair $ pair (var "f") (var "s")) (var "decodedSecond"))
@@ -327,11 +313,11 @@ fromJson = define "fromJson" $
             (Maybes.maybe
               (left $ string "expected @left or @right in Either")
               ("rj" ~>
-                "decoded" <~ (fromJson @@ var "types" @@ var "rightType" @@ var "rj") $
+                "decoded" <~ (fromJson @@ var "types" @@ var "tname" @@ var "rightType" @@ var "rj") $
                 Eithers.map ("v" ~> Core.termEither $ right $ var "v") (var "decoded"))
               (var "rightJson"))
             ("lj" ~>
-              "decoded" <~ (fromJson @@ var "types" @@ var "leftType" @@ var "lj") $
+              "decoded" <~ (fromJson @@ var "types" @@ var "tname" @@ var "leftType" @@ var "lj") $
               Eithers.map ("v" ~> Core.termEither $ left $ var "v") (var "decoded"))
             (var "leftJson"))
         (var "objResult"),
@@ -343,7 +329,7 @@ fromJson = define "fromJson" $
         (left $ Strings.cat $ list [
           string "unknown type variable: ",
           Core.unName $ var "name"])
-        ("resolvedType" ~> fromJson @@ var "types" @@ var "resolvedType" @@ var "value")
+        ("resolvedType" ~> fromJson @@ var "types" @@ var "name" @@ var "resolvedType" @@ var "value")
         (var "lookedUp")]
 
 -- | Decode a JSON value to a literal term given a literal type

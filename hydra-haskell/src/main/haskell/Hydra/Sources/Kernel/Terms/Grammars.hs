@@ -178,7 +178,7 @@ makeElements = define "makeElements" $
   lets [
     "forPat">: ("pat" ~> match G._Pattern Nothing [
       _Pattern_alternatives>>: "pats" ~> var "forRecordOrUnion" @@ false @@
-        ("fields" ~> Core.typeUnion (Core.rowType (Constants.placeholderName) (var "fields"))) @@ var "pats",
+        ("fields" ~> Core.typeUnion (var "fields")) @@ var "pats",
       _Pattern_constant>>: constant (var "trivial"),
       _Pattern_ignored>>: constant (list ([] :: [TTerm (String, Type)])),
       _Pattern_labeled>>: "lp" ~> var "forPat" @@ Grammar.labeledPatternPattern (var "lp"),
@@ -189,7 +189,7 @@ makeElements = define "makeElements" $
       _Pattern_plus>>: "p" ~> var "mod" @@ string "Elmt" @@ (unaryFunction MetaTypes.list) @@ var "p",
       _Pattern_regex>>: constant (list [pair (var "lname") MetaTypes.string]),
       _Pattern_sequence>>: "pats" ~> var "forRecordOrUnion" @@ true @@
-        ("fields" ~> Core.typeRecord (Core.rowType (Constants.placeholderName) (var "fields"))) @@ var "pats",
+        ("fields" ~> Core.typeRecord (var "fields")) @@ var "pats",
       _Pattern_star>>: "p" ~> var "mod" @@ string "Elmt" @@ (unaryFunction MetaTypes.list) @@ var "p"]
     @@ var "pat"),
 
@@ -243,29 +243,14 @@ toName = define "toName" $
 
 replacePlaceholders :: TBinding (Name -> Type -> Type)
 replacePlaceholders = define "replacePlaceholders" $
-  doc "Replace Placeholder names in a type with the actual element name" $
-  "elName" ~> "typ" ~>
-  Rewriting.rewriteType @@ ("recurse" ~> "t" ~>
-    cases _Type (var "t") (Just (var "t")) [
-    _Type_record>>: "rt" ~>
-      Logic.ifElse (Equality.equal (Core.rowTypeTypeName $ var "rt") Constants.placeholderName)
-        (Core.typeRecord (Core.rowType (var "elName") (Core.rowTypeFields $ var "rt")))
-        (var "t"),
-    _Type_union>>: "ut" ~>
-      Logic.ifElse (Equality.equal (Core.rowTypeTypeName $ var "ut") Constants.placeholderName)
-        (Core.typeUnion (Core.rowType (var "elName") (Core.rowTypeFields $ var "ut")))
-        (var "t"),
-    _Type_wrap>>: "wt" ~>
-      Logic.ifElse (Equality.equal (Core.wrappedTypeTypeName $ var "wt") Constants.placeholderName)
-        (Core.typeWrap (Core.wrappedType (var "elName") (Core.wrappedTypeBody $ var "wt")))
-        (var "t")])
-  @@ var "typ"
+  doc "Replace Placeholder names in a type with the actual element name (no-op since types no longer carry names)" $
+  "elName" ~> "typ" ~> var "typ"
 
 wrapType :: TBinding (Type -> Type)
 wrapType = define "wrapType" $
   doc "Wrap a type in a placeholder name, unless it is already a wrapper, record, or union type" $
   "t" ~> cases _Type (var "t")
-    (Just (Core.typeWrap (Core.wrappedType (Core.nameLift placeholderName) (var "t")))) [
+    (Just (Core.typeWrap (var "t"))) [
     _Type_record>>: constant (var "t"),
     _Type_union>>: constant (var "t"),
     _Type_wrap>>: constant (var "t")]

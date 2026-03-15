@@ -272,7 +272,7 @@ encodeFunction = haskellCoderDefinition "encodeFunction" $
               "rt" <<~ Schemas.requireUnionType @@ var "cx" @@ var "g" @@ var "dn" $ lets [
               "toFieldMapEntry">: "f" ~>
                 pair (Core.fieldTypeName $ var "f") (var "f"),
-              "fieldMap">: Maps.fromList $ Lists.map (var "toFieldMapEntry") (Core.rowTypeFields $ var "rt")] $
+              "fieldMap">: Maps.fromList $ Lists.map (var "toFieldMapEntry") (var "rt")] $
               "ecases" <<~ Eithers.mapList (var "toAlt" @@ var "fieldMap") (var "fields") $
               "dcases" <<~ (Maybes.cases (var "def")
                 (right $ list ([] :: [TTerm H.CaseRhs])) $
@@ -572,20 +572,16 @@ encodeType = haskellCoderDefinition "encodeType" $
       "f" <<~ var "encode" @@ (Core.pairTypeFirst $ var "pt") $
       "s" <<~ var "encode" @@ (Core.pairTypeSecond $ var "pt") $
         right $ inject H._Type H._Type_tuple $ list [var "f", var "s"],
-    _Type_record>>: "rt" ~> var "ref" @@ (Core.rowTypeTypeName $ var "rt"),
+    _Type_record>>: constant (var "ref" @@ Core.name (string "placeholder")),
     _Type_set>>: "st" ~>
       "hst" <<~ var "encode" @@ var "st" $
       right $ HaskellUtils.toTypeApplication @@ list [
           inject H._Type H._Type_variable $ HaskellUtils.rawName @@ string "S.Set",
           var "hst"],
-    _Type_union>>: "rt" ~> lets [
-      "typeName">: Core.rowTypeTypeName $ var "rt"] $
-      var "ref" @@ var "typeName",
+    _Type_union>>: constant (var "ref" @@ Core.name (string "placeholder")),
     _Type_unit>>: constant $ right $ var "unitTuple",
     _Type_variable>>: "v1" ~> var "ref" @@ var "v1",
-    _Type_wrap>>: "wrapped" ~> lets [
-      "name">: Core.wrappedTypeTypeName $ var "wrapped"] $
-      var "ref" @@ var "name"]
+    _Type_wrap>>: constant (var "ref" @@ Core.name (string "placeholder"))]
 
 encodeTypeWithClassAssertions :: TBinding (HaskellNamespaces -> M.Map Name (S.Set TypeClass) -> Type -> Context -> Graph -> Either (InContext Error) H.Type)
 encodeTypeWithClassAssertions = haskellCoderDefinition "encodeTypeWithClassAssertions" $
@@ -848,7 +844,7 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
             H._TypeDeclaration_name>>: var "hd",
             H._TypeDeclaration_type>>: var "htype"]) [
         _Type_record>>: "rt" ~>
-          "cons" <<~ (var "recordCons" @@ var "lname" @@ (Core.rowTypeFields $ var "rt")) $
+          "cons" <<~ (var "recordCons" @@ var "lname" @@ var "rt") $
           right $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
             H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_data,
             H._DataDeclaration_context>>: list ([] :: [TTerm H.Assertion]),
@@ -856,16 +852,15 @@ toTypeDeclarationsFrom = haskellCoderDefinition "toTypeDeclarationsFrom" $
             H._DataDeclaration_constructors>>: list [var "cons"],
             H._DataDeclaration_deriving>>: list [var "deriv"]],
         _Type_union>>: "rt" ~>
-          "cons" <<~ Eithers.mapList (var "unionCons" @@ (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g"))) @@ var "lname") (Core.rowTypeFields $ var "rt") $
+          "cons" <<~ Eithers.mapList (var "unionCons" @@ (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g"))) @@ var "lname") (var "rt") $
           right $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
             H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_data,
             H._DataDeclaration_context>>: list ([] :: [TTerm H.Assertion]),
             H._DataDeclaration_head>>: var "hd",
             H._DataDeclaration_constructors>>: var "cons",
             H._DataDeclaration_deriving>>: list [var "deriv"]],
-        _Type_wrap>>: "wrapped" ~> lets [
-          "wt">: Core.wrappedTypeBody $ var "wrapped"] $
-          "cons" <<~ var "newtypeCons" @@ var "elementName" @@ var "wt" $
+        _Type_wrap>>: "wrapped" ~>
+          "cons" <<~ var "newtypeCons" @@ var "elementName" @@ var "wrapped" $
             right $ inject H._Declaration H._Declaration_data $ record H._DataDeclaration [
               H._DataDeclaration_keyword>>: injectUnit H._DataOrNewtype H._DataOrNewtype_newtype,
               H._DataDeclaration_context>>: list ([] :: [TTerm H.Assertion]),

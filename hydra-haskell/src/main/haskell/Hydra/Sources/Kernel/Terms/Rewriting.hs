@@ -1688,18 +1688,15 @@ rewriteType = define "rewriteType" $ "f" ~> "typ0" ~>
         (var "recurse" @@ (Core.mapTypeKeys $ var "mt"))
         (var "recurse" @@ (Core.mapTypeValues $ var "mt")),
       _Type_maybe>>: "t" ~> Core.typeMaybe $ var "recurse" @@ var "t",
-      _Type_record>>: "rt" ~> Core.typeRecord $ Core.rowType
-        (Core.rowTypeTypeName $ var "rt")
-        (Lists.map (var "forField") (Core.rowTypeFields $ var "rt")),
+      _Type_record>>: "rt" ~> Core.typeRecord $
+        Lists.map (var "forField") (var "rt"),
       _Type_set>>: "t" ~> Core.typeSet $ var "recurse" @@ var "t",
-      _Type_union>>: "rt" ~> Core.typeUnion $ Core.rowType
-        (Core.rowTypeTypeName $ var "rt")
-        (Lists.map (var "forField") (Core.rowTypeFields $ var "rt")),
+      _Type_union>>: "rt" ~> Core.typeUnion $
+        Lists.map (var "forField") (var "rt"),
       _Type_unit>>: constant Core.typeUnit,
       _Type_variable>>: "v" ~> Core.typeVariable $ var "v",
-      _Type_wrap>>: "wt" ~> Core.typeWrap $ Core.wrappedType
-        (Core.wrappedTypeTypeName $ var "wt")
-        (var "recurse" @@ (Core.wrappedTypeBody $ var "wt"))]) $
+      _Type_wrap>>: "wt" ~> Core.typeWrap $
+        var "recurse" @@ var "wt"]) $
 --  rewrite @@ var "fsub" @@ var "f" -- TODO: restore global rewrite/fix instead of the local definition
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ var "typ0"
@@ -1743,29 +1740,25 @@ rewriteTypeM = define "rewriteTypeM" $
       "rt" <<~ var "recurse" @@ var "t" $
       right $ Core.typeMaybe $ var "rt",
     _Type_record>>: "rt" ~>
-      "name" <~ Core.rowTypeTypeName (var "rt") $
-      "fields" <~ Core.rowTypeFields (var "rt") $
       "forField" <~ ("f" ~>
         "t" <<~ var "recurse" @@ (Core.fieldTypeType $ var "f") $
         right $ Core.fieldTypeWithType (var "f") (var "t")) $
-      "rfields" <<~ Eithers.mapList (var "forField") (var "fields") $
-      right $ Core.typeRecord $ Core.rowType (var "name") (var "rfields"),
+      "rfields" <<~ Eithers.mapList (var "forField") (var "rt") $
+      right $ Core.typeRecord $ var "rfields",
     _Type_set>>: "t" ~>
       "rt" <<~ var "recurse" @@ var "t" $
       right $ Core.typeSet $ var "rt",
     _Type_union>>: "rt" ~>
-      "name" <~ Core.rowTypeTypeName (var "rt") $
-      "fields" <~ Core.rowTypeFields (var "rt") $
       "forField" <~ ("f" ~>
         "t" <<~ var "recurse" @@ (Core.fieldTypeType $ var "f") $
         right $ Core.fieldTypeWithType (var "f") (var "t")) $
-      "rfields" <<~ Eithers.mapList (var "forField") (var "fields") $
-      right $ Core.typeUnion $ Core.rowType (var "name") (var "rfields"),
+      "rfields" <<~ Eithers.mapList (var "forField") (var "rt") $
+      right $ Core.typeUnion $ var "rfields",
     _Type_unit>>: constant $ right $ Core.typeUnit,
     _Type_variable>>: "v" ~> right $ Core.typeVariable $ var "v",
     _Type_wrap>>: "wt" ~>
-      "t" <<~ var "recurse" @@ (Core.wrappedTypeBody $ var "wt") $
-      right $ Core.typeWrap $ Core.wrappedType (Core.wrappedTypeTypeName $ var "wt") (var "t")]) $
+      "t" <<~ var "recurse" @@ var "wt" $
+      right $ Core.typeWrap $ var "t"]) $
   "recurse" <~ var "f" @@ (var "fsub" @@ var "recurse") $
   var "recurse" @@ var "typ0"
 
@@ -1975,12 +1968,12 @@ subtypes = define "subtypes" $
       Core.mapTypeKeys $ var "mt",
       Core.mapTypeValues $ var "mt"],
     _Type_maybe>>: "ot" ~> list [var "ot"],
-    _Type_record>>: "rt" ~> Lists.map (unaryFunction Core.fieldTypeType) (Core.rowTypeFields $ var "rt"),
+    _Type_record>>: "rt" ~> Lists.map (unaryFunction Core.fieldTypeType) (var "rt"),
     _Type_set>>: "st" ~> list [var "st"],
-    _Type_union>>: "rt" ~> Lists.map (unaryFunction Core.fieldTypeType) (Core.rowTypeFields $ var "rt"),
+    _Type_union>>: "rt" ~> Lists.map (unaryFunction Core.fieldTypeType) (var "rt"),
     _Type_unit>>: constant $ list ([] :: [TTerm Type]),
     _Type_variable>>: constant $ list ([] :: [TTerm Type]),
-    _Type_wrap>>: "nt" ~> list [Core.wrappedTypeBody $ var "nt"]]
+    _Type_wrap>>: "nt" ~> list [var "nt"]]
 
 termDependencyNames :: TBinding (Bool -> Bool -> Bool -> Term -> S.Set Name)
 termDependencyNames = define "termDependencyNames" $
@@ -2075,17 +2068,7 @@ typeDependencyNames = define "typeDependencyNames" $
 typeNamesInType :: TBinding (Type -> S.Set Name)
 typeNamesInType = define "typeNamesInType" $
   "typ0" ~>
-  "addNames" <~ ("names" ~> "typ" ~> cases _Type (var "typ")
-    (Just $ var "names") [
-    _Type_record>>: "rowType" ~>
-      "tname" <~ Core.rowTypeTypeName (var "rowType") $
-      Sets.insert (var "tname") (var "names"),
-    _Type_union>>: "rowType" ~>
-      "tname" <~ Core.rowTypeTypeName (var "rowType") $
-      Sets.insert (var "tname") (var "names"),
-    _Type_wrap>>: "wrappedType" ~>
-      "tname" <~ Core.wrappedTypeTypeName (var "wrappedType") $
-      Sets.insert (var "tname") (var "names")]) $
+  "addNames" <~ ("names" ~> "typ" ~> var "names") $
   foldOverType @@ Coders.traversalOrderPre @@ var "addNames" @@ Sets.empty @@ var "typ0"
 
 unshadowVariables :: TBinding (Term -> Term)

@@ -275,7 +275,7 @@ testTypePersonOrSomething = defineType "testTypePersonOrSomething" $
 
 testTypePolymorphicWrapper :: TBinding Type
 testTypePolymorphicWrapper = defineType "testTypePolymorphicWrapper" $
-  T.forAll "a" $ Core.typeWrap $ Core.wrappedType testTypePolymorphicWrapperName (T.list $ T.variable "a")
+  T.forAll "a" $ Core.typeWrap (T.list $ T.variable "a")
 
 testTypeSimpleNumber :: TBinding Type
 testTypeSimpleNumber = defineType "testTypeSimpleNumber" $
@@ -285,7 +285,7 @@ testTypeSimpleNumber = defineType "testTypeSimpleNumber" $
 
 testTypeStringAlias :: TBinding Type
 testTypeStringAlias = defineType "testTypeStringAlias" $
-  Core.typeWrap $ Core.wrappedType testTypeStringAliasName T.string
+  Core.typeWrap T.string
 
 testTypeSymmetricTriple :: TBinding Type
 testTypeSymmetricTriple = defineType "testTypeSymmetricTriple" $
