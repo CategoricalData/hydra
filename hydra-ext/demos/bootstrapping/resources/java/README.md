@@ -14,7 +14,7 @@ infrastructure) to form a self-contained, buildable project.
 
 ## Prerequisites
 
-- JDK 17+ and [Gradle](https://gradle.org/) (via the included wrapper)
+- JDK 11+ and [Gradle](https://gradle.org/) (via the included wrapper)
 
 ## Running the tests
 

@@ -87,7 +87,7 @@ for more details.
 
 ### Java
 
-Install JDK 17 or later. Build with Gradle from the repository root:
+Install JDK 11 or later. Build with Gradle from the repository root:
 
 ```bash
 ./gradlew compileJava
@@ -96,7 +96,7 @@ Install JDK 17 or later. Build with Gradle from the repository root:
 You may need to set `JAVA_HOME` if your default Java version is too old:
 
 ```bash
-JAVA_HOME=/path/to/java17 ./gradlew compileJava
+JAVA_HOME=/path/to/java11 ./gradlew compileJava
 ```
 
 See the [Hydra-Java README](https://github.com/CategoricalData/hydra/blob/main/hydra-java/README.md)
