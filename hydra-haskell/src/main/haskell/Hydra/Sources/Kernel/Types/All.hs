@@ -7,7 +7,6 @@ import qualified Hydra.Sources.Kernel.Types.Accessors   as Accessors
 import qualified Hydra.Sources.Kernel.Types.Ast         as Ast
 import qualified Hydra.Sources.Kernel.Types.Classes     as Classes
 import qualified Hydra.Sources.Kernel.Types.Coders      as Coders
-import qualified Hydra.Sources.Kernel.Types.Compute     as Compute
 import qualified Hydra.Sources.Kernel.Types.Context     as Context
 import qualified Hydra.Sources.Kernel.Types.Core        as Core
 import qualified Hydra.Sources.Kernel.Types.Error       as Error
@@ -33,7 +32,6 @@ kernelTypesModules = [
   Ast.module_,
   Classes.module_,
   Coders.module_,
-  Compute.module_,
   Context.module_,
   Core.module_,
   Error.module_,

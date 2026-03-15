@@ -4,7 +4,6 @@
 
 module Hydra.Pg.Graphson.Construct where
 
-import qualified Hydra.Compute as Compute
 import qualified Hydra.Context as Context
 import qualified Hydra.Error as Error
 import qualified Hydra.Json.Model as Model
@@ -16,6 +15,7 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Pg.Graphson.Coder as Coder
 import qualified Hydra.Pg.Graphson.Syntax as Syntax
 import qualified Hydra.Pg.Model as Model_
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -53,10 +53,10 @@ edgePropertyToGraphson :: ((t0 -> Either t1 t2) -> (Model_.PropertyKey, t0) -> E
 edgePropertyToGraphson encodeValue prop = (Eithers.map (\gv -> (Syntax.PropertyKey (Model_.unPropertyKey (Pairs.first prop)), gv)) (encodeValue (Pairs.second prop)))
 
 -- | A coder that converts GraphSON vertices to JSON. Decoding is not supported.
-graphsonVertexToJsonCoder :: (Compute.Coder Syntax.Vertex Model.Value)
-graphsonVertexToJsonCoder = Compute.Coder {
-  Compute.coderEncode = (\_cx -> \v -> Right (Coder.vertexToJson v)),
-  Compute.coderDecode = (\_cx -> \_ -> Left (Context.InContext {
+graphsonVertexToJsonCoder :: (Util.Coder Syntax.Vertex Model.Value)
+graphsonVertexToJsonCoder = Util.Coder {
+  Util.coderEncode = (\_cx -> \v -> Right (Coder.vertexToJson v)),
+  Util.coderDecode = (\_cx -> \_ -> Left (Context.InContext {
     Context.inContextObject = (Error.ErrorOther (Error.OtherError "decoding GraphSON JSON is currently unsupported")),
     Context.inContextContext = _cx}))}
 

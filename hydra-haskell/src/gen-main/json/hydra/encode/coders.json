@@ -283,6 +283,6 @@
   "termDependencies": [
     "hydra.encode.core",
     "hydra.encode.graph",
-    "hydra.encode.compute",
+    "hydra.encode.util",
     "hydra.encode.variants"],
   "typeDependencies": ["hydra.coders"]}

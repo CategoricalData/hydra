@@ -5,7 +5,6 @@
 module Hydra.Pg.TermsToElements where
 
 import qualified Hydra.Annotations as Annotations
-import qualified Hydra.Compute as Compute
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Error as Error
@@ -25,6 +24,7 @@ import qualified Hydra.Pg.Model as Model
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Schemas as Schemas
 import qualified Hydra.Show.Core as Core__
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -120,7 +120,7 @@ expectList cx g f term = (Eithers.bind (Core_.list cx g term) (\elems -> Eithers
 
 -- | Parse an edge id pattern from a value spec and schema
 parseEdgeIdPattern :: (t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.ValueSpec -> Either t5 (Context.Context -> Core.Term -> Either (Context.InContext Error.Error) [t4]))
-parseEdgeIdPattern cx g schema spec = (Eithers.bind (parseValueSpec cx g spec) (\fun -> Right (\cx_ -> \term -> Eithers.bind (fun cx_ term) (\terms -> Eithers.mapList (Compute.coderEncode (Mapping.schemaEdgeIds schema) cx_) terms))))
+parseEdgeIdPattern cx g schema spec = (Eithers.bind (parseValueSpec cx g spec) (\fun -> Right (\cx_ -> \term -> Eithers.bind (fun cx_ term) (\terms -> Eithers.mapList (Util.coderEncode (Mapping.schemaEdgeIds schema) cx_) terms))))
 
 -- | Parse an edge specification into a label and encoder function
 parseEdgeSpec :: (t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.EdgeSpec -> Either t5 (Model.Label, (Context.Context -> Core.Term -> Either (Context.InContext Error.Error) [Model.Element t4])))
@@ -163,7 +163,7 @@ parsePropertySpec :: (t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.PropertySpe
 parsePropertySpec cx g schema spec =  
   let key = (Mapping.propertySpecKey spec) 
       value = (Mapping.propertySpecValue spec)
-  in (Eithers.bind (parseValueSpec cx g value) (\fun -> Right (\cx_ -> \term -> Eithers.bind (fun cx_ term) (\results -> Eithers.bind (Eithers.mapList (Compute.coderEncode (Mapping.schemaPropertyValues schema) cx_) results) (\values -> Right (Lists.map (\v -> (key, v)) values))))))
+  in (Eithers.bind (parseValueSpec cx g value) (\fun -> Right (\cx_ -> \term -> Eithers.bind (fun cx_ term) (\results -> Eithers.bind (Eithers.mapList (Util.coderEncode (Mapping.schemaPropertyValues schema) cx_) results) (\values -> Right (Lists.map (\v -> (key, v)) values))))))
 
 -- | Parse a value specification into a function that processes terms
 parseValueSpec :: (t0 -> t1 -> Mapping.ValueSpec -> Either t2 (Context.Context -> Core.Term -> Either (Context.InContext Error.Error) [Core.Term]))
@@ -174,7 +174,7 @@ parseValueSpec cx g spec = ((\x -> case x of
 
 -- | Parse a vertex id pattern from a value spec and schema
 parseVertexIdPattern :: (t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.ValueSpec -> Either t5 (Context.Context -> Core.Term -> Either (Context.InContext Error.Error) [t4]))
-parseVertexIdPattern cx g schema spec = (Eithers.bind (parseValueSpec cx g spec) (\fun -> Right (\cx_ -> \term -> Eithers.bind (fun cx_ term) (\terms -> Eithers.mapList (Compute.coderEncode (Mapping.schemaVertexIds schema) cx_) terms))))
+parseVertexIdPattern cx g schema spec = (Eithers.bind (parseValueSpec cx g spec) (\fun -> Right (\cx_ -> \term -> Eithers.bind (fun cx_ term) (\terms -> Eithers.mapList (Util.coderEncode (Mapping.schemaVertexIds schema) cx_) terms))))
 
 -- | Parse a vertex specification into a label and encoder function
 parseVertexSpec :: (t0 -> t1 -> Mapping.Schema t2 t3 t4 -> Mapping.VertexSpec -> Either t5 (Model.Label, (Context.Context -> Core.Term -> Either (Context.InContext Error.Error) [Model.Element t4])))
@@ -222,27 +222,27 @@ requireUnique cx context fun term = (Eithers.bind (fun term) (\results -> Logic.
   Context.inContextContext = cx})))))
 
 -- | Create an adapter that maps terms to property graph elements using a mapping specification
-termToElementsAdapter :: (Context.Context -> Graph.Graph -> Mapping.Schema t0 t1 t2 -> Core.Type -> Either (Context.InContext Error.Error) (Compute.Adapter Core.Type [Model.Label] Core.Term [Model.Element t2]))
+termToElementsAdapter :: (Context.Context -> Graph.Graph -> Mapping.Schema t0 t1 t2 -> Core.Type -> Either (Context.InContext Error.Error) (Util.Adapter Core.Type [Model.Label] Core.Term [Model.Element t2]))
 termToElementsAdapter cx g schema typ =  
   let key_elements = (Core.Name "elements")
-  in (Maybes.maybe (Right (Compute.Adapter {
-    Compute.adapterIsLossy = False,
-    Compute.adapterSource = typ,
-    Compute.adapterTarget = [],
-    Compute.adapterCoder = Compute.Coder {
-      Compute.coderEncode = (\_cx -> \_t -> Right []),
-      Compute.coderDecode = (\cx_ -> \_els -> Left (Context.InContext {
+  in (Maybes.maybe (Right (Util.Adapter {
+    Util.adapterIsLossy = False,
+    Util.adapterSource = typ,
+    Util.adapterTarget = [],
+    Util.adapterCoder = Util.Coder {
+      Util.coderEncode = (\_cx -> \_t -> Right []),
+      Util.coderDecode = (\cx_ -> \_els -> Left (Context.InContext {
         Context.inContextObject = (Error.ErrorOther (Error.OtherError "no corresponding element type")),
         Context.inContextContext = cx_}))}})) (\term -> Eithers.bind (expectList cx g decodeElementSpec term) (\specTerms -> Eithers.bind (Eithers.mapList (parseElementSpec cx g schema) specTerms) (\specs ->  
     let labels = (Lists.nub (Lists.map (\_p -> Pairs.first _p) specs)) 
         encoders = (Lists.map (\_p -> Pairs.second _p) specs)
-    in (Right (Compute.Adapter {
-      Compute.adapterIsLossy = False,
-      Compute.adapterSource = typ,
-      Compute.adapterTarget = labels,
-      Compute.adapterCoder = Compute.Coder {
-        Compute.coderEncode = (\cx_ -> \t -> Eithers.map (\_xs -> Lists.concat _xs) (Eithers.mapList (\e -> e cx_ t) encoders)),
-        Compute.coderDecode = (\cx_ -> \_els -> Left (Context.InContext {
+    in (Right (Util.Adapter {
+      Util.adapterIsLossy = False,
+      Util.adapterSource = typ,
+      Util.adapterTarget = labels,
+      Util.adapterCoder = Util.Coder {
+        Util.coderEncode = (\cx_ -> \t -> Eithers.map (\_xs -> Lists.concat _xs) (Eithers.mapList (\e -> e cx_ t) encoders)),
+        Util.coderDecode = (\cx_ -> \_els -> Left (Context.InContext {
           Context.inContextObject = (Error.ErrorOther (Error.OtherError "element decoding is not yet supported")),
           Context.inContextContext = cx_}))}}))))) (Annotations.getTypeAnnotation key_elements typ))
 

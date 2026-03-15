@@ -665,7 +665,7 @@
                                                                                                                                             "name": "variable",
                                                                                                                                             "term": {
                                                                                                                                               "wrap": {
-                                                                                                                                                "body": {"literal": {"string": "hydra.compute.Adapter"}},
+                                                                                                                                                "body": {"literal": {"string": "hydra.util.Adapter"}},
                                                                                                                                                 "typeName": "hydra.core.Name"}}},
                                                                                                                                           "typeName": "hydra.core.Type"}}},
                                                                                                                                     {
@@ -911,6 +911,6 @@
   "termDependencies": [],
   "typeDependencies": [
     "hydra.core",
-    "hydra.compute",
+    "hydra.util",
     "hydra.ext.org.apache.avro.schema",
     "hydra.json.model"]}

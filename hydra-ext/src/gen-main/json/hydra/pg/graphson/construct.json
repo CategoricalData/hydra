@@ -690,7 +690,7 @@
                                       "parameter": "_"}}},
                                 "domain": [{"variable": "hydra.context.Context"}],
                                 "parameter": "_cx"}}}}],
-                      "typeName": "hydra.compute.Coder"}},
+                      "typeName": "hydra.util.Coder"}},
                   "type": {"variable": "hydra.pg.graphson.syntax.Vertex"}}},
               "type": {"variable": "hydra.json.model.Value"}}}}},
       "type": [
@@ -702,7 +702,7 @@
               "function": {
                 "application": {
                   "argument": {"variable": "hydra.pg.graphson.syntax.Vertex"},
-                  "function": {"variable": "hydra.compute.Coder"}}}}},
+                  "function": {"variable": "hydra.util.Coder"}}}}},
           "variables": []}]},
     {
       "name": "hydra.pg.graphson.construct.pgVertexWithAdjacentEdgesToGraphsonVertex",
@@ -1410,7 +1410,6 @@
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",
-    "hydra.compute",
     "hydra.context",
     "hydra.core",
     "hydra.error",

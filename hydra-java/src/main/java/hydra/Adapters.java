@@ -1,7 +1,7 @@
 package hydra;
 
-import hydra.compute.Adapter;
-import hydra.compute.StatelessAdapter;
+import hydra.util.Adapter;
+import hydra.util.StatelessAdapter;
 import hydra.util.Either;
 
 import java.util.function.Function;

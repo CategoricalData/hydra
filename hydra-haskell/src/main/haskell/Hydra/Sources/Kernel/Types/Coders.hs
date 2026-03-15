@@ -7,8 +7,8 @@ import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types ((>:), (@@), (~>))
 import qualified Hydra.Dsl.Types as T
 import qualified Hydra.Sources.Kernel.Types.Core as Core
-import qualified Hydra.Sources.Kernel.Types.Compute as Compute
 import qualified Hydra.Sources.Kernel.Types.Graph as Graph
+import qualified Hydra.Sources.Kernel.Types.Util as Util
 import qualified Hydra.Sources.Kernel.Types.Variants as Variants
 
 
@@ -19,7 +19,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns elements [Graph.ns, Compute.ns, Variants.ns] [Core.ns] $
+module_ = Module ns elements [Graph.ns, Util.ns, Variants.ns] [Core.ns] $
     Just "Abstractions for paired transformations between languages"
   where
     elements = [
@@ -44,7 +44,7 @@ adapterContext = define "AdapterContext" $
       language,
     "adapters">:
       doc "A map of type names to adapters for those types" $
-      T.map Core.name (Compute.adapter
+      T.map Core.name (Util.adapter
         @@ Core.type_ @@ Core.type_
         @@ Core.term @@ Core.term)]
 
@@ -103,7 +103,7 @@ languageName = define "LanguageName" $
 symmetricAdapter :: Binding
 symmetricAdapter = define "SymmetricAdapter" $
   doc "A bidirectional encoder which maps between the same type and term languages on either side" $
-  T.forAlls ["t", "v"] $ Compute.adapter @@ "t" @@ "t" @@ "v" @@ "v"
+  T.forAlls ["t", "v"] $ Util.adapter @@ "t" @@ "t" @@ "v" @@ "v"
 
 traversalOrder :: Binding
 traversalOrder = define "TraversalOrder" $

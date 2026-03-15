@@ -1,6 +1,6 @@
 // Note: this is an automatically generated file. Do not edit.
 
-package hydra.compute;
+package hydra.util;
 
 import java.io.Serializable;
 
@@ -8,7 +8,7 @@ import java.io.Serializable;
  * An encoder and decoder; a bidirectional transformation between two types
  */
 public class Coder<V1, V2> implements Serializable, Comparable<Coder<V1, V2>> {
-  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.compute.Coder");
+  public static final hydra.core.Name TYPE_ = new hydra.core.Name("hydra.util.Coder");
   
   public static final hydra.core.Name ENCODE = new hydra.core.Name("encode");
   

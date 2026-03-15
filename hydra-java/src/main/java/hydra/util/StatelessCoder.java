@@ -1,4 +1,4 @@
-package hydra.compute;
+package hydra.util;
 
 import hydra.context.Context;
 import hydra.context.InContext;

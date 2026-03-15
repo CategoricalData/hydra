@@ -1,6 +1,4 @@
-package hydra.compute;
-
-import hydra.util.Either;
+package hydra.util;
 
 import java.util.function.Function;
 

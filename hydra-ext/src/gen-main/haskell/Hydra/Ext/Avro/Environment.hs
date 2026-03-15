@@ -4,10 +4,10 @@
 
 module Hydra.Ext.Avro.Environment where
 
-import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Ext.Org.Apache.Avro.Schema as Schema
 import qualified Hydra.Json.Model as Model
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -62,7 +62,7 @@ _AvroPrimaryKey_constructor = (Core.Name "constructor")
 data AvroEnvironment = 
   AvroEnvironment {
     -- | Named adapters for previously processed schemas
-    avroEnvironmentNamedAdapters :: (M.Map AvroQualifiedName (Compute.Adapter Schema.Schema Core.Type Model.Value Core.Term)),
+    avroEnvironmentNamedAdapters :: (M.Map AvroQualifiedName (Util.Adapter Schema.Schema Core.Type Model.Value Core.Term)),
     -- | The current Avro namespace
     avroEnvironmentNamespace :: (Maybe String),
     -- | Generated Hydra elements

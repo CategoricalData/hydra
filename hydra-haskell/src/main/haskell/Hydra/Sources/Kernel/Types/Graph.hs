@@ -6,7 +6,6 @@ import           Hydra.Dsl.Annotations (doc)
 import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types ((>:), (@@), (~>))
 import qualified Hydra.Dsl.Types as T
-import qualified Hydra.Sources.Kernel.Types.Compute as Compute
 import qualified Hydra.Sources.Kernel.Types.Context as Context
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Error as Error
@@ -19,7 +18,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns elements [Compute.ns, Context.ns, Core.ns, Error.ns] [Compute.ns, Context.ns, Core.ns, Error.ns] $
+module_ = Module ns elements [Context.ns, Core.ns, Error.ns] [Context.ns, Core.ns, Error.ns] $
     Just "The extension to graphs of Hydra's core type system (hydra.core)"
   where
     elements = [

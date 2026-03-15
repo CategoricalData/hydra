@@ -11,7 +11,7 @@ module Hydra.Dsl.Bootstrap (
   useType,
 ) where
 
-import Hydra.Compute
+import Hydra.Util
 import Hydra.Constants
 import Hydra.Core
 import Hydra.Dsl.AsType

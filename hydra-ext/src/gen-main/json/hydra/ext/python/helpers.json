@@ -1388,7 +1388,7 @@
   "termDependencies": [],
   "typeDependencies": [
     "hydra.ext.python.syntax",
-    "hydra.compute",
+    "hydra.util",
     "hydra.core",
     "hydra.graph",
     "hydra.module",

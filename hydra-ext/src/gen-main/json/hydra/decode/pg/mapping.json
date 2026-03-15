@@ -4271,5 +4271,5 @@
     "hydra.rewriting",
     "hydra.decode.core",
     "hydra.decode.pg.model",
-    "hydra.decode.compute"],
+    "hydra.decode.util"],
   "typeDependencies": ["hydra.pg.mapping", "hydra.util"]}

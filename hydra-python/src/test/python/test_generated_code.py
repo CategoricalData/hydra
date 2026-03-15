@@ -138,7 +138,6 @@ pyright src/gen-main/python/hydra/variants.py
 from hydra.accessors import *
 from hydra.ast import *
 from hydra.coders import *
-from hydra.compute import *
 from hydra.core import *
 from hydra.grammar import *
 from hydra.graph import *

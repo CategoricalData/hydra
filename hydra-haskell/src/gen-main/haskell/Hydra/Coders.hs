@@ -4,9 +4,9 @@
 
 module Hydra.Coders where
 
-import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Util as Util
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -23,7 +23,7 @@ data AdapterContext =
     -- | The language being encoded or decoded
     adapterContextLanguage :: Language,
     -- | A map of type names to adapters for those types
-    adapterContextAdapters :: (M.Map Core.Name (Compute.Adapter Core.Type Core.Type Core.Term Core.Term))}
+    adapterContextAdapters :: (M.Map Core.Name (Util.Adapter Core.Type Core.Type Core.Term Core.Term))}
 
 _AdapterContext = (Core.Name "hydra.coders.AdapterContext")
 
@@ -106,7 +106,7 @@ newtype LanguageName =
 _LanguageName = (Core.Name "hydra.coders.LanguageName")
 
 -- | A bidirectional encoder which maps between the same type and term languages on either side
-type SymmetricAdapter t v = (Compute.Adapter t t v v)
+type SymmetricAdapter t v = (Util.Adapter t t v v)
 
 _SymmetricAdapter = (Core.Name "hydra.coders.SymmetricAdapter")
 

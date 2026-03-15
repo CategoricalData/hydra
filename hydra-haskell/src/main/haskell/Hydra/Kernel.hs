@@ -24,7 +24,6 @@ module Hydra.Kernel (
   module Hydra.Checking,
   module Hydra.Classes,
   module Hydra.Coders,
-  module Hydra.Compute,
   module Hydra.Constants,
   module Hydra.Context,
   module Hydra.Core,
@@ -65,7 +64,6 @@ import Hydra.Arity
 import Hydra.Checking
 import Hydra.Classes
 import Hydra.Coders
-import Hydra.Compute
 import Hydra.Constants
 import Hydra.Context
 import Hydra.Core

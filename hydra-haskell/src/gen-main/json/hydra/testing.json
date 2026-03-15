@@ -12625,7 +12625,6 @@
   "termDependencies": [
     "hydra.ast",
     "hydra.coders",
-    "hydra.compute",
     "hydra.graph",
     "hydra.json.model",
     "hydra.module",

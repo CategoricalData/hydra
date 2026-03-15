@@ -3,7 +3,6 @@
 -- | A DSL for constructing primitive function definitions
 module Hydra.Dsl.Prims where
 
-import Hydra.Compute
 import Hydra.Core
 import Hydra.Classes
 import Hydra.Graph

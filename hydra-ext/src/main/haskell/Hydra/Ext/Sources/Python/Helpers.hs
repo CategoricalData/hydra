@@ -11,8 +11,8 @@ import           Hydra.Dsl.Types                           ((>:), (@@))
 import qualified Hydra.Dsl.Types                           as T
 import qualified Hydra.Sources.Kernel.Types.Core           as Core
 -- Additional imports
-import qualified Hydra.Sources.Kernel.Types.Compute as Compute
 import qualified Hydra.Sources.Kernel.Types.Graph as Graph
+import qualified Hydra.Sources.Kernel.Types.Util as Util
 import qualified Hydra.Sources.Kernel.Types.Module as Module
 import qualified Hydra.Sources.Kernel.Types.Typing as Typing
 import qualified Hydra.Ext.Sources.Python.Syntax as Syntax
@@ -43,7 +43,7 @@ typing :: String -> Type
 typing = typeref Typing.ns
 
 module_ :: Module
-module_ = Module ns elements [] [Syntax.ns, Compute.ns, Core.ns, Graph.ns, Module.ns, Typing.ns] $
+module_ = Module ns elements [] [Syntax.ns, Util.ns, Core.ns, Graph.ns, Module.ns, Typing.ns] $
     Just "Helper types for Python code generation"
   where
     elements = [

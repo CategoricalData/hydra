@@ -1,6 +1,6 @@
 package hydra;
 
-import hydra.compute.Coder;
+import hydra.util.Coder;
 import hydra.context.Context;
 import hydra.context.InContext;
 import hydra.error.Error_;

@@ -3,7 +3,7 @@
 -- This module contains a single binding, typesByName, which maps type Names to Types
 -- for all types defined in the kernel modules needed to decode the Module type
 -- and to provide schema types for inference tests:
--- hydra.coders, hydra.compute, hydra.context, hydra.core, hydra.error, hydra.graph, and hydra.module.
+-- hydra.coders, hydra.context, hydra.core, hydra.error, hydra.graph, hydra.module, and hydra.util.
 --
 -- By consolidating these types into a single map, we avoid the need to generate
 -- individual Source modules for each kernel type module (which can exceed the JVM's
@@ -15,12 +15,12 @@ module Hydra.Sources.Json.Bootstrap where
 import Hydra.Kernel
 import qualified Hydra.Encode.Core as EncodeCore
 import qualified Hydra.Sources.Kernel.Types.Coders as Coders
-import qualified Hydra.Sources.Kernel.Types.Compute as Compute
 import qualified Hydra.Sources.Kernel.Types.Context as Context
 import qualified Hydra.Sources.Kernel.Types.Core as Core
 import qualified Hydra.Sources.Kernel.Types.Error as Error
 import qualified Hydra.Sources.Kernel.Types.Graph as Graph
 import qualified Hydra.Sources.Kernel.Types.Module as Module
+import qualified Hydra.Sources.Kernel.Types.Util as Util
 
 import qualified Data.Map as M
 
@@ -33,12 +33,12 @@ ns = Namespace "hydra.json.bootstrap"
 bootstrapTypeModules :: [Module]
 bootstrapTypeModules = [
   Coders.module_,
-  Compute.module_,
   Context.module_,
   Core.module_,
   Error.module_,
   Graph.module_,
-  Module.module_]
+  Module.module_,
+  Util.module_]
 
 module_ :: Module
 module_ = Module ns [typesByNameBinding] [] [Namespace "hydra.core"] $

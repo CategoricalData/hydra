@@ -9,9 +9,9 @@ from enum import Enum
 from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Node
 from typing import Annotated, TypeAlias, TypeVar, cast
-import hydra.compute
 import hydra.core
 import hydra.graph
+import hydra.util
 import hydra.variants
 
 T = TypeVar("T")
@@ -23,7 +23,7 @@ class AdapterContext:
     
     graph: Annotated[hydra.graph.Graph, "The underlying graph of elements and primitives"]
     language: Annotated[Language, "The language being encoded or decoded"]
-    adapters: Annotated[FrozenDict[hydra.core.Name, hydra.compute.Adapter[hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]], "A map of type names to adapters for those types"]
+    adapters: Annotated[FrozenDict[hydra.core.Name, hydra.util.Adapter[hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]], "A map of type names to adapters for those types"]
     
     TYPE_ = hydra.core.Name("hydra.coders.AdapterContext")
     GRAPH = hydra.core.Name("graph")
@@ -79,7 +79,7 @@ class LanguageName(Node[str]):
 LanguageName.TYPE_ = hydra.core.Name("hydra.coders.LanguageName")
 
 # A bidirectional encoder which maps between the same type and term languages on either side.
-SymmetricAdapter: TypeAlias = "hydra.compute.Adapter[T, T, V, V]"
+SymmetricAdapter: TypeAlias = "hydra.util.Adapter[T, T, V, V]"
 
 class TraversalOrder(Enum):
     r"""Specifies either a pre-order or post-order traversal."""

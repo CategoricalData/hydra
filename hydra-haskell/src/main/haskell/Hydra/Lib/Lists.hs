@@ -2,7 +2,7 @@
 
 module Hydra.Lib.Lists where
 
-import Hydra.Compute
+import Hydra.Util
 import Hydra.Core
 import Hydra.Graph
 import qualified Hydra.Dsl.Terms as Terms

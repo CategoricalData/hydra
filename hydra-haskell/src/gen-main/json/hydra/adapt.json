@@ -4766,7 +4766,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "function": {
-                                                                                                "elimination": {"record": {"field": "encode", "typeName": "hydra.compute.Coder"}}}},
+                                                                                                "elimination": {"record": {"field": "encode", "typeName": "hydra.util.Coder"}}}},
                                                                                             "type": {"variable": "t1"}}},
                                                                                         "type": {"variable": "t2"}}}}}}}}},
                                                                         "domain": [{"variable": "t1"}],
@@ -4788,7 +4788,7 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "function": {
-                                                                                              "elimination": {"record": {"field": "encode", "typeName": "hydra.compute.Coder"}}}},
+                                                                                              "elimination": {"record": {"field": "encode", "typeName": "hydra.util.Coder"}}}},
                                                                                           "type": {"variable": "t0"}}},
                                                                                       "type": {"variable": "t1"}}}}}}}}},
                                                                       "function": {
@@ -4836,7 +4836,7 @@
                                                                                           "typeApplication": {
                                                                                             "body": {
                                                                                               "function": {
-                                                                                                "elimination": {"record": {"field": "decode", "typeName": "hydra.compute.Coder"}}}},
+                                                                                                "elimination": {"record": {"field": "decode", "typeName": "hydra.util.Coder"}}}},
                                                                                             "type": {"variable": "t0"}}},
                                                                                         "type": {"variable": "t1"}}}}}}}}},
                                                                         "domain": [{"variable": "t1"}],
@@ -4858,7 +4858,7 @@
                                                                                         "typeApplication": {
                                                                                           "body": {
                                                                                             "function": {
-                                                                                              "elimination": {"record": {"field": "decode", "typeName": "hydra.compute.Coder"}}}},
+                                                                                              "elimination": {"record": {"field": "decode", "typeName": "hydra.util.Coder"}}}},
                                                                                           "type": {"variable": "t1"}}},
                                                                                       "type": {"variable": "t2"}}}}}}}}},
                                                                       "function": {
@@ -4878,7 +4878,7 @@
                                                               "parameter": "c"}}},
                                                         "domain": [{"variable": "hydra.context.Context"}],
                                                         "parameter": "cx"}}}}],
-                                              "typeName": "hydra.compute.Coder"}},
+                                              "typeName": "hydra.util.Coder"}},
                                           "type": {"variable": "t0"}}},
                                       "type": {"variable": "t2"}}},
                                   "domain": [
@@ -4888,7 +4888,7 @@
                                         "function": {
                                           "application": {
                                             "argument": {"variable": "t1"},
-                                            "function": {"variable": "hydra.compute.Coder"}}}}}],
+                                            "function": {"variable": "hydra.util.Coder"}}}}}],
                                   "parameter": "c2"}}},
                             "domain": [
                               {
@@ -4897,7 +4897,7 @@
                                   "function": {
                                     "application": {
                                       "argument": {"variable": "t0"},
-                                      "function": {"variable": "hydra.compute.Coder"}}}}}],
+                                      "function": {"variable": "hydra.util.Coder"}}}}}],
                             "parameter": "c1"}}}}},
                   "parameter": "t2"}},
               "parameter": "t1"}},
@@ -4915,21 +4915,21 @@
                       "function": {
                         "application": {
                           "argument": {"variable": "t0"},
-                          "function": {"variable": "hydra.compute.Coder"}}}}},
+                          "function": {"variable": "hydra.util.Coder"}}}}},
                   "domain": {
                     "application": {
                       "argument": {"variable": "t2"},
                       "function": {
                         "application": {
                           "argument": {"variable": "t1"},
-                          "function": {"variable": "hydra.compute.Coder"}}}}}}},
+                          "function": {"variable": "hydra.util.Coder"}}}}}}},
               "domain": {
                 "application": {
                   "argument": {"variable": "t1"},
                   "function": {
                     "application": {
                       "argument": {"variable": "t0"},
-                      "function": {"variable": "hydra.compute.Coder"}}}}}}},
+                      "function": {"variable": "hydra.util.Coder"}}}}}}},
           "variables": ["t0", "t1", "t2"]}]},
     {
       "name": "hydra.adapt.dataGraphToDefinitions",
@@ -8788,10 +8788,10 @@
                                                                                                                         "parameter": "term"}}},
                                                                                                                   "domain": [{"variable": "hydra.context.Context"}],
                                                                                                                   "parameter": "cx"}}}}],
-                                                                                                        "typeName": "hydra.compute.Coder"}},
+                                                                                                        "typeName": "hydra.util.Coder"}},
                                                                                                     "type": {"variable": "hydra.core.Term"}}},
                                                                                                 "type": {"variable": "hydra.core.Term"}}}}],
-                                                                                        "typeName": "hydra.compute.Adapter"}},
+                                                                                        "typeName": "hydra.util.Adapter"}},
                                                                                     "type": {"variable": "hydra.core.Type"}}},
                                                                                 "type": {"variable": "hydra.core.Type"}}},
                                                                             "type": {"variable": "hydra.core.Term"}}},
@@ -8809,7 +8809,7 @@
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {"variable": "hydra.core.Type"},
-                                                                            "function": {"variable": "hydra.compute.Adapter"}}}}}}}}}}},
+                                                                            "function": {"variable": "hydra.util.Adapter"}}}}}}}}}}},
                                                         "domain": [{"variable": "hydra.core.Type"}],
                                                         "parameter": "adaptedType"}}},
                                                   "function": {
@@ -8845,7 +8845,7 @@
                                                                       "function": {
                                                                         "application": {
                                                                           "argument": {"variable": "hydra.core.Type"},
-                                                                          "function": {"variable": "hydra.compute.Adapter"}}}}}}}}}}}}}}}}}}},
+                                                                          "function": {"variable": "hydra.util.Adapter"}}}}}}}}}}}}}}}}}}},
                                       "domain": [{"variable": "hydra.core.Type"}],
                                       "parameter": "typ"}}},
                                 "domain": [{"variable": "hydra.graph.Graph"}],
@@ -8881,7 +8881,7 @@
                                           "function": {
                                             "application": {
                                               "argument": {"variable": "hydra.core.Type"},
-                                              "function": {"variable": "hydra.compute.Adapter"}}}}}}}}}}},
+                                              "function": {"variable": "hydra.util.Adapter"}}}}}}}}}}},
                           "domain": {"variable": "hydra.core.Type"}}},
                       "domain": {"variable": "hydra.graph.Graph"}}},
                   "domain": {"variable": "t0"}}},
@@ -9623,7 +9623,6 @@
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",
-    "hydra.compute",
     "hydra.context",
     "hydra.core",
     "hydra.error",
