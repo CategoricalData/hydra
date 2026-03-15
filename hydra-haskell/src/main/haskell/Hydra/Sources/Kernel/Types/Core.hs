@@ -51,15 +51,13 @@ module_ = Module ns elements [] [ns] $ -- Note: hydra.core uniquely takes itself
       name,
       projection,
       record,
-      rowType,
       term,
       type_,
       typeApplicationTerm,
       typeLambda,
       typeScheme,
       typeVariableMetadata,
-      wrappedTerm,
-      wrappedType]
+      wrappedTerm]
 
 annotatedTerm :: Binding
 annotatedTerm = define "AnnotatedTerm" $
@@ -415,17 +413,6 @@ record = define "Record" $
       doc "The fields of the record, as a list of name/term pairs" $
       T.list field]
 
-rowType :: Binding
-rowType = define "RowType" $
-  doc "A labeled record or union type" $
-  T.record [
-    "typeName">:
-      doc "The name of the row type, which must correspond to the name of a Type element"
-      name,
-    "fields">:
-      doc "The fields of this row type, excluding any inherited fields" $
-      T.list fieldType]
-
 term :: Binding
 term = define "Term" $
   doc "A data term" $
@@ -520,14 +507,14 @@ type_ = define "Type" $
       doc "A pair (2-tuple) type"
       pairType,
     "record">:
-      doc "A record type"
-      rowType,
+      doc "A record type" $
+      T.list fieldType,
     "set">:
       doc "A set type"
       type_,
     "union">:
-      doc "A union type with field names"
-      rowType,
+      doc "A union type with field names" $
+      T.list fieldType,
     "unit">:
       doc "The unit type" $
       T.unit,
@@ -536,7 +523,7 @@ type_ = define "Type" $
       name,
     "wrap">:
       doc "A wrapped type (newtype)"
-      wrappedType]
+      type_]
 
 typeApplicationTerm :: Binding
 typeApplicationTerm = define "TypeApplicationTerm" $
@@ -593,13 +580,3 @@ wrappedTerm = define "WrappedTerm" $
       doc "The wrapped term"
       term]
 
-wrappedType :: Binding
-wrappedType = define "WrappedType" $
-  doc "A type wrapped in a type name; a newtype" $
-  T.record [
-    "typeName">:
-      doc "The name of the wrapper (newtype)"
-      name,
-    "body">:
-      doc "The wrapped type"
-      type_]
