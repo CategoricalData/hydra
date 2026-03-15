@@ -5,9 +5,9 @@
 module Hydra.Dsl.Coders where
 
 import qualified Hydra.Coders as Coders
-import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Util as Util
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -16,7 +16,7 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-adapterContext :: (Graph.Graph -> Coders.Language -> M.Map Core.Name (Compute.Adapter Core.Type Core.Type Core.Term Core.Term) -> Coders.AdapterContext)
+adapterContext :: (Graph.Graph -> Coders.Language -> M.Map Core.Name (Util.Adapter Core.Type Core.Type Core.Term Core.Term) -> Coders.AdapterContext)
 adapterContext graph language adapters = Coders.AdapterContext {
   Coders.adapterContextGraph = graph,
   Coders.adapterContextLanguage = language,
@@ -28,7 +28,7 @@ adapterContextGraph = Coders.adapterContextGraph
 adapterContextLanguage :: (Coders.AdapterContext -> Coders.Language)
 adapterContextLanguage = Coders.adapterContextLanguage
 
-adapterContextAdapters :: (Coders.AdapterContext -> M.Map Core.Name (Compute.Adapter Core.Type Core.Type Core.Term Core.Term))
+adapterContextAdapters :: (Coders.AdapterContext -> M.Map Core.Name (Util.Adapter Core.Type Core.Type Core.Term Core.Term))
 adapterContextAdapters = Coders.adapterContextAdapters
 
 adapterContextWithGraph :: (Coders.AdapterContext -> Graph.Graph -> Coders.AdapterContext)
@@ -43,7 +43,7 @@ adapterContextWithLanguage original newVal = Coders.AdapterContext {
   Coders.adapterContextLanguage = newVal,
   Coders.adapterContextAdapters = (Coders.adapterContextAdapters original)}
 
-adapterContextWithAdapters :: (Coders.AdapterContext -> M.Map Core.Name (Compute.Adapter Core.Type Core.Type Core.Term Core.Term) -> Coders.AdapterContext)
+adapterContextWithAdapters :: (Coders.AdapterContext -> M.Map Core.Name (Util.Adapter Core.Type Core.Type Core.Term Core.Term) -> Coders.AdapterContext)
 adapterContextWithAdapters original newVal = Coders.AdapterContext {
   Coders.adapterContextGraph = (Coders.adapterContextGraph original),
   Coders.adapterContextLanguage = (Coders.adapterContextLanguage original),
