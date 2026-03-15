@@ -63,18 +63,27 @@ HYDRA_ROOT="$( cd "$SCRIPT_DIR/.." && pwd )"
 HYDRA_HASKELL_DIR="$HYDRA_ROOT/hydra-haskell"
 HYDRA_EXT_DIR="$HYDRA_ROOT/hydra-ext"
 
-# Ensure JAVA_HOME is set to JDK 17 (required for Gradle builds)
-if [ -z "$JAVA_HOME" ] || ! "$JAVA_HOME/bin/java" --version 2>&1 | grep -q "17\."; then
-    if [ -d "/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home" ]; then
-        export JAVA_HOME="/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home"
-    elif command -v /usr/libexec/java_home &>/dev/null; then
-        export JAVA_HOME="$(/usr/libexec/java_home -v 17 2>/dev/null || true)"
+# Ensure JAVA_HOME is set to a JDK 11+ (required for Gradle builds)
+if [ -z "$JAVA_HOME" ]; then
+    if command -v /usr/libexec/java_home &>/dev/null; then
+        export JAVA_HOME="$(/usr/libexec/java_home 2>/dev/null || true)"
     fi
-    if [ -z "$JAVA_HOME" ] || ! "$JAVA_HOME/bin/java" --version 2>&1 | grep -q "17\."; then
-        echo "Warning: JDK 17 not found. Java compilation steps may fail."
-        echo "Set JAVA_HOME to a JDK 17 installation before running this script."
-    else
-        echo "Using JAVA_HOME=$JAVA_HOME"
+fi
+if [ -z "$JAVA_HOME" ]; then
+    echo "Warning: JAVA_HOME is not set. Java compilation steps may fail."
+    echo "Set JAVA_HOME to a JDK 11+ installation before running this script."
+else
+    echo "Using JAVA_HOME=$JAVA_HOME"
+fi
+
+# Warn if running an x86_64 JDK under Rosetta on Apple Silicon (causes ~20x slowdown)
+if [ "$(uname -s)" = "Darwin" ] && [ "$(uname -m)" = "arm64" ]; then
+    JAVA_CMD="${JAVA_HOME:+$JAVA_HOME/bin/}java"
+    if command -v "$JAVA_CMD" > /dev/null 2>&1 && file "$(command -v "$JAVA_CMD")" | grep -q x86_64; then
+        echo "WARNING: x86_64 JDK detected on Apple Silicon. This runs under Rosetta 2"
+        echo "  and will be ~20x slower than a native arm64 JDK."
+        echo "  Current JDK: $("$JAVA_CMD" -version 2>&1 | head -1)"
+        echo ""
     fi
 fi
 

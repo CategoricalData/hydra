@@ -30,6 +30,38 @@ You may need to set the `JAVA_HOME` environment variable:
 JAVA_HOME=/path/to/java11/installation ./gradlew build
 ```
 
+### Performance note: native JDK on Apple Silicon
+
+On Apple Silicon (M1/M2/M3/M4) Macs, using an x86_64 JDK (which runs under Rosetta 2
+translation) can cause **~20x slower** code generation and test execution compared to a
+native arm64 JDK. This applies to any Java version — the critical factor is architecture,
+not version number.
+
+To check your JDK's architecture:
+
+```bash
+file "$(which java)"
+# arm64 = native (fast), x86_64 = Rosetta (slow)
+```
+
+If you see `x86_64`, install a native arm64 JDK. Downloads are available from
+[Oracle](https://www.oracle.com/java/technologies/downloads/),
+[Adoptium](https://adoptium.net/), or via Homebrew (`brew install openjdk@11`).
+
+To compare Hydra's performance across JDK versions on your machine, use the benchmark
+test runner with `--tag` to label each run and `--repeat` for statistical reliability:
+
+```bash
+export JAVA_HOME=$(/usr/libexec/java_home -v 11)
+bin/run-benchmark-tests.sh java --tag java11 --repeat 5
+
+export JAVA_HOME=$(/usr/libexec/java_home -v 17)
+bin/run-benchmark-tests.sh java --tag java17 --repeat 5
+
+# Compare results
+bin/run-benchmark-tests.sh dashboard diff --old java11 --new java17
+```
+
 ## Documentation
 
 For comprehensive documentation about Hydra's architecture and usage, see:
