@@ -777,7 +777,21 @@ The DSL can handle mutual recursion directly — functions in the same module ca
 
     This works because `Terms.list` operates at the untyped term level and doesn't require the `AsTerm` constraint, while the outer `TTerm` annotation tells GHC the phantom type.
 
-39. **Language-specific character escaping in serialization**: When promoting code that generates source files (e.g., a Java or Python serializer), be aware that target languages may require specific escape sequences for non-ASCII characters. For example, Java source files require `\uXXXX` escape sequences for characters outside ASCII. You may need to write custom escape functions (e.g., `escapeJavaChar`, `escapeJavaString`) in the DSL rather than relying on Haskell's default `show` behavior, which passes non-ASCII characters through as literal UTF-8. Test generated source files with non-ASCII input (e.g., `\u03BB` for lambda) to verify correct escaping.
+39. **Mixed type/term module pitfall**: If a module contains any `isNativeType` element (a type definition), the code generator (`generateSourceFiles`) classifies the entire module as a "type module." Type modules only generate type definitions — all term bindings are **silently skipped**. This means adding a type definition to an existing term module will cause all its functions to disappear from the generated output with no error message. The solution: always put type definitions in dedicated type-only modules, separate from term definitions. If you need both a type and functions that use it, define the type in a Types module and the functions in a separate Terms module that depends on it.
+
+40. **`Prelude hiding ((++))` and Haskell-level string operations**: Most DSL source modules import `Prelude hiding ((++))` because `Hydra.Dsl.Meta.Phantoms` exports its own `(++)` for `TTerm String` concatenation. This means you cannot use Haskell's native `(++)` for regular `String` concatenation in DSL helper functions. Use `(<>)` instead, which works on any `Semigroup` including `String`:
+
+    ```haskell
+    -- Won't compile (++ is hidden):
+    defineName name nsStr localName = define name $
+      wrap _Name $ string (nsStr ++ "." ++ localName)
+
+    -- Use <> instead:
+    defineName name nsStr localName = define name $
+      wrap _Name $ string (nsStr <> "." <> localName)
+    ```
+
+41. **Language-specific character escaping in serialization**: When promoting code that generates source files (e.g., a Java or Python serializer), be aware that target languages may require specific escape sequences for non-ASCII characters. For example, Java source files require `\uXXXX` escape sequences for characters outside ASCII. You may need to write custom escape functions (e.g., `escapeJavaChar`, `escapeJavaString`) in the DSL rather than relying on Haskell's default `show` behavior, which passes non-ASCII characters through as literal UTF-8. Test generated source files with non-ASCII input (e.g., `\u03BB` for lambda) to verify correct escaping.
 
 ## Promoting modules with I/O
 
@@ -845,6 +859,107 @@ When the module to be promoted contains a mix of pure logic and I/O operations (
 - Library-specific code: Aeson JSON parsing, ByteString processing
 - Haskell-specific encoders/decoders: `EncodeModule.module_`, `DecodeCore.type_`
 - Bootstrap graph: `bootstrapGraph` (Haskell's is defined in `Hydra.Dsl.Bootstrap`)
+
+## Promoting type definitions
+
+The main body of this document covers promoting *term-level* code (functions, constants). Promoting a **type definition** is a
+different workflow: you add it to a Types module under `Hydra/Sources/Kernel/Types/` (or `Hydra/Ext/Sources/` for extension types).
+
+### Example: promoting `TestGenerator`
+
+```haskell
+-- In Hydra.Sources.Kernel.Types.Testing
+
+testGenerator :: Binding
+testGenerator = define "TestGenerator" $
+  doc "A language-agnostic test generator abstraction" $
+  T.forAll "a" $ T.record [
+    "namespacesForModule">:
+      doc "Build namespaces for a module" $
+      Module.module' ~> Graph.graph ~> T.either_ T.string (Module.namespaces @@ "a"),
+    "createCodec">:
+      doc "Create a test codec from resolved namespaces" $
+      Module.namespaces @@ "a" ~> testCodec]
+```
+
+Key differences from promoting terms:
+
+- Use `define` (or `defineType`) instead of `definitionInModule`
+- Use `T.record`, `T.forAll`, `T.either_`, etc. from `Hydra.Dsl.Types` for type constructors
+- Use `>:` for field definitions (name `>:` type)
+- Reference other type bindings (e.g., `Module.module'` for the `Module` type) — note that `module'` is the
+  *type binding*, while `module_` is the Haskell `Module` value for the module definition
+- Add the new binding to the module's elements list
+- After regeneration, the type appears in `gen-main` with field names prefixed by the type name
+  (e.g., `testGeneratorNamespacesForModule`)
+
+## Promoting data and constants modules
+
+Not all promotions involve functions. Sometimes you need to promote a module of **pure data constants** — values like
+`Name` or `Namespace` literals that should be available across all target languages.
+
+### Example: promoting `Names.hs`
+
+The original `Hydra.Staging.Lib.Names` contained hand-written constants like:
+
+```haskell
+-- Staging code (raw Haskell)
+_hydra_lib_lists :: Namespace
+_hydra_lib_lists = Namespace "hydra.lib.lists"
+
+_lists_map :: Name
+_lists_map = qname _hydra_lib_lists "map"
+```
+
+The promoted DSL version in `Hydra.Sources.Kernel.Lib.Names`:
+
+```haskell
+-- Namespace constants
+defineNs :: String -> String -> TBinding Namespace
+defineNs name nsStr = define name $
+  wrap _Namespace $ string nsStr
+
+lists :: TBinding Namespace
+lists = defineNs "lists" "hydra.lib.lists"
+
+-- Name constants
+defineName :: String -> String -> String -> TBinding Name
+defineName name nsStr localName = define name $
+  wrap _Name $ string (nsStr <> "." <> localName)
+
+listsMap = defineName "listsMap" "hydra.lib.lists" "map"
+```
+
+This generates simple data constructors in all target languages:
+
+```haskell
+-- Generated output (gen-main)
+lists :: Module.Namespace
+lists = (Module.Namespace "hydra.lib.lists")
+
+listsMap :: Core.Name
+listsMap = (Core.Name "hydra.lib.lists.map")
+```
+
+### Key principle: Haskell-level vs DSL-level computation
+
+When the goal is to generate **simple data** (no function calls in the output), do any computation at the Haskell level
+in the DSL helper, not at the DSL term level. For example:
+
+```haskell
+-- WRONG: generates a function application in the output
+defineName name nsBinding localName = define name $
+  Names.qname @@ nsBinding @@ string localName
+-- Output: listsMap = (Names.qname lists "map")  -- function call!
+
+-- RIGHT: pre-computes the string at the Haskell level
+defineName name nsStr localName = define name $
+  wrap _Name $ string (nsStr <> "." <> localName)
+-- Output: listsMap = (Core.Name "hydra.lib.lists.map")  -- simple data
+```
+
+The `<>` operator performs string concatenation at Haskell compile time, so the DSL only sees the final string literal.
+The generated code in all target languages will contain only simple constructor calls.
 
 ## Related recipes
 
