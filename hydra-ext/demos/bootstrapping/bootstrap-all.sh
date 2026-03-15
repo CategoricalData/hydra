@@ -123,14 +123,21 @@ if $NEED_JAVA; then
         fi
     fi
 
-    # Validate that java is available and is 17+.
+    # Validate that java is available and is 11+.
     JAVA_CMD="${JAVA_HOME:+$JAVA_HOME/bin/}java"
     if ! command -v "$JAVA_CMD" > /dev/null 2>&1; then
-        ENV_ERRORS+=("java is not installed. JDK 17 or later is required.")
+        ENV_ERRORS+=("java is not installed. JDK 11 or later is required.")
     else
         JAVA_VER=$("$JAVA_CMD" -version 2>&1 | head -1 | sed -E 's/.*"([0-9]+).*/\1/')
-        if [ -n "$JAVA_VER" ] && [ "$JAVA_VER" -lt 17 ] 2>/dev/null; then
-            ENV_ERRORS+=("Java $JAVA_VER is too old; version 17 or later is required (found: $("$JAVA_CMD" -version 2>&1 | head -1))")
+        if [ -n "$JAVA_VER" ] && [ "$JAVA_VER" -lt 11 ] 2>/dev/null; then
+            ENV_ERRORS+=("Java $JAVA_VER is too old; version 11 or later is required (found: $("$JAVA_CMD" -version 2>&1 | head -1))")
+        fi
+    fi
+
+    # Warn if running an x86_64 JDK under Rosetta on Apple Silicon (causes ~20x slowdown)
+    if [ "$(uname -s)" = "Darwin" ] && [ "$(uname -m)" = "arm64" ]; then
+        if command -v "$JAVA_CMD" > /dev/null 2>&1 && file "$(command -v "$JAVA_CMD")" | grep -q x86_64; then
+            ENV_WARNINGS+=("x86_64 JDK detected on Apple Silicon. This runs under Rosetta 2 and will be ~20x slower than a native arm64 JDK. Current: $("$JAVA_CMD" -version 2>&1 | head -1)")
         fi
     fi
 fi

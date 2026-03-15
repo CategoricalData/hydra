@@ -46,6 +46,17 @@ fi
 
 mkdir -p "$RUN_DIR"
 
+# Warn if running an x86_64 JDK under Rosetta on Apple Silicon (causes ~20x slowdown)
+if [ "$(uname -s)" = "Darwin" ] && [ "$(uname -m)" = "arm64" ]; then
+    JAVA_CMD="${JAVA_HOME:+$JAVA_HOME/bin/}java"
+    if command -v "$JAVA_CMD" > /dev/null 2>&1 && file "$(command -v "$JAVA_CMD")" | grep -q x86_64; then
+        echo "WARNING: x86_64 JDK detected on Apple Silicon. This runs under Rosetta 2"
+        echo "  and will be ~20x slower than a native arm64 JDK."
+        echo "  Current JDK: $("$JAVA_CMD" -version 2>&1 | head -1)"
+        echo ""
+    fi
+fi
+
 run_lang() {
     local lang="$1"
     local i="$2"
