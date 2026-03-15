@@ -34,7 +34,7 @@ Major release completing Hydra-Python and Hydra-Java as self-hosting Hydra imple
 - Removed old `hydra.mantle.Either` type (replaced by core `Either`)
 - Removed `hydra.lib.tuples` library
 - Removed C# coder stub (C# syntax model remains)
-- Minimum Java version bumped to 17 (#249)
+- Minimum Java version lowered to 11 (#249)
 - DSL syntax migration: removed OverloadedStrings for term expressions (#238)
 
 ### New Features

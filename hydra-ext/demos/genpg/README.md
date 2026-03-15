@@ -66,7 +66,7 @@ hydra-ext/
 
 - GHC and Stack (for Haskell mode and code generation)
 - Python 3.10+ (for Python mode)
-- Java 17+ and Gradle (for Java mode)
+- Java 11+ and Gradle (for Java mode)
 
 ## Running the demo
 
@@ -105,7 +105,7 @@ The `sales` argument is the default, so it can be omitted.
 
 ### Java mode
 
-Java 17+ is required. From the repository root:
+Java 11+ is required. From the repository root:
 
 ```bash
 ./gradlew :hydra-ext:compileJava

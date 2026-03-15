@@ -34,7 +34,7 @@ hydra/
   hydra-go/         # Early-stage Go
   hydra-javascript/  # Early-stage JavaScript
   docs/             # Documentation, recipes, Javadoc
-  wiki/             # Local checkout of the GitHub wiki (separate repo; may not be present)
+  wiki/             # Local checkout of the GitHub wiki (separate repo; may also be at ../../hydra/wiki/ in feature branches)
 ```
 
 ### The src/main vs src/gen-main pattern
@@ -106,8 +106,10 @@ This section links to every major document in the project with a brief descripti
 
 ### Wiki (GitHub wiki -- separate repository)
 
-The wiki is a separate Git repository. A local checkout may exist at `./wiki/`,
-but these web links are the canonical references:
+The wiki is a separate Git repository. A local checkout may be found in one of two
+conventional locations: `./wiki/` (within the main hydra directory), or when working
+in a feature branch under `hydra-branches/feature_xxx_yyy/`, at `../../hydra/wiki/`.
+The web links below are the canonical references:
 
 | Page | URL | Description |
 |------|-----|-------------|
@@ -255,7 +257,7 @@ stack ghci hydra:lib hydra:hydra-test
 ./gradlew test --tests "hydra.VisitorTest"
 ```
 
-Requires: **Java 17+** (see [Hydra-Java README](hydra-java/README.md))
+Requires: **Java 11+** (see [Hydra-Java README](hydra-java/README.md))
 
 ### Python (hydra-python)
 
@@ -518,15 +520,50 @@ If step 4 fails, check the `implementation()` method of the primitive class.
 | Java reducer | `hydra-java/src/gen-main/java/hydra/reduction/Reduction.java` |
 | Haskell test definitions | `hydra-haskell/src/main/haskell/Hydra/Sources/Test/Lib/` |
 
-## Quick orientation checklist
+## Session startup procedure
 
-When starting a new session, consider:
+At the beginning of every new session, follow these steps **before doing any other work**:
 
-1. Check `git status` and recent commits for context on what's being worked on.
-2. If the task involves the kernel DSL, read the Hydra lexicon
-   (`docs/hydra-lexicon.txt`) for the complete API surface.
-3. If promoting code, read [promoting-code.md](docs/recipes/promoting-code.md).
-4. If modifying kernel types/terms, read
-   [extending-hydra-core.md](docs/recipes/extending-hydra-core.md).
-5. If adding primitives, read [adding-primitives.md](docs/recipes/adding-primitives.md).
-6. After any DSL changes: rebuild Haskell, then sync Java and Python.
+### 1. Identify the current branch
+
+Run `git branch --show-current` to determine which branch you are on.
+
+### 2. Load or create the branch plan document
+
+Look for a Markdown file in the `plans/` directory (at the repository root) named after
+the current branch. For example:
+
+- Branch `main` → `plans/main.md`
+- Branch `feature_249_java_version` → `plans/feature_249_java_version.md`
+
+If the file exists, read it to understand the current state of work and the plan.
+
+If the file does **not** exist, create it:
+
+- **Feature branches** (`feature_NNN_*`): Extract the issue number from the branch
+  name and fetch the issue from GitHub (e.g.,
+  `https://github.com/CategoricalData/hydra/issues/249`). Use the issue description
+  to draft an initial plan, including the goal, approach, and a task checklist.
+- **Main branch**: Create a minimal plan noting that this is the main development
+  branch, and summarize any in-progress work based on recent commits.
+
+### 3. Discuss the plan with the user
+
+Present the plan (whether loaded or newly created) to the user. Incorporate any
+feedback or changes they provide, and update the plan document accordingly.
+
+### 4. Save progress periodically
+
+Throughout the session, update the branch plan document whenever you reach a
+milestone, change approach, or complete a significant step. This ensures continuity
+if the session is interrupted (e.g., by a power failure or context limit).
+
+### 5. Consult task-specific references as needed
+
+- If the task involves the kernel DSL, read the Hydra lexicon
+  (`docs/hydra-lexicon.txt`) for the complete API surface.
+- If promoting code, read [promoting-code.md](docs/recipes/promoting-code.md).
+- If modifying kernel types/terms, read
+  [extending-hydra-core.md](docs/recipes/extending-hydra-core.md).
+- If adding primitives, read [adding-primitives.md](docs/recipes/adding-primitives.md).
+- After any DSL changes: rebuild Haskell, then sync Java and Python.
