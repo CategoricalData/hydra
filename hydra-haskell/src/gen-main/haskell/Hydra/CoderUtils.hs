@@ -244,7 +244,7 @@ nameToFilePath nsConv localConv ext name =
               (Module.unFileExtension ext)])
 
 -- | Convert a union row type to a record row type
-unionTypeToRecordType :: (Core.RowType -> Core.RowType)
+unionTypeToRecordType :: ([Core.FieldType] -> [Core.FieldType])
 unionTypeToRecordType rt =  
   let makeOptional = (\f ->  
           let fn = (Core.fieldTypeName f)
@@ -253,9 +253,7 @@ unionTypeToRecordType rt =
             in Core.FieldType {
               Core.fieldTypeName = fn,
               Core.fieldTypeType = (Rewriting.mapBeneathTypeAnnotations (\x -> Core.TypeMaybe x) ft)})
-  in Core.RowType {
-    Core.rowTypeTypeName = (Core.rowTypeTypeName rt),
-    Core.rowTypeFields = (Lists.map makeOptional (Core.rowTypeFields rt))}
+  in (Lists.map makeOptional rt)
 
 -- | Extract comments/description from a Binding
 commentsFromElement :: (Context.Context -> Graph.Graph -> Core.Binding -> Either (Context.InContext Error.Error) (Maybe String))

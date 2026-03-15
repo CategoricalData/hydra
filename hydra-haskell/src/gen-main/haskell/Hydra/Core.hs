@@ -509,20 +509,9 @@ _Record_typeName = (Name "typeName")
 
 _Record_fields = (Name "fields")
 
--- | A labeled record or union type
-data RowType = 
-  RowType {
-    -- | The name of the row type, which must correspond to the name of a Type element
-    rowTypeTypeName :: Name,
-    -- | The fields of this row type, excluding any inherited fields
-    rowTypeFields :: [FieldType]}
-  deriving (Eq, Ord, Read, Show)
 
-_RowType = (Name "hydra.core.RowType")
 
-_RowType_typeName = (Name "typeName")
 
-_RowType_fields = (Name "fields")
 
 -- | A data term
 data Term = 
@@ -625,17 +614,17 @@ data Type =
   -- | A pair (2-tuple) type
   TypePair PairType |
   -- | A record type
-  TypeRecord RowType |
+  TypeRecord [FieldType] |
   -- | A set type
   TypeSet Type |
   -- | A union type with field names
-  TypeUnion RowType |
+  TypeUnion [FieldType] |
   -- | The unit type
   TypeUnit  |
   -- | A type variable
   TypeVariable Name |
   -- | A wrapped type (newtype)
-  TypeWrap WrappedType
+  TypeWrap Type
   deriving (Eq, Ord, Read, Show)
 
 _Type = (Name "hydra.core.Type")
@@ -747,17 +736,6 @@ _WrappedTerm_typeName = (Name "typeName")
 
 _WrappedTerm_body = (Name "body")
 
--- | A type wrapped in a type name; a newtype
-data WrappedType = 
-  WrappedType {
-    -- | The name of the wrapper (newtype)
-    wrappedTypeTypeName :: Name,
-    -- | The wrapped type
-    wrappedTypeBody :: Type}
-  deriving (Eq, Ord, Read, Show)
 
-_WrappedType = (Name "hydra.core.WrappedType")
 
-_WrappedType_typeName = (Name "typeName")
 
-_WrappedType_body = (Name "body")

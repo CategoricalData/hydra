@@ -674,27 +674,6 @@ def record_fields(r: TTerm) -> TTerm:
 
 
 # ============================================================
-# RowType
-# ============================================================
-
-def row_type(type_name: TTerm, fields: TTerm) -> TTerm:
-    """Construct a RowType."""
-    return Phantoms.record(C.RowType.TYPE_, [
-        Phantoms.field(C.RowType.TYPE_NAME, type_name),
-        Phantoms.field(C.RowType.FIELDS, fields)])
-
-
-def row_type_type_name(rt: TTerm) -> TTerm:
-    """Get the typeName of a RowType."""
-    return Phantoms.apply(Phantoms.project(C.RowType.TYPE_, C.RowType.TYPE_NAME), rt)
-
-
-def row_type_fields(rt: TTerm) -> TTerm:
-    """Get the fields of a RowType."""
-    return Phantoms.apply(Phantoms.project(C.RowType.TYPE_, C.RowType.FIELDS), rt)
-
-
-# ============================================================
 # Term variants (injection functions)
 # ============================================================
 
@@ -842,9 +821,9 @@ def type_pair(pt: TTerm) -> TTerm:
     return Phantoms.inject(C.Type.TYPE_, C.Type.PAIR, pt)
 
 
-def type_record(rt: TTerm) -> TTerm:
-    """Inject a RowType into a Type (record variant)."""
-    return Phantoms.inject(C.Type.TYPE_, C.Type.RECORD, rt)
+def type_record(fields: TTerm) -> TTerm:
+    """Inject a list of FieldTypes into a Type (record variant)."""
+    return Phantoms.inject(C.Type.TYPE_, C.Type.RECORD, fields)
 
 
 def type_set(t: TTerm) -> TTerm:
@@ -852,9 +831,9 @@ def type_set(t: TTerm) -> TTerm:
     return Phantoms.inject(C.Type.TYPE_, C.Type.SET, t)
 
 
-def type_union(rt: TTerm) -> TTerm:
-    """Inject a RowType into a Type (union variant)."""
-    return Phantoms.inject(C.Type.TYPE_, C.Type.UNION, rt)
+def type_union(fields: TTerm) -> TTerm:
+    """Inject a list of FieldTypes into a Type (union variant)."""
+    return Phantoms.inject(C.Type.TYPE_, C.Type.UNION, fields)
 
 
 def type_unit() -> TTerm:
@@ -867,9 +846,9 @@ def type_variable(name: TTerm) -> TTerm:
     return Phantoms.inject(C.Type.TYPE_, C.Type.VARIABLE, name)
 
 
-def type_wrap(wt: TTerm) -> TTerm:
-    """Inject a WrappedType into a Type."""
-    return Phantoms.inject(C.Type.TYPE_, C.Type.WRAP, wt)
+def type_wrap(t: TTerm) -> TTerm:
+    """Inject a Type into a Type (wrap variant)."""
+    return Phantoms.inject(C.Type.TYPE_, C.Type.WRAP, t)
 
 
 # ============================================================
@@ -981,27 +960,6 @@ def wrapped_term_type_name(wt: TTerm) -> TTerm:
 def wrapped_term_body(wt: TTerm) -> TTerm:
     """Get the body of a WrappedTerm."""
     return Phantoms.apply(Phantoms.project(C.WrappedTerm.TYPE_, C.WrappedTerm.BODY), wt)
-
-
-# ============================================================
-# WrappedType
-# ============================================================
-
-def wrapped_type(type_name: TTerm, body: TTerm) -> TTerm:
-    """Construct a WrappedType."""
-    return Phantoms.record(C.WrappedType.TYPE_, [
-        Phantoms.field(C.WrappedType.TYPE_NAME, type_name),
-        Phantoms.field(C.WrappedType.BODY, body)])
-
-
-def wrapped_type_type_name(wt: TTerm) -> TTerm:
-    """Get the typeName of a WrappedType."""
-    return Phantoms.apply(Phantoms.project(C.WrappedType.TYPE_, C.WrappedType.TYPE_NAME), wt)
-
-
-def wrapped_type_body(wt: TTerm) -> TTerm:
-    """Get the body of a WrappedType."""
-    return Phantoms.apply(Phantoms.project(C.WrappedType.TYPE_, C.WrappedType.BODY), wt)
 
 
 # ============================================================

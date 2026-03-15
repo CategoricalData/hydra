@@ -20,7 +20,6 @@ from hydra.core import (
     MapType,
     Name,
     PairType,
-    RowType,
     Term,
     Type,
     TypeAnnotated,
@@ -41,7 +40,6 @@ from hydra.core import (
     TypeVariable,
     TypeVariableMetadata,
     TypeWrap,
-    WrappedType,
 )
 from hydra.dsl.python import FrozenDict, Just, Nothing
 
@@ -368,7 +366,7 @@ def record_with_name(tname: Name, fields: Sequence[FieldType]) -> Type:
 
     Example: record_with_name(Name("Person"), [field("name", string()), field("age", int32())])
     """
-    return TypeRecord(RowType(tname, tuple(fields)))
+    return TypeRecord(tuple(fields))
 
 
 def unit() -> Type:
@@ -382,7 +380,7 @@ def union(fields: Sequence[FieldType]) -> Type:
     Example: union([field("success", int32()), field("failure", string())])
     This creates a tagged union type (sum type with named variants).
     """
-    return TypeUnion(RowType(hydra.constants.placeholder_name, tuple(fields)))
+    return TypeUnion(tuple(fields))
 
 
 def wrap(t: Typeable) -> Type:
@@ -399,7 +397,7 @@ def wrap_with_name(name: Name, t: Type) -> Type:
 
     Example: wrap_with_name(Name("Email"), string())
     """
-    return TypeWrap(WrappedType(name, t))
+    return TypeWrap(t)
 
 
 def pair(a: Typeable, b: Typeable) -> Type:

@@ -454,16 +454,16 @@ record x = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "fields"),
       Core.fieldTerm = ((\xs -> Core.TermList (Lists.map field xs)) (Core.recordFields x))}]}))
 
-rowType :: (Core.RowType -> Core.Term)
+rowType :: ([Core.FieldType] -> Core.Term)
 rowType x = (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.core.RowType"),
   Core.recordFields = [
     Core.Field {
       Core.fieldName = (Core.Name "typeName"),
-      Core.fieldTerm = (name (Core.rowTypeTypeName x))},
+      Core.fieldTerm = (name (Core.Name "unknown"))},
     Core.Field {
       Core.fieldName = (Core.Name "fields"),
-      Core.fieldTerm = ((\xs -> Core.TermList (Lists.map fieldType xs)) (Core.rowTypeFields x))}]}))
+      Core.fieldTerm = ((\xs -> Core.TermList (Lists.map fieldType xs)) x)}]}))
 
 term :: (Core.Term -> Core.Term)
 term x = case x of
@@ -696,13 +696,13 @@ wrappedTerm x = (Core.TermRecord (Core.Record {
       Core.fieldName = (Core.Name "body"),
       Core.fieldTerm = (term (Core.wrappedTermBody x))}]}))
 
-wrappedType :: (Core.WrappedType -> Core.Term)
+wrappedType :: (Core.Type -> Core.Term)
 wrappedType x = (Core.TermRecord (Core.Record {
   Core.recordTypeName = (Core.Name "hydra.core.WrappedType"),
   Core.recordFields = [
     Core.Field {
       Core.fieldName = (Core.Name "typeName"),
-      Core.fieldTerm = (name (Core.wrappedTypeTypeName x))},
+      Core.fieldTerm = (name (Core.Name "unknown"))},
     Core.Field {
       Core.fieldName = (Core.Name "body"),
-      Core.fieldTerm = (type_ (Core.wrappedTypeBody x))}]}))
+      Core.fieldTerm = (type_ x)}]}))

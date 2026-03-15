@@ -261,8 +261,9 @@ public class Generation {
      */
     public static Module decodeModuleFromJson(Graph bsGraph, Map<Name, hydra.core.Type> schemaMap,
             boolean stripTypeSchemes, Value jsonVal) {
-        hydra.core.Type modType = new hydra.core.Type.Variable(new Name("hydra.module.Module"));
-        Either<String, hydra.core.Term> jsonResult = hydra.json.decode.Decode.fromJson(PersistentMap.fromMap(schemaMap), modType, jsonVal);
+        Name modName = new Name("hydra.module.Module");
+        hydra.core.Type modType = new hydra.core.Type.Variable(modName);
+        Either<String, hydra.core.Term> jsonResult = hydra.json.decode.Decode.fromJson(PersistentMap.fromMap(schemaMap), modName, modType, jsonVal);
         return jsonResult.accept(new Either.Visitor<String, hydra.core.Term, Module>() {
             @Override
             public Module visit(Either.Left<String, hydra.core.Term> instance) {

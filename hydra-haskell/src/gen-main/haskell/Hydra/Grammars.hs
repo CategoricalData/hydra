@@ -110,9 +110,7 @@ makeElements omitTrivial ns lname pat =
       let mod = (\n -> \f -> \p -> descend n (\pairs -> Lists.cons (lname, (f (Pairs.second (Lists.head pairs)))) (Lists.tail pairs)) p)
       in  
         let forPat = (\pat -> (\x -> case x of
-                Grammar.PatternAlternatives v0 -> (forRecordOrUnion False (\fields -> Core.TypeUnion (Core.RowType {
-                  Core.rowTypeTypeName = Constants.placeholderName,
-                  Core.rowTypeFields = fields})) v0)
+                Grammar.PatternAlternatives v0 -> (forRecordOrUnion False (\fields -> Core.TypeUnion fields) v0)
                 Grammar.PatternConstant _ -> trivial
                 Grammar.PatternIgnored _ -> []
                 Grammar.PatternLabeled v0 -> (forPat (Grammar.labeledPatternPattern v0))
@@ -123,9 +121,7 @@ makeElements omitTrivial ns lname pat =
                 Grammar.PatternPlus v0 -> (mod "Elmt" (\x -> Core.TypeList x) v0)
                 Grammar.PatternRegex _ -> [
                   (lname, (Core.TypeLiteral Core.LiteralTypeString))]
-                Grammar.PatternSequence v0 -> (forRecordOrUnion True (\fields -> Core.TypeRecord (Core.RowType {
-                  Core.rowTypeTypeName = Constants.placeholderName,
-                  Core.rowTypeFields = fields})) v0)
+                Grammar.PatternSequence v0 -> (forRecordOrUnion True (\fields -> Core.TypeRecord fields) v0)
                 Grammar.PatternStar v0 -> (mod "Elmt" (\x -> Core.TypeList x) v0)) pat) 
             forRecordOrUnion = (\isRecord -> \construct -> \pats ->  
                     let minPats = (simplify isRecord pats)
@@ -162,15 +158,9 @@ rawName pat = ((\x -> case x of
 -- | Replace Placeholder names in a type with the actual element name
 replacePlaceholders :: (Core.Name -> Core.Type -> Core.Type)
 replacePlaceholders elName typ = (Rewriting.rewriteType (\recurse -> \t -> (\x -> case x of
-  Core.TypeRecord v0 -> (Logic.ifElse (Equality.equal (Core.rowTypeTypeName v0) Constants.placeholderName) (Core.TypeRecord (Core.RowType {
-    Core.rowTypeTypeName = elName,
-    Core.rowTypeFields = (Core.rowTypeFields v0)})) t)
-  Core.TypeUnion v0 -> (Logic.ifElse (Equality.equal (Core.rowTypeTypeName v0) Constants.placeholderName) (Core.TypeUnion (Core.RowType {
-    Core.rowTypeTypeName = elName,
-    Core.rowTypeFields = (Core.rowTypeFields v0)})) t)
-  Core.TypeWrap v0 -> (Logic.ifElse (Equality.equal (Core.wrappedTypeTypeName v0) Constants.placeholderName) (Core.TypeWrap (Core.WrappedType {
-    Core.wrappedTypeTypeName = elName,
-    Core.wrappedTypeBody = (Core.wrappedTypeBody v0)})) t)
+  Core.TypeRecord v0 -> (Logic.ifElse (Equality.equal (Core.Name "unknown") Constants.placeholderName) (Core.TypeRecord v0) t)
+  Core.TypeUnion v0 -> (Logic.ifElse (Equality.equal (Core.Name "unknown") Constants.placeholderName) (Core.TypeUnion v0) t)
+  Core.TypeWrap v0 -> (Logic.ifElse (Equality.equal (Core.Name "unknown") Constants.placeholderName) (Core.TypeWrap v0) t)
   _ -> t) t) typ)
 
 -- | Remove trivial patterns from records
@@ -193,6 +183,4 @@ wrapType t = ((\x -> case x of
   Core.TypeRecord _ -> t
   Core.TypeUnion _ -> t
   Core.TypeWrap _ -> t
-  _ -> (Core.TypeWrap (Core.WrappedType {
-    Core.wrappedTypeTypeName = (Core.Name "Placeholder"),
-    Core.wrappedTypeBody = t}))) t)
+  _ -> (Core.TypeWrap t)) t)

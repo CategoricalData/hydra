@@ -438,13 +438,11 @@ record cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\strip
       Core.recordFields = field_fields}))))
   _ -> (Left (Error.DecodingError "expected record of type hydra.core.Record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
-rowType :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.RowType)
+rowType :: (Graph.Graph -> Core.Term -> Either Error.DecodingError [Core.FieldType])
 rowType cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v0 ->  
     let fieldMap = (Helpers.toFieldMap v0)
-    in (Eithers.bind (Helpers.requireField "typeName" name fieldMap cx) (\field_typeName -> Eithers.bind (Helpers.requireField "fields" (Helpers.decodeList fieldType) fieldMap cx) (\field_fields -> Right (Core.RowType {
-      Core.rowTypeTypeName = field_typeName,
-      Core.rowTypeFields = field_fields}))))
+    in (Eithers.bind (Helpers.requireField "typeName" name fieldMap cx) (\field_typeName -> Eithers.bind (Helpers.requireField "fields" (Helpers.decodeList fieldType) fieldMap cx) (\field_fields -> Right field_fields)))
   _ -> (Left (Error.DecodingError "expected record of type hydra.core.RowType"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 term :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Term)
@@ -556,11 +554,9 @@ wrappedTerm cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\
       Core.wrappedTermBody = field_body}))))
   _ -> (Left (Error.DecodingError "expected record of type hydra.core.WrappedTerm"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
-wrappedType :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.WrappedType)
+wrappedType :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Type)
 wrappedType cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermRecord v0 ->  
     let fieldMap = (Helpers.toFieldMap v0)
-    in (Eithers.bind (Helpers.requireField "typeName" name fieldMap cx) (\field_typeName -> Eithers.bind (Helpers.requireField "body" type_ fieldMap cx) (\field_body -> Right (Core.WrappedType {
-      Core.wrappedTypeTypeName = field_typeName,
-      Core.wrappedTypeBody = field_body}))))
+    in (Eithers.bind (Helpers.requireField "typeName" name fieldMap cx) (\field_typeName -> Eithers.bind (Helpers.requireField "body" type_ fieldMap cx) (\field_body -> Right field_body)))
   _ -> (Left (Error.DecodingError "expected record of type hydra.core.WrappedType"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))

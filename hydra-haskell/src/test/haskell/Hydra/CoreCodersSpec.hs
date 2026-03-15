@@ -47,18 +47,16 @@ individualEncoderTestCases = do
 
     H.it "record type" $ do
       H.shouldBe
-        (strip $ EncodeCore.type_ (TypeRecord $ RowType (Name "Example")
+        (strip $ EncodeCore.type_ (TypeRecord
           [Types.field "something" Types.string, Types.field "nothing" Types.unit]) :: Term)
         (strip $ inject _Type _Type_record $
-          record _RowType [
-            Field _RowType_typeName $ wrap _Name $ string "Example",
-            Field _RowType_fields $ list [
-              record _FieldType [
-                Field _FieldType_name $ wrap _Name $ string "something",
-                Field _FieldType_type $ inject _Type _Type_literal $ injectUnit _LiteralType _LiteralType_string],
-              record _FieldType [
-                Field _FieldType_name $ wrap _Name $ string "nothing",
-                Field _FieldType_type $ injectUnit _Type _Type_unit]]])
+          list [
+            record _FieldType [
+              Field _FieldType_name $ wrap _Name $ string "something",
+              Field _FieldType_type $ inject _Type _Type_literal $ injectUnit _LiteralType _LiteralType_string],
+            record _FieldType [
+              Field _FieldType_name $ wrap _Name $ string "nothing",
+              Field _FieldType_type $ injectUnit _Type _Type_unit]])
 
     H.it "Name (wrapped type)" $ do
       H.shouldBe
@@ -132,19 +130,17 @@ individualDecoderTestCases = do
     H.it "union type" $ do
       shouldSucceedWith
         (decodeE $ DecodeCore.type_ (testGraph) $
-          inject _Type _Type_union $ record _RowType [
-            Field _RowType_typeName $ wrap _Name $ string (unName testTypeName),
-            Field _RowType_fields $
-              list [
-                record _FieldType [
-                  Field _FieldType_name $ wrap _Name $ string "left",
-                  Field _FieldType_type $ inject _Type _Type_literal $ inject _LiteralType _LiteralType_integer $
-                    injectUnit _IntegerType _IntegerType_int64],
-                record _FieldType [
-                  Field _FieldType_name $ wrap _Name $ string "right",
-                  Field _FieldType_type $ inject _Type _Type_literal $ inject _LiteralType _LiteralType_float $
-                    injectUnit _FloatType _FloatType_float64]]])
-          (TypeUnion $ RowType testTypeName [
+          inject _Type _Type_union $
+            list [
+              record _FieldType [
+                Field _FieldType_name $ wrap _Name $ string "left",
+                Field _FieldType_type $ inject _Type _Type_literal $ inject _LiteralType _LiteralType_integer $
+                  injectUnit _IntegerType _IntegerType_int64],
+              record _FieldType [
+                Field _FieldType_name $ wrap _Name $ string "right",
+                Field _FieldType_type $ inject _Type _Type_literal $ inject _LiteralType _LiteralType_float $
+                  injectUnit _FloatType _FloatType_float64]])
+          (TypeUnion [
             Types.field "left" Types.int64,
             Types.field "right" Types.float64])
 

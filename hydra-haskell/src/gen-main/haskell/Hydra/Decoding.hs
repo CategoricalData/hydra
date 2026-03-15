@@ -50,10 +50,10 @@ collectOrdConstrainedVariables typ = ((\x -> case x of
     (collectOrdConstrainedVariables (Core.mapTypeValues v0))])
   Core.TypeMaybe v0 -> (collectOrdConstrainedVariables v0)
   Core.TypePair v0 -> (Lists.concat2 (collectOrdConstrainedVariables (Core.pairTypeFirst v0)) (collectOrdConstrainedVariables (Core.pairTypeSecond v0)))
-  Core.TypeRecord v0 -> (Lists.concat (Lists.map (\ft -> collectOrdConstrainedVariables (Core.fieldTypeType ft)) (Core.rowTypeFields v0)))
+  Core.TypeRecord v0 -> (Lists.concat (Lists.map (\ft -> collectOrdConstrainedVariables (Core.fieldTypeType ft)) v0))
   Core.TypeSet v0 -> (Lists.concat2 (collectTypeVariablesFromType v0) (collectOrdConstrainedVariables v0))
-  Core.TypeUnion v0 -> (Lists.concat (Lists.map (\ft -> collectOrdConstrainedVariables (Core.fieldTypeType ft)) (Core.rowTypeFields v0)))
-  Core.TypeWrap v0 -> (collectOrdConstrainedVariables (Core.wrappedTypeBody v0))
+  Core.TypeUnion v0 -> (Lists.concat (Lists.map (\ft -> collectOrdConstrainedVariables (Core.fieldTypeType ft)) v0))
+  Core.TypeWrap v0 -> (collectOrdConstrainedVariables v0)
   _ -> []) typ)
 
 -- | Collect type variable names from a type (forall parameters only)
@@ -71,12 +71,12 @@ collectTypeVariablesFromType typ = ((\x -> case x of
   Core.TypeMap v0 -> (Lists.concat2 (collectTypeVariablesFromType (Core.mapTypeKeys v0)) (collectTypeVariablesFromType (Core.mapTypeValues v0)))
   Core.TypeMaybe v0 -> (collectTypeVariablesFromType v0)
   Core.TypePair v0 -> (Lists.concat2 (collectTypeVariablesFromType (Core.pairTypeFirst v0)) (collectTypeVariablesFromType (Core.pairTypeSecond v0)))
-  Core.TypeRecord v0 -> (Lists.concat (Lists.map (\ft -> collectTypeVariablesFromType (Core.fieldTypeType ft)) (Core.rowTypeFields v0)))
+  Core.TypeRecord v0 -> (Lists.concat (Lists.map (\ft -> collectTypeVariablesFromType (Core.fieldTypeType ft)) v0))
   Core.TypeSet v0 -> (collectTypeVariablesFromType v0)
-  Core.TypeUnion v0 -> (Lists.concat (Lists.map (\ft -> collectTypeVariablesFromType (Core.fieldTypeType ft)) (Core.rowTypeFields v0)))
+  Core.TypeUnion v0 -> (Lists.concat (Lists.map (\ft -> collectTypeVariablesFromType (Core.fieldTypeType ft)) v0))
   Core.TypeVariable v0 -> [
     v0]
-  Core.TypeWrap v0 -> (collectTypeVariablesFromType (Core.wrappedTypeBody v0))
+  Core.TypeWrap v0 -> (collectTypeVariablesFromType v0)
   _ -> []) typ)
 
 -- | Transform a type binding into a decoder binding
@@ -1124,11 +1124,11 @@ decodePairType pt =
       Core.applicationArgument = secondDecoder}))
 
 -- | Generate a decoder for a record type
-decodeRecordType :: (Core.RowType -> Core.Term)
+decodeRecordType :: ([Core.FieldType] -> Core.Term)
 decodeRecordType rt =  
-  let typeName = (Core.rowTypeTypeName rt)
+  let typeName = (Core.Name "unknown")
   in  
-    let fieldTypes = (Core.rowTypeFields rt)
+    let fieldTypes = rt
     in  
       let decodeFieldTerm = (\ft -> Core.TermApplication (Core.Application {
               Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -1250,9 +1250,9 @@ decodeUnitType :: Core.Term
 decodeUnitType = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeUnit"))
 
 -- | Generate a decoder for a union type
-decodeUnionType :: (Core.RowType -> Core.Term)
+decodeUnionType :: ([Core.FieldType] -> Core.Term)
 decodeUnionType rt =  
-  let typeName = (Core.rowTypeTypeName rt)
+  let typeName = (Core.Name "unknown")
   in  
     let toVariantPair = (\ft -> Core.TermPair (Core.TermWrap (Core.WrappedTerm {
             Core.wrappedTermTypeName = (Core.Name "hydra.core.Name"),
@@ -1346,7 +1346,7 @@ decodeUnionType rt =
                               Core.bindingName = (Core.Name "variantMap"),
                               Core.bindingTerm = (Core.TermApplication (Core.Application {
                                 Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.maps.fromList"))),
-                                Core.applicationArgument = (Core.TermList (Lists.map toVariantPair (Core.rowTypeFields rt)))})),
+                                Core.applicationArgument = (Core.TermList (Lists.map toVariantPair rt))})),
                               Core.bindingType = Nothing}],
                           Core.letBody = (Core.TermApplication (Core.Application {
                             Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -1384,9 +1384,9 @@ decodeUnionType rt =
             Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))})))
 
 -- | Generate a decoder for a wrapped type
-decodeWrappedType :: (Core.WrappedType -> Core.Term)
+decodeWrappedType :: (Core.Type -> Core.Term)
 decodeWrappedType wt =  
-  let bodyDecoder = (decodeType (Core.wrappedTypeBody wt))
+  let bodyDecoder = (decodeType wt)
   in (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
     Core.lambdaParameter = (Core.Name "cx"),
     Core.lambdaDomain = Nothing,
@@ -1413,7 +1413,7 @@ decodeWrappedType wt =
                   Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
                   Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString (Strings.cat [
                     "expected wrapped type ",
-                    (Core.unName (Core.wrappedTypeTypeName wt))])))}))))),
+                    (Core.unName (Core.Name "unknown"))])))}))))),
                 Core.caseStatementCases = [
                   Core.Field {
                     Core.fieldName = (Core.Name "wrap"),
@@ -1427,7 +1427,7 @@ decodeWrappedType wt =
                             Core.lambdaParameter = (Core.Name "b"),
                             Core.lambdaDomain = Nothing,
                             Core.lambdaBody = (Core.TermWrap (Core.WrappedTerm {
-                              Core.wrappedTermTypeName = (Core.wrappedTypeTypeName wt),
+                              Core.wrappedTermTypeName = (Core.Name "unknown"),
                               Core.wrappedTermBody = (Core.TermVariable (Core.Name "b"))}))})))})),
                         Core.applicationArgument = (Core.TermApplication (Core.Application {
                           Core.applicationFunction = (Core.TermApplication (Core.Application {
@@ -1467,12 +1467,12 @@ decoderFullResultType typ = ((\x -> case x of
   Core.TypePair v0 -> (Core.TypePair (Core.PairType {
     Core.pairTypeFirst = (decoderFullResultType (Core.pairTypeFirst v0)),
     Core.pairTypeSecond = (decoderFullResultType (Core.pairTypeSecond v0))}))
-  Core.TypeRecord v0 -> (Core.TypeVariable (Core.rowTypeTypeName v0))
+  Core.TypeRecord v0 -> (Core.TypeVariable (Core.Name "unknown"))
   Core.TypeSet v0 -> (Core.TypeSet (decoderFullResultType v0))
-  Core.TypeUnion v0 -> (Core.TypeVariable (Core.rowTypeTypeName v0))
+  Core.TypeUnion v0 -> (Core.TypeVariable (Core.Name "unknown"))
   Core.TypeUnit -> Core.TypeUnit
   Core.TypeVariable v0 -> (Core.TypeVariable v0)
-  Core.TypeWrap v0 -> (Core.TypeVariable (Core.wrappedTypeTypeName v0))
+  Core.TypeWrap v0 -> (Core.TypeVariable (Core.Name "unknown"))
   _ -> (Core.TypeVariable (Core.Name "hydra.core.Term"))) typ)
 
 -- | Compute the result type name for a decoder
@@ -1482,9 +1482,9 @@ decoderResultType typ = ((\x -> case x of
   Core.TypeApplication v0 -> (decoderResultType (Core.applicationTypeFunction v0))
   Core.TypeForall v0 -> (decoderResultType (Core.forallTypeBody v0))
   Core.TypeLiteral _ -> (Core.Name "hydra.core.Literal")
-  Core.TypeRecord v0 -> (Core.rowTypeTypeName v0)
-  Core.TypeUnion v0 -> (Core.rowTypeTypeName v0)
-  Core.TypeWrap v0 -> (Core.wrappedTypeTypeName v0)
+  Core.TypeRecord v0 -> (Core.Name "unknown")
+  Core.TypeUnion v0 -> (Core.Name "unknown")
+  Core.TypeWrap v0 -> (Core.Name "unknown")
   _ -> (Core.Name "hydra.core.Term")) typ)
 
 -- | Build decoder function type

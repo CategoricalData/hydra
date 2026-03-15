@@ -245,7 +245,7 @@ spec = do
 
 -- | Check that JSON decoding produces the expected result (Either String Term)
 checkJsonDecode :: Type -> Json.Value -> Either String Term -> H.Expectation
-checkJsonDecode typ json expected = case JsonDecode.fromJson M.empty typ json of
+checkJsonDecode typ json expected = case JsonDecode.fromJson M.empty (Name "test") typ json of
     Left errMsg -> case expected of
       Left _ -> return ()  -- Expected failure, got failure
       Right _ -> HL.assertFailure ("JSON decode failed: " ++ errMsg)
@@ -271,7 +271,7 @@ checkJsonEncode term expected = case JsonEncode.toJson term of
 checkJsonRoundtrip :: Type -> Term -> H.Expectation
 checkJsonRoundtrip typ term = case JsonEncode.toJson term of
     Left errMsg -> HL.assertFailure ("Failed to encode term to JSON: " ++ errMsg)
-    Right json -> case JsonDecode.fromJson M.empty typ json of
+    Right json -> case JsonDecode.fromJson M.empty (Name "test") typ json of
       Left errMsg -> HL.assertFailure ("Failed to decode JSON back to term: " ++ errMsg)
       Right decoded -> H.shouldBe decoded term
 

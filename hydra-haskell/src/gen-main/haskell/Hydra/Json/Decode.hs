@@ -73,11 +73,11 @@ fromJson types typ value =
                             Core.fieldName = fname,
                             Core.fieldTerm = v}) decoded))
         in  
-          let fields = (Core.rowTypeFields v0)
+          let fields = (id v0)
           in  
             let decodedFields = (Eithers.mapList decodeField fields)
             in (Eithers.map (\fs -> Core.TermRecord (Core.Record {
-              Core.recordTypeName = (Core.rowTypeTypeName v0),
+              Core.recordTypeName = (Core.Name "unknown"),
               Core.recordFields = fs})) decodedFields)) objResult)
     Core.TypeUnion v0 ->  
       let decodeVariant = (\key -> \val -> \ftype ->  
@@ -85,7 +85,7 @@ fromJson types typ value =
               in  
                 let decoded = (fromJson types ftype jsonVal)
                 in (Eithers.map (\v -> Core.TermUnion (Core.Injection {
-                  Core.injectionTypeName = (Core.rowTypeTypeName v0),
+                  Core.injectionTypeName = (Core.Name "unknown"),
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name key),
                     Core.fieldTerm = v}})) decoded))
@@ -96,7 +96,7 @@ fromJson types typ value =
                   "unknown variant: ",
                   key])) (Maybes.maybe (findAndDecode key val (Lists.tail fts)) (\r -> r) (tryField key val (Lists.head fts))))
           in  
-            let decodeSingleKey = (\obj -> findAndDecode (Lists.head (Maps.keys obj)) (Maps.lookup (Lists.head (Maps.keys obj)) obj) (Core.rowTypeFields v0))
+            let decodeSingleKey = (\obj -> findAndDecode (Lists.head (Maps.keys obj)) (Maps.lookup (Lists.head (Maps.keys obj)) obj) (id v0))
             in  
               let processUnion = (\obj -> Logic.ifElse (Equality.equal (Lists.length (Maps.keys obj)) 1) (decodeSingleKey obj) (Left "expected single-key object for union"))
               in  
@@ -107,7 +107,7 @@ fromJson types typ value =
       in (Eithers.map (\_ -> Core.TermUnit) objResult)
     Core.TypeWrap v0 ->  
       let extractInnerType = (\lt -> (\x -> case x of
-              Core.TypeWrap v1 -> (Core.wrappedTypeBody v1)
+              Core.TypeWrap v1 -> (id v1)
               _ -> lt) lt)
       in  
         let decodeAndWrap = (\lt ->  
@@ -115,13 +115,13 @@ fromJson types typ value =
                 in  
                   let decoded = (fromJson types innerType value)
                   in (Eithers.map (\v -> Core.TermWrap (Core.WrappedTerm {
-                    Core.wrappedTermTypeName = (Core.wrappedTypeTypeName v0),
+                    Core.wrappedTermTypeName = (Core.Name "unknown"),
                     Core.wrappedTermBody = v})) decoded))
         in  
-          let lookedUp = (Maps.lookup (Core.wrappedTypeTypeName v0) types)
+          let lookedUp = (Maps.lookup (Core.Name "unknown") types)
           in (Maybes.maybe (Left (Strings.cat [
             "unknown wrapped type: ",
-            (Core.unName (Core.wrappedTypeTypeName v0))])) (\lt -> decodeAndWrap lt) lookedUp)
+            (Core.unName (Core.Name "unknown"))])) (\lt -> decodeAndWrap lt) lookedUp)
     Core.TypeMap v0 ->  
       let keyType = (Core.mapTypeKeys v0)
       in  

@@ -886,7 +886,7 @@ def run_json_decode_test(test_case: hydra.testing.JsonDecodeTestCase) -> None:
     import hydra.json.decode as json_decode
 
     empty_types = FrozenDict({})
-    decode_result = json_decode.from_json(empty_types, test_case.type, test_case.json)
+    decode_result = json_decode.from_json(empty_types, hydra.core.Name("test"), test_case.type, test_case.json)
 
     match test_case.expected:
         case Left(value=_err_msg):
@@ -958,7 +958,7 @@ def run_json_roundtrip_test(test_case: hydra.testing.JsonRoundtripTestCase) -> N
 
     # Decode the JSON back
     empty_types = FrozenDict({})
-    decode_result = json_decode.from_json(empty_types, test_case.type, json)
+    decode_result = json_decode.from_json(empty_types, hydra.core.Name("test"), test_case.type, json)
 
     match decode_result:
         case Left(value=err):

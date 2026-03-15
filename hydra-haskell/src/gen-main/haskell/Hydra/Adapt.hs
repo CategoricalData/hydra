@@ -530,7 +530,7 @@ termAlternatives cx graph term = ((\x -> case x of
             in (Eithers.bind (Eithers.bimap (\ic -> Error_.error (Context.inContextObject ic)) (\x -> x) (Schemas.requireUnionType cx graph tname)) (\rt -> Right [
               Core.TermRecord (Core.Record {
                 Core.recordTypeName = tname,
-                Core.recordFields = (Lists.map forFieldType (Core.rowTypeFields rt))})]))
+                Core.recordFields = (Lists.map forFieldType rt)})]))
   Core.TermUnit -> (Right [
     Core.TermLiteral (Core.LiteralBoolean True)])
   Core.TermWrap v0 ->  
@@ -549,9 +549,9 @@ typeAlternatives type_ = ((\x -> case x of
   Core.TypeMaybe v0 -> [
     Core.TypeList v0]
   Core.TypeUnion v0 ->  
-    let tname = (Core.rowTypeTypeName v0)
+    let tname = (Core.Name "unknown")
     in  
-      let fields = (Core.rowTypeFields v0)
+      let fields = v0
       in  
         let toOptField = (\f -> Core.FieldType {
                 Core.fieldTypeName = (Core.fieldTypeName f),
@@ -559,9 +559,7 @@ typeAlternatives type_ = ((\x -> case x of
         in  
           let optFields = (Lists.map toOptField fields)
           in [
-            Core.TypeRecord (Core.RowType {
-              Core.rowTypeTypeName = tname,
-              Core.rowTypeFields = optFields})]
+            Core.TypeRecord optFields]
   Core.TypeUnit -> [
     Core.TypeLiteral Core.LiteralTypeBoolean]
   _ -> []) type_)

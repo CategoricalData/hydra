@@ -1021,11 +1021,9 @@ inferTypeOfRecord fcx cx record =
                         in  
                           let recElemConstraints = (Pairs.second (Pairs.second (Pairs.second results)))
                           in  
-                            let ityp = (Core.TypeRecord (Core.RowType {
-                                    Core.rowTypeTypeName = tname,
-                                    Core.rowTypeFields = (Lists.zipWith (\n -> \t -> Core.FieldType {
+                            let ityp = (Core.TypeRecord (Lists.zipWith (\n -> \t -> Core.FieldType {
                                       Core.fieldTypeName = n,
-                                      Core.fieldTypeType = t}) fnames itypes)}))
+                                      Core.fieldTypeType = t}) fnames itypes))
                             in (Eithers.bind (mapConstraints fcx3 cx (\subst -> yieldWithConstraints fcx3 (buildTypeApplicationTerm svars (Core.TermRecord (Core.Record {
                               Core.recordTypeName = tname,
                               Core.recordFields = (Lists.zipWith (\n -> \t -> Core.Field {
@@ -1140,9 +1138,7 @@ inferTypeOfWrappedTerm fcx cx wt =
                   in  
                     let isubst = (Typing_.inferenceResultSubst result)
                     in  
-                      let ityp = (Core.TypeWrap (Core.WrappedType {
-                              Core.wrappedTypeTypeName = tname,
-                              Core.wrappedTypeBody = itype}))
+                      let ityp = (Core.TypeWrap itype)
                       in (Eithers.bind (mapConstraints fcx3 cx (\subst -> yield fcx3 (buildTypeApplicationTerm svars (Core.TermWrap (Core.WrappedTerm {
                         Core.wrappedTermTypeName = tname,
                         Core.wrappedTermBody = iterm}))) (Schemas.nominalApplication tname (Lists.map (\x -> Core.TypeVariable x) svars)) (Substitution.composeTypeSubst isubst subst)) [

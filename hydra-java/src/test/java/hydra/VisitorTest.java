@@ -5,9 +5,7 @@ import hydra.core.FloatType;
 import hydra.core.IntegerType;
 import hydra.core.LiteralType;
 import hydra.core.Name;
-import hydra.core.RowType;
 import hydra.core.Type;
-import hydra.core.WrappedType;
 
 import java.util.Arrays;
 import java.util.stream.Collectors;
@@ -29,11 +27,9 @@ public class VisitorTest {
     private final Type float64Type = new Type.Literal(new LiteralType.Float_(new FloatType.Float64()));
     private final Type listOfStrings = new Type.List(stringType);
     private final Type maybeInt = new Type.Maybe(int32Type);
-    private final Type recordType = new Type.Record(new RowType(
-            new Name("LatLon"),
-            hydra.util.ConsList.of(
+    private final Type recordType = new Type.Record(ConsList.of(
                     new FieldType(new Name("lat"), float64Type),
-                    new FieldType(new Name("lon"), float64Type))));
+                    new FieldType(new Name("lon"), float64Type)));
 
     // Example visitor: format a type as a human-readable string
     private final Type.Visitor<String> typeToString = new Type.Visitor<String>() {
@@ -118,7 +114,7 @@ public class VisitorTest {
 
         @Override
         public String visit(Type.Record instance) {
-            String fields = instance.value.fields.stream()
+            String fields = instance.value.stream()
                     .map(f -> f.name.value + ": " + f.type.accept(typeToString))
                     .collect(Collectors.joining(", "));
             return "{" + fields + "}";
@@ -131,7 +127,7 @@ public class VisitorTest {
 
         @Override
         public String visit(Type.Union instance) {
-            String fields = instance.value.fields.stream()
+            String fields = instance.value.stream()
                     .map(f -> f.name.value + ": " + f.type.accept(typeToString))
                     .collect(Collectors.joining(" | "));
             return "(" + fields + ")";
@@ -149,7 +145,7 @@ public class VisitorTest {
 
         @Override
         public String visit(Type.Wrap instance) {
-            return "wrap(" + instance.value.typeName.value + ", " + instance.value.body.accept(typeToString) + ")";
+            return "wrap(" + instance.value.accept(typeToString) + ")";
         }
     };
 

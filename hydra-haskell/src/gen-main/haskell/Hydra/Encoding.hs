@@ -65,10 +65,10 @@ encoderCollectOrdVars typ = ((\x -> case x of
     (encoderCollectOrdVars (Core.mapTypeValues v0))])
   Core.TypeMaybe v0 -> (encoderCollectOrdVars v0)
   Core.TypePair v0 -> (Lists.concat2 (encoderCollectOrdVars (Core.pairTypeFirst v0)) (encoderCollectOrdVars (Core.pairTypeSecond v0)))
-  Core.TypeRecord v0 -> (Lists.concat (Lists.map (\ft -> encoderCollectOrdVars (Core.fieldTypeType ft)) (Core.rowTypeFields v0)))
+  Core.TypeRecord v0 -> (Lists.concat (Lists.map (\ft -> encoderCollectOrdVars (Core.fieldTypeType ft)) v0))
   Core.TypeSet v0 -> (Lists.concat2 (encoderCollectTypeVarsFromType v0) (encoderCollectOrdVars v0))
-  Core.TypeUnion v0 -> (Lists.concat (Lists.map (\ft -> encoderCollectOrdVars (Core.fieldTypeType ft)) (Core.rowTypeFields v0)))
-  Core.TypeWrap v0 -> (encoderCollectOrdVars (Core.wrappedTypeBody v0))
+  Core.TypeUnion v0 -> (Lists.concat (Lists.map (\ft -> encoderCollectOrdVars (Core.fieldTypeType ft)) v0))
+  Core.TypeWrap v0 -> (encoderCollectOrdVars v0)
   _ -> []) typ)
 
 -- | Collect all type variable names from a type expression
@@ -81,12 +81,12 @@ encoderCollectTypeVarsFromType typ = ((\x -> case x of
   Core.TypeMap v0 -> (Lists.concat2 (encoderCollectTypeVarsFromType (Core.mapTypeKeys v0)) (encoderCollectTypeVarsFromType (Core.mapTypeValues v0)))
   Core.TypeMaybe v0 -> (encoderCollectTypeVarsFromType v0)
   Core.TypePair v0 -> (Lists.concat2 (encoderCollectTypeVarsFromType (Core.pairTypeFirst v0)) (encoderCollectTypeVarsFromType (Core.pairTypeSecond v0)))
-  Core.TypeRecord v0 -> (Lists.concat (Lists.map (\ft -> encoderCollectTypeVarsFromType (Core.fieldTypeType ft)) (Core.rowTypeFields v0)))
+  Core.TypeRecord v0 -> (Lists.concat (Lists.map (\ft -> encoderCollectTypeVarsFromType (Core.fieldTypeType ft)) v0))
   Core.TypeSet v0 -> (encoderCollectTypeVarsFromType v0)
-  Core.TypeUnion v0 -> (Lists.concat (Lists.map (\ft -> encoderCollectTypeVarsFromType (Core.fieldTypeType ft)) (Core.rowTypeFields v0)))
+  Core.TypeUnion v0 -> (Lists.concat (Lists.map (\ft -> encoderCollectTypeVarsFromType (Core.fieldTypeType ft)) v0))
   Core.TypeVariable v0 -> [
     v0]
-  Core.TypeWrap v0 -> (encoderCollectTypeVarsFromType (Core.wrappedTypeBody v0))
+  Core.TypeWrap v0 -> (encoderCollectTypeVarsFromType v0)
   _ -> []) typ)
 
 -- | Get full result type for encoder input
@@ -111,12 +111,12 @@ encoderFullResultType typ = ((\x -> case x of
   Core.TypePair v0 -> (Core.TypePair (Core.PairType {
     Core.pairTypeFirst = (encoderFullResultType (Core.pairTypeFirst v0)),
     Core.pairTypeSecond = (encoderFullResultType (Core.pairTypeSecond v0))}))
-  Core.TypeRecord v0 -> (Core.TypeVariable (Core.rowTypeTypeName v0))
+  Core.TypeRecord v0 -> (Core.TypeVariable (Core.Name "unknown"))
   Core.TypeSet v0 -> (Core.TypeSet (encoderFullResultType v0))
-  Core.TypeUnion v0 -> (Core.TypeVariable (Core.rowTypeTypeName v0))
+  Core.TypeUnion v0 -> (Core.TypeVariable (Core.Name "unknown"))
   Core.TypeUnit -> Core.TypeUnit
   Core.TypeVariable v0 -> (Core.TypeVariable v0)
-  Core.TypeWrap v0 -> (Core.TypeVariable (Core.wrappedTypeTypeName v0))
+  Core.TypeWrap v0 -> (Core.TypeVariable (Core.Name "unknown"))
   _ -> (Core.TypeVariable (Core.Name "hydra.core.Term"))) typ)
 
 -- | Build encoder function type
@@ -398,7 +398,7 @@ encodeNamespace ns = (Module.Namespace (Strings.cat [
   (Strings.intercalate "." (Lists.tail (Strings.splitOn "." (Module.unNamespace ns))))]))
 
 -- | Generate an encoder for a record type
-encodeRecordType :: (Core.RowType -> Core.Term)
+encodeRecordType :: ([Core.FieldType] -> Core.Term)
 encodeRecordType rt = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
   Core.lambdaParameter = (Core.Name "x"),
   Core.lambdaDomain = Nothing,
@@ -411,7 +411,7 @@ encodeRecordType rt = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
         Core.recordFields = [
           Core.Field {
             Core.fieldName = (Core.Name "typeName"),
-            Core.fieldTerm = (encodeName (Core.rowTypeTypeName rt))},
+            Core.fieldTerm = (encodeName (Core.Name "unknown"))},
           Core.Field {
             Core.fieldName = (Core.Name "fields"),
             Core.fieldTerm = (Core.TermList (Lists.map ((\recType -> \ft -> Core.TermRecord (Core.Record {
@@ -426,9 +426,9 @@ encodeRecordType rt = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                     Core.applicationFunction = (encodeType (Core.fieldTypeType ft)),
                     Core.applicationArgument = (Core.TermApplication (Core.Application {
                       Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-                        Core.projectionTypeName = (Core.rowTypeTypeName recType),
+                        Core.projectionTypeName = (Core.Name "unknown"),
                         Core.projectionField = (Core.fieldTypeName ft)})))),
-                      Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})) rt) (Core.rowTypeFields rt)))}]}))}}))})))
+                      Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]})) rt) rt))}]}))}}))})))
 
 -- | Generate an encoder for a set type
 encodeSetType :: (Core.Type -> Core.Term)
@@ -482,16 +482,16 @@ encodeType x = case x of
     Core.lambdaBody = (Core.TermVariable (Core.Name "x"))})))
 
 -- | Generate an encoder for a union type
-encodeUnionType :: (Core.RowType -> Core.Term)
+encodeUnionType :: ([Core.FieldType] -> Core.Term)
 encodeUnionType rt = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
-  Core.caseStatementTypeName = (Core.rowTypeTypeName rt),
+  Core.caseStatementTypeName = (Core.Name "unknown"),
   Core.caseStatementDefault = Nothing,
   Core.caseStatementCases = (Lists.map (\ft -> Core.Field {
     Core.fieldName = (Core.fieldTypeName ft),
-    Core.fieldTerm = (encodeFieldValue (Core.rowTypeTypeName rt) (Core.fieldTypeName ft) (Core.fieldTypeType ft))}) (Core.rowTypeFields rt))}))))
+    Core.fieldTerm = (encodeFieldValue (Core.Name "unknown") (Core.fieldTypeName ft) (Core.fieldTypeType ft))}) rt)}))))
 
 -- | Generate an encoder for a wrapped type
-encodeWrappedType :: (Core.WrappedType -> Core.Term)
+encodeWrappedType :: (Core.Type -> Core.Term)
 encodeWrappedType wt = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
   Core.lambdaParameter = (Core.Name "x"),
   Core.lambdaDomain = Nothing,
@@ -504,13 +504,13 @@ encodeWrappedType wt = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
         Core.recordFields = [
           Core.Field {
             Core.fieldName = (Core.Name "typeName"),
-            Core.fieldTerm = (encodeName (Core.wrappedTypeTypeName wt))},
+            Core.fieldTerm = (encodeName (Core.Name "unknown"))},
           Core.Field {
             Core.fieldName = (Core.Name "body"),
             Core.fieldTerm = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (encodeType (Core.wrappedTypeBody wt)),
+              Core.applicationFunction = (encodeType wt),
               Core.applicationArgument = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.wrappedTypeTypeName wt)))),
+                Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "unknown")))),
                 Core.applicationArgument = (Core.TermVariable (Core.Name "x"))}))}))}]}))}}))})))
 
 -- | Filter bindings to only encodable type definitions

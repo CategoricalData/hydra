@@ -571,24 +571,6 @@ public interface Core {
     }
 
     // ============================================================
-    // RowType
-    // ============================================================
-
-    static Expr<RowType> rowType(TTerm<Name> typeName, TTerm<?> fields) {
-        return record(RowType.TYPE_,
-                field(RowType.TYPE_NAME, typeName),
-                field(RowType.FIELDS, fields));
-    }
-
-    static Expr<Name> rowTypeTypeName(TTerm<RowType> rt) {
-        return apply(project(RowType.TYPE_, RowType.TYPE_NAME), rt);
-    }
-
-    static Expr<?> rowTypeFields(TTerm<RowType> rt) {
-        return apply(project(RowType.TYPE_, RowType.FIELDS), rt);
-    }
-
-    // ============================================================
     // Term variants (injection functions)
     // ============================================================
 
@@ -708,16 +690,16 @@ public interface Core {
         return inject(Type.TYPE_, Type.PAIR, pt);
     }
 
-    static Expr<Type> typeRecord(TTerm<RowType> rt) {
-        return inject(Type.TYPE_, Type.RECORD, rt);
+    static Expr<Type> typeRecord(TTerm<?> fields) {
+        return inject(Type.TYPE_, Type.RECORD, fields);
     }
 
     static Expr<Type> typeSet(TTerm<Type> t) {
         return inject(Type.TYPE_, Type.SET, t);
     }
 
-    static Expr<Type> typeUnion(TTerm<RowType> rt) {
-        return inject(Type.TYPE_, Type.UNION, rt);
+    static Expr<Type> typeUnion(TTerm<?> fields) {
+        return inject(Type.TYPE_, Type.UNION, fields);
     }
 
     static Expr<Type> typeUnit() {
@@ -728,8 +710,8 @@ public interface Core {
         return inject(Type.TYPE_, Type.VARIABLE, name);
     }
 
-    static Expr<Type> typeWrap(TTerm<WrappedType> wt) {
-        return inject(Type.TYPE_, Type.WRAP, wt);
+    static Expr<Type> typeWrap(TTerm<Type> t) {
+        return inject(Type.TYPE_, Type.WRAP, t);
     }
 
     // ============================================================
@@ -811,24 +793,6 @@ public interface Core {
 
     static Expr<Term> wrappedTermBody(TTerm<WrappedTerm> wt) {
         return apply(project(WrappedTerm.TYPE_, WrappedTerm.BODY), wt);
-    }
-
-    // ============================================================
-    // WrappedType
-    // ============================================================
-
-    static Expr<WrappedType> wrappedType(TTerm<Name> typeName, TTerm<Type> body) {
-        return record(WrappedType.TYPE_,
-                field(WrappedType.TYPE_NAME, typeName),
-                field(WrappedType.BODY, body));
-    }
-
-    static Expr<Name> wrappedTypeTypeName(TTerm<WrappedType> wt) {
-        return apply(project(WrappedType.TYPE_, WrappedType.TYPE_NAME), wt);
-    }
-
-    static Expr<Type> wrappedTypeBody(TTerm<WrappedType> wt) {
-        return apply(project(WrappedType.TYPE_, WrappedType.BODY), wt);
     }
 
     // ============================================================

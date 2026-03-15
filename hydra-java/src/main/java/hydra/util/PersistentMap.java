@@ -71,7 +71,8 @@ public abstract class PersistentMap<K, V> implements Map<K, V>, Iterable<Map.Ent
      * Later entries override earlier ones for duplicate keys.
      */
     @SafeVarargs
-    public static <K extends Comparable<K>, V> PersistentMap<K, V> ofEntries(Map.Entry<K, V>... entries) {
+    @SuppressWarnings("unchecked")
+    public static <K, V> PersistentMap<K, V> ofEntries(Map.Entry<K, V>... entries) {
         PersistentMap<K, V> map = empty();
         for (Map.Entry<K, V> entry : entries) {
             map = map.insert(entry.getKey(), entry.getValue());
