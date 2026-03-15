@@ -1,6 +1,6 @@
 -- | Java test code generation codec for JUnit-based generation tests
 
-module Hydra.Ext.Staging.Java.TestCodec (
+module Hydra.Ext.Java.TestCodecIo (
   javaTestGenerator,
   generateJavaGenerationTests,
 ) where
@@ -10,7 +10,7 @@ import qualified Hydra.Show.Error as ShowError
 import Hydra.Testing
 import Hydra.Coders (LanguageName(..))
 import Hydra.Test.Transform (collectTestCases)
-import Hydra.Staging.Testing.Generation.Generate (TestGenerator(..), createTestGroupLookup, generateGenerationTestSuite)
+import Hydra.Generation (TestGenerator(..), createTestGroupLookup, generateGenerationTestSuite)
 import Hydra.Ext.Java.Coder (encodeTerm)
 import Hydra.Ext.Java.Helpers (JavaEnvironment(..), Aliases(..))
 import Hydra.Ext.Java.Utils (importAliasesForModule)
@@ -321,10 +321,10 @@ inferTerm g term = case Inference.inferInGraphContext emptyContext g term of
 -- | Java-specific test generator
 javaTestGenerator :: TestGenerator ()
 javaTestGenerator = TestGenerator {
-  testGenNamespacesForModule = \_ _ -> Right $ Namespaces (Namespace "", ()) M.empty,
-  testGenCreateCodec = \_ -> javaTestCodec,
-  testGenGenerateTestFile = generateJavaTestFile,
-  testGenAggregatorFile = Nothing  -- Could add a test suite aggregator later
+  testGeneratorNamespacesForModule = \_ _ -> Right $ Namespaces (Namespace "", ()) M.empty,
+  testGeneratorCreateCodec = \_ -> javaTestCodec,
+  testGeneratorGenerateTestFile = generateJavaTestFile,
+  testGeneratorAggregatorFile = Nothing  -- Could add a test suite aggregator later
 }
 
 -- | Main entry point for generating Java generation tests

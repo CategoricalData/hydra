@@ -62,6 +62,7 @@ module_ = Module ns elements [Ast.ns, Coders.ns, Compute.ns, Graph.ns, JsonModel
       parserTestCase,
       tag,
       testCodec,
+      testGenerator,
       testCase,
       testCaseWithMetadata,
       testGroup,
@@ -487,6 +488,23 @@ testCodec = define "TestCodec" $
     "findImports">:
       doc "A function that determines the necessary imports for a given set of dependencies" $
       T.set Core.name ~> T.list T.string]
+
+testGenerator :: Binding
+testGenerator = define "TestGenerator" $
+  doc "A language-agnostic test generator abstraction, parameterized by the namespace/module name type" $
+  T.forAll "a" $ T.record [
+    "namespacesForModule">:
+      doc "Build namespaces for a module, resolving all imports and primitives" $
+      Module.module' ~> Graph.graph ~> T.either_ T.string (Module.namespaces @@ "a"),
+    "createCodec">:
+      doc "Create a test codec from resolved namespaces" $
+      Module.namespaces @@ "a" ~> testCodec,
+    "generateTestFile">:
+      doc "Generate a complete test file for a module and test group" $
+      Module.module' ~> testGroup ~> Graph.graph ~> T.either_ T.string (T.pair T.string T.string),
+    "aggregatorFile">:
+      doc "Generate an aggregator file (e.g., Spec.hs for Haskell, conftest.py for Python). Takes base directory and list of modules, returns (filepath, content) or Nothing if not needed" $
+      T.maybe (T.string ~> T.list Module.module' ~> T.pair T.string T.string)]
 
 testCase :: Binding
 testCase = define "TestCase" $

@@ -37,10 +37,10 @@ import Hydra.Ext.Java.Coder (moduleToJava)
 import Hydra.Ext.Java.Language (javaLanguage)
 import Hydra.Ext.Python.Coder (moduleToPython)
 import Hydra.Ext.Python.Language (pythonLanguage)
-import Hydra.Staging.Testing.Generation.Generate (TestGenerator, generateGenerationTestSuite, createTestGroupLookup)
-import Hydra.Staging.Haskell.TestCodec (haskellTestGenerator)
-import Hydra.Ext.Staging.Java.TestCodec (javaTestGenerator)
-import Hydra.Ext.Staging.Python.TestCodec (pythonTestGenerator)
+import Hydra.Generation (TestGenerator, generateGenerationTestSuite, createTestGroupLookup)
+import Hydra.Ext.Haskell.TestCodecIo (haskellTestGenerator)
+import Hydra.Ext.Java.TestCodecIo (javaTestGenerator)
+import Hydra.Ext.Python.TestCodecIo (pythonTestGenerator)
 import qualified Hydra.Sources.Test.TestSuite as TestSuite
 import qualified Hydra.Test.TestSuite as GenTests
 

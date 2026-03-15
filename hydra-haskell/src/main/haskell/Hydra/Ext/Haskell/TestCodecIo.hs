@@ -3,13 +3,12 @@
 -- and only adds the TestGenerator (which involves IO infrastructure)
 -- and the aggregator file generator (which uses System.FilePath).
 
-module Hydra.Staging.Haskell.TestCodec where
+module Hydra.Ext.Haskell.TestCodecIo where
 
 import Hydra.Kernel hiding (map)
 import Hydra.Testing
-import Hydra.Generation (showError)
+import Hydra.Generation (showError, TestGenerator(..), generateGenerationTestSuite)
 import Hydra.Test.Transform (addGenerationPrefix)
-import Hydra.Staging.Testing.Generation.Generate (TestGenerator(..), generateGenerationTestSuite)
 import Hydra.Ext.Haskell.Utils (namespacesForModule, sanitizeHaskellName)
 import qualified Hydra.Ext.Haskell.TestCodec as Generated
 import qualified Hydra.Ext.Haskell.Ast as H
@@ -25,13 +24,13 @@ import Data.Char (toUpper)
 -- | Haskell-specific test generator
 haskellTestGenerator :: TestGenerator H.ModuleName
 haskellTestGenerator = TestGenerator {
-  testGenNamespacesForModule = \m g -> do
+  testGeneratorNamespacesForModule = \m g -> do
     case namespacesForModule m emptyContext g of
       Left ic -> Left (showError (inContextObject ic))
       Right ns -> Right ns,
-  testGenCreateCodec = Generated.haskellTestCodec,
-  testGenGenerateTestFile = Generated.generateHaskellTestFile,
-  testGenAggregatorFile = Just generateHaskellAggregatorSpec
+  testGeneratorCreateCodec = Generated.haskellTestCodec,
+  testGeneratorGenerateTestFile = Generated.generateHaskellTestFile,
+  testGeneratorAggregatorFile = Just generateHaskellAggregatorSpec
 }
 
 -- | Main entry point for generating Haskell generation tests

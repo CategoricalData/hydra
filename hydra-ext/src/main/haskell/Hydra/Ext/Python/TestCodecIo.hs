@@ -1,5 +1,5 @@
 -- | Python test code generation codec, similar to TestCodec in hydra-haskell but for pytest
-module Hydra.Ext.Staging.Python.TestCodec (
+module Hydra.Ext.Python.TestCodecIo (
   pythonTestGenerator,
   generatePythonGenerationTests,
 ) where
@@ -9,7 +9,7 @@ import qualified Hydra.Show.Error as ShowError
 import Hydra.Testing
 import Hydra.Coders (LanguageName(..))
 import Hydra.Test.Transform (collectTestCases)
-import Hydra.Staging.Testing.Generation.Generate (TestGenerator(..), createTestGroupLookup, generateGenerationTestSuite)
+import Hydra.Generation (TestGenerator(..), createTestGroupLookup, generateGenerationTestSuite)
 import Hydra.Ext.Python.Coder (encodeTermInline, encodeType)
 import Hydra.Ext.Python.Helpers (PythonModuleMetadata(..))
 import qualified Hydra.Ext.Python.Names as PyNames
@@ -339,10 +339,10 @@ inferTerm g term = case Inference.inferInGraphContext emptyContext g term of
 -- Provides the complete Python implementation of the TestGenerator abstraction
 pythonTestGenerator :: TestGenerator Py.DottedName
 pythonTestGenerator = TestGenerator {
-  testGenNamespacesForModule = namespacesForPythonModule,
-  testGenCreateCodec = pythonTestCodec,
-  testGenGenerateTestFile = generatePythonTestFile,
-  testGenAggregatorFile = Nothing  -- pytest auto-discovers tests via test_ prefix
+  testGeneratorNamespacesForModule = namespacesForPythonModule,
+  testGeneratorCreateCodec = pythonTestCodec,
+  testGeneratorGenerateTestFile = generatePythonTestFile,
+  testGeneratorAggregatorFile = Nothing  -- pytest auto-discovers tests via test_ prefix
 }
 
 -- | Main entry point for generating Python generation tests
