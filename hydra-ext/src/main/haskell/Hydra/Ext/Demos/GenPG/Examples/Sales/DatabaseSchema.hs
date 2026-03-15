@@ -1,7 +1,7 @@
 module Hydra.Ext.Demos.GenPG.Examples.Sales.DatabaseSchema where
 
 import Hydra.Tabular
-import Hydra.Dsl.Tabular (tableType, columnType)
+import Hydra.Dsl.Meta.Tabular (tableType, columnType)
 import Hydra.Dsl.Types (binary, boolean, float32, float64, int32, int64, string)
 
 employeesTableType :: TableType

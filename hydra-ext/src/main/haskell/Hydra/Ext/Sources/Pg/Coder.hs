@@ -50,7 +50,7 @@ import qualified Hydra.Dsl.Meta.Util                       as Util
 import qualified Hydra.Encode.Core                         as EncodeCore
 import qualified Hydra.Dsl.Meta.Variants                   as Variants
 import qualified Hydra.Dsl.Prims                           as Prims
-import qualified Hydra.Dsl.Tabular                         as Tabular
+import qualified Hydra.Dsl.Meta.Tabular                         as Tabular
 import qualified Hydra.Dsl.Terms                           as Terms
 import qualified Hydra.Dsl.Tests                           as Tests
 import qualified Hydra.Dsl.Types                           as Types

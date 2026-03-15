@@ -8,7 +8,6 @@ import Hydra.Ext.Demos.GenPG.Examples.Sales.Mapping
 import Hydra.Ext.Demos.GenPG.Examples.Health.DatabaseSchema
 import Hydra.Ext.Demos.GenPG.Examples.Health.GraphSchema
 import Hydra.Ext.Demos.GenPG.Examples.Health.Mapping
-import Hydra.Dsl.Tabular
 import Hydra.Ext.Dsl.Pg.Mappings
 import Hydra.Lib.Literals
 import Hydra.Pg.Graphson.Utils
