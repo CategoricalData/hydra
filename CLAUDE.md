@@ -553,11 +553,11 @@ Run `git branch --show-current` to determine which branch you are on.
 
 ### 2. Load or create the branch plan document
 
-Look for a Markdown file in the `plans/` directory (at the repository root) named after
+Look for a Markdown file at the repository root named after
 the current branch. For example:
 
-- Branch `main` → `plans/main.md`
-- Branch `feature_249_java_version` → `plans/feature_249_java_version.md`
+- Branch `main` → `main-plan.md`
+- Branch `feature_249_java_version` → `feature_249_java_version-plan.md`
 
 If the file exists, read it to understand the current state of work and the plan.
 
@@ -569,6 +569,8 @@ If the file does **not** exist, create it:
   to draft an initial plan, including the goal, approach, and a task checklist.
 - **Main branch**: Create a minimal plan noting that this is the main development
   branch, and summarize any in-progress work based on recent commits.
+
+These plan documents are not to be checked in to Git.
 
 ### 3. Discuss the plan with the user
 
