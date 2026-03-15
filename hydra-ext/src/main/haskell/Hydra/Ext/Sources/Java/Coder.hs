@@ -1336,18 +1336,12 @@ encodeType = def "encodeType" $
           @@ string "Void"),
       _Type_record>>: lambda "rt" $
         Logic.ifElse
-          (Logic.and
-            (Equality.equal (Core.rowTypeTypeName (var "rt")) (wrap _Name (string "hydra.core.Unit")))
-            (Lists.null (Core.rowTypeFields (var "rt"))))
+          (Lists.null (var "rt"))
           (right (JavaUtilsSource.javaRefType
             @@ list ([] :: [TTerm Java.ReferenceType])
             @@ asTerm JavaNamesSource.javaLangPackageName
             @@ string "Void"))
-          (right (inject Java._Type Java._Type_reference
-            (JavaUtilsSource.nameToJavaReferenceType @@ var "aliases" @@ boolean True
-              @@ (javaTypeArgumentsForType @@ var "t")
-              @@ Core.rowTypeTypeName (var "rt")
-              @@ nothing))),
+          (Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous record type")) (var "cx")),
       _Type_maybe>>: lambda "ot" $
         "jot" <<~ (Eithers.bind
           (encodeType @@ var "aliases" @@ var "boundVars" @@ var "ot" @@ var "cx" @@ var "g")
@@ -1364,12 +1358,8 @@ encodeType = def "encodeType" $
           @@ list [var "jst"]
           @@ asTerm JavaNamesSource.hydraUtilPackageName
           @@ string "PersistentSet"),
-      _Type_union>>: lambda "rt" $
-        right (inject Java._Type Java._Type_reference
-          (JavaUtilsSource.nameToJavaReferenceType @@ var "aliases" @@ boolean True
-            @@ (javaTypeArgumentsForType @@ var "t")
-            @@ Core.rowTypeTypeName (var "rt")
-            @@ nothing)),
+      _Type_union>>: lambda "_" $
+        Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous union type")) (var "cx"),
       _Type_variable>>: lambda "name0" $
         -- Apply type variable substitution
         "name" <~ Maybes.fromMaybe (var "name0") (Maps.lookup (var "name0") (var "typeVarSubst")) $
@@ -1401,12 +1391,8 @@ encodeType = def "encodeType" $
           -- Typedef resolved: encode the resolved type
           (lambda "resolvedType" $
             encodeType @@ var "aliases" @@ var "boundVars" @@ var "resolvedType" @@ var "cx" @@ var "g"),
-      _Type_wrap>>: lambda "wt" $
-        right (inject Java._Type Java._Type_reference
-          (JavaUtilsSource.nameToJavaReferenceType @@ var "aliases" @@ boolean True
-            @@ list ([] :: [TTerm Java.TypeArgument])
-            @@ (Core.wrappedTypeTypeName (var "wt"))
-            @@ nothing))]
+      _Type_wrap>>: lambda "_" $
+        Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous wrap type")) (var "cx")]
 
 -- | Resolve a TypeVariable name if it refers to a typedef (simple type alias)
 encodeType_resolveIfTypedef :: TBinding (JavaHelpers.Aliases -> S.Set Name -> S.Set Name -> Name -> Context -> Graph -> Either (InContext Error) (Maybe Type))
@@ -2597,7 +2583,7 @@ typesMatch = def "typesMatch" $
       cases _Type (var "b")
         (Just $ boolean True) [
         _Type_wrap>>: lambda "wb" $
-          Equality.equal (Core.wrappedTypeTypeName (var "wa")) (Core.wrappedTypeTypeName (var "wb"))]]
+          Equality.equal (var "wa") (var "wb")]]
 
 -- | Check if a Name is simple (unqualified, no dots).
 isSimpleName :: TBinding (Name -> Bool)
@@ -3532,7 +3518,7 @@ isFieldUnitType = def "isFieldUnitType" $
           _Type_union>>: lambda "rt" $
             right (Maybes.cases
               (Lists.find (lambda "ft" $ Equality.equal (Core.fieldTypeName (var "ft")) (var "fieldName"))
-                (Core.rowTypeFields (var "rt")))
+                (var "rt"))
               false
               (lambda "ft" $ Schemas.isUnitType @@ (Rewriting.deannotateType @@ Core.fieldTypeType (var "ft"))))])
 
@@ -3747,7 +3733,7 @@ encodeTermInternal = def "encodeTermInternal" $
             _Type_record>>: lambda "rt" $
               just (Maps.fromList (Lists.map
                 (lambda "ft" $ pair (Core.fieldTypeName (var "ft")) (Core.fieldTypeType (var "ft")))
-                (Core.rowTypeFields (var "rt"))))])) $
+                (var "rt")))])) $
         -- Build type variable substitution from the annotation type's type arguments
         "combinedAnnsRec" <~ Lists.foldl (lambda "acc" $ lambda "m" $ Maps.union (var "acc") (var "m")) Maps.empty (var "anns") $
         "mAnnotType" <<~ (getTypeE (var "cx") (var "g") (var "combinedAnnsRec")) $
@@ -4674,10 +4660,10 @@ toClassDecl = def "toClassDecl" $
       (Just $ var "wrap" @@ var "t") [
       _Type_record>>: lambda "rt" $
         declarationForRecordType @@ var "isInner" @@ var "isSer" @@ var "aliases" @@ var "tparams" @@ var "elName"
-          @@ (Core.rowTypeFields (var "rt")) @@ var "cx" @@ var "g",
+          @@ (var "rt") @@ var "cx" @@ var "g",
       _Type_union>>: lambda "rt" $
         declarationForUnionType @@ var "isSer" @@ var "aliases" @@ var "tparams" @@ var "elName"
-          @@ (Core.rowTypeFields (var "rt")) @@ var "cx" @@ var "g",
+          @@ (var "rt") @@ var "cx" @@ var "g",
       _Type_forall>>: lambda "fa" $
         "v" <~ Core.forallTypeParameter (var "fa") $
         "body" <~ Core.forallTypeBody (var "fa") $
@@ -4685,9 +4671,8 @@ toClassDecl = def "toClassDecl" $
         toClassDecl @@ false @@ var "isSer" @@ var "aliases"
           @@ (Lists.concat2 (var "tparams") (list [var "param"])) @@ var "elName" @@ var "body" @@ var "cx" @@ var "g",
       _Type_wrap>>: lambda "wt" $
-        "wtype" <~ (Core.wrappedTypeBody (var "wt")) $
         declarationForRecordType @@ var "isInner" @@ var "isSer" @@ var "aliases" @@ var "tparams" @@ var "elName"
-          @@ (list [Core.fieldType (wrap _Name (string "value")) (var "wtype")]) @@ var "cx" @@ var "g"]
+          @@ (list [Core.fieldType (wrap _Name (string "value")) (var "wt")]) @@ var "cx" @@ var "g"]
 
 -- | Augment a variant class declaration for union types.
 -- Adds public static final modifiers, sets parent class extends, and adds accept method.

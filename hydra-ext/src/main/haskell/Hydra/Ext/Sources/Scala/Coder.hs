@@ -202,10 +202,9 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
     "freeVars">: Lists.filter ("v" ~> Logic.not (Lists.elem (int32 46) (Strings.toList (Core.unName (var "v"))))) (Sets.toList (Rewriting.freeVariablesInType @@ var "typ")),
     "tparams">: Lists.map ("__v" ~> stparam (var "__v")) (var "freeVars")] $
     (cases _Type (Rewriting.deannotateType @@ var "typ") (Just $ defaultTypeCase (var "lname") (var "tparams") (var "cx") (var "g") (var "typ")) [
-      _Type_record>>: ("rt" ~> lets [
-        "fields">: project _RowType _RowType_fields @@ var "rt"] $
+      _Type_record>>: ("rt" ~>
         Eithers.bind
-          (Eithers.mapList ("f" ~> asTerm fieldToParam @@ var "cx" @@ var "g" @@ var "f") (var "fields"))
+          (Eithers.mapList ("f" ~> asTerm fieldToParam @@ var "cx" @@ var "g" @@ var "f") (var "rt"))
           ("params" ~>
             right (inject _Stat _Stat_defn (inject _Defn _Defn_class (
               record _Defn_Class [
@@ -217,10 +216,9 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
                   _Ctor_Primary_name>>: inject Scala._Name _Name_value (string ""),
                   _Ctor_Primary_paramss>>: list [var "params"]],
                 _Defn_Class_template>>: emptyTemplate]))))),
-      _Type_union>>: ("rt" ~> lets [
-        "fields">: project _RowType _RowType_fields @@ var "rt"] $
+      _Type_union>>: ("rt" ~>
         Eithers.bind
-          (Eithers.mapList ("f" ~> asTerm fieldToEnumCase @@ var "cx" @@ var "g" @@ var "lname" @@ var "tparams" @@ var "f") (var "fields"))
+          (Eithers.mapList ("f" ~> asTerm fieldToEnumCase @@ var "cx" @@ var "g" @@ var "lname" @@ var "tparams" @@ var "f") (var "rt"))
           ("cases" ~>
             right (inject _Stat _Stat_defn (inject _Defn _Defn_enum (
               record _Defn_Enum [
@@ -236,10 +234,9 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
                   _Template_inits>>: emptyList,
                   _Template_self>>: wrap _Self unit,
                   _Template_stats>>: var "cases"]]))))),
-      _Type_wrap>>: ("wt" ~> lets [
-        "inner">: project _WrappedType _WrappedType_body @@ var "wt"] $
+      _Type_wrap>>: ("wt" ~>
         Eithers.bind
-          (asTerm encodeType @@ var "cx" @@ var "g" @@ var "inner")
+          (asTerm encodeType @@ var "cx" @@ var "g" @@ var "wt")
           ("styp" ~>
             right (inject _Stat _Stat_defn (inject _Defn _Defn_type (
               record _Defn_Type [
@@ -300,7 +297,7 @@ fieldToEnumCase = def "fieldToEnumCase" $
     "caseName">: record _Data_Name [_Data_Name_value>>: wrap _PredefString (var "fname")],
     "isUnit">: cases _Type (Rewriting.deannotateType @@ var "ftyp") (Just false) [
       _Type_unit>>: (constant true),
-      _Type_record>>: ("rt" ~> Equality.equal (Lists.length (project _RowType _RowType_fields @@ var "rt")) (int32 0))],
+      _Type_record>>: ("rt" ~> Equality.equal (Lists.length (var "rt")) (int32 0))],
     "parentType">: Logic.ifElse (Lists.null (var "tparams"))
       (stref (var "parentName"))
       (inject Scala._Type _Type_apply (record _Type_Apply [
@@ -697,17 +694,17 @@ encodeType = def "encodeType" $
               (asTerm encodeType @@ var "cx" @@ var "g" @@ var "st")
               ("sst" ~>
                 right (ScalaUtilsSource.stapply2 @@ stref (string "Tuple2") @@ var "sft" @@ var "sst")))),
-      _Type_record>>: ("rt" ~>
-        right (stref (ScalaUtilsSource.scalaTypeName @@ true @@ (project _RowType _RowType_typeName @@ var "rt")))),
+      _Type_record>>: (constant $
+        Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous record type")) (var "cx")),
       _Type_set>>: ("st" ~>
         Eithers.bind
           (asTerm encodeType @@ var "cx" @@ var "g" @@ var "st")
           ("sst" ~>
             right (ScalaUtilsSource.stapply1 @@ stref (string "Set") @@ var "sst"))),
-      _Type_union>>: ("rt" ~>
-        right (stref (ScalaUtilsSource.scalaTypeName @@ true @@ (project _RowType _RowType_typeName @@ var "rt")))),
-      _Type_wrap>>: ("wt" ~>
-        right (stref (ScalaUtilsSource.scalaTypeName @@ true @@ (project _WrappedType _WrappedType_typeName @@ var "wt")))),
+      _Type_union>>: (constant $
+        Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous union type")) (var "cx")),
+      _Type_wrap>>: (constant $
+        Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous wrap type")) (var "cx")),
       _Type_forall>>: ("ft" ~> lets [
         "v">: project _ForallType _ForallType_parameter @@ var "ft",
         "body">: project _ForallType _ForallType_body @@ var "ft"] $

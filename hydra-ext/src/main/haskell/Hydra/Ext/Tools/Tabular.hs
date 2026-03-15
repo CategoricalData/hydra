@@ -34,10 +34,10 @@ referenceCoder fieldCoders = Coder encode decode
             _ -> Left $ InContext (ErrorOther (OtherError $ "expected variable, found: " ++ ShowCore.term fterm)) cx
           Nothing -> return field
 
--- | Consumes a row type and a cell-level coder, producing a record coder.
+-- | Consumes a type name and field types plus a cell-level coder, producing a record coder.
 --   The record coder maps data rows on the left to records on the right, and vice versa.
-tabularAdapter :: RowType -> (Type -> Coder (Maybe v) Term) -> Coder (DataRow v) Record
-tabularAdapter (RowType typeName fieldTypes) cellAdapter = Coder encode decode
+tabularAdapter :: Name -> [FieldType] -> (Type -> Coder (Maybe v) Term) -> Coder (DataRow v) Record
+tabularAdapter typeName fieldTypes cellAdapter = Coder encode decode
   where
     cellCoders = cellAdapter <$> (fieldTypeType <$> fieldTypes)
     encode cx (DataRow cells) = do

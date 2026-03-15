@@ -680,18 +680,15 @@ encodeType = def "encodeType" $
         "pyFirst" <<~ encodeType @@ var "env" @@ (project _PairType _PairType_first @@ var "pairT") $
         "pySecond" <<~ encodeType @@ var "env" @@ (project _PairType _PairType_second @@ var "pairT") $
         right $ PyUtils.nameAndParams @@ (PyDsl.name $ string "tuple") @@ list [var "pyFirst", var "pySecond"],
-      _Type_record>>: "rt" ~>
-        right $ PyNames.typeVariableReference @@ var "env" @@ (project _RowType _RowType_typeName @@ var "rt"),
+      _Type_record>>: constant $ var "dflt",
       _Type_set>>: "et" ~>
         "pyet" <<~ encodeType @@ var "env" @@ var "et" $
         right $ PyUtils.nameAndParams @@ (PyDsl.name $ string "frozenset") @@ list [var "pyet"],
-      _Type_union>>: "rt" ~>
-        right $ PyNames.typeVariableReference @@ var "env" @@ (project _RowType _RowType_typeName @@ var "rt"),
+      _Type_union>>: constant $ var "dflt",
       _Type_unit>>: constant $ right $ PyUtils.pyNameToPyExpression @@ PyUtils.pyNone,
       _Type_variable>>: "name" ~>
         right $ PyNames.typeVariableReference @@ var "env" @@ var "name",
-      _Type_wrap>>: "wt" ~>
-        right $ PyNames.typeVariableReference @@ var "env" @@ (project _WrappedType _WrappedType_typeName @@ var "wt"),
+      _Type_wrap>>: constant $ var "dflt",
       -- Default case for annotated and any other types
       _Type_annotated>>: constant $ var "dflt"]
 
@@ -883,12 +880,11 @@ extractCaseElimination = def "extractCaseElimination" $
 
 -- | Check if a field type in a row type represents a unit-valued variant.
 --   Used to determine if a variant has "no value" (unit type).
-isVariantUnitType :: TBinding (RowType -> Name -> Bool)
+isVariantUnitType :: TBinding ([FieldType] -> Name -> Bool)
 isVariantUnitType = def "isVariantUnitType" $
   doc "Check if a variant field has unit type" $
   "rowType" ~> "fieldName" ~>
-    "fields" <~ (project _RowType _RowType_fields @@ var "rowType") $
-    "mfield" <~ (Lists.find ("ft" ~> Equality.equal (Core.fieldTypeName $ var "ft") (var "fieldName")) (var "fields")) $
+    "mfield" <~ (Lists.find ("ft" ~> Equality.equal (Core.fieldTypeName $ var "ft") (var "fieldName")) (var "rowType")) $
     Maybes.fromMaybe false $
       Maybes.map
         ("ft" ~> Schemas.isUnitType @@ (Rewriting.deannotateType @@ Core.fieldTypeType (var "ft")))
@@ -940,18 +936,18 @@ classVariantPatternWithCapture = def "classVariantPatternWithCapture" $
 
 -- | Determine whether a union type's cases are fully covered.
 --   Returns true if the number of cases >= number of fields in the row type.
-isCasesFull :: TBinding (RowType -> [Field] -> Bool)
+isCasesFull :: TBinding ([FieldType] -> [Field] -> Bool)
 isCasesFull = def "isCasesFull" $
   doc "Check if union cases are fully covered" $
   "rowType" ~> "cases_" ~>
     "numCases" <~ (Lists.length $ var "cases_") $
-    "numFields" <~ (Lists.length $ project _RowType _RowType_fields @@ var "rowType") $
+    "numFields" <~ (Lists.length $ var "rowType") $
     -- numCases >= numFields is equivalent to NOT (numCases < numFields)
     Logic.not $ Equality.lt (var "numCases") (var "numFields")
 
 -- | Create a ClosedPattern for a variant, choosing the appropriate pattern type
 --   based on whether the variant is an enum, unit type, or has a value.
-variantClosedPattern :: TBinding (PyHelpers.PythonEnvironment -> Name -> Name -> Py.Name -> RowType -> Bool -> Name -> Bool -> Py.ClosedPattern)
+variantClosedPattern :: TBinding (PyHelpers.PythonEnvironment -> Name -> Name -> Py.Name -> [FieldType] -> Bool -> Name -> Bool -> Py.ClosedPattern)
 variantClosedPattern = def "variantClosedPattern" $
   doc "Create a ClosedPattern for a variant based on its characteristics" $
   "env" ~> "typeName" ~> "fieldName" ~> "pyVariantName" ~> "rowType" ~> "isEnum" ~> "varName" ~> "shouldCapture" ~>
@@ -1133,7 +1129,7 @@ encodeDefaultCaseBlock = def "encodeDefaultCaseBlock" $
 --   The encodeBody function is passed in to allow different encoding strategies
 --   (inline vs multiline).
 --   Uses withLambda to extend Graph with the case binding variable.
-encodeCaseBlock :: TBinding (Context -> PyHelpers.PythonEnvironment -> Name -> RowType -> Bool -> (PyHelpers.PythonEnvironment -> Term -> Either (InContext Error) [Py.Statement]) -> Field -> Either (InContext Error) Py.CaseBlock)
+encodeCaseBlock :: TBinding (Context -> PyHelpers.PythonEnvironment -> Name -> [FieldType] -> Bool -> (PyHelpers.PythonEnvironment -> Term -> Either (InContext Error) [Py.Statement]) -> Field -> Either (InContext Error) Py.CaseBlock)
 encodeCaseBlock = def "encodeCaseBlock" $
   doc "Encode a single case (Field) into a CaseBlock for a match statement" $
   "cx" ~> "env" ~> "tname" ~> "rowType" ~> "isEnum" ~> "encodeBody" ~> "field" ~>
@@ -1239,14 +1235,13 @@ dataclassDecorator = def "dataclassDecorator" $
           (Phantoms.list ([] :: [TTerm Py.KwargOrDoubleStarred]))))
 
 -- | Encode a record type as a Python dataclass
-encodeRecordType :: TBinding (Context -> PyHelpers.PythonEnvironment -> Name -> RowType -> Maybe String -> Either (InContext Error) Py.Statement)
+encodeRecordType :: TBinding (Context -> PyHelpers.PythonEnvironment -> Name -> [FieldType] -> Maybe String -> Either (InContext Error) Py.Statement)
 encodeRecordType = def "encodeRecordType" $
   doc "Encode a record type as a Python dataclass" $
   "cx" ~> "env" ~> "name" ~> "rowType" ~> "comment" ~>
-    "tfields" <~ Core.rowTypeFields (var "rowType") $
-    "pyFields" <<~ (Eithers.mapList (encodeFieldType @@ var "cx" @@ var "env") (var "tfields")) $
+    "pyFields" <<~ (Eithers.mapList (encodeFieldType @@ var "cx" @@ var "env") (var "rowType")) $
     -- Generate class-level name constants
-    "constStmts" <~ (encodeNameConstants @@ var "env" @@ var "name" @@ var "tfields") $
+    "constStmts" <~ (encodeNameConstants @@ var "env" @@ var "name" @@ var "rowType") $
     "body" <~ (PyUtils.indentedBlock @@ var "comment" @@ list [var "pyFields", var "constStmts"]) $
     -- Get bound type variables for Generic args
     "boundVars" <~ (Phantoms.project PyHelpers._PythonEnvironment PyHelpers._PythonEnvironment_boundTypeVariables @@ var "env") $
@@ -1333,14 +1328,13 @@ encodeUnionField = def "encodeUnionField" $
         (var "body")
 
 -- | Encode a union type as either an enum or a set of variant classes
-encodeUnionType :: TBinding (Context -> PyHelpers.PythonEnvironment -> Name -> RowType -> Maybe String -> Either (InContext Error) [Py.Statement])
+encodeUnionType :: TBinding (Context -> PyHelpers.PythonEnvironment -> Name -> [FieldType] -> Maybe String -> Either (InContext Error) [Py.Statement])
 encodeUnionType = def "encodeUnionType" $
   doc "Encode a union type as an enum (for unit-only fields) or variant classes" $
   "cx" ~> "env" ~> "name" ~> "rowType" ~> "comment" ~>
-    "tfields" <~ Core.rowTypeFields (var "rowType") $
     Logic.ifElse (Schemas.isEnumRowType @@ var "rowType")
       -- Enum case: enum values are Name objects; TYPE_ assigned after class to avoid becoming a member
-      ("vals" <<~ (Eithers.mapList (encodeEnumValueAssignment @@ var "cx" @@ var "env") (var "tfields")) $
+      ("vals" <<~ (Eithers.mapList (encodeEnumValueAssignment @@ var "cx" @@ var "env") (var "rowType")) $
        "body" <~ (PyUtils.indentedBlock @@ var "comment" @@ var "vals") $
        "enumName" <~ PyDsl.name (string "Enum") $
        "args" <~ (just $ PyUtils.pyExpressionsToPyArgs @@ list [PyUtils.pyNameToPyExpression @@ var "enumName"]) $
@@ -1356,10 +1350,10 @@ encodeUnionType = def "encodeUnionType" $
          PyDsl.classDefinition nothing (var "pyName") (Phantoms.list ([] :: [TTerm Py.TypeParameter])) (var "args") (var "body"),
          var "typeConstStmt"])
       -- Union case: pass constants to the union class body
-      ("constStmts" <~ (encodeNameConstants @@ var "env" @@ var "name" @@ var "tfields") $
-       "fieldStmts" <<~ (Eithers.mapList (encodeUnionField @@ var "cx" @@ var "env" @@ var "name") (var "tfields")) $
+      ("constStmts" <~ (encodeNameConstants @@ var "env" @@ var "name" @@ var "rowType") $
+       "fieldStmts" <<~ (Eithers.mapList (encodeUnionField @@ var "cx" @@ var "env" @@ var "name") (var "rowType")) $
        "tparams" <~ (environmentTypeParameters @@ var "env") $
-       "unionAlts" <~ Lists.map (encodeUnionFieldAlt @@ var "env" @@ var "name") (var "tfields") $
+       "unionAlts" <~ Lists.map (encodeUnionFieldAlt @@ var "env" @@ var "name") (var "rowType") $
        "unionStmts" <~ (unionTypeStatementsFor @@ var "env" @@
          (PyNames.encodeName @@ false @@ Util.caseConventionPascal @@ var "env" @@ var "name") @@
          (var "tparams") @@
@@ -1428,8 +1422,7 @@ encodeTypeAssignmentInner = def "encodeTypeAssignmentInner" $
 
       -- Wrapped type
       _Type_wrap>>: "wt" ~>
-        "innerType" <~ (Core.wrappedTypeBody $ var "wt") $
-        encodeWrappedType @@ var "env" @@ var "name" @@ var "innerType" @@ var "comment"]
+        encodeWrappedType @@ var "env" @@ var "name" @@ var "wt" @@ var "comment"]
 
 -- | Encode a field (name-value pair) to a Python (Name, Expression) pair
 encodeField :: TBinding (Context -> PyHelpers.PythonEnvironment -> Field -> (TTerm Term -> Either (InContext Error) Py.Expression) -> Either (InContext Error) (Py.Name, Py.Expression))
@@ -2656,12 +2649,11 @@ encodeTermInline = def "encodeTermInline" $
             @@ (PyNames.encodeEnumValue @@ var "env" @@ Core.fieldName (var "field")))
           -- Class variant
           ("fname" <~ Core.fieldName (var "field") $
-            "ftypes" <~ Core.rowTypeFields (var "rt") $
             -- Check if this is a unit variant
             "isUnitVariant" <~ (Maybes.maybe
               false
               ("ft" ~> Schemas.isUnitType @@ (Rewriting.deannotateType @@ Core.fieldTypeType (var "ft")))
-              (Lists.find ("ft" ~> Core.equalName_ (Core.fieldTypeName (var "ft")) (var "fname")) (var "ftypes"))) $
+              (Lists.find ("ft" ~> Core.equalName_ (Core.fieldTypeName (var "ft")) (var "fname")) (var "rt"))) $
             "args" <<~ (Logic.ifElse (Logic.or (Schemas.isUnitTerm @@ Core.fieldTerm (var "field")) (var "isUnitVariant"))
               (right (list ([] :: [TTerm Py.Expression])))
               ("parg" <<~ (var "encode" @@ Core.fieldTerm (var "field")) $
@@ -3584,7 +3576,7 @@ extendMetaForType = def "extendMetaForType" $
       _Type_union>>: "rt" ~>
         Logic.ifElse (Schemas.isEnumRowType @@ var "rt")
           (setMetaUsesEnum @@ var "metaWithSubtypes" @@ true)
-          (Logic.ifElse (Logic.not (Lists.null (Core.rowTypeFields $ var "rt")))
+          (Logic.ifElse (Logic.not (Lists.null (var "rt")))
             (setMetaUsesNode @@ var "metaWithSubtypes" @@ true)
             (var "metaWithSubtypes")),
       -- Forall type: may need Generic for records, Node for wraps
@@ -3597,14 +3589,13 @@ extendMetaForType = def "extendMetaForType" $
             setMetaUsesGeneric @@ var "metaForWrap" @@ true],
       -- Record type: need dataclass (if non-empty) and possibly Annotated
       _Type_record>>: "rt" ~>
-        "fields" <~ Core.rowTypeFields (var "rt") $
         -- Check if any field has a type description (needs Annotated)
         "hasAnnotated" <~ (Lists.foldl
           ("b" ~> "ft" ~> Logic.or (var "b") (Annotations.hasTypeDescription @@ Core.fieldTypeType (var "ft")))
           false
-          (var "fields")) $
+          (var "rt")) $
         -- Set usesDataclass if fields are non-empty
-        "meta1" <~ (Logic.ifElse (Lists.null $ var "fields")
+        "meta1" <~ (Logic.ifElse (Lists.null $ var "rt")
           (var "metaWithSubtypes")
           (setMetaUsesDataclass @@ var "metaWithSubtypes" @@ true)) $
         -- Set usesAnnotated if any field has description

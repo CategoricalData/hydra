@@ -159,7 +159,7 @@ shaclCoder = define "shaclCoder" $
             Shacl._Definition_iri>>: elementIri @@ var "el",
             Shacl._Definition_target>>: inject Shacl._Shape Shacl._Shape_node
               (record Shacl._NodeShape [Shacl._NodeShape_common>>: var "__cp"])])
-          (encodeType @@ var "__typ" @@ var "cx"))] $
+          (encodeType @@ (Core.bindingName (var "el")) @@ var "__typ" @@ var "cx"))] $
     Eithers.map
       ("__shapes" ~> pair
         (wrap Shacl._ShapesGraph (Sets.fromList (var "__shapes")))
@@ -249,7 +249,7 @@ encodeFieldType = define "encodeFieldType" $
                 Shacl._PropertyShape_name>>: wrap Rdf._LangStrings Maps.empty,
                 Shacl._PropertyShape_order>>: var "order",
                 Shacl._PropertyShape_path>>: var "iri"]])
-        (encodeType @@ var "t" @@ var "cx")] $
+        (encodeType @@ var "rname" @@ var "t" @@ var "cx")] $
     -- Dispatch on the type: peel optional/set wrappers, then build shape
     var "forType" @@ (just (bigint 1)) @@ (just (bigint 1)) @@ var "ftype"
 
@@ -431,19 +431,17 @@ foldAccumResult = define "foldAccumResult" $
           (foldAccumResult @@ var "f" @@ (Pairs.second (var "__r")) @@ (Lists.tail (var "xs")))))
 
 -- | Encode a Hydra Type as SHACL CommonProperties
-encodeType :: TBinding (Type -> Context -> Either (InContext Error) Shacl.CommonProperties)
+encodeType :: TBinding (Name -> Type -> Context -> Either (InContext Error) Shacl.CommonProperties)
 encodeType = define "encodeType" $
   doc "Encode a Hydra type as SHACL CommonProperties" $
-  lambda "typ" $ lambda "cx" $ lets [
+  lambda "tname" $ lambda "typ" $ lambda "cx" $ lets [
     "any">: right (common @@ (list ([] :: [TTerm Shacl.CommonConstraint])))] $
     cases _Type (Rewriting.deannotateType @@ var "typ") (Just (unexpectedE @@ var "cx" @@ string "type" @@ string "unsupported type variant")) [
       _Type_list>>: lambda "_" $ var "any",
       _Type_literal>>: lambda "lt" $ right (encodeLiteralType @@ var "lt"),
       _Type_map>>: lambda "_" $ var "any",
       _Type_wrap>>: lambda "_" $ var "any",
-      _Type_record>>: lambda "rt" $ lets [
-        "rname">: Core.rowTypeTypeName (var "rt"),
-        "fields">: Core.rowTypeFields (var "rt")] $
+      _Type_record>>: "fts" ~>
         Eithers.map
           ("__props" ~> common @@ list [
             inject Shacl._CommonConstraint Shacl._CommonConstraint_property
@@ -451,12 +449,10 @@ encodeType = define "encodeType" $
                 ("__p" ~> inject Shacl._Reference Shacl._Reference_definition (var "__p"))
                 (var "__props")))])
           (Eithers.mapList
-            ("__pair" ~> encodeFieldType @@ var "rname" @@ (just (Pairs.first (var "__pair"))) @@ (Pairs.second (var "__pair")) @@ var "cx")
-            (Lists.zip (Lists.map ("__i" ~> Literals.int32ToBigint (var "__i")) (Math.range (int32 0) (Lists.length (var "fields")))) (var "fields"))),
+            ("__pair" ~> encodeFieldType @@ var "tname" @@ (just (Pairs.first (var "__pair"))) @@ (Pairs.second (var "__pair")) @@ var "cx")
+            (Lists.zip (Lists.map ("__i" ~> Literals.int32ToBigint (var "__i")) (Math.range (int32 0) (Lists.length (var "fts")))) (var "fts"))),
       _Type_set>>: lambda "_" $ var "any",
-      _Type_union>>: lambda "rt" $ lets [
-        "rname">: Core.rowTypeTypeName (var "rt"),
-        "fields">: Core.rowTypeFields (var "rt")] $
+      _Type_union>>: "fts" ~>
         Eithers.map
           ("__props" ~> common @@ list [
             inject Shacl._CommonConstraint Shacl._CommonConstraint_xone
@@ -466,8 +462,8 @@ encodeType = define "encodeType" $
                     (Sets.fromList (list [inject Shacl._Reference Shacl._Reference_definition (var "__p")]))]))
                 (var "__props")))])
           (Eithers.mapList
-            ("__ft" ~> encodeFieldType @@ var "rname" @@ nothing @@ var "__ft" @@ var "cx")
-            (var "fields"))]
+            ("__ft" ~> encodeFieldType @@ var "tname" @@ nothing @@ var "__ft" @@ var "cx")
+            (var "fts"))]
 
 -- | Construct a SHACL node shape from a list of common constraints
 node :: TBinding ([Shacl.CommonConstraint] -> Shacl.Shape)
