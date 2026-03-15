@@ -31,11 +31,18 @@ import qualified Hydra.Sources.Json.Yaml.Decode as JsonYamlDecode
 import qualified Hydra.Sources.Json.Yaml.Encode as JsonYamlEncode
 import qualified Hydra.Sources.Test.Transform as TestTransform
 import qualified Hydra.Sources.Test.Utils as TestUtils
+import qualified Hydra.Sources.Kernel.Terms.Dsls as Dsls
 import qualified Hydra.Sources.Yaml.Model as YamlModel
 
 
 mainModules :: [Module]
 mainModules = kernelModules ++ haskellModules ++ jsonModules ++ otherModules
+
+-- | The DSL source module (hydra.dsls) must be generated separately from mainModules
+-- because including it in the main generation causes a stack overflow due to the
+-- complexity of its term definitions (which reference decoders, the full type graph, etc.)
+dslSourceModules :: [Module]
+dslSourceModules = [Dsls.module_]
 
 kernelModules :: [Module]
 kernelModules = kernelTypesModules ++ kernelTermsModules ++ jsonModules

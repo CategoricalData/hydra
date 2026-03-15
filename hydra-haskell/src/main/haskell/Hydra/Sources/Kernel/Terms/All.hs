@@ -10,6 +10,7 @@ import qualified Hydra.Sources.Kernel.Terms.Checking        as Checking
 import qualified Hydra.Sources.Kernel.Terms.CodeGeneration  as CodeGeneration
 import qualified Hydra.Sources.Kernel.Terms.Constants       as Constants
 import qualified Hydra.Sources.Kernel.Terms.Decoding        as Decoding
+import qualified Hydra.Sources.Kernel.Terms.Dsls            as Dsls
 import qualified Hydra.Sources.Kernel.Terms.Encoding        as Encoding
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core    as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Extract.Helpers as ExtractHelpers
@@ -98,6 +99,7 @@ kernelPrimaryTermsModules = [
   CodeGeneration.module_,
   Constants.module_,
   Decoding.module_,
+--  Dsls.module_,
   Encoding.module_,
   ExtractCore.module_,
   ExtractHelpers.module_,

@@ -18,6 +18,7 @@ import qualified Hydra.Json.Writer as JsonWriter
 import Hydra.Sources.Libraries
 import qualified Hydra.Context as Context
 import qualified Hydra.Decoding as Decoding
+import qualified Hydra.Dsls as Dsls
 import qualified Hydra.Encoding as Encoding
 import qualified Hydra.Error as Error
 import qualified Hydra.Show.Error as ShowError
@@ -195,6 +196,24 @@ writeDecoderHaskell = writeCoderHaskell generateDecoderModules
 
 writeEncoderHaskell :: FilePath -> [Module] -> [Module] -> IO ()
 writeEncoderHaskell = writeCoderHaskell generateEncoderModules
+
+----------------------------------------
+-- DSL Module Generation
+----------------------------------------
+
+-- | Write the hydra.dsls source module (the DSL generator itself) to Haskell.
+-- The Dsls module is NOT included in the universe to avoid infinite recursion
+-- during graph construction (its terms reference decoders that reference types).
+writeDslSourceHaskell :: FilePath -> IO ()
+writeDslSourceHaskell basePath = do
+    _ <- writeHaskell basePath Sources.mainModules Sources.dslSourceModules
+    return ()
+
+generateDslModules :: [Module] -> [Module] -> IO [Module]
+generateDslModules = generateCoderModulesIO Dsls.dslModule "DSL"
+
+writeDslHaskell :: FilePath -> [Module] -> [Module] -> IO ()
+writeDslHaskell = writeCoderHaskell generateDslModules
 
 ----------------------------------------
 -- Module Inference
