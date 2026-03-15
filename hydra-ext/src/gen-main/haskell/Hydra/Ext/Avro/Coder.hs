@@ -4,7 +4,6 @@
 
 module Hydra.Ext.Avro.Coder where
 
-import qualified Hydra.Compute as Compute
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Error as Error
@@ -27,6 +26,7 @@ import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
 import qualified Hydra.Rewriting as Rewriting
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -48,47 +48,47 @@ emptyAvroEnvironment = Environment.AvroEnvironment {
   Environment.avroEnvironmentElements = Maps.empty}
 
 -- | Create an adapter between Avro schemas and Hydra types/terms
-avroHydraAdapter :: (Context.Context -> Schema.Schema -> Environment.AvroEnvironment -> Either (Context.InContext Error.Error) (Compute.Adapter Schema.Schema Core.Type Model.Value Core.Term, Environment.AvroEnvironment))
+avroHydraAdapter :: (Context.Context -> Schema.Schema -> Environment.AvroEnvironment -> Either (Context.InContext Error.Error) (Util.Adapter Schema.Schema Core.Type Model.Value Core.Term, Environment.AvroEnvironment))
 avroHydraAdapter cx schema env0 =  
-  let simpleAdapter = (\env -> \typ -> \encode -> \decode -> Right (Compute.Adapter {
-          Compute.adapterIsLossy = False,
-          Compute.adapterSource = schema,
-          Compute.adapterTarget = typ,
-          Compute.adapterCoder = Compute.Coder {
-            Compute.coderEncode = encode,
-            Compute.coderDecode = decode}}, env)) 
+  let simpleAdapter = (\env -> \typ -> \encode -> \decode -> Right (Util.Adapter {
+          Util.adapterIsLossy = False,
+          Util.adapterSource = schema,
+          Util.adapterTarget = typ,
+          Util.adapterCoder = Util.Coder {
+            Util.coderEncode = encode,
+            Util.coderDecode = decode}}, env)) 
       doubleToInt = (\d -> Literals.bigintToInt32 (Math.truncate (Literals.bigfloatToFloat64 d)))
       doubleToLong = (\d -> Literals.bigintToInt64 (Math.truncate (Literals.bigfloatToFloat64 d)))
   in ((\x -> case x of
     Schema.SchemaArray v0 -> (Eithers.bind (avroHydraAdapter cx (Schema.arrayItems v0) env0) (\adEnv ->  
       let ad = (Pairs.first adEnv) 
           env1 = (Pairs.second adEnv)
-      in (Right (Compute.Adapter {
-        Compute.adapterIsLossy = (Compute.adapterIsLossy ad),
-        Compute.adapterSource = schema,
-        Compute.adapterTarget = (Core.TypeList (Compute.adapterTarget ad)),
-        Compute.adapterCoder = Compute.Coder {
-          Compute.coderEncode = (\cx1 -> \v -> (\x -> case x of
-            Model.ValueArray v1 -> (Eithers.map (\ts -> Core.TermList ts) (Eithers.mapList (\jv -> Compute.coderEncode (Compute.adapterCoder ad) cx1 jv) v1))) v),
-          Compute.coderDecode = (\cx1 -> \t -> (\x -> case x of
-            Core.TermList v1 -> (Eithers.map (\jvs -> Model.ValueArray jvs) (Eithers.mapList (\tv -> Compute.coderDecode (Compute.adapterCoder ad) cx1 tv) v1))) t)}}, env1))))
+      in (Right (Util.Adapter {
+        Util.adapterIsLossy = (Util.adapterIsLossy ad),
+        Util.adapterSource = schema,
+        Util.adapterTarget = (Core.TypeList (Util.adapterTarget ad)),
+        Util.adapterCoder = Util.Coder {
+          Util.coderEncode = (\cx1 -> \v -> (\x -> case x of
+            Model.ValueArray v1 -> (Eithers.map (\ts -> Core.TermList ts) (Eithers.mapList (\jv -> Util.coderEncode (Util.adapterCoder ad) cx1 jv) v1))) v),
+          Util.coderDecode = (\cx1 -> \t -> (\x -> case x of
+            Core.TermList v1 -> (Eithers.map (\jvs -> Model.ValueArray jvs) (Eithers.mapList (\tv -> Util.coderDecode (Util.adapterCoder ad) cx1 tv) v1))) t)}}, env1))))
     Schema.SchemaMap v0 -> (Eithers.bind (avroHydraAdapter cx (Schema.mapValues v0) env0) (\adEnv ->  
       let ad = (Pairs.first adEnv) 
           env1 = (Pairs.second adEnv)
           pairToHydra = (\cx1 -> \entry ->  
                   let k = (Pairs.first entry) 
                       v = (Pairs.second entry)
-                  in (Eithers.map (\v_ -> (Core.TermLiteral (Core.LiteralString k), v_)) (Compute.coderEncode (Compute.adapterCoder ad) cx1 v)))
-      in (Right (Compute.Adapter {
-        Compute.adapterIsLossy = (Compute.adapterIsLossy ad),
-        Compute.adapterSource = schema,
-        Compute.adapterTarget = (Core.TypeMap (Core.MapType {
+                  in (Eithers.map (\v_ -> (Core.TermLiteral (Core.LiteralString k), v_)) (Util.coderEncode (Util.adapterCoder ad) cx1 v)))
+      in (Right (Util.Adapter {
+        Util.adapterIsLossy = (Util.adapterIsLossy ad),
+        Util.adapterSource = schema,
+        Util.adapterTarget = (Core.TypeMap (Core.MapType {
           Core.mapTypeKeys = (Core.TypeLiteral Core.LiteralTypeString),
-          Core.mapTypeValues = (Compute.adapterTarget ad)})),
-        Compute.adapterCoder = Compute.Coder {
-          Compute.coderEncode = (\cx1 -> \v -> (\x -> case x of
+          Core.mapTypeValues = (Util.adapterTarget ad)})),
+        Util.adapterCoder = Util.Coder {
+          Util.coderEncode = (\cx1 -> \v -> (\x -> case x of
             Model.ValueObject v1 -> (Eithers.map (\pairs -> Core.TermMap (Maps.fromList pairs)) (Eithers.mapList (\e -> pairToHydra cx1 e) (Maps.toList v1)))) v),
-          Compute.coderDecode = (\cx1 -> \m -> Eithers.map (\mp_ -> Model.ValueObject mp_) (Core_.map cx (\t -> Core_.string cx (Graph.Graph {
+          Util.coderDecode = (\cx1 -> \m -> Eithers.map (\mp_ -> Model.ValueObject mp_) (Core_.map cx (\t -> Core_.string cx (Graph.Graph {
             Graph.graphBoundTerms = Maps.empty,
             Graph.graphBoundTypes = Maps.empty,
             Graph.graphClassConstraints = Maps.empty,
@@ -96,7 +96,7 @@ avroHydraAdapter cx schema env0 =
             Graph.graphMetadata = Maps.empty,
             Graph.graphPrimitives = Maps.empty,
             Graph.graphSchemaTypes = Maps.empty,
-            Graph.graphTypeVariables = Sets.empty}) t) (\t -> Compute.coderDecode (Compute.adapterCoder ad) cx1 t) (Graph.Graph {
+            Graph.graphTypeVariables = Sets.empty}) t) (\t -> Util.coderDecode (Util.adapterCoder ad) cx1 t) (Graph.Graph {
             Graph.graphBoundTerms = Maps.empty,
             Graph.graphBoundTypes = Maps.empty,
             Graph.graphClassConstraints = Maps.empty,
@@ -162,7 +162,7 @@ avroHydraAdapter cx schema env0 =
                         ": ",
                         k])) (\fad -> Eithers.map (\v_ -> Core.Field {
                         Core.fieldName = (Core.Name k),
-                        Core.fieldTerm = v_}) (Compute.coderEncode (Compute.adapterCoder (Pairs.second fad)) cx1 v)) (Maps.lookup k adaptersByFieldName))) 
+                        Core.fieldTerm = v_}) (Util.coderEncode (Util.adapterCoder (Pairs.second fad)) cx1 v)) (Maps.lookup k adaptersByFieldName))) 
                   decodeField = (\cx1 -> \fld ->  
                           let k = (Core.unName (Core.fieldName fld)) 
                               v = (Core.fieldTerm fld)
@@ -170,24 +170,24 @@ avroHydraAdapter cx schema env0 =
                             "unrecognized field for ",
                             (showQname qname),
                             ": ",
-                            k])) (\fad -> Eithers.map (\v_ -> (k, v_)) (Compute.coderDecode (Compute.adapterCoder (Pairs.second fad)) cx1 v)) (Maps.lookup k adaptersByFieldName)))
-                  lossy = (Lists.foldl (\b -> \fad -> Logic.or b (Compute.adapterIsLossy (Pairs.second fad))) False (Maps.elems adaptersByFieldName))
+                            k])) (\fad -> Eithers.map (\v_ -> (k, v_)) (Util.coderDecode (Util.adapterCoder (Pairs.second fad)) cx1 v)) (Maps.lookup k adaptersByFieldName)))
+                  lossy = (Lists.foldl (\b -> \fad -> Logic.or b (Util.adapterIsLossy (Pairs.second fad))) False (Maps.elems adaptersByFieldName))
                   hfields = (Lists.map (\fad -> Core.FieldType {
                           Core.fieldTypeName = (Core.Name (Schema.fieldName (Pairs.first fad))),
-                          Core.fieldTypeType = (Compute.adapterTarget (Pairs.second fad))}) (Maps.elems adaptersByFieldName))
+                          Core.fieldTypeType = (Util.adapterTarget (Pairs.second fad))}) (Maps.elems adaptersByFieldName))
                   target = (Core.TypeRecord (Core.RowType {
                           Core.rowTypeTypeName = hydraName,
                           Core.rowTypeFields = hfields}))
-              in (Right (Compute.Adapter {
-                Compute.adapterIsLossy = lossy,
-                Compute.adapterSource = schema,
-                Compute.adapterTarget = target,
-                Compute.adapterCoder = Compute.Coder {
-                  Compute.coderEncode = (\cx1 -> \jv -> (\x -> case x of
+              in (Right (Util.Adapter {
+                Util.adapterIsLossy = lossy,
+                Util.adapterSource = schema,
+                Util.adapterTarget = target,
+                Util.adapterCoder = Util.Coder {
+                  Util.coderEncode = (\cx1 -> \jv -> (\x -> case x of
                     Model.ValueObject v2 -> (Eithers.map (\fields -> Core.TermRecord (Core.Record {
                       Core.recordTypeName = hydraName,
                       Core.recordFields = fields})) (Eithers.mapList (\e -> encodePair cx1 e) (Maps.toList v2)))) jv),
-                  Compute.coderDecode = (\cx1 -> \t -> (\x -> case x of
+                  Util.coderDecode = (\cx1 -> \t -> (\x -> case x of
                     Core.TermRecord v2 -> (Eithers.map (\kvs -> Model.ValueObject (Maps.fromList kvs)) (Eithers.mapList (\fld -> decodeField cx1 fld) (Core.recordFields v2)))) t)}}, env2))))))) (Schema.namedType v0)) (\adEnv2 ->  
         let ad = (Pairs.first adEnv2) 
             env2 = (Pairs.second adEnv2)
@@ -293,27 +293,27 @@ avroHydraAdapter cx schema env0 =
           forOptional = (\s -> Eithers.bind (avroHydraAdapter cx s env0) (\adEnv ->  
                   let ad = (Pairs.first adEnv) 
                       env1 = (Pairs.second adEnv)
-                  in (Right (Compute.Adapter {
-                    Compute.adapterIsLossy = (Compute.adapterIsLossy ad),
-                    Compute.adapterSource = schema,
-                    Compute.adapterTarget = (Core.TypeMaybe (Compute.adapterTarget ad)),
-                    Compute.adapterCoder = Compute.Coder {
-                      Compute.coderEncode = (\cx1 -> \v -> (\x -> case x of
+                  in (Right (Util.Adapter {
+                    Util.adapterIsLossy = (Util.adapterIsLossy ad),
+                    Util.adapterSource = schema,
+                    Util.adapterTarget = (Core.TypeMaybe (Util.adapterTarget ad)),
+                    Util.adapterCoder = Util.Coder {
+                      Util.coderEncode = (\cx1 -> \v -> (\x -> case x of
                         Model.ValueNull -> (Right (Core.TermMaybe Nothing))
-                        _ -> (Eithers.map (\t -> Core.TermMaybe (Just t)) (Compute.coderEncode (Compute.adapterCoder ad) cx1 v))) v),
-                      Compute.coderDecode = (\cx1 -> \t -> (\x -> case x of
-                        Core.TermMaybe v1 -> (Maybes.maybe (Right Model.ValueNull) (\term_ -> Compute.coderDecode (Compute.adapterCoder ad) cx1 term_) v1)) t)}}, env1))))
+                        _ -> (Eithers.map (\t -> Core.TermMaybe (Just t)) (Util.coderEncode (Util.adapterCoder ad) cx1 v))) v),
+                      Util.coderDecode = (\cx1 -> \t -> (\x -> case x of
+                        Core.TermMaybe v1 -> (Maybes.maybe (Right Model.ValueNull) (\term_ -> Util.coderDecode (Util.adapterCoder ad) cx1 term_) v1)) t)}}, env1))))
       in (Logic.ifElse (Equality.gt (Lists.length nonNulls) 1) (err cx "general-purpose unions are not yet supported") (Logic.ifElse (Lists.null nonNulls) (err cx "cannot generate the empty type") (Logic.ifElse hasNull (forOptional (Lists.head nonNulls)) (Eithers.bind (avroHydraAdapter cx (Lists.head nonNulls) env0) (\adEnv ->  
         let ad = (Pairs.first adEnv) 
             env1 = (Pairs.second adEnv)
-        in (Right (Compute.Adapter {
-          Compute.adapterIsLossy = (Compute.adapterIsLossy ad),
-          Compute.adapterSource = schema,
-          Compute.adapterTarget = (Compute.adapterTarget ad),
-          Compute.adapterCoder = (Compute.adapterCoder ad)}, env1)))))))) schema)
+        in (Right (Util.Adapter {
+          Util.adapterIsLossy = (Util.adapterIsLossy ad),
+          Util.adapterSource = schema,
+          Util.adapterTarget = (Util.adapterTarget ad),
+          Util.adapterCoder = (Util.adapterCoder ad)}, env1)))))))) schema)
 
 -- | Thread AvroEnvironment through preparing multiple fields
-prepareFields :: (Context.Context -> Environment.AvroEnvironment -> [Schema.Field] -> Either (Context.InContext Error.Error) (M.Map String (Schema.Field, (Compute.Adapter Schema.Schema Core.Type Model.Value Core.Term)), Environment.AvroEnvironment))
+prepareFields :: (Context.Context -> Environment.AvroEnvironment -> [Schema.Field] -> Either (Context.InContext Error.Error) (M.Map String (Schema.Field, (Util.Adapter Schema.Schema Core.Type Model.Value Core.Term)), Environment.AvroEnvironment))
 prepareFields cx env fields = (Lists.foldl (\acc -> \f -> Eithers.bind acc (\accPair ->  
   let m = (Pairs.first accPair) 
       env1 = (Pairs.second accPair)
@@ -325,7 +325,7 @@ prepareFields cx env fields = (Lists.foldl (\acc -> \f -> Eithers.bind acc (\acc
     in (Right (Maps.insert k v m, env2)))))) (Right (Maps.empty, env)) fields)
 
 -- | Prepare a single field, producing an adapter and updated environment
-prepareField :: (Context.Context -> Environment.AvroEnvironment -> Schema.Field -> Either (Context.InContext Error.Error) ((String, (Schema.Field, (Compute.Adapter Schema.Schema Core.Type Model.Value Core.Term))), Environment.AvroEnvironment))
+prepareField :: (Context.Context -> Environment.AvroEnvironment -> Schema.Field -> Either (Context.InContext Error.Error) ((String, (Schema.Field, (Util.Adapter Schema.Schema Core.Type Model.Value Core.Term))), Environment.AvroEnvironment))
 prepareField cx env f =  
   let manns = (fieldAnnotationsToCore f) 
       ann = (Logic.ifElse (Maps.null manns) Nothing (Just manns))
@@ -336,45 +336,45 @@ prepareField cx env f =
       let ad0 = (Pairs.first adEnvPair) 
           env1 = (Pairs.second adEnvPair)
           elTyp = (Core.TypeVariable fkName)
-          encodeValue = (\cx1 -> \v -> Eithers.bind (Compute.coderEncode (Compute.adapterCoder ad0) cx1 v) (\encoded -> Eithers.bind (termToStringE cx1 encoded) (\s -> Right (Core.TermVariable (fkConstr s)))))
+          encodeValue = (\cx1 -> \v -> Eithers.bind (Util.coderEncode (Util.adapterCoder ad0) cx1 v) (\encoded -> Eithers.bind (termToStringE cx1 encoded) (\s -> Right (Core.TermVariable (fkConstr s)))))
           decodeTerm = (\cx1 -> \t -> (\x -> case x of
-                  Core.TermVariable v0 -> (Eithers.bind (stringToTermE cx1 (Compute.adapterTarget ad0) (Core.unName v0)) (\term_ -> Compute.coderDecode (Compute.adapterCoder ad0) cx1 term_))
+                  Core.TermVariable v0 -> (Eithers.bind (stringToTermE cx1 (Util.adapterTarget ad0) (Core.unName v0)) (\term_ -> Util.coderDecode (Util.adapterCoder ad0) cx1 term_))
                   _ -> (err cx1 "expected variable")) t)
-          forTypeAndCoder = (\env2 -> \ad1 -> \typ -> \cdr -> Right (Compute.Adapter {
-                  Compute.adapterIsLossy = (Compute.adapterIsLossy ad1),
-                  Compute.adapterSource = (Schema.fieldType f),
-                  Compute.adapterTarget = typ,
-                  Compute.adapterCoder = cdr}, env2))
+          forTypeAndCoder = (\env2 -> \ad1 -> \typ -> \cdr -> Right (Util.Adapter {
+                  Util.adapterIsLossy = (Util.adapterIsLossy ad1),
+                  Util.adapterSource = (Schema.fieldType f),
+                  Util.adapterTarget = typ,
+                  Util.adapterCoder = cdr}, env2))
       in ((\x -> case x of
         Core.TypeMaybe v0 -> ((\x -> case x of
-          Core.TypeLiteral _ -> (forTypeAndCoder env1 ad0 (Core.TypeMaybe elTyp) (Compute.Coder {
-            Compute.coderEncode = (\cx2 -> \json -> Eithers.map (\v_ -> Core.TermMaybe (Just v_)) (encodeValue cx2 json)),
-            Compute.coderDecode = decodeTerm}))
+          Core.TypeLiteral _ -> (forTypeAndCoder env1 ad0 (Core.TypeMaybe elTyp) (Util.Coder {
+            Util.coderEncode = (\cx2 -> \json -> Eithers.map (\v_ -> Core.TermMaybe (Just v_)) (encodeValue cx2 json)),
+            Util.coderDecode = decodeTerm}))
           _ -> (err cx "expected literal type inside optional foreign key")) v0)
         Core.TypeList v0 -> ((\x -> case x of
-          Core.TypeLiteral _ -> (forTypeAndCoder env1 ad0 (Core.TypeList elTyp) (Compute.Coder {
-            Compute.coderEncode = (\cx2 -> \json -> (\x -> case x of
+          Core.TypeLiteral _ -> (forTypeAndCoder env1 ad0 (Core.TypeList elTyp) (Util.Coder {
+            Util.coderEncode = (\cx2 -> \json -> (\x -> case x of
               Model.ValueArray v2 -> (Eithers.map (\terms -> Core.TermList terms) (Eithers.mapList (\jv -> encodeValue cx2 jv) v2))
               _ -> (err cx2 "Expected JSON array")) json),
-            Compute.coderDecode = decodeTerm}))
+            Util.coderDecode = decodeTerm}))
           _ -> (err cx "expected literal type inside list foreign key")) v0)
-        Core.TypeLiteral _ -> (forTypeAndCoder env1 ad0 elTyp (Compute.Coder {
-          Compute.coderEncode = encodeValue,
-          Compute.coderDecode = decodeTerm}))
-        _ -> (err cx (Strings.cat2 "unsupported type annotated as foreign key: " "unknown"))) (Rewriting.deannotateType (Compute.adapterTarget ad0)))))) fk) (\adEnv ->  
+        Core.TypeLiteral _ -> (forTypeAndCoder env1 ad0 elTyp (Util.Coder {
+          Util.coderEncode = encodeValue,
+          Util.coderDecode = decodeTerm}))
+        _ -> (err cx (Strings.cat2 "unsupported type annotated as foreign key: " "unknown"))) (Rewriting.deannotateType (Util.adapterTarget ad0)))))) fk) (\adEnv ->  
     let ad = (Pairs.first adEnv) 
         env1 = (Pairs.second adEnv)
     in (Right ((Schema.fieldName f, (f, (annotateAdapter ann ad))), env1)))))
 
 -- | Annotate an adapter's target type with optional annotations
-annotateAdapter :: (Maybe (M.Map Core.Name Core.Term) -> Compute.Adapter t0 Core.Type t1 t2 -> Compute.Adapter t0 Core.Type t1 t2)
-annotateAdapter ann ad = (Maybes.maybe ad (\n -> Compute.Adapter {
-  Compute.adapterIsLossy = (Compute.adapterIsLossy ad),
-  Compute.adapterSource = (Compute.adapterSource ad),
-  Compute.adapterTarget = (Core.TypeAnnotated (Core.AnnotatedType {
-    Core.annotatedTypeBody = (Compute.adapterTarget ad),
+annotateAdapter :: (Maybe (M.Map Core.Name Core.Term) -> Util.Adapter t0 Core.Type t1 t2 -> Util.Adapter t0 Core.Type t1 t2)
+annotateAdapter ann ad = (Maybes.maybe ad (\n -> Util.Adapter {
+  Util.adapterIsLossy = (Util.adapterIsLossy ad),
+  Util.adapterSource = (Util.adapterSource ad),
+  Util.adapterTarget = (Core.TypeAnnotated (Core.AnnotatedType {
+    Core.annotatedTypeBody = (Util.adapterTarget ad),
     Core.annotatedTypeAnnotation = n})),
-  Compute.adapterCoder = (Compute.adapterCoder ad)}) ann)
+  Util.adapterCoder = (Util.adapterCoder ad)}) ann)
 
 -- | Find the primary key field among a list of Avro fields
 findAvroPrimaryKeyField :: (Context.Context -> Environment.AvroQualifiedName -> [Schema.Field] -> Either (Context.InContext Error.Error) (Maybe Environment.AvroPrimaryKey))
@@ -419,7 +419,7 @@ namedAnnotationsToCore n = (Maps.fromList (Lists.map (\entry ->
   in (Core.Name k, (encodeAnnotationValue v))) (Maps.toList (Schema.namedAnnotations n))))
 
 -- | Look up an adapter by qualified name in the environment
-getAvroHydraAdapter :: (Environment.AvroQualifiedName -> Environment.AvroEnvironment -> Maybe (Compute.Adapter Schema.Schema Core.Type Model.Value Core.Term))
+getAvroHydraAdapter :: (Environment.AvroQualifiedName -> Environment.AvroEnvironment -> Maybe (Util.Adapter Schema.Schema Core.Type Model.Value Core.Term))
 getAvroHydraAdapter qname env = (Maps.lookup qname (Environment.avroEnvironmentNamedAdapters env))
 
 -- | Extract a foreign key annotation from a field, if present
@@ -452,7 +452,7 @@ parseAvroName mns name_ =
     Environment.avroQualifiedNameName = local}))
 
 -- | Store an adapter in the environment by qualified name
-putAvroHydraAdapter :: (Environment.AvroQualifiedName -> Compute.Adapter Schema.Schema Core.Type Model.Value Core.Term -> Environment.AvroEnvironment -> Environment.AvroEnvironment)
+putAvroHydraAdapter :: (Environment.AvroQualifiedName -> Util.Adapter Schema.Schema Core.Type Model.Value Core.Term -> Environment.AvroEnvironment -> Environment.AvroEnvironment)
 putAvroHydraAdapter qname ad env = Environment.AvroEnvironment {
   Environment.avroEnvironmentNamedAdapters = (Maps.insert qname ad (Environment.avroEnvironmentNamedAdapters env)),
   Environment.avroEnvironmentNamespace = (Environment.avroEnvironmentNamespace env),

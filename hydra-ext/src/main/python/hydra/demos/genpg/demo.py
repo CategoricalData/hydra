@@ -27,7 +27,7 @@ _hydra_python_root = os.path.join(os.path.dirname(_hydra_ext_root), "hydra-pytho
 sys.path.insert(0, os.path.join(_hydra_ext_root, "src/main/python"))
 # 2. hydra-ext generated modules (hydra.pg.*, hydra.demos.genpg.transform, etc.)
 sys.path.insert(0, os.path.join(_hydra_ext_root, "src/gen-main/python"))
-# 3. hydra-python generated modules (hydra.core, hydra.compute, etc.)
+# 3. hydra-python generated modules (hydra.core, hydra.util, etc.)
 sys.path.insert(0, os.path.join(_hydra_python_root, "src/gen-main/python"))
 # 4. hydra-python hand-written modules (hydra.dsl.python, etc.)
 sys.path.insert(0, os.path.join(_hydra_python_root, "src/main/python"))
@@ -37,7 +37,6 @@ from hydra.pg.model import LazyGraph, Vertex, Edge, Element, ElementVertex, Elem
 from hydra.tabular import TableType, Table
 from hydra.relational import RelationName
 from hydra.pg.graphson.utils import pg_elements_to_graphson, encode_term_value
-from hydra.compute import Flow, FlowState, Trace
 from hydra.graph import Graph as HydraGraph
 import hydra.core
 import hydra.json.writer as json_writer

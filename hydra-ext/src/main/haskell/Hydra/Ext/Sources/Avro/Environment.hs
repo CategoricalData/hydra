@@ -8,13 +8,13 @@ import           Hydra.Dsl.Bootstrap
 import           Hydra.Dsl.Types                 ((>:))
 import qualified Hydra.Dsl.Types                 as T
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
-import qualified Hydra.Sources.Kernel.Types.Compute as ComputeTypes
+import qualified Hydra.Sources.Kernel.Types.Util as UtilTypes
 
 ns :: Namespace
 ns = Namespace "hydra.ext.avro.environment"
 
 computeType :: String -> Type
-computeType = typeref ComputeTypes.ns
+computeType = typeref UtilTypes.ns
 
 avroSchemaType :: Type
 avroSchemaType = typeref (Namespace "hydra.ext.org.apache.avro.schema") "Schema"
@@ -37,7 +37,7 @@ localType = typeref ns
 
 module_ :: Module
 module_ = Module ns elements []
-    [CoreTypes.ns, ComputeTypes.ns, Namespace "hydra.ext.org.apache.avro.schema", Namespace "hydra.json.model"] $
+    [CoreTypes.ns, UtilTypes.ns, Namespace "hydra.ext.org.apache.avro.schema", Namespace "hydra.json.model"] $
     Just "Type definitions for the Avro code generation environment"
   where
     elements = [

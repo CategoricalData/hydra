@@ -1436,5 +1436,7 @@
     "hydra.extract.helpers",
     "hydra.lexical",
     "hydra.rewriting",
-    "hydra.decode.core"],
+    "hydra.decode.context",
+    "hydra.decode.core",
+    "hydra.decode.error"],
   "typeDependencies": ["hydra.util", "hydra.util"]}

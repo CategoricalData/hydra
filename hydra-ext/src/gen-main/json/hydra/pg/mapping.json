@@ -1087,7 +1087,7 @@
                                                                                                                               "name": "variable",
                                                                                                                               "term": {
                                                                                                                                 "wrap": {
-                                                                                                                                  "body": {"literal": {"string": "hydra.compute.Coder"}},
+                                                                                                                                  "body": {"literal": {"string": "hydra.util.Coder"}},
                                                                                                                                   "typeName": "hydra.core.Name"}}},
                                                                                                                             "typeName": "hydra.core.Type"}}},
                                                                                                                       {
@@ -1150,7 +1150,7 @@
                                                                                                                               "name": "variable",
                                                                                                                               "term": {
                                                                                                                                 "wrap": {
-                                                                                                                                  "body": {"literal": {"string": "hydra.compute.Coder"}},
+                                                                                                                                  "body": {"literal": {"string": "hydra.util.Coder"}},
                                                                                                                                   "typeName": "hydra.core.Name"}}},
                                                                                                                             "typeName": "hydra.core.Type"}}},
                                                                                                                       {
@@ -1213,7 +1213,7 @@
                                                                                                                               "name": "variable",
                                                                                                                               "term": {
                                                                                                                                 "wrap": {
-                                                                                                                                  "body": {"literal": {"string": "hydra.compute.Coder"}},
+                                                                                                                                  "body": {"literal": {"string": "hydra.util.Coder"}},
                                                                                                                                   "typeName": "hydra.core.Name"}}},
                                                                                                                             "typeName": "hydra.core.Type"}}},
                                                                                                                       {
@@ -1276,7 +1276,7 @@
                                                                                                                               "name": "variable",
                                                                                                                               "term": {
                                                                                                                                 "wrap": {
-                                                                                                                                  "body": {"literal": {"string": "hydra.compute.Coder"}},
+                                                                                                                                  "body": {"literal": {"string": "hydra.util.Coder"}},
                                                                                                                                   "typeName": "hydra.core.Name"}}},
                                                                                                                             "typeName": "hydra.core.Type"}}},
                                                                                                                       {
@@ -1339,7 +1339,7 @@
                                                                                                                               "name": "variable",
                                                                                                                               "term": {
                                                                                                                                 "wrap": {
-                                                                                                                                  "body": {"literal": {"string": "hydra.compute.Coder"}},
+                                                                                                                                  "body": {"literal": {"string": "hydra.util.Coder"}},
                                                                                                                                   "typeName": "hydra.core.Name"}}},
                                                                                                                             "typeName": "hydra.core.Type"}}},
                                                                                                                       {
@@ -1402,7 +1402,7 @@
                                                                                                                               "name": "variable",
                                                                                                                               "term": {
                                                                                                                                 "wrap": {
-                                                                                                                                  "body": {"literal": {"string": "hydra.compute.Coder"}},
+                                                                                                                                  "body": {"literal": {"string": "hydra.util.Coder"}},
                                                                                                                                   "typeName": "hydra.core.Name"}}},
                                                                                                                             "typeName": "hydra.core.Type"}}},
                                                                                                                       {
@@ -1918,5 +1918,5 @@
           "type": {"variable": "hydra.core.Type"},
           "variables": []}]}],
   "namespace": "hydra.pg.mapping",
-  "termDependencies": ["hydra.pg.model", "hydra.core", "hydra.compute"],
+  "termDependencies": ["hydra.pg.model", "hydra.core", "hydra.util"],
   "typeDependencies": ["hydra.core"]}

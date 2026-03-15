@@ -16,7 +16,7 @@ _root = Path(__file__).parent.parent.parent
 _main_path = _root / "main" / "python"
 _gen_test_path = _root / "gen-test" / "python"
 
-# Main must come first so hydra.compute etc. are found there,
+# Main must come first so hydra.util etc. are found there,
 # but gen-test must also be present so hydra.test can be found
 sys.path.insert(0, str(_gen_test_path))
 sys.path.insert(0, str(_main_path))
@@ -30,7 +30,6 @@ import importlib.util
 import types
 
 import hydra.coders
-import hydra.compute
 import hydra.core
 import hydra.encode.core
 import hydra.formatting
@@ -141,7 +140,7 @@ def _load_bootstrap_type_schemes() -> FrozenDict:
     Uses hydra.json.bootstrap.types_by_name (the same bootstrap type map
     used for JSON decoding) to build a Map[Name, TypeScheme] suitable for
     the test graph's schema_types. This provides type definitions for
-    hydra.core, hydra.compute, hydra.context, hydra.error, hydra.graph,
+    hydra.core, hydra.util,hydra.context, hydra.error, hydra.graph,
     and hydra.module — all the types needed by inference tests.
 
     This mirrors Java's Generation.bootstrapTypeSchemes().
@@ -213,7 +212,7 @@ def build_test_graph() -> hydra.graph.Graph:
     bs_graph = bootstrap_graph()
 
     # Step 1: Build schema types from bootstrap type map + test types
-    # The bootstrap type schemes provide types for hydra.core, hydra.compute,
+    # The bootstrap type schemes provide types for hydra.core, hydra.util,
     # hydra.context, hydra.error, hydra.graph, and hydra.module.
     bootstrap_types = _load_bootstrap_type_schemes()
 

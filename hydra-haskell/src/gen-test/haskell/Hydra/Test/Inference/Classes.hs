@@ -153,9 +153,8 @@ testGroupForMonomorphicConstraints = Testing.TestGroup {
                 Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "a"))})),
               Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "b"))})),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
-              Core.typeSchemeVariables = [
-                Core.Name "t0"],
-              Core.typeSchemeType = (Core.TypeVariable (Core.Name "t0")),
+              Core.typeSchemeVariables = [],
+              Core.typeSchemeType = (Core.TypeVariable (Core.Name "hydra.util.Comparison")),
               Core.typeSchemeConstraints = Nothing}})),
           Testing.testCaseWithMetadataDescription = Nothing,
           Testing.testCaseWithMetadataTags = []}]},
@@ -411,13 +410,12 @@ testGroupForPrimitiveReferences = Testing.TestGroup {
             Testing.inferenceTestCaseInput = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.equality.compare"))),
             Testing.inferenceTestCaseOutput = Core.TypeScheme {
               Core.typeSchemeVariables = [
-                Core.Name "t0",
-                (Core.Name "t1")],
+                Core.Name "t0"],
               Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
                 Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
                 Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
                   Core.functionTypeDomain = (Core.TypeVariable (Core.Name "t0")),
-                  Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "t1"))}))})),
+                  Core.functionTypeCodomain = (Core.TypeVariable (Core.Name "hydra.util.Comparison"))}))})),
               Core.typeSchemeConstraints = (Just (M.fromList [
                 (Core.Name "t0", Core.TypeVariableMetadata {
                   Core.typeVariableMetadataClasses = (S.fromList [

@@ -8,7 +8,6 @@ from functools import lru_cache
 from hydra.dsl.python import Either, FrozenDict, Just, Left, Maybe, Nothing, Right, frozenlist
 from typing import TypeVar, cast
 import hydra.coders
-import hydra.compute
 import hydra.context
 import hydra.core
 import hydra.error
@@ -35,6 +34,7 @@ import hydra.rewriting
 import hydra.schemas
 import hydra.show.core
 import hydra.show.error
+import hydra.util
 
 T0 = TypeVar("T0")
 T1 = TypeVar("T1")
@@ -544,10 +544,10 @@ def adapt_type_for_language(lang: hydra.coders.Language, typ: hydra.core.Type) -
         return adapt_literal_types_map(constraints)
     return adapt_type(constraints, litmap(), typ)
 
-def compose_coders(c1: hydra.compute.Coder[T0, T1], c2: hydra.compute.Coder[T1, T2]) -> hydra.compute.Coder[T0, T2]:
+def compose_coders(c1: hydra.util.Coder[T0, T1], c2: hydra.util.Coder[T1, T2]) -> hydra.util.Coder[T0, T2]:
     r"""Compose two coders into a single coder."""
     
-    return hydra.compute.Coder((lambda cx, a: hydra.lib.eithers.bind(c1.encode(cx, a), (lambda b1: c2.encode(cx, b1)))), (lambda cx, c: hydra.lib.eithers.bind(c2.decode(cx, c), (lambda b2: c1.decode(cx, b2)))))
+    return hydra.util.Coder((lambda cx, a: hydra.lib.eithers.bind(c1.encode(cx, a), (lambda b1: c2.encode(cx, b1)))), (lambda cx, c: hydra.lib.eithers.bind(c2.decode(cx, c), (lambda b2: c1.decode(cx, b2)))))
 
 def data_graph_to_definitions(constraints: hydra.coders.LanguageConstraints, do_infer: bool, do_expand: bool, do_hoist_case_statements: bool, do_hoist_polymorphic_let_bindings: bool, original_bindings: frozenlist[hydra.core.Binding], graph0: hydra.graph.Graph, namespaces: frozenlist[hydra.module.Namespace], cx: hydra.context.Context) -> Either[str, tuple[hydra.graph.Graph, frozenlist[frozenlist[hydra.module.TermDefinition]]]]:
     r"""Given a data graph along with language constraints, original ordered bindings, and a designated list of namespaces, adapt the graph to the language constraints, then return the processed graph along with term definitions grouped by namespace (in the order of the input namespaces). Inference is performed before adaptation if bindings lack type annotations. Hoisting must preserve type schemes; if any binding loses its type scheme after hoisting, the pipeline fails. Adaptation preserves type application/lambda wrappers and adapts embedded types. Post-adaptation inference is performed to ensure binding TypeSchemes are fully consistent. The doExpand flag controls eta expansion. The doHoistCaseStatements flag controls case statement hoisting (needed for Python). The doHoistPolymorphicLetBindings flag controls polymorphic let binding hoisting (needed for Java). The originalBindings parameter provides the original ordered bindings (from module elements)."""
@@ -605,11 +605,11 @@ def schema_graph_to_definitions(constraints: hydra.coders.LanguageConstraints, g
         return adapt_literal_types_map(constraints)
     return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda ic: ic.object.value), (lambda x: x), hydra.schemas.graph_as_types(cx, graph, hydra.lexical.graph_to_bindings(graph))), (lambda tmap0: hydra.lib.eithers.bind(adapt_graph_schema(constraints, litmap(), tmap0), (lambda tmap1: (to_def := (lambda pair: hydra.module.TypeDefinition(hydra.lib.pairs.first(pair), hydra.lib.pairs.second(pair))), Right((tmap1, hydra.lib.lists.map((lambda names: hydra.lib.lists.map((lambda x1: to_def(x1)), hydra.lib.lists.map((lambda n: (n, hydra.lib.maybes.from_just(hydra.lib.maps.lookup(n, tmap1)))), names))), name_lists))))[1]))))
 
-def simple_language_adapter(lang: hydra.coders.Language, cx: T0, g: hydra.graph.Graph, typ: hydra.core.Type) -> Either[str, hydra.compute.Adapter[hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
+def simple_language_adapter(lang: hydra.coders.Language, cx: T0, g: hydra.graph.Graph, typ: hydra.core.Type) -> Either[str, hydra.util.Adapter[hydra.core.Type, hydra.core.Type, hydra.core.Term, hydra.core.Term]]:
     r"""Given a target language and a source type, produce an adapter which rewrites the type and its terms according to the language's constraints. The encode direction adapts terms; the decode direction is identity."""
     
     constraints = lang.constraints
     @lru_cache(1)
     def litmap() -> FrozenDict[hydra.core.LiteralType, hydra.core.LiteralType]:
         return adapt_literal_types_map(constraints)
-    return hydra.lib.eithers.bind(adapt_type(constraints, litmap(), typ), (lambda adapted_type: Right(hydra.compute.Adapter(False, typ, adapted_type, hydra.compute.Coder((lambda cx2, term: hydra.lib.eithers.bimap((lambda _s: hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(_s))), cx2)), (lambda _x: _x), adapt_term(constraints, litmap(), cx2, g, term))), (lambda cx2, term: Right(term)))))))
+    return hydra.lib.eithers.bind(adapt_type(constraints, litmap(), typ), (lambda adapted_type: Right(hydra.util.Adapter(False, typ, adapted_type, hydra.util.Coder((lambda cx2, term: hydra.lib.eithers.bimap((lambda _s: hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(_s))), cx2)), (lambda _x: _x), adapt_term(constraints, litmap(), cx2, g, term))), (lambda cx2, term: Right(term)))))))

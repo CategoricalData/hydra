@@ -83,10 +83,10 @@ testGroupForMonomorphicConstraints = define "testGroupForMonomorphicConstraints"
       expectMono 1 []
         (primitive _equality_equal @@ int32 1 @@ int32 2)
         T.boolean,
-      -- equality.compare "a" "b" => forall t0. t0
-      expectPoly 2 []
+      -- equality.compare "a" "b" => Comparison
+      expectMono 2 []
         (primitive _equality_compare @@ string "a" @@ string "b")
-        ["t0"] (T.var "t0")],
+        (T.var "hydra.util.Comparison")],
 
     subgroup "List operations with concrete types" [
       -- lists.sort [3, 1, 2] => [Int32]
@@ -154,11 +154,11 @@ testGroupForPrimitiveReferences = define "testGroupForPrimitiveReferences" $
         (primitive _equality_equal)
         ["t0"] [("t0", ["equality"])]
         (T.functionMany [T.var "t0", T.var "t0", T.boolean]),
-      -- equality.compare => forall x y. Ord x => x -> x -> y
+      -- equality.compare => forall x. Ord x => x -> x -> Comparison
       expectPolyConstrained 2 []
         (primitive _equality_compare)
-        ["t0", "t1"] [("t0", ["ordering"])]
-        (T.functionMany [T.var "t0", T.var "t0", T.var "t1"])],
+        ["t0"] [("t0", ["ordering"])]
+        (T.functionMany [T.var "t0", T.var "t0", T.var "hydra.util.Comparison"])],
 
     subgroup "List primitives with constraints" [
       -- lists.sort => forall x. Ord x => [x] -> [x]

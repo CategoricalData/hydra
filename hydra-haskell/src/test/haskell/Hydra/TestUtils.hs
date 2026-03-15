@@ -12,10 +12,10 @@ import Hydra.ArbitraryCore()
 import Hydra.Dsl.Bootstrap
 import Hydra.Dsl.Terms
 import qualified Hydra.Sources.Kernel.Types.Coders as TypeCoders
-import qualified Hydra.Sources.Kernel.Types.Compute as TypeCompute
 import qualified Hydra.Sources.Kernel.Types.Context as TypeContext
 import qualified Hydra.Sources.Kernel.Types.Core as TypeCore
 import qualified Hydra.Sources.Kernel.Types.Error as TypeError
+import qualified Hydra.Sources.Kernel.Types.Util as TypeUtil
 import qualified Hydra.Sources.Kernel.Terms.Annotations as TermAnnotations
 import qualified Hydra.Sources.Kernel.Terms.Constants as TermConstants
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as TermExtractCore
@@ -67,15 +67,15 @@ testGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes testSchemaGraph) (
 testSchemaGraph :: Graph
 testSchemaGraph = elementsToGraph hydraCoreGraph (decodeSchemaTypes hydraCoreGraph)
     -- Only the kernel type modules that define types referenced by the test suite schema graph:
-    -- CoderDirection (hydra.coders), Coder (hydra.compute), and Type/Name/ForallType (hydra.core).
+    -- CoderDirection (hydra.coders), Coder (hydra.util), and Type/Name/ForallType (hydra.core).
     (kernelElements ++ testElements)
   where
     kernelElements = L.concat $ fmap moduleElements
       [ TypeCoders.module_
-      , TypeCompute.module_
       , TypeContext.module_
       , TypeCore.module_
       , TypeError.module_
+      , TypeUtil.module_
       ]
     testElements = fmap
       (\(n, t) -> Binding n (EncodeCore.type_ t) $ Just $ Types.mono $ TypeVariable _Type) $ M.toList testTypes

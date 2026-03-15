@@ -4,9 +4,9 @@
 
 module Hydra.Pg.Mapping where
 
-import qualified Hydra.Compute as Compute
 import qualified Hydra.Core as Core
 import qualified Hydra.Pg.Model as Model
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -123,12 +123,12 @@ _PropertySpec_value = (Core.Name "value")
 -- | A set of mappings which translates between Hydra terms and annotations, and application-specific property graph types
 data Schema s t v = 
   Schema {
-    schemaVertexIdTypes :: (Compute.Coder Core.Type t),
-    schemaVertexIds :: (Compute.Coder Core.Term v),
-    schemaEdgeIdTypes :: (Compute.Coder Core.Type t),
-    schemaEdgeIds :: (Compute.Coder Core.Term v),
-    schemaPropertyTypes :: (Compute.Coder Core.Type t),
-    schemaPropertyValues :: (Compute.Coder Core.Term v),
+    schemaVertexIdTypes :: (Util.Coder Core.Type t),
+    schemaVertexIds :: (Util.Coder Core.Term v),
+    schemaEdgeIdTypes :: (Util.Coder Core.Type t),
+    schemaEdgeIds :: (Util.Coder Core.Term v),
+    schemaPropertyTypes :: (Util.Coder Core.Type t),
+    schemaPropertyValues :: (Util.Coder Core.Term v),
     schemaAnnotations :: AnnotationSchema,
     schemaDefaultVertexId :: v,
     schemaDefaultEdgeId :: v}

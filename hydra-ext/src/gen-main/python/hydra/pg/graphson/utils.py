@@ -8,7 +8,7 @@ from decimal import Decimal
 from functools import lru_cache
 from hydra.dsl.python import FrozenDict, frozenlist
 from typing import TypeVar, cast
-import hydra.compute
+import hydra.util
 import hydra.core
 import hydra.json.model
 import hydra.lib.flows
@@ -53,11 +53,11 @@ def elements_to_vertices_with_adjacent_edges(els: frozenlist[hydra.pg.model.Elem
         return hydra.lib.lists.foldl((lambda vmap, edge: (label := edge.label, edge_id := edge.id, out_v := edge.out, in_v := edge.in_, props := edge.properties, adj_edge_out := hydra.pg.model.AdjacentEdge(label, edge_id, in_v, props), adj_edge_in := hydra.pg.model.AdjacentEdge(label, edge_id, out_v, props), vmap1 := hydra.lib.maybes.maybe(vmap, (lambda vae: hydra.lib.maps.insert(out_v, hydra.pg.model.VertexWithAdjacentEdges(vae.vertex, vae.ins, hydra.lib.lists.cons(adj_edge_out, vae.outs)), vmap)), hydra.lib.maps.lookup(out_v, vmap)), hydra.lib.maybes.maybe(vmap1, (lambda vae: hydra.lib.maps.insert(in_v, hydra.pg.model.VertexWithAdjacentEdges(vae.vertex, hydra.lib.lists.cons(adj_edge_in, vae.ins), vae.outs), vmap1)), hydra.lib.maps.lookup(in_v, vmap1)))[8]), vertex_map0(), edges())
     return hydra.lib.maps.elems(vertex_map1())
 
-def encode_string_value(s: str) -> hydra.compute.Flow[T0, hydra.pg.graphson.syntax.Value]:
+def encode_string_value(s: str) -> hydra.util.Flow[T0, hydra.pg.graphson.syntax.Value]:
     return hydra.lib.flows.pure(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueString(s)))
 
-def encode_term_value(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.pg.graphson.syntax.Value]:
-    def _hoist_hydra_pg_graphson_utils_encode_term_value_1(v1: hydra.core.FloatValue) -> hydra.compute.Flow[T1, hydra.pg.graphson.syntax.Value]:
+def encode_term_value(term: hydra.core.Term) -> hydra.util.Flow[T0, hydra.pg.graphson.syntax.Value]:
+    def _hoist_hydra_pg_graphson_utils_encode_term_value_1(v1: hydra.core.FloatValue) -> hydra.util.Flow[T1, hydra.pg.graphson.syntax.Value]:
         match v1:
             case hydra.core.FloatValueBigfloat(value=f):
                 return hydra.lib.flows.pure(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueBigDecimal(hydra.pg.graphson.syntax.BigDecimalValue(hydra.lib.literals.show_bigfloat(f)))))
@@ -70,7 +70,7 @@ def encode_term_value(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.pg.
             
             case _:
                 return hydra.lib.flows.fail("unsupported float type")
-    def _hoist_hydra_pg_graphson_utils_encode_term_value_2(v1: hydra.core.IntegerValue) -> hydra.compute.Flow[T1, hydra.pg.graphson.syntax.Value]:
+    def _hoist_hydra_pg_graphson_utils_encode_term_value_2(v1: hydra.core.IntegerValue) -> hydra.util.Flow[T1, hydra.pg.graphson.syntax.Value]:
         match v1:
             case hydra.core.IntegerValueBigint(value=i):
                 return hydra.lib.flows.pure(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueBigInteger(i)))
@@ -83,7 +83,7 @@ def encode_term_value(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.pg.
             
             case _:
                 return hydra.lib.flows.fail("unsupported integer type")
-    def _hoist_hydra_pg_graphson_utils_encode_term_value_3(v1: hydra.core.Literal) -> hydra.compute.Flow[T1, hydra.pg.graphson.syntax.Value]:
+    def _hoist_hydra_pg_graphson_utils_encode_term_value_3(v1: hydra.core.Literal) -> hydra.util.Flow[T1, hydra.pg.graphson.syntax.Value]:
         match v1:
             case hydra.core.LiteralBinary(value=b):
                 return hydra.lib.flows.pure(cast(hydra.pg.graphson.syntax.Value, hydra.pg.graphson.syntax.ValueBinary(hydra.lib.literals.binary_to_string(b))))
@@ -112,5 +112,5 @@ def encode_term_value(term: hydra.core.Term) -> hydra.compute.Flow[T0, hydra.pg.
         case _:
             return hydra.lib.flows.fail("unsupported term variant for GraphSON encoding")
 
-def pg_elements_to_graphson(encode_value: Callable[[T0], hydra.compute.Flow[T1, hydra.pg.graphson.syntax.Value]], els: frozenlist[hydra.pg.model.Element[T0]]) -> hydra.compute.Flow[T1, frozenlist[hydra.json.model.Value]]:
+def pg_elements_to_graphson(encode_value: Callable[[T0], hydra.util.Flow[T1, hydra.pg.graphson.syntax.Value]], els: frozenlist[hydra.pg.model.Element[T0]]) -> hydra.util.Flow[T1, frozenlist[hydra.json.model.Value]]:
     return hydra.lib.flows.map_list((lambda v1: hydra.pg.graphson.construct.pg_vertex_with_adjacent_edges_to_json(encode_value, v1)), elements_to_vertices_with_adjacent_edges(els))

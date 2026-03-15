@@ -1,7 +1,7 @@
 package hydra.pg;
 
-import hydra.compute.StatelessAdapter;
-import hydra.compute.StatelessCoder;
+import hydra.util.StatelessAdapter;
+import hydra.util.StatelessCoder;
 import hydra.core.Literal;
 import hydra.core.LiteralType;
 import hydra.util.Either;

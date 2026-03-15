@@ -1125,9 +1125,7 @@
                                                           {
                                                             "name": "variables",
                                                             "term": {
-                                                              "list": [
-                                                                {
-                                                                  "wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}}]}},
+                                                              "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.Name"}}}},
                                                           {
                                                             "name": "type",
                                                             "term": {
@@ -1135,7 +1133,9 @@
                                                                 "field": {
                                                                   "name": "variable",
                                                                   "term": {
-                                                                    "wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}}},
+                                                                    "wrap": {
+                                                                      "body": {"literal": {"string": "hydra.util.Comparison"}},
+                                                                      "typeName": "hydra.core.Name"}}},
                                                                 "typeName": "hydra.core.Type"}}},
                                                           {
                                                             "name": "constraints",
@@ -2889,9 +2889,7 @@
                                                             "term": {
                                                               "list": [
                                                                 {
-                                                                  "wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}},
-                                                                {
-                                                                  "wrap": {"body": {"literal": {"string": "t1"}}, "typeName": "hydra.core.Name"}}]}},
+                                                                  "wrap": {"body": {"literal": {"string": "t0"}}, "typeName": "hydra.core.Name"}}]}},
                                                           {
                                                             "name": "type",
                                                             "term": {
@@ -2935,7 +2933,9 @@
                                                                                             "field": {
                                                                                               "name": "variable",
                                                                                               "term": {
-                                                                                                "wrap": {"body": {"literal": {"string": "t1"}}, "typeName": "hydra.core.Name"}}},
+                                                                                                "wrap": {
+                                                                                                  "body": {"literal": {"string": "hydra.util.Comparison"}},
+                                                                                                  "typeName": "hydra.core.Name"}}},
                                                                                             "typeName": "hydra.core.Type"}}}],
                                                                                     "typeName": "hydra.core.FunctionType"}}},
                                                                               "typeName": "hydra.core.Type"}}}],
@@ -9633,7 +9633,6 @@
     "hydra.ast",
     "hydra.classes",
     "hydra.coders",
-    "hydra.compute",
     "hydra.context",
     "hydra.core",
     "hydra.error",

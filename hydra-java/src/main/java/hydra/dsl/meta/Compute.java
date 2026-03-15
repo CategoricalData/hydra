@@ -1,7 +1,7 @@
 package hydra.dsl.meta;
 
-import hydra.compute.Adapter;
-import hydra.compute.Coder;
+import hydra.util.Adapter;
+import hydra.util.Coder;
 import hydra.phantoms.TTerm;
 
 import static hydra.dsl.meta.Phantoms.*;

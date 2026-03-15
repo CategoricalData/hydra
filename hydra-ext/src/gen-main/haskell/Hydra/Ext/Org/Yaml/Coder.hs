@@ -5,7 +5,6 @@
 module Hydra.Ext.Org.Yaml.Coder where
 
 import qualified Hydra.Adapt as Adapt
-import qualified Hydra.Compute as Compute
 import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Error as Error
@@ -22,6 +21,7 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Rewriting as Rewriting
 import qualified Hydra.Show.Core as Core__
+import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -30,15 +30,15 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Create a YAML coder for a given type
-yamlCoder :: (Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (Compute.Coder Core.Term Model.Node))
+yamlCoder :: (Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (Util.Coder Core.Term Model.Node))
 yamlCoder typ cx g =  
   let mkTermCoder = (\t -> termCoder t cx g)
   in (Eithers.bind (Eithers.bimap (\_s -> Context.InContext {
     Context.inContextObject = (Error.ErrorOther (Error.OtherError _s)),
-    Context.inContextContext = cx}) (\_x -> _x) (Adapt.simpleLanguageAdapter Language.yamlLanguage cx g typ)) (\adapter -> Eithers.bind (mkTermCoder (Compute.adapterTarget adapter)) (\coder -> Right (Adapt.composeCoders (Compute.adapterCoder adapter) coder))))
+    Context.inContextContext = cx}) (\_x -> _x) (Adapt.simpleLanguageAdapter Language.yamlLanguage cx g typ)) (\adapter -> Eithers.bind (mkTermCoder (Util.adapterTarget adapter)) (\coder -> Right (Adapt.composeCoders (Util.adapterCoder adapter) coder))))
 
 -- | Create a YAML coder for literal types
-literalYamlCoder :: (Core.LiteralType -> Either t0 (Compute.Coder Core.Literal Model.Scalar))
+literalYamlCoder :: (Core.LiteralType -> Either t0 (Util.Coder Core.Literal Model.Scalar))
 literalYamlCoder lt =  
   let decodeBool = (\cx -> \s -> (\x -> case x of
           Model.ScalarBool v0 -> (Right (Core.LiteralBoolean v0))
@@ -69,32 +69,32 @@ literalYamlCoder lt =
                   Context.inContextContext = cx}))) s)
         in  
           let encoded = ((\x -> case x of
-                  Core.LiteralTypeBoolean -> Compute.Coder {
-                    Compute.coderEncode = (\cx -> \lit -> Eithers.bind (Core_.booleanLiteral cx lit) (\b -> Right (Model.ScalarBool b))),
-                    Compute.coderDecode = decodeBool}
-                  Core.LiteralTypeFloat _ -> Compute.Coder {
-                    Compute.coderEncode = (\cx -> \lit -> Eithers.bind (Core_.floatLiteral cx lit) (\f -> Eithers.bind (Core_.bigfloatValue cx f) (\bf -> Right (Model.ScalarFloat bf)))),
-                    Compute.coderDecode = decodeFloat}
-                  Core.LiteralTypeInteger _ -> Compute.Coder {
-                    Compute.coderEncode = (\cx -> \lit -> Eithers.bind (Core_.integerLiteral cx lit) (\i -> Eithers.bind (Core_.bigintValue cx i) (\bi -> Right (Model.ScalarInt bi)))),
-                    Compute.coderDecode = decodeInteger}
-                  Core.LiteralTypeString -> Compute.Coder {
-                    Compute.coderEncode = (\cx -> \lit -> Eithers.bind (Core_.stringLiteral cx lit) (\s -> Right (Model.ScalarStr s))),
-                    Compute.coderDecode = decodeString}) lt)
+                  Core.LiteralTypeBoolean -> Util.Coder {
+                    Util.coderEncode = (\cx -> \lit -> Eithers.bind (Core_.booleanLiteral cx lit) (\b -> Right (Model.ScalarBool b))),
+                    Util.coderDecode = decodeBool}
+                  Core.LiteralTypeFloat _ -> Util.Coder {
+                    Util.coderEncode = (\cx -> \lit -> Eithers.bind (Core_.floatLiteral cx lit) (\f -> Eithers.bind (Core_.bigfloatValue cx f) (\bf -> Right (Model.ScalarFloat bf)))),
+                    Util.coderDecode = decodeFloat}
+                  Core.LiteralTypeInteger _ -> Util.Coder {
+                    Util.coderEncode = (\cx -> \lit -> Eithers.bind (Core_.integerLiteral cx lit) (\i -> Eithers.bind (Core_.bigintValue cx i) (\bi -> Right (Model.ScalarInt bi)))),
+                    Util.coderDecode = decodeInteger}
+                  Core.LiteralTypeString -> Util.Coder {
+                    Util.coderEncode = (\cx -> \lit -> Eithers.bind (Core_.stringLiteral cx lit) (\s -> Right (Model.ScalarStr s))),
+                    Util.coderDecode = decodeString}) lt)
           in (Right encoded)
 
 -- | Create a YAML coder for record types
-recordCoder :: (Core.RowType -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (Compute.Coder Core.Term Model.Node))
+recordCoder :: (Core.RowType -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (Util.Coder Core.Term Model.Node))
 recordCoder rt cx g =  
   let fields = (Core.rowTypeFields rt)
   in  
     let getCoder = (\f -> Eithers.bind (termCoder (Core.fieldTypeType f) cx g) (\coder -> Right (f, coder)))
-    in (Eithers.bind (Eithers.mapList getCoder fields) (\coders -> Right (Compute.Coder {
-      Compute.coderEncode = (\cx -> \term -> encodeRecord coders cx g term),
-      Compute.coderDecode = (\cx -> \val -> decodeRecord rt coders cx val)})))
+    in (Eithers.bind (Eithers.mapList getCoder fields) (\coders -> Right (Util.Coder {
+      Util.coderEncode = (\cx -> \term -> encodeRecord coders cx g term),
+      Util.coderDecode = (\cx -> \val -> decodeRecord rt coders cx val)})))
 
 -- | Encode a record term to YAML
-encodeRecord :: ([(Core.FieldType, (Compute.Coder Core.Term Model.Node))] -> Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) Model.Node)
+encodeRecord :: ([(Core.FieldType, (Util.Coder Core.Term Model.Node))] -> Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) Model.Node)
 encodeRecord coders cx graph term =  
   let stripped = (Rewriting.deannotateTerm term)
   in  
@@ -116,13 +116,13 @@ encodeRecord coders cx graph term =
                       let fname = (Core.fieldName field)
                       in  
                         let fvalue = (Core.fieldTerm field)
-                        in (Logic.ifElse (isMaybeNothing ft fvalue) (Right Nothing) (Eithers.bind (Compute.coderEncode coder_ cx fvalue) (\encoded -> Right (Just (Model.NodeScalar (Model.ScalarStr (Core.unName fname)), encoded))))))
+                        in (Logic.ifElse (isMaybeNothing ft fvalue) (Right Nothing) (Eithers.bind (Util.coderEncode coder_ cx fvalue) (\encoded -> Right (Just (Model.NodeScalar (Model.ScalarStr (Core.unName fname)), encoded))))))
       in (Eithers.bind (Core_.termRecord cx graph stripped) (\record ->  
         let fields = (Core.recordFields record)
         in (Eithers.bind (Eithers.mapList encodeField (Lists.zip coders fields)) (\maybeFields -> Right (Model.NodeMapping (Maps.fromList (Maybes.cat maybeFields)))))))
 
 -- | Decode a YAML value to a record term
-decodeRecord :: (Core.RowType -> [(Core.FieldType, (Compute.Coder Core.Term Model.Node))] -> Context.Context -> Model.Node -> Either (Context.InContext Error.Error) Core.Term)
+decodeRecord :: (Core.RowType -> [(Core.FieldType, (Util.Coder Core.Term Model.Node))] -> Context.Context -> Model.Node -> Either (Context.InContext Error.Error) Core.Term)
 decodeRecord rt coders cx n =  
   let decodeObjectBody = (\m ->  
           let decodeField = (\coder ->  
@@ -135,7 +135,7 @@ decodeRecord rt coders cx n =
                         let defaultValue = (Model.NodeScalar Model.ScalarNull)
                         in  
                           let yamlValue = (Maybes.fromMaybe defaultValue (Maps.lookup (Model.NodeScalar (Model.ScalarStr (Core.unName fname))) m))
-                          in (Eithers.bind (Compute.coderDecode coder_ cx yamlValue) (\v -> Right (Core.Field {
+                          in (Eithers.bind (Util.coderDecode coder_ cx yamlValue) (\v -> Right (Core.Field {
                             Core.fieldName = fname,
                             Core.fieldTerm = v}))))
           in (Eithers.bind (Eithers.mapList decodeField coders) (\fields -> Right (Core.TermRecord (Core.Record {
@@ -148,12 +148,12 @@ decodeRecord rt coders cx n =
       Context.inContextContext = cx}))) n)
 
 -- | Create a YAML coder for term types
-termCoder :: (Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (Compute.Coder Core.Term Model.Node))
+termCoder :: (Core.Type -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (Util.Coder Core.Term Model.Node))
 termCoder typ cx g =  
   let stripped = (Rewriting.deannotateType typ)
   in  
     let encodeLiteral = (\ac -> \cx -> \term -> (\x -> case x of
-            Core.TermLiteral v0 -> (Eithers.bind (Compute.coderEncode ac cx v0) (\scalar -> Right (Model.NodeScalar scalar)))
+            Core.TermLiteral v0 -> (Eithers.bind (Util.coderEncode ac cx v0) (\scalar -> Right (Model.NodeScalar scalar)))
             _ -> (Left (Context.InContext {
               Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat [
                 "expected literal term, found: ",
@@ -161,7 +161,7 @@ termCoder typ cx g =
               Context.inContextContext = cx}))) term)
     in  
       let encodeList = (\lc -> \cx -> \term -> (\x -> case x of
-              Core.TermList v0 -> (Eithers.bind (Eithers.mapList (\el -> Compute.coderEncode lc cx el) v0) (\encodedEls -> Right (Model.NodeSequence encodedEls)))
+              Core.TermList v0 -> (Eithers.bind (Eithers.mapList (\el -> Util.coderEncode lc cx el) v0) (\encodedEls -> Right (Model.NodeSequence encodedEls)))
               _ -> (Left (Context.InContext {
                 Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat [
                   "expected list term, found: ",
@@ -169,7 +169,7 @@ termCoder typ cx g =
                 Context.inContextContext = cx}))) term)
       in  
         let decodeList = (\lc -> \cx -> \n -> (\x -> case x of
-                Model.NodeSequence v0 -> (Eithers.bind (Eithers.mapList (\node -> Compute.coderDecode lc cx node) v0) (\decodedNodes -> Right (Core.TermList decodedNodes)))
+                Model.NodeSequence v0 -> (Eithers.bind (Eithers.mapList (\node -> Util.coderDecode lc cx node) v0) (\decodedNodes -> Right (Core.TermList decodedNodes)))
                 _ -> (Left (Context.InContext {
                   Context.inContextObject = (Error.ErrorOther (Error.OtherError "expected sequence")),
                   Context.inContextContext = cx}))) n)
@@ -177,7 +177,7 @@ termCoder typ cx g =
           let encodeMaybe = (\maybeElementCoder -> \cx -> \maybeTerm ->  
                   let strippedMaybeTerm = (Rewriting.deannotateTerm maybeTerm)
                   in ((\x -> case x of
-                    Core.TermMaybe v0 -> (Logic.ifElse (Maybes.isNothing v0) (Right (Model.NodeScalar Model.ScalarNull)) (Eithers.bind (Compute.coderEncode maybeElementCoder cx (Maybes.fromJust v0)) (\encodedInner -> Right encodedInner)))
+                    Core.TermMaybe v0 -> (Logic.ifElse (Maybes.isNothing v0) (Right (Model.NodeScalar Model.ScalarNull)) (Eithers.bind (Util.coderEncode maybeElementCoder cx (Maybes.fromJust v0)) (\encodedInner -> Right encodedInner)))
                     _ -> (Left (Context.InContext {
                       Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat [
                         "expected optional term, found: ",
@@ -187,20 +187,20 @@ termCoder typ cx g =
             let decodeMaybe = (\maybeElementCoder -> \cx -> \yamlVal -> (\x -> case x of
                     Model.NodeScalar v0 -> ((\x -> case x of
                       Model.ScalarNull -> (Right (Core.TermMaybe Nothing))
-                      _ -> (Eithers.bind (Compute.coderDecode maybeElementCoder cx yamlVal) (\decodedInner -> Right (Core.TermMaybe (Just decodedInner))))) v0)
-                    _ -> (Eithers.bind (Compute.coderDecode maybeElementCoder cx yamlVal) (\decodedInner -> Right (Core.TermMaybe (Just decodedInner))))) yamlVal)
+                      _ -> (Eithers.bind (Util.coderDecode maybeElementCoder cx yamlVal) (\decodedInner -> Right (Core.TermMaybe (Just decodedInner))))) v0)
+                    _ -> (Eithers.bind (Util.coderDecode maybeElementCoder cx yamlVal) (\decodedInner -> Right (Core.TermMaybe (Just decodedInner))))) yamlVal)
             in  
               let result = ((\x -> case x of
-                      Core.TypeLiteral v0 -> (Eithers.bind (literalYamlCoder v0) (\ac -> Right (Compute.Coder {
-                        Compute.coderEncode = (encodeLiteral ac),
-                        Compute.coderDecode = (\cx -> \n -> (\x -> case x of
-                          Model.NodeScalar v1 -> (Eithers.bind (Compute.coderDecode ac cx v1) (\lit -> Right (Core.TermLiteral lit)))
+                      Core.TypeLiteral v0 -> (Eithers.bind (literalYamlCoder v0) (\ac -> Right (Util.Coder {
+                        Util.coderEncode = (encodeLiteral ac),
+                        Util.coderDecode = (\cx -> \n -> (\x -> case x of
+                          Model.NodeScalar v1 -> (Eithers.bind (Util.coderDecode ac cx v1) (\lit -> Right (Core.TermLiteral lit)))
                           _ -> (Left (Context.InContext {
                             Context.inContextObject = (Error.ErrorOther (Error.OtherError "expected scalar node")),
                             Context.inContextContext = cx}))) n)})))
-                      Core.TypeList v0 -> (Eithers.bind (termCoder v0 cx g) (\lc -> Right (Compute.Coder {
-                        Compute.coderEncode = (encodeList lc),
-                        Compute.coderDecode = (decodeList lc)})))
+                      Core.TypeList v0 -> (Eithers.bind (termCoder v0 cx g) (\lc -> Right (Util.Coder {
+                        Util.coderEncode = (encodeList lc),
+                        Util.coderDecode = (decodeList lc)})))
                       Core.TypeMap v0 ->  
                         let kt = (Core.mapTypeKeys v0)
                         in  
@@ -210,29 +210,29 @@ termCoder typ cx g =
                                     let k = (Pairs.first kv)
                                     in  
                                       let v = (Pairs.second kv)
-                                      in (Eithers.bind (Compute.coderEncode kc cx k) (\encodedK -> Eithers.bind (Compute.coderEncode vc cx v) (\encodedV -> Right (encodedK, encodedV)))))
+                                      in (Eithers.bind (Util.coderEncode kc cx k) (\encodedK -> Eithers.bind (Util.coderEncode vc cx v) (\encodedV -> Right (encodedK, encodedV)))))
                             in  
                               let decodeEntry = (\cx -> \kv ->  
                                       let k = (Pairs.first kv)
                                       in  
                                         let v = (Pairs.second kv)
-                                        in (Eithers.bind (Compute.coderDecode kc cx k) (\decodedK -> Eithers.bind (Compute.coderDecode vc cx v) (\decodedV -> Right (decodedK, decodedV)))))
-                              in (Right (Compute.Coder {
-                                Compute.coderEncode = (\cx -> \term -> (\x -> case x of
+                                        in (Eithers.bind (Util.coderDecode kc cx k) (\decodedK -> Eithers.bind (Util.coderDecode vc cx v) (\decodedV -> Right (decodedK, decodedV)))))
+                              in (Right (Util.Coder {
+                                Util.coderEncode = (\cx -> \term -> (\x -> case x of
                                   Core.TermMap v1 -> (Eithers.bind (Eithers.mapList (\entry -> encodeEntry cx entry) (Maps.toList v1)) (\entries -> Right (Model.NodeMapping (Maps.fromList entries))))
                                   _ -> (Left (Context.InContext {
                                     Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat [
                                       "expected map term, found: ",
                                       (Core__.term term)]))),
                                     Context.inContextContext = cx}))) term),
-                                Compute.coderDecode = (\cx -> \n -> (\x -> case x of
+                                Util.coderDecode = (\cx -> \n -> (\x -> case x of
                                   Model.NodeMapping v1 -> (Eithers.bind (Eithers.mapList (\entry -> decodeEntry cx entry) (Maps.toList v1)) (\entries -> Right (Core.TermMap (Maps.fromList entries))))
                                   _ -> (Left (Context.InContext {
                                     Context.inContextObject = (Error.ErrorOther (Error.OtherError "expected mapping")),
                                     Context.inContextContext = cx}))) n)})))))
-                      Core.TypeMaybe v0 -> (Eithers.bind (termCoder v0 cx g) (\maybeElementCoder -> Right (Compute.Coder {
-                        Compute.coderEncode = (encodeMaybe maybeElementCoder),
-                        Compute.coderDecode = (decodeMaybe maybeElementCoder)})))
+                      Core.TypeMaybe v0 -> (Eithers.bind (termCoder v0 cx g) (\maybeElementCoder -> Right (Util.Coder {
+                        Util.coderEncode = (encodeMaybe maybeElementCoder),
+                        Util.coderDecode = (decodeMaybe maybeElementCoder)})))
                       Core.TypeRecord v0 -> (recordCoder v0 cx g)
                       Core.TypeUnit -> (Right unitCoder)
                       _ -> (Left (Context.InContext {
@@ -243,10 +243,10 @@ termCoder typ cx g =
               in result
 
 -- | YAML coder for unit values
-unitCoder :: (Compute.Coder Core.Term Model.Node)
-unitCoder = Compute.Coder {
-  Compute.coderEncode = encodeUnit,
-  Compute.coderDecode = decodeUnit} 
+unitCoder :: (Util.Coder Core.Term Model.Node)
+unitCoder = Util.Coder {
+  Util.coderEncode = encodeUnit,
+  Util.coderDecode = decodeUnit} 
   where 
     encodeUnit = (\cx -> \term -> (\x -> case x of
       Core.TermUnit -> (Right (Model.NodeScalar Model.ScalarNull))

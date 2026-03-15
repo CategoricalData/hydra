@@ -7167,7 +7167,6 @@
     "hydra.encode.core",
     "hydra.encode.ast",
     "hydra.encode.coders",
-    "hydra.encode.compute",
     "hydra.encode.graph",
     "hydra.encode.json.model",
     "hydra.encode.module",

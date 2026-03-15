@@ -1276,7 +1276,7 @@ public class TestSuiteRunner {
                 new FieldType(new Name("decode"), new Type.Unit())))));
 
         // Coder: ∀v1.∀v2. {encode: Context -> v1 -> Either (InContext Error) v2, decode: Context -> v2 -> Either (InContext Error) v1}
-        Name coderName = new Name("hydra.compute.Coder");
+        Name coderName = new Name("hydra.util.Coder");
         Name contextName = new Name("hydra.context.Context");
         Name inContextName = new Name("hydra.context.InContext");
         Name errorName = new Name("hydra.error.Error");
@@ -1365,6 +1365,30 @@ public class TestSuiteRunner {
             new Type.Record(new RowType(forallTypeName, List.of(
                 new FieldType(new Name("parameter"), new Type.Variable(nameName)),
                 new FieldType(new Name("body"), new Type.Variable(typeName))))));
+
+        // Comparison: enum with lessThan, equalTo, greaterThan
+        Name comparisonName = new Name("hydra.util.Comparison");
+        types.put(comparisonName,
+            new Type.Union(new RowType(comparisonName, List.of(
+                new FieldType(new Name("lessThan"), new Type.Unit()),
+                new FieldType(new Name("equalTo"), new Type.Unit()),
+                new FieldType(new Name("greaterThan"), new Type.Unit())))));
+
+        // CaseConvention: enum with camel, pascal, lowerSnake, upperSnake
+        Name caseConventionName = new Name("hydra.util.CaseConvention");
+        types.put(caseConventionName,
+            new Type.Union(new RowType(caseConventionName, List.of(
+                new FieldType(new Name("camel"), new Type.Unit()),
+                new FieldType(new Name("pascal"), new Type.Unit()),
+                new FieldType(new Name("lowerSnake"), new Type.Unit()),
+                new FieldType(new Name("upperSnake"), new Type.Unit())))));
+
+        // Precision: union with arbitrary (unit) and bits (int32)
+        Name precisionName = new Name("hydra.util.Precision");
+        types.put(precisionName,
+            new Type.Union(new RowType(precisionName, List.of(
+                new FieldType(new Name("arbitrary"), new Type.Unit()),
+                new FieldType(new Name("bits"), new Type.Literal(new LiteralType.Integer_(new IntegerType.Int32())))))));
 
         return types;
     }

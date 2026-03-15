@@ -6,7 +6,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from hydra.dsl.python import Node, frozenlist
 from typing import Annotated, Generic, TypeAlias, TypeVar
-import hydra.compute
+import hydra.util
 import hydra.core
 import hydra.pg.model
 
@@ -101,12 +101,12 @@ PROPERTY_SPEC__VALUE__NAME = hydra.core.Name("value")
 class Schema(Generic[S, T, V]):
     r"""A set of mappings which translates between Hydra terms and annotations, and application-specific property graph types."""
     
-    vertex_id_types: hydra.compute.Coder[S, S, hydra.core.Type, T]
-    vertex_ids: hydra.compute.Coder[S, S, hydra.core.Term, V]
-    edge_id_types: hydra.compute.Coder[S, S, hydra.core.Type, T]
-    edge_ids: hydra.compute.Coder[S, S, hydra.core.Term, V]
-    property_types: hydra.compute.Coder[S, S, hydra.core.Type, T]
-    property_values: hydra.compute.Coder[S, S, hydra.core.Term, V]
+    vertex_id_types: hydra.util.Coder[S, S, hydra.core.Type, T]
+    vertex_ids: hydra.util.Coder[S, S, hydra.core.Term, V]
+    edge_id_types: hydra.util.Coder[S, S, hydra.core.Type, T]
+    edge_ids: hydra.util.Coder[S, S, hydra.core.Term, V]
+    property_types: hydra.util.Coder[S, S, hydra.core.Type, T]
+    property_values: hydra.util.Coder[S, S, hydra.core.Term, V]
     annotations: AnnotationSchema
     default_vertex_id: V
     default_edge_id: V

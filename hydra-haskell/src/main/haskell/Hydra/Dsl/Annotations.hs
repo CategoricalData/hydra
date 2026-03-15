@@ -3,7 +3,7 @@
 module Hydra.Dsl.Annotations where
 
 import Hydra.Core
-import Hydra.Compute
+import Hydra.Util
 import Hydra.Constants
 import Hydra.Annotations
 import Hydra.Dsl.AsType

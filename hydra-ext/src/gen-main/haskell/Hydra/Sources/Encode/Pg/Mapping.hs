@@ -906,7 +906,7 @@ module_ = Module.Module {
   Module.moduleTermDependencies = [
     Module.Namespace "hydra.encode.core",
     (Module.Namespace "hydra.encode.pg.model"),
-    (Module.Namespace "hydra.encode.compute")],
+    (Module.Namespace "hydra.encode.util")],
   Module.moduleTypeDependencies = [
     Module.Namespace "hydra.pg.mapping"],
   Module.moduleDescription = (Just "Term encoders for hydra.pg.mapping")}

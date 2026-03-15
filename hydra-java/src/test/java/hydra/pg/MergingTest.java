@@ -1,6 +1,6 @@
 package hydra.pg;
 
-import hydra.compute.StatelessAdapter;
+import hydra.util.StatelessAdapter;
 import hydra.core.Literal;
 import hydra.core.LiteralType;
 import hydra.util.Either;
@@ -319,7 +319,7 @@ public class MergingTest extends PropertyGraphTestBase {
      * Apply a Coder's encode function using an empty context, returning Either<String, B>.
      */
     private static <A, B> Either<String, B> applyCoderEncode(
-            hydra.compute.Coder<A, B> coder, A value) {
+            hydra.util.Coder<A, B> coder, A value) {
         hydra.context.Context cx = new hydra.context.Context(
             java.util.Collections.emptyList(),
             java.util.Collections.emptyList(),

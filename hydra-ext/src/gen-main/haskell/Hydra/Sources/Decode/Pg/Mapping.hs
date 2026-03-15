@@ -1835,7 +1835,7 @@ module_ = Module.Module {
     (Module.Namespace "hydra.rewriting"),
     (Module.Namespace "hydra.decode.core"),
     (Module.Namespace "hydra.decode.pg.model"),
-    (Module.Namespace "hydra.decode.compute")],
+    (Module.Namespace "hydra.decode.util")],
   Module.moduleTypeDependencies = [
     Module.Namespace "hydra.pg.mapping",
     (Module.Namespace "hydra.util")],

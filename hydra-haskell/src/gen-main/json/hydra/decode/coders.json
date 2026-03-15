@@ -1017,6 +1017,6 @@
     "hydra.rewriting",
     "hydra.decode.core",
     "hydra.decode.graph",
-    "hydra.decode.compute",
+    "hydra.decode.util",
     "hydra.decode.variants"],
   "typeDependencies": ["hydra.coders", "hydra.util"]}

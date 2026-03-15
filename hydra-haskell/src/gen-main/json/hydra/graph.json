@@ -1395,5 +1395,5 @@
           "type": {"variable": "hydra.core.Type"},
           "variables": []}]}],
   "namespace": "hydra.graph",
-  "termDependencies": ["hydra.compute", "hydra.context", "hydra.core", "hydra.error"],
-  "typeDependencies": ["hydra.compute", "hydra.context", "hydra.core", "hydra.error"]}
+  "termDependencies": ["hydra.context", "hydra.core", "hydra.error"],
+  "typeDependencies": ["hydra.context", "hydra.core", "hydra.error"]}

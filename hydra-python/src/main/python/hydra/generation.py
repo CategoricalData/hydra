@@ -39,8 +39,8 @@ def bootstrap_schema_map():
     suitable for the JSON decoder.
 
     The bootstrap type map contains types from the kernel modules needed to
-    decode Module from JSON: hydra.compute, hydra.context, hydra.core,
-    hydra.error, hydra.graph, and hydra.module.
+    decode Module from JSON: hydra.context, hydra.core,
+    hydra.error, hydra.graph, hydra.module, and hydra.util.
     """
     from hydra.json.bootstrap import types_by_name
 

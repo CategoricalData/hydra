@@ -7277,7 +7277,6 @@ module_ = Module.Module {
     (Module.Namespace "hydra.decode.core"),
     (Module.Namespace "hydra.decode.ast"),
     (Module.Namespace "hydra.decode.coders"),
-    (Module.Namespace "hydra.decode.compute"),
     (Module.Namespace "hydra.decode.graph"),
     (Module.Namespace "hydra.decode.json.model"),
     (Module.Namespace "hydra.decode.module"),

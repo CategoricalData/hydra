@@ -1150,5 +1150,5 @@
               "domain": {"variable": "hydra.pg.mapping.VertexSpec"}}},
           "variables": []}]}],
   "namespace": "hydra.encode.pg.mapping",
-  "termDependencies": ["hydra.encode.core", "hydra.encode.pg.model", "hydra.encode.compute"],
+  "termDependencies": ["hydra.encode.core", "hydra.encode.pg.model", "hydra.encode.util"],
   "typeDependencies": ["hydra.pg.mapping"]}

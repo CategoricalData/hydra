@@ -1,7 +1,6 @@
-package hydra.compute;
+package hydra.util;
 
 import hydra.HydraTestBase;
-import hydra.util.Either;
 import org.junit.jupiter.api.Test;
 
 import static hydra.Coders.composeStateless;

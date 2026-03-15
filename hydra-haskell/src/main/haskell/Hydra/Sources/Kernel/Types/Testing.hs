@@ -10,7 +10,6 @@ import qualified Hydra.Sources.Kernel.Types.Core as Core
 
 import qualified Hydra.Sources.Kernel.Types.Ast as Ast
 import qualified Hydra.Sources.Kernel.Types.Coders as Coders
-import qualified Hydra.Sources.Kernel.Types.Compute as Compute
 import qualified Hydra.Sources.Kernel.Types.Graph as Graph
 import qualified Hydra.Sources.Json.Model as JsonModel
 import qualified Hydra.Sources.Kernel.Types.Module as Module
@@ -26,7 +25,7 @@ define :: String -> Type -> Binding
 define = defineType ns
 
 module_ :: Module
-module_ = Module ns elements [Ast.ns, Coders.ns, Compute.ns, Graph.ns, JsonModel.ns, Module.ns, Parsing.ns, Typing.ns, Util.ns] [Core.ns] $
+module_ = Module ns elements [Ast.ns, Coders.ns, Graph.ns, JsonModel.ns, Module.ns, Parsing.ns, Typing.ns, Util.ns] [Core.ns] $
     Just "A model for unit testing"
   where
     elements = [
