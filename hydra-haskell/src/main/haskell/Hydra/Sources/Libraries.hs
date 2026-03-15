@@ -2,11 +2,10 @@
 -- | Implementations of the Hydra standard libraries in Haskell
 module Hydra.Sources.Libraries (
   module Hydra.Sources.Libraries,
-  module Hydra.Staging.Lib.Names,
 ) where
 
 import Hydra.Kernel
-import Hydra.Staging.Lib.Names
+import qualified Hydra.Lib.Names as LibNames
 import Hydra.Dsl.Prims as Prims
 import qualified Hydra.Dsl.Terms as Terms
 import qualified Hydra.Dsl.Types as Types
@@ -25,6 +24,281 @@ import qualified Hydra.Lib.Sets as Sets
 import qualified Hydra.Lib.Strings as Strings
 
 import qualified Data.List as L
+
+
+-- Compatibility aliases for legacy _* names (from the old Staging.Lib.Names module).
+-- These map old names to the new generated Hydra.Lib.Names constants.
+
+-- Namespace aliases
+_hydra_lib_chars    = LibNames.chars
+_hydra_lib_eithers  = LibNames.eithers
+_hydra_lib_equality = LibNames.equality
+_hydra_lib_lists    = LibNames.lists
+_hydra_lib_literals = LibNames.literals
+_hydra_lib_logic    = LibNames.logic
+_hydra_lib_maps     = LibNames.maps
+_hydra_lib_math     = LibNames.math
+_hydra_lib_maybes   = LibNames.maybes
+_hydra_lib_pairs    = LibNames.pairs
+_hydra_lib_sets     = LibNames.sets
+_hydra_lib_strings  = LibNames.strings
+_hydra_typeclass    = LibNames.typeclass
+
+-- Chars
+_chars_isAlphaNum = LibNames.charsIsAlphaNum
+_chars_isLower    = LibNames.charsIsLower
+_chars_isSpace    = LibNames.charsIsSpace
+_chars_isUpper    = LibNames.charsIsUpper
+_chars_toLower    = LibNames.charsToLower
+_chars_toUpper    = LibNames.charsToUpper
+
+-- Eithers
+_eithers_bind             = LibNames.eithersBind
+_eithers_bimap            = LibNames.eithersBimap
+_eithers_either           = LibNames.eithersEither
+_eithers_foldl            = LibNames.eithersFoldl
+_eithers_fromLeft         = LibNames.eithersFromLeft
+_eithers_fromRight        = LibNames.eithersFromRight
+_eithers_isLeft           = LibNames.eithersIsLeft
+_eithers_isRight          = LibNames.eithersIsRight
+_eithers_lefts            = LibNames.eithersLefts
+_eithers_map              = LibNames.eithersMap
+_eithers_mapList          = LibNames.eithersMapList
+_eithers_mapMaybe         = LibNames.eithersMapMaybe
+_eithers_mapSet           = LibNames.eithersMapSet
+_eithers_partitionEithers = LibNames.eithersPartitionEithers
+_eithers_rights           = LibNames.eithersRights
+
+-- Equality
+_equality_compare  = LibNames.equalityCompare
+_equality_equal    = LibNames.equalityEqual
+_equality_gt       = LibNames.equalityGt
+_equality_gte      = LibNames.equalityGte
+_equality_identity = LibNames.equalityIdentity
+_equality_lt       = LibNames.equalityLt
+_equality_lte      = LibNames.equalityLte
+_equality_max      = LibNames.equalityMax
+_equality_min      = LibNames.equalityMin
+
+-- Lists
+_lists_apply       = LibNames.listsApply
+_lists_at          = LibNames.listsAt
+_lists_bind        = LibNames.listsBind
+_lists_concat      = LibNames.listsConcat
+_lists_concat2     = LibNames.listsConcat2
+_lists_cons        = LibNames.listsCons
+_lists_drop        = LibNames.listsDrop
+_lists_dropWhile   = LibNames.listsDropWhile
+_lists_elem        = LibNames.listsElem
+_lists_filter      = LibNames.listsFilter
+_lists_find        = LibNames.listsFind
+_lists_foldl       = LibNames.listsFoldl
+_lists_foldr       = LibNames.listsFoldr
+_lists_group       = LibNames.listsGroup
+_lists_head        = LibNames.listsHead
+_lists_init        = LibNames.listsInit
+_lists_intercalate = LibNames.listsIntercalate
+_lists_intersperse = LibNames.listsIntersperse
+_lists_last        = LibNames.listsLast
+_lists_length      = LibNames.listsLength
+_lists_map         = LibNames.listsMap
+_lists_nub         = LibNames.listsNub
+_lists_null        = LibNames.listsNull
+_lists_partition   = LibNames.listsPartition
+_lists_pure        = LibNames.listsPure
+_lists_replicate   = LibNames.listsReplicate
+_lists_reverse     = LibNames.listsReverse
+_lists_safeHead    = LibNames.listsSafeHead
+_lists_singleton   = LibNames.listsSingleton
+_lists_sort        = LibNames.listsSort
+_lists_sortOn      = LibNames.listsSortOn
+_lists_span        = LibNames.listsSpan
+_lists_tail        = LibNames.listsTail
+_lists_take        = LibNames.listsTake
+_lists_transpose   = LibNames.listsTranspose
+_lists_zip         = LibNames.listsZip
+_lists_zipWith     = LibNames.listsZipWith
+
+-- Literals
+_literals_bigfloatToBigint  = LibNames.literalsBigfloatToBigint
+_literals_bigfloatToFloat32 = LibNames.literalsBigfloatToFloat32
+_literals_bigfloatToFloat64 = LibNames.literalsBigfloatToFloat64
+_literals_bigintToBigfloat  = LibNames.literalsBigintToBigfloat
+_literals_bigintToInt8      = LibNames.literalsBigintToInt8
+_literals_bigintToInt16     = LibNames.literalsBigintToInt16
+_literals_bigintToInt32     = LibNames.literalsBigintToInt32
+_literals_bigintToInt64     = LibNames.literalsBigintToInt64
+_literals_bigintToUint8     = LibNames.literalsBigintToUint8
+_literals_bigintToUint16    = LibNames.literalsBigintToUint16
+_literals_bigintToUint32    = LibNames.literalsBigintToUint32
+_literals_bigintToUint64    = LibNames.literalsBigintToUint64
+_literals_binaryToBytes     = LibNames.literalsBinaryToBytes
+_literals_binaryToString    = LibNames.literalsBinaryToString
+_literals_float32ToBigfloat = LibNames.literalsFloat32ToBigfloat
+_literals_float64ToBigfloat = LibNames.literalsFloat64ToBigfloat
+_literals_int8ToBigint      = LibNames.literalsInt8ToBigint
+_literals_int16ToBigint     = LibNames.literalsInt16ToBigint
+_literals_int32ToBigint     = LibNames.literalsInt32ToBigint
+_literals_int64ToBigint     = LibNames.literalsInt64ToBigint
+_literals_readBigfloat      = LibNames.literalsReadBigfloat
+_literals_readBigint        = LibNames.literalsReadBigint
+_literals_readBoolean       = LibNames.literalsReadBoolean
+_literals_readFloat32       = LibNames.literalsReadFloat32
+_literals_readFloat64       = LibNames.literalsReadFloat64
+_literals_readInt8          = LibNames.literalsReadInt8
+_literals_readInt16         = LibNames.literalsReadInt16
+_literals_readInt32         = LibNames.literalsReadInt32
+_literals_readInt64         = LibNames.literalsReadInt64
+_literals_readString        = LibNames.literalsReadString
+_literals_readUint8         = LibNames.literalsReadUint8
+_literals_readUint16        = LibNames.literalsReadUint16
+_literals_readUint32        = LibNames.literalsReadUint32
+_literals_readUint64        = LibNames.literalsReadUint64
+_literals_showBigfloat      = LibNames.literalsShowBigfloat
+_literals_showBigint        = LibNames.literalsShowBigint
+_literals_showBoolean       = LibNames.literalsShowBoolean
+_literals_showFloat32       = LibNames.literalsShowFloat32
+_literals_showFloat64       = LibNames.literalsShowFloat64
+_literals_showInt8          = LibNames.literalsShowInt8
+_literals_showInt16         = LibNames.literalsShowInt16
+_literals_showInt32         = LibNames.literalsShowInt32
+_literals_showInt64         = LibNames.literalsShowInt64
+_literals_showUint8         = LibNames.literalsShowUint8
+_literals_showUint16        = LibNames.literalsShowUint16
+_literals_showUint32        = LibNames.literalsShowUint32
+_literals_showUint64        = LibNames.literalsShowUint64
+_literals_showString        = LibNames.literalsShowString
+_literals_stringToBinary    = LibNames.literalsStringToBinary
+_literals_uint8ToBigint     = LibNames.literalsUint8ToBigint
+_literals_uint16ToBigint    = LibNames.literalsUint16ToBigint
+_literals_uint32ToBigint    = LibNames.literalsUint32ToBigint
+_literals_uint64ToBigint    = LibNames.literalsUint64ToBigint
+
+-- Logic
+_logic_and    = LibNames.logicAnd
+_logic_ifElse = LibNames.logicIfElse
+_logic_not    = LibNames.logicNot
+_logic_or     = LibNames.logicOr
+
+-- Maps
+_maps_alter           = LibNames.mapsAlter
+_maps_bimap           = LibNames.mapsBimap
+_maps_delete          = LibNames.mapsDelete
+_maps_elems           = LibNames.mapsElems
+_maps_empty           = LibNames.mapsEmpty
+_maps_filter          = LibNames.mapsFilter
+_maps_filterWithKey   = LibNames.mapsFilterWithKey
+_maps_findWithDefault = LibNames.mapsFindWithDefault
+_maps_fromList        = LibNames.mapsFromList
+_maps_insert          = LibNames.mapsInsert
+_maps_keys            = LibNames.mapsKeys
+_maps_lookup          = LibNames.mapsLookup
+_maps_map             = LibNames.mapsMap
+_maps_mapKeys         = LibNames.mapsMapKeys
+_maps_member          = LibNames.mapsMember
+_maps_null            = LibNames.mapsNull
+_maps_singleton       = LibNames.mapsSingleton
+_maps_size            = LibNames.mapsSize
+_maps_toList          = LibNames.mapsToList
+_maps_union           = LibNames.mapsUnion
+
+-- Math
+_math_abs      = LibNames.mathAbs
+_math_acos     = LibNames.mathAcos
+_math_acosh    = LibNames.mathAcosh
+_math_add      = LibNames.mathAdd
+_math_asin     = LibNames.mathAsin
+_math_asinh    = LibNames.mathAsinh
+_math_atan     = LibNames.mathAtan
+_math_atan2    = LibNames.mathAtan2
+_math_atanh    = LibNames.mathAtanh
+_math_ceiling  = LibNames.mathCeiling
+_math_cos      = LibNames.mathCos
+_math_cosh     = LibNames.mathCosh
+_math_div      = LibNames.mathDiv
+_math_e        = LibNames.mathE
+_math_even     = LibNames.mathEven
+_math_exp      = LibNames.mathExp
+_math_floor    = LibNames.mathFloor
+_math_log      = LibNames.mathLog
+_math_logBase  = LibNames.mathLogBase
+_math_max      = LibNames.mathMax
+_math_min      = LibNames.mathMin
+_math_mod      = LibNames.mathMod
+_math_mul      = LibNames.mathMul
+_math_negate   = LibNames.mathNegate
+_math_odd      = LibNames.mathOdd
+_math_pi       = LibNames.mathPi
+_math_pow      = LibNames.mathPow
+_math_pred     = LibNames.mathPred
+_math_range    = LibNames.mathRange
+_math_rem      = LibNames.mathRem
+_math_round    = LibNames.mathRound
+_math_signum   = LibNames.mathSignum
+_math_sin      = LibNames.mathSin
+_math_sinh     = LibNames.mathSinh
+_math_sqrt     = LibNames.mathSqrt
+_math_sub      = LibNames.mathSub
+_math_succ     = LibNames.mathSucc
+_math_tan      = LibNames.mathTan
+_math_tanh     = LibNames.mathTanh
+_math_truncate = LibNames.mathTruncate
+
+-- Maybes
+_maybes_apply     = LibNames.maybesApply
+_maybes_bind      = LibNames.maybesBind
+_maybes_cases     = LibNames.maybesCases
+_maybes_cat       = LibNames.maybesCat
+_maybes_compose   = LibNames.maybesCompose
+_maybes_fromJust  = LibNames.maybesFromJust
+_maybes_fromMaybe = LibNames.maybesFromMaybe
+_maybes_isJust    = LibNames.maybesIsJust
+_maybes_isNothing = LibNames.maybesIsNothing
+_maybes_map       = LibNames.maybesMap
+_maybes_mapMaybe  = LibNames.maybesMapMaybe
+_maybes_maybe     = LibNames.maybesMaybe
+_maybes_pure      = LibNames.maybesPure
+_maybes_toList    = LibNames.maybesToList
+
+-- Pairs
+_pairs_bimap  = LibNames.pairsBimap
+_pairs_first  = LibNames.pairsFirst
+_pairs_second = LibNames.pairsSecond
+
+-- Sets
+_sets_delete       = LibNames.setsDelete
+_sets_difference   = LibNames.setsDifference
+_sets_empty        = LibNames.setsEmpty
+_sets_fromList     = LibNames.setsFromList
+_sets_insert       = LibNames.setsInsert
+_sets_intersection = LibNames.setsIntersection
+_sets_map          = LibNames.setsMap
+_sets_member       = LibNames.setsMember
+_sets_null         = LibNames.setsNull
+_sets_singleton    = LibNames.setsSingleton
+_sets_size         = LibNames.setsSize
+_sets_toList       = LibNames.setsToList
+_sets_union        = LibNames.setsUnion
+_sets_unions       = LibNames.setsUnions
+
+-- Strings
+_strings_cat         = LibNames.stringsCat
+_strings_cat2        = LibNames.stringsCat2
+_strings_charAt      = LibNames.stringsCharAt
+_strings_fromList    = LibNames.stringsFromList
+_strings_intercalate = LibNames.stringsIntercalate
+_strings_null        = LibNames.stringsNull
+_strings_length      = LibNames.stringsLength
+_strings_lines       = LibNames.stringsLines
+_strings_splitOn     = LibNames.stringsSplitOn
+_strings_toList      = LibNames.stringsToList
+_strings_toLower     = LibNames.stringsToLower
+_strings_toUpper     = LibNames.stringsToUpper
+_strings_unlines     = LibNames.stringsUnlines
+
+-- Type classes
+_typeclass_Eq  = LibNames.typeclassEq
+_typeclass_Ord = LibNames.typeclassOrd
 
 
 -- Type variables (TypeVar) for primitive type schemes
