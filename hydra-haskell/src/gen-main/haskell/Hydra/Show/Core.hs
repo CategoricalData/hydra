@@ -331,7 +331,7 @@ term t =
 type_ :: (Core.Type -> String)
 type_ typ =  
   let showRowType = (\rt ->  
-          let flds = (Core.rowTypeFields rt)
+          let flds = rt
           in  
             let fieldStrs = (Lists.map fieldType flds)
             in (Strings.cat [
@@ -430,9 +430,9 @@ type_ typ =
         Core.TypeUnit -> "unit"
         Core.TypeVariable v0 -> (Core.unName v0)
         Core.TypeWrap v0 ->  
-          let tname = (Core.unName (Core.wrappedTypeTypeName v0))
+          let tname = (Core.unName (Core.Name "unknown"))
           in  
-            let typ1 = (Core.wrappedTypeBody v0)
+            let typ1 = v0
             in (Strings.cat [
               "wrap[",
               tname,

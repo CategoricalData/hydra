@@ -78,10 +78,10 @@ instantiateTemplate cx minimal schema t =
                 let vt = (Core.mapTypeValues v0)
                 in (Logic.ifElse minimal (Right (Core.TermMap Maps.empty)) (Eithers.bind (inst kt) (\ke -> Eithers.bind (inst vt) (\ve -> Right (Core.TermMap (Maps.singleton ke ve))))))
             Core.TypeMaybe v0 -> (Logic.ifElse minimal (Right (Core.TermMaybe Nothing)) (Eithers.bind (inst v0) (\e -> Right (Core.TermMaybe (Just e)))))
-            Core.TypeRecord v0 ->  
-              let tname = (Core.rowTypeTypeName v0)
-              in  
-                let fields = (Core.rowTypeFields v0)
+            Core.TypeRecord v0 ->
+              let tname = (Core.Name "unknown")
+              in
+                let fields = v0
                 in  
                   let toField = (\ft -> Eithers.bind (inst (Core.fieldTypeType ft)) (\e -> Right (Core.Field {
                           Core.fieldName = (Core.fieldTypeName ft),
@@ -94,10 +94,10 @@ instantiateTemplate cx minimal schema t =
             Core.TypeVariable v0 -> (Maybes.maybe (Left (Context.InContext {
               Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "Type variable " (Strings.cat2 (Core__.term (Core.TermVariable v0)) " not found in schema")))),
               Context.inContextContext = cx})) inst (Maps.lookup v0 schema))
-            Core.TypeWrap v0 ->  
-              let tname = (Core.wrappedTypeTypeName v0)
-              in  
-                let t_ = (Core.wrappedTypeBody v0)
+            Core.TypeWrap v0 ->
+              let tname = (Core.Name "unknown")
+              in
+                let t_ = v0
                 in (Eithers.bind (inst t_) (\e -> Right (Core.TermWrap (Core.WrappedTerm {
                   Core.wrappedTermTypeName = tname,
                   Core.wrappedTermBody = e}))))) t)

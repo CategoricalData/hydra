@@ -924,7 +924,7 @@ public class TestSuiteRunner {
                 JsonDecodeTestCase tc = instance.value;
                 return withTimeout(name, () -> {
                     hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> emptyTypes = hydra.util.PersistentMap.empty();
-                    var decodeResult = hydra.json.decode.Decode.fromJson(emptyTypes, tc.type, tc.json);
+                    var decodeResult = hydra.json.decode.Decode.fromJson(emptyTypes, new Name("test"), tc.type, tc.json);
 
                     tc.expected.accept(new hydra.util.Either.Visitor<>() {
                         @Override
@@ -981,7 +981,7 @@ public class TestSuiteRunner {
 
                     // Decode back
                     hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> emptyTypes = hydra.util.PersistentMap.empty();
-                    var decodeResult = hydra.json.decode.Decode.fromJson(emptyTypes, tc.type, encoded);
+                    var decodeResult = hydra.json.decode.Decode.fromJson(emptyTypes, new Name("test"), tc.type, encoded);
                     assertEitherRight(decodeResult, "JSON decode failed");
                     Term decoded = eitherRight(decodeResult);
                     if (!termsEqual(tc.term, decoded)) {
@@ -1277,9 +1277,9 @@ public class TestSuiteRunner {
 
         // CoderDirection: enum with encode, decode
         types.put(new Name("hydra.coders.CoderDirection"),
-            new Type.Union(new RowType(new Name("hydra.coders.CoderDirection"), hydra.util.ConsList.of(
+            new Type.Union(List.of(
                 new FieldType(new Name("encode"), new Type.Unit()),
-                new FieldType(new Name("decode"), new Type.Unit())))));
+                new FieldType(new Name("decode"), new Type.Unit()))));
 
         // Coder: ∀v1.∀v2. {encode: Context -> v1 -> Either (InContext Error) v2, decode: Context -> v2 -> Either (InContext Error) v1}
         Name coderName = new Name("hydra.util.Coder");
@@ -1305,9 +1305,9 @@ public class TestSuiteRunner {
             new Type.Function(new FunctionType(
                 new Type.Variable(new Name("v2")),
                 eitherInContextError.apply(new Type.Variable(new Name("v1")))))));
-        Type coderBody = new Type.Record(new RowType(coderName, hydra.util.ConsList.of(
+        Type coderBody = new Type.Record(List.of(
             new FieldType(new Name("encode"), encodeType),
-            new FieldType(new Name("decode"), decodeType))));
+            new FieldType(new Name("decode"), decodeType)));
         // Wrap in foralls: ∀v1.∀v2. coderBody
         types.put(coderName,
             new Type.Forall(new ForallType(new Name("v1"),
@@ -1315,33 +1315,33 @@ public class TestSuiteRunner {
 
         // Context: record with trace, messages, other
         types.put(contextName,
-            new Type.Record(new RowType(contextName, hydra.util.ConsList.of(
+            new Type.Record(List.of(
                 new FieldType(new Name("trace"), new Type.List(new Type.Literal(new LiteralType.String_()))),
                 new FieldType(new Name("messages"), new Type.List(new Type.Literal(new LiteralType.String_()))),
                 new FieldType(new Name("other"), new Type.Map(new MapType(
                     new Type.Variable(new Name("hydra.core.Name")),
-                    new Type.Variable(new Name("hydra.core.Term")))))))));
+                    new Type.Variable(new Name("hydra.core.Term"))))))));
 
         // InContext: ∀e. record with object (e) and context (Context)
         types.put(inContextName,
             new Type.Forall(new ForallType(new Name("e"),
-                new Type.Record(new RowType(inContextName, hydra.util.ConsList.of(
+                new Type.Record(List.of(
                     new FieldType(new Name("object"), new Type.Variable(new Name("e"))),
-                    new FieldType(new Name("context"), new Type.Variable(contextName))))))));
+                    new FieldType(new Name("context"), new Type.Variable(contextName)))))));
 
         // Error: union type with multiple error variants
         Name otherErrorName = new Name("hydra.error.OtherError");
         types.put(otherErrorName,
-            new Type.Wrap(new WrappedType(otherErrorName,
-                new Type.Literal(new LiteralType.String_()))));
+            new Type.Wrap(
+                new Type.Literal(new LiteralType.String_())));
         types.put(errorName,
-            new Type.Union(new RowType(errorName, hydra.util.ConsList.of(
-                new FieldType(new Name("other"), new Type.Variable(otherErrorName))))));
+            new Type.Union(List.of(
+                new FieldType(new Name("other"), new Type.Variable(otherErrorName)))));
 
         // Type: the hydra.core.Type union — large recursive type
         Name typeName = new Name("hydra.core.Type");
         types.put(typeName,
-            new Type.Union(new RowType(typeName, hydra.util.ConsList.of(
+            new Type.Union(List.of(
                 new FieldType(new Name("annotated"), new Type.Variable(new Name("annotatedType"))),
                 new FieldType(new Name("application"), new Type.Variable(new Name("applicationElim"))),
                 new FieldType(new Name("either"), new Type.Variable(new Name("eitherType"))),
@@ -1357,44 +1357,44 @@ public class TestSuiteRunner {
                 new FieldType(new Name("union"), new Type.Variable(new Name("rowType"))),
                 new FieldType(new Name("unit"), new Type.Unit()),
                 new FieldType(new Name("variable"), new Type.Variable(new Name("name"))),
-                new FieldType(new Name("wrap"), new Type.Variable(new Name("wrappedType")))))));
+                new FieldType(new Name("wrap"), new Type.Variable(new Name("wrappedType"))))));
 
         // Name: wrapper over string
         Name nameName = new Name("hydra.core.Name");
         types.put(nameName,
-            new Type.Wrap(new WrappedType(nameName,
-                new Type.Literal(new LiteralType.String_()))));
+            new Type.Wrap(
+                new Type.Literal(new LiteralType.String_())));
 
         // ForallType: record with parameter (Name) and body (Type)
         Name forallTypeName = new Name("hydra.core.ForallType");
         types.put(forallTypeName,
-            new Type.Record(new RowType(forallTypeName, hydra.util.ConsList.of(
+            new Type.Record(List.of(
                 new FieldType(new Name("parameter"), new Type.Variable(nameName)),
-                new FieldType(new Name("body"), new Type.Variable(typeName))))));
+                new FieldType(new Name("body"), new Type.Variable(typeName)))));
 
         // Comparison: enum with lessThan, equalTo, greaterThan
         Name comparisonName = new Name("hydra.util.Comparison");
         types.put(comparisonName,
-            new Type.Union(new RowType(comparisonName, ConsList.of(
+            new Type.Union(ConsList.of(
                 new FieldType(new Name("lessThan"), new Type.Unit()),
                 new FieldType(new Name("equalTo"), new Type.Unit()),
-                new FieldType(new Name("greaterThan"), new Type.Unit())))));
+                new FieldType(new Name("greaterThan"), new Type.Unit()))));
 
         // CaseConvention: enum with camel, pascal, lowerSnake, upperSnake
         Name caseConventionName = new Name("hydra.util.CaseConvention");
         types.put(caseConventionName,
-            new Type.Union(new RowType(caseConventionName, ConsList.of(
+            new Type.Union(ConsList.of(
                 new FieldType(new Name("camel"), new Type.Unit()),
                 new FieldType(new Name("pascal"), new Type.Unit()),
                 new FieldType(new Name("lowerSnake"), new Type.Unit()),
-                new FieldType(new Name("upperSnake"), new Type.Unit())))));
+                new FieldType(new Name("upperSnake"), new Type.Unit()))));
 
         // Precision: union with arbitrary (unit) and bits (int32)
         Name precisionName = new Name("hydra.util.Precision");
         types.put(precisionName,
-            new Type.Union(new RowType(precisionName, ConsList.of(
+            new Type.Union(ConsList.of(
                 new FieldType(new Name("arbitrary"), new Type.Unit()),
-                new FieldType(new Name("bits"), new Type.Literal(new LiteralType.Integer_(new IntegerType.Int32())))))));
+                new FieldType(new Name("bits"), new Type.Literal(new LiteralType.Integer_(new IntegerType.Int32()))))));
 
         return types;
     }

@@ -1260,18 +1260,12 @@ rewriteType f typ0 =
               Core.mapTypeKeys = (recurse (Core.mapTypeKeys v0)),
               Core.mapTypeValues = (recurse (Core.mapTypeValues v0))}))
             Core.TypeMaybe v0 -> (Core.TypeMaybe (recurse v0))
-            Core.TypeRecord v0 -> (Core.TypeRecord (Core.RowType {
-              Core.rowTypeTypeName = (Core.rowTypeTypeName v0),
-              Core.rowTypeFields = (Lists.map forField (Core.rowTypeFields v0))}))
+            Core.TypeRecord v0 -> (Core.TypeRecord (Lists.map forField v0))
             Core.TypeSet v0 -> (Core.TypeSet (recurse v0))
-            Core.TypeUnion v0 -> (Core.TypeUnion (Core.RowType {
-              Core.rowTypeTypeName = (Core.rowTypeTypeName v0),
-              Core.rowTypeFields = (Lists.map forField (Core.rowTypeFields v0))}))
+            Core.TypeUnion v0 -> (Core.TypeUnion (Lists.map forField v0))
             Core.TypeUnit -> Core.TypeUnit
             Core.TypeVariable v0 -> (Core.TypeVariable v0)
-            Core.TypeWrap v0 -> (Core.TypeWrap (Core.WrappedType {
-              Core.wrappedTypeTypeName = (Core.wrappedTypeTypeName v0),
-              Core.wrappedTypeBody = (recurse (Core.wrappedTypeBody v0))}))) typ))
+            Core.TypeWrap v0 -> (Core.TypeWrap (recurse v0))) typ))
   in  
     let recurse = (f (fsub recurse))
     in (recurse typ0)
@@ -1305,33 +1299,27 @@ rewriteTypeM f typ0 =
             Core.mapTypeValues = vt})))))
           Core.TypeMaybe v0 -> (Eithers.bind (recurse v0) (\rt -> Right (Core.TypeMaybe rt)))
           Core.TypeRecord v0 ->  
-            let name = (Core.rowTypeTypeName v0)
+            let name = (Core.Name "unknown")
             in  
-              let fields = (Core.rowTypeFields v0)
+              let fields = v0
               in  
                 let forField = (\f -> Eithers.bind (recurse (Core.fieldTypeType f)) (\t -> Right (Core.FieldType {
                         Core.fieldTypeName = (Core.fieldTypeName f),
                         Core.fieldTypeType = t})))
-                in (Eithers.bind (Eithers.mapList forField fields) (\rfields -> Right (Core.TypeRecord (Core.RowType {
-                  Core.rowTypeTypeName = name,
-                  Core.rowTypeFields = rfields}))))
+                in (Eithers.bind (Eithers.mapList forField fields) (\rfields -> Right (Core.TypeRecord rfields)))
           Core.TypeSet v0 -> (Eithers.bind (recurse v0) (\rt -> Right (Core.TypeSet rt)))
           Core.TypeUnion v0 ->  
-            let name = (Core.rowTypeTypeName v0)
+            let name = (Core.Name "unknown")
             in  
-              let fields = (Core.rowTypeFields v0)
+              let fields = v0
               in  
                 let forField = (\f -> Eithers.bind (recurse (Core.fieldTypeType f)) (\t -> Right (Core.FieldType {
                         Core.fieldTypeName = (Core.fieldTypeName f),
                         Core.fieldTypeType = t})))
-                in (Eithers.bind (Eithers.mapList forField fields) (\rfields -> Right (Core.TypeUnion (Core.RowType {
-                  Core.rowTypeTypeName = name,
-                  Core.rowTypeFields = rfields}))))
+                in (Eithers.bind (Eithers.mapList forField fields) (\rfields -> Right (Core.TypeUnion rfields)))
           Core.TypeUnit -> (Right Core.TypeUnit)
           Core.TypeVariable v0 -> (Right (Core.TypeVariable v0))
-          Core.TypeWrap v0 -> (Eithers.bind (recurse (Core.wrappedTypeBody v0)) (\t -> Right (Core.TypeWrap (Core.WrappedType {
-            Core.wrappedTypeTypeName = (Core.wrappedTypeTypeName v0),
-            Core.wrappedTypeBody = t}))))) typ)
+          Core.TypeWrap v0 -> (Eithers.bind (recurse v0) (\t -> Right (Core.TypeWrap t)))) typ)
   in  
     let recurse = (f (fsub recurse))
     in (recurse typ0)
@@ -1520,14 +1508,14 @@ subtypes x = case x of
     (Core.mapTypeValues v0)]
   Core.TypeMaybe v0 -> [
     v0]
-  Core.TypeRecord v0 -> (Lists.map Core.fieldTypeType (Core.rowTypeFields v0))
+  Core.TypeRecord v0 -> (Lists.map Core.fieldTypeType v0)
   Core.TypeSet v0 -> [
     v0]
-  Core.TypeUnion v0 -> (Lists.map Core.fieldTypeType (Core.rowTypeFields v0))
+  Core.TypeUnion v0 -> (Lists.map Core.fieldTypeType v0)
   Core.TypeUnit -> []
   Core.TypeVariable _ -> []
   Core.TypeWrap v0 -> [
-    Core.wrappedTypeBody v0]
+    v0]
 
 -- | Note: does not distinguish between bound and free variables; use freeVariablesInTerm for that
 termDependencyNames :: (Bool -> Bool -> Bool -> Core.Term -> S.Set Core.Name)
@@ -1610,13 +1598,13 @@ typeNamesInType :: (Core.Type -> S.Set Core.Name)
 typeNamesInType typ0 =  
   let addNames = (\names -> \typ -> (\x -> case x of
           Core.TypeRecord v0 ->  
-            let tname = (Core.rowTypeTypeName v0)
+            let tname = (Core.Name "unknown")
             in (Sets.insert tname names)
           Core.TypeUnion v0 ->  
-            let tname = (Core.rowTypeTypeName v0)
+            let tname = (Core.Name "unknown")
             in (Sets.insert tname names)
           Core.TypeWrap v0 ->  
-            let tname = (Core.wrappedTypeTypeName v0)
+            let tname = (Core.Name "unknown")
             in (Sets.insert tname names)
           _ -> names) typ)
   in (foldOverType Coders.TraversalOrderPre addNames Sets.empty typ0)

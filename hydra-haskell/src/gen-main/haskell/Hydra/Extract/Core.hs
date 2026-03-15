@@ -389,8 +389,8 @@ recordType :: (Context.Context -> Core.Name -> Core.Type -> Either (Context.InCo
 recordType cx ename typ =  
   let stripped = (Rewriting.deannotateType typ)
   in ((\x -> case x of
-    Core.TypeRecord v0 -> (Logic.ifElse (Equality.equal (Core.unName (Core.rowTypeTypeName v0)) (Core.unName ename)) (Right (Core.rowTypeFields v0)) (Left (Context.InContext {
-      Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " (Strings.cat2 "record of type " (Core.unName ename))) " but found ") (Strings.cat2 "record of type " (Core.unName (Core.rowTypeTypeName v0)))))),
+    Core.TypeRecord v0 -> (Logic.ifElse (Equality.equal (Core.unName (Core.Name "unknown")) (Core.unName ename)) (Right (v0)) (Left (Context.InContext {
+      Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " (Strings.cat2 "record of type " (Core.unName ename))) " but found ") (Strings.cat2 "record of type " (Core.unName (Core.Name "unknown")))))),
       Context.inContextContext = cx})))
     _ -> (Left (Context.InContext {
       Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "record type") " but found ") (Core_.type_ typ)))),
@@ -491,8 +491,8 @@ unionType :: (Context.Context -> Core.Name -> Core.Type -> Either (Context.InCon
 unionType cx ename typ =  
   let stripped = (Rewriting.deannotateType typ)
   in ((\x -> case x of
-    Core.TypeUnion v0 -> (Logic.ifElse (Equality.equal (Core.rowTypeTypeName v0) ename) (Right (Core.rowTypeFields v0)) (Left (Context.InContext {
-      Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " (Strings.cat2 "union of type " (Core.unName ename))) " but found ") (Strings.cat2 "union of type " (Core.unName (Core.rowTypeTypeName v0)))))),
+    Core.TypeUnion v0 -> (Logic.ifElse (Equality.equal (Core.Name "unknown") ename) (Right (v0)) (Left (Context.InContext {
+      Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " (Strings.cat2 "union of type " (Core.unName ename))) " but found ") (Strings.cat2 "union of type " (Core.unName (Core.Name "unknown")))))),
       Context.inContextContext = cx})))
     _ -> (Left (Context.InContext {
       Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "union type") " but found ") (Core_.type_ typ)))),
@@ -525,8 +525,8 @@ wrappedType :: (Context.Context -> Core.Name -> Core.Type -> Either (Context.InC
 wrappedType cx ename typ =  
   let stripped = (Rewriting.deannotateType typ)
   in ((\x -> case x of
-    Core.TypeWrap v0 -> (Logic.ifElse (Equality.equal (Core.unName (Core.wrappedTypeTypeName v0)) (Core.unName ename)) (Right (Core.wrappedTypeBody v0)) (Left (Context.InContext {
-      Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " (Strings.cat2 "wrapped type " (Core.unName ename))) " but found ") (Strings.cat2 "wrapped type " (Core.unName (Core.wrappedTypeTypeName v0)))))),
+    Core.TypeWrap v0 -> (Logic.ifElse (Equality.equal (Core.unName (Core.Name "unknown")) (Core.unName ename)) (Right (v0)) (Left (Context.InContext {
+      Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " (Strings.cat2 "wrapped type " (Core.unName ename))) " but found ") (Strings.cat2 "wrapped type " (Core.unName (Core.Name "unknown")))))),
       Context.inContextContext = cx})))
     _ -> (Left (Context.InContext {
       Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "wrapped type") " but found ") (Core_.type_ typ)))),

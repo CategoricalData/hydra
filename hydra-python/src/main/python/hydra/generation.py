@@ -132,7 +132,7 @@ def decode_module(bs_graph, schema_map, do_strip_type_schemes, json_val):
     mod_type = TypeVariable(Name("hydra.module.Module"))
 
     # Step 1: Decode JSON to a Term using the schema map
-    json_result = json_decode.from_json(schema_map, mod_type, json_val)
+    json_result = json_decode.from_json(schema_map, Name("hydra.module.Module"), mod_type, json_val)
     match json_result:
         case Left(value=err):
             raise RuntimeError(f"Module JSON decode error: {err}")

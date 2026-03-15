@@ -53,7 +53,7 @@ public class PersistentSet<T> implements Set<T>, Serializable {
      * Builds a set from varargs. O(n log n).
      */
     @SafeVarargs
-    public static <T extends Comparable<T>> PersistentSet<T> of(T... elements) {
+    public static <T> PersistentSet<T> of(T... elements) {
         PersistentMap<T, Object> m = PersistentMap.empty();
         for (T elem : elements) {
             m = m.insert(elem, PRESENT);
@@ -64,7 +64,7 @@ public class PersistentSet<T> implements Set<T>, Serializable {
     /**
      * Builds a set from a list. O(n log n).
      */
-    public static <T extends Comparable<T>> PersistentSet<T> fromList(List<T> list) {
+    public static <T> PersistentSet<T> fromList(List<T> list) {
         PersistentMap<T, Object> m = PersistentMap.empty();
         for (T elem : list) {
             m = m.insert(elem, PRESENT);
@@ -75,7 +75,7 @@ public class PersistentSet<T> implements Set<T>, Serializable {
     /**
      * Builds a set from a ConsList. O(n log n).
      */
-    public static <T extends Comparable<T>> PersistentSet<T> fromConsList(ConsList<T> list) {
+    public static <T> PersistentSet<T> fromConsList(ConsList<T> list) {
         PersistentMap<T, Object> m = PersistentMap.empty();
         for (T elem : list) {
             m = m.insert(elem, PRESENT);
@@ -186,7 +186,7 @@ public class PersistentSet<T> implements Set<T>, Serializable {
      * Returns the union of multiple sets.
      */
     @SuppressWarnings("unchecked")
-    public static <T extends Comparable<T>> PersistentSet<T> unions(List<PersistentSet<T>> sets) {
+    public static <T> PersistentSet<T> unions(List<PersistentSet<T>> sets) {
         PersistentSet<T> result = empty();
         for (PersistentSet<T> set : sets) {
             result = result.union(set);

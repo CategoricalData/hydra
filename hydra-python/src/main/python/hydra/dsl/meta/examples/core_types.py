@@ -232,12 +232,6 @@ term: Binding = define("Term",
         T.field("variable", name),
         T.field("wrap", wrapped_term)]))
 
-# A labeled record or union type.
-row_type: Binding = define("RowType",
-    T.record([
-        T.field("typeName", name),
-        T.field("fields", T.list_(field_type))]))
-
 # A type together with an annotation.
 annotated_type: Binding = define("AnnotatedType",
     T.record([
@@ -280,12 +274,6 @@ map_type: Binding = define("MapType",
         T.field("keys", _Type),
         T.field("values", _Type)]))
 
-# A type wrapped in a type name; a newtype.
-wrapped_type: Binding = define("WrappedType",
-    T.record([
-        T.field("typeName", name),
-        T.field("body", _Type)]))
-
 # A data type.
 type: Binding = define("Type",
     T.union([
@@ -299,12 +287,12 @@ type: Binding = define("Type",
         T.field("map", map_type),
         T.field("maybe", _Type),
         T.field("pair", pair_type),
-        T.field("record", row_type),
+        T.field("record", T.list_(field_type)),
         T.field("set", _Type),
-        T.field("union", row_type),
+        T.field("union", T.list_(field_type)),
         T.field("unit", T.unit()),
         T.field("variable", name),
-        T.field("wrap", wrapped_type)]))
+        T.field("wrap", _Type)]))
 
 # =========================================================================
 # Module definition
@@ -338,15 +326,13 @@ elements = [
     name,
     projection,
     record,
-    row_type,
     term,
     type,
     type_application_term,
     type_lambda,
     type_scheme,
     type_variable_metadata,
-    wrapped_term,
-    wrapped_type]
+    wrapped_term]
 
 # Note: hydra.core uniquely takes itself as a type-level dependency.
 module = Module(

@@ -13,12 +13,10 @@ import hydra.core.LiteralType;
 import hydra.core.MapType;
 import hydra.core.Name;
 import hydra.core.PairType;
-import hydra.core.RowType;
 import hydra.core.Term;
 import hydra.core.Type;
 import hydra.core.TypeScheme;
 import hydra.core.TypeVariableMetadata;
-import hydra.core.WrappedType;
 import hydra.util.ConsList;
 import hydra.util.Maybe;
 import hydra.util.PersistentMap;
@@ -776,26 +774,6 @@ public interface Types {
     }
 
     /**
-     * Create a row type.
-     * @param name the row type name
-     * @param fields the list of fields
-     * @return the row type
-     */
-    static RowType row(Name name, List<FieldType> fields) {
-        return new RowType(name, ConsList.fromList(fields));
-    }
-
-    /**
-     * Create a row type from varargs.
-     * @param name the row type name
-     * @param fields the fields
-     * @return the row type
-     */
-    static RowType row(Name name, FieldType... fields) {
-        return new RowType(name, ConsList.of(fields));
-    }
-
-    /**
      * Create a record type with the given fields and the default type name.
      * Example: record(field("name", string()), field("age", int32()))
      * @param fields the fields
@@ -822,7 +800,7 @@ public interface Types {
      * @return the record type
      */
     static Type recordWithName(Name tname, List<FieldType> fields) {
-        return new Type.Record(row(tname, fields));
+        return new Type.Record(ConsList.fromList(fields));
     }
 
     /**
@@ -832,7 +810,7 @@ public interface Types {
      * @return the record type
      */
     static Type recordWithName(Name tname, FieldType... fields) {
-        return new Type.Record(row(tname, fields));
+        return new Type.Record(ConsList.of(fields));
     }
 
     /**
@@ -874,7 +852,7 @@ public interface Types {
      * @return the union type
      */
     static Type union(FieldType... fields) {
-        return new Type.Union(row(PLACEHOLDER_NAME, fields));
+        return new Type.Union(ConsList.of(fields));
     }
 
     /**
@@ -883,7 +861,7 @@ public interface Types {
      * @return the union type
      */
     static Type union(List<FieldType> fields) {
-        return new Type.Union(row(PLACEHOLDER_NAME, fields));
+        return new Type.Union(ConsList.fromList(fields));
     }
 
     /**
@@ -893,7 +871,7 @@ public interface Types {
      * @return the union type
      */
     static Type union(Name tname, FieldType... fields) {
-        return new Type.Union(row(tname, fields));
+        return new Type.Union(ConsList.of(fields));
     }
 
     /**
@@ -926,7 +904,7 @@ public interface Types {
      * @return the wrapped type
      */
     static Type wrapWithName(Name tname, Type t) {
-        return new Type.Wrap(new WrappedType(tname, t));
+        return new Type.Wrap(t);
     }
 
     /**

@@ -49,7 +49,7 @@ joinTypes cx left right comment =
           in  
             let joinList = (\lefts -> \rights -> Logic.ifElse (Equality.equal (Lists.length lefts) (Lists.length rights)) (Right (Lists.zipWith joinOne lefts rights)) cannotUnify)
             in  
-              let joinRowTypes = (\left -> \right -> Logic.ifElse (Logic.and (Equality.equal (Core.unName (Core.rowTypeTypeName left)) (Core.unName (Core.rowTypeTypeName right))) (Logic.and (Equality.equal (Lists.length (Lists.map Core.fieldTypeName (Core.rowTypeFields left))) (Lists.length (Lists.map Core.fieldTypeName (Core.rowTypeFields right)))) (Lists.foldl Logic.and True (Lists.zipWith (\left -> \right -> Equality.equal (Core.unName left) (Core.unName right)) (Lists.map Core.fieldTypeName (Core.rowTypeFields left)) (Lists.map Core.fieldTypeName (Core.rowTypeFields right)))))) (joinList (Lists.map Core.fieldTypeType (Core.rowTypeFields left)) (Lists.map Core.fieldTypeType (Core.rowTypeFields right))) cannotUnify)
+              let joinRowTypes = (\left -> \right -> Logic.ifElse (Logic.and (Equality.equal (Core.unName (Core.Name "unknown")) (Core.unName (Core.Name "unknown"))) (Logic.and (Equality.equal (Lists.length (Lists.map Core.fieldTypeName left)) (Lists.length (Lists.map Core.fieldTypeName right))) (Lists.foldl Logic.and True (Lists.zipWith (\left -> \right -> Equality.equal (Core.unName left) (Core.unName right)) (Lists.map Core.fieldTypeName left) (Lists.map Core.fieldTypeName right))))) (joinList (Lists.map Core.fieldTypeType left) (Lists.map Core.fieldTypeType right)) cannotUnify)
               in ((\x -> case x of
                 Core.TypeApplication v0 -> ((\x -> case x of
                   Core.TypeApplication v1 -> (Right [
@@ -99,8 +99,8 @@ joinTypes cx left right comment =
                   Core.TypeUnit -> (Right [])
                   _ -> cannotUnify) sright)
                 Core.TypeWrap v0 -> ((\x -> case x of
-                  Core.TypeWrap v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.wrappedTypeTypeName v0)) (Core.unName (Core.wrappedTypeTypeName v1))) (Right [
-                    joinOne (Core.wrappedTypeBody v0) (Core.wrappedTypeBody v1)]) cannotUnify)
+                  Core.TypeWrap v1 -> (Logic.ifElse (Equality.equal (Core.unName (Core.Name "unknown")) (Core.unName (Core.Name "unknown"))) (Right [
+                    joinOne v0 v1]) cannotUnify)
                   _ -> cannotUnify) sright)
                 _ -> cannotUnify) sleft)
 

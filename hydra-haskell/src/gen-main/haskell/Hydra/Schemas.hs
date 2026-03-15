@@ -189,8 +189,8 @@ fieldTypes cx graph t =
   let toMap = (\fields -> Maps.fromList (Lists.map (\ft -> (Core.fieldTypeName ft, (Core.fieldTypeType ft))) fields))
   in ((\x -> case x of
     Core.TypeForall v0 -> (fieldTypes cx graph (Core.forallTypeBody v0))
-    Core.TypeRecord v0 -> (Right (toMap (Core.rowTypeFields v0)))
-    Core.TypeUnion v0 -> (Right (toMap (Core.rowTypeFields v0)))
+    Core.TypeRecord v0 -> (Right (toMap v0))
+    Core.TypeUnion v0 -> (Right (toMap v0))
     Core.TypeVariable v0 -> (Eithers.bind (Lexical.requireElement cx graph v0) (\el -> Eithers.bind (Eithers.bimap (\_wc_e -> Context.InContext {
       Context.inContextObject = _wc_e,
       Context.inContextContext = cx}) (\_wc_a -> _wc_a) (Eithers.bimap (\_e -> Error.ErrorOther (Error.OtherError (Error.unDecodingError _e))) (\_a -> _a) (Core_.type_ graph (Core.bindingTerm el)))) (\decodedType -> fieldTypes cx graph decodedType)))
@@ -323,8 +323,8 @@ isEncodedType t = ((\x -> case x of
   _ -> False) (Rewriting.deannotateTerm t))
 
 -- | Check if a row type represents an enum (all fields are unit-typed)
-isEnumRowType :: (Core.RowType -> Bool)
-isEnumRowType rt = (Lists.foldl Logic.and True (Lists.map (\f -> isUnitType (Rewriting.deannotateType (Core.fieldTypeType f))) (Core.rowTypeFields rt)))
+isEnumRowType :: ([Core.FieldType] -> Bool)
+isEnumRowType rt = (Lists.foldl Logic.and True (Lists.map (\f -> isUnitType (Rewriting.deannotateType (Core.fieldTypeType f))) rt))
 
 -- | Check if a type is an enum type
 isEnumType :: (Core.Type -> Bool)
@@ -359,7 +359,7 @@ isType :: (Core.Type -> Bool)
 isType t = ((\x -> case x of
   Core.TypeApplication v0 -> (isType (Core.applicationTypeFunction v0))
   Core.TypeForall v0 -> (isType (Core.forallTypeBody v0))
-  Core.TypeUnion v0 -> (Equality.equal "hydra.core.Type" (Core.unName (Core.rowTypeTypeName v0)))
+  Core.TypeUnion v0 -> (Equality.equal "hydra.core.Type" (Core.unName (Core.Name "unknown")))
   Core.TypeVariable v0 -> (Equality.equal v0 (Core.Name "hydra.core.Type"))
   _ -> False) (Rewriting.deannotateType t))
 
@@ -424,7 +424,7 @@ partitionDefinitions defs =
     in (Maybes.cat (Lists.map getType defs), (Maybes.cat (Lists.map getTerm defs)))
 
 -- | Require a name to resolve to a record type
-requireRecordType :: (Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Error.Error) Core.RowType)
+requireRecordType :: (Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Error.Error) [Core.FieldType])
 requireRecordType cx graph name =  
   let toRecord = (\t -> (\x -> case x of
           Core.TypeRecord v0 -> (Just v0)
@@ -467,7 +467,7 @@ requireType cx graph name = (Maybes.maybe (Maybes.maybe (Left (Context.InContext
 requireUnionField :: (Context.Context -> Graph.Graph -> Core.Name -> Core.Name -> Either (Context.InContext Error.Error) Core.Type)
 requireUnionField cx graph tname fname =  
   let withRowType = (\rt ->  
-          let matches = (Lists.filter (\ft -> Equality.equal (Core.fieldTypeName ft) fname) (Core.rowTypeFields rt))
+          let matches = (Lists.filter (\ft -> Equality.equal (Core.fieldTypeName ft) fname) rt)
           in (Logic.ifElse (Lists.null matches) (Left (Context.InContext {
             Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat [
               "no field \"",
@@ -478,7 +478,7 @@ requireUnionField cx graph tname fname =
   in (Eithers.bind (requireUnionType cx graph tname) withRowType)
 
 -- | Require a name to resolve to a union type
-requireUnionType :: (Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Error.Error) Core.RowType)
+requireUnionType :: (Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Error.Error) [Core.FieldType])
 requireUnionType cx graph name =  
   let toUnion = (\t -> (\x -> case x of
           Core.TypeUnion v0 -> (Just v0)

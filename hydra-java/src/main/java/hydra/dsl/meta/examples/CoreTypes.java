@@ -298,14 +298,6 @@ public interface CoreTypes {
             Types.field("wrap", wrappedTerm)));
 
     /**
-     * A labeled record or union type.
-     */
-    Binding rowType = define("RowType",
-        Types.record(
-            Types.field("typeName", name),
-            Types.field("fields", Types.list(fieldType))));
-
-    /**
      * A type together with an annotation.
      */
     Binding annotatedType = define("AnnotatedType",
@@ -362,14 +354,6 @@ public interface CoreTypes {
             Types.field("values", _Type)));
 
     /**
-     * A type wrapped in a type name; a newtype.
-     */
-    Binding wrappedType = define("WrappedType",
-        Types.record(
-            Types.field("typeName", name),
-            Types.field("body", _Type)));
-
-    /**
      * A data type.
      */
     Binding type = define("Type",
@@ -384,12 +368,12 @@ public interface CoreTypes {
             Types.field("map", mapType),
             Types.field("maybe", _Type),
             Types.field("pair", pairType),
-            Types.field("record", rowType),
+            Types.field("record", Types.list(fieldType)),
             Types.field("set", _Type),
-            Types.field("union", rowType),
+            Types.field("union", Types.list(fieldType)),
             Types.field("unit", Types.unit()),
             Types.field("variable", name),
-            Types.field("wrap", wrappedType)));
+            Types.field("wrap", _Type)));
 
     // =========================================================================
     // Module definition
@@ -426,15 +410,13 @@ public interface CoreTypes {
         name,
         projection,
         record,
-        rowType,
         term,
         type,
         typeApplicationTerm,
         typeLambda,
         typeScheme,
         typeVariableMetadata,
-        wrappedTerm,
-        wrappedType);
+        wrappedTerm);
 
     /**
      * The hydra.core module, containing all core type definitions.

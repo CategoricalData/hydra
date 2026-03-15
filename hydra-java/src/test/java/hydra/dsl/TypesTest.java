@@ -3,7 +3,6 @@ package hydra.dsl;
 import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.Type;
-import hydra.core.WrappedType;
 import org.junit.jupiter.api.Test;
 
 import static hydra.dsl.Core.fieldName;
@@ -51,12 +50,10 @@ public class TypesTest {
     @Test
     public void constructedTypesAreAsExpected() {
         assertTrue(latLonType instanceof Type.Record);
-        assertEquals(name("LatLon"), ((Type.Record) latLonType).value.typeName);
-        assertEquals(fieldName("lat"), ((Type.Record) latLonType).value.fields.get(0).name);
+        assertEquals(fieldName("lat"), ((Type.Record) latLonType).value.get(0).name);
 
         assertTrue(locationType instanceof Type.Union);
-        assertEquals(name("Location"), ((Type.Union) locationType).value.typeName);
-        assertEquals(fieldName("latlon"), ((Type.Union) locationType).value.fields.get(1).name);
+        assertEquals(fieldName("latlon"), ((Type.Union) locationType).value.get(1).name);
 
         assertTrue(stringToIntType instanceof Type.Function);
         assertEquals(string(), ((Type.Function) stringToIntType).value.domain);
@@ -64,7 +61,7 @@ public class TypesTest {
 
         assertTrue(pairOfLatLonsToFloatType instanceof Type.Function);
         assertTrue(((Type.Function) pairOfLatLonsToFloatType).value.domain instanceof Type.Wrap);
-        assertEquals(new WrappedType(name("LatLon"), float32()),
+        assertEquals(float32(),
                 ((Type.Wrap) ((Type.Function) pairOfLatLonsToFloatType).value.domain).value);
 
         assertTrue(annotatedType instanceof Type.Annotated);
@@ -78,12 +75,12 @@ public class TypesTest {
         Type.PartialVisitor<Integer> countFields = new Type.PartialVisitor<Integer>() {
             @Override
             public Integer visit(Type.Record instance) {
-                return instance.value.fields.size();
+                return instance.value.size();
             }
 
             @Override
             public Integer visit(Type.Union instance) {
-                return instance.value.fields.size();
+                return instance.value.size();
             }
 
             @Override
