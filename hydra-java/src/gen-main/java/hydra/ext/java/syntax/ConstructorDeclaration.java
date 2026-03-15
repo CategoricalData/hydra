@@ -15,7 +15,7 @@ public class ConstructorDeclaration implements Serializable, Comparable<Construc
   
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
-  public final java.util.List<hydra.ext.java.syntax.ConstructorModifier> modifiers;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.ConstructorModifier> modifiers;
   
   public final hydra.ext.java.syntax.ConstructorDeclarator constructor;
   
@@ -23,7 +23,7 @@ public class ConstructorDeclaration implements Serializable, Comparable<Construc
   
   public final hydra.ext.java.syntax.ConstructorBody body;
   
-  public ConstructorDeclaration (java.util.List<hydra.ext.java.syntax.ConstructorModifier> modifiers, hydra.ext.java.syntax.ConstructorDeclarator constructor, hydra.util.Maybe<hydra.ext.java.syntax.Throws> throws_, hydra.ext.java.syntax.ConstructorBody body) {
+  public ConstructorDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.ConstructorModifier> modifiers, hydra.ext.java.syntax.ConstructorDeclarator constructor, hydra.util.Maybe<hydra.ext.java.syntax.Throws> throws_, hydra.ext.java.syntax.ConstructorBody body) {
     this.modifiers = modifiers;
     this.constructor = constructor;
     this.throws_ = throws_;
@@ -75,7 +75,7 @@ public class ConstructorDeclaration implements Serializable, Comparable<Construc
     return ((Comparable) body).compareTo(other.body);
   }
   
-  public ConstructorDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.ConstructorModifier> modifiers) {
+  public ConstructorDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.ConstructorModifier> modifiers) {
     return new ConstructorDeclaration(modifiers, constructor, throws_, body);
   }
   

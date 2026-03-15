@@ -13,13 +13,13 @@ public class SubClassOf implements Serializable, Comparable<SubClassOf> {
   
   public static final hydra.core.Name SUPER_CLASS = new hydra.core.Name("superClass");
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
   public final hydra.ext.org.w3.owl.syntax.ClassExpression subClass;
   
   public final hydra.ext.org.w3.owl.syntax.ClassExpression superClass;
   
-  public SubClassOf (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ClassExpression subClass, hydra.ext.org.w3.owl.syntax.ClassExpression superClass) {
+  public SubClassOf (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ClassExpression subClass, hydra.ext.org.w3.owl.syntax.ClassExpression superClass) {
     this.annotations = annotations;
     this.subClass = subClass;
     this.superClass = superClass;
@@ -62,7 +62,7 @@ public class SubClassOf implements Serializable, Comparable<SubClassOf> {
     return ((Comparable) superClass).compareTo(other.superClass);
   }
   
-  public SubClassOf withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public SubClassOf withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new SubClassOf(annotations, subClass, superClass);
   }
   

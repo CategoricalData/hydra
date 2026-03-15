@@ -15,11 +15,11 @@ public class MethodReference_ReferenceType implements Serializable, Comparable<M
   
   public final hydra.ext.java.syntax.ReferenceType referenceType;
   
-  public final java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments;
   
   public final hydra.ext.java.syntax.Identifier identifier;
   
-  public MethodReference_ReferenceType (hydra.ext.java.syntax.ReferenceType referenceType, java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.Identifier identifier) {
+  public MethodReference_ReferenceType (hydra.ext.java.syntax.ReferenceType referenceType, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.Identifier identifier) {
     this.referenceType = referenceType;
     this.typeArguments = typeArguments;
     this.identifier = identifier;
@@ -66,7 +66,7 @@ public class MethodReference_ReferenceType implements Serializable, Comparable<M
     return new MethodReference_ReferenceType(referenceType, typeArguments, identifier);
   }
   
-  public MethodReference_ReferenceType withTypeArguments(java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments) {
+  public MethodReference_ReferenceType withTypeArguments(hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments) {
     return new MethodReference_ReferenceType(referenceType, typeArguments, identifier);
   }
   

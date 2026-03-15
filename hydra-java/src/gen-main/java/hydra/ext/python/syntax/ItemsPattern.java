@@ -9,9 +9,9 @@ public class ItemsPattern implements Serializable, Comparable<ItemsPattern> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.python.syntax.KeyValuePattern> value;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.KeyValuePattern> value;
   
-  public ItemsPattern (java.util.List<hydra.ext.python.syntax.KeyValuePattern> value) {
+  public ItemsPattern (hydra.util.ConsList<hydra.ext.python.syntax.KeyValuePattern> value) {
     this.value = value;
   }
   

@@ -87,9 +87,9 @@ public abstract class Assertion implements Serializable, Comparable<Assertion> {
    * A tuple of assertions
    */
   public static final class Tuple extends hydra.ext.haskell.ast.Assertion implements Serializable {
-    public final java.util.List<hydra.ext.haskell.ast.Assertion> value;
+    public final hydra.util.ConsList<hydra.ext.haskell.ast.Assertion> value;
     
-    public Tuple (java.util.List<hydra.ext.haskell.ast.Assertion> value) {
+    public Tuple (hydra.util.ConsList<hydra.ext.haskell.ast.Assertion> value) {
       this.value = value;
     }
     

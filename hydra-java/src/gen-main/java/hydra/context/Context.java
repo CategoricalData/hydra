@@ -19,19 +19,19 @@ public class Context implements Serializable, Comparable<Context> {
   /**
    * A stack of context labels describing the current execution path
    */
-  public final java.util.List<String> trace;
+  public final hydra.util.ConsList<String> trace;
   
   /**
    * A log of warnings and/or info messages
    */
-  public final java.util.List<String> messages;
+  public final hydra.util.ConsList<String> messages;
   
   /**
    * A map of string keys to arbitrary terms as values, for application-specific use
    */
-  public final java.util.Map<hydra.core.Name, hydra.core.Term> other;
+  public final hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> other;
   
-  public Context (java.util.List<String> trace, java.util.List<String> messages, java.util.Map<hydra.core.Name, hydra.core.Term> other) {
+  public Context (hydra.util.ConsList<String> trace, hydra.util.ConsList<String> messages, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> other) {
     this.trace = trace;
     this.messages = messages;
     this.other = other;
@@ -78,15 +78,15 @@ public class Context implements Serializable, Comparable<Context> {
       other.other.hashCode());
   }
   
-  public Context withTrace(java.util.List<String> trace) {
+  public Context withTrace(hydra.util.ConsList<String> trace) {
     return new Context(trace, messages, other);
   }
   
-  public Context withMessages(java.util.List<String> messages) {
+  public Context withMessages(hydra.util.ConsList<String> messages) {
     return new Context(trace, messages, other);
   }
   
-  public Context withOther(java.util.Map<hydra.core.Name, hydra.core.Term> other) {
+  public Context withOther(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> other) {
     return new Context(trace, messages, other);
   }
 }

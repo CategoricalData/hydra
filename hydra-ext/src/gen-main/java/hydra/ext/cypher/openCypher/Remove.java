@@ -9,9 +9,9 @@ public class Remove implements Serializable, Comparable<Remove> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.cypher.openCypher.RemoveItem> value;
+  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.RemoveItem> value;
   
-  public Remove (java.util.List<hydra.ext.cypher.openCypher.RemoveItem> value) {
+  public Remove (hydra.util.ConsList<hydra.ext.cypher.openCypher.RemoveItem> value) {
     this.value = value;
   }
   

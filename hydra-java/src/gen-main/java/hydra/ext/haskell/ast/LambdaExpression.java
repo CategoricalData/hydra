@@ -17,14 +17,14 @@ public class LambdaExpression implements Serializable, Comparable<LambdaExpressi
   /**
    * The patterns binding parameters
    */
-  public final java.util.List<hydra.ext.haskell.ast.Pattern> bindings;
+  public final hydra.util.ConsList<hydra.ext.haskell.ast.Pattern> bindings;
   
   /**
    * The body of the lambda
    */
   public final hydra.ext.haskell.ast.Expression inner;
   
-  public LambdaExpression (java.util.List<hydra.ext.haskell.ast.Pattern> bindings, hydra.ext.haskell.ast.Expression inner) {
+  public LambdaExpression (hydra.util.ConsList<hydra.ext.haskell.ast.Pattern> bindings, hydra.ext.haskell.ast.Expression inner) {
     this.bindings = bindings;
     this.inner = inner;
   }
@@ -60,7 +60,7 @@ public class LambdaExpression implements Serializable, Comparable<LambdaExpressi
     return ((Comparable) inner).compareTo(other.inner);
   }
   
-  public LambdaExpression withBindings(java.util.List<hydra.ext.haskell.ast.Pattern> bindings) {
+  public LambdaExpression withBindings(hydra.util.ConsList<hydra.ext.haskell.ast.Pattern> bindings) {
     return new LambdaExpression(bindings, inner);
   }
   

@@ -13,13 +13,13 @@ public class AnnotationTypeDeclaration implements Serializable, Comparable<Annot
   
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
-  public final java.util.List<hydra.ext.java.syntax.InterfaceModifier> modifiers;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.InterfaceModifier> modifiers;
   
   public final hydra.ext.java.syntax.TypeIdentifier identifier;
   
   public final hydra.ext.java.syntax.AnnotationTypeBody body;
   
-  public AnnotationTypeDeclaration (java.util.List<hydra.ext.java.syntax.InterfaceModifier> modifiers, hydra.ext.java.syntax.TypeIdentifier identifier, hydra.ext.java.syntax.AnnotationTypeBody body) {
+  public AnnotationTypeDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.InterfaceModifier> modifiers, hydra.ext.java.syntax.TypeIdentifier identifier, hydra.ext.java.syntax.AnnotationTypeBody body) {
     this.modifiers = modifiers;
     this.identifier = identifier;
     this.body = body;
@@ -62,7 +62,7 @@ public class AnnotationTypeDeclaration implements Serializable, Comparable<Annot
     return ((Comparable) body).compareTo(other.body);
   }
   
-  public AnnotationTypeDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.InterfaceModifier> modifiers) {
+  public AnnotationTypeDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.InterfaceModifier> modifiers) {
     return new AnnotationTypeDeclaration(modifiers, identifier, body);
   }
   

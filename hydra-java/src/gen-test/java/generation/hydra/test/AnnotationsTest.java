@@ -18,7 +18,7 @@ public class AnnotationsTest {
 
         assertEquals(
 
-            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.String_("foo")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.String_("foo")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
   new hydra.core.Name("k1"),
   new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))))))),
 
@@ -35,7 +35,7 @@ public class AnnotationsTest {
 
         assertEquals(
 
-            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.String_("bar")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.String_("bar")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
   new hydra.core.Name("myKey"),
   new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(-17))))))),
 
@@ -52,7 +52,7 @@ public class AnnotationsTest {
 
         assertEquals(
 
-            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(0))), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(0))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
   new hydra.core.Name("x"),
   new hydra.core.Term.Literal(new hydra.core.Literal.String_("hello")))))),
 
@@ -165,11 +165,11 @@ public class AnnotationsTest {
 
         assertEquals(
 
-            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(true)), java.util.Map.ofEntries(
-  java.util.Map.entry(
+            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(true)), hydra.util.PersistentMap.ofEntries(
+  hydra.util.PersistentMap.entry(
     new hydra.core.Name("k1"),
     new hydra.core.Term.Literal(new hydra.core.Literal.String_("first"))),
-  java.util.Map.entry(
+  hydra.util.PersistentMap.entry(
     new hydra.core.Name("k2"),
     new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(200))))))),
 
@@ -189,11 +189,11 @@ public class AnnotationsTest {
 
         assertEquals(
 
-            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.String_("test")), java.util.Map.ofEntries(
-  java.util.Map.entry(
+            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.String_("test")), hydra.util.PersistentMap.ofEntries(
+  hydra.util.PersistentMap.entry(
     new hydra.core.Name("a"),
     new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(-5)))),
-  java.util.Map.entry(
+  hydra.util.PersistentMap.entry(
     new hydra.core.Name("b"),
     new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(0))))))),
 
@@ -213,7 +213,7 @@ public class AnnotationsTest {
 
         assertEquals(
 
-            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.String_("bar")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.String_("bar")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
   new hydra.core.Name("k1"),
   new hydra.core.Term.Literal(new hydra.core.Literal.String_("outer")))))),
 
@@ -233,7 +233,7 @@ public class AnnotationsTest {
 
         assertEquals(
 
-            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
   new hydra.core.Name("x"),
   new hydra.core.Term.Literal(new hydra.core.Literal.String_("new")))))),
 
@@ -253,7 +253,7 @@ public class AnnotationsTest {
 
         assertEquals(
 
-            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(false)), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(false)), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
   new hydra.core.Name("key"),
   new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(999))))))),
 
@@ -309,7 +309,7 @@ public class AnnotationsTest {
 
         assertEquals(
 
-            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int64((long) (137)))), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int64((long) (137)))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
   new hydra.core.Name("k2"),
   new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(200))))))),
 
@@ -332,7 +332,7 @@ public class AnnotationsTest {
 
         assertEquals(
 
-            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.String_("x")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.String_("x")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
   new hydra.core.Name("a"),
   new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(1))))))),
 
@@ -357,7 +357,7 @@ public class AnnotationsTest {
 
         assertEquals(
 
-            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.String_("foo")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.String_("foo")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
   new hydra.core.Name("description"),
   new hydra.core.Term.Literal(new hydra.core.Literal.String_("my description")))))),
 
@@ -373,7 +373,7 @@ public class AnnotationsTest {
 
         assertEquals(
 
-            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
   new hydra.core.Name("description"),
   new hydra.core.Term.Literal(new hydra.core.Literal.String_("")))))),
 
@@ -389,7 +389,7 @@ public class AnnotationsTest {
 
         assertEquals(
 
-            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(true)), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Boolean_(true)), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
   new hydra.core.Name("description"),
   new hydra.core.Term.Literal(new hydra.core.Literal.String_("A longer description with spaces")))))),
 
@@ -501,7 +501,7 @@ public class AnnotationsTest {
 
         assertEquals(
 
-            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.String_("bar")), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.String_("bar")), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
   new hydra.core.Name("description"),
   new hydra.core.Term.Literal(new hydra.core.Literal.String_("outer")))))),
 
@@ -519,7 +519,7 @@ public class AnnotationsTest {
 
         assertEquals(
 
-            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(99))), java.util.Map.ofEntries(java.util.Map.entry(
+            new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(99))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
   new hydra.core.Name("description"),
   new hydra.core.Term.Literal(new hydra.core.Literal.String_("new")))))),
 
@@ -589,7 +589,7 @@ public class AnnotationsTest {
 
             hydra.annotations.Annotations.getTermAnnotation(
   new hydra.core.Name("one"),
-  new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))), java.util.Map.ofEntries(java.util.Map.entry(
+  new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
     new hydra.core.Name("one"),
     new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(1)))))))));
 
@@ -605,9 +605,9 @@ public class AnnotationsTest {
 
             hydra.annotations.Annotations.getTermAnnotation(
   new hydra.core.Name("one"),
-  new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))), java.util.Map.ofEntries(java.util.Map.entry(
+  new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
     new hydra.core.Name("one"),
-    new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(1))))))), java.util.Map.ofEntries(java.util.Map.entry(
+    new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(1))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
     new hydra.core.Name("two"),
     new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(2)))))))));
 
@@ -623,9 +623,9 @@ public class AnnotationsTest {
 
             hydra.annotations.Annotations.getTermAnnotation(
   new hydra.core.Name("two"),
-  new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))), java.util.Map.ofEntries(java.util.Map.entry(
+  new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
     new hydra.core.Name("one"),
-    new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(1))))))), java.util.Map.ofEntries(java.util.Map.entry(
+    new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(1))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
     new hydra.core.Name("two"),
     new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(2)))))))));
 
@@ -641,11 +641,11 @@ public class AnnotationsTest {
 
             hydra.annotations.Annotations.getTermAnnotation(
   new hydra.core.Name("two"),
-  new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))), java.util.Map.ofEntries(java.util.Map.entry(
+  new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
     new hydra.core.Name("one"),
-    new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(1))))))), java.util.Map.ofEntries(java.util.Map.entry(
+    new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(1))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
     new hydra.core.Name("two"),
-    new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(2))))))), java.util.Map.ofEntries(java.util.Map.entry(
+    new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(2))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
     new hydra.core.Name("one"),
     new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(99)))))))));
 
@@ -661,11 +661,11 @@ public class AnnotationsTest {
 
             hydra.annotations.Annotations.getTermAnnotation(
   new hydra.core.Name("one"),
-  new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))), java.util.Map.ofEntries(java.util.Map.entry(
+  new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(42))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
     new hydra.core.Name("one"),
-    new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(1))))))), java.util.Map.ofEntries(java.util.Map.entry(
+    new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(1))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
     new hydra.core.Name("two"),
-    new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(2))))))), java.util.Map.ofEntries(java.util.Map.entry(
+    new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(2))))))), hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
     new hydra.core.Name("one"),
     new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(99)))))))));
 

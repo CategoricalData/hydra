@@ -15,15 +15,15 @@ public class ShapeDefinition implements Serializable, Comparable<ShapeDefinition
   
   public static final hydra.core.Name SEMANTIC_ACTIONS = new hydra.core.Name("SemanticActions");
   
-  public final java.util.List<hydra.ext.io.shex.syntax.ShapeDefinition_ListOfAlts_Elmt> listOfAlts;
+  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.ShapeDefinition_ListOfAlts_Elmt> listOfAlts;
   
   public final hydra.util.Maybe<hydra.ext.io.shex.syntax.TripleExpression> TripleExpression;
   
-  public final java.util.List<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation;
+  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation;
   
   public final hydra.ext.io.shex.syntax.SemanticActions SemanticActions;
   
-  public ShapeDefinition (java.util.List<hydra.ext.io.shex.syntax.ShapeDefinition_ListOfAlts_Elmt> listOfAlts, hydra.util.Maybe<hydra.ext.io.shex.syntax.TripleExpression> TripleExpression, java.util.List<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation, hydra.ext.io.shex.syntax.SemanticActions SemanticActions) {
+  public ShapeDefinition (hydra.util.ConsList<hydra.ext.io.shex.syntax.ShapeDefinition_ListOfAlts_Elmt> listOfAlts, hydra.util.Maybe<hydra.ext.io.shex.syntax.TripleExpression> TripleExpression, hydra.util.ConsList<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation, hydra.ext.io.shex.syntax.SemanticActions SemanticActions) {
     this.listOfAlts = listOfAlts;
     this.TripleExpression = TripleExpression;
     this.listOfAnnotation = listOfAnnotation;
@@ -77,7 +77,7 @@ public class ShapeDefinition implements Serializable, Comparable<ShapeDefinition
     return ((Comparable) SemanticActions).compareTo(other.SemanticActions);
   }
   
-  public ShapeDefinition withListOfAlts(java.util.List<hydra.ext.io.shex.syntax.ShapeDefinition_ListOfAlts_Elmt> listOfAlts) {
+  public ShapeDefinition withListOfAlts(hydra.util.ConsList<hydra.ext.io.shex.syntax.ShapeDefinition_ListOfAlts_Elmt> listOfAlts) {
     return new ShapeDefinition(listOfAlts, TripleExpression, listOfAnnotation, SemanticActions);
   }
   
@@ -85,7 +85,7 @@ public class ShapeDefinition implements Serializable, Comparable<ShapeDefinition
     return new ShapeDefinition(listOfAlts, TripleExpression, listOfAnnotation, SemanticActions);
   }
   
-  public ShapeDefinition withListOfAnnotation(java.util.List<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation) {
+  public ShapeDefinition withListOfAnnotation(hydra.util.ConsList<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation) {
     return new ShapeDefinition(listOfAlts, TripleExpression, listOfAnnotation, SemanticActions);
   }
   

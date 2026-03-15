@@ -13,13 +13,13 @@ public class SinglePartQuery implements Serializable, Comparable<SinglePartQuery
   
   public static final hydra.core.Name RETURN = new hydra.core.Name("return");
   
-  public final java.util.List<hydra.ext.cypher.openCypher.ReadingClause> reading;
+  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.ReadingClause> reading;
   
-  public final java.util.List<hydra.ext.cypher.openCypher.UpdatingClause> updating;
+  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.UpdatingClause> updating;
   
   public final hydra.util.Maybe<hydra.ext.cypher.openCypher.Return> return_;
   
-  public SinglePartQuery (java.util.List<hydra.ext.cypher.openCypher.ReadingClause> reading, java.util.List<hydra.ext.cypher.openCypher.UpdatingClause> updating, hydra.util.Maybe<hydra.ext.cypher.openCypher.Return> return_) {
+  public SinglePartQuery (hydra.util.ConsList<hydra.ext.cypher.openCypher.ReadingClause> reading, hydra.util.ConsList<hydra.ext.cypher.openCypher.UpdatingClause> updating, hydra.util.Maybe<hydra.ext.cypher.openCypher.Return> return_) {
     this.reading = reading;
     this.updating = updating;
     this.return_ = return_;
@@ -66,11 +66,11 @@ public class SinglePartQuery implements Serializable, Comparable<SinglePartQuery
       other.return_.hashCode());
   }
   
-  public SinglePartQuery withReading(java.util.List<hydra.ext.cypher.openCypher.ReadingClause> reading) {
+  public SinglePartQuery withReading(hydra.util.ConsList<hydra.ext.cypher.openCypher.ReadingClause> reading) {
     return new SinglePartQuery(reading, updating, return_);
   }
   
-  public SinglePartQuery withUpdating(java.util.List<hydra.ext.cypher.openCypher.UpdatingClause> updating) {
+  public SinglePartQuery withUpdating(hydra.util.ConsList<hydra.ext.cypher.openCypher.UpdatingClause> updating) {
     return new SinglePartQuery(reading, updating, return_);
   }
   

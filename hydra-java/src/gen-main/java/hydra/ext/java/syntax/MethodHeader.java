@@ -15,7 +15,7 @@ public class MethodHeader implements Serializable, Comparable<MethodHeader> {
   
   public static final hydra.core.Name THROWS = new hydra.core.Name("throws");
   
-  public final java.util.List<hydra.ext.java.syntax.TypeParameter> parameters;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> parameters;
   
   public final hydra.ext.java.syntax.Result result;
   
@@ -23,7 +23,7 @@ public class MethodHeader implements Serializable, Comparable<MethodHeader> {
   
   public final hydra.util.Maybe<hydra.ext.java.syntax.Throws> throws_;
   
-  public MethodHeader (java.util.List<hydra.ext.java.syntax.TypeParameter> parameters, hydra.ext.java.syntax.Result result, hydra.ext.java.syntax.MethodDeclarator declarator, hydra.util.Maybe<hydra.ext.java.syntax.Throws> throws_) {
+  public MethodHeader (hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> parameters, hydra.ext.java.syntax.Result result, hydra.ext.java.syntax.MethodDeclarator declarator, hydra.util.Maybe<hydra.ext.java.syntax.Throws> throws_) {
     this.parameters = parameters;
     this.result = result;
     this.declarator = declarator;
@@ -75,7 +75,7 @@ public class MethodHeader implements Serializable, Comparable<MethodHeader> {
       other.throws_.hashCode());
   }
   
-  public MethodHeader withParameters(java.util.List<hydra.ext.java.syntax.TypeParameter> parameters) {
+  public MethodHeader withParameters(hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> parameters) {
     return new MethodHeader(parameters, result, declarator, throws_);
   }
   

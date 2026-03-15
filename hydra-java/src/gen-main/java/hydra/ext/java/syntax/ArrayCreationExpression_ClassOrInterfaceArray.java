@@ -15,11 +15,11 @@ public class ArrayCreationExpression_ClassOrInterfaceArray implements Serializab
   
   public final hydra.ext.java.syntax.ClassOrInterfaceType type;
   
-  public final java.util.List<hydra.ext.java.syntax.Dims> dims;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.Dims> dims;
   
   public final hydra.ext.java.syntax.ArrayInitializer array;
   
-  public ArrayCreationExpression_ClassOrInterfaceArray (hydra.ext.java.syntax.ClassOrInterfaceType type, java.util.List<hydra.ext.java.syntax.Dims> dims, hydra.ext.java.syntax.ArrayInitializer array) {
+  public ArrayCreationExpression_ClassOrInterfaceArray (hydra.ext.java.syntax.ClassOrInterfaceType type, hydra.util.ConsList<hydra.ext.java.syntax.Dims> dims, hydra.ext.java.syntax.ArrayInitializer array) {
     this.type = type;
     this.dims = dims;
     this.array = array;
@@ -66,7 +66,7 @@ public class ArrayCreationExpression_ClassOrInterfaceArray implements Serializab
     return new ArrayCreationExpression_ClassOrInterfaceArray(type, dims, array);
   }
   
-  public ArrayCreationExpression_ClassOrInterfaceArray withDims(java.util.List<hydra.ext.java.syntax.Dims> dims) {
+  public ArrayCreationExpression_ClassOrInterfaceArray withDims(hydra.util.ConsList<hydra.ext.java.syntax.Dims> dims) {
     return new ArrayCreationExpression_ClassOrInterfaceArray(type, dims, array);
   }
   

@@ -13,9 +13,9 @@ public class ExplicitProcedureInvocation implements Serializable, Comparable<Exp
   
   public final hydra.ext.cypher.openCypher.QualifiedName name;
   
-  public final java.util.List<hydra.ext.cypher.openCypher.Expression> arguments;
+  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.Expression> arguments;
   
-  public ExplicitProcedureInvocation (hydra.ext.cypher.openCypher.QualifiedName name, java.util.List<hydra.ext.cypher.openCypher.Expression> arguments) {
+  public ExplicitProcedureInvocation (hydra.ext.cypher.openCypher.QualifiedName name, hydra.util.ConsList<hydra.ext.cypher.openCypher.Expression> arguments) {
     this.name = name;
     this.arguments = arguments;
   }
@@ -55,7 +55,7 @@ public class ExplicitProcedureInvocation implements Serializable, Comparable<Exp
     return new ExplicitProcedureInvocation(name, arguments);
   }
   
-  public ExplicitProcedureInvocation withArguments(java.util.List<hydra.ext.cypher.openCypher.Expression> arguments) {
+  public ExplicitProcedureInvocation withArguments(hydra.util.ConsList<hydra.ext.cypher.openCypher.Expression> arguments) {
     return new ExplicitProcedureInvocation(name, arguments);
   }
 }

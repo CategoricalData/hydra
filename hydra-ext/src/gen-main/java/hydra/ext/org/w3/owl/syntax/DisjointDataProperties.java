@@ -11,11 +11,11 @@ public class DisjointDataProperties implements Serializable, Comparable<Disjoint
   
   public static final hydra.core.Name PROPERTIES = new hydra.core.Name("properties");
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> properties;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> properties;
   
-  public DisjointDataProperties (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, java.util.List<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> properties) {
+  public DisjointDataProperties (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> properties) {
     this.annotations = annotations;
     this.properties = properties;
   }
@@ -53,11 +53,11 @@ public class DisjointDataProperties implements Serializable, Comparable<Disjoint
       other.properties.hashCode());
   }
   
-  public DisjointDataProperties withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public DisjointDataProperties withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new DisjointDataProperties(annotations, properties);
   }
   
-  public DisjointDataProperties withProperties(java.util.List<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> properties) {
+  public DisjointDataProperties withProperties(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> properties) {
     return new DisjointDataProperties(annotations, properties);
   }
 }

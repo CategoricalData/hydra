@@ -13,13 +13,13 @@ public class ExplicitConstructorInvocation implements Serializable, Comparable<E
   
   public static final hydra.core.Name VARIANT = new hydra.core.Name("variant");
   
-  public final java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments;
   
-  public final java.util.List<hydra.ext.java.syntax.Expression> arguments;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.Expression> arguments;
   
   public final hydra.ext.java.syntax.ExplicitConstructorInvocation_Variant variant;
   
-  public ExplicitConstructorInvocation (java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments, java.util.List<hydra.ext.java.syntax.Expression> arguments, hydra.ext.java.syntax.ExplicitConstructorInvocation_Variant variant) {
+  public ExplicitConstructorInvocation (hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.util.ConsList<hydra.ext.java.syntax.Expression> arguments, hydra.ext.java.syntax.ExplicitConstructorInvocation_Variant variant) {
     this.typeArguments = typeArguments;
     this.arguments = arguments;
     this.variant = variant;
@@ -64,11 +64,11 @@ public class ExplicitConstructorInvocation implements Serializable, Comparable<E
     return ((Comparable) variant).compareTo(other.variant);
   }
   
-  public ExplicitConstructorInvocation withTypeArguments(java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments) {
+  public ExplicitConstructorInvocation withTypeArguments(hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments) {
     return new ExplicitConstructorInvocation(typeArguments, arguments, variant);
   }
   
-  public ExplicitConstructorInvocation withArguments(java.util.List<hydra.ext.java.syntax.Expression> arguments) {
+  public ExplicitConstructorInvocation withArguments(hydra.util.ConsList<hydra.ext.java.syntax.Expression> arguments) {
     return new ExplicitConstructorInvocation(typeArguments, arguments, variant);
   }
   

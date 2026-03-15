@@ -17,17 +17,17 @@ public class NormalInterfaceDeclaration implements Serializable, Comparable<Norm
   
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
-  public final java.util.List<hydra.ext.java.syntax.InterfaceModifier> modifiers;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.InterfaceModifier> modifiers;
   
   public final hydra.ext.java.syntax.TypeIdentifier identifier;
   
-  public final java.util.List<hydra.ext.java.syntax.TypeParameter> parameters;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> parameters;
   
-  public final java.util.List<hydra.ext.java.syntax.InterfaceType> extends_;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.InterfaceType> extends_;
   
   public final hydra.ext.java.syntax.InterfaceBody body;
   
-  public NormalInterfaceDeclaration (java.util.List<hydra.ext.java.syntax.InterfaceModifier> modifiers, hydra.ext.java.syntax.TypeIdentifier identifier, java.util.List<hydra.ext.java.syntax.TypeParameter> parameters, java.util.List<hydra.ext.java.syntax.InterfaceType> extends_, hydra.ext.java.syntax.InterfaceBody body) {
+  public NormalInterfaceDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.InterfaceModifier> modifiers, hydra.ext.java.syntax.TypeIdentifier identifier, hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> parameters, hydra.util.ConsList<hydra.ext.java.syntax.InterfaceType> extends_, hydra.ext.java.syntax.InterfaceBody body) {
     this.modifiers = modifiers;
     this.identifier = identifier;
     this.parameters = parameters;
@@ -88,7 +88,7 @@ public class NormalInterfaceDeclaration implements Serializable, Comparable<Norm
     return ((Comparable) body).compareTo(other.body);
   }
   
-  public NormalInterfaceDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.InterfaceModifier> modifiers) {
+  public NormalInterfaceDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.InterfaceModifier> modifiers) {
     return new NormalInterfaceDeclaration(modifiers, identifier, parameters, extends_, body);
   }
   
@@ -96,11 +96,11 @@ public class NormalInterfaceDeclaration implements Serializable, Comparable<Norm
     return new NormalInterfaceDeclaration(modifiers, identifier, parameters, extends_, body);
   }
   
-  public NormalInterfaceDeclaration withParameters(java.util.List<hydra.ext.java.syntax.TypeParameter> parameters) {
+  public NormalInterfaceDeclaration withParameters(hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> parameters) {
     return new NormalInterfaceDeclaration(modifiers, identifier, parameters, extends_, body);
   }
   
-  public NormalInterfaceDeclaration withExtends(java.util.List<hydra.ext.java.syntax.InterfaceType> extends_) {
+  public NormalInterfaceDeclaration withExtends(hydra.util.ConsList<hydra.ext.java.syntax.InterfaceType> extends_) {
     return new NormalInterfaceDeclaration(modifiers, identifier, parameters, extends_, body);
   }
   

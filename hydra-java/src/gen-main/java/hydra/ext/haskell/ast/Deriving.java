@@ -12,9 +12,9 @@ public class Deriving implements Serializable, Comparable<Deriving> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.haskell.ast.Name> value;
+  public final hydra.util.ConsList<hydra.ext.haskell.ast.Name> value;
   
-  public Deriving (java.util.List<hydra.ext.haskell.ast.Name> value) {
+  public Deriving (hydra.util.ConsList<hydra.ext.haskell.ast.Name> value) {
     this.value = value;
   }
   

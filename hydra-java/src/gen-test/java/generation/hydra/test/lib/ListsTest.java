@@ -20,7 +20,7 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "ONE",
   "TWO",
   "THREE",
@@ -29,10 +29,10 @@ public class ListsTest {
   "three"),
 
             hydra.lib.lists.Apply.apply(
-  java.util.List.of(
+  hydra.util.ConsList.of(
     hydra.lib.strings.ToUpper::apply,
     hydra.lib.strings.ToLower::apply),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     "One",
     "Two",
     "Three")));
@@ -47,11 +47,11 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.lists.Apply.apply(
-  (java.util.List<java.util.function.Function<String, T1>>) (java.util.List.<java.util.function.Function<String, T1>>of()),
-  java.util.List.of(
+  (hydra.util.ConsList<java.util.function.Function<String, T1>>) (hydra.util.ConsList.<java.util.function.Function<String, T1>>of()),
+  hydra.util.ConsList.of(
     "a",
     "b")));
 
@@ -63,11 +63,11 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.lists.Apply.apply(
-  java.util.List.of(hydra.lib.strings.ToUpper::apply),
-  (java.util.List<String>) (java.util.List.<String>of())));
+  hydra.util.ConsList.of(hydra.lib.strings.ToUpper::apply),
+  (hydra.util.ConsList<String>) (hydra.util.ConsList.<String>of())));
 
     }
 
@@ -77,11 +77,11 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of("HELLO"),
+            hydra.util.ConsList.of("HELLO"),
 
             hydra.lib.lists.Apply.apply(
-  java.util.List.of(hydra.lib.strings.ToUpper::apply),
-  java.util.List.of("hello")));
+  hydra.util.ConsList.of(hydra.lib.strings.ToUpper::apply),
+  hydra.util.ConsList.of("hello")));
 
     }
 
@@ -91,15 +91,15 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "TEST",
   "test"),
 
             hydra.lib.lists.Apply.apply(
-  java.util.List.of(
+  hydra.util.ConsList.of(
     hydra.lib.strings.ToUpper::apply,
     hydra.lib.strings.ToLower::apply),
-  java.util.List.of("Test")));
+  hydra.util.ConsList.of("Test")));
 
     }
 
@@ -115,7 +115,7 @@ public class ListsTest {
 
             hydra.lib.lists.At.apply(
   0,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -132,7 +132,7 @@ public class ListsTest {
 
             hydra.lib.lists.At.apply(
   1,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -149,7 +149,7 @@ public class ListsTest {
 
             hydra.lib.lists.At.apply(
   2,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -166,7 +166,7 @@ public class ListsTest {
 
             hydra.lib.lists.At.apply(
   0,
-  java.util.List.of(42)));
+  hydra.util.ConsList.of(42)));
 
     }
 
@@ -180,7 +180,7 @@ public class ListsTest {
 
             hydra.lib.lists.At.apply(
   1,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     "hello",
     "world")));
 
@@ -194,19 +194,19 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   -1,
   -2,
   -3,
   -4),
 
             hydra.lib.lists.Bind.apply(
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3,
     4),
-  (java.util.function.Function<Integer, java.util.List<Integer>>) (x -> hydra.lib.lists.Pure.apply(hydra.lib.math.Negate.apply(x)))));
+  (java.util.function.Function<Integer, hydra.util.ConsList<Integer>>) (x -> hydra.lib.lists.Pure.apply(hydra.lib.math.Negate.apply(x)))));
 
     }
 
@@ -216,11 +216,11 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.lists.Bind.apply(
-  (java.util.List<Integer>) (java.util.List.<Integer>of()),
-  (java.util.function.Function<Integer, java.util.List<Integer>>) (x -> hydra.lib.lists.Pure.apply(hydra.lib.math.Negate.apply(x)))));
+  (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of()),
+  (java.util.function.Function<Integer, hydra.util.ConsList<Integer>>) (x -> hydra.lib.lists.Pure.apply(hydra.lib.math.Negate.apply(x)))));
 
     }
 
@@ -230,11 +230,11 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(-5),
+            hydra.util.ConsList.of(-5),
 
             hydra.lib.lists.Bind.apply(
-  java.util.List.of(5),
-  (java.util.function.Function<Integer, java.util.List<Integer>>) (x -> hydra.lib.lists.Pure.apply(hydra.lib.math.Negate.apply(x)))));
+  hydra.util.ConsList.of(5),
+  (java.util.function.Function<Integer, hydra.util.ConsList<Integer>>) (x -> hydra.lib.lists.Pure.apply(hydra.lib.math.Negate.apply(x)))));
 
     }
 
@@ -244,17 +244,17 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   -1,
   -1,
   -2),
 
             hydra.lib.lists.Bind.apply(
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     1,
     2),
-  (java.util.function.Function<Integer, java.util.List<Integer>>) (x -> hydra.lib.lists.Pure.apply(hydra.lib.math.Negate.apply(x)))));
+  (java.util.function.Function<Integer, hydra.util.ConsList<Integer>>) (x -> hydra.lib.lists.Pure.apply(hydra.lib.math.Negate.apply(x)))));
 
     }
 
@@ -266,7 +266,7 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2,
   3,
@@ -276,15 +276,15 @@ public class ListsTest {
   7,
   8),
 
-            hydra.lib.lists.Concat.apply(java.util.List.of(
-  java.util.List.of(
+            hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     4,
     5),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     6,
     7,
     8))));
@@ -297,18 +297,18 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2,
   3),
 
-            hydra.lib.lists.Concat.apply(java.util.List.of(
-  (java.util.List<Integer>) (java.util.List.<Integer>of()),
-  java.util.List.of(
+            hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
+  (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of()),
+  hydra.util.ConsList.of(
     1,
     2),
-  (java.util.List<Integer>) (java.util.List.<Integer>of()),
-  java.util.List.of(3))));
+  (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of()),
+  hydra.util.ConsList.of(3))));
 
     }
 
@@ -318,12 +318,12 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2,
   3),
 
-            hydra.lib.lists.Concat.apply(java.util.List.of(java.util.List.of(
+            hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(hydra.util.ConsList.of(
   1,
   2,
   3))));
@@ -336,12 +336,12 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
-            hydra.lib.lists.Concat.apply(java.util.List.of(
-  (java.util.List<T4>) (java.util.List.<T4>of()),
-  (java.util.List<T4>) (java.util.List.<T4>of()),
-  (java.util.List<T4>) (java.util.List.<T4>of()))));
+            hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
+  (hydra.util.ConsList<T4>) (hydra.util.ConsList.<T4>of()),
+  (hydra.util.ConsList<T4>) (hydra.util.ConsList.<T4>of()),
+  (hydra.util.ConsList<T4>) (hydra.util.ConsList.<T4>of()))));
 
     }
 
@@ -351,9 +351,9 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
-            hydra.lib.lists.Concat.apply((java.util.List<java.util.List<T0>>) (java.util.List.<java.util.List<T0>>of())));
+            hydra.lib.lists.Concat.apply((hydra.util.ConsList<hydra.util.ConsList<T0>>) (hydra.util.ConsList.<hydra.util.ConsList<T0>>of())));
 
     }
 
@@ -365,17 +365,17 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2,
   3,
   4),
 
             hydra.lib.lists.Concat2.apply(
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     3,
     4)));
 
@@ -387,13 +387,13 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2),
 
             hydra.lib.lists.Concat2.apply(
-  (java.util.List<Integer>) (java.util.List.<Integer>of()),
-  java.util.List.of(
+  (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of()),
+  hydra.util.ConsList.of(
     1,
     2)));
 
@@ -405,15 +405,15 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2),
 
             hydra.lib.lists.Concat2.apply(
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2),
-  (java.util.List<Integer>) (java.util.List.<Integer>of())));
+  (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of())));
 
     }
 
@@ -423,11 +423,11 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.lists.Concat2.apply(
-  (java.util.List<T3>) (java.util.List.<T3>of()),
-  (java.util.List<T3>) (java.util.List.<T3>of())));
+  (hydra.util.ConsList<T3>) (hydra.util.ConsList.<T3>of()),
+  (hydra.util.ConsList<T3>) (hydra.util.ConsList.<T3>of())));
 
     }
 
@@ -437,13 +437,13 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2),
 
             hydra.lib.lists.Concat2.apply(
-  java.util.List.of(1),
-  java.util.List.of(2)));
+  hydra.util.ConsList.of(1),
+  hydra.util.ConsList.of(2)));
 
     }
 
@@ -453,17 +453,17 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "a",
   "b",
   "c",
   "d"),
 
             hydra.lib.lists.Concat2.apply(
-  java.util.List.of(
+  hydra.util.ConsList.of(
     "a",
     "b"),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     "c",
     "d")));
 
@@ -477,14 +477,14 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2,
   3),
 
             hydra.lib.lists.Cons.apply(
   1,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     2,
     3)));
 
@@ -496,11 +496,11 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(1),
+            hydra.util.ConsList.of(1),
 
             hydra.lib.lists.Cons.apply(
   1,
-  (java.util.List<Integer>) (java.util.List.<Integer>of())));
+  (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of())));
 
     }
 
@@ -510,14 +510,14 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   -1,
   2,
   3),
 
             hydra.lib.lists.Cons.apply(
   -1,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     2,
     3)));
 
@@ -529,13 +529,13 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "hello",
   "world"),
 
             hydra.lib.lists.Cons.apply(
   "hello",
-  java.util.List.of("world")));
+  hydra.util.ConsList.of("world")));
 
     }
 
@@ -547,14 +547,14 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   3,
   4,
   5),
 
             hydra.lib.lists.Drop.apply(
   2,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3,
@@ -569,14 +569,14 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2,
   3),
 
             hydra.lib.lists.Drop.apply(
   0,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -589,11 +589,11 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.lists.Drop.apply(
   3,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -606,11 +606,11 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.lists.Drop.apply(
   5,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2)));
 
@@ -622,11 +622,11 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.lists.Drop.apply(
   3,
-  (java.util.List<T2>) (java.util.List.<T2>of())));
+  (hydra.util.ConsList<T2>) (hydra.util.ConsList.<T2>of())));
 
     }
 
@@ -636,14 +636,14 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2,
   3),
 
             hydra.lib.lists.Drop.apply(
   -1,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -658,7 +658,7 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   3,
   2,
   1),
@@ -667,7 +667,7 @@ public class ListsTest {
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
     x,
     3)),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3,
@@ -682,13 +682,13 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.lists.DropWhile.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
     x,
     10)),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -701,7 +701,7 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2,
   3),
@@ -710,7 +710,7 @@ public class ListsTest {
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
     x,
     0)),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -723,13 +723,13 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.lists.DropWhile.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
     x,
     5)),
-  (java.util.List<Integer>) (java.util.List.<Integer>of())));
+  (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of())));
 
     }
 
@@ -745,7 +745,7 @@ public class ListsTest {
 
             hydra.lib.lists.Elem.apply(
   2,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -762,7 +762,7 @@ public class ListsTest {
 
             hydra.lib.lists.Elem.apply(
   4,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -779,7 +779,7 @@ public class ListsTest {
 
             hydra.lib.lists.Elem.apply(
   1,
-  (java.util.List<Integer>) (java.util.List.<Integer>of())));
+  (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of())));
 
     }
 
@@ -793,7 +793,7 @@ public class ListsTest {
 
             hydra.lib.lists.Elem.apply(
   1,
-  java.util.List.of(1)));
+  hydra.util.ConsList.of(1)));
 
     }
 
@@ -807,7 +807,7 @@ public class ListsTest {
 
             hydra.lib.lists.Elem.apply(
   2,
-  java.util.List.of(1)));
+  hydra.util.ConsList.of(1)));
 
     }
 
@@ -821,7 +821,7 @@ public class ListsTest {
 
             hydra.lib.lists.Elem.apply(
   2,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     2,
@@ -839,7 +839,7 @@ public class ListsTest {
 
             hydra.lib.lists.Elem.apply(
   "hello",
-  java.util.List.of(
+  hydra.util.ConsList.of(
     "world",
     "hello",
     "test")));
@@ -856,7 +856,7 @@ public class ListsTest {
 
             hydra.lib.lists.Elem.apply(
   "missing",
-  java.util.List.of(
+  hydra.util.ConsList.of(
     "world",
     "hello")));
 
@@ -870,7 +870,7 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   2,
   4,
   5),
@@ -879,7 +879,7 @@ public class ListsTest {
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Gt.apply(
     x,
     0)),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     -1,
     2,
     -3,
@@ -894,7 +894,7 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2,
   3),
@@ -903,7 +903,7 @@ public class ListsTest {
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
     x,
     10)),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -916,13 +916,13 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.lists.Filter.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Gt.apply(
     x,
     10)),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -935,13 +935,13 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.lists.Filter.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Gt.apply(
     x,
     0)),
-  (java.util.List<Integer>) (java.util.List.<Integer>of())));
+  (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of())));
 
     }
 
@@ -959,7 +959,7 @@ public class ListsTest {
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Gt.apply(
     x,
     3)),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     4,
@@ -979,7 +979,7 @@ public class ListsTest {
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Gt.apply(
     x,
     0)),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -998,7 +998,7 @@ public class ListsTest {
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Gt.apply(
     x,
     10)),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -1017,7 +1017,7 @@ public class ListsTest {
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Gt.apply(
     x,
     0)),
-  (java.util.List<Integer>) (java.util.List.<Integer>of())));
+  (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of())));
 
     }
 
@@ -1033,7 +1033,7 @@ public class ListsTest {
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Equal.apply(
     x,
     42)),
-  java.util.List.of(42)));
+  hydra.util.ConsList.of(42)));
 
     }
 
@@ -1052,7 +1052,7 @@ public class ListsTest {
     p0,
     p1)),
   0,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3,
@@ -1073,7 +1073,7 @@ public class ListsTest {
     p0,
     p1)),
   1,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     2,
     3,
     4)));
@@ -1093,7 +1093,7 @@ public class ListsTest {
     p0,
     p1)),
   5,
-  (java.util.List<Integer>) (java.util.List.<Integer>of())));
+  (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of())));
 
     }
 
@@ -1110,7 +1110,7 @@ public class ListsTest {
     p0,
     p1)),
   10,
-  java.util.List.of(5)));
+  hydra.util.ConsList.of(5)));
 
     }
 
@@ -1127,7 +1127,7 @@ public class ListsTest {
     p0,
     p1)),
   10,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -1149,7 +1149,7 @@ public class ListsTest {
     p0,
     p1)),
   0,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -1169,7 +1169,7 @@ public class ListsTest {
     p0,
     p1)),
   5,
-  (java.util.List<Integer>) (java.util.List.<Integer>of())));
+  (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of())));
 
     }
 
@@ -1186,7 +1186,7 @@ public class ListsTest {
     p0,
     p1)),
   10,
-  java.util.List.of(5)));
+  hydra.util.ConsList.of(5)));
 
     }
 
@@ -1203,7 +1203,7 @@ public class ListsTest {
     p0,
     p1)),
   0,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3,
@@ -1224,7 +1224,7 @@ public class ListsTest {
     p0,
     p1)),
   10,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -1239,18 +1239,18 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
-  java.util.List.of(
+            hydra.util.ConsList.of(
+  hydra.util.ConsList.of(
     1,
     1),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     2,
     2,
     2),
-  java.util.List.of(3),
-  java.util.List.of(1)),
+  hydra.util.ConsList.of(3),
+  hydra.util.ConsList.of(1)),
 
-            hydra.lib.lists.Group.apply(java.util.List.of(
+            hydra.lib.lists.Group.apply(hydra.util.ConsList.of(
   1,
   1,
   2,
@@ -1267,12 +1267,12 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
-  java.util.List.of(1),
-  java.util.List.of(2),
-  java.util.List.of(3)),
+            hydra.util.ConsList.of(
+  hydra.util.ConsList.of(1),
+  hydra.util.ConsList.of(2),
+  hydra.util.ConsList.of(3)),
 
-            hydra.lib.lists.Group.apply(java.util.List.of(
+            hydra.lib.lists.Group.apply(hydra.util.ConsList.of(
   1,
   2,
   3)));
@@ -1285,12 +1285,12 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(java.util.List.of(
+            hydra.util.ConsList.of(hydra.util.ConsList.of(
   1,
   1,
   1)),
 
-            hydra.lib.lists.Group.apply(java.util.List.of(
+            hydra.lib.lists.Group.apply(hydra.util.ConsList.of(
   1,
   1,
   1)));
@@ -1303,9 +1303,9 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
-            hydra.lib.lists.Group.apply((java.util.List<T1>) (java.util.List.<T1>of())));
+            hydra.lib.lists.Group.apply((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>of())));
 
     }
 
@@ -1315,9 +1315,9 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(java.util.List.of(1)),
+            hydra.util.ConsList.of(hydra.util.ConsList.of(1)),
 
-            hydra.lib.lists.Group.apply(java.util.List.of(1)));
+            hydra.lib.lists.Group.apply(hydra.util.ConsList.of(1)));
 
     }
 
@@ -1331,7 +1331,7 @@ public class ListsTest {
 
             1,
 
-            hydra.lib.lists.Head.apply(java.util.List.of(
+            hydra.lib.lists.Head.apply(hydra.util.ConsList.of(
   1,
   2,
   3)));
@@ -1346,7 +1346,7 @@ public class ListsTest {
 
             42,
 
-            hydra.lib.lists.Head.apply(java.util.List.of(42)));
+            hydra.lib.lists.Head.apply(hydra.util.ConsList.of(42)));
 
     }
 
@@ -1358,7 +1358,7 @@ public class ListsTest {
 
             -1,
 
-            hydra.lib.lists.Head.apply(java.util.List.of(
+            hydra.lib.lists.Head.apply(hydra.util.ConsList.of(
   -1,
   -2,
   -3)));
@@ -1373,7 +1373,7 @@ public class ListsTest {
 
             "hello",
 
-            hydra.lib.lists.Head.apply(java.util.List.of(
+            hydra.lib.lists.Head.apply(hydra.util.ConsList.of(
   "hello",
   "world")));
 
@@ -1387,12 +1387,12 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2,
   3),
 
-            hydra.lib.lists.Init.apply(java.util.List.of(
+            hydra.lib.lists.Init.apply(hydra.util.ConsList.of(
   1,
   2,
   3,
@@ -1406,9 +1406,9 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(1),
+            hydra.util.ConsList.of(1),
 
-            hydra.lib.lists.Init.apply(java.util.List.of(
+            hydra.lib.lists.Init.apply(hydra.util.ConsList.of(
   1,
   2)));
 
@@ -1420,9 +1420,9 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
-            hydra.lib.lists.Init.apply(java.util.List.of(1)));
+            hydra.lib.lists.Init.apply(hydra.util.ConsList.of(1)));
 
     }
 
@@ -1432,11 +1432,11 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "a",
   "b"),
 
-            hydra.lib.lists.Init.apply(java.util.List.of(
+            hydra.lib.lists.Init.apply(hydra.util.ConsList.of(
   "a",
   "b",
   "c")));
@@ -1451,7 +1451,7 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2,
   3,
@@ -1466,18 +1466,18 @@ public class ListsTest {
   8),
 
             hydra.lib.lists.Intercalate.apply(
-  java.util.List.of(
+  hydra.util.ConsList.of(
     0,
     0),
-  java.util.List.of(
-    java.util.List.of(
+  hydra.util.ConsList.of(
+    hydra.util.ConsList.of(
       1,
       2,
       3),
-    java.util.List.of(
+    hydra.util.ConsList.of(
       4,
       5),
-    java.util.List.of(
+    hydra.util.ConsList.of(
       6,
       7,
       8))));
@@ -1490,19 +1490,19 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2,
   3,
   4),
 
             hydra.lib.lists.Intercalate.apply(
-  (java.util.List<Integer>) (java.util.List.<Integer>of()),
-  java.util.List.of(
-    java.util.List.of(
+  (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of()),
+  hydra.util.ConsList.of(
+    hydra.util.ConsList.of(
       1,
       2),
-    java.util.List.of(
+    hydra.util.ConsList.of(
       3,
       4))));
 
@@ -1514,7 +1514,7 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   99,
   2,
@@ -1522,11 +1522,11 @@ public class ListsTest {
   3),
 
             hydra.lib.lists.Intercalate.apply(
-  java.util.List.of(99),
-  java.util.List.of(
-    java.util.List.of(1),
-    java.util.List.of(2),
-    java.util.List.of(3))));
+  hydra.util.ConsList.of(99),
+  hydra.util.ConsList.of(
+    hydra.util.ConsList.of(1),
+    hydra.util.ConsList.of(2),
+    hydra.util.ConsList.of(3))));
 
     }
 
@@ -1536,11 +1536,11 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.lists.Intercalate.apply(
-  java.util.List.of(0),
-  (java.util.List<java.util.List<Integer>>) (java.util.List.<java.util.List<Integer>>of())));
+  hydra.util.ConsList.of(0),
+  (hydra.util.ConsList<hydra.util.ConsList<Integer>>) (hydra.util.ConsList.<hydra.util.ConsList<Integer>>of())));
 
     }
 
@@ -1550,14 +1550,14 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2,
   3),
 
             hydra.lib.lists.Intercalate.apply(
-  java.util.List.of(0),
-  java.util.List.of(java.util.List.of(
+  hydra.util.ConsList.of(0),
+  hydra.util.ConsList.of(hydra.util.ConsList.of(
     1,
     2,
     3))));
@@ -1570,17 +1570,17 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   0,
   1,
   0),
 
             hydra.lib.lists.Intercalate.apply(
-  java.util.List.of(0),
-  java.util.List.of(
-    (java.util.List<Integer>) (java.util.List.<Integer>of()),
-    java.util.List.of(1),
-    (java.util.List<Integer>) (java.util.List.<Integer>of()))));
+  hydra.util.ConsList.of(0),
+  hydra.util.ConsList.of(
+    (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of()),
+    hydra.util.ConsList.of(1),
+    (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of()))));
 
     }
 
@@ -1592,7 +1592,7 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "one",
   "and",
   "two",
@@ -1601,7 +1601,7 @@ public class ListsTest {
 
             hydra.lib.lists.Intersperse.apply(
   "and",
-  java.util.List.of(
+  hydra.util.ConsList.of(
     "one",
     "two",
     "three")));
@@ -1614,11 +1614,11 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of("only"),
+            hydra.util.ConsList.of("only"),
 
             hydra.lib.lists.Intersperse.apply(
   "x",
-  java.util.List.of("only")));
+  hydra.util.ConsList.of("only")));
 
     }
 
@@ -1628,11 +1628,11 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.lists.Intersperse.apply(
   "x",
-  (java.util.List<String>) (java.util.List.<String>of())));
+  (hydra.util.ConsList<String>) (hydra.util.ConsList.<String>of())));
 
     }
 
@@ -1642,14 +1642,14 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "a",
   "+",
   "b"),
 
             hydra.lib.lists.Intersperse.apply(
   "+",
-  java.util.List.of(
+  hydra.util.ConsList.of(
     "a",
     "b")));
 
@@ -1661,7 +1661,7 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   0,
   2,
@@ -1670,7 +1670,7 @@ public class ListsTest {
 
             hydra.lib.lists.Intersperse.apply(
   0,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -1687,7 +1687,7 @@ public class ListsTest {
 
             3,
 
-            hydra.lib.lists.Last.apply(java.util.List.of(
+            hydra.lib.lists.Last.apply(hydra.util.ConsList.of(
   1,
   2,
   3)));
@@ -1702,7 +1702,7 @@ public class ListsTest {
 
             42,
 
-            hydra.lib.lists.Last.apply(java.util.List.of(42)));
+            hydra.lib.lists.Last.apply(hydra.util.ConsList.of(42)));
 
     }
 
@@ -1714,7 +1714,7 @@ public class ListsTest {
 
             -3,
 
-            hydra.lib.lists.Last.apply(java.util.List.of(
+            hydra.lib.lists.Last.apply(hydra.util.ConsList.of(
   -1,
   -2,
   -3)));
@@ -1729,7 +1729,7 @@ public class ListsTest {
 
             "world",
 
-            hydra.lib.lists.Last.apply(java.util.List.of(
+            hydra.lib.lists.Last.apply(hydra.util.ConsList.of(
   "hello",
   "world")));
 
@@ -1745,7 +1745,7 @@ public class ListsTest {
 
             3,
 
-            hydra.lib.lists.Length.apply(java.util.List.of(
+            hydra.lib.lists.Length.apply(hydra.util.ConsList.of(
   1,
   2,
   3)));
@@ -1760,7 +1760,7 @@ public class ListsTest {
 
             0,
 
-            hydra.lib.lists.Length.apply((java.util.List<T1>) (java.util.List.<T1>of())));
+            hydra.lib.lists.Length.apply((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>of())));
 
     }
 
@@ -1772,7 +1772,7 @@ public class ListsTest {
 
             1,
 
-            hydra.lib.lists.Length.apply(java.util.List.of(42)));
+            hydra.lib.lists.Length.apply(hydra.util.ConsList.of(42)));
 
     }
 
@@ -1784,7 +1784,7 @@ public class ListsTest {
 
             10,
 
-            hydra.lib.lists.Length.apply(java.util.List.of(
+            hydra.lib.lists.Length.apply(hydra.util.ConsList.of(
   1,
   2,
   3,
@@ -1806,7 +1806,7 @@ public class ListsTest {
 
             3,
 
-            hydra.lib.lists.Length.apply(java.util.List.of(
+            hydra.lib.lists.Length.apply(hydra.util.ConsList.of(
   "a",
   "b",
   "c")));
@@ -1821,13 +1821,13 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "ONE",
   "TWO"),
 
             hydra.lib.lists.Map.apply(
   hydra.lib.strings.ToUpper::apply,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     "one",
     "two")));
 
@@ -1839,11 +1839,11 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.lists.Map.apply(
   hydra.lib.strings.ToUpper::apply,
-  (java.util.List<String>) (java.util.List.<String>of())));
+  (hydra.util.ConsList<String>) (hydra.util.ConsList.<String>of())));
 
     }
 
@@ -1853,11 +1853,11 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of("HELLO"),
+            hydra.util.ConsList.of("HELLO"),
 
             hydra.lib.lists.Map.apply(
   hydra.lib.strings.ToUpper::apply,
-  java.util.List.of("hello")));
+  hydra.util.ConsList.of("hello")));
 
     }
 
@@ -1867,14 +1867,14 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   -1,
   -2,
   -3),
 
             hydra.lib.lists.Map.apply(
   hydra.lib.math.Negate::apply,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -1887,14 +1887,14 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2,
   3),
 
             hydra.lib.lists.Map.apply(
   (java.util.function.Function<Integer, Integer>) (hydra.lib.equality.Identity::apply),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -1909,13 +1909,13 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2,
   3,
   4),
 
-            hydra.lib.lists.Nub.apply(java.util.List.of(
+            hydra.lib.lists.Nub.apply(hydra.util.ConsList.of(
   1,
   2,
   1,
@@ -1931,12 +1931,12 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2,
   3),
 
-            hydra.lib.lists.Nub.apply(java.util.List.of(
+            hydra.lib.lists.Nub.apply(hydra.util.ConsList.of(
   1,
   2,
   3)));
@@ -1949,9 +1949,9 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(1),
+            hydra.util.ConsList.of(1),
 
-            hydra.lib.lists.Nub.apply(java.util.List.of(
+            hydra.lib.lists.Nub.apply(hydra.util.ConsList.of(
   1,
   1,
   1)));
@@ -1964,9 +1964,9 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
-            hydra.lib.lists.Nub.apply((java.util.List<T1>) (java.util.List.<T1>of())));
+            hydra.lib.lists.Nub.apply((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>of())));
 
     }
 
@@ -1976,9 +1976,9 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(1),
+            hydra.util.ConsList.of(1),
 
-            hydra.lib.lists.Nub.apply(java.util.List.of(1)));
+            hydra.lib.lists.Nub.apply(hydra.util.ConsList.of(1)));
 
     }
 
@@ -1988,12 +1988,12 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "a",
   "b",
   "c"),
 
-            hydra.lib.lists.Nub.apply(java.util.List.of(
+            hydra.lib.lists.Nub.apply(hydra.util.ConsList.of(
   "a",
   "b",
   "a",
@@ -2011,7 +2011,7 @@ public class ListsTest {
 
             true,
 
-            hydra.lib.lists.Null.apply((java.util.List<T1>) (java.util.List.<T1>of())));
+            hydra.lib.lists.Null.apply((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>of())));
 
     }
 
@@ -2023,7 +2023,7 @@ public class ListsTest {
 
             false,
 
-            hydra.lib.lists.Null.apply(java.util.List.of(1)));
+            hydra.lib.lists.Null.apply(hydra.util.ConsList.of(1)));
 
     }
 
@@ -2035,7 +2035,7 @@ public class ListsTest {
 
             false,
 
-            hydra.lib.lists.Null.apply(java.util.List.of(
+            hydra.lib.lists.Null.apply(hydra.util.ConsList.of(
   1,
   2,
   3)));
@@ -2050,7 +2050,7 @@ public class ListsTest {
 
             true,
 
-            hydra.lib.lists.Null.apply((java.util.List<T1>) (java.util.List.<T1>of())));
+            hydra.lib.lists.Null.apply((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>of())));
 
     }
 
@@ -2062,7 +2062,7 @@ public class ListsTest {
 
             false,
 
-            hydra.lib.lists.Null.apply(java.util.List.of("a")));
+            hydra.lib.lists.Null.apply(hydra.util.ConsList.of("a")));
 
     }
 
@@ -2074,10 +2074,10 @@ public class ListsTest {
 
         assertEquals(
 
-            (hydra.util.Pair<java.util.List<Integer>, java.util.List<Integer>>) ((hydra.util.Pair<java.util.List<Integer>, java.util.List<Integer>>) (new hydra.util.Pair<java.util.List<Integer>, java.util.List<Integer>>(java.util.List.of(
+            (hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.util.ConsList<Integer>>(hydra.util.ConsList.of(
   4,
   5,
-  6), java.util.List.of(
+  6), hydra.util.ConsList.of(
   1,
   2,
   3)))),
@@ -2086,7 +2086,7 @@ public class ListsTest {
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Gt.apply(
     x,
     3)),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3,
@@ -2102,16 +2102,16 @@ public class ListsTest {
 
         assertEquals(
 
-            (hydra.util.Pair<java.util.List<Integer>, java.util.List<T1>>) ((hydra.util.Pair<java.util.List<Integer>, java.util.List<T1>>) (new hydra.util.Pair<java.util.List<Integer>, java.util.List<T1>>(java.util.List.of(
+            (hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.util.ConsList<T1>>) ((hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.util.ConsList<T1>>) (new hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.util.ConsList<T1>>(hydra.util.ConsList.of(
   1,
   2,
-  3), (java.util.List<T1>) (java.util.List.<T1>of())))),
+  3), (hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>of())))),
 
             hydra.lib.lists.Partition.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
     x,
     10)),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -2124,7 +2124,7 @@ public class ListsTest {
 
         assertEquals(
 
-            (hydra.util.Pair<java.util.List<T0>, java.util.List<Integer>>) ((hydra.util.Pair<java.util.List<T0>, java.util.List<Integer>>) (new hydra.util.Pair<java.util.List<T0>, java.util.List<Integer>>((java.util.List<T0>) (java.util.List.<T0>of()), java.util.List.of(
+            (hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.ConsList<Integer>>((hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()), hydra.util.ConsList.of(
   1,
   2,
   3)))),
@@ -2133,7 +2133,7 @@ public class ListsTest {
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Gt.apply(
     x,
     10)),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -2146,17 +2146,17 @@ public class ListsTest {
 
         assertEquals(
 
-            (hydra.util.Pair<java.util.List<Integer>, java.util.List<Integer>>) ((hydra.util.Pair<java.util.List<Integer>, java.util.List<Integer>>) (new hydra.util.Pair<java.util.List<Integer>, java.util.List<Integer>>(java.util.List.of(
+            (hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.util.ConsList<Integer>>(hydra.util.ConsList.of(
   2,
   4,
-  6), java.util.List.of(
+  6), hydra.util.ConsList.of(
   1,
   3,
   5)))),
 
             hydra.lib.lists.Partition.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.math.Even.apply(x)),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3,
@@ -2172,13 +2172,13 @@ public class ListsTest {
 
         assertEquals(
 
-            (hydra.util.Pair<java.util.List<T0>, java.util.List<T1>>) ((hydra.util.Pair<java.util.List<T0>, java.util.List<T1>>) (new hydra.util.Pair<java.util.List<T0>, java.util.List<T1>>((java.util.List<T0>) (java.util.List.<T0>of()), (java.util.List<T1>) (java.util.List.<T1>of())))),
+            (hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.ConsList<T1>>) ((hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.ConsList<T1>>) (new hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.ConsList<T1>>((hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()), (hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>of())))),
 
             hydra.lib.lists.Partition.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
     x,
     5)),
-  (java.util.List<Integer>) (java.util.List.<Integer>of())));
+  (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of())));
 
     }
 
@@ -2190,7 +2190,7 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of("one"),
+            hydra.util.ConsList.of("one"),
 
             hydra.lib.lists.Pure.apply("one"));
 
@@ -2202,7 +2202,7 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(""),
+            hydra.util.ConsList.of(""),
 
             hydra.lib.lists.Pure.apply(""));
 
@@ -2214,7 +2214,7 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(42),
+            hydra.util.ConsList.of(42),
 
             hydra.lib.lists.Pure.apply(42));
 
@@ -2226,7 +2226,7 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(-5),
+            hydra.util.ConsList.of(-5),
 
             hydra.lib.lists.Pure.apply(-5));
 
@@ -2240,7 +2240,7 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   42,
   42,
   42),
@@ -2257,7 +2257,7 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.lists.Replicate.apply(
   0,
@@ -2271,7 +2271,7 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(99),
+            hydra.util.ConsList.of(99),
 
             hydra.lib.lists.Replicate.apply(
   1,
@@ -2285,7 +2285,7 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "hello",
   "hello"),
 
@@ -2303,13 +2303,13 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   4,
   3,
   2,
   1),
 
-            hydra.lib.lists.Reverse.apply(java.util.List.of(
+            hydra.lib.lists.Reverse.apply(hydra.util.ConsList.of(
   1,
   2,
   3,
@@ -2323,9 +2323,9 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(1),
+            hydra.util.ConsList.of(1),
 
-            hydra.lib.lists.Reverse.apply(java.util.List.of(1)));
+            hydra.lib.lists.Reverse.apply(hydra.util.ConsList.of(1)));
 
     }
 
@@ -2335,9 +2335,9 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
-            hydra.lib.lists.Reverse.apply((java.util.List<T1>) (java.util.List.<T1>of())));
+            hydra.lib.lists.Reverse.apply((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>of())));
 
     }
 
@@ -2347,11 +2347,11 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   2,
   1),
 
-            hydra.lib.lists.Reverse.apply(java.util.List.of(
+            hydra.lib.lists.Reverse.apply(hydra.util.ConsList.of(
   1,
   2)));
 
@@ -2363,12 +2363,12 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "c",
   "b",
   "a"),
 
-            hydra.lib.lists.Reverse.apply(java.util.List.of(
+            hydra.lib.lists.Reverse.apply(hydra.util.ConsList.of(
   "a",
   "b",
   "c")));
@@ -2385,7 +2385,7 @@ public class ListsTest {
 
             hydra.util.Maybe.just(1),
 
-            hydra.lib.lists.SafeHead.apply(java.util.List.of(
+            hydra.lib.lists.SafeHead.apply(hydra.util.ConsList.of(
   1,
   2,
   3)));
@@ -2400,7 +2400,7 @@ public class ListsTest {
 
             (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
-            hydra.lib.lists.SafeHead.apply((java.util.List<T1>) (java.util.List.<T1>of())));
+            hydra.lib.lists.SafeHead.apply((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>of())));
 
     }
 
@@ -2412,7 +2412,7 @@ public class ListsTest {
 
             hydra.util.Maybe.just(42),
 
-            hydra.lib.lists.SafeHead.apply(java.util.List.of(42)));
+            hydra.lib.lists.SafeHead.apply(hydra.util.ConsList.of(42)));
 
     }
 
@@ -2424,7 +2424,7 @@ public class ListsTest {
 
             hydra.util.Maybe.just("hello"),
 
-            hydra.lib.lists.SafeHead.apply(java.util.List.of(
+            hydra.lib.lists.SafeHead.apply(hydra.util.ConsList.of(
   "hello",
   "world")));
 
@@ -2438,7 +2438,7 @@ public class ListsTest {
 
             (hydra.util.Maybe<T0>) (hydra.util.Maybe.<T0>nothing()),
 
-            hydra.lib.lists.SafeHead.apply((java.util.List<T1>) (java.util.List.<T1>of())));
+            hydra.lib.lists.SafeHead.apply((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>of())));
 
     }
 
@@ -2450,7 +2450,7 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(42),
+            hydra.util.ConsList.of(42),
 
             hydra.lib.lists.Singleton.apply(42));
 
@@ -2462,7 +2462,7 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(-1),
+            hydra.util.ConsList.of(-1),
 
             hydra.lib.lists.Singleton.apply(-1));
 
@@ -2474,7 +2474,7 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(0),
+            hydra.util.ConsList.of(0),
 
             hydra.lib.lists.Singleton.apply(0));
 
@@ -2486,7 +2486,7 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of("hello"),
+            hydra.util.ConsList.of("hello"),
 
             hydra.lib.lists.Singleton.apply("hello"));
 
@@ -2500,14 +2500,14 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   1,
   3,
   4,
   5),
 
-            hydra.lib.lists.Sort.apply(java.util.List.of(
+            hydra.lib.lists.Sort.apply(hydra.util.ConsList.of(
   3,
   1,
   4,
@@ -2522,12 +2522,12 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2,
   3),
 
-            hydra.lib.lists.Sort.apply(java.util.List.of(
+            hydra.lib.lists.Sort.apply(hydra.util.ConsList.of(
   1,
   2,
   3)));
@@ -2540,12 +2540,12 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2,
   3),
 
-            hydra.lib.lists.Sort.apply(java.util.List.of(
+            hydra.lib.lists.Sort.apply(hydra.util.ConsList.of(
   3,
   2,
   1)));
@@ -2558,9 +2558,9 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(1),
+            hydra.util.ConsList.of(1),
 
-            hydra.lib.lists.Sort.apply(java.util.List.of(1)));
+            hydra.lib.lists.Sort.apply(hydra.util.ConsList.of(1)));
 
     }
 
@@ -2570,9 +2570,9 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
-            hydra.lib.lists.Sort.apply((java.util.List<T1>) (java.util.List.<T1>of())));
+            hydra.lib.lists.Sort.apply((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>of())));
 
     }
 
@@ -2582,14 +2582,14 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   1,
   2,
   2,
   3),
 
-            hydra.lib.lists.Sort.apply(java.util.List.of(
+            hydra.lib.lists.Sort.apply(hydra.util.ConsList.of(
   2,
   1,
   2,
@@ -2604,12 +2604,12 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "apple",
   "banana",
   "zebra"),
 
-            hydra.lib.lists.Sort.apply(java.util.List.of(
+            hydra.lib.lists.Sort.apply(hydra.util.ConsList.of(
   "zebra",
   "apple",
   "banana")));
@@ -2624,14 +2624,14 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "hi",
   "hello",
   "world"),
 
             hydra.lib.lists.SortOn.apply(
   hydra.lib.strings.Length::apply,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     "hello",
     "hi",
     "world")));
@@ -2644,11 +2644,11 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.lists.SortOn.apply(
   hydra.lib.strings.Length::apply,
-  (java.util.List<String>) (java.util.List.<String>of())));
+  (hydra.util.ConsList<String>) (hydra.util.ConsList.<String>of())));
 
     }
 
@@ -2658,11 +2658,11 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of("test"),
+            hydra.util.ConsList.of("test"),
 
             hydra.lib.lists.SortOn.apply(
   hydra.lib.strings.Length::apply,
-  java.util.List.of("test")));
+  hydra.util.ConsList.of("test")));
 
     }
 
@@ -2672,14 +2672,14 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   3,
   2,
   1),
 
             hydra.lib.lists.SortOn.apply(
   hydra.lib.math.Negate::apply,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     3,
     2)));
@@ -2692,14 +2692,14 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   -1,
   2,
   -3),
 
             hydra.lib.lists.SortOn.apply(
   hydra.lib.math.Abs::apply,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     -1,
     -3,
     2)));
@@ -2714,9 +2714,9 @@ public class ListsTest {
 
         assertEquals(
 
-            (hydra.util.Pair<java.util.List<Integer>, java.util.List<Integer>>) ((hydra.util.Pair<java.util.List<Integer>, java.util.List<Integer>>) (new hydra.util.Pair<java.util.List<Integer>, java.util.List<Integer>>(java.util.List.of(
+            (hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.util.ConsList<Integer>>(hydra.util.ConsList.of(
   1,
-  2), java.util.List.of(
+  2), hydra.util.ConsList.of(
   3,
   1,
   2)))),
@@ -2725,7 +2725,7 @@ public class ListsTest {
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
     x,
     3)),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3,
@@ -2740,16 +2740,16 @@ public class ListsTest {
 
         assertEquals(
 
-            (hydra.util.Pair<java.util.List<Integer>, java.util.List<T1>>) ((hydra.util.Pair<java.util.List<Integer>, java.util.List<T1>>) (new hydra.util.Pair<java.util.List<Integer>, java.util.List<T1>>(java.util.List.of(
+            (hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.util.ConsList<T1>>) ((hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.util.ConsList<T1>>) (new hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.util.ConsList<T1>>(hydra.util.ConsList.of(
   1,
   2,
-  3), (java.util.List<T1>) (java.util.List.<T1>of())))),
+  3), (hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>of())))),
 
             hydra.lib.lists.Span.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
     x,
     10)),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -2762,7 +2762,7 @@ public class ListsTest {
 
         assertEquals(
 
-            (hydra.util.Pair<java.util.List<T0>, java.util.List<Integer>>) ((hydra.util.Pair<java.util.List<T0>, java.util.List<Integer>>) (new hydra.util.Pair<java.util.List<T0>, java.util.List<Integer>>((java.util.List<T0>) (java.util.List.<T0>of()), java.util.List.of(
+            (hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.ConsList<Integer>>) ((hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.ConsList<Integer>>) (new hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.ConsList<Integer>>((hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()), hydra.util.ConsList.of(
   1,
   2,
   3)))),
@@ -2771,7 +2771,7 @@ public class ListsTest {
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Gt.apply(
     x,
     10)),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -2784,13 +2784,13 @@ public class ListsTest {
 
         assertEquals(
 
-            (hydra.util.Pair<java.util.List<T0>, java.util.List<T1>>) ((hydra.util.Pair<java.util.List<T0>, java.util.List<T1>>) (new hydra.util.Pair<java.util.List<T0>, java.util.List<T1>>((java.util.List<T0>) (java.util.List.<T0>of()), (java.util.List<T1>) (java.util.List.<T1>of())))),
+            (hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.ConsList<T1>>) ((hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.ConsList<T1>>) (new hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.ConsList<T1>>((hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()), (hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>of())))),
 
             hydra.lib.lists.Span.apply(
   (java.util.function.Function<Integer, Boolean>) (x -> hydra.lib.equality.Lt.apply(
     x,
     5)),
-  (java.util.List<Integer>) (java.util.List.<Integer>of())));
+  (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of())));
 
     }
 
@@ -2802,12 +2802,12 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   2,
   3,
   4),
 
-            hydra.lib.lists.Tail.apply(java.util.List.of(
+            hydra.lib.lists.Tail.apply(hydra.util.ConsList.of(
   1,
   2,
   3,
@@ -2821,9 +2821,9 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(2),
+            hydra.util.ConsList.of(2),
 
-            hydra.lib.lists.Tail.apply(java.util.List.of(
+            hydra.lib.lists.Tail.apply(hydra.util.ConsList.of(
   1,
   2)));
 
@@ -2835,9 +2835,9 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
-            hydra.lib.lists.Tail.apply(java.util.List.of(1)));
+            hydra.lib.lists.Tail.apply(hydra.util.ConsList.of(1)));
 
     }
 
@@ -2847,11 +2847,11 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "b",
   "c"),
 
-            hydra.lib.lists.Tail.apply(java.util.List.of(
+            hydra.lib.lists.Tail.apply(hydra.util.ConsList.of(
   "a",
   "b",
   "c")));
@@ -2866,13 +2866,13 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2),
 
             hydra.lib.lists.Take.apply(
   2,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3,
@@ -2887,11 +2887,11 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.lists.Take.apply(
   0,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -2904,14 +2904,14 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2,
   3),
 
             hydra.lib.lists.Take.apply(
   3,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -2924,13 +2924,13 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2),
 
             hydra.lib.lists.Take.apply(
   5,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2)));
 
@@ -2942,11 +2942,11 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.lists.Take.apply(
   3,
-  (java.util.List<T2>) (java.util.List.<T2>of())));
+  (hydra.util.ConsList<T2>) (hydra.util.ConsList.<T2>of())));
 
     }
 
@@ -2956,11 +2956,11 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.lists.Take.apply(
   -1,
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -2975,23 +2975,23 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
-  java.util.List.of(
+            hydra.util.ConsList.of(
+  hydra.util.ConsList.of(
     1,
     4),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     2,
     5),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     3,
     6)),
 
-            hydra.lib.lists.Transpose.apply(java.util.List.of(
-  java.util.List.of(
+            hydra.lib.lists.Transpose.apply(hydra.util.ConsList.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     4,
     5,
     6))));
@@ -3004,9 +3004,9 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
-            hydra.lib.lists.Transpose.apply((java.util.List<java.util.List<T0>>) (java.util.List.<java.util.List<T0>>of())));
+            hydra.lib.lists.Transpose.apply((hydra.util.ConsList<hydra.util.ConsList<T0>>) (hydra.util.ConsList.<hydra.util.ConsList<T0>>of())));
 
     }
 
@@ -3016,12 +3016,12 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
-  java.util.List.of(1),
-  java.util.List.of(2),
-  java.util.List.of(3)),
+            hydra.util.ConsList.of(
+  hydra.util.ConsList.of(1),
+  hydra.util.ConsList.of(2),
+  hydra.util.ConsList.of(3)),
 
-            hydra.lib.lists.Transpose.apply(java.util.List.of(java.util.List.of(
+            hydra.lib.lists.Transpose.apply(hydra.util.ConsList.of(hydra.util.ConsList.of(
   1,
   2,
   3))));
@@ -3034,15 +3034,15 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(java.util.List.of(
+            hydra.util.ConsList.of(hydra.util.ConsList.of(
   1,
   2,
   3)),
 
-            hydra.lib.lists.Transpose.apply(java.util.List.of(
-  java.util.List.of(1),
-  java.util.List.of(2),
-  java.util.List.of(3))));
+            hydra.lib.lists.Transpose.apply(hydra.util.ConsList.of(
+  hydra.util.ConsList.of(1),
+  hydra.util.ConsList.of(2),
+  hydra.util.ConsList.of(3))));
 
     }
 
@@ -3052,22 +3052,22 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
-  java.util.List.of(
+            hydra.util.ConsList.of(
+  hydra.util.ConsList.of(
     1,
     3,
     4),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     2,
     5),
-  java.util.List.of(6)),
+  hydra.util.ConsList.of(6)),
 
-            hydra.lib.lists.Transpose.apply(java.util.List.of(
-  java.util.List.of(
+            hydra.lib.lists.Transpose.apply(hydra.util.ConsList.of(
+  hydra.util.ConsList.of(
     1,
     2),
-  java.util.List.of(3),
-  java.util.List.of(
+  hydra.util.ConsList.of(3),
+  hydra.util.ConsList.of(
     4,
     5,
     6))));
@@ -3082,17 +3082,17 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(1, "a"))),
   (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(2, "b"))),
   (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(3, "c")))),
 
             hydra.lib.lists.Zip.apply(
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     "a",
     "b",
     "c")));
@@ -3105,15 +3105,15 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(1, "a"))),
   (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(2, "b")))),
 
             hydra.lib.lists.Zip.apply(
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     "a",
     "b",
     "c")));
@@ -3126,16 +3126,16 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(1, "a"))),
   (hydra.util.Pair<Integer, String>) ((hydra.util.Pair<Integer, String>) (new hydra.util.Pair<Integer, String>(2, "b")))),
 
             hydra.lib.lists.Zip.apply(
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     "a",
     "b")));
 
@@ -3147,11 +3147,11 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.lists.Zip.apply(
-  (java.util.List<T2>) (java.util.List.<T2>of()),
-  java.util.List.of(
+  (hydra.util.ConsList<T2>) (hydra.util.ConsList.<T2>of()),
+  hydra.util.ConsList.of(
     "a",
     "b")));
 
@@ -3163,13 +3163,13 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.lists.Zip.apply(
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2),
-  (java.util.List<T4>) (java.util.List.<T4>of())));
+  (hydra.util.ConsList<T4>) (hydra.util.ConsList.<T4>of())));
 
     }
 
@@ -3179,11 +3179,11 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.lists.Zip.apply(
-  (java.util.List<T2>) (java.util.List.<T2>of()),
-  (java.util.List<T4>) (java.util.List.<T4>of())));
+  (hydra.util.ConsList<T2>) (hydra.util.ConsList.<T2>of()),
+  (hydra.util.ConsList<T4>) (hydra.util.ConsList.<T4>of())));
 
     }
 
@@ -3195,7 +3195,7 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   5,
   7,
   9),
@@ -3204,11 +3204,11 @@ public class ListsTest {
   (java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (p0 -> p1 -> hydra.lib.math.Add.apply(
     p0,
     p1)),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     4,
     5,
     6)));
@@ -3221,7 +3221,7 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   5,
   7),
 
@@ -3229,10 +3229,10 @@ public class ListsTest {
   (java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (p0 -> p1 -> hydra.lib.math.Add.apply(
     p0,
     p1)),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     4,
     5,
     6)));
@@ -3245,7 +3245,7 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   5,
   7),
 
@@ -3253,11 +3253,11 @@ public class ListsTest {
   (java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (p0 -> p1 -> hydra.lib.math.Add.apply(
     p0,
     p1)),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     4,
     5)));
 
@@ -3269,14 +3269,14 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.lists.ZipWith.apply(
   (java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (p0 -> p1 -> hydra.lib.math.Add.apply(
     p0,
     p1)),
-  (java.util.List<Integer>) (java.util.List.<Integer>of()),
-  java.util.List.of(
+  (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of()),
+  hydra.util.ConsList.of(
     1,
     2,
     3)));
@@ -3289,17 +3289,17 @@ public class ListsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.lists.ZipWith.apply(
   (java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (p0 -> p1 -> hydra.lib.math.Add.apply(
     p0,
     p1)),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3),
-  (java.util.List<Integer>) (java.util.List.<Integer>of())));
+  (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of())));
 
     }
 
@@ -3309,7 +3309,7 @@ public class ListsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "a1",
   "b2"),
 
@@ -3317,10 +3317,10 @@ public class ListsTest {
   (java.util.function.Function<String, java.util.function.Function<String, String>>) (p0 -> p1 -> hydra.lib.strings.Cat2.apply(
     p0,
     p1)),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     "a",
     "b"),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     "1",
     "2")));
 

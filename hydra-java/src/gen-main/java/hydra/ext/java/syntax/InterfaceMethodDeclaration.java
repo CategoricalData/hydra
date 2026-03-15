@@ -13,13 +13,13 @@ public class InterfaceMethodDeclaration implements Serializable, Comparable<Inte
   
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
-  public final java.util.List<hydra.ext.java.syntax.InterfaceMethodModifier> modifiers;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.InterfaceMethodModifier> modifiers;
   
   public final hydra.ext.java.syntax.MethodHeader header;
   
   public final hydra.ext.java.syntax.MethodBody body;
   
-  public InterfaceMethodDeclaration (java.util.List<hydra.ext.java.syntax.InterfaceMethodModifier> modifiers, hydra.ext.java.syntax.MethodHeader header, hydra.ext.java.syntax.MethodBody body) {
+  public InterfaceMethodDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.InterfaceMethodModifier> modifiers, hydra.ext.java.syntax.MethodHeader header, hydra.ext.java.syntax.MethodBody body) {
     this.modifiers = modifiers;
     this.header = header;
     this.body = body;
@@ -62,7 +62,7 @@ public class InterfaceMethodDeclaration implements Serializable, Comparable<Inte
     return ((Comparable) body).compareTo(other.body);
   }
   
-  public InterfaceMethodDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.InterfaceMethodModifier> modifiers) {
+  public InterfaceMethodDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.InterfaceMethodModifier> modifiers) {
     return new InterfaceMethodDeclaration(modifiers, header, body);
   }
   

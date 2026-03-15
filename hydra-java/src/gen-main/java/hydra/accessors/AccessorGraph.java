@@ -17,14 +17,14 @@ public class AccessorGraph implements Serializable, Comparable<AccessorGraph> {
   /**
    * All nodes in the graph
    */
-  public final java.util.List<hydra.accessors.AccessorNode> nodes;
+  public final hydra.util.ConsList<hydra.accessors.AccessorNode> nodes;
   
   /**
    * All edges in the graph
    */
-  public final java.util.List<hydra.accessors.AccessorEdge> edges;
+  public final hydra.util.ConsList<hydra.accessors.AccessorEdge> edges;
   
-  public AccessorGraph (java.util.List<hydra.accessors.AccessorNode> nodes, java.util.List<hydra.accessors.AccessorEdge> edges) {
+  public AccessorGraph (hydra.util.ConsList<hydra.accessors.AccessorNode> nodes, hydra.util.ConsList<hydra.accessors.AccessorEdge> edges) {
     this.nodes = nodes;
     this.edges = edges;
   }
@@ -62,11 +62,11 @@ public class AccessorGraph implements Serializable, Comparable<AccessorGraph> {
       other.edges.hashCode());
   }
   
-  public AccessorGraph withNodes(java.util.List<hydra.accessors.AccessorNode> nodes) {
+  public AccessorGraph withNodes(hydra.util.ConsList<hydra.accessors.AccessorNode> nodes) {
     return new AccessorGraph(nodes, edges);
   }
   
-  public AccessorGraph withEdges(java.util.List<hydra.accessors.AccessorEdge> edges) {
+  public AccessorGraph withEdges(hydra.util.ConsList<hydra.accessors.AccessorEdge> edges) {
     return new AccessorGraph(nodes, edges);
   }
 }

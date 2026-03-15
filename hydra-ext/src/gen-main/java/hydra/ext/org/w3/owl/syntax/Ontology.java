@@ -13,13 +13,13 @@ public class Ontology implements Serializable, Comparable<Ontology> {
   
   public static final hydra.core.Name AXIOMS = new hydra.core.Name("axioms");
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.Ontology> directImports;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Ontology> directImports;
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.Axiom> axioms;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Axiom> axioms;
   
-  public Ontology (java.util.List<hydra.ext.org.w3.owl.syntax.Ontology> directImports, java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, java.util.List<hydra.ext.org.w3.owl.syntax.Axiom> axioms) {
+  public Ontology (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Ontology> directImports, hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Axiom> axioms) {
     this.directImports = directImports;
     this.annotations = annotations;
     this.axioms = axioms;
@@ -66,15 +66,15 @@ public class Ontology implements Serializable, Comparable<Ontology> {
       other.axioms.hashCode());
   }
   
-  public Ontology withDirectImports(java.util.List<hydra.ext.org.w3.owl.syntax.Ontology> directImports) {
+  public Ontology withDirectImports(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Ontology> directImports) {
     return new Ontology(directImports, annotations, axioms);
   }
   
-  public Ontology withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public Ontology withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new Ontology(directImports, annotations, axioms);
   }
   
-  public Ontology withAxioms(java.util.List<hydra.ext.org.w3.owl.syntax.Axiom> axioms) {
+  public Ontology withAxioms(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Axiom> axioms) {
     return new Ontology(directImports, annotations, axioms);
   }
 }

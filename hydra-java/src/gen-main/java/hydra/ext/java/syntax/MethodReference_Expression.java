@@ -15,11 +15,11 @@ public class MethodReference_Expression implements Serializable, Comparable<Meth
   
   public final hydra.ext.java.syntax.ExpressionName name;
   
-  public final java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments;
   
   public final hydra.ext.java.syntax.Identifier identifier;
   
-  public MethodReference_Expression (hydra.ext.java.syntax.ExpressionName name, java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.Identifier identifier) {
+  public MethodReference_Expression (hydra.ext.java.syntax.ExpressionName name, hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments, hydra.ext.java.syntax.Identifier identifier) {
     this.name = name;
     this.typeArguments = typeArguments;
     this.identifier = identifier;
@@ -66,7 +66,7 @@ public class MethodReference_Expression implements Serializable, Comparable<Meth
     return new MethodReference_Expression(name, typeArguments, identifier);
   }
   
-  public MethodReference_Expression withTypeArguments(java.util.List<hydra.ext.java.syntax.TypeArgument> typeArguments) {
+  public MethodReference_Expression withTypeArguments(hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments) {
     return new MethodReference_Expression(name, typeArguments, identifier);
   }
   

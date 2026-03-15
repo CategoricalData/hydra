@@ -52,7 +52,7 @@ public interface Serde {
                             c,
                             92))))))))))),
       () -> "?",
-      () -> hydra.lib.strings.FromList.apply(java.util.List.of(c)));
+      () -> hydra.lib.strings.FromList.apply(hydra.util.ConsList.of(c)));
   }
   
   static String escapeIriStr(String s) {
@@ -87,7 +87,7 @@ public interface Serde {
                 c,
                 13),
               () -> "\\r",
-              () -> hydra.lib.strings.FromList.apply(java.util.List.of(c)))))));
+              () -> hydra.lib.strings.FromList.apply(hydra.util.ConsList.of(c)))))));
   }
   
   static String escapeLiteralString(String s) {
@@ -101,7 +101,7 @@ public interface Serde {
   }
   
   static hydra.ast.Expr writeBlankNode(hydra.ext.org.w3.rdf.syntax.BlankNode bnode) {
-    return hydra.serialization.Serialization.noSep(java.util.List.of(
+    return hydra.serialization.Serialization.noSep(hydra.util.ConsList.of(
       hydra.serialization.Serialization.cst("_:"),
       hydra.serialization.Serialization.cst((bnode).value)));
   }
@@ -113,14 +113,14 @@ public interface Serde {
   }
   
   static hydra.ast.Expr writeIri(hydra.ext.org.w3.rdf.syntax.Iri iri) {
-    return hydra.serialization.Serialization.noSep(java.util.List.of(
+    return hydra.serialization.Serialization.noSep(hydra.util.ConsList.of(
       hydra.serialization.Serialization.cst("<"),
       hydra.serialization.Serialization.cst(hydra.ext.rdf.serde.Serde.escapeIriStr((iri).value)),
       hydra.serialization.Serialization.cst(">")));
   }
   
   static hydra.ast.Expr writeLanguageTag(hydra.ext.org.w3.rdf.syntax.LanguageTag lang) {
-    return hydra.serialization.Serialization.noSep(java.util.List.of(
+    return hydra.serialization.Serialization.noSep(hydra.util.ConsList.of(
       hydra.serialization.Serialization.cst("@"),
       hydra.serialization.Serialization.cst((lang).value)));
   }
@@ -129,17 +129,17 @@ public interface Serde {
     hydra.ext.org.w3.rdf.syntax.Iri dt = (lit).datatypeIri;
     hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.LanguageTag> lang = (lit).languageTag;
     String lex = (lit).lexicalForm;
-    hydra.ast.Expr lexExpr = hydra.serialization.Serialization.cst(hydra.lib.strings.Cat.apply(java.util.List.of(
+    hydra.ast.Expr lexExpr = hydra.serialization.Serialization.cst(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
       "\"",
       hydra.ext.rdf.serde.Serde.escapeLiteralString(lex),
       "\"")));
     hydra.util.Lazy<hydra.ast.Expr> suffix = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
-      () -> hydra.serialization.Serialization.noSep(java.util.List.of(
+      () -> hydra.serialization.Serialization.noSep(hydra.util.ConsList.of(
         hydra.serialization.Serialization.cst("^^"),
         hydra.ext.rdf.serde.Serde.writeIri(dt))),
       hydra.ext.rdf.serde.Serde::writeLanguageTag,
       lang));
-    return hydra.serialization.Serialization.noSep(java.util.List.of(
+    return hydra.serialization.Serialization.noSep(hydra.util.ConsList.of(
       lexExpr,
       suffix.get()));
   }
@@ -181,7 +181,7 @@ public interface Serde {
     hydra.ext.org.w3.rdf.syntax.Node obj = (t).object;
     hydra.ext.org.w3.rdf.syntax.Iri pred = (t).predicate;
     hydra.ext.org.w3.rdf.syntax.Resource subj = (t).subject;
-    return hydra.serialization.Serialization.spaceSep(java.util.List.of(
+    return hydra.serialization.Serialization.spaceSep(hydra.util.ConsList.of(
       hydra.ext.rdf.serde.Serde.writeResource(subj),
       hydra.ext.rdf.serde.Serde.writeIri(pred),
       hydra.ext.rdf.serde.Serde.writeNode(obj),

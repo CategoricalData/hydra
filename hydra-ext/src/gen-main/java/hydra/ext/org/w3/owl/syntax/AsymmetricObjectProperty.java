@@ -11,11 +11,11 @@ public class AsymmetricObjectProperty implements Serializable, Comparable<Asymme
   
   public static final hydra.core.Name PROPERTY = new hydra.core.Name("property");
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
   public final hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property;
   
-  public AsymmetricObjectProperty (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property) {
+  public AsymmetricObjectProperty (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property) {
     this.annotations = annotations;
     this.property = property;
   }
@@ -51,7 +51,7 @@ public class AsymmetricObjectProperty implements Serializable, Comparable<Asymme
     return ((Comparable) property).compareTo(other.property);
   }
   
-  public AsymmetricObjectProperty withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public AsymmetricObjectProperty withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new AsymmetricObjectProperty(annotations, property);
   }
   

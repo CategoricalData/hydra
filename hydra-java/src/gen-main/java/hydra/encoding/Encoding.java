@@ -25,31 +25,31 @@ public interface Encoding {
       () -> new hydra.core.Name(hydra.lib.strings.Intercalate.apply(
         ".",
         hydra.lib.lists.Concat2.apply(
-          java.util.List.of(
+          hydra.util.ConsList.of(
             "hydra",
             "encode"),
           hydra.lib.lists.Concat2.apply(
             hydra.lib.lists.Tail.apply(hydra.lib.lists.Init.apply(hydra.lib.strings.SplitOn.apply(
               ".",
               (n).value))),
-            java.util.List.of(hydra.formatting.Formatting.decapitalize(hydra.names.Names.localNameOf(n))))))),
+            hydra.util.ConsList.of(hydra.formatting.Formatting.decapitalize(hydra.names.Names.localNameOf(n))))))),
       () -> new hydra.core.Name(hydra.formatting.Formatting.decapitalize(hydra.names.Names.localNameOf(n))));
   }
   
-  static java.util.List<hydra.core.Name> encoderCollectForallVariables(hydra.core.Type typ) {
+  static hydra.util.ConsList<hydra.core.Name> encoderCollectForallVariables(hydra.core.Type typ) {
     return (typ).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
-      public java.util.List<hydra.core.Name> otherwise(hydra.core.Type instance) {
-        return (java.util.List<hydra.core.Name>) (java.util.List.<hydra.core.Name>of());
+      public hydra.util.ConsList<hydra.core.Name> otherwise(hydra.core.Type instance) {
+        return (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>of());
       }
       
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Type.Annotated at) {
+      public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Annotated at) {
         return hydra.encoding.Encoding.encoderCollectForallVariables(((at).value).body);
       }
       
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Type.Forall ft) {
+      public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Forall ft) {
         return hydra.lib.lists.Cons.apply(
           ((ft).value).parameter,
           hydra.encoding.Encoding.encoderCollectForallVariables(((ft).value).body));
@@ -57,164 +57,164 @@ public interface Encoding {
     });
   }
   
-  static java.util.List<hydra.core.Name> encoderCollectOrdVars(hydra.core.Type typ) {
+  static hydra.util.ConsList<hydra.core.Name> encoderCollectOrdVars(hydra.core.Type typ) {
     return (typ).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
-      public java.util.List<hydra.core.Name> otherwise(hydra.core.Type instance) {
-        return (java.util.List<hydra.core.Name>) (java.util.List.<hydra.core.Name>of());
+      public hydra.util.ConsList<hydra.core.Name> otherwise(hydra.core.Type instance) {
+        return (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>of());
       }
       
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Type.Annotated at) {
+      public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Annotated at) {
         return hydra.encoding.Encoding.encoderCollectOrdVars(((at).value).body);
       }
       
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Type.Application appType) {
+      public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Application appType) {
         return hydra.lib.lists.Concat2.apply(
           hydra.encoding.Encoding.encoderCollectOrdVars(((appType).value).function),
           hydra.encoding.Encoding.encoderCollectOrdVars(((appType).value).argument));
       }
       
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Type.Either et) {
+      public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Either et) {
         return hydra.lib.lists.Concat2.apply(
           hydra.encoding.Encoding.encoderCollectOrdVars(((et).value).left),
           hydra.encoding.Encoding.encoderCollectOrdVars(((et).value).right));
       }
       
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Type.Forall ft) {
+      public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Forall ft) {
         return hydra.encoding.Encoding.encoderCollectOrdVars(((ft).value).body);
       }
       
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Type.List elemType) {
+      public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.List elemType) {
         return hydra.encoding.Encoding.encoderCollectOrdVars((elemType).value);
       }
       
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Type.Map mt) {
-        return hydra.lib.lists.Concat.apply(java.util.List.of(
+      public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Map mt) {
+        return hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
           hydra.encoding.Encoding.encoderCollectTypeVarsFromType(((mt).value).keys),
           hydra.encoding.Encoding.encoderCollectOrdVars(((mt).value).keys),
           hydra.encoding.Encoding.encoderCollectOrdVars(((mt).value).values)));
       }
       
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Type.Maybe elemType) {
+      public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Maybe elemType) {
         return hydra.encoding.Encoding.encoderCollectOrdVars((elemType).value);
       }
       
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Type.Pair pt) {
+      public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Pair pt) {
         return hydra.lib.lists.Concat2.apply(
           hydra.encoding.Encoding.encoderCollectOrdVars(((pt).value).first),
           hydra.encoding.Encoding.encoderCollectOrdVars(((pt).value).second));
       }
       
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Type.Record rt) {
+      public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Record rt) {
         return hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
-          (java.util.function.Function<hydra.core.FieldType, java.util.List<hydra.core.Name>>) (ft -> hydra.encoding.Encoding.encoderCollectOrdVars((ft).type)),
+          (java.util.function.Function<hydra.core.FieldType, hydra.util.ConsList<hydra.core.Name>>) (ft -> hydra.encoding.Encoding.encoderCollectOrdVars((ft).type)),
           ((rt).value).fields));
       }
       
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Type.Set elemType) {
+      public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Set elemType) {
         return hydra.lib.lists.Concat2.apply(
           hydra.encoding.Encoding.encoderCollectTypeVarsFromType((elemType).value),
           hydra.encoding.Encoding.encoderCollectOrdVars((elemType).value));
       }
       
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Type.Union rt) {
+      public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Union rt) {
         return hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
-          (java.util.function.Function<hydra.core.FieldType, java.util.List<hydra.core.Name>>) (ft -> hydra.encoding.Encoding.encoderCollectOrdVars((ft).type)),
+          (java.util.function.Function<hydra.core.FieldType, hydra.util.ConsList<hydra.core.Name>>) (ft -> hydra.encoding.Encoding.encoderCollectOrdVars((ft).type)),
           ((rt).value).fields));
       }
       
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Type.Wrap wt) {
+      public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Wrap wt) {
         return hydra.encoding.Encoding.encoderCollectOrdVars(((wt).value).body);
       }
     });
   }
   
-  static java.util.List<hydra.core.Name> encoderCollectTypeVarsFromType(hydra.core.Type typ) {
+  static hydra.util.ConsList<hydra.core.Name> encoderCollectTypeVarsFromType(hydra.core.Type typ) {
     return (typ).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
-      public java.util.List<hydra.core.Name> otherwise(hydra.core.Type instance) {
-        return (java.util.List<hydra.core.Name>) (java.util.List.<hydra.core.Name>of());
+      public hydra.util.ConsList<hydra.core.Name> otherwise(hydra.core.Type instance) {
+        return (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>of());
       }
       
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Type.Annotated at) {
+      public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Annotated at) {
         return hydra.encoding.Encoding.encoderCollectTypeVarsFromType(((at).value).body);
       }
       
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Type.Application appType) {
+      public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Application appType) {
         return hydra.lib.lists.Concat2.apply(
           hydra.encoding.Encoding.encoderCollectTypeVarsFromType(((appType).value).function),
           hydra.encoding.Encoding.encoderCollectTypeVarsFromType(((appType).value).argument));
       }
       
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Type.Forall ft) {
+      public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Forall ft) {
         return hydra.encoding.Encoding.encoderCollectTypeVarsFromType(((ft).value).body);
       }
       
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Type.List elemType) {
+      public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.List elemType) {
         return hydra.encoding.Encoding.encoderCollectTypeVarsFromType((elemType).value);
       }
       
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Type.Map mt) {
+      public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Map mt) {
         return hydra.lib.lists.Concat2.apply(
           hydra.encoding.Encoding.encoderCollectTypeVarsFromType(((mt).value).keys),
           hydra.encoding.Encoding.encoderCollectTypeVarsFromType(((mt).value).values));
       }
       
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Type.Maybe elemType) {
+      public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Maybe elemType) {
         return hydra.encoding.Encoding.encoderCollectTypeVarsFromType((elemType).value);
       }
       
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Type.Pair pt) {
+      public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Pair pt) {
         return hydra.lib.lists.Concat2.apply(
           hydra.encoding.Encoding.encoderCollectTypeVarsFromType(((pt).value).first),
           hydra.encoding.Encoding.encoderCollectTypeVarsFromType(((pt).value).second));
       }
       
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Type.Record rt) {
+      public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Record rt) {
         return hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
-          (java.util.function.Function<hydra.core.FieldType, java.util.List<hydra.core.Name>>) (ft -> hydra.encoding.Encoding.encoderCollectTypeVarsFromType((ft).type)),
+          (java.util.function.Function<hydra.core.FieldType, hydra.util.ConsList<hydra.core.Name>>) (ft -> hydra.encoding.Encoding.encoderCollectTypeVarsFromType((ft).type)),
           ((rt).value).fields));
       }
       
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Type.Set elemType) {
+      public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Set elemType) {
         return hydra.encoding.Encoding.encoderCollectTypeVarsFromType((elemType).value);
       }
       
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Type.Union rt) {
+      public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Union rt) {
         return hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
-          (java.util.function.Function<hydra.core.FieldType, java.util.List<hydra.core.Name>>) (ft -> hydra.encoding.Encoding.encoderCollectTypeVarsFromType((ft).type)),
+          (java.util.function.Function<hydra.core.FieldType, hydra.util.ConsList<hydra.core.Name>>) (ft -> hydra.encoding.Encoding.encoderCollectTypeVarsFromType((ft).type)),
           ((rt).value).fields));
       }
       
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Type.Variable name) {
-        return java.util.List.of((name).value);
+      public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Variable name) {
+        return hydra.util.ConsList.of((name).value);
       }
       
       @Override
-      public java.util.List<hydra.core.Name> visit(hydra.core.Type.Wrap wt) {
+      public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Wrap wt) {
         return hydra.encoding.Encoding.encoderCollectTypeVarsFromType(((wt).value).body);
       }
     });
@@ -313,16 +313,16 @@ public interface Encoding {
   }
   
   static hydra.core.TypeScheme encoderTypeScheme(hydra.core.Type typ) {
-    java.util.List<hydra.core.Name> allOrdVars = hydra.encoding.Encoding.encoderCollectOrdVars(typ);
-    java.util.List<hydra.core.Name> typeVars = hydra.encoding.Encoding.encoderCollectForallVariables(typ);
-    hydra.util.Lazy<java.util.List<hydra.core.Name>> ordVars = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
+    hydra.util.ConsList<hydra.core.Name> allOrdVars = hydra.encoding.Encoding.encoderCollectOrdVars(typ);
+    hydra.util.ConsList<hydra.core.Name> typeVars = hydra.encoding.Encoding.encoderCollectForallVariables(typ);
+    hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> ordVars = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
       (java.util.function.Function<hydra.core.Name, Boolean>) (v -> hydra.lib.lists.Elem.apply(
         v,
         typeVars)),
       allOrdVars));
-    hydra.util.Lazy<hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>> constraints = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
+    hydra.util.Lazy<hydra.util.Maybe<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>> constraints = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(ordVars.get()),
-      () -> (hydra.util.Maybe<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()),
+      () -> (hydra.util.Maybe<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()),
       () -> hydra.util.Maybe.just(hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
         (java.util.function.Function<hydra.core.Name, hydra.util.Pair<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (v -> (hydra.util.Pair<hydra.core.Name, hydra.core.TypeVariableMetadata>) ((hydra.util.Pair<hydra.core.Name, hydra.core.TypeVariableMetadata>) (new hydra.util.Pair<hydra.core.Name, hydra.core.TypeVariableMetadata>(v, new hydra.core.TypeVariableMetadata(hydra.lib.sets.Singleton.apply(new hydra.core.Name("ordering"))))))),
         ordVars.get())))));
@@ -380,9 +380,9 @@ public interface Encoding {
   }
   
   static hydra.core.Term encodeInjection(hydra.core.Name typeName, hydra.core.Name fieldName, hydra.core.Term fieldTerm) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.Injection"), java.util.List.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.Injection"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("typeName"), hydra.encoding.Encoding.encodeName(typeName)),
-      new hydra.core.Field(new hydra.core.Name("field"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.Field"), java.util.List.of(
+      new hydra.core.Field(new hydra.core.Name("field"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.Field"), hydra.util.ConsList.of(
         new hydra.core.Field(new hydra.core.Name("name"), hydra.encoding.Encoding.encodeName(fieldName)),
         new hydra.core.Field(new hydra.core.Name("term"), fieldTerm))))))));
   }
@@ -504,7 +504,7 @@ public interface Encoding {
         cx,
         graph,
         (mod).elements),
-      (java.util.function.Function<java.util.List<hydra.core.Binding>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<hydra.module.Module>>>) (typeBindings -> hydra.lib.logic.IfElse.lazy(
+      (java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<hydra.module.Module>>>) (typeBindings -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(typeBindings),
         () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<hydra.module.Module>>right((hydra.util.Maybe<hydra.module.Module>) (hydra.util.Maybe.<hydra.module.Module>nothing())),
         () -> hydra.lib.eithers.Bind.apply(
@@ -517,13 +517,13 @@ public interface Encoding {
                 graph,
                 b))),
             typeBindings),
-          (java.util.function.Function<java.util.List<hydra.core.Binding>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<hydra.module.Module>>>) (encodedBindings -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<hydra.module.Module>>right(hydra.util.Maybe.just(new hydra.module.Module(hydra.encoding.Encoding.encodeNamespace((mod).namespace), encodedBindings, hydra.lib.lists.Nub.apply(hydra.lib.lists.Concat2.apply(
+          (java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<hydra.module.Module>>>) (encodedBindings -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<hydra.module.Module>>right(hydra.util.Maybe.just(new hydra.module.Module(hydra.encoding.Encoding.encodeNamespace((mod).namespace), encodedBindings, hydra.lib.lists.Nub.apply(hydra.lib.lists.Concat2.apply(
             hydra.lib.lists.Map.apply(
               hydra.encoding.Encoding::encodeNamespace,
               (mod).typeDependencies),
             hydra.lib.lists.Map.apply(
               hydra.encoding.Encoding::encodeNamespace,
-              (mod).termDependencies))), java.util.List.of((mod).namespace), hydra.util.Maybe.just(hydra.lib.strings.Cat.apply(java.util.List.of(
+              (mod).termDependencies))), hydra.util.ConsList.of((mod).namespace), hydra.util.Maybe.just(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
             "Term encoders for ",
             ((mod).namespace).value)))))))))));
   }
@@ -533,7 +533,7 @@ public interface Encoding {
   }
   
   static hydra.module.Namespace encodeNamespace(hydra.module.Namespace ns) {
-    return new hydra.module.Namespace(hydra.lib.strings.Cat.apply(java.util.List.of(
+    return new hydra.module.Namespace(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
       "hydra.encode.",
       hydra.lib.strings.Intercalate.apply(
         ".",
@@ -543,10 +543,10 @@ public interface Encoding {
   }
   
   static hydra.core.Term encodeRecordType(hydra.core.RowType rt) {
-    return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("record"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.Record"), java.util.List.of(
+    return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("record"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.Record"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("typeName"), hydra.encoding.Encoding.encodeName((rt).typeName)),
       new hydra.core.Field(new hydra.core.Name("fields"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.core.FieldType, hydra.core.Term>) (ft -> new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.Field"), java.util.List.of(
+        (java.util.function.Function<hydra.core.FieldType, hydra.core.Term>) (ft -> new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.Field"), hydra.util.ConsList.of(
           new hydra.core.Field(new hydra.core.Name("name"), hydra.encoding.Encoding.encodeName((ft).name)),
           new hydra.core.Field(new hydra.core.Name("term"), new hydra.core.Term.Application(new hydra.core.Application(hydra.encoding.Encoding.encodeType((ft).type), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Record(new hydra.core.Projection((rt).typeName, (ft).name)))), new hydra.core.Term.Variable(new hydra.core.Name("x"))))))))))),
         (rt).fields))))))))))));
@@ -655,14 +655,14 @@ public interface Encoding {
   }
   
   static hydra.core.Term encodeWrappedType(hydra.core.WrappedType wt) {
-    return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("wrap"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.WrappedTerm"), java.util.List.of(
+    return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name("x"), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Term"), new hydra.core.Field(new hydra.core.Name("wrap"), new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.WrappedTerm"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("typeName"), hydra.encoding.Encoding.encodeName((wt).typeName)),
       new hydra.core.Field(new hydra.core.Name("body"), new hydra.core.Term.Application(new hydra.core.Application(hydra.encoding.Encoding.encodeType((wt).body), new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Function(new hydra.core.Function.Elimination(new hydra.core.Elimination.Wrap((wt).typeName))), new hydra.core.Term.Variable(new hydra.core.Name("x"))))))))))))))));
   }
   
-  static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, java.util.List<hydra.core.Binding>> filterTypeBindings(hydra.context.Context cx, hydra.graph.Graph graph, java.util.List<hydra.core.Binding> bindings) {
+  static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.Binding>> filterTypeBindings(hydra.context.Context cx, hydra.graph.Graph graph, hydra.util.ConsList<hydra.core.Binding> bindings) {
     return hydra.lib.eithers.Map.apply(
-      (java.util.function.Function<java.util.List<hydra.util.Maybe<hydra.core.Binding>>, java.util.List<hydra.core.Binding>>) (hydra.lib.maybes.Cat::apply),
+      (java.util.function.Function<hydra.util.ConsList<hydra.util.Maybe<hydra.core.Binding>>, hydra.util.ConsList<hydra.core.Binding>>) (hydra.lib.maybes.Cat::apply),
       hydra.lib.eithers.MapList.apply(
         (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<hydra.core.Binding>>>) (v1 -> hydra.encoding.Encoding.isEncodableBinding(
           cx,

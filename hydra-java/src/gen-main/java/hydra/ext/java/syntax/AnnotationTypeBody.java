@@ -9,9 +9,9 @@ public class AnnotationTypeBody implements Serializable, Comparable<AnnotationTy
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<java.util.List<hydra.ext.java.syntax.AnnotationTypeMemberDeclaration>> value;
+  public final hydra.util.ConsList<hydra.util.ConsList<hydra.ext.java.syntax.AnnotationTypeMemberDeclaration>> value;
   
-  public AnnotationTypeBody (java.util.List<java.util.List<hydra.ext.java.syntax.AnnotationTypeMemberDeclaration>> value) {
+  public AnnotationTypeBody (hydra.util.ConsList<hydra.util.ConsList<hydra.ext.java.syntax.AnnotationTypeMemberDeclaration>> value) {
     this.value = value;
   }
   

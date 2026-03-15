@@ -15,7 +15,7 @@ public class Resource_Local implements Serializable, Comparable<Resource_Local> 
   
   public static final hydra.core.Name EXPRESSION = new hydra.core.Name("expression");
   
-  public final java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers;
   
   public final hydra.ext.java.syntax.LocalVariableType type;
   
@@ -23,7 +23,7 @@ public class Resource_Local implements Serializable, Comparable<Resource_Local> 
   
   public final hydra.ext.java.syntax.Expression expression;
   
-  public Resource_Local (java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers, hydra.ext.java.syntax.LocalVariableType type, hydra.ext.java.syntax.Identifier identifier, hydra.ext.java.syntax.Expression expression) {
+  public Resource_Local (hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers, hydra.ext.java.syntax.LocalVariableType type, hydra.ext.java.syntax.Identifier identifier, hydra.ext.java.syntax.Expression expression) {
     this.modifiers = modifiers;
     this.type = type;
     this.identifier = identifier;
@@ -73,7 +73,7 @@ public class Resource_Local implements Serializable, Comparable<Resource_Local> 
     return ((Comparable) expression).compareTo(other.expression);
   }
   
-  public Resource_Local withModifiers(java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers) {
+  public Resource_Local withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers) {
     return new Resource_Local(modifiers, type, identifier, expression);
   }
   

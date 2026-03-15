@@ -104,7 +104,7 @@ public interface Parsers {
       c)));
   }
   
-  static <T0> hydra.parsing.Parser<T0> choice(java.util.List<hydra.parsing.Parser<T0>> ps) {
+  static <T0> hydra.parsing.Parser<T0> choice(hydra.util.ConsList<hydra.parsing.Parser<T0>> ps) {
     return hydra.lib.lists.Foldl.apply(
       p0 -> p1 -> hydra.parsers.Parsers.<T0>alt(
         p0,
@@ -130,10 +130,10 @@ public interface Parsers {
     return (hydra.parsing.Parser<T0>) (new hydra.parsing.Parser((java.util.function.Function<String, hydra.parsing.ParseResult<T0>>) (input -> (((java.util.function.Function<hydra.parsing.Parser<T0>, java.util.function.Function<String, hydra.parsing.ParseResult<T0>>>) (wrapped -> (wrapped).value)).apply((f).apply(null))).apply(input))));
   }
   
-  static <T0> hydra.parsing.Parser<java.util.List<T0>> many(hydra.parsing.Parser<T0> p) {
-    return hydra.parsers.Parsers.<java.util.List<T0>>alt(
+  static <T0> hydra.parsing.Parser<hydra.util.ConsList<T0>> many(hydra.parsing.Parser<T0> p) {
+    return hydra.parsers.Parsers.<hydra.util.ConsList<T0>>alt(
       hydra.parsers.Parsers.<T0>some(p),
-      hydra.parsers.Parsers.<java.util.List<T0>>pure((java.util.List<T0>) (java.util.List.<T0>of())));
+      hydra.parsers.Parsers.<hydra.util.ConsList<T0>>pure((hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of())));
   }
   
   static <T0, T1> hydra.parsing.Parser<T1> map(java.util.function.Function<T0, T1> f, hydra.parsing.Parser<T0> pa) {
@@ -175,7 +175,7 @@ public interface Parsers {
   
   static hydra.parsing.Parser<Integer> satisfy(java.util.function.Function<Integer, Boolean> pred) {
     java.util.function.Function<String, hydra.parsing.ParseResult<Integer>> parse = (java.util.function.Function<String, hydra.parsing.ParseResult<Integer>>) (input -> {
-      java.util.List<Integer> codes = hydra.lib.strings.ToList.apply(input);
+      hydra.util.ConsList<Integer> codes = hydra.lib.strings.ToList.apply(input);
       return hydra.lib.maybes.Maybe.applyLazy(
         () -> (hydra.parsing.ParseResult<Integer>) (new hydra.parsing.ParseResult.Failure(new hydra.parsing.ParseError("unexpected end of input", input))),
         (java.util.function.Function<Integer, hydra.parsing.ParseResult<Integer>>) (c -> {
@@ -192,42 +192,42 @@ public interface Parsers {
     return (hydra.parsing.Parser<Integer>) (new hydra.parsing.Parser(parse));
   }
   
-  static <T0, T1> hydra.parsing.Parser<java.util.List<T0>> sepBy(hydra.parsing.Parser<T0> p, hydra.parsing.Parser<T1> sep) {
-    return hydra.parsers.Parsers.<java.util.List<T0>>alt(
+  static <T0, T1> hydra.parsing.Parser<hydra.util.ConsList<T0>> sepBy(hydra.parsing.Parser<T0> p, hydra.parsing.Parser<T1> sep) {
+    return hydra.parsers.Parsers.<hydra.util.ConsList<T0>>alt(
       hydra.parsers.Parsers.<T0, T1>sepBy1(
         p,
         sep),
-      hydra.parsers.Parsers.<java.util.List<T0>>pure((java.util.List<T0>) (java.util.List.<T0>of())));
+      hydra.parsers.Parsers.<hydra.util.ConsList<T0>>pure((hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of())));
   }
   
-  static <T0, T1> hydra.parsing.Parser<java.util.List<T0>> sepBy1(hydra.parsing.Parser<T0> p, hydra.parsing.Parser<T1> sep) {
-    return hydra.parsers.Parsers.<T0, java.util.List<T0>>bind(
+  static <T0, T1> hydra.parsing.Parser<hydra.util.ConsList<T0>> sepBy1(hydra.parsing.Parser<T0> p, hydra.parsing.Parser<T1> sep) {
+    return hydra.parsers.Parsers.<T0, hydra.util.ConsList<T0>>bind(
       p,
-      (java.util.function.Function<T0, hydra.parsing.Parser<java.util.List<T0>>>) (x -> hydra.parsers.Parsers.<java.util.List<T0>, java.util.List<T0>>bind(
+      (java.util.function.Function<T0, hydra.parsing.Parser<hydra.util.ConsList<T0>>>) (x -> hydra.parsers.Parsers.<hydra.util.ConsList<T0>, hydra.util.ConsList<T0>>bind(
         hydra.parsers.Parsers.<T0>many(hydra.parsers.Parsers.<T1, T0>bind(
           sep,
           (java.util.function.Function<T1, hydra.parsing.Parser<T0>>) (ignored -> p))),
-        (java.util.function.Function<java.util.List<T0>, hydra.parsing.Parser<java.util.List<T0>>>) (xs -> hydra.parsers.Parsers.<java.util.List<T0>>pure(hydra.lib.lists.Cons.apply(
+        (java.util.function.Function<hydra.util.ConsList<T0>, hydra.parsing.Parser<hydra.util.ConsList<T0>>>) (xs -> hydra.parsers.Parsers.<hydra.util.ConsList<T0>>pure(hydra.lib.lists.Cons.apply(
           x,
           xs))))));
   }
   
-  static <T0> hydra.parsing.Parser<java.util.List<T0>> some(hydra.parsing.Parser<T0> p) {
-    return hydra.parsers.Parsers.<T0, java.util.List<T0>>bind(
+  static <T0> hydra.parsing.Parser<hydra.util.ConsList<T0>> some(hydra.parsing.Parser<T0> p) {
+    return hydra.parsers.Parsers.<T0, hydra.util.ConsList<T0>>bind(
       p,
-      (java.util.function.Function<T0, hydra.parsing.Parser<java.util.List<T0>>>) (x -> hydra.parsers.Parsers.<java.util.List<T0>, java.util.List<T0>>bind(
+      (java.util.function.Function<T0, hydra.parsing.Parser<hydra.util.ConsList<T0>>>) (x -> hydra.parsers.Parsers.<hydra.util.ConsList<T0>, hydra.util.ConsList<T0>>bind(
         hydra.parsers.Parsers.<T0>many(p),
-        (java.util.function.Function<java.util.List<T0>, hydra.parsing.Parser<java.util.List<T0>>>) (xs -> hydra.parsers.Parsers.<java.util.List<T0>>pure(hydra.lib.lists.Cons.apply(
+        (java.util.function.Function<hydra.util.ConsList<T0>, hydra.parsing.Parser<hydra.util.ConsList<T0>>>) (xs -> hydra.parsers.Parsers.<hydra.util.ConsList<T0>>pure(hydra.lib.lists.Cons.apply(
           x,
           xs))))));
   }
   
   static hydra.parsing.Parser<String> string(String str) {
     return (hydra.parsing.Parser<String>) (new hydra.parsing.Parser((java.util.function.Function<String, hydra.parsing.ParseResult<String>>) (input -> {
-      java.util.List<Integer> inputCodes = hydra.lib.strings.ToList.apply(input);
-      java.util.List<Integer> strCodes = hydra.lib.strings.ToList.apply(str);
+      hydra.util.ConsList<Integer> inputCodes = hydra.lib.strings.ToList.apply(input);
+      hydra.util.ConsList<Integer> strCodes = hydra.lib.strings.ToList.apply(str);
       hydra.util.Lazy<Integer> strLen = new hydra.util.Lazy<>(() -> hydra.lib.lists.Length.apply(strCodes));
-      hydra.util.Lazy<java.util.List<Integer>> inputPrefix = new hydra.util.Lazy<>(() -> hydra.lib.lists.Take.apply(
+      hydra.util.Lazy<hydra.util.ConsList<Integer>> inputPrefix = new hydra.util.Lazy<>(() -> hydra.lib.lists.Take.apply(
         strLen.get(),
         inputCodes));
       return hydra.lib.logic.IfElse.lazy(

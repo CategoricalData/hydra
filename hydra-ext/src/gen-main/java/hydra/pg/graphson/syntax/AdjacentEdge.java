@@ -17,9 +17,9 @@ public class AdjacentEdge implements Serializable, Comparable<AdjacentEdge> {
   
   public final hydra.pg.graphson.syntax.Value vertexId;
   
-  public final java.util.Map<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.Value> properties;
+  public final hydra.util.PersistentMap<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.Value> properties;
   
-  public AdjacentEdge (hydra.pg.graphson.syntax.Value id, hydra.pg.graphson.syntax.Value vertexId, java.util.Map<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.Value> properties) {
+  public AdjacentEdge (hydra.pg.graphson.syntax.Value id, hydra.pg.graphson.syntax.Value vertexId, hydra.util.PersistentMap<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.Value> properties) {
     this.id = id;
     this.vertexId = vertexId;
     this.properties = properties;
@@ -70,7 +70,7 @@ public class AdjacentEdge implements Serializable, Comparable<AdjacentEdge> {
     return new AdjacentEdge(id, vertexId, properties);
   }
   
-  public AdjacentEdge withProperties(java.util.Map<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.Value> properties) {
+  public AdjacentEdge withProperties(hydra.util.PersistentMap<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.Value> properties) {
     return new AdjacentEdge(id, vertexId, properties);
   }
 }

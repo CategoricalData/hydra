@@ -13,13 +13,13 @@ public class WithClause implements Serializable, Comparable<WithClause> {
   
   public static final hydra.core.Name WITH = new hydra.core.Name("with");
   
-  public final java.util.List<hydra.ext.cypher.openCypher.ReadingClause> reading;
+  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.ReadingClause> reading;
   
-  public final java.util.List<hydra.ext.cypher.openCypher.UpdatingClause> updating;
+  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.UpdatingClause> updating;
   
   public final hydra.ext.cypher.openCypher.With with;
   
-  public WithClause (java.util.List<hydra.ext.cypher.openCypher.ReadingClause> reading, java.util.List<hydra.ext.cypher.openCypher.UpdatingClause> updating, hydra.ext.cypher.openCypher.With with) {
+  public WithClause (hydra.util.ConsList<hydra.ext.cypher.openCypher.ReadingClause> reading, hydra.util.ConsList<hydra.ext.cypher.openCypher.UpdatingClause> updating, hydra.ext.cypher.openCypher.With with) {
     this.reading = reading;
     this.updating = updating;
     this.with = with;
@@ -64,11 +64,11 @@ public class WithClause implements Serializable, Comparable<WithClause> {
     return ((Comparable) with).compareTo(other.with);
   }
   
-  public WithClause withReading(java.util.List<hydra.ext.cypher.openCypher.ReadingClause> reading) {
+  public WithClause withReading(hydra.util.ConsList<hydra.ext.cypher.openCypher.ReadingClause> reading) {
     return new WithClause(reading, updating, with);
   }
   
-  public WithClause withUpdating(java.util.List<hydra.ext.cypher.openCypher.UpdatingClause> updating) {
+  public WithClause withUpdating(hydra.util.ConsList<hydra.ext.cypher.openCypher.UpdatingClause> updating) {
     return new WithClause(reading, updating, with);
   }
   

@@ -13,13 +13,13 @@ public class DatatypeDefinition implements Serializable, Comparable<DatatypeDefi
   
   public static final hydra.core.Name RANGE = new hydra.core.Name("range");
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
   public final hydra.ext.org.w3.owl.syntax.Datatype datatype;
   
   public final hydra.ext.org.w3.owl.syntax.DataRange range;
   
-  public DatatypeDefinition (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.Datatype datatype, hydra.ext.org.w3.owl.syntax.DataRange range) {
+  public DatatypeDefinition (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.Datatype datatype, hydra.ext.org.w3.owl.syntax.DataRange range) {
     this.annotations = annotations;
     this.datatype = datatype;
     this.range = range;
@@ -62,7 +62,7 @@ public class DatatypeDefinition implements Serializable, Comparable<DatatypeDefi
     return ((Comparable) range).compareTo(other.range);
   }
   
-  public DatatypeDefinition withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public DatatypeDefinition withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new DatatypeDefinition(annotations, datatype, range);
   }
   

@@ -17,13 +17,13 @@ public class WithStatement implements Serializable, Comparable<WithStatement> {
   
   public final Boolean async;
   
-  public final java.util.List<hydra.ext.python.syntax.WithItem> items;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.WithItem> items;
   
   public final hydra.util.Maybe<hydra.ext.python.syntax.TypeComment> typeComment;
   
   public final hydra.ext.python.syntax.Block body;
   
-  public WithStatement (Boolean async, java.util.List<hydra.ext.python.syntax.WithItem> items, hydra.util.Maybe<hydra.ext.python.syntax.TypeComment> typeComment, hydra.ext.python.syntax.Block body) {
+  public WithStatement (Boolean async, hydra.util.ConsList<hydra.ext.python.syntax.WithItem> items, hydra.util.Maybe<hydra.ext.python.syntax.TypeComment> typeComment, hydra.ext.python.syntax.Block body) {
     this.async = async;
     this.items = items;
     this.typeComment = typeComment;
@@ -79,7 +79,7 @@ public class WithStatement implements Serializable, Comparable<WithStatement> {
     return new WithStatement(async, items, typeComment, body);
   }
   
-  public WithStatement withItems(java.util.List<hydra.ext.python.syntax.WithItem> items) {
+  public WithStatement withItems(hydra.util.ConsList<hydra.ext.python.syntax.WithItem> items) {
     return new WithStatement(async, items, typeComment, body);
   }
   

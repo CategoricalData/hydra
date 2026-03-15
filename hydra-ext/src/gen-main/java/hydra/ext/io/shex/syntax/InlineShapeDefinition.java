@@ -11,11 +11,11 @@ public class InlineShapeDefinition implements Serializable, Comparable<InlineSha
   
   public static final hydra.core.Name TRIPLE_EXPRESSION = new hydra.core.Name("TripleExpression");
   
-  public final java.util.List<hydra.ext.io.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt> listOfAlts;
+  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt> listOfAlts;
   
   public final hydra.util.Maybe<hydra.ext.io.shex.syntax.TripleExpression> TripleExpression;
   
-  public InlineShapeDefinition (java.util.List<hydra.ext.io.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt> listOfAlts, hydra.util.Maybe<hydra.ext.io.shex.syntax.TripleExpression> TripleExpression) {
+  public InlineShapeDefinition (hydra.util.ConsList<hydra.ext.io.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt> listOfAlts, hydra.util.Maybe<hydra.ext.io.shex.syntax.TripleExpression> TripleExpression) {
     this.listOfAlts = listOfAlts;
     this.TripleExpression = TripleExpression;
   }
@@ -53,7 +53,7 @@ public class InlineShapeDefinition implements Serializable, Comparable<InlineSha
       other.TripleExpression.hashCode());
   }
   
-  public InlineShapeDefinition withListOfAlts(java.util.List<hydra.ext.io.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt> listOfAlts) {
+  public InlineShapeDefinition withListOfAlts(hydra.util.ConsList<hydra.ext.io.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt> listOfAlts) {
     return new InlineShapeDefinition(listOfAlts, TripleExpression);
   }
   

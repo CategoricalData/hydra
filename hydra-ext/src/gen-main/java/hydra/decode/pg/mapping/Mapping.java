@@ -17,7 +17,7 @@ public interface Mapping {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.AnnotationSchema> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "vertexLabel",
@@ -502,7 +502,7 @@ public interface Mapping {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.EdgeSpec> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "label",
@@ -538,7 +538,7 @@ public interface Mapping {
                   (java.util.function.Function<hydra.pg.mapping.ValueSpec, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.EdgeSpec>>) (field_in -> hydra.lib.eithers.Bind.apply(
                     hydra.extract.helpers.Helpers.requireField(
                       "properties",
-                      (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.pg.mapping.PropertySpec>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.pg.mapping.PropertySpec>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
+                      (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.pg.mapping.PropertySpec>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.pg.mapping.PropertySpec>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
                         (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.PropertySpec>>>) (p0 -> p1 -> hydra.decode.pg.mapping.Mapping.propertySpec(
                           p0,
                           p1)),
@@ -546,7 +546,7 @@ public interface Mapping {
                         v2))),
                       fieldMap,
                       cx),
-                    (java.util.function.Function<java.util.List<hydra.pg.mapping.PropertySpec>, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.EdgeSpec>>) (field_properties -> hydra.util.Either.<hydra.error.DecodingError, hydra.pg.mapping.EdgeSpec>right(new hydra.pg.mapping.EdgeSpec(field_label, field_id, field_out, field_in, field_properties))))))))))));
+                    (java.util.function.Function<hydra.util.ConsList<hydra.pg.mapping.PropertySpec>, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.EdgeSpec>>) (field_properties -> hydra.util.Either.<hydra.error.DecodingError, hydra.pg.mapping.EdgeSpec>right(new hydra.pg.mapping.EdgeSpec(field_label, field_id, field_out, field_in, field_properties))))))))))));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(
@@ -569,7 +569,7 @@ public interface Mapping {
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
           hydra.core.Name tname = ((inj).value).typeName;
-          hydra.util.Lazy<java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ElementSpec>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(java.util.List.of(
+          hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ElementSpec>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ElementSpec>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ElementSpec>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ElementSpec>>>(new hydra.core.Name("vertex"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ElementSpec>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<hydra.pg.mapping.VertexSpec, hydra.pg.mapping.ElementSpec>) (t -> new hydra.pg.mapping.ElementSpec.Vertex(t)),
               hydra.decode.pg.mapping.Mapping.vertexSpec(
@@ -581,7 +581,7 @@ public interface Mapping {
                 cx,
                 input)))))))));
           return hydra.lib.maybes.Maybe.applyLazy(
-            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.pg.mapping.ElementSpec>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.pg.mapping.ElementSpec>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "no such field ",
               (fname).value,
               " in union type ",
@@ -608,7 +608,7 @@ public interface Mapping {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.PropertySpec> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "key",
@@ -648,7 +648,7 @@ public interface Mapping {
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
           hydra.core.Name tname = ((inj).value).typeName;
-          hydra.util.Lazy<java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ValueSpec>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(java.util.List.of(
+          hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ValueSpec>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ValueSpec>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ValueSpec>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ValueSpec>>>(new hydra.core.Name("value"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ValueSpec>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<java.lang.Void, hydra.pg.mapping.ValueSpec>) (t -> new hydra.pg.mapping.ValueSpec.Value()),
               hydra.extract.helpers.Helpers.decodeUnit(
@@ -683,7 +683,7 @@ public interface Mapping {
                   cx,
                   input))))))))));
           return hydra.lib.maybes.Maybe.applyLazy(
-            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.pg.mapping.ValueSpec>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.pg.mapping.ValueSpec>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "no such field ",
               (fname).value,
               " in union type ",
@@ -710,7 +710,7 @@ public interface Mapping {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.VertexSpec> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "label",
@@ -730,7 +730,7 @@ public interface Mapping {
               (java.util.function.Function<hydra.pg.mapping.ValueSpec, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.VertexSpec>>) (field_id -> hydra.lib.eithers.Bind.apply(
                 hydra.extract.helpers.Helpers.requireField(
                   "properties",
-                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.pg.mapping.PropertySpec>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, java.util.List<hydra.pg.mapping.PropertySpec>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
+                  (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.pg.mapping.PropertySpec>>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<hydra.pg.mapping.PropertySpec>>>) (v2 -> hydra.extract.helpers.Helpers.decodeList(
                     (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.PropertySpec>>>) (p0 -> p1 -> hydra.decode.pg.mapping.Mapping.propertySpec(
                       p0,
                       p1)),
@@ -738,7 +738,7 @@ public interface Mapping {
                     v2))),
                   fieldMap,
                   cx),
-                (java.util.function.Function<java.util.List<hydra.pg.mapping.PropertySpec>, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.VertexSpec>>) (field_properties -> hydra.util.Either.<hydra.error.DecodingError, hydra.pg.mapping.VertexSpec>right(new hydra.pg.mapping.VertexSpec(field_label, field_id, field_properties))))))));
+                (java.util.function.Function<hydra.util.ConsList<hydra.pg.mapping.PropertySpec>, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.VertexSpec>>) (field_properties -> hydra.util.Either.<hydra.error.DecodingError, hydra.pg.mapping.VertexSpec>right(new hydra.pg.mapping.VertexSpec(field_label, field_id, field_properties))))))));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(

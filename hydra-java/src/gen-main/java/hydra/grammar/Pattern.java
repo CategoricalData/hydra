@@ -116,9 +116,9 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
    * A choice between alternative patterns
    */
   public static final class Alternatives extends hydra.grammar.Pattern implements Serializable {
-    public final java.util.List<hydra.grammar.Pattern> value;
+    public final hydra.util.ConsList<hydra.grammar.Pattern> value;
     
-    public Alternatives (java.util.List<hydra.grammar.Pattern> value) {
+    public Alternatives (hydra.util.ConsList<hydra.grammar.Pattern> value) {
       this.value = value;
     }
     
@@ -500,9 +500,9 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
    * A sequence of patterns
    */
   public static final class Sequence extends hydra.grammar.Pattern implements Serializable {
-    public final java.util.List<hydra.grammar.Pattern> value;
+    public final hydra.util.ConsList<hydra.grammar.Pattern> value;
     
-    public Sequence (java.util.List<hydra.grammar.Pattern> value) {
+    public Sequence (hydra.util.ConsList<hydra.grammar.Pattern> value) {
       this.value = value;
     }
     

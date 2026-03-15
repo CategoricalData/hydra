@@ -94,9 +94,9 @@ public abstract class PropertyArgs implements Serializable, Comparable<PropertyA
   }
   
   public static final class Objects extends hydra.ext.org.apache.tinkerpop.gremlin.PropertyArgs implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
     
-    public Objects (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
+    public Objects (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
       this.value = value;
     }
     

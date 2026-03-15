@@ -43,9 +43,9 @@ public class EdgeType<T> implements Serializable, Comparable<EdgeType<T>> {
   /**
    * A list of property types. The types are ordered for the sake of applications in which property order is significant.
    */
-  public final java.util.List<hydra.pg.model.PropertyType<T>> properties;
+  public final hydra.util.ConsList<hydra.pg.model.PropertyType<T>> properties;
   
-  public EdgeType (hydra.pg.model.EdgeLabel label, T id, hydra.pg.model.VertexLabel out, hydra.pg.model.VertexLabel in, java.util.List<hydra.pg.model.PropertyType<T>> properties) {
+  public EdgeType (hydra.pg.model.EdgeLabel label, T id, hydra.pg.model.VertexLabel out, hydra.pg.model.VertexLabel in, hydra.util.ConsList<hydra.pg.model.PropertyType<T>> properties) {
     this.label = label;
     this.id = id;
     this.out = out;
@@ -118,7 +118,7 @@ public class EdgeType<T> implements Serializable, Comparable<EdgeType<T>> {
     return new EdgeType(label, id, out, in, properties);
   }
   
-  public EdgeType withProperties(java.util.List<hydra.pg.model.PropertyType<T>> properties) {
+  public EdgeType withProperties(hydra.util.ConsList<hydra.pg.model.PropertyType<T>> properties) {
     return new EdgeType(label, id, out, in, properties);
   }
 }

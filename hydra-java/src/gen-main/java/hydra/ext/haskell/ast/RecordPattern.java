@@ -22,9 +22,9 @@ public class RecordPattern implements Serializable, Comparable<RecordPattern> {
   /**
    * The field patterns
    */
-  public final java.util.List<hydra.ext.haskell.ast.PatternField> fields;
+  public final hydra.util.ConsList<hydra.ext.haskell.ast.PatternField> fields;
   
-  public RecordPattern (hydra.ext.haskell.ast.Name name, java.util.List<hydra.ext.haskell.ast.PatternField> fields) {
+  public RecordPattern (hydra.ext.haskell.ast.Name name, hydra.util.ConsList<hydra.ext.haskell.ast.PatternField> fields) {
     this.name = name;
     this.fields = fields;
   }
@@ -64,7 +64,7 @@ public class RecordPattern implements Serializable, Comparable<RecordPattern> {
     return new RecordPattern(name, fields);
   }
   
-  public RecordPattern withFields(java.util.List<hydra.ext.haskell.ast.PatternField> fields) {
+  public RecordPattern withFields(hydra.util.ConsList<hydra.ext.haskell.ast.PatternField> fields) {
     return new RecordPattern(name, fields);
   }
 }

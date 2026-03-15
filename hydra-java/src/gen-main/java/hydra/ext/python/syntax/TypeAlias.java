@@ -15,11 +15,11 @@ public class TypeAlias implements Serializable, Comparable<TypeAlias> {
   
   public final hydra.ext.python.syntax.Name name;
   
-  public final java.util.List<hydra.ext.python.syntax.TypeParameter> typeParams;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter> typeParams;
   
   public final hydra.ext.python.syntax.Expression expression;
   
-  public TypeAlias (hydra.ext.python.syntax.Name name, java.util.List<hydra.ext.python.syntax.TypeParameter> typeParams, hydra.ext.python.syntax.Expression expression) {
+  public TypeAlias (hydra.ext.python.syntax.Name name, hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter> typeParams, hydra.ext.python.syntax.Expression expression) {
     this.name = name;
     this.typeParams = typeParams;
     this.expression = expression;
@@ -66,7 +66,7 @@ public class TypeAlias implements Serializable, Comparable<TypeAlias> {
     return new TypeAlias(name, typeParams, expression);
   }
   
-  public TypeAlias withTypeParams(java.util.List<hydra.ext.python.syntax.TypeParameter> typeParams) {
+  public TypeAlias withTypeParams(hydra.util.ConsList<hydra.ext.python.syntax.TypeParameter> typeParams) {
     return new TypeAlias(name, typeParams, expression);
   }
   

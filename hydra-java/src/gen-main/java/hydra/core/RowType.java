@@ -22,9 +22,9 @@ public class RowType implements Serializable, Comparable<RowType> {
   /**
    * The fields of this row type, excluding any inherited fields
    */
-  public final java.util.List<hydra.core.FieldType> fields;
+  public final hydra.util.ConsList<hydra.core.FieldType> fields;
   
-  public RowType (hydra.core.Name typeName, java.util.List<hydra.core.FieldType> fields) {
+  public RowType (hydra.core.Name typeName, hydra.util.ConsList<hydra.core.FieldType> fields) {
     this.typeName = typeName;
     this.fields = fields;
   }
@@ -64,7 +64,7 @@ public class RowType implements Serializable, Comparable<RowType> {
     return new RowType(typeName, fields);
   }
   
-  public RowType withFields(java.util.List<hydra.core.FieldType> fields) {
+  public RowType withFields(hydra.util.ConsList<hydra.core.FieldType> fields) {
     return new RowType(typeName, fields);
   }
 }

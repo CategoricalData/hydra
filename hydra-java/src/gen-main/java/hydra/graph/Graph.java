@@ -29,44 +29,44 @@ public class Graph implements Serializable, Comparable<Graph> {
   /**
    * The terms bound by all term variables in scope
    */
-  public final java.util.Map<hydra.core.Name, hydra.core.Term> boundTerms;
+  public final hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> boundTerms;
   
   /**
    * The type schemes of all term variables in scope
    */
-  public final java.util.Map<hydra.core.Name, hydra.core.TypeScheme> boundTypes;
+  public final hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme> boundTypes;
   
   /**
    * A mutable map from type variable names to their accumulated class constraints. This is populated during type inference when operations requiring Eq or Ord are encountered.
    */
-  public final java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata> classConstraints;
+  public final hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata> classConstraints;
   
   /**
    * The set of term variables introduced by specifically by lambdas
    */
-  public final java.util.Set<hydra.core.Name> lambdaVariables;
+  public final hydra.util.PersistentSet<hydra.core.Name> lambdaVariables;
   
   /**
    * Any additional metadata bound to term variables in scope
    */
-  public final java.util.Map<hydra.core.Name, hydra.core.Term> metadata;
+  public final hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> metadata;
   
   /**
    * All primitive functions and constants by name
    */
-  public final java.util.Map<hydra.core.Name, hydra.graph.Primitive> primitives;
+  public final hydra.util.PersistentMap<hydra.core.Name, hydra.graph.Primitive> primitives;
   
   /**
    * All schema types (type schemes) in scope
    */
-  public final java.util.Map<hydra.core.Name, hydra.core.TypeScheme> schemaTypes;
+  public final hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme> schemaTypes;
   
   /**
    * The set of type variables introduced specifically by type lambdas
    */
-  public final java.util.Set<hydra.core.Name> typeVariables;
+  public final hydra.util.PersistentSet<hydra.core.Name> typeVariables;
   
-  public Graph (java.util.Map<hydra.core.Name, hydra.core.Term> boundTerms, java.util.Map<hydra.core.Name, hydra.core.TypeScheme> boundTypes, java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata> classConstraints, java.util.Set<hydra.core.Name> lambdaVariables, java.util.Map<hydra.core.Name, hydra.core.Term> metadata, java.util.Map<hydra.core.Name, hydra.graph.Primitive> primitives, java.util.Map<hydra.core.Name, hydra.core.TypeScheme> schemaTypes, java.util.Set<hydra.core.Name> typeVariables) {
+  public Graph (hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> boundTerms, hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme> boundTypes, hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata> classConstraints, hydra.util.PersistentSet<hydra.core.Name> lambdaVariables, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> metadata, hydra.util.PersistentMap<hydra.core.Name, hydra.graph.Primitive> primitives, hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme> schemaTypes, hydra.util.PersistentSet<hydra.core.Name> typeVariables) {
     this.boundTerms = boundTerms;
     this.boundTypes = boundTypes;
     this.classConstraints = classConstraints;
@@ -158,35 +158,35 @@ public class Graph implements Serializable, Comparable<Graph> {
       other.typeVariables.hashCode());
   }
   
-  public Graph withBoundTerms(java.util.Map<hydra.core.Name, hydra.core.Term> boundTerms) {
+  public Graph withBoundTerms(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> boundTerms) {
     return new Graph(boundTerms, boundTypes, classConstraints, lambdaVariables, metadata, primitives, schemaTypes, typeVariables);
   }
   
-  public Graph withBoundTypes(java.util.Map<hydra.core.Name, hydra.core.TypeScheme> boundTypes) {
+  public Graph withBoundTypes(hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme> boundTypes) {
     return new Graph(boundTerms, boundTypes, classConstraints, lambdaVariables, metadata, primitives, schemaTypes, typeVariables);
   }
   
-  public Graph withClassConstraints(java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata> classConstraints) {
+  public Graph withClassConstraints(hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata> classConstraints) {
     return new Graph(boundTerms, boundTypes, classConstraints, lambdaVariables, metadata, primitives, schemaTypes, typeVariables);
   }
   
-  public Graph withLambdaVariables(java.util.Set<hydra.core.Name> lambdaVariables) {
+  public Graph withLambdaVariables(hydra.util.PersistentSet<hydra.core.Name> lambdaVariables) {
     return new Graph(boundTerms, boundTypes, classConstraints, lambdaVariables, metadata, primitives, schemaTypes, typeVariables);
   }
   
-  public Graph withMetadata(java.util.Map<hydra.core.Name, hydra.core.Term> metadata) {
+  public Graph withMetadata(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> metadata) {
     return new Graph(boundTerms, boundTypes, classConstraints, lambdaVariables, metadata, primitives, schemaTypes, typeVariables);
   }
   
-  public Graph withPrimitives(java.util.Map<hydra.core.Name, hydra.graph.Primitive> primitives) {
+  public Graph withPrimitives(hydra.util.PersistentMap<hydra.core.Name, hydra.graph.Primitive> primitives) {
     return new Graph(boundTerms, boundTypes, classConstraints, lambdaVariables, metadata, primitives, schemaTypes, typeVariables);
   }
   
-  public Graph withSchemaTypes(java.util.Map<hydra.core.Name, hydra.core.TypeScheme> schemaTypes) {
+  public Graph withSchemaTypes(hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme> schemaTypes) {
     return new Graph(boundTerms, boundTypes, classConstraints, lambdaVariables, metadata, primitives, schemaTypes, typeVariables);
   }
   
-  public Graph withTypeVariables(java.util.Set<hydra.core.Name> typeVariables) {
+  public Graph withTypeVariables(hydra.util.PersistentSet<hydra.core.Name> typeVariables) {
     return new Graph(boundTerms, boundTypes, classConstraints, lambdaVariables, metadata, primitives, schemaTypes, typeVariables);
   }
 }

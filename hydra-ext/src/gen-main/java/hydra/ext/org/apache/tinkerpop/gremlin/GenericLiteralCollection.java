@@ -9,9 +9,9 @@ public class GenericLiteralCollection implements Serializable, Comparable<Generi
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteral> value;
+  public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteral> value;
   
-  public GenericLiteralCollection (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteral> value) {
+  public GenericLiteralCollection (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteral> value) {
     this.value = value;
   }
   

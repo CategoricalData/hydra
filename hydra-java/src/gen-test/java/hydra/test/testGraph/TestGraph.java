@@ -6,12 +6,12 @@ package hydra.test.testGraph;
  * A module defining the graph used in the test suite.
  */
 public interface TestGraph {
-  static java.util.Map<hydra.core.Name, hydra.core.Term> testTerms() {
-    return hydra.lib.maps.FromList.apply(java.util.List.of((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Term>(new hydra.core.Name("testDataArthur"), hydra.test.testTerms.TestTerms.testDataArthur())))));
+  static hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> testTerms() {
+    return hydra.lib.maps.FromList.apply(hydra.util.ConsList.of((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Term>(new hydra.core.Name("testDataArthur"), hydra.test.testTerms.TestTerms.testDataArthur())))));
   }
   
-  static java.util.Map<hydra.core.Name, hydra.core.Type> testTypes() {
-    return hydra.lib.maps.FromList.apply(java.util.List.of(
+  static hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> testTypes() {
+    return hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
       (hydra.util.Pair<hydra.core.Name, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Type>(hydra.test.testTypes.TestTypes.testTypeBuddyListAName(), hydra.test.testTypes.TestTypes.testTypeBuddyListA()))),
       (hydra.util.Pair<hydra.core.Name, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Type>(hydra.test.testTypes.TestTypes.testTypeBuddyListBName(), hydra.test.testTypes.TestTypes.testTypeBuddyListB()))),
       (hydra.util.Pair<hydra.core.Name, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Type>(hydra.test.testTypes.TestTypes.testTypeComparisonName(), hydra.test.testTypes.TestTypes.testTypeComparison()))),

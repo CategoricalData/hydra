@@ -20,9 +20,9 @@ public class ObjectExactCardinality implements Serializable, Comparable<ObjectEx
   
   public final hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property;
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> class_;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ClassExpression> class_;
   
-  public ObjectExactCardinality (java.math.BigInteger bound, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property, java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> class_) {
+  public ObjectExactCardinality (java.math.BigInteger bound, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property, hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ClassExpression> class_) {
     this.bound = bound;
     this.property = property;
     this.class_ = class_;
@@ -71,7 +71,7 @@ public class ObjectExactCardinality implements Serializable, Comparable<ObjectEx
     return new ObjectExactCardinality(bound, property, class_);
   }
   
-  public ObjectExactCardinality withClass(java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> class_) {
+  public ObjectExactCardinality withClass(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ClassExpression> class_) {
     return new ObjectExactCardinality(bound, property, class_);
   }
 }

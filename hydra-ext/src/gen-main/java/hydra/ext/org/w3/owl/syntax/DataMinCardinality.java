@@ -17,9 +17,9 @@ public class DataMinCardinality implements Serializable, Comparable<DataMinCardi
   
   public final hydra.ext.org.w3.owl.syntax.DataPropertyExpression property;
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.DataRange> range;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DataRange> range;
   
-  public DataMinCardinality (java.math.BigInteger bound, hydra.ext.org.w3.owl.syntax.DataPropertyExpression property, java.util.List<hydra.ext.org.w3.owl.syntax.DataRange> range) {
+  public DataMinCardinality (java.math.BigInteger bound, hydra.ext.org.w3.owl.syntax.DataPropertyExpression property, hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DataRange> range) {
     this.bound = bound;
     this.property = property;
     this.range = range;
@@ -68,7 +68,7 @@ public class DataMinCardinality implements Serializable, Comparable<DataMinCardi
     return new DataMinCardinality(bound, property, range);
   }
   
-  public DataMinCardinality withRange(java.util.List<hydra.ext.org.w3.owl.syntax.DataRange> range) {
+  public DataMinCardinality withRange(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DataRange> range) {
     return new DataMinCardinality(bound, property, range);
   }
 }

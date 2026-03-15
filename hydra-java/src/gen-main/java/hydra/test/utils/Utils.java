@@ -7,18 +7,18 @@ package hydra.test.utils;
  */
 public interface Utils {
   static hydra.util.Either<String, hydra.testing.TestGroup> inferTestGroupTerms(hydra.graph.Graph g, hydra.testing.TestGroup tg) {
-    java.util.List<hydra.testing.TestCaseWithMetadata> cases_ = (tg).cases;
+    hydra.util.ConsList<hydra.testing.TestCaseWithMetadata> cases_ = (tg).cases;
     hydra.util.Maybe<String> desc = (tg).description;
     String name_ = (tg).name;
-    java.util.List<hydra.testing.TestGroup> subgroups = (tg).subgroups;
+    hydra.util.ConsList<hydra.testing.TestGroup> subgroups = (tg).subgroups;
     return hydra.lib.eithers.Bind.apply(
       hydra.lib.eithers.MapList.apply(
         (java.util.function.Function<hydra.testing.TestGroup, hydra.util.Either<String, hydra.testing.TestGroup>>) (sg -> hydra.test.utils.Utils.inferTestGroupTerms(
           g,
           sg)),
         subgroups),
-      (java.util.function.Function<java.util.List<hydra.testing.TestGroup>, hydra.util.Either<String, hydra.testing.TestGroup>>) (inferredSubgroups -> hydra.lib.eithers.Map.apply(
-        (java.util.function.Function<java.util.List<hydra.testing.TestCaseWithMetadata>, hydra.testing.TestGroup>) (inferredCases -> new hydra.testing.TestGroup(name_, desc, inferredSubgroups, inferredCases)),
+      (java.util.function.Function<hydra.util.ConsList<hydra.testing.TestGroup>, hydra.util.Either<String, hydra.testing.TestGroup>>) (inferredSubgroups -> hydra.lib.eithers.Map.apply(
+        (java.util.function.Function<hydra.util.ConsList<hydra.testing.TestCaseWithMetadata>, hydra.testing.TestGroup>) (inferredCases -> new hydra.testing.TestGroup(name_, desc, inferredSubgroups, inferredCases)),
         hydra.lib.eithers.MapList.apply(
           (java.util.function.Function<hydra.testing.TestCaseWithMetadata, hydra.util.Either<String, hydra.testing.TestCaseWithMetadata>>) (tc -> hydra.test.utils.Utils.inferTestCase(
             g,
@@ -29,7 +29,7 @@ public interface Utils {
   static hydra.util.Either<String, hydra.testing.TestCaseWithMetadata> inferTestCase(hydra.graph.Graph g, hydra.testing.TestCaseWithMetadata tcm) {
     hydra.util.Maybe<String> desc = (tcm).description;
     String name_ = (tcm).name;
-    java.util.List<hydra.testing.Tag> tags_ = (tcm).tags;
+    hydra.util.ConsList<hydra.testing.Tag> tags_ = (tcm).tags;
     hydra.testing.TestCase tcase = (tcm).case_;
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<hydra.testing.TestCase, hydra.testing.TestCaseWithMetadata>) (inferredCase -> new hydra.testing.TestCaseWithMetadata(name_, inferredCase, desc, tags_)),

@@ -22,9 +22,9 @@ public class ForeignKey implements Serializable, Comparable<ForeignKey> {
   /**
    * The mapping of source column names to target column names. The target column names must together make up the primary key of the target relation.
    */
-  public final java.util.Map<hydra.relational.ColumnName, hydra.relational.ColumnName> keys;
+  public final hydra.util.PersistentMap<hydra.relational.ColumnName, hydra.relational.ColumnName> keys;
   
-  public ForeignKey (hydra.relational.RelationName foreignRelation, java.util.Map<hydra.relational.ColumnName, hydra.relational.ColumnName> keys) {
+  public ForeignKey (hydra.relational.RelationName foreignRelation, hydra.util.PersistentMap<hydra.relational.ColumnName, hydra.relational.ColumnName> keys) {
     this.foreignRelation = foreignRelation;
     this.keys = keys;
   }
@@ -64,7 +64,7 @@ public class ForeignKey implements Serializable, Comparable<ForeignKey> {
     return new ForeignKey(foreignRelation, keys);
   }
   
-  public ForeignKey withKeys(java.util.Map<hydra.relational.ColumnName, hydra.relational.ColumnName> keys) {
+  public ForeignKey withKeys(hydra.util.PersistentMap<hydra.relational.ColumnName, hydra.relational.ColumnName> keys) {
     return new ForeignKey(foreignRelation, keys);
   }
 }

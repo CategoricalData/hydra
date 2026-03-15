@@ -13,13 +13,13 @@ public class LambdaParameter_Normal implements Serializable, Comparable<LambdaPa
   
   public static final hydra.core.Name ID = new hydra.core.Name("id");
   
-  public final java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers;
   
   public final hydra.ext.java.syntax.LambdaParameterType type;
   
   public final hydra.ext.java.syntax.VariableDeclaratorId id;
   
-  public LambdaParameter_Normal (java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers, hydra.ext.java.syntax.LambdaParameterType type, hydra.ext.java.syntax.VariableDeclaratorId id) {
+  public LambdaParameter_Normal (hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers, hydra.ext.java.syntax.LambdaParameterType type, hydra.ext.java.syntax.VariableDeclaratorId id) {
     this.modifiers = modifiers;
     this.type = type;
     this.id = id;
@@ -62,7 +62,7 @@ public class LambdaParameter_Normal implements Serializable, Comparable<LambdaPa
     return ((Comparable) id).compareTo(other.id);
   }
   
-  public LambdaParameter_Normal withModifiers(java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers) {
+  public LambdaParameter_Normal withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers) {
     return new LambdaParameter_Normal(modifiers, type, id);
   }
   

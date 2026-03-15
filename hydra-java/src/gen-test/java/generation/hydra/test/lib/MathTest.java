@@ -674,7 +674,7 @@ public class MathTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2,
   3,
@@ -693,7 +693,7 @@ public class MathTest {
 
         assertEquals(
 
-            java.util.List.of(5),
+            hydra.util.ConsList.of(5),
 
             hydra.lib.math.Range.apply(
   5,
@@ -707,7 +707,7 @@ public class MathTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   3,
   4),
 
@@ -723,7 +723,7 @@ public class MathTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   -2,
   -1,
   0,

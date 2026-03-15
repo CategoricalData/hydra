@@ -17,13 +17,13 @@ public class TryExceptStatement implements Serializable, Comparable<TryExceptSta
   
   public final hydra.ext.python.syntax.Block body;
   
-  public final java.util.List<hydra.ext.python.syntax.ExceptBlock> excepts;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.ExceptBlock> excepts;
   
   public final hydra.util.Maybe<hydra.ext.python.syntax.Block> else_;
   
   public final hydra.util.Maybe<hydra.ext.python.syntax.Block> finally_;
   
-  public TryExceptStatement (hydra.ext.python.syntax.Block body, java.util.List<hydra.ext.python.syntax.ExceptBlock> excepts, hydra.util.Maybe<hydra.ext.python.syntax.Block> else_, hydra.util.Maybe<hydra.ext.python.syntax.Block> finally_) {
+  public TryExceptStatement (hydra.ext.python.syntax.Block body, hydra.util.ConsList<hydra.ext.python.syntax.ExceptBlock> excepts, hydra.util.Maybe<hydra.ext.python.syntax.Block> else_, hydra.util.Maybe<hydra.ext.python.syntax.Block> finally_) {
     this.body = body;
     this.excepts = excepts;
     this.else_ = else_;
@@ -81,7 +81,7 @@ public class TryExceptStatement implements Serializable, Comparable<TryExceptSta
     return new TryExceptStatement(body, excepts, else_, finally_);
   }
   
-  public TryExceptStatement withExcepts(java.util.List<hydra.ext.python.syntax.ExceptBlock> excepts) {
+  public TryExceptStatement withExcepts(hydra.util.ConsList<hydra.ext.python.syntax.ExceptBlock> excepts) {
     return new TryExceptStatement(body, excepts, else_, finally_);
   }
   

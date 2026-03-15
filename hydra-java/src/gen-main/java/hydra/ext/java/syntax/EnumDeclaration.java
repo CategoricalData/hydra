@@ -15,15 +15,15 @@ public class EnumDeclaration implements Serializable, Comparable<EnumDeclaration
   
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
-  public final java.util.List<hydra.ext.java.syntax.ClassModifier> modifiers;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.ClassModifier> modifiers;
   
   public final hydra.ext.java.syntax.TypeIdentifier identifier;
   
-  public final java.util.List<hydra.ext.java.syntax.InterfaceType> implements_;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.InterfaceType> implements_;
   
   public final hydra.ext.java.syntax.EnumBody body;
   
-  public EnumDeclaration (java.util.List<hydra.ext.java.syntax.ClassModifier> modifiers, hydra.ext.java.syntax.TypeIdentifier identifier, java.util.List<hydra.ext.java.syntax.InterfaceType> implements_, hydra.ext.java.syntax.EnumBody body) {
+  public EnumDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.ClassModifier> modifiers, hydra.ext.java.syntax.TypeIdentifier identifier, hydra.util.ConsList<hydra.ext.java.syntax.InterfaceType> implements_, hydra.ext.java.syntax.EnumBody body) {
     this.modifiers = modifiers;
     this.identifier = identifier;
     this.implements_ = implements_;
@@ -75,7 +75,7 @@ public class EnumDeclaration implements Serializable, Comparable<EnumDeclaration
     return ((Comparable) body).compareTo(other.body);
   }
   
-  public EnumDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.ClassModifier> modifiers) {
+  public EnumDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.ClassModifier> modifiers) {
     return new EnumDeclaration(modifiers, identifier, implements_, body);
   }
   
@@ -83,7 +83,7 @@ public class EnumDeclaration implements Serializable, Comparable<EnumDeclaration
     return new EnumDeclaration(modifiers, identifier, implements_, body);
   }
   
-  public EnumDeclaration withImplements(java.util.List<hydra.ext.java.syntax.InterfaceType> implements_) {
+  public EnumDeclaration withImplements(hydra.util.ConsList<hydra.ext.java.syntax.InterfaceType> implements_) {
     return new EnumDeclaration(modifiers, identifier, implements_, body);
   }
   

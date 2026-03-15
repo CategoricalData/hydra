@@ -22,9 +22,9 @@ public class ApplicationPattern implements Serializable, Comparable<ApplicationP
   /**
    * The pattern arguments
    */
-  public final java.util.List<hydra.ext.haskell.ast.Pattern> args;
+  public final hydra.util.ConsList<hydra.ext.haskell.ast.Pattern> args;
   
-  public ApplicationPattern (hydra.ext.haskell.ast.Name name, java.util.List<hydra.ext.haskell.ast.Pattern> args) {
+  public ApplicationPattern (hydra.ext.haskell.ast.Name name, hydra.util.ConsList<hydra.ext.haskell.ast.Pattern> args) {
     this.name = name;
     this.args = args;
   }
@@ -64,7 +64,7 @@ public class ApplicationPattern implements Serializable, Comparable<ApplicationP
     return new ApplicationPattern(name, args);
   }
   
-  public ApplicationPattern withArgs(java.util.List<hydra.ext.haskell.ast.Pattern> args) {
+  public ApplicationPattern withArgs(hydra.util.ConsList<hydra.ext.haskell.ast.Pattern> args) {
     return new ApplicationPattern(name, args);
   }
 }

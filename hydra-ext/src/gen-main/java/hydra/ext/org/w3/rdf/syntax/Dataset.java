@@ -9,9 +9,9 @@ public class Dataset implements Serializable, Comparable<Dataset> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.Set<hydra.ext.org.w3.rdf.syntax.Quad> value;
+  public final hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Quad> value;
   
-  public Dataset (java.util.Set<hydra.ext.org.w3.rdf.syntax.Quad> value) {
+  public Dataset (hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Quad> value) {
     this.value = value;
   }
   

@@ -38,9 +38,9 @@ public abstract class LambdaParameters implements Serializable, Comparable<Lambd
   }
   
   public static final class Tuple extends hydra.ext.java.syntax.LambdaParameters implements Serializable {
-    public final java.util.List<hydra.ext.java.syntax.LambdaParameters> value;
+    public final hydra.util.ConsList<hydra.ext.java.syntax.LambdaParameters> value;
     
-    public Tuple (java.util.List<hydra.ext.java.syntax.LambdaParameters> value) {
+    public Tuple (hydra.util.ConsList<hydra.ext.java.syntax.LambdaParameters> value) {
       this.value = value;
     }
     

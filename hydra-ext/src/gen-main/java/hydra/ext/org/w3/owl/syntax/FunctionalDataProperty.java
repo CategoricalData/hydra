@@ -11,11 +11,11 @@ public class FunctionalDataProperty implements Serializable, Comparable<Function
   
   public static final hydra.core.Name PROPERTY = new hydra.core.Name("property");
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
   public final hydra.ext.org.w3.owl.syntax.DataPropertyExpression property;
   
-  public FunctionalDataProperty (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.DataPropertyExpression property) {
+  public FunctionalDataProperty (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.DataPropertyExpression property) {
     this.annotations = annotations;
     this.property = property;
   }
@@ -51,7 +51,7 @@ public class FunctionalDataProperty implements Serializable, Comparable<Function
     return ((Comparable) property).compareTo(other.property);
   }
   
-  public FunctionalDataProperty withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public FunctionalDataProperty withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new FunctionalDataProperty(annotations, property);
   }
   

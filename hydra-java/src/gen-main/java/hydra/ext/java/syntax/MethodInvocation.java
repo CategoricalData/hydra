@@ -13,9 +13,9 @@ public class MethodInvocation implements Serializable, Comparable<MethodInvocati
   
   public final hydra.ext.java.syntax.MethodInvocation_Header header;
   
-  public final java.util.List<hydra.ext.java.syntax.Expression> arguments;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.Expression> arguments;
   
-  public MethodInvocation (hydra.ext.java.syntax.MethodInvocation_Header header, java.util.List<hydra.ext.java.syntax.Expression> arguments) {
+  public MethodInvocation (hydra.ext.java.syntax.MethodInvocation_Header header, hydra.util.ConsList<hydra.ext.java.syntax.Expression> arguments) {
     this.header = header;
     this.arguments = arguments;
   }
@@ -55,7 +55,7 @@ public class MethodInvocation implements Serializable, Comparable<MethodInvocati
     return new MethodInvocation(header, arguments);
   }
   
-  public MethodInvocation withArguments(java.util.List<hydra.ext.java.syntax.Expression> arguments) {
+  public MethodInvocation withArguments(hydra.util.ConsList<hydra.ext.java.syntax.Expression> arguments) {
     return new MethodInvocation(header, arguments);
   }
 }

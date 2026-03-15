@@ -13,13 +13,13 @@ public class UntypedAssignment implements Serializable, Comparable<UntypedAssign
   
   public static final hydra.core.Name TYPE_COMMENT = new hydra.core.Name("typeComment");
   
-  public final java.util.List<hydra.ext.python.syntax.StarTarget> targets;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.StarTarget> targets;
   
   public final hydra.ext.python.syntax.AnnotatedRhs rhs;
   
   public final hydra.util.Maybe<hydra.ext.python.syntax.TypeComment> typeComment;
   
-  public UntypedAssignment (java.util.List<hydra.ext.python.syntax.StarTarget> targets, hydra.ext.python.syntax.AnnotatedRhs rhs, hydra.util.Maybe<hydra.ext.python.syntax.TypeComment> typeComment) {
+  public UntypedAssignment (hydra.util.ConsList<hydra.ext.python.syntax.StarTarget> targets, hydra.ext.python.syntax.AnnotatedRhs rhs, hydra.util.Maybe<hydra.ext.python.syntax.TypeComment> typeComment) {
     this.targets = targets;
     this.rhs = rhs;
     this.typeComment = typeComment;
@@ -64,7 +64,7 @@ public class UntypedAssignment implements Serializable, Comparable<UntypedAssign
       other.typeComment.hashCode());
   }
   
-  public UntypedAssignment withTargets(java.util.List<hydra.ext.python.syntax.StarTarget> targets) {
+  public UntypedAssignment withTargets(hydra.util.ConsList<hydra.ext.python.syntax.StarTarget> targets) {
     return new UntypedAssignment(targets, rhs, typeComment);
   }
   

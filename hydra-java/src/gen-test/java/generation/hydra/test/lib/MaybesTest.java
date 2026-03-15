@@ -132,11 +132,11 @@ public class MaybesTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2),
 
-            hydra.lib.maybes.Cat.apply(java.util.List.of(
+            hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
   hydra.util.Maybe.just(1),
   (hydra.util.Maybe<Integer>) (hydra.util.Maybe.<Integer>nothing()),
   hydra.util.Maybe.just(2))));
@@ -149,11 +149,11 @@ public class MaybesTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2),
 
-            hydra.lib.maybes.Cat.apply(java.util.List.of(
+            hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
   hydra.util.Maybe.just(1),
   hydra.util.Maybe.just(2))));
 
@@ -165,9 +165,9 @@ public class MaybesTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
-            hydra.lib.maybes.Cat.apply(java.util.List.of(
+            hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
   (hydra.util.Maybe<T3>) (hydra.util.Maybe.<T3>nothing()),
   (hydra.util.Maybe<T3>) (hydra.util.Maybe.<T3>nothing()))));
 
@@ -179,9 +179,9 @@ public class MaybesTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
-            hydra.lib.maybes.Cat.apply((java.util.List<hydra.util.Maybe<T0>>) (java.util.List.<hydra.util.Maybe<T0>>of())));
+            hydra.lib.maybes.Cat.apply((hydra.util.ConsList<hydra.util.Maybe<T0>>) (hydra.util.ConsList.<hydra.util.Maybe<T0>>of())));
 
     }
 
@@ -412,7 +412,7 @@ public class MaybesTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   6,
   8,
   10),
@@ -426,7 +426,7 @@ public class MaybesTest {
       x,
       2)),
     () -> (hydra.util.Maybe<Integer>) (hydra.util.Maybe.<Integer>nothing()))),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2,
     3,
@@ -441,7 +441,7 @@ public class MaybesTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.maybes.MapMaybe.apply(
   (java.util.function.Function<Integer, hydra.util.Maybe<Integer>>) (x -> hydra.lib.logic.IfElse.lazy(
@@ -452,7 +452,7 @@ public class MaybesTest {
       x,
       2)),
     () -> (hydra.util.Maybe<Integer>) (hydra.util.Maybe.<Integer>nothing()))),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2)));
 
@@ -464,7 +464,7 @@ public class MaybesTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.maybes.MapMaybe.apply(
   (java.util.function.Function<Integer, hydra.util.Maybe<Integer>>) (x -> hydra.lib.logic.IfElse.lazy(
@@ -475,7 +475,7 @@ public class MaybesTest {
       x,
       2)),
     () -> (hydra.util.Maybe<Integer>) (hydra.util.Maybe.<Integer>nothing()))),
-  (java.util.List<Integer>) (java.util.List.<Integer>of())));
+  (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of())));
 
     }
 
@@ -549,7 +549,7 @@ public class MaybesTest {
 
         assertEquals(
 
-            java.util.List.of(42),
+            hydra.util.ConsList.of(42),
 
             hydra.lib.maybes.ToList.apply(hydra.util.Maybe.just(42)));
 
@@ -561,7 +561,7 @@ public class MaybesTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.maybes.ToList.apply((hydra.util.Maybe<T1>) (hydra.util.Maybe.<T1>nothing())));
 

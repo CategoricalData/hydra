@@ -15,9 +15,9 @@ public class TypeVariableMetadata implements Serializable, Comparable<TypeVariab
   /**
    * The set of typeclass constraints on this type variable
    */
-  public final java.util.Set<hydra.core.Name> classes;
+  public final hydra.util.PersistentSet<hydra.core.Name> classes;
   
-  public TypeVariableMetadata (java.util.Set<hydra.core.Name> classes) {
+  public TypeVariableMetadata (hydra.util.PersistentSet<hydra.core.Name> classes) {
     this.classes = classes;
   }
   

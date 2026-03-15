@@ -12,9 +12,9 @@ public class LocalBindings implements Serializable, Comparable<LocalBindings> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.haskell.ast.LocalBinding> value;
+  public final hydra.util.ConsList<hydra.ext.haskell.ast.LocalBinding> value;
   
-  public LocalBindings (java.util.List<hydra.ext.haskell.ast.LocalBinding> value) {
+  public LocalBindings (hydra.util.ConsList<hydra.ext.haskell.ast.LocalBinding> value) {
     this.value = value;
   }
   

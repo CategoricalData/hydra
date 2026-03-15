@@ -6,7 +6,7 @@ package hydra.ext.haskell.utils;
  * Utilities for working with Haskell syntax trees
  */
 public interface Utils {
-  static hydra.ext.haskell.ast.Pattern applicationPattern(hydra.ext.haskell.ast.Name name, java.util.List<hydra.ext.haskell.ast.Pattern> args) {
+  static hydra.ext.haskell.ast.Pattern applicationPattern(hydra.ext.haskell.ast.Name name, hydra.util.ConsList<hydra.ext.haskell.ast.Pattern> args) {
     return new hydra.ext.haskell.ast.Pattern.Application(new hydra.ext.haskell.ast.ApplicationPattern(name, args));
   }
   
@@ -18,7 +18,7 @@ public interface Utils {
     hydra.util.Lazy<String> gmod = new hydra.util.Lazy<>(() -> (hydra.lib.pairs.Second.apply(namespacePair.get())).value);
     hydra.util.Lazy<hydra.module.Namespace> gname = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(namespacePair.get()));
     hydra.util.Maybe<hydra.module.Namespace> mns = (qname).namespace;
-    hydra.util.Lazy<java.util.Map<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName>> namespacesMap = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>, java.util.Map<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName>>) (projected -> projected.mapping)).apply(namespaces));
+    hydra.util.Lazy<hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName>> namespacesMap = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>, hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName>>) (projected -> projected.mapping)).apply(namespaces));
     return hydra.lib.maybes.Cases.applyLazy(
       (qname).namespace,
       () -> hydra.ext.haskell.utils.Utils.simpleName(local),
@@ -34,7 +34,7 @@ public interface Utils {
               ns,
               gname.get()),
             () -> hydra.ext.haskell.utils.Utils.simpleName(escLocal),
-            () -> hydra.ext.haskell.utils.Utils.rawName(hydra.lib.strings.Cat.apply(java.util.List.of(
+            () -> hydra.ext.haskell.utils.Utils.rawName(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               aliasStr,
               ".",
               hydra.ext.haskell.utils.Utils.sanitizeHaskellName(local)))));
@@ -46,7 +46,7 @@ public interface Utils {
   }
   
   static hydra.ext.haskell.ast.Expression hslambda(hydra.ext.haskell.ast.Name name, hydra.ext.haskell.ast.Expression rhs) {
-    return new hydra.ext.haskell.ast.Expression.Lambda(new hydra.ext.haskell.ast.LambdaExpression(java.util.List.of(new hydra.ext.haskell.ast.Pattern.Name(name)), rhs));
+    return new hydra.ext.haskell.ast.Expression.Lambda(new hydra.ext.haskell.ast.LambdaExpression(hydra.util.ConsList.of(new hydra.ext.haskell.ast.Pattern.Name(name)), rhs));
   }
   
   static hydra.ext.haskell.ast.Expression hslit(hydra.ext.haskell.ast.Literal lit) {
@@ -67,11 +67,11 @@ public interface Utils {
         true,
         true,
         mod),
-      (java.util.function.Function<java.util.Set<hydra.module.Namespace>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>>>) (nss -> {
-        hydra.util.Lazy<java.util.List<hydra.module.Namespace>> nssAsList = new hydra.util.Lazy<>(() -> hydra.lib.sets.ToList.apply(nss));
+      (java.util.function.Function<hydra.util.PersistentSet<hydra.module.Namespace>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>>>) (nss -> {
+        hydra.util.Lazy<hydra.util.ConsList<hydra.module.Namespace>> nssAsList = new hydra.util.Lazy<>(() -> hydra.lib.sets.ToList.apply(nss));
         java.util.function.Function<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName> toModuleName = (java.util.function.Function<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName>) (namespace -> {
           String namespaceStr = (namespace).value;
-          java.util.List<String> parts = hydra.lib.strings.SplitOn.apply(
+          hydra.util.ConsList<String> parts = hydra.lib.strings.SplitOn.apply(
             ".",
             namespaceStr);
           hydra.util.Lazy<String> lastPart = new hydra.util.Lazy<>(() -> hydra.lib.lists.Last.apply(parts));
@@ -79,10 +79,10 @@ public interface Utils {
           return new hydra.ext.haskell.ast.ModuleName(capitalized);
         });
         java.util.function.Function<hydra.module.Namespace, hydra.util.Pair<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName>> toPair = (java.util.function.Function<hydra.module.Namespace, hydra.util.Pair<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName>>) (name -> (hydra.util.Pair<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName>) ((hydra.util.Pair<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName>) (new hydra.util.Pair<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName>(name, (toModuleName).apply(name)))));
-        hydra.util.Lazy<java.util.List<hydra.util.Pair<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName>>> nssPairs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+        hydra.util.Lazy<hydra.util.ConsList<hydra.util.Pair<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName>>> nssPairs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
           toPair,
           nssAsList.get()));
-        hydra.util.Lazy<hydra.util.Pair<java.util.Map<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName>, java.util.Set<hydra.ext.haskell.ast.ModuleName>>> finalState = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+        hydra.util.Lazy<hydra.util.Pair<hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName>, hydra.util.PersistentSet<hydra.ext.haskell.ast.ModuleName>>> finalState = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
           p0 -> p1 -> hydra.ext.haskell.utils.Utils.<hydra.module.Namespace>namespacesForModule_addPair(
             p0,
             p1),
@@ -90,15 +90,15 @@ public interface Utils {
           nssPairs.get()));
         hydra.module.Namespace ns = (mod).namespace;
         hydra.util.Pair<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName> focusPair = (toPair).apply(ns);
-        hydra.util.Lazy<java.util.Map<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName>> resultMap = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(finalState.get()));
+        hydra.util.Lazy<hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.haskell.ast.ModuleName>> resultMap = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(finalState.get()));
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>>right((hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>) (new hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName>(focusPair, resultMap.get())));
       }));
   }
   
-  static <T0> hydra.util.Pair<java.util.Map<T0, hydra.ext.haskell.ast.ModuleName>, java.util.Set<hydra.ext.haskell.ast.ModuleName>> namespacesForModule_addPair(hydra.util.Pair<java.util.Map<T0, hydra.ext.haskell.ast.ModuleName>, java.util.Set<hydra.ext.haskell.ast.ModuleName>> state, hydra.util.Pair<T0, hydra.ext.haskell.ast.ModuleName> namePair) {
+  static <T0> hydra.util.Pair<hydra.util.PersistentMap<T0, hydra.ext.haskell.ast.ModuleName>, hydra.util.PersistentSet<hydra.ext.haskell.ast.ModuleName>> namespacesForModule_addPair(hydra.util.Pair<hydra.util.PersistentMap<T0, hydra.ext.haskell.ast.ModuleName>, hydra.util.PersistentSet<hydra.ext.haskell.ast.ModuleName>> state, hydra.util.Pair<T0, hydra.ext.haskell.ast.ModuleName> namePair) {
     hydra.util.Lazy<hydra.ext.haskell.ast.ModuleName> alias = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(namePair));
     String aliasStr = (alias.get()).value;
-    hydra.util.Lazy<java.util.Set<hydra.ext.haskell.ast.ModuleName>> currentSet = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(state));
+    hydra.util.Lazy<hydra.util.PersistentSet<hydra.ext.haskell.ast.ModuleName>> currentSet = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(state));
     hydra.util.Lazy<T0> name = new hydra.util.Lazy<>(() -> hydra.ext.haskell.utils.Utils.<T0>namespacesForModule_name(namePair));
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.sets.Member.apply(
@@ -109,7 +109,7 @@ public interface Utils {
         (hydra.util.Pair<T0, hydra.ext.haskell.ast.ModuleName>) ((hydra.util.Pair<T0, hydra.ext.haskell.ast.ModuleName>) (new hydra.util.Pair<T0, hydra.ext.haskell.ast.ModuleName>(name.get(), new hydra.ext.haskell.ast.ModuleName(hydra.lib.strings.Cat2.apply(
           aliasStr,
           "_")))))),
-      () -> (hydra.util.Pair<java.util.Map<T0, hydra.ext.haskell.ast.ModuleName>, java.util.Set<hydra.ext.haskell.ast.ModuleName>>) ((hydra.util.Pair<java.util.Map<T0, hydra.ext.haskell.ast.ModuleName>, java.util.Set<hydra.ext.haskell.ast.ModuleName>>) (new hydra.util.Pair<java.util.Map<T0, hydra.ext.haskell.ast.ModuleName>, java.util.Set<hydra.ext.haskell.ast.ModuleName>>(hydra.lib.maps.Insert.apply(
+      () -> (hydra.util.Pair<hydra.util.PersistentMap<T0, hydra.ext.haskell.ast.ModuleName>, hydra.util.PersistentSet<hydra.ext.haskell.ast.ModuleName>>) ((hydra.util.Pair<hydra.util.PersistentMap<T0, hydra.ext.haskell.ast.ModuleName>, hydra.util.PersistentSet<hydra.ext.haskell.ast.ModuleName>>) (new hydra.util.Pair<hydra.util.PersistentMap<T0, hydra.ext.haskell.ast.ModuleName>, hydra.util.PersistentSet<hydra.ext.haskell.ast.ModuleName>>(hydra.lib.maps.Insert.apply(
         name.get(),
         alias.get(),
         hydra.ext.haskell.utils.Utils.<T0>namespacesForModule_currentMap(state)), hydra.lib.sets.Insert.apply(
@@ -117,11 +117,11 @@ public interface Utils {
         currentSet.get())))));
   }
   
-  static <T0, T1, T2> hydra.util.Pair<java.util.Map<T0, T1>, java.util.Set<T2>> namespacesForModule_emptyState() {
-    return (hydra.util.Pair<java.util.Map<T0, T1>, java.util.Set<T2>>) ((hydra.util.Pair<java.util.Map<T0, T1>, java.util.Set<T2>>) (new hydra.util.Pair<java.util.Map<T0, T1>, java.util.Set<T2>>((java.util.Map<T0, T1>) ((java.util.Map<T0, T1>) (hydra.lib.maps.Empty.<T0, T1>apply())), (java.util.Set<T2>) (hydra.lib.sets.Empty.<T2>apply()))));
+  static <T0, T1, T2> hydra.util.Pair<hydra.util.PersistentMap<T0, T1>, hydra.util.PersistentSet<T2>> namespacesForModule_emptyState() {
+    return (hydra.util.Pair<hydra.util.PersistentMap<T0, T1>, hydra.util.PersistentSet<T2>>) ((hydra.util.Pair<hydra.util.PersistentMap<T0, T1>, hydra.util.PersistentSet<T2>>) (new hydra.util.Pair<hydra.util.PersistentMap<T0, T1>, hydra.util.PersistentSet<T2>>((hydra.util.PersistentMap<T0, T1>) ((hydra.util.PersistentMap<T0, T1>) (hydra.lib.maps.Empty.<T0, T1>apply())), (hydra.util.PersistentSet<T2>) (hydra.lib.sets.Empty.<T2>apply()))));
   }
   
-  static <T0> java.util.Map<T0, hydra.ext.haskell.ast.ModuleName> namespacesForModule_currentMap(hydra.util.Pair<java.util.Map<T0, hydra.ext.haskell.ast.ModuleName>, java.util.Set<hydra.ext.haskell.ast.ModuleName>> state) {
+  static <T0> hydra.util.PersistentMap<T0, hydra.ext.haskell.ast.ModuleName> namespacesForModule_currentMap(hydra.util.Pair<hydra.util.PersistentMap<T0, hydra.ext.haskell.ast.ModuleName>, hydra.util.PersistentSet<hydra.ext.haskell.ast.ModuleName>> state) {
     return hydra.lib.pairs.First.apply(state);
   }
   
@@ -136,7 +136,7 @@ public interface Utils {
   }
   
   static hydra.ext.haskell.ast.Name rawName(String n) {
-    return new hydra.ext.haskell.ast.Name.Normal(new hydra.ext.haskell.ast.QualifiedName((java.util.List<hydra.ext.haskell.ast.NamePart>) (java.util.List.<hydra.ext.haskell.ast.NamePart>of()), new hydra.ext.haskell.ast.NamePart(n)));
+    return new hydra.ext.haskell.ast.Name.Normal(new hydra.ext.haskell.ast.QualifiedName((hydra.util.ConsList<hydra.ext.haskell.ast.NamePart>) (hydra.util.ConsList.<hydra.ext.haskell.ast.NamePart>of()), new hydra.ext.haskell.ast.NamePart(n)));
   }
   
   static hydra.ext.haskell.ast.Name recordFieldReference(hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.core.Name sname, hydra.core.Name fname) {
@@ -167,14 +167,14 @@ public interface Utils {
   }
   
   static hydra.ext.haskell.ast.ValueBinding simpleValueBinding(hydra.ext.haskell.ast.Name hname, hydra.ext.haskell.ast.Expression rhs, hydra.util.Maybe<hydra.ext.haskell.ast.LocalBindings> bindings) {
-    hydra.util.Lazy<hydra.ext.haskell.ast.Pattern> pat = new hydra.util.Lazy<>(() -> new hydra.ext.haskell.ast.Pattern.Application(new hydra.ext.haskell.ast.ApplicationPattern(hname, (java.util.List<hydra.ext.haskell.ast.Pattern>) (java.util.List.<hydra.ext.haskell.ast.Pattern>of()))));
+    hydra.util.Lazy<hydra.ext.haskell.ast.Pattern> pat = new hydra.util.Lazy<>(() -> new hydra.ext.haskell.ast.Pattern.Application(new hydra.ext.haskell.ast.ApplicationPattern(hname, (hydra.util.ConsList<hydra.ext.haskell.ast.Pattern>) (hydra.util.ConsList.<hydra.ext.haskell.ast.Pattern>of()))));
     hydra.ext.haskell.ast.RightHandSide rightHandSide = new hydra.ext.haskell.ast.RightHandSide(rhs);
     return new hydra.ext.haskell.ast.ValueBinding.Simple(new hydra.ext.haskell.ast.SimpleValueBinding(pat.get(), rightHandSide, bindings));
   }
   
-  static hydra.ext.haskell.ast.Type toTypeApplication(java.util.List<hydra.ext.haskell.ast.Type> types) {
-    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.List<hydra.ext.haskell.ast.Type>, hydra.ext.haskell.ast.Type>> app = new java.util.concurrent.atomic.AtomicReference<>();
-    app.set((java.util.function.Function<java.util.List<hydra.ext.haskell.ast.Type>, hydra.ext.haskell.ast.Type>) (l -> hydra.lib.logic.IfElse.lazy(
+  static hydra.ext.haskell.ast.Type toTypeApplication(hydra.util.ConsList<hydra.ext.haskell.ast.Type> types) {
+    java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.util.ConsList<hydra.ext.haskell.ast.Type>, hydra.ext.haskell.ast.Type>> app = new java.util.concurrent.atomic.AtomicReference<>();
+    app.set((java.util.function.Function<hydra.util.ConsList<hydra.ext.haskell.ast.Type>, hydra.ext.haskell.ast.Type>) (l -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Gt.apply(
         hydra.lib.lists.Length.apply(l),
         1),
@@ -185,13 +185,13 @@ public interface Utils {
   
   static String typeNameForRecord(hydra.core.Name sname) {
     String snameStr = (sname).value;
-    java.util.List<String> parts = hydra.lib.strings.SplitOn.apply(
+    hydra.util.ConsList<String> parts = hydra.lib.strings.SplitOn.apply(
       ".",
       snameStr);
     return hydra.lib.lists.Last.apply(parts);
   }
   
-  static hydra.ext.haskell.ast.Name unionFieldReference(java.util.Set<hydra.core.Name> boundNames, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.core.Name sname, hydra.core.Name fname) {
+  static hydra.ext.haskell.ast.Name unionFieldReference(hydra.util.PersistentSet<hydra.core.Name> boundNames, hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.core.Name sname, hydra.core.Name fname) {
     String fnameStr = (fname).value;
     String capitalizedFieldName = hydra.formatting.Formatting.capitalize(fnameStr);
     String typeNameStr = hydra.ext.haskell.utils.Utils.typeNameForRecord(sname);
@@ -220,21 +220,21 @@ public interface Utils {
       unqualName);
   }
   
-  static hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.core.Type> unpackForallType(hydra.core.Type t) {
+  static hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Type> unpackForallType(hydra.core.Type t) {
     return (hydra.rewriting.Rewriting.deannotateType(t)).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
-      public hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.core.Type> otherwise(hydra.core.Type instance) {
-        return (hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.core.Type>) ((hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.core.Type>) (new hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.core.Type>((java.util.List<hydra.core.Name>) (java.util.List.<hydra.core.Name>of()), t)));
+      public hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Type> otherwise(hydra.core.Type instance) {
+        return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Type>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Type>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Type>((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>of()), t)));
       }
       
       @Override
-      public hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.core.Type> visit(hydra.core.Type.Forall fat) {
+      public hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Type> visit(hydra.core.Type.Forall fat) {
         hydra.core.Type tbody = ((fat).value).body;
-        hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.core.Type> recursiveResult = hydra.ext.haskell.utils.Utils.unpackForallType(tbody);
+        hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Type> recursiveResult = hydra.ext.haskell.utils.Utils.unpackForallType(tbody);
         hydra.util.Lazy<hydra.core.Type> finalType = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(recursiveResult));
         hydra.core.Name v = ((fat).value).parameter;
-        hydra.util.Lazy<java.util.List<hydra.core.Name>> vars = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(recursiveResult));
-        return (hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.core.Type>) ((hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.core.Type>) (new hydra.util.Pair<java.util.List<hydra.core.Name>, hydra.core.Type>(hydra.lib.lists.Cons.apply(
+        hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> vars = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(recursiveResult));
+        return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Type>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Type>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Type>(hydra.lib.lists.Cons.apply(
           v,
           vars.get()), finalType.get())));
       }

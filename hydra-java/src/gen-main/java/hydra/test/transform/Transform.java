@@ -7,14 +7,14 @@ package hydra.test.transform;
  */
 public interface Transform {
   static hydra.util.Maybe<hydra.testing.TestGroup> transformToCompiledTests(hydra.testing.TestGroup tg) {
-    java.util.List<hydra.testing.TestCaseWithMetadata> cases_ = (tg).cases;
+    hydra.util.ConsList<hydra.testing.TestCaseWithMetadata> cases_ = (tg).cases;
     hydra.util.Maybe<String> desc = (tg).description;
     String name_ = (tg).name;
-    java.util.List<hydra.testing.TestGroup> subgroups = (tg).subgroups;
-    hydra.util.Lazy<java.util.List<hydra.testing.TestCaseWithMetadata>> transformedCases = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+    hydra.util.ConsList<hydra.testing.TestGroup> subgroups = (tg).subgroups;
+    hydra.util.Lazy<hydra.util.ConsList<hydra.testing.TestCaseWithMetadata>> transformedCases = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.testing.TestCaseWithMetadata, hydra.util.Maybe<hydra.testing.TestCaseWithMetadata>>) (tc -> hydra.test.transform.Transform.transformTestCase(tc)),
       cases_)));
-    hydra.util.Lazy<java.util.List<hydra.testing.TestGroup>> transformedSubgroups = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
+    hydra.util.Lazy<hydra.util.ConsList<hydra.testing.TestGroup>> transformedSubgroups = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.testing.TestGroup, hydra.util.Maybe<hydra.testing.TestGroup>>) (sg -> hydra.test.transform.Transform.transformToCompiledTests(sg)),
       subgroups)));
     return hydra.lib.logic.IfElse.lazy(
@@ -28,7 +28,7 @@ public interface Transform {
   static hydra.util.Maybe<hydra.testing.TestCaseWithMetadata> transformTestCase(hydra.testing.TestCaseWithMetadata tcm) {
     hydra.util.Maybe<String> desc = (tcm).description;
     String name_ = (tcm).name;
-    java.util.List<hydra.testing.Tag> tags_ = (tcm).tags;
+    hydra.util.ConsList<hydra.testing.Tag> tags_ = (tcm).tags;
     hydra.testing.TestCase tc = (tcm).case_;
     return (tc).accept(new hydra.testing.TestCase.PartialVisitor<>() {
       @Override
@@ -62,15 +62,15 @@ public interface Transform {
       
       @Override
       public hydra.util.Maybe<hydra.testing.TestCaseWithMetadata> visit(hydra.testing.TestCase.TopologicalSort tscase) {
-        java.util.List<hydra.util.Pair<Integer, java.util.List<Integer>>> adjList = ((tscase).value).adjacencyList;
-        hydra.util.Either<java.util.List<java.util.List<Integer>>, java.util.List<Integer>> expected = ((tscase).value).expected;
+        hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>> adjList = ((tscase).value).adjacencyList;
+        hydra.util.Either<hydra.util.ConsList<hydra.util.ConsList<Integer>>, hydra.util.ConsList<Integer>> expected = ((tscase).value).expected;
         return hydra.util.Maybe.just(new hydra.testing.TestCaseWithMetadata(name_, new hydra.testing.TestCase.DelegatedEvaluation(new hydra.testing.DelegatedEvaluationTestCase(hydra.test.transform.Transform.buildTopologicalSortCall(adjList), hydra.test.transform.Transform.encodeEitherListList(expected))), desc, tags_));
       }
       
       @Override
       public hydra.util.Maybe<hydra.testing.TestCaseWithMetadata> visit(hydra.testing.TestCase.TopologicalSortSCC scccase) {
-        java.util.List<hydra.util.Pair<Integer, java.util.List<Integer>>> adjList = ((scccase).value).adjacencyList;
-        java.util.List<java.util.List<Integer>> expected = ((scccase).value).expected;
+        hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>> adjList = ((scccase).value).adjacencyList;
+        hydra.util.ConsList<hydra.util.ConsList<Integer>> expected = ((scccase).value).expected;
         return hydra.util.Maybe.just(new hydra.testing.TestCaseWithMetadata(name_, new hydra.testing.TestCase.DelegatedEvaluation(new hydra.testing.DelegatedEvaluationTestCase(hydra.test.transform.Transform.buildTopologicalSortSCCCall(adjList), hydra.test.transform.Transform.encodeListList(expected))), desc, tags_));
       }
     });
@@ -114,25 +114,25 @@ public interface Transform {
     return new hydra.module.Module(hydra.test.transform.Transform.addGenerationPrefix((m).namespace), (m).elements, (m).termDependencies, (m).typeDependencies, (m).description);
   }
   
-  static java.util.List<hydra.testing.TestCaseWithMetadata> collectTestCases(hydra.testing.TestGroup tg) {
+  static hydra.util.ConsList<hydra.testing.TestCaseWithMetadata> collectTestCases(hydra.testing.TestGroup tg) {
     return hydra.lib.lists.Concat2.apply(
       (tg).cases,
       hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
-        (java.util.function.Function<hydra.testing.TestGroup, java.util.List<hydra.testing.TestCaseWithMetadata>>) (sg -> hydra.test.transform.Transform.collectTestCases(sg)),
+        (java.util.function.Function<hydra.testing.TestGroup, hydra.util.ConsList<hydra.testing.TestCaseWithMetadata>>) (sg -> hydra.test.transform.Transform.collectTestCases(sg)),
         (tg).subgroups)));
   }
   
-  static hydra.core.Term buildTopologicalSortCall(java.util.List<hydra.util.Pair<Integer, java.util.List<Integer>>> adjList) {
+  static hydra.core.Term buildTopologicalSortCall(hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>> adjList) {
     return new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.sorting.topologicalSort")), hydra.test.transform.Transform.encodeAdjacencyList(adjList)));
   }
   
-  static hydra.core.Term buildTopologicalSortSCCCall(java.util.List<hydra.util.Pair<Integer, java.util.List<Integer>>> adjList) {
+  static hydra.core.Term buildTopologicalSortSCCCall(hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>> adjList) {
     return new hydra.core.Term.Application(new hydra.core.Application(new hydra.core.Term.Variable(new hydra.core.Name("hydra.sorting.topologicalSortComponents")), hydra.test.transform.Transform.encodeAdjacencyList(adjList)));
   }
   
-  static hydra.core.Term encodeAdjacencyList(java.util.List<hydra.util.Pair<Integer, java.util.List<Integer>>> pairs) {
+  static hydra.core.Term encodeAdjacencyList(hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>> pairs) {
     return new hydra.core.Term.List(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.util.Pair<Integer, java.util.List<Integer>>, hydra.core.Term>) (p -> new hydra.core.Term.Pair((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(hydra.test.transform.Transform.encodeInt(hydra.lib.pairs.First.apply(p)), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+      (java.util.function.Function<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>, hydra.core.Term>) (p -> new hydra.core.Term.Pair((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(hydra.test.transform.Transform.encodeInt(hydra.lib.pairs.First.apply(p)), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
         (java.util.function.Function<Integer, hydra.core.Term>) (d -> hydra.test.transform.Transform.encodeInt(d)),
         hydra.lib.pairs.Second.apply(p)))))))),
       pairs));
@@ -142,20 +142,20 @@ public interface Transform {
     return new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32(n)));
   }
   
-  static hydra.core.Term encodeEitherListList(hydra.util.Either<java.util.List<java.util.List<Integer>>, java.util.List<Integer>> e) {
+  static hydra.core.Term encodeEitherListList(hydra.util.Either<hydra.util.ConsList<hydra.util.ConsList<Integer>>, hydra.util.ConsList<Integer>> e) {
     return new hydra.core.Term.Either(hydra.lib.eithers.Bimap.apply(
-      (java.util.function.Function<java.util.List<java.util.List<Integer>>, hydra.core.Term>) (cycles -> hydra.test.transform.Transform.encodeListList(cycles)),
-      (java.util.function.Function<java.util.List<Integer>, hydra.core.Term>) (sorted -> hydra.test.transform.Transform.encodeIntList(sorted)),
+      (java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<Integer>>, hydra.core.Term>) (cycles -> hydra.test.transform.Transform.encodeListList(cycles)),
+      (java.util.function.Function<hydra.util.ConsList<Integer>, hydra.core.Term>) (sorted -> hydra.test.transform.Transform.encodeIntList(sorted)),
       e));
   }
   
-  static hydra.core.Term encodeListList(java.util.List<java.util.List<Integer>> lists) {
+  static hydra.core.Term encodeListList(hydra.util.ConsList<hydra.util.ConsList<Integer>> lists) {
     return new hydra.core.Term.List(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<java.util.List<Integer>, hydra.core.Term>) (l -> hydra.test.transform.Transform.encodeIntList(l)),
+      (java.util.function.Function<hydra.util.ConsList<Integer>, hydra.core.Term>) (l -> hydra.test.transform.Transform.encodeIntList(l)),
       lists));
   }
   
-  static hydra.core.Term encodeIntList(java.util.List<Integer> ints) {
+  static hydra.core.Term encodeIntList(hydra.util.ConsList<Integer> ints) {
     return new hydra.core.Term.List(hydra.lib.lists.Map.apply(
       (java.util.function.Function<Integer, hydra.core.Term>) (n -> hydra.test.transform.Transform.encodeInt(n)),
       ints));

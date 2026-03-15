@@ -13,13 +13,13 @@ public class ConstantDeclaration implements Serializable, Comparable<ConstantDec
   
   public static final hydra.core.Name VARIABLES = new hydra.core.Name("variables");
   
-  public final java.util.List<hydra.ext.java.syntax.ConstantModifier> modifiers;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.ConstantModifier> modifiers;
   
   public final hydra.ext.java.syntax.UnannType type;
   
-  public final java.util.List<hydra.ext.java.syntax.VariableDeclarator> variables;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.VariableDeclarator> variables;
   
-  public ConstantDeclaration (java.util.List<hydra.ext.java.syntax.ConstantModifier> modifiers, hydra.ext.java.syntax.UnannType type, java.util.List<hydra.ext.java.syntax.VariableDeclarator> variables) {
+  public ConstantDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.ConstantModifier> modifiers, hydra.ext.java.syntax.UnannType type, hydra.util.ConsList<hydra.ext.java.syntax.VariableDeclarator> variables) {
     this.modifiers = modifiers;
     this.type = type;
     this.variables = variables;
@@ -64,7 +64,7 @@ public class ConstantDeclaration implements Serializable, Comparable<ConstantDec
       other.variables.hashCode());
   }
   
-  public ConstantDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.ConstantModifier> modifiers) {
+  public ConstantDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.ConstantModifier> modifiers) {
     return new ConstantDeclaration(modifiers, type, variables);
   }
   
@@ -72,7 +72,7 @@ public class ConstantDeclaration implements Serializable, Comparable<ConstantDec
     return new ConstantDeclaration(modifiers, type, variables);
   }
   
-  public ConstantDeclaration withVariables(java.util.List<hydra.ext.java.syntax.VariableDeclarator> variables) {
+  public ConstantDeclaration withVariables(hydra.util.ConsList<hydra.ext.java.syntax.VariableDeclarator> variables) {
     return new ConstantDeclaration(modifiers, type, variables);
   }
 }

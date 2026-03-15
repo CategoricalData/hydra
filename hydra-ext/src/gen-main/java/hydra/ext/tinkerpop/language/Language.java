@@ -8,21 +8,21 @@ package hydra.ext.tinkerpop.language;
 public interface Language {
   static <T0> hydra.coders.Language tinkerpopLanguage(hydra.coders.LanguageName name, hydra.ext.org.apache.tinkerpop.features.Features features, hydra.ext.org.apache.tinkerpop.features.ExtraFeatures<T0> extras) {
     hydra.ext.org.apache.tinkerpop.features.DataTypeFeatures vpFeatures = (((features).vertex).properties).dataTypeFeatures;
-    hydra.util.Lazy<java.util.Set<hydra.core.FloatType>> floatTypes = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.maybes.Cat.apply(java.util.List.of(
+    hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.FloatType>> floatTypes = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
       hydra.ext.tinkerpop.language.Language.tinkerpopLanguage_cond(
         new hydra.core.FloatType.Float32(),
         (vpFeatures).supportsFloatValues),
       hydra.ext.tinkerpop.language.Language.tinkerpopLanguage_cond(
         new hydra.core.FloatType.Float64(),
         (vpFeatures).supportsDoubleValues)))));
-    hydra.util.Lazy<java.util.Set<hydra.core.IntegerType>> integerTypes = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.maybes.Cat.apply(java.util.List.of(
+    hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.IntegerType>> integerTypes = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
       hydra.ext.tinkerpop.language.Language.tinkerpopLanguage_cond(
         new hydra.core.IntegerType.Int32(),
         (vpFeatures).supportsIntegerValues),
       hydra.ext.tinkerpop.language.Language.tinkerpopLanguage_cond(
         new hydra.core.IntegerType.Int64(),
         (vpFeatures).supportsLongValues)))));
-    hydra.util.Lazy<java.util.Set<hydra.variants.LiteralVariant>> literalVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.maybes.Cat.apply(java.util.List.of(
+    hydra.util.Lazy<hydra.util.PersistentSet<hydra.variants.LiteralVariant>> literalVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
       hydra.ext.tinkerpop.language.Language.tinkerpopLanguage_cond(
         new hydra.variants.LiteralVariant.Binary(),
         (vpFeatures).supportsByteArrayValues),
@@ -57,7 +57,7 @@ public interface Language {
                 (vpFeatures).supportsStringArrayValues))))));
     Boolean supportsLiterals = true;
     Boolean supportsMaps = (vpFeatures).supportsMapValues;
-    hydra.util.Lazy<java.util.Set<hydra.variants.TermVariant>> termVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.maybes.Cat.apply(java.util.List.of(
+    hydra.util.Lazy<hydra.util.PersistentSet<hydra.variants.TermVariant>> termVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
       hydra.ext.tinkerpop.language.Language.tinkerpopLanguage_cond(
         new hydra.variants.TermVariant.List(),
         supportsLists),
@@ -182,7 +182,7 @@ public interface Language {
         }
       });
     });
-    hydra.util.Lazy<java.util.Set<hydra.variants.TypeVariant>> typeVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.maybes.Cat.apply(java.util.List.of(
+    hydra.util.Lazy<hydra.util.PersistentSet<hydra.variants.TypeVariant>> typeVariants = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
       hydra.ext.tinkerpop.language.Language.tinkerpopLanguage_cond(
         new hydra.variants.TypeVariant.List(),
         supportsLists),
@@ -204,11 +204,11 @@ public interface Language {
       () -> (hydra.util.Maybe<T1>) (hydra.util.Maybe.<T1>nothing()));
   }
   
-  static <T1> java.util.Set<T1> tinkerpopLanguage_eliminationVariants() {
-    return (java.util.Set<T1>) (hydra.lib.sets.Empty.<T1>apply());
+  static <T1> hydra.util.PersistentSet<T1> tinkerpopLanguage_eliminationVariants() {
+    return (hydra.util.PersistentSet<T1>) (hydra.lib.sets.Empty.<T1>apply());
   }
   
-  static <T1> java.util.Set<T1> tinkerpopLanguage_functionVariants() {
-    return (java.util.Set<T1>) (hydra.lib.sets.Empty.<T1>apply());
+  static <T1> hydra.util.PersistentSet<T1> tinkerpopLanguage_functionVariants() {
+    return (hydra.util.PersistentSet<T1>) (hydra.lib.sets.Empty.<T1>apply());
   }
 }

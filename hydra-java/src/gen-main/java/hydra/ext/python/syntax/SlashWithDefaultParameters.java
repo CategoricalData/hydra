@@ -13,13 +13,13 @@ public class SlashWithDefaultParameters implements Serializable, Comparable<Slas
   
   public static final hydra.core.Name STAR_ETC = new hydra.core.Name("starEtc");
   
-  public final java.util.List<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault;
   
-  public final java.util.List<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault;
   
   public final hydra.util.Maybe<hydra.ext.python.syntax.StarEtc> starEtc;
   
-  public SlashWithDefaultParameters (java.util.List<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault, java.util.List<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault, hydra.util.Maybe<hydra.ext.python.syntax.StarEtc> starEtc) {
+  public SlashWithDefaultParameters (hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault, hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault, hydra.util.Maybe<hydra.ext.python.syntax.StarEtc> starEtc) {
     this.paramNoDefault = paramNoDefault;
     this.paramWithDefault = paramWithDefault;
     this.starEtc = starEtc;
@@ -66,11 +66,11 @@ public class SlashWithDefaultParameters implements Serializable, Comparable<Slas
       other.starEtc.hashCode());
   }
   
-  public SlashWithDefaultParameters withParamNoDefault(java.util.List<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault) {
+  public SlashWithDefaultParameters withParamNoDefault(hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault) {
     return new SlashWithDefaultParameters(paramNoDefault, paramWithDefault, starEtc);
   }
   
-  public SlashWithDefaultParameters withParamWithDefault(java.util.List<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault) {
+  public SlashWithDefaultParameters withParamWithDefault(hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault) {
     return new SlashWithDefaultParameters(paramNoDefault, paramWithDefault, starEtc);
   }
   

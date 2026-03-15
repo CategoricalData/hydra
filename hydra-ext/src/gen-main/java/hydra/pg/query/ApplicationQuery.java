@@ -9,9 +9,9 @@ public class ApplicationQuery implements Serializable, Comparable<ApplicationQue
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.pg.query.Query> value;
+  public final hydra.util.ConsList<hydra.pg.query.Query> value;
   
-  public ApplicationQuery (java.util.List<hydra.pg.query.Query> value) {
+  public ApplicationQuery (hydra.util.ConsList<hydra.pg.query.Query> value) {
     this.value = value;
   }
   

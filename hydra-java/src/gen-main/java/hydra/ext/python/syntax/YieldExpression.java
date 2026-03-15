@@ -78,9 +78,9 @@ public abstract class YieldExpression implements Serializable, Comparable<YieldE
   }
   
   public static final class Simple extends hydra.ext.python.syntax.YieldExpression implements Serializable {
-    public final java.util.List<hydra.ext.python.syntax.StarExpression> value;
+    public final hydra.util.ConsList<hydra.ext.python.syntax.StarExpression> value;
     
-    public Simple (java.util.List<hydra.ext.python.syntax.StarExpression> value) {
+    public Simple (hydra.util.ConsList<hydra.ext.python.syntax.StarExpression> value) {
       this.value = value;
     }
     

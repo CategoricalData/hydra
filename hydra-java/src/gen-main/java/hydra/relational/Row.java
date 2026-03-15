@@ -12,9 +12,9 @@ public class Row<V> implements Serializable, Comparable<Row<V>> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<V> value;
+  public final hydra.util.ConsList<V> value;
   
-  public Row (java.util.List<V> value) {
+  public Row (hydra.util.ConsList<V> value) {
     this.value = value;
   }
   

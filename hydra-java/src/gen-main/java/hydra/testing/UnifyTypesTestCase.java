@@ -21,7 +21,7 @@ public class UnifyTypesTestCase implements Serializable, Comparable<UnifyTypesTe
   /**
    * The schema types map (type variable names that should not be bound)
    */
-  public final java.util.List<hydra.core.Name> schemaTypes;
+  public final hydra.util.ConsList<hydra.core.Name> schemaTypes;
   
   /**
    * The left type to unify
@@ -38,7 +38,7 @@ public class UnifyTypesTestCase implements Serializable, Comparable<UnifyTypesTe
    */
   public final hydra.util.Either<String, hydra.typing.TypeSubst> expected;
   
-  public UnifyTypesTestCase (java.util.List<hydra.core.Name> schemaTypes, hydra.core.Type left, hydra.core.Type right, hydra.util.Either<String, hydra.typing.TypeSubst> expected) {
+  public UnifyTypesTestCase (hydra.util.ConsList<hydra.core.Name> schemaTypes, hydra.core.Type left, hydra.core.Type right, hydra.util.Either<String, hydra.typing.TypeSubst> expected) {
     this.schemaTypes = schemaTypes;
     this.left = left;
     this.right = right;
@@ -90,7 +90,7 @@ public class UnifyTypesTestCase implements Serializable, Comparable<UnifyTypesTe
       other.expected.hashCode());
   }
   
-  public UnifyTypesTestCase withSchemaTypes(java.util.List<hydra.core.Name> schemaTypes) {
+  public UnifyTypesTestCase withSchemaTypes(hydra.util.ConsList<hydra.core.Name> schemaTypes) {
     return new UnifyTypesTestCase(schemaTypes, left, right, expected);
   }
   

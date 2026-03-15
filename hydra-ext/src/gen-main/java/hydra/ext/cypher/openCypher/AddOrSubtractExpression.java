@@ -13,9 +13,9 @@ public class AddOrSubtractExpression implements Serializable, Comparable<AddOrSu
   
   public final hydra.ext.cypher.openCypher.MultiplyDivideModuloExpression left;
   
-  public final java.util.List<hydra.ext.cypher.openCypher.AddOrSubtractRightHandSide> right;
+  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.AddOrSubtractRightHandSide> right;
   
-  public AddOrSubtractExpression (hydra.ext.cypher.openCypher.MultiplyDivideModuloExpression left, java.util.List<hydra.ext.cypher.openCypher.AddOrSubtractRightHandSide> right) {
+  public AddOrSubtractExpression (hydra.ext.cypher.openCypher.MultiplyDivideModuloExpression left, hydra.util.ConsList<hydra.ext.cypher.openCypher.AddOrSubtractRightHandSide> right) {
     this.left = left;
     this.right = right;
   }
@@ -55,7 +55,7 @@ public class AddOrSubtractExpression implements Serializable, Comparable<AddOrSu
     return new AddOrSubtractExpression(left, right);
   }
   
-  public AddOrSubtractExpression withRight(java.util.List<hydra.ext.cypher.openCypher.AddOrSubtractRightHandSide> right) {
+  public AddOrSubtractExpression withRight(hydra.util.ConsList<hydra.ext.cypher.openCypher.AddOrSubtractRightHandSide> right) {
     return new AddOrSubtractExpression(left, right);
   }
 }

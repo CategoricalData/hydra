@@ -18,9 +18,9 @@ public class SetsTest {
 
         assertEquals(
 
-            (java.util.Set<T0>) (java.util.Set.<T0>of()),
+            (hydra.util.PersistentSet<T0>) (hydra.util.PersistentSet.<T0>empty()),
 
-            (java.util.Set<T0>) (hydra.lib.sets.Empty.<T0>apply()));
+            (hydra.util.PersistentSet<T0>) (hydra.lib.sets.Empty.<T0>apply()));
 
     }
 
@@ -32,7 +32,7 @@ public class SetsTest {
 
         assertEquals(
 
-            java.util.stream.Stream.of(42).collect(java.util.stream.Collectors.toSet()),
+            hydra.util.PersistentSet.of(42),
 
             hydra.lib.sets.Singleton.apply(42));
 
@@ -46,12 +46,12 @@ public class SetsTest {
 
         assertEquals(
 
-            java.util.stream.Stream.of(
+            hydra.util.PersistentSet.of(
   1,
   2,
-  3).collect(java.util.stream.Collectors.toSet()),
+  3),
 
-            hydra.lib.sets.FromList.apply(java.util.List.of(
+            hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(
   1,
   2,
   3)));
@@ -64,12 +64,12 @@ public class SetsTest {
 
         assertEquals(
 
-            java.util.stream.Stream.of(
+            hydra.util.PersistentSet.of(
   1,
   2,
-  3).collect(java.util.stream.Collectors.toSet()),
+  3),
 
-            hydra.lib.sets.FromList.apply(java.util.List.of(
+            hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(
   1,
   2,
   1,
@@ -83,9 +83,9 @@ public class SetsTest {
 
         assertEquals(
 
-            (java.util.Set<T0>) (java.util.Set.<T0>of()),
+            (hydra.util.PersistentSet<T0>) (hydra.util.PersistentSet.<T0>empty()),
 
-            hydra.lib.sets.FromList.apply((java.util.List<T1>) (java.util.List.<T1>of())));
+            hydra.lib.sets.FromList.apply((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>of())));
 
     }
 
@@ -97,15 +97,15 @@ public class SetsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2,
   3),
 
-            hydra.lib.sets.ToList.apply(java.util.stream.Stream.of(
+            hydra.lib.sets.ToList.apply(hydra.util.PersistentSet.of(
   1,
   2,
-  3).collect(java.util.stream.Collectors.toSet())));
+  3)));
 
     }
 
@@ -115,15 +115,15 @@ public class SetsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2,
   3),
 
-            hydra.lib.sets.ToList.apply(java.util.stream.Stream.of(
+            hydra.lib.sets.ToList.apply(hydra.util.PersistentSet.of(
   1,
   2,
-  3).collect(java.util.stream.Collectors.toSet())));
+  3)));
 
     }
 
@@ -133,9 +133,9 @@ public class SetsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
-            hydra.lib.sets.ToList.apply((java.util.Set<T1>) (java.util.Set.<T1>of())));
+            hydra.lib.sets.ToList.apply((hydra.util.PersistentSet<T1>) (hydra.util.PersistentSet.<T1>empty())));
 
     }
 
@@ -147,18 +147,18 @@ public class SetsTest {
 
         assertEquals(
 
-            java.util.stream.Stream.of(
+            hydra.util.PersistentSet.of(
   1,
   2,
   3,
-  4).collect(java.util.stream.Collectors.toSet()),
+  4),
 
             hydra.lib.sets.Insert.apply(
   4,
-  java.util.stream.Stream.of(
+  hydra.util.PersistentSet.of(
     1,
     2,
-    3).collect(java.util.stream.Collectors.toSet())));
+    3)));
 
     }
 
@@ -168,17 +168,17 @@ public class SetsTest {
 
         assertEquals(
 
-            java.util.stream.Stream.of(
+            hydra.util.PersistentSet.of(
   1,
   2,
-  3).collect(java.util.stream.Collectors.toSet()),
+  3),
 
             hydra.lib.sets.Insert.apply(
   2,
-  java.util.stream.Stream.of(
+  hydra.util.PersistentSet.of(
     1,
     2,
-    3).collect(java.util.stream.Collectors.toSet())));
+    3)));
 
     }
 
@@ -188,11 +188,11 @@ public class SetsTest {
 
         assertEquals(
 
-            java.util.stream.Stream.of(1).collect(java.util.stream.Collectors.toSet()),
+            hydra.util.PersistentSet.of(1),
 
             hydra.lib.sets.Insert.apply(
   1,
-  (java.util.Set<Integer>) (java.util.Set.<Integer>of())));
+  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>empty())));
 
     }
 
@@ -204,16 +204,16 @@ public class SetsTest {
 
         assertEquals(
 
-            java.util.stream.Stream.of(
+            hydra.util.PersistentSet.of(
   1,
-  3).collect(java.util.stream.Collectors.toSet()),
+  3),
 
             hydra.lib.sets.Delete.apply(
   2,
-  java.util.stream.Stream.of(
+  hydra.util.PersistentSet.of(
     1,
     2,
-    3).collect(java.util.stream.Collectors.toSet())));
+    3)));
 
     }
 
@@ -223,17 +223,17 @@ public class SetsTest {
 
         assertEquals(
 
-            java.util.stream.Stream.of(
+            hydra.util.PersistentSet.of(
   1,
   2,
-  3).collect(java.util.stream.Collectors.toSet()),
+  3),
 
             hydra.lib.sets.Delete.apply(
   4,
-  java.util.stream.Stream.of(
+  hydra.util.PersistentSet.of(
     1,
     2,
-    3).collect(java.util.stream.Collectors.toSet())));
+    3)));
 
     }
 
@@ -243,11 +243,11 @@ public class SetsTest {
 
         assertEquals(
 
-            (java.util.Set<T0>) (java.util.Set.<T0>of()),
+            (hydra.util.PersistentSet<T0>) (hydra.util.PersistentSet.<T0>empty()),
 
             hydra.lib.sets.Delete.apply(
   1,
-  (java.util.Set<Integer>) (java.util.Set.<Integer>of())));
+  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>empty())));
 
     }
 
@@ -263,10 +263,10 @@ public class SetsTest {
 
             hydra.lib.sets.Member.apply(
   2,
-  java.util.stream.Stream.of(
+  hydra.util.PersistentSet.of(
     1,
     2,
-    3).collect(java.util.stream.Collectors.toSet())));
+    3)));
 
     }
 
@@ -280,10 +280,10 @@ public class SetsTest {
 
             hydra.lib.sets.Member.apply(
   4,
-  java.util.stream.Stream.of(
+  hydra.util.PersistentSet.of(
     1,
     2,
-    3).collect(java.util.stream.Collectors.toSet())));
+    3)));
 
     }
 
@@ -297,7 +297,7 @@ public class SetsTest {
 
             hydra.lib.sets.Member.apply(
   1,
-  (java.util.Set<Integer>) (java.util.Set.<Integer>of())));
+  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>empty())));
 
     }
 
@@ -311,10 +311,10 @@ public class SetsTest {
 
             3,
 
-            hydra.lib.sets.Size.apply(java.util.stream.Stream.of(
+            hydra.lib.sets.Size.apply(hydra.util.PersistentSet.of(
   1,
   2,
-  3).collect(java.util.stream.Collectors.toSet())));
+  3)));
 
     }
 
@@ -326,7 +326,7 @@ public class SetsTest {
 
             1,
 
-            hydra.lib.sets.Size.apply(java.util.stream.Stream.of(42).collect(java.util.stream.Collectors.toSet())));
+            hydra.lib.sets.Size.apply(hydra.util.PersistentSet.of(42)));
 
     }
 
@@ -338,7 +338,7 @@ public class SetsTest {
 
             0,
 
-            hydra.lib.sets.Size.apply((java.util.Set<T1>) (java.util.Set.<T1>of())));
+            hydra.lib.sets.Size.apply((hydra.util.PersistentSet<T1>) (hydra.util.PersistentSet.<T1>empty())));
 
     }
 
@@ -352,7 +352,7 @@ public class SetsTest {
 
             true,
 
-            hydra.lib.sets.Null.apply((java.util.Set<T1>) (java.util.Set.<T1>of())));
+            hydra.lib.sets.Null.apply((hydra.util.PersistentSet<T1>) (hydra.util.PersistentSet.<T1>empty())));
 
     }
 
@@ -364,9 +364,9 @@ public class SetsTest {
 
             false,
 
-            hydra.lib.sets.Null.apply(java.util.stream.Stream.of(
+            hydra.lib.sets.Null.apply(hydra.util.PersistentSet.of(
   1,
-  2).collect(java.util.stream.Collectors.toSet())));
+  2)));
 
     }
 
@@ -378,18 +378,18 @@ public class SetsTest {
 
         assertEquals(
 
-            java.util.stream.Stream.of(
+            hydra.util.PersistentSet.of(
   1,
   2,
-  3).collect(java.util.stream.Collectors.toSet()),
+  3),
 
             hydra.lib.sets.Union.apply(
-  java.util.stream.Stream.of(
+  hydra.util.PersistentSet.of(
     1,
-    2).collect(java.util.stream.Collectors.toSet()),
-  java.util.stream.Stream.of(
+    2),
+  hydra.util.PersistentSet.of(
     2,
-    3).collect(java.util.stream.Collectors.toSet())));
+    3)));
 
     }
 
@@ -399,15 +399,15 @@ public class SetsTest {
 
         assertEquals(
 
-            java.util.stream.Stream.of(
+            hydra.util.PersistentSet.of(
   1,
-  2).collect(java.util.stream.Collectors.toSet()),
+  2),
 
             hydra.lib.sets.Union.apply(
-  java.util.stream.Stream.of(
+  hydra.util.PersistentSet.of(
     1,
-    2).collect(java.util.stream.Collectors.toSet()),
-  (java.util.Set<Integer>) (java.util.Set.<Integer>of())));
+    2),
+  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>empty())));
 
     }
 
@@ -417,15 +417,15 @@ public class SetsTest {
 
         assertEquals(
 
-            java.util.stream.Stream.of(
+            hydra.util.PersistentSet.of(
   1,
-  2).collect(java.util.stream.Collectors.toSet()),
+  2),
 
             hydra.lib.sets.Union.apply(
-  (java.util.Set<Integer>) (java.util.Set.<Integer>of()),
-  java.util.stream.Stream.of(
+  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>empty()),
+  hydra.util.PersistentSet.of(
     1,
-    2).collect(java.util.stream.Collectors.toSet())));
+    2)));
 
     }
 
@@ -437,22 +437,22 @@ public class SetsTest {
 
         assertEquals(
 
-            java.util.stream.Stream.of(
+            hydra.util.PersistentSet.of(
   1,
   2,
   3,
-  4).collect(java.util.stream.Collectors.toSet()),
+  4),
 
-            hydra.lib.sets.Unions.apply(java.util.List.of(
-  java.util.stream.Stream.of(
+            hydra.lib.sets.Unions.apply(hydra.util.ConsList.of(
+  hydra.util.PersistentSet.of(
     1,
-    2).collect(java.util.stream.Collectors.toSet()),
-  java.util.stream.Stream.of(
+    2),
+  hydra.util.PersistentSet.of(
     2,
-    3).collect(java.util.stream.Collectors.toSet()),
-  java.util.stream.Stream.of(
+    3),
+  hydra.util.PersistentSet.of(
     3,
-    4).collect(java.util.stream.Collectors.toSet()))));
+    4))));
 
     }
 
@@ -462,17 +462,17 @@ public class SetsTest {
 
         assertEquals(
 
-            java.util.stream.Stream.of(
+            hydra.util.PersistentSet.of(
   1,
   2,
-  3).collect(java.util.stream.Collectors.toSet()),
+  3),
 
-            hydra.lib.sets.Unions.apply(java.util.List.of(
-  java.util.stream.Stream.of(
+            hydra.lib.sets.Unions.apply(hydra.util.ConsList.of(
+  hydra.util.PersistentSet.of(
     1,
-    2).collect(java.util.stream.Collectors.toSet()),
-  (java.util.Set<Integer>) (java.util.Set.<Integer>of()),
-  java.util.stream.Stream.of(3).collect(java.util.stream.Collectors.toSet()))));
+    2),
+  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>empty()),
+  hydra.util.PersistentSet.of(3))));
 
     }
 
@@ -482,9 +482,9 @@ public class SetsTest {
 
         assertEquals(
 
-            (java.util.Set<T0>) (java.util.Set.<T0>of()),
+            (hydra.util.PersistentSet<T0>) (hydra.util.PersistentSet.<T0>empty()),
 
-            hydra.lib.sets.Unions.apply((java.util.List<java.util.Set<T0>>) (java.util.List.<java.util.Set<T0>>of())));
+            hydra.lib.sets.Unions.apply((hydra.util.ConsList<hydra.util.PersistentSet<T0>>) (hydra.util.ConsList.<hydra.util.PersistentSet<T0>>of())));
 
     }
 
@@ -494,15 +494,15 @@ public class SetsTest {
 
         assertEquals(
 
-            java.util.stream.Stream.of(
+            hydra.util.PersistentSet.of(
   1,
   2,
-  3).collect(java.util.stream.Collectors.toSet()),
+  3),
 
-            hydra.lib.sets.Unions.apply(java.util.List.of(java.util.stream.Stream.of(
+            hydra.lib.sets.Unions.apply(hydra.util.ConsList.of(hydra.util.PersistentSet.of(
   1,
   2,
-  3).collect(java.util.stream.Collectors.toSet()))));
+  3))));
 
     }
 
@@ -514,19 +514,19 @@ public class SetsTest {
 
         assertEquals(
 
-            java.util.stream.Stream.of(
+            hydra.util.PersistentSet.of(
   2,
-  3).collect(java.util.stream.Collectors.toSet()),
+  3),
 
             hydra.lib.sets.Intersection.apply(
-  java.util.stream.Stream.of(
+  hydra.util.PersistentSet.of(
     1,
     2,
-    3).collect(java.util.stream.Collectors.toSet()),
-  java.util.stream.Stream.of(
+    3),
+  hydra.util.PersistentSet.of(
     2,
     3,
-    4).collect(java.util.stream.Collectors.toSet())));
+    4)));
 
     }
 
@@ -536,15 +536,15 @@ public class SetsTest {
 
         assertEquals(
 
-            (java.util.Set<T0>) (java.util.Set.<T0>of()),
+            (hydra.util.PersistentSet<T0>) (hydra.util.PersistentSet.<T0>empty()),
 
             hydra.lib.sets.Intersection.apply(
-  java.util.stream.Stream.of(
+  hydra.util.PersistentSet.of(
     1,
-    2).collect(java.util.stream.Collectors.toSet()),
-  java.util.stream.Stream.of(
+    2),
+  hydra.util.PersistentSet.of(
     3,
-    4).collect(java.util.stream.Collectors.toSet())));
+    4)));
 
     }
 
@@ -554,13 +554,13 @@ public class SetsTest {
 
         assertEquals(
 
-            (java.util.Set<T0>) (java.util.Set.<T0>of()),
+            (hydra.util.PersistentSet<T0>) (hydra.util.PersistentSet.<T0>empty()),
 
             hydra.lib.sets.Intersection.apply(
-  java.util.stream.Stream.of(
+  hydra.util.PersistentSet.of(
     1,
-    2).collect(java.util.stream.Collectors.toSet()),
-  (java.util.Set<Integer>) (java.util.Set.<Integer>of())));
+    2),
+  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>empty())));
 
     }
 
@@ -572,18 +572,18 @@ public class SetsTest {
 
         assertEquals(
 
-            java.util.stream.Stream.of(
+            hydra.util.PersistentSet.of(
   1,
-  3).collect(java.util.stream.Collectors.toSet()),
+  3),
 
             hydra.lib.sets.Difference.apply(
-  java.util.stream.Stream.of(
+  hydra.util.PersistentSet.of(
     1,
     2,
-    3).collect(java.util.stream.Collectors.toSet()),
-  java.util.stream.Stream.of(
+    3),
+  hydra.util.PersistentSet.of(
     2,
-    4).collect(java.util.stream.Collectors.toSet())));
+    4)));
 
     }
 
@@ -593,17 +593,17 @@ public class SetsTest {
 
         assertEquals(
 
-            java.util.stream.Stream.of(
+            hydra.util.PersistentSet.of(
   1,
-  2).collect(java.util.stream.Collectors.toSet()),
+  2),
 
             hydra.lib.sets.Difference.apply(
-  java.util.stream.Stream.of(
+  hydra.util.PersistentSet.of(
     1,
-    2).collect(java.util.stream.Collectors.toSet()),
-  java.util.stream.Stream.of(
+    2),
+  hydra.util.PersistentSet.of(
     3,
-    4).collect(java.util.stream.Collectors.toSet())));
+    4)));
 
     }
 
@@ -613,15 +613,15 @@ public class SetsTest {
 
         assertEquals(
 
-            java.util.stream.Stream.of(
+            hydra.util.PersistentSet.of(
   1,
-  2).collect(java.util.stream.Collectors.toSet()),
+  2),
 
             hydra.lib.sets.Difference.apply(
-  java.util.stream.Stream.of(
+  hydra.util.PersistentSet.of(
     1,
-    2).collect(java.util.stream.Collectors.toSet()),
-  (java.util.Set<Integer>) (java.util.Set.<Integer>of())));
+    2),
+  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>empty())));
 
     }
 
@@ -633,19 +633,19 @@ public class SetsTest {
 
         assertEquals(
 
-            java.util.stream.Stream.of(
+            hydra.util.PersistentSet.of(
   2,
   4,
-  6).collect(java.util.stream.Collectors.toSet()),
+  6),
 
             hydra.lib.sets.Map.apply(
   (java.util.function.Function<Integer, Integer>) (x -> hydra.lib.math.Mul.apply(
     x,
     2)),
-  java.util.stream.Stream.of(
+  hydra.util.PersistentSet.of(
     1,
     2,
-    3).collect(java.util.stream.Collectors.toSet())));
+    3)));
 
     }
 
@@ -655,13 +655,13 @@ public class SetsTest {
 
         assertEquals(
 
-            (java.util.Set<T0>) (java.util.Set.<T0>of()),
+            (hydra.util.PersistentSet<T0>) (hydra.util.PersistentSet.<T0>empty()),
 
             hydra.lib.sets.Map.apply(
   (java.util.function.Function<Integer, Integer>) (x -> hydra.lib.math.Mul.apply(
     x,
     2)),
-  (java.util.Set<Integer>) (java.util.Set.<Integer>of())));
+  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>empty())));
 
     }
 }

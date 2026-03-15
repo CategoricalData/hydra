@@ -21,13 +21,13 @@ public class Vertex implements Serializable, Comparable<Vertex> {
   
   public final hydra.util.Maybe<hydra.pg.graphson.syntax.VertexLabel> label;
   
-  public final java.util.Map<hydra.pg.graphson.syntax.EdgeLabel, java.util.List<hydra.pg.graphson.syntax.AdjacentEdge>> inEdges;
+  public final hydra.util.PersistentMap<hydra.pg.graphson.syntax.EdgeLabel, hydra.util.ConsList<hydra.pg.graphson.syntax.AdjacentEdge>> inEdges;
   
-  public final java.util.Map<hydra.pg.graphson.syntax.EdgeLabel, java.util.List<hydra.pg.graphson.syntax.AdjacentEdge>> outEdges;
+  public final hydra.util.PersistentMap<hydra.pg.graphson.syntax.EdgeLabel, hydra.util.ConsList<hydra.pg.graphson.syntax.AdjacentEdge>> outEdges;
   
-  public final java.util.Map<hydra.pg.graphson.syntax.PropertyKey, java.util.List<hydra.pg.graphson.syntax.VertexPropertyValue>> properties;
+  public final hydra.util.PersistentMap<hydra.pg.graphson.syntax.PropertyKey, hydra.util.ConsList<hydra.pg.graphson.syntax.VertexPropertyValue>> properties;
   
-  public Vertex (hydra.pg.graphson.syntax.Value id, hydra.util.Maybe<hydra.pg.graphson.syntax.VertexLabel> label, java.util.Map<hydra.pg.graphson.syntax.EdgeLabel, java.util.List<hydra.pg.graphson.syntax.AdjacentEdge>> inEdges, java.util.Map<hydra.pg.graphson.syntax.EdgeLabel, java.util.List<hydra.pg.graphson.syntax.AdjacentEdge>> outEdges, java.util.Map<hydra.pg.graphson.syntax.PropertyKey, java.util.List<hydra.pg.graphson.syntax.VertexPropertyValue>> properties) {
+  public Vertex (hydra.pg.graphson.syntax.Value id, hydra.util.Maybe<hydra.pg.graphson.syntax.VertexLabel> label, hydra.util.PersistentMap<hydra.pg.graphson.syntax.EdgeLabel, hydra.util.ConsList<hydra.pg.graphson.syntax.AdjacentEdge>> inEdges, hydra.util.PersistentMap<hydra.pg.graphson.syntax.EdgeLabel, hydra.util.ConsList<hydra.pg.graphson.syntax.AdjacentEdge>> outEdges, hydra.util.PersistentMap<hydra.pg.graphson.syntax.PropertyKey, hydra.util.ConsList<hydra.pg.graphson.syntax.VertexPropertyValue>> properties) {
     this.id = id;
     this.label = label;
     this.inEdges = inEdges;
@@ -98,15 +98,15 @@ public class Vertex implements Serializable, Comparable<Vertex> {
     return new Vertex(id, label, inEdges, outEdges, properties);
   }
   
-  public Vertex withInEdges(java.util.Map<hydra.pg.graphson.syntax.EdgeLabel, java.util.List<hydra.pg.graphson.syntax.AdjacentEdge>> inEdges) {
+  public Vertex withInEdges(hydra.util.PersistentMap<hydra.pg.graphson.syntax.EdgeLabel, hydra.util.ConsList<hydra.pg.graphson.syntax.AdjacentEdge>> inEdges) {
     return new Vertex(id, label, inEdges, outEdges, properties);
   }
   
-  public Vertex withOutEdges(java.util.Map<hydra.pg.graphson.syntax.EdgeLabel, java.util.List<hydra.pg.graphson.syntax.AdjacentEdge>> outEdges) {
+  public Vertex withOutEdges(hydra.util.PersistentMap<hydra.pg.graphson.syntax.EdgeLabel, hydra.util.ConsList<hydra.pg.graphson.syntax.AdjacentEdge>> outEdges) {
     return new Vertex(id, label, inEdges, outEdges, properties);
   }
   
-  public Vertex withProperties(java.util.Map<hydra.pg.graphson.syntax.PropertyKey, java.util.List<hydra.pg.graphson.syntax.VertexPropertyValue>> properties) {
+  public Vertex withProperties(hydra.util.PersistentMap<hydra.pg.graphson.syntax.PropertyKey, hydra.util.ConsList<hydra.pg.graphson.syntax.VertexPropertyValue>> properties) {
     return new Vertex(id, label, inEdges, outEdges, properties);
   }
 }

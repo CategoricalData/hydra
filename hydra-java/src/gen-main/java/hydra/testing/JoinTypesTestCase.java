@@ -29,9 +29,9 @@ public class JoinTypesTestCase implements Serializable, Comparable<JoinTypesTest
   /**
    * The expected result: Left for failure, Right for constraints
    */
-  public final hydra.util.Either<java.lang.Void, java.util.List<hydra.typing.TypeConstraint>> expected;
+  public final hydra.util.Either<java.lang.Void, hydra.util.ConsList<hydra.typing.TypeConstraint>> expected;
   
-  public JoinTypesTestCase (hydra.core.Type left, hydra.core.Type right, hydra.util.Either<java.lang.Void, java.util.List<hydra.typing.TypeConstraint>> expected) {
+  public JoinTypesTestCase (hydra.core.Type left, hydra.core.Type right, hydra.util.Either<java.lang.Void, hydra.util.ConsList<hydra.typing.TypeConstraint>> expected) {
     this.left = left;
     this.right = right;
     this.expected = expected;
@@ -82,7 +82,7 @@ public class JoinTypesTestCase implements Serializable, Comparable<JoinTypesTest
     return new JoinTypesTestCase(left, right, expected);
   }
   
-  public JoinTypesTestCase withExpected(hydra.util.Either<java.lang.Void, java.util.List<hydra.typing.TypeConstraint>> expected) {
+  public JoinTypesTestCase withExpected(hydra.util.Either<java.lang.Void, hydra.util.ConsList<hydra.typing.TypeConstraint>> expected) {
     return new JoinTypesTestCase(left, right, expected);
   }
 }

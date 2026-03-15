@@ -25,8 +25,8 @@ public interface Reflect {
     });
   }
   
-  static java.util.List<hydra.variants.EliminationVariant> eliminationVariants() {
-    return java.util.List.of(
+  static hydra.util.ConsList<hydra.variants.EliminationVariant> eliminationVariants() {
+    return hydra.util.ConsList.of(
       new hydra.variants.EliminationVariant.Record(),
       new hydra.variants.EliminationVariant.Union(),
       new hydra.variants.EliminationVariant.Wrap());
@@ -51,8 +51,8 @@ public interface Reflect {
     });
   }
   
-  static java.util.List<hydra.core.FloatType> floatTypes() {
-    return java.util.List.of(
+  static hydra.util.ConsList<hydra.core.FloatType> floatTypes() {
+    return hydra.util.ConsList.of(
       new hydra.core.FloatType.Bigfloat(),
       new hydra.core.FloatType.Float32(),
       new hydra.core.FloatType.Float64());
@@ -96,8 +96,8 @@ public interface Reflect {
     });
   }
   
-  static java.util.List<hydra.variants.FunctionVariant> functionVariants() {
-    return java.util.List.of(
+  static hydra.util.ConsList<hydra.variants.FunctionVariant> functionVariants() {
+    return hydra.util.ConsList.of(
       new hydra.variants.FunctionVariant.Elimination(),
       new hydra.variants.FunctionVariant.Lambda(),
       new hydra.variants.FunctionVariant.Primitive());
@@ -201,8 +201,8 @@ public interface Reflect {
     });
   }
   
-  static java.util.List<hydra.core.IntegerType> integerTypes() {
-    return java.util.List.of(
+  static hydra.util.ConsList<hydra.core.IntegerType> integerTypes() {
+    return hydra.util.ConsList.of(
       new hydra.core.IntegerType.Bigint(),
       new hydra.core.IntegerType.Int8(),
       new hydra.core.IntegerType.Int16(),
@@ -321,9 +321,9 @@ public interface Reflect {
     });
   }
   
-  static java.util.List<hydra.core.LiteralType> literalTypes() {
-    return hydra.lib.lists.Concat.apply(java.util.List.of(
-      java.util.List.of(
+  static hydra.util.ConsList<hydra.core.LiteralType> literalTypes() {
+    return hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
+      hydra.util.ConsList.of(
         new hydra.core.LiteralType.Binary(),
         new hydra.core.LiteralType.Boolean_()),
       hydra.lib.lists.Map.apply(
@@ -332,15 +332,15 @@ public interface Reflect {
       hydra.lib.lists.Map.apply(
         (java.util.function.Function<hydra.core.IntegerType, hydra.core.LiteralType>) (x -> new hydra.core.LiteralType.Integer_(x)),
         hydra.reflect.Reflect.integerTypes()),
-      java.util.List.of(new hydra.core.LiteralType.String_())));
+      hydra.util.ConsList.of(new hydra.core.LiteralType.String_())));
   }
   
   static hydra.variants.LiteralVariant literalVariant(hydra.core.Literal arg_) {
     return hydra.reflect.Reflect.literalTypeVariant(hydra.reflect.Reflect.literalType(arg_));
   }
   
-  static java.util.List<hydra.variants.LiteralVariant> literalVariants() {
-    return java.util.List.of(
+  static hydra.util.ConsList<hydra.variants.LiteralVariant> literalVariants() {
+    return hydra.util.ConsList.of(
       new hydra.variants.LiteralVariant.Binary(),
       new hydra.variants.LiteralVariant.Boolean_(),
       new hydra.variants.LiteralVariant.Float_(),
@@ -442,8 +442,8 @@ public interface Reflect {
     });
   }
   
-  static java.util.List<hydra.variants.TermVariant> termVariants() {
-    return java.util.List.of(
+  static hydra.util.ConsList<hydra.variants.TermVariant> termVariants() {
+    return hydra.util.ConsList.of(
       new hydra.variants.TermVariant.Annotated(),
       new hydra.variants.TermVariant.Application(),
       new hydra.variants.TermVariant.Either(),
@@ -547,8 +547,8 @@ public interface Reflect {
     });
   }
   
-  static java.util.List<hydra.variants.TypeVariant> typeVariants() {
-    return java.util.List.of(
+  static hydra.util.ConsList<hydra.variants.TypeVariant> typeVariants() {
+    return hydra.util.ConsList.of(
       new hydra.variants.TypeVariant.Annotated(),
       new hydra.variants.TypeVariant.Application(),
       new hydra.variants.TypeVariant.Either(),

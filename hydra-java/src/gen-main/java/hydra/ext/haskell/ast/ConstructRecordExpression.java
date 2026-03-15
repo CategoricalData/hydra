@@ -22,9 +22,9 @@ public class ConstructRecordExpression implements Serializable, Comparable<Const
   /**
    * The field assignments
    */
-  public final java.util.List<hydra.ext.haskell.ast.FieldUpdate> fields;
+  public final hydra.util.ConsList<hydra.ext.haskell.ast.FieldUpdate> fields;
   
-  public ConstructRecordExpression (hydra.ext.haskell.ast.Name name, java.util.List<hydra.ext.haskell.ast.FieldUpdate> fields) {
+  public ConstructRecordExpression (hydra.ext.haskell.ast.Name name, hydra.util.ConsList<hydra.ext.haskell.ast.FieldUpdate> fields) {
     this.name = name;
     this.fields = fields;
   }
@@ -64,7 +64,7 @@ public class ConstructRecordExpression implements Serializable, Comparable<Const
     return new ConstructRecordExpression(name, fields);
   }
   
-  public ConstructRecordExpression withFields(java.util.List<hydra.ext.haskell.ast.FieldUpdate> fields) {
+  public ConstructRecordExpression withFields(hydra.util.ConsList<hydra.ext.haskell.ast.FieldUpdate> fields) {
     return new ConstructRecordExpression(name, fields);
   }
 }

@@ -11,11 +11,11 @@ public class Declaration implements Serializable, Comparable<Declaration> {
   
   public static final hydra.core.Name ENTITY = new hydra.core.Name("entity");
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
   public final hydra.ext.org.w3.owl.syntax.Entity entity;
   
-  public Declaration (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.Entity entity) {
+  public Declaration (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.Entity entity) {
     this.annotations = annotations;
     this.entity = entity;
   }
@@ -51,7 +51,7 @@ public class Declaration implements Serializable, Comparable<Declaration> {
     return ((Comparable) entity).compareTo(other.entity);
   }
   
-  public Declaration withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public Declaration withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new Declaration(annotations, entity);
   }
   

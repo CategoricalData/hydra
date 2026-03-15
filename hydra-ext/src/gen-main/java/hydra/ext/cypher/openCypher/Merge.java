@@ -13,9 +13,9 @@ public class Merge implements Serializable, Comparable<Merge> {
   
   public final hydra.ext.cypher.openCypher.PatternPart patternPart;
   
-  public final java.util.List<hydra.ext.cypher.openCypher.MergeAction> actions;
+  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.MergeAction> actions;
   
-  public Merge (hydra.ext.cypher.openCypher.PatternPart patternPart, java.util.List<hydra.ext.cypher.openCypher.MergeAction> actions) {
+  public Merge (hydra.ext.cypher.openCypher.PatternPart patternPart, hydra.util.ConsList<hydra.ext.cypher.openCypher.MergeAction> actions) {
     this.patternPart = patternPart;
     this.actions = actions;
   }
@@ -55,7 +55,7 @@ public class Merge implements Serializable, Comparable<Merge> {
     return new Merge(patternPart, actions);
   }
   
-  public Merge withActions(java.util.List<hydra.ext.cypher.openCypher.MergeAction> actions) {
+  public Merge withActions(hydra.util.ConsList<hydra.ext.cypher.openCypher.MergeAction> actions) {
     return new Merge(patternPart, actions);
   }
 }

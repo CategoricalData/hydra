@@ -22,9 +22,9 @@ public class UpdateRecordExpression implements Serializable, Comparable<UpdateRe
   /**
    * The field updates
    */
-  public final java.util.List<hydra.ext.haskell.ast.FieldUpdate> fields;
+  public final hydra.util.ConsList<hydra.ext.haskell.ast.FieldUpdate> fields;
   
-  public UpdateRecordExpression (hydra.ext.haskell.ast.Expression inner, java.util.List<hydra.ext.haskell.ast.FieldUpdate> fields) {
+  public UpdateRecordExpression (hydra.ext.haskell.ast.Expression inner, hydra.util.ConsList<hydra.ext.haskell.ast.FieldUpdate> fields) {
     this.inner = inner;
     this.fields = fields;
   }
@@ -64,7 +64,7 @@ public class UpdateRecordExpression implements Serializable, Comparable<UpdateRe
     return new UpdateRecordExpression(inner, fields);
   }
   
-  public UpdateRecordExpression withFields(java.util.List<hydra.ext.haskell.ast.FieldUpdate> fields) {
+  public UpdateRecordExpression withFields(hydra.util.ConsList<hydra.ext.haskell.ast.FieldUpdate> fields) {
     return new UpdateRecordExpression(inner, fields);
   }
 }

@@ -15,11 +15,11 @@ public class MatchQuery implements Serializable, Comparable<MatchQuery> {
   
   public final Boolean optional;
   
-  public final java.util.List<hydra.pg.query.Projection> pattern;
+  public final hydra.util.ConsList<hydra.pg.query.Projection> pattern;
   
   public final hydra.util.Maybe<hydra.pg.query.Expression> where;
   
-  public MatchQuery (Boolean optional, java.util.List<hydra.pg.query.Projection> pattern, hydra.util.Maybe<hydra.pg.query.Expression> where) {
+  public MatchQuery (Boolean optional, hydra.util.ConsList<hydra.pg.query.Projection> pattern, hydra.util.Maybe<hydra.pg.query.Expression> where) {
     this.optional = optional;
     this.pattern = pattern;
     this.where = where;
@@ -68,7 +68,7 @@ public class MatchQuery implements Serializable, Comparable<MatchQuery> {
     return new MatchQuery(optional, pattern, where);
   }
   
-  public MatchQuery withPattern(java.util.List<hydra.pg.query.Projection> pattern) {
+  public MatchQuery withPattern(hydra.util.ConsList<hydra.pg.query.Projection> pattern) {
     return new MatchQuery(optional, pattern, where);
   }
   

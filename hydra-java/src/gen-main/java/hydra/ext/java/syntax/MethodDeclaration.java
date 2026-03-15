@@ -18,15 +18,15 @@ public class MethodDeclaration implements Serializable, Comparable<MethodDeclara
   /**
    * Note: simple methods cannot have annotations
    */
-  public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations;
   
-  public final java.util.List<hydra.ext.java.syntax.MethodModifier> modifiers;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.MethodModifier> modifiers;
   
   public final hydra.ext.java.syntax.MethodHeader header;
   
   public final hydra.ext.java.syntax.MethodBody body;
   
-  public MethodDeclaration (java.util.List<hydra.ext.java.syntax.Annotation> annotations, java.util.List<hydra.ext.java.syntax.MethodModifier> modifiers, hydra.ext.java.syntax.MethodHeader header, hydra.ext.java.syntax.MethodBody body) {
+  public MethodDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations, hydra.util.ConsList<hydra.ext.java.syntax.MethodModifier> modifiers, hydra.ext.java.syntax.MethodHeader header, hydra.ext.java.syntax.MethodBody body) {
     this.annotations = annotations;
     this.modifiers = modifiers;
     this.header = header;
@@ -78,11 +78,11 @@ public class MethodDeclaration implements Serializable, Comparable<MethodDeclara
     return ((Comparable) body).compareTo(other.body);
   }
   
-  public MethodDeclaration withAnnotations(java.util.List<hydra.ext.java.syntax.Annotation> annotations) {
+  public MethodDeclaration withAnnotations(hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {
     return new MethodDeclaration(annotations, modifiers, header, body);
   }
   
-  public MethodDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.MethodModifier> modifiers) {
+  public MethodDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.MethodModifier> modifiers) {
     return new MethodDeclaration(annotations, modifiers, header, body);
   }
   

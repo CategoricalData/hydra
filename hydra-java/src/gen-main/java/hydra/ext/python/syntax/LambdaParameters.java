@@ -17,13 +17,13 @@ public class LambdaParameters implements Serializable, Comparable<LambdaParamete
   
   public final hydra.util.Maybe<hydra.ext.python.syntax.LambdaSlashNoDefault> slashNoDefault;
   
-  public final java.util.List<hydra.ext.python.syntax.LambdaParamNoDefault> paramNoDefault;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.LambdaParamNoDefault> paramNoDefault;
   
-  public final java.util.List<hydra.ext.python.syntax.LambdaParamWithDefault> paramWithDefault;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.LambdaParamWithDefault> paramWithDefault;
   
   public final hydra.util.Maybe<hydra.ext.python.syntax.LambdaStarEtc> starEtc;
   
-  public LambdaParameters (hydra.util.Maybe<hydra.ext.python.syntax.LambdaSlashNoDefault> slashNoDefault, java.util.List<hydra.ext.python.syntax.LambdaParamNoDefault> paramNoDefault, java.util.List<hydra.ext.python.syntax.LambdaParamWithDefault> paramWithDefault, hydra.util.Maybe<hydra.ext.python.syntax.LambdaStarEtc> starEtc) {
+  public LambdaParameters (hydra.util.Maybe<hydra.ext.python.syntax.LambdaSlashNoDefault> slashNoDefault, hydra.util.ConsList<hydra.ext.python.syntax.LambdaParamNoDefault> paramNoDefault, hydra.util.ConsList<hydra.ext.python.syntax.LambdaParamWithDefault> paramWithDefault, hydra.util.Maybe<hydra.ext.python.syntax.LambdaStarEtc> starEtc) {
     this.slashNoDefault = slashNoDefault;
     this.paramNoDefault = paramNoDefault;
     this.paramWithDefault = paramWithDefault;
@@ -83,11 +83,11 @@ public class LambdaParameters implements Serializable, Comparable<LambdaParamete
     return new LambdaParameters(slashNoDefault, paramNoDefault, paramWithDefault, starEtc);
   }
   
-  public LambdaParameters withParamNoDefault(java.util.List<hydra.ext.python.syntax.LambdaParamNoDefault> paramNoDefault) {
+  public LambdaParameters withParamNoDefault(hydra.util.ConsList<hydra.ext.python.syntax.LambdaParamNoDefault> paramNoDefault) {
     return new LambdaParameters(slashNoDefault, paramNoDefault, paramWithDefault, starEtc);
   }
   
-  public LambdaParameters withParamWithDefault(java.util.List<hydra.ext.python.syntax.LambdaParamWithDefault> paramWithDefault) {
+  public LambdaParameters withParamWithDefault(hydra.util.ConsList<hydra.ext.python.syntax.LambdaParamWithDefault> paramWithDefault) {
     return new LambdaParameters(slashNoDefault, paramNoDefault, paramWithDefault, starEtc);
   }
   

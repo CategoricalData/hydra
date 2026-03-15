@@ -17,14 +17,14 @@ public class Query implements Serializable, Comparable<Query> {
   /**
    * The variables selected by the query
    */
-  public final java.util.List<hydra.query.Variable> variables;
+  public final hydra.util.ConsList<hydra.query.Variable> variables;
   
   /**
    * The patterns to be matched
    */
-  public final java.util.List<hydra.query.Pattern> patterns;
+  public final hydra.util.ConsList<hydra.query.Pattern> patterns;
   
-  public Query (java.util.List<hydra.query.Variable> variables, java.util.List<hydra.query.Pattern> patterns) {
+  public Query (hydra.util.ConsList<hydra.query.Variable> variables, hydra.util.ConsList<hydra.query.Pattern> patterns) {
     this.variables = variables;
     this.patterns = patterns;
   }
@@ -62,11 +62,11 @@ public class Query implements Serializable, Comparable<Query> {
       other.patterns.hashCode());
   }
   
-  public Query withVariables(java.util.List<hydra.query.Variable> variables) {
+  public Query withVariables(hydra.util.ConsList<hydra.query.Variable> variables) {
     return new Query(variables, patterns);
   }
   
-  public Query withPatterns(java.util.List<hydra.query.Pattern> patterns) {
+  public Query withPatterns(hydra.util.ConsList<hydra.query.Pattern> patterns) {
     return new Query(variables, patterns);
   }
 }

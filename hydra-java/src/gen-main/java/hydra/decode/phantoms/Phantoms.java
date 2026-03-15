@@ -17,7 +17,7 @@ public interface Phantoms {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>> visit(hydra.core.Term.Record record) {
-          java.util.Map<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> fieldMap = hydra.extract.helpers.Helpers.toFieldMap((record).value);
           return hydra.lib.eithers.Bind.apply(
             hydra.extract.helpers.Helpers.requireField(
               "name",

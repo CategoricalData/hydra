@@ -350,9 +350,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
    * A tuple type
    */
   public static final class Tuple extends hydra.ext.haskell.ast.Type implements Serializable {
-    public final java.util.List<hydra.ext.haskell.ast.Type> value;
+    public final hydra.util.ConsList<hydra.ext.haskell.ast.Type> value;
     
-    public Tuple (java.util.List<hydra.ext.haskell.ast.Type> value) {
+    public Tuple (hydra.util.ConsList<hydra.ext.haskell.ast.Type> value) {
       this.value = value;
     }
     

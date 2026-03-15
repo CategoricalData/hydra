@@ -19,11 +19,11 @@ public class VariableArityParameter implements Serializable, Comparable<Variable
   
   public final hydra.ext.java.syntax.UnannType type;
   
-  public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations;
   
   public final hydra.ext.java.syntax.Identifier identifier;
   
-  public VariableArityParameter (hydra.ext.java.syntax.VariableModifier modifiers, hydra.ext.java.syntax.UnannType type, java.util.List<hydra.ext.java.syntax.Annotation> annotations, hydra.ext.java.syntax.Identifier identifier) {
+  public VariableArityParameter (hydra.ext.java.syntax.VariableModifier modifiers, hydra.ext.java.syntax.UnannType type, hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations, hydra.ext.java.syntax.Identifier identifier) {
     this.modifiers = modifiers;
     this.type = type;
     this.annotations = annotations;
@@ -81,7 +81,7 @@ public class VariableArityParameter implements Serializable, Comparable<Variable
     return new VariableArityParameter(modifiers, type, annotations, identifier);
   }
   
-  public VariableArityParameter withAnnotations(java.util.List<hydra.ext.java.syntax.Annotation> annotations) {
+  public VariableArityParameter withAnnotations(hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {
     return new VariableArityParameter(modifiers, type, annotations, identifier);
   }
   

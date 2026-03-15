@@ -9,9 +9,9 @@ public class ExtraPropertySet implements Serializable, Comparable<ExtraPropertyS
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.io.shex.syntax.Predicate> value;
+  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.Predicate> value;
   
-  public ExtraPropertySet (java.util.List<hydra.ext.io.shex.syntax.Predicate> value) {
+  public ExtraPropertySet (hydra.util.ConsList<hydra.ext.io.shex.syntax.Predicate> value) {
     this.value = value;
   }
   

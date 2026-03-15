@@ -16,9 +16,9 @@ public class DatatypeRestriction implements Serializable, Comparable<DatatypeRes
   
   public final hydra.ext.org.w3.owl.syntax.Datatype datatype;
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.DatatypeRestriction_Constraint> constraints;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DatatypeRestriction_Constraint> constraints;
   
-  public DatatypeRestriction (hydra.ext.org.w3.owl.syntax.Datatype datatype, java.util.List<hydra.ext.org.w3.owl.syntax.DatatypeRestriction_Constraint> constraints) {
+  public DatatypeRestriction (hydra.ext.org.w3.owl.syntax.Datatype datatype, hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DatatypeRestriction_Constraint> constraints) {
     this.datatype = datatype;
     this.constraints = constraints;
   }
@@ -58,7 +58,7 @@ public class DatatypeRestriction implements Serializable, Comparable<DatatypeRes
     return new DatatypeRestriction(datatype, constraints);
   }
   
-  public DatatypeRestriction withConstraints(java.util.List<hydra.ext.org.w3.owl.syntax.DatatypeRestriction_Constraint> constraints) {
+  public DatatypeRestriction withConstraints(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DatatypeRestriction_Constraint> constraints) {
     return new DatatypeRestriction(datatype, constraints);
   }
 }

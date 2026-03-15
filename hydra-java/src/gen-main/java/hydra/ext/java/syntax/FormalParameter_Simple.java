@@ -13,13 +13,13 @@ public class FormalParameter_Simple implements Serializable, Comparable<FormalPa
   
   public static final hydra.core.Name ID = new hydra.core.Name("id");
   
-  public final java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers;
   
   public final hydra.ext.java.syntax.UnannType type;
   
   public final hydra.ext.java.syntax.VariableDeclaratorId id;
   
-  public FormalParameter_Simple (java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers, hydra.ext.java.syntax.UnannType type, hydra.ext.java.syntax.VariableDeclaratorId id) {
+  public FormalParameter_Simple (hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers, hydra.ext.java.syntax.UnannType type, hydra.ext.java.syntax.VariableDeclaratorId id) {
     this.modifiers = modifiers;
     this.type = type;
     this.id = id;
@@ -62,7 +62,7 @@ public class FormalParameter_Simple implements Serializable, Comparable<FormalPa
     return ((Comparable) id).compareTo(other.id);
   }
   
-  public FormalParameter_Simple withModifiers(java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers) {
+  public FormalParameter_Simple withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers) {
     return new FormalParameter_Simple(modifiers, type, id);
   }
   

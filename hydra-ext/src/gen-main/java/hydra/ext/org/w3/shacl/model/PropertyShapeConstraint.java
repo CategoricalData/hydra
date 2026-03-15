@@ -76,9 +76,9 @@ public abstract class PropertyShapeConstraint implements Serializable, Comparabl
    * See https://www.w3.org/TR/shacl/#LessThanConstraintComponent
    */
   public static final class LessThan extends hydra.ext.org.w3.shacl.model.PropertyShapeConstraint implements Serializable {
-    public final java.util.Set<hydra.ext.org.w3.rdf.syntax.Property> value;
+    public final hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property> value;
     
-    public LessThan (java.util.Set<hydra.ext.org.w3.rdf.syntax.Property> value) {
+    public LessThan (hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property> value) {
       this.value = value;
     }
     
@@ -121,9 +121,9 @@ public abstract class PropertyShapeConstraint implements Serializable, Comparabl
    * See https://www.w3.org/TR/shacl/#LessThanOrEqualsConstraintComponent
    */
   public static final class LessThanOrEquals extends hydra.ext.org.w3.shacl.model.PropertyShapeConstraint implements Serializable {
-    public final java.util.Set<hydra.ext.org.w3.rdf.syntax.Property> value;
+    public final hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property> value;
     
-    public LessThanOrEquals (java.util.Set<hydra.ext.org.w3.rdf.syntax.Property> value) {
+    public LessThanOrEquals (hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property> value) {
       this.value = value;
     }
     

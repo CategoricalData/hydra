@@ -16,9 +16,9 @@ public class ModuleDirective_Provides implements Serializable, Comparable<Module
   /**
    * At least one type
    */
-  public final java.util.List<hydra.ext.java.syntax.TypeName> with;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.TypeName> with;
   
-  public ModuleDirective_Provides (hydra.ext.java.syntax.TypeName to, java.util.List<hydra.ext.java.syntax.TypeName> with) {
+  public ModuleDirective_Provides (hydra.ext.java.syntax.TypeName to, hydra.util.ConsList<hydra.ext.java.syntax.TypeName> with) {
     this.to = to;
     this.with = with;
   }
@@ -58,7 +58,7 @@ public class ModuleDirective_Provides implements Serializable, Comparable<Module
     return new ModuleDirective_Provides(to, with);
   }
   
-  public ModuleDirective_Provides withWith(java.util.List<hydra.ext.java.syntax.TypeName> with) {
+  public ModuleDirective_Provides withWith(hydra.util.ConsList<hydra.ext.java.syntax.TypeName> with) {
     return new ModuleDirective_Provides(to, with);
   }
 }

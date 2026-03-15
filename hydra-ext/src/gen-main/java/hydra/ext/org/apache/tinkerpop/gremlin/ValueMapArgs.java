@@ -38,9 +38,9 @@ public abstract class ValueMapArgs implements Serializable, Comparable<ValueMapA
   }
   
   public static final class String_ extends hydra.ext.org.apache.tinkerpop.gremlin.ValueMapArgs implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
     
-    public String_ (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
+    public String_ (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
     

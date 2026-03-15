@@ -240,7 +240,7 @@ public class ReductionTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "a",
   "b",
   "c"),
@@ -275,7 +275,7 @@ public class ReductionTest {
 
             3,
 
-            hydra.lib.lists.Length.apply(java.util.List.of(
+            hydra.lib.lists.Length.apply(hydra.util.ConsList.of(
   1,
   2,
   3)));
@@ -290,7 +290,7 @@ public class ReductionTest {
 
             2,
 
-            hydra.lib.lists.Length.apply(java.util.List.of(
+            hydra.lib.lists.Length.apply(hydra.util.ConsList.of(
   "a",
   "b")));
 
@@ -304,7 +304,7 @@ public class ReductionTest {
 
             0,
 
-            hydra.lib.lists.Length.apply((java.util.List<T1>) (java.util.List.<T1>of())));
+            hydra.lib.lists.Length.apply((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>of())));
 
     }
 
@@ -316,7 +316,7 @@ public class ReductionTest {
 
             1,
 
-            hydra.lib.lists.Length.apply(java.util.List.of(true)));
+            hydra.lib.lists.Length.apply(hydra.util.ConsList.of(true)));
 
     }
 
@@ -328,7 +328,7 @@ public class ReductionTest {
 
             10,
 
-            hydra.lib.lists.Head.apply(java.util.List.of(
+            hydra.lib.lists.Head.apply(hydra.util.ConsList.of(
   10,
   20,
   30)));
@@ -343,7 +343,7 @@ public class ReductionTest {
 
             "first",
 
-            hydra.lib.lists.Head.apply(java.util.List.of(
+            hydra.lib.lists.Head.apply(hydra.util.ConsList.of(
   "first",
   "second")));
 
@@ -357,7 +357,7 @@ public class ReductionTest {
 
             30,
 
-            hydra.lib.lists.Last.apply(java.util.List.of(
+            hydra.lib.lists.Last.apply(hydra.util.ConsList.of(
   10,
   20,
   30)));
@@ -370,17 +370,17 @@ public class ReductionTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2,
   3,
   4),
 
             hydra.lib.lists.Concat2.apply(
-  java.util.List.of(
+  hydra.util.ConsList.of(
     1,
     2),
-  java.util.List.of(
+  hydra.util.ConsList.of(
     3,
     4)));
 
@@ -392,13 +392,13 @@ public class ReductionTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2),
 
             hydra.lib.lists.Concat2.apply(
-  (java.util.List<Integer>) (java.util.List.<Integer>of()),
-  java.util.List.of(
+  (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of()),
+  hydra.util.ConsList.of(
     1,
     2)));
 
@@ -410,12 +410,12 @@ public class ReductionTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   3,
   2,
   1),
 
-            hydra.lib.lists.Reverse.apply(java.util.List.of(
+            hydra.lib.lists.Reverse.apply(hydra.util.ConsList.of(
   1,
   2,
   3)));
@@ -428,9 +428,9 @@ public class ReductionTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
-            hydra.lib.lists.Reverse.apply((java.util.List<T1>) (java.util.List.<T1>of())));
+            hydra.lib.lists.Reverse.apply((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>of())));
 
     }
 
@@ -444,7 +444,7 @@ public class ReductionTest {
 
             0,
 
-            hydra.lib.sets.Size.apply((java.util.Set<T1>) (hydra.lib.sets.Empty.<T1>apply())));
+            hydra.lib.sets.Size.apply((hydra.util.PersistentSet<T1>) (hydra.lib.sets.Empty.<T1>apply())));
 
     }
 
@@ -596,9 +596,9 @@ public class ReductionTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
-            (java.util.List<T0>) (java.util.List.<T0>of()));
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()));
 
     }
 
@@ -608,12 +608,12 @@ public class ReductionTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2,
   3),
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   1,
   2,
   3));
@@ -626,9 +626,9 @@ public class ReductionTest {
 
         assertEquals(
 
-            java.util.List.of(42),
+            hydra.util.ConsList.of(42),
 
-            java.util.List.of(((java.util.function.Function<Integer, Integer>) (x -> x)).apply(42)));
+            hydra.util.ConsList.of(((java.util.function.Function<Integer, Integer>) (x -> x)).apply(42)));
 
     }
 

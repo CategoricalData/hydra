@@ -11,11 +11,11 @@ public class EquivalentObjectProperties implements Serializable, Comparable<Equi
   
   public static final hydra.core.Name PROPERTIES = new hydra.core.Name("properties");
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> properties;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> properties;
   
-  public EquivalentObjectProperties (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, java.util.List<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> properties) {
+  public EquivalentObjectProperties (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> properties) {
     this.annotations = annotations;
     this.properties = properties;
   }
@@ -53,11 +53,11 @@ public class EquivalentObjectProperties implements Serializable, Comparable<Equi
       other.properties.hashCode());
   }
   
-  public EquivalentObjectProperties withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public EquivalentObjectProperties withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new EquivalentObjectProperties(annotations, properties);
   }
   
-  public EquivalentObjectProperties withProperties(java.util.List<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> properties) {
+  public EquivalentObjectProperties withProperties(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression> properties) {
     return new EquivalentObjectProperties(annotations, properties);
   }
 }

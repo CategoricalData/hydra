@@ -44,52 +44,52 @@ public class Aliases implements Serializable, Comparable<Aliases> {
   /**
    * Maps namespaces to Java package names
    */
-  public final java.util.Map<hydra.module.Namespace, hydra.ext.java.syntax.PackageName> packages;
+  public final hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.java.syntax.PackageName> packages;
   
   /**
    * Variables bound in pattern matching branches
    */
-  public final java.util.Set<hydra.core.Name> branchVars;
+  public final hydra.util.PersistentSet<hydra.core.Name> branchVars;
   
   /**
    * Variables that are self-recursive
    */
-  public final java.util.Set<hydra.core.Name> recursiveVars;
+  public final hydra.util.PersistentSet<hydra.core.Name> recursiveVars;
   
   /**
    * Type parameters that are in scope (from method-level type parameters)
    */
-  public final java.util.Set<hydra.core.Name> inScopeTypeParams;
+  public final hydra.util.PersistentSet<hydra.core.Name> inScopeTypeParams;
   
   /**
    * Local variables that have polymorphic types (declared with raw types)
    */
-  public final java.util.Set<hydra.core.Name> polymorphicLocals;
+  public final hydra.util.PersistentSet<hydra.core.Name> polymorphicLocals;
   
   /**
    * All in-scope Java variable names (for avoiding lambda parameter shadowing)
    */
-  public final java.util.Set<hydra.core.Name> inScopeJavaVars;
+  public final hydra.util.PersistentSet<hydra.core.Name> inScopeJavaVars;
   
   /**
    * Variable renames for avoiding shadowing (maps Hydra name to Java name)
    */
-  public final java.util.Map<hydra.core.Name, hydra.core.Name> varRenames;
+  public final hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> varRenames;
   
   /**
    * Lambda-bound variables (including hoisted captures with qualified names)
    */
-  public final java.util.Set<hydra.core.Name> lambdaVars;
+  public final hydra.util.PersistentSet<hydra.core.Name> lambdaVars;
   
   /**
    * Type variable substitution: maps fresh inference variable names to canonical scheme variable names
    */
-  public final java.util.Map<hydra.core.Name, hydra.core.Name> typeVarSubst;
+  public final hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> typeVarSubst;
   
   /**
    * Type variables that actually appear in the method's formal parameter types
    */
-  public final java.util.Set<hydra.core.Name> trustedTypeVars;
+  public final hydra.util.PersistentSet<hydra.core.Name> trustedTypeVars;
   
   /**
    * The enclosing method's codomain (return type), used for casting pair expressions
@@ -99,9 +99,9 @@ public class Aliases implements Serializable, Comparable<Aliases> {
   /**
    * Variables that have been thunked (wrapped in Supplier) for lazy evaluation
    */
-  public final java.util.Set<hydra.core.Name> thunkedVars;
+  public final hydra.util.PersistentSet<hydra.core.Name> thunkedVars;
   
-  public Aliases (hydra.module.Namespace currentNamespace, java.util.Map<hydra.module.Namespace, hydra.ext.java.syntax.PackageName> packages, java.util.Set<hydra.core.Name> branchVars, java.util.Set<hydra.core.Name> recursiveVars, java.util.Set<hydra.core.Name> inScopeTypeParams, java.util.Set<hydra.core.Name> polymorphicLocals, java.util.Set<hydra.core.Name> inScopeJavaVars, java.util.Map<hydra.core.Name, hydra.core.Name> varRenames, java.util.Set<hydra.core.Name> lambdaVars, java.util.Map<hydra.core.Name, hydra.core.Name> typeVarSubst, java.util.Set<hydra.core.Name> trustedTypeVars, hydra.util.Maybe<hydra.core.Type> methodCodomain, java.util.Set<hydra.core.Name> thunkedVars) {
+  public Aliases (hydra.module.Namespace currentNamespace, hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.java.syntax.PackageName> packages, hydra.util.PersistentSet<hydra.core.Name> branchVars, hydra.util.PersistentSet<hydra.core.Name> recursiveVars, hydra.util.PersistentSet<hydra.core.Name> inScopeTypeParams, hydra.util.PersistentSet<hydra.core.Name> polymorphicLocals, hydra.util.PersistentSet<hydra.core.Name> inScopeJavaVars, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> varRenames, hydra.util.PersistentSet<hydra.core.Name> lambdaVars, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> typeVarSubst, hydra.util.PersistentSet<hydra.core.Name> trustedTypeVars, hydra.util.Maybe<hydra.core.Type> methodCodomain, hydra.util.PersistentSet<hydra.core.Name> thunkedVars) {
     this.currentNamespace = currentNamespace;
     this.packages = packages;
     this.branchVars = branchVars;
@@ -240,43 +240,43 @@ public class Aliases implements Serializable, Comparable<Aliases> {
     return new Aliases(currentNamespace, packages, branchVars, recursiveVars, inScopeTypeParams, polymorphicLocals, inScopeJavaVars, varRenames, lambdaVars, typeVarSubst, trustedTypeVars, methodCodomain, thunkedVars);
   }
   
-  public Aliases withPackages(java.util.Map<hydra.module.Namespace, hydra.ext.java.syntax.PackageName> packages) {
+  public Aliases withPackages(hydra.util.PersistentMap<hydra.module.Namespace, hydra.ext.java.syntax.PackageName> packages) {
     return new Aliases(currentNamespace, packages, branchVars, recursiveVars, inScopeTypeParams, polymorphicLocals, inScopeJavaVars, varRenames, lambdaVars, typeVarSubst, trustedTypeVars, methodCodomain, thunkedVars);
   }
   
-  public Aliases withBranchVars(java.util.Set<hydra.core.Name> branchVars) {
+  public Aliases withBranchVars(hydra.util.PersistentSet<hydra.core.Name> branchVars) {
     return new Aliases(currentNamespace, packages, branchVars, recursiveVars, inScopeTypeParams, polymorphicLocals, inScopeJavaVars, varRenames, lambdaVars, typeVarSubst, trustedTypeVars, methodCodomain, thunkedVars);
   }
   
-  public Aliases withRecursiveVars(java.util.Set<hydra.core.Name> recursiveVars) {
+  public Aliases withRecursiveVars(hydra.util.PersistentSet<hydra.core.Name> recursiveVars) {
     return new Aliases(currentNamespace, packages, branchVars, recursiveVars, inScopeTypeParams, polymorphicLocals, inScopeJavaVars, varRenames, lambdaVars, typeVarSubst, trustedTypeVars, methodCodomain, thunkedVars);
   }
   
-  public Aliases withInScopeTypeParams(java.util.Set<hydra.core.Name> inScopeTypeParams) {
+  public Aliases withInScopeTypeParams(hydra.util.PersistentSet<hydra.core.Name> inScopeTypeParams) {
     return new Aliases(currentNamespace, packages, branchVars, recursiveVars, inScopeTypeParams, polymorphicLocals, inScopeJavaVars, varRenames, lambdaVars, typeVarSubst, trustedTypeVars, methodCodomain, thunkedVars);
   }
   
-  public Aliases withPolymorphicLocals(java.util.Set<hydra.core.Name> polymorphicLocals) {
+  public Aliases withPolymorphicLocals(hydra.util.PersistentSet<hydra.core.Name> polymorphicLocals) {
     return new Aliases(currentNamespace, packages, branchVars, recursiveVars, inScopeTypeParams, polymorphicLocals, inScopeJavaVars, varRenames, lambdaVars, typeVarSubst, trustedTypeVars, methodCodomain, thunkedVars);
   }
   
-  public Aliases withInScopeJavaVars(java.util.Set<hydra.core.Name> inScopeJavaVars) {
+  public Aliases withInScopeJavaVars(hydra.util.PersistentSet<hydra.core.Name> inScopeJavaVars) {
     return new Aliases(currentNamespace, packages, branchVars, recursiveVars, inScopeTypeParams, polymorphicLocals, inScopeJavaVars, varRenames, lambdaVars, typeVarSubst, trustedTypeVars, methodCodomain, thunkedVars);
   }
   
-  public Aliases withVarRenames(java.util.Map<hydra.core.Name, hydra.core.Name> varRenames) {
+  public Aliases withVarRenames(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> varRenames) {
     return new Aliases(currentNamespace, packages, branchVars, recursiveVars, inScopeTypeParams, polymorphicLocals, inScopeJavaVars, varRenames, lambdaVars, typeVarSubst, trustedTypeVars, methodCodomain, thunkedVars);
   }
   
-  public Aliases withLambdaVars(java.util.Set<hydra.core.Name> lambdaVars) {
+  public Aliases withLambdaVars(hydra.util.PersistentSet<hydra.core.Name> lambdaVars) {
     return new Aliases(currentNamespace, packages, branchVars, recursiveVars, inScopeTypeParams, polymorphicLocals, inScopeJavaVars, varRenames, lambdaVars, typeVarSubst, trustedTypeVars, methodCodomain, thunkedVars);
   }
   
-  public Aliases withTypeVarSubst(java.util.Map<hydra.core.Name, hydra.core.Name> typeVarSubst) {
+  public Aliases withTypeVarSubst(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name> typeVarSubst) {
     return new Aliases(currentNamespace, packages, branchVars, recursiveVars, inScopeTypeParams, polymorphicLocals, inScopeJavaVars, varRenames, lambdaVars, typeVarSubst, trustedTypeVars, methodCodomain, thunkedVars);
   }
   
-  public Aliases withTrustedTypeVars(java.util.Set<hydra.core.Name> trustedTypeVars) {
+  public Aliases withTrustedTypeVars(hydra.util.PersistentSet<hydra.core.Name> trustedTypeVars) {
     return new Aliases(currentNamespace, packages, branchVars, recursiveVars, inScopeTypeParams, polymorphicLocals, inScopeJavaVars, varRenames, lambdaVars, typeVarSubst, trustedTypeVars, methodCodomain, thunkedVars);
   }
   
@@ -284,7 +284,7 @@ public class Aliases implements Serializable, Comparable<Aliases> {
     return new Aliases(currentNamespace, packages, branchVars, recursiveVars, inScopeTypeParams, polymorphicLocals, inScopeJavaVars, varRenames, lambdaVars, typeVarSubst, trustedTypeVars, methodCodomain, thunkedVars);
   }
   
-  public Aliases withThunkedVars(java.util.Set<hydra.core.Name> thunkedVars) {
+  public Aliases withThunkedVars(hydra.util.PersistentSet<hydra.core.Name> thunkedVars) {
     return new Aliases(currentNamespace, packages, branchVars, recursiveVars, inScopeTypeParams, polymorphicLocals, inScopeJavaVars, varRenames, lambdaVars, typeVarSubst, trustedTypeVars, methodCodomain, thunkedVars);
   }
 }

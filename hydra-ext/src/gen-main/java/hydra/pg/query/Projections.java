@@ -13,9 +13,9 @@ public class Projections implements Serializable, Comparable<Projections> {
   
   public final Boolean all;
   
-  public final java.util.List<hydra.pg.query.Projection> explicit;
+  public final hydra.util.ConsList<hydra.pg.query.Projection> explicit;
   
-  public Projections (Boolean all, java.util.List<hydra.pg.query.Projection> explicit) {
+  public Projections (Boolean all, hydra.util.ConsList<hydra.pg.query.Projection> explicit) {
     this.all = all;
     this.explicit = explicit;
   }
@@ -55,7 +55,7 @@ public class Projections implements Serializable, Comparable<Projections> {
     return new Projections(all, explicit);
   }
   
-  public Projections withExplicit(java.util.List<hydra.pg.query.Projection> explicit) {
+  public Projections withExplicit(hydra.util.ConsList<hydra.pg.query.Projection> explicit) {
     return new Projections(all, explicit);
   }
 }

@@ -194,9 +194,9 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
    * A list pattern
    */
   public static final class List extends hydra.ext.haskell.ast.Pattern implements Serializable {
-    public final java.util.List<hydra.ext.haskell.ast.Pattern> value;
+    public final hydra.util.ConsList<hydra.ext.haskell.ast.Pattern> value;
     
-    public List (java.util.List<hydra.ext.haskell.ast.Pattern> value) {
+    public List (hydra.util.ConsList<hydra.ext.haskell.ast.Pattern> value) {
       this.value = value;
     }
     
@@ -411,9 +411,9 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
    * A tuple pattern
    */
   public static final class Tuple extends hydra.ext.haskell.ast.Pattern implements Serializable {
-    public final java.util.List<hydra.ext.haskell.ast.Pattern> value;
+    public final hydra.util.ConsList<hydra.ext.haskell.ast.Pattern> value;
     
-    public Tuple (java.util.List<hydra.ext.haskell.ast.Pattern> value) {
+    public Tuple (hydra.util.ConsList<hydra.ext.haskell.ast.Pattern> value) {
       this.value = value;
     }
     

@@ -36,9 +36,9 @@ public class TestGenerator<A> implements Serializable, Comparable<TestGenerator<
   /**
    * Generate an aggregator file (e.g., Spec.hs for Haskell, conftest.py for Python). Takes base directory and list of modules, returns (filepath, content) or Nothing if not needed
    */
-  public final hydra.util.Maybe<java.util.function.Function<String, java.util.function.Function<java.util.List<hydra.module.Module>, hydra.util.Pair<String, String>>>> aggregatorFile;
+  public final hydra.util.Maybe<java.util.function.Function<String, java.util.function.Function<hydra.util.ConsList<hydra.module.Module>, hydra.util.Pair<String, String>>>> aggregatorFile;
   
-  public TestGenerator (java.util.function.Function<hydra.module.Module, java.util.function.Function<hydra.graph.Graph, hydra.util.Either<String, hydra.module.Namespaces<A>>>> namespacesForModule, java.util.function.Function<hydra.module.Namespaces<A>, hydra.testing.TestCodec> createCodec, java.util.function.Function<hydra.module.Module, java.util.function.Function<hydra.testing.TestGroup, java.util.function.Function<hydra.graph.Graph, hydra.util.Either<String, hydra.util.Pair<String, String>>>>> generateTestFile, hydra.util.Maybe<java.util.function.Function<String, java.util.function.Function<java.util.List<hydra.module.Module>, hydra.util.Pair<String, String>>>> aggregatorFile) {
+  public TestGenerator (java.util.function.Function<hydra.module.Module, java.util.function.Function<hydra.graph.Graph, hydra.util.Either<String, hydra.module.Namespaces<A>>>> namespacesForModule, java.util.function.Function<hydra.module.Namespaces<A>, hydra.testing.TestCodec> createCodec, java.util.function.Function<hydra.module.Module, java.util.function.Function<hydra.testing.TestGroup, java.util.function.Function<hydra.graph.Graph, hydra.util.Either<String, hydra.util.Pair<String, String>>>>> generateTestFile, hydra.util.Maybe<java.util.function.Function<String, java.util.function.Function<hydra.util.ConsList<hydra.module.Module>, hydra.util.Pair<String, String>>>> aggregatorFile) {
     this.namespacesForModule = namespacesForModule;
     this.createCodec = createCodec;
     this.generateTestFile = generateTestFile;
@@ -106,7 +106,7 @@ public class TestGenerator<A> implements Serializable, Comparable<TestGenerator<
     return new TestGenerator(namespacesForModule, createCodec, generateTestFile, aggregatorFile);
   }
   
-  public TestGenerator withAggregatorFile(hydra.util.Maybe<java.util.function.Function<String, java.util.function.Function<java.util.List<hydra.module.Module>, hydra.util.Pair<String, String>>>> aggregatorFile) {
+  public TestGenerator withAggregatorFile(hydra.util.Maybe<java.util.function.Function<String, java.util.function.Function<hydra.util.ConsList<hydra.module.Module>, hydra.util.Pair<String, String>>>> aggregatorFile) {
     return new TestGenerator(namespacesForModule, createCodec, generateTestFile, aggregatorFile);
   }
 }

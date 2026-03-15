@@ -87,30 +87,30 @@ public interface Arity {
     return hydra.arity.Arity.typeArity((arg_).type);
   }
   
-  static java.util.List<hydra.core.Type> uncurryType(hydra.core.Type t) {
+  static hydra.util.ConsList<hydra.core.Type> uncurryType(hydra.core.Type t) {
     return (t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
-      public java.util.List<hydra.core.Type> otherwise(hydra.core.Type instance) {
-        return java.util.List.of(t);
+      public hydra.util.ConsList<hydra.core.Type> otherwise(hydra.core.Type instance) {
+        return hydra.util.ConsList.of(t);
       }
       
       @Override
-      public java.util.List<hydra.core.Type> visit(hydra.core.Type.Annotated arg_) {
+      public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Annotated arg_) {
         return hydra.arity.Arity.uncurryType(((arg_).value).body);
       }
       
       @Override
-      public java.util.List<hydra.core.Type> visit(hydra.core.Type.Application arg_) {
+      public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Application arg_) {
         return hydra.arity.Arity.uncurryType(((arg_).value).function);
       }
       
       @Override
-      public java.util.List<hydra.core.Type> visit(hydra.core.Type.Forall arg_) {
+      public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Forall arg_) {
         return hydra.arity.Arity.uncurryType(((arg_).value).body);
       }
       
       @Override
-      public java.util.List<hydra.core.Type> visit(hydra.core.Type.Function ft) {
+      public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Function ft) {
         return hydra.lib.lists.Cons.apply(
           ((ft).value).domain,
           hydra.arity.Arity.uncurryType(((ft).value).codomain));

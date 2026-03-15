@@ -9,9 +9,9 @@ public class Throws implements Serializable, Comparable<Throws> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.java.syntax.ExceptionType> value;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.ExceptionType> value;
   
-  public Throws (java.util.List<hydra.ext.java.syntax.ExceptionType> value) {
+  public Throws (hydra.util.ConsList<hydra.ext.java.syntax.ExceptionType> value) {
     this.value = value;
   }
   

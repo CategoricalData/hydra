@@ -17,13 +17,13 @@ public class TryExceptStarStatement implements Serializable, Comparable<TryExcep
   
   public final hydra.ext.python.syntax.Block body;
   
-  public final java.util.List<hydra.ext.python.syntax.ExceptStarBlock> excepts;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.ExceptStarBlock> excepts;
   
   public final hydra.util.Maybe<hydra.ext.python.syntax.Block> else_;
   
   public final hydra.util.Maybe<hydra.ext.python.syntax.Block> finally_;
   
-  public TryExceptStarStatement (hydra.ext.python.syntax.Block body, java.util.List<hydra.ext.python.syntax.ExceptStarBlock> excepts, hydra.util.Maybe<hydra.ext.python.syntax.Block> else_, hydra.util.Maybe<hydra.ext.python.syntax.Block> finally_) {
+  public TryExceptStarStatement (hydra.ext.python.syntax.Block body, hydra.util.ConsList<hydra.ext.python.syntax.ExceptStarBlock> excepts, hydra.util.Maybe<hydra.ext.python.syntax.Block> else_, hydra.util.Maybe<hydra.ext.python.syntax.Block> finally_) {
     this.body = body;
     this.excepts = excepts;
     this.else_ = else_;
@@ -81,7 +81,7 @@ public class TryExceptStarStatement implements Serializable, Comparable<TryExcep
     return new TryExceptStarStatement(body, excepts, else_, finally_);
   }
   
-  public TryExceptStarStatement withExcepts(java.util.List<hydra.ext.python.syntax.ExceptStarBlock> excepts) {
+  public TryExceptStarStatement withExcepts(hydra.util.ConsList<hydra.ext.python.syntax.ExceptStarBlock> excepts) {
     return new TryExceptStarStatement(body, excepts, else_, finally_);
   }
   

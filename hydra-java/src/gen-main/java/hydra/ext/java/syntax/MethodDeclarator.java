@@ -17,9 +17,9 @@ public class MethodDeclarator implements Serializable, Comparable<MethodDeclarat
   
   public final hydra.util.Maybe<hydra.ext.java.syntax.ReceiverParameter> receiverParameter;
   
-  public final java.util.List<hydra.ext.java.syntax.FormalParameter> formalParameters;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.FormalParameter> formalParameters;
   
-  public MethodDeclarator (hydra.ext.java.syntax.Identifier identifier, hydra.util.Maybe<hydra.ext.java.syntax.ReceiverParameter> receiverParameter, java.util.List<hydra.ext.java.syntax.FormalParameter> formalParameters) {
+  public MethodDeclarator (hydra.ext.java.syntax.Identifier identifier, hydra.util.Maybe<hydra.ext.java.syntax.ReceiverParameter> receiverParameter, hydra.util.ConsList<hydra.ext.java.syntax.FormalParameter> formalParameters) {
     this.identifier = identifier;
     this.receiverParameter = receiverParameter;
     this.formalParameters = formalParameters;
@@ -72,7 +72,7 @@ public class MethodDeclarator implements Serializable, Comparable<MethodDeclarat
     return new MethodDeclarator(identifier, receiverParameter, formalParameters);
   }
   
-  public MethodDeclarator withFormalParameters(java.util.List<hydra.ext.java.syntax.FormalParameter> formalParameters) {
+  public MethodDeclarator withFormalParameters(hydra.util.ConsList<hydra.ext.java.syntax.FormalParameter> formalParameters) {
     return new MethodDeclarator(identifier, receiverParameter, formalParameters);
   }
 }

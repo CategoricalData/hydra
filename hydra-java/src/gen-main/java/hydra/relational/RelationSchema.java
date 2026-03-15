@@ -26,19 +26,19 @@ public class RelationSchema<T> implements Serializable, Comparable<RelationSchem
   /**
    * A list of column specifications
    */
-  public final java.util.List<hydra.relational.ColumnSchema<T>> columns;
+  public final hydra.util.ConsList<hydra.relational.ColumnSchema<T>> columns;
   
   /**
    * Any number of primary keys for the relation, each of which must be valid for this relation
    */
-  public final java.util.List<hydra.relational.PrimaryKey> primaryKeys;
+  public final hydra.util.ConsList<hydra.relational.PrimaryKey> primaryKeys;
   
   /**
    * Any number of foreign keys, each of which must be valid for both this relation and the target relation
    */
-  public final java.util.List<hydra.relational.ForeignKey> foreignKeys;
+  public final hydra.util.ConsList<hydra.relational.ForeignKey> foreignKeys;
   
-  public RelationSchema (hydra.relational.RelationName name, java.util.List<hydra.relational.ColumnSchema<T>> columns, java.util.List<hydra.relational.PrimaryKey> primaryKeys, java.util.List<hydra.relational.ForeignKey> foreignKeys) {
+  public RelationSchema (hydra.relational.RelationName name, hydra.util.ConsList<hydra.relational.ColumnSchema<T>> columns, hydra.util.ConsList<hydra.relational.PrimaryKey> primaryKeys, hydra.util.ConsList<hydra.relational.ForeignKey> foreignKeys) {
     this.name = name;
     this.columns = columns;
     this.primaryKeys = primaryKeys;
@@ -96,15 +96,15 @@ public class RelationSchema<T> implements Serializable, Comparable<RelationSchem
     return new RelationSchema(name, columns, primaryKeys, foreignKeys);
   }
   
-  public RelationSchema withColumns(java.util.List<hydra.relational.ColumnSchema<T>> columns) {
+  public RelationSchema withColumns(hydra.util.ConsList<hydra.relational.ColumnSchema<T>> columns) {
     return new RelationSchema(name, columns, primaryKeys, foreignKeys);
   }
   
-  public RelationSchema withPrimaryKeys(java.util.List<hydra.relational.PrimaryKey> primaryKeys) {
+  public RelationSchema withPrimaryKeys(hydra.util.ConsList<hydra.relational.PrimaryKey> primaryKeys) {
     return new RelationSchema(name, columns, primaryKeys, foreignKeys);
   }
   
-  public RelationSchema withForeignKeys(java.util.List<hydra.relational.ForeignKey> foreignKeys) {
+  public RelationSchema withForeignKeys(hydra.util.ConsList<hydra.relational.ForeignKey> foreignKeys) {
     return new RelationSchema(name, columns, primaryKeys, foreignKeys);
   }
 }

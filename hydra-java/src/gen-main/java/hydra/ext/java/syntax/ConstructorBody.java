@@ -13,9 +13,9 @@ public class ConstructorBody implements Serializable, Comparable<ConstructorBody
   
   public final hydra.util.Maybe<hydra.ext.java.syntax.ExplicitConstructorInvocation> invocation;
   
-  public final java.util.List<hydra.ext.java.syntax.BlockStatement> statements;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement> statements;
   
-  public ConstructorBody (hydra.util.Maybe<hydra.ext.java.syntax.ExplicitConstructorInvocation> invocation, java.util.List<hydra.ext.java.syntax.BlockStatement> statements) {
+  public ConstructorBody (hydra.util.Maybe<hydra.ext.java.syntax.ExplicitConstructorInvocation> invocation, hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement> statements) {
     this.invocation = invocation;
     this.statements = statements;
   }
@@ -57,7 +57,7 @@ public class ConstructorBody implements Serializable, Comparable<ConstructorBody
     return new ConstructorBody(invocation, statements);
   }
   
-  public ConstructorBody withStatements(java.util.List<hydra.ext.java.syntax.BlockStatement> statements) {
+  public ConstructorBody withStatements(hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement> statements) {
     return new ConstructorBody(invocation, statements);
   }
 }

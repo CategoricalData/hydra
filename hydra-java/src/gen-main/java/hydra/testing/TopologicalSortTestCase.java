@@ -17,14 +17,14 @@ public class TopologicalSortTestCase implements Serializable, Comparable<Topolog
   /**
    * The directed graph as an adjacency list (node to list of dependencies)
    */
-  public final java.util.List<hydra.util.Pair<Integer, java.util.List<Integer>>> adjacencyList;
+  public final hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>> adjacencyList;
   
   /**
    * The expected result: Left for cycles, Right for sorted nodes
    */
-  public final hydra.util.Either<java.util.List<java.util.List<Integer>>, java.util.List<Integer>> expected;
+  public final hydra.util.Either<hydra.util.ConsList<hydra.util.ConsList<Integer>>, hydra.util.ConsList<Integer>> expected;
   
-  public TopologicalSortTestCase (java.util.List<hydra.util.Pair<Integer, java.util.List<Integer>>> adjacencyList, hydra.util.Either<java.util.List<java.util.List<Integer>>, java.util.List<Integer>> expected) {
+  public TopologicalSortTestCase (hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>> adjacencyList, hydra.util.Either<hydra.util.ConsList<hydra.util.ConsList<Integer>>, hydra.util.ConsList<Integer>> expected) {
     this.adjacencyList = adjacencyList;
     this.expected = expected;
   }
@@ -62,11 +62,11 @@ public class TopologicalSortTestCase implements Serializable, Comparable<Topolog
       other.expected.hashCode());
   }
   
-  public TopologicalSortTestCase withAdjacencyList(java.util.List<hydra.util.Pair<Integer, java.util.List<Integer>>> adjacencyList) {
+  public TopologicalSortTestCase withAdjacencyList(hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>> adjacencyList) {
     return new TopologicalSortTestCase(adjacencyList, expected);
   }
   
-  public TopologicalSortTestCase withExpected(hydra.util.Either<java.util.List<java.util.List<Integer>>, java.util.List<Integer>> expected) {
+  public TopologicalSortTestCase withExpected(hydra.util.Either<hydra.util.ConsList<hydra.util.ConsList<Integer>>, hydra.util.ConsList<Integer>> expected) {
     return new TopologicalSortTestCase(adjacencyList, expected);
   }
 }

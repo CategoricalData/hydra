@@ -36,9 +36,9 @@ public class TypeArityMismatchError implements Serializable, Comparable<TypeArit
   /**
    * The type arguments that were provided
    */
-  public final java.util.List<hydra.core.Type> typeArguments;
+  public final hydra.util.ConsList<hydra.core.Type> typeArguments;
   
-  public TypeArityMismatchError (hydra.core.Type type, Integer expectedArity, Integer actualArity, java.util.List<hydra.core.Type> typeArguments) {
+  public TypeArityMismatchError (hydra.core.Type type, Integer expectedArity, Integer actualArity, hydra.util.ConsList<hydra.core.Type> typeArguments) {
     this.type = type;
     this.expectedArity = expectedArity;
     this.actualArity = actualArity;
@@ -100,7 +100,7 @@ public class TypeArityMismatchError implements Serializable, Comparable<TypeArit
     return new TypeArityMismatchError(type, expectedArity, actualArity, typeArguments);
   }
   
-  public TypeArityMismatchError withTypeArguments(java.util.List<hydra.core.Type> typeArguments) {
+  public TypeArityMismatchError withTypeArguments(hydra.util.ConsList<hydra.core.Type> typeArguments) {
     return new TypeArityMismatchError(type, expectedArity, actualArity, typeArguments);
   }
 }

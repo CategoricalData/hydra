@@ -13,9 +13,9 @@ public class PropertyExpression implements Serializable, Comparable<PropertyExpr
   
   public final hydra.ext.cypher.openCypher.Atom atom;
   
-  public final java.util.List<hydra.ext.cypher.openCypher.PropertyLookup> lookups;
+  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.PropertyLookup> lookups;
   
-  public PropertyExpression (hydra.ext.cypher.openCypher.Atom atom, java.util.List<hydra.ext.cypher.openCypher.PropertyLookup> lookups) {
+  public PropertyExpression (hydra.ext.cypher.openCypher.Atom atom, hydra.util.ConsList<hydra.ext.cypher.openCypher.PropertyLookup> lookups) {
     this.atom = atom;
     this.lookups = lookups;
   }
@@ -55,7 +55,7 @@ public class PropertyExpression implements Serializable, Comparable<PropertyExpr
     return new PropertyExpression(atom, lookups);
   }
   
-  public PropertyExpression withLookups(java.util.List<hydra.ext.cypher.openCypher.PropertyLookup> lookups) {
+  public PropertyExpression withLookups(hydra.util.ConsList<hydra.ext.cypher.openCypher.PropertyLookup> lookups) {
     return new PropertyExpression(atom, lookups);
   }
 }

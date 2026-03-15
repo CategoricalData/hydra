@@ -20,7 +20,7 @@ public class StringsTest {
 
             "onetwothree",
 
-            hydra.lib.strings.Cat.apply(java.util.List.of(
+            hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
   "one",
   "two",
   "three")));
@@ -35,7 +35,7 @@ public class StringsTest {
 
             "hello",
 
-            hydra.lib.strings.Cat.apply(java.util.List.of("hello")));
+            hydra.lib.strings.Cat.apply(hydra.util.ConsList.of("hello")));
 
     }
 
@@ -47,7 +47,7 @@ public class StringsTest {
 
             "",
 
-            hydra.lib.strings.Cat.apply((java.util.List<String>) (java.util.List.<String>of())));
+            hydra.lib.strings.Cat.apply((hydra.util.ConsList<String>) (hydra.util.ConsList.<String>of())));
 
     }
 
@@ -59,7 +59,7 @@ public class StringsTest {
 
             "one",
 
-            hydra.lib.strings.Cat.apply(java.util.List.of(
+            hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
   "",
   "one",
   "",
@@ -75,7 +75,7 @@ public class StringsTest {
 
             "",
 
-            hydra.lib.strings.Cat.apply(java.util.List.of(
+            hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
   "",
   "",
   "",
@@ -91,7 +91,7 @@ public class StringsTest {
 
             "\u00F1\u4E16\uD83C\uDF0D",
 
-            hydra.lib.strings.Cat.apply(java.util.List.of(
+            hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
   "\u00F1",
   "\u4E16",
   "\uD83C\uDF0D")));
@@ -106,7 +106,7 @@ public class StringsTest {
 
             "e\u0301",
 
-            hydra.lib.strings.Cat.apply(java.util.List.of(
+            hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
   "e",
   "\u0301")));
 
@@ -120,7 +120,7 @@ public class StringsTest {
 
             "\n\t\r",
 
-            hydra.lib.strings.Cat.apply(java.util.List.of(
+            hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
   "\n",
   "\t",
   "\r")));
@@ -135,7 +135,7 @@ public class StringsTest {
 
             "hello\u0000world",
 
-            hydra.lib.strings.Cat.apply(java.util.List.of(
+            hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
   "hello",
   "\u0000",
   "world")));
@@ -352,7 +352,7 @@ public class StringsTest {
 
             "hello",
 
-            hydra.lib.strings.FromList.apply(java.util.List.of(
+            hydra.lib.strings.FromList.apply(hydra.util.ConsList.of(
   104,
   101,
   108,
@@ -369,7 +369,7 @@ public class StringsTest {
 
             "",
 
-            hydra.lib.strings.FromList.apply((java.util.List<Integer>) (java.util.List.<Integer>of())));
+            hydra.lib.strings.FromList.apply((hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of())));
 
     }
 
@@ -381,7 +381,7 @@ public class StringsTest {
 
             "a",
 
-            hydra.lib.strings.FromList.apply(java.util.List.of(97)));
+            hydra.lib.strings.FromList.apply(hydra.util.ConsList.of(97)));
 
     }
 
@@ -393,7 +393,7 @@ public class StringsTest {
 
             "\u00F1\u4E16\uD83C\uDF0D",
 
-            hydra.lib.strings.FromList.apply(java.util.List.of(
+            hydra.lib.strings.FromList.apply(hydra.util.ConsList.of(
   241,
   19990,
   127757)));
@@ -408,7 +408,7 @@ public class StringsTest {
 
             "e\u0301",
 
-            hydra.lib.strings.FromList.apply(java.util.List.of(
+            hydra.lib.strings.FromList.apply(hydra.util.ConsList.of(
   101,
   769)));
 
@@ -422,7 +422,7 @@ public class StringsTest {
 
             "\n\t\r",
 
-            hydra.lib.strings.FromList.apply(java.util.List.of(
+            hydra.lib.strings.FromList.apply(hydra.util.ConsList.of(
   10,
   9,
   13)));
@@ -437,7 +437,7 @@ public class StringsTest {
 
             "h\u0000i",
 
-            hydra.lib.strings.FromList.apply(java.util.List.of(
+            hydra.lib.strings.FromList.apply(hydra.util.ConsList.of(
   104,
   0,
   105)));
@@ -456,7 +456,7 @@ public class StringsTest {
 
             hydra.lib.strings.Intercalate.apply(
   ",",
-  java.util.List.of(
+  hydra.util.ConsList.of(
     "one",
     "two",
     "three")));
@@ -473,7 +473,7 @@ public class StringsTest {
 
             hydra.lib.strings.Intercalate.apply(
   "",
-  java.util.List.of(
+  hydra.util.ConsList.of(
     "a",
     "b",
     "c")));
@@ -490,7 +490,7 @@ public class StringsTest {
 
             hydra.lib.strings.Intercalate.apply(
   " | ",
-  java.util.List.of(
+  hydra.util.ConsList.of(
     "A",
     "B",
     "C")));
@@ -507,7 +507,7 @@ public class StringsTest {
 
             hydra.lib.strings.Intercalate.apply(
   ",",
-  (java.util.List<String>) (java.util.List.<String>of())));
+  (hydra.util.ConsList<String>) (hydra.util.ConsList.<String>of())));
 
     }
 
@@ -521,7 +521,7 @@ public class StringsTest {
 
             hydra.lib.strings.Intercalate.apply(
   ",",
-  java.util.List.of("only")));
+  hydra.util.ConsList.of("only")));
 
     }
 
@@ -535,7 +535,7 @@ public class StringsTest {
 
             hydra.lib.strings.Intercalate.apply(
   ",",
-  java.util.List.of(
+  hydra.util.ConsList.of(
     "",
     "a",
     "")));
@@ -552,7 +552,7 @@ public class StringsTest {
 
             hydra.lib.strings.Intercalate.apply(
   "\uD83C\uDF0D",
-  java.util.List.of(
+  hydra.util.ConsList.of(
     "link1",
     "link2")));
 
@@ -568,7 +568,7 @@ public class StringsTest {
 
             hydra.lib.strings.Intercalate.apply(
   "\n",
-  java.util.List.of(
+  hydra.util.ConsList.of(
     "line1",
     "line2")));
 
@@ -656,7 +656,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of("hello world"),
+            hydra.util.ConsList.of("hello world"),
 
             hydra.lib.strings.Lines.apply("hello world"));
 
@@ -668,7 +668,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "hello",
   "world"),
 
@@ -682,7 +682,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "one",
   "two",
   "three"),
@@ -697,7 +697,7 @@ public class StringsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.strings.Lines.apply(""));
 
@@ -709,7 +709,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(""),
+            hydra.util.ConsList.of(""),
 
             hydra.lib.strings.Lines.apply("\n"));
 
@@ -721,7 +721,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of("hello"),
+            hydra.util.ConsList.of("hello"),
 
             hydra.lib.strings.Lines.apply("hello\n"));
 
@@ -733,7 +733,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "",
   "hello"),
 
@@ -747,7 +747,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "a",
   "",
   "b"),
@@ -762,7 +762,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "\u00F1",
   "\u4E16"),
 
@@ -776,7 +776,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "a\tb",
   "c"),
 
@@ -878,7 +878,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "Mi",
   "i",
   "ippi"),
@@ -895,7 +895,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "one",
   "two",
   "three"),
@@ -912,7 +912,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "a",
   "b",
   "c"),
@@ -929,7 +929,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of("hello"),
+            hydra.util.ConsList.of("hello"),
 
             hydra.lib.strings.SplitOn.apply(
   "x",
@@ -943,7 +943,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "",
   "ello"),
 
@@ -959,7 +959,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "hell",
   ""),
 
@@ -975,7 +975,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "",
   "one",
   "two",
@@ -993,7 +993,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "",
   ""),
 
@@ -1009,7 +1009,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "a",
   "",
   "b"),
@@ -1026,7 +1026,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "he",
   "",
   "o"),
@@ -1043,7 +1043,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "",
   "a"),
 
@@ -1059,7 +1059,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "",
   "a",
   "b",
@@ -1077,7 +1077,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(""),
+            hydra.util.ConsList.of(""),
 
             hydra.lib.strings.SplitOn.apply(
   "x",
@@ -1091,7 +1091,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(""),
+            hydra.util.ConsList.of(""),
 
             hydra.lib.strings.SplitOn.apply(
   "",
@@ -1105,7 +1105,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "",
   ""),
 
@@ -1121,7 +1121,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "hello",
   "world"),
 
@@ -1137,7 +1137,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "\u00F1",
   "\u4E16",
   "\uD83C\uDF0D"),
@@ -1154,7 +1154,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   "line1",
   "line2",
   "line3"),
@@ -1173,7 +1173,7 @@ public class StringsTest {
 
         assertEquals(
 
-            (java.util.List<T0>) (java.util.List.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
 
             hydra.lib.strings.ToList.apply(""));
 
@@ -1185,7 +1185,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(97),
+            hydra.util.ConsList.of(97),
 
             hydra.lib.strings.ToList.apply("a"));
 
@@ -1197,7 +1197,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   104,
   101,
   108,
@@ -1214,7 +1214,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   241,
   19990,
   127757),
@@ -1229,7 +1229,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   101,
   769),
 
@@ -1243,7 +1243,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   10,
   9,
   13),
@@ -1258,7 +1258,7 @@ public class StringsTest {
 
         assertEquals(
 
-            java.util.List.of(
+            hydra.util.ConsList.of(
   104,
   0,
   105),
@@ -1449,7 +1449,7 @@ public class StringsTest {
 
             "one\ntwo\nthree\n",
 
-            hydra.lib.strings.Unlines.apply(java.util.List.of(
+            hydra.lib.strings.Unlines.apply(hydra.util.ConsList.of(
   "one",
   "two",
   "three")));
@@ -1464,7 +1464,7 @@ public class StringsTest {
 
             "hello\n",
 
-            hydra.lib.strings.Unlines.apply(java.util.List.of("hello")));
+            hydra.lib.strings.Unlines.apply(hydra.util.ConsList.of("hello")));
 
     }
 
@@ -1476,7 +1476,7 @@ public class StringsTest {
 
             "",
 
-            hydra.lib.strings.Unlines.apply((java.util.List<String>) (java.util.List.<String>of())));
+            hydra.lib.strings.Unlines.apply((hydra.util.ConsList<String>) (hydra.util.ConsList.<String>of())));
 
     }
 
@@ -1488,7 +1488,7 @@ public class StringsTest {
 
             "hello\n\nworld\n",
 
-            hydra.lib.strings.Unlines.apply(java.util.List.of(
+            hydra.lib.strings.Unlines.apply(hydra.util.ConsList.of(
   "hello",
   "",
   "world")));
@@ -1503,7 +1503,7 @@ public class StringsTest {
 
             "\n\n\n",
 
-            hydra.lib.strings.Unlines.apply(java.util.List.of(
+            hydra.lib.strings.Unlines.apply(hydra.util.ConsList.of(
   "",
   "",
   "")));
@@ -1518,7 +1518,7 @@ public class StringsTest {
 
             "\u00F1o\u00F1o\n\u4E16\u754C\n",
 
-            hydra.lib.strings.Unlines.apply(java.util.List.of(
+            hydra.lib.strings.Unlines.apply(hydra.util.ConsList.of(
   "\u00F1o\u00F1o",
   "\u4E16\u754C")));
 

@@ -13,13 +13,13 @@ public class ClassAssertion implements Serializable, Comparable<ClassAssertion> 
   
   public static final hydra.core.Name INDIVIDUAL = new hydra.core.Name("individual");
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
   public final hydra.ext.org.w3.owl.syntax.ClassExpression class_;
   
   public final hydra.ext.org.w3.owl.syntax.Individual individual;
   
-  public ClassAssertion (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ClassExpression class_, hydra.ext.org.w3.owl.syntax.Individual individual) {
+  public ClassAssertion (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ClassExpression class_, hydra.ext.org.w3.owl.syntax.Individual individual) {
     this.annotations = annotations;
     this.class_ = class_;
     this.individual = individual;
@@ -62,7 +62,7 @@ public class ClassAssertion implements Serializable, Comparable<ClassAssertion> 
     return ((Comparable) individual).compareTo(other.individual);
   }
   
-  public ClassAssertion withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public ClassAssertion withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new ClassAssertion(annotations, class_, individual);
   }
   

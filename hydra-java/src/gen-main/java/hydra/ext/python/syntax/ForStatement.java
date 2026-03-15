@@ -21,9 +21,9 @@ public class ForStatement implements Serializable, Comparable<ForStatement> {
   
   public final Boolean async;
   
-  public final java.util.List<hydra.ext.python.syntax.StarTarget> targets;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.StarTarget> targets;
   
-  public final java.util.List<hydra.ext.python.syntax.StarExpression> expressions;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.StarExpression> expressions;
   
   public final hydra.util.Maybe<hydra.ext.python.syntax.TypeComment> typeComment;
   
@@ -31,7 +31,7 @@ public class ForStatement implements Serializable, Comparable<ForStatement> {
   
   public final hydra.util.Maybe<hydra.ext.python.syntax.Block> else_;
   
-  public ForStatement (Boolean async, java.util.List<hydra.ext.python.syntax.StarTarget> targets, java.util.List<hydra.ext.python.syntax.StarExpression> expressions, hydra.util.Maybe<hydra.ext.python.syntax.TypeComment> typeComment, hydra.ext.python.syntax.Block body, hydra.util.Maybe<hydra.ext.python.syntax.Block> else_) {
+  public ForStatement (Boolean async, hydra.util.ConsList<hydra.ext.python.syntax.StarTarget> targets, hydra.util.ConsList<hydra.ext.python.syntax.StarExpression> expressions, hydra.util.Maybe<hydra.ext.python.syntax.TypeComment> typeComment, hydra.ext.python.syntax.Block body, hydra.util.Maybe<hydra.ext.python.syntax.Block> else_) {
     this.async = async;
     this.targets = targets;
     this.expressions = expressions;
@@ -105,11 +105,11 @@ public class ForStatement implements Serializable, Comparable<ForStatement> {
     return new ForStatement(async, targets, expressions, typeComment, body, else_);
   }
   
-  public ForStatement withTargets(java.util.List<hydra.ext.python.syntax.StarTarget> targets) {
+  public ForStatement withTargets(hydra.util.ConsList<hydra.ext.python.syntax.StarTarget> targets) {
     return new ForStatement(async, targets, expressions, typeComment, body, else_);
   }
   
-  public ForStatement withExpressions(java.util.List<hydra.ext.python.syntax.StarExpression> expressions) {
+  public ForStatement withExpressions(hydra.util.ConsList<hydra.ext.python.syntax.StarExpression> expressions) {
     return new ForStatement(async, targets, expressions, typeComment, body, else_);
   }
   

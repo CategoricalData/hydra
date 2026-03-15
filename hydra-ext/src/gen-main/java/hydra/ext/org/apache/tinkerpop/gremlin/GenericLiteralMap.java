@@ -9,9 +9,9 @@ public class GenericLiteralMap implements Serializable, Comparable<GenericLitera
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.MapEntry> value;
+  public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.MapEntry> value;
   
-  public GenericLiteralMap (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.MapEntry> value) {
+  public GenericLiteralMap (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.MapEntry> value) {
     this.value = value;
   }
   

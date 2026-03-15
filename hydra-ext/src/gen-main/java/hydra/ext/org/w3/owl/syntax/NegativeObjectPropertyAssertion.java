@@ -15,7 +15,7 @@ public class NegativeObjectPropertyAssertion implements Serializable, Comparable
   
   public static final hydra.core.Name TARGET = new hydra.core.Name("target");
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
   public final hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property;
   
@@ -23,7 +23,7 @@ public class NegativeObjectPropertyAssertion implements Serializable, Comparable
   
   public final hydra.ext.org.w3.owl.syntax.Individual target;
   
-  public NegativeObjectPropertyAssertion (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property, hydra.ext.org.w3.owl.syntax.Individual source, hydra.ext.org.w3.owl.syntax.Individual target) {
+  public NegativeObjectPropertyAssertion (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property, hydra.ext.org.w3.owl.syntax.Individual source, hydra.ext.org.w3.owl.syntax.Individual target) {
     this.annotations = annotations;
     this.property = property;
     this.source = source;
@@ -73,7 +73,7 @@ public class NegativeObjectPropertyAssertion implements Serializable, Comparable
     return ((Comparable) target).compareTo(other.target);
   }
   
-  public NegativeObjectPropertyAssertion withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public NegativeObjectPropertyAssertion withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new NegativeObjectPropertyAssertion(annotations, property, source, target);
   }
   

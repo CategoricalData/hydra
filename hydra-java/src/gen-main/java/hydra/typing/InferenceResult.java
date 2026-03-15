@@ -38,14 +38,14 @@ public class InferenceResult implements Serializable, Comparable<InferenceResult
   /**
    * Class constraints discovered during inference (e.g., Ord constraints from Map.lookup)
    */
-  public final java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata> classConstraints;
+  public final hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata> classConstraints;
   
   /**
    * The updated context after inference (carries fresh variable state)
    */
   public final hydra.context.Context context;
   
-  public InferenceResult (hydra.core.Term term, hydra.core.Type type, hydra.typing.TypeSubst subst, java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata> classConstraints, hydra.context.Context context) {
+  public InferenceResult (hydra.core.Term term, hydra.core.Type type, hydra.typing.TypeSubst subst, hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata> classConstraints, hydra.context.Context context) {
     this.term = term;
     this.type = type;
     this.subst = subst;
@@ -114,7 +114,7 @@ public class InferenceResult implements Serializable, Comparable<InferenceResult
     return new InferenceResult(term, type, subst, classConstraints, context);
   }
   
-  public InferenceResult withClassConstraints(java.util.Map<hydra.core.Name, hydra.core.TypeVariableMetadata> classConstraints) {
+  public InferenceResult withClassConstraints(hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata> classConstraints) {
     return new InferenceResult(term, type, subst, classConstraints, context);
   }
   

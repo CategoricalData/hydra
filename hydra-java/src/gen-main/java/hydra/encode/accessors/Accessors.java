@@ -7,14 +7,14 @@ package hydra.encode.accessors;
  */
 public interface Accessors {
   static hydra.core.Term accessorEdge(hydra.accessors.AccessorEdge x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.accessors.AccessorEdge"), java.util.List.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.accessors.AccessorEdge"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("source"), hydra.encode.accessors.Accessors.accessorNode((x).source)),
       new hydra.core.Field(new hydra.core.Name("path"), hydra.encode.accessors.Accessors.accessorPath((x).path)),
       new hydra.core.Field(new hydra.core.Name("target"), hydra.encode.accessors.Accessors.accessorNode((x).target)))));
   }
   
   static hydra.core.Term accessorGraph(hydra.accessors.AccessorGraph x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.accessors.AccessorGraph"), java.util.List.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.accessors.AccessorGraph"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("nodes"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
         hydra.encode.accessors.Accessors::accessorNode,
         (x).nodes))),
@@ -24,7 +24,7 @@ public interface Accessors {
   }
   
   static hydra.core.Term accessorNode(hydra.accessors.AccessorNode x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.accessors.AccessorNode"), java.util.List.of(
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.accessors.AccessorNode"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("name"), hydra.encode.core.Core.name((x).name)),
       new hydra.core.Field(new hydra.core.Name("label"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).label))),
       new hydra.core.Field(new hydra.core.Name("id"), new hydra.core.Term.Literal(new hydra.core.Literal.String_((x).id))))));

@@ -13,9 +13,9 @@ public class StringArgumentAndOptionalStringLiteralVarargs implements Serializab
   
   public final hydra.ext.org.apache.tinkerpop.gremlin.StringArgument first;
   
-  public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> rest;
+  public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> rest;
   
-  public StringArgumentAndOptionalStringLiteralVarargs (hydra.ext.org.apache.tinkerpop.gremlin.StringArgument first, java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> rest) {
+  public StringArgumentAndOptionalStringLiteralVarargs (hydra.ext.org.apache.tinkerpop.gremlin.StringArgument first, hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> rest) {
     this.first = first;
     this.rest = rest;
   }
@@ -55,7 +55,7 @@ public class StringArgumentAndOptionalStringLiteralVarargs implements Serializab
     return new StringArgumentAndOptionalStringLiteralVarargs(first, rest);
   }
   
-  public StringArgumentAndOptionalStringLiteralVarargs withRest(java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> rest) {
+  public StringArgumentAndOptionalStringLiteralVarargs withRest(hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> rest) {
     return new StringArgumentAndOptionalStringLiteralVarargs(first, rest);
   }
 }

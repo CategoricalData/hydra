@@ -11,11 +11,11 @@ public class LetQuery implements Serializable, Comparable<LetQuery> {
   
   public static final hydra.core.Name ENVIRONMENT = new hydra.core.Name("environment");
   
-  public final java.util.List<hydra.pg.query.Binding> bindings;
+  public final hydra.util.ConsList<hydra.pg.query.Binding> bindings;
   
   public final hydra.pg.query.Query environment;
   
-  public LetQuery (java.util.List<hydra.pg.query.Binding> bindings, hydra.pg.query.Query environment) {
+  public LetQuery (hydra.util.ConsList<hydra.pg.query.Binding> bindings, hydra.pg.query.Query environment) {
     this.bindings = bindings;
     this.environment = environment;
   }
@@ -51,7 +51,7 @@ public class LetQuery implements Serializable, Comparable<LetQuery> {
     return ((Comparable) environment).compareTo(other.environment);
   }
   
-  public LetQuery withBindings(java.util.List<hydra.pg.query.Binding> bindings) {
+  public LetQuery withBindings(hydra.util.ConsList<hydra.pg.query.Binding> bindings) {
     return new LetQuery(bindings, environment);
   }
   

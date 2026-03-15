@@ -15,11 +15,11 @@ public class OrdinaryCompilationUnit implements Serializable, Comparable<Ordinar
   
   public final hydra.util.Maybe<hydra.ext.java.syntax.PackageDeclaration> package_;
   
-  public final java.util.List<hydra.ext.java.syntax.ImportDeclaration> imports;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.ImportDeclaration> imports;
   
-  public final java.util.List<hydra.ext.java.syntax.TypeDeclarationWithComments> types;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.TypeDeclarationWithComments> types;
   
-  public OrdinaryCompilationUnit (hydra.util.Maybe<hydra.ext.java.syntax.PackageDeclaration> package_, java.util.List<hydra.ext.java.syntax.ImportDeclaration> imports, java.util.List<hydra.ext.java.syntax.TypeDeclarationWithComments> types) {
+  public OrdinaryCompilationUnit (hydra.util.Maybe<hydra.ext.java.syntax.PackageDeclaration> package_, hydra.util.ConsList<hydra.ext.java.syntax.ImportDeclaration> imports, hydra.util.ConsList<hydra.ext.java.syntax.TypeDeclarationWithComments> types) {
     this.package_ = package_;
     this.imports = imports;
     this.types = types;
@@ -70,11 +70,11 @@ public class OrdinaryCompilationUnit implements Serializable, Comparable<Ordinar
     return new OrdinaryCompilationUnit(package_, imports, types);
   }
   
-  public OrdinaryCompilationUnit withImports(java.util.List<hydra.ext.java.syntax.ImportDeclaration> imports) {
+  public OrdinaryCompilationUnit withImports(hydra.util.ConsList<hydra.ext.java.syntax.ImportDeclaration> imports) {
     return new OrdinaryCompilationUnit(package_, imports, types);
   }
   
-  public OrdinaryCompilationUnit withTypes(java.util.List<hydra.ext.java.syntax.TypeDeclarationWithComments> types) {
+  public OrdinaryCompilationUnit withTypes(hydra.util.ConsList<hydra.ext.java.syntax.TypeDeclarationWithComments> types) {
     return new OrdinaryCompilationUnit(package_, imports, types);
   }
 }

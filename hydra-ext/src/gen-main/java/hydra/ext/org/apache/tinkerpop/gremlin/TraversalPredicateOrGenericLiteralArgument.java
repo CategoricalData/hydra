@@ -78,9 +78,9 @@ public abstract class TraversalPredicateOrGenericLiteralArgument implements Seri
   }
   
   public static final class Literal extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalPredicateOrGenericLiteralArgument implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
     
-    public Literal (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
+    public Literal (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
       this.value = value;
     }
     

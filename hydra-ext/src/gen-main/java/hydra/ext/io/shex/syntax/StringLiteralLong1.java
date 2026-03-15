@@ -9,9 +9,9 @@ public class StringLiteralLong1 implements Serializable, Comparable<StringLitera
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.io.shex.syntax.StringLiteralLong1_Elmt> value;
+  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.StringLiteralLong1_Elmt> value;
   
-  public StringLiteralLong1 (java.util.List<hydra.ext.io.shex.syntax.StringLiteralLong1_Elmt> value) {
+  public StringLiteralLong1 (hydra.util.ConsList<hydra.ext.io.shex.syntax.StringLiteralLong1_Elmt> value) {
     this.value = value;
   }
   

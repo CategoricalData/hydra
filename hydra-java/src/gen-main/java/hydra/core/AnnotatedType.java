@@ -22,9 +22,9 @@ public class AnnotatedType implements Serializable, Comparable<AnnotatedType> {
   /**
    * The annotation as a map from keys to values
    */
-  public final java.util.Map<hydra.core.Name, hydra.core.Term> annotation;
+  public final hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> annotation;
   
-  public AnnotatedType (hydra.core.Type body, java.util.Map<hydra.core.Name, hydra.core.Term> annotation) {
+  public AnnotatedType (hydra.core.Type body, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> annotation) {
     this.body = body;
     this.annotation = annotation;
   }
@@ -64,7 +64,7 @@ public class AnnotatedType implements Serializable, Comparable<AnnotatedType> {
     return new AnnotatedType(body, annotation);
   }
   
-  public AnnotatedType withAnnotation(java.util.Map<hydra.core.Name, hydra.core.Term> annotation) {
+  public AnnotatedType withAnnotation(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> annotation) {
     return new AnnotatedType(body, annotation);
   }
 }

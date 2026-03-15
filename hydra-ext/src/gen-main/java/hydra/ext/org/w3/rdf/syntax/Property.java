@@ -19,16 +19,16 @@ public class Property implements Serializable, Comparable<Property> {
   /**
    * State that any resource that has a given property is an instance of one or more classes
    */
-  public final java.util.Set<hydra.ext.org.w3.rdf.syntax.RdfsClass> domain;
+  public final hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.RdfsClass> domain;
   
   /**
    * States that the values of a property are instances of one or more classes
    */
-  public final java.util.Set<hydra.ext.org.w3.rdf.syntax.RdfsClass> range;
+  public final hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.RdfsClass> range;
   
-  public final java.util.Set<hydra.ext.org.w3.rdf.syntax.Property> subPropertyOf;
+  public final hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property> subPropertyOf;
   
-  public Property (java.util.Set<hydra.ext.org.w3.rdf.syntax.RdfsClass> domain, java.util.Set<hydra.ext.org.w3.rdf.syntax.RdfsClass> range, java.util.Set<hydra.ext.org.w3.rdf.syntax.Property> subPropertyOf) {
+  public Property (hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.RdfsClass> domain, hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.RdfsClass> range, hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property> subPropertyOf) {
     this.domain = domain;
     this.range = range;
     this.subPropertyOf = subPropertyOf;
@@ -75,15 +75,15 @@ public class Property implements Serializable, Comparable<Property> {
       other.subPropertyOf.hashCode());
   }
   
-  public Property withDomain(java.util.Set<hydra.ext.org.w3.rdf.syntax.RdfsClass> domain) {
+  public Property withDomain(hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.RdfsClass> domain) {
     return new Property(domain, range, subPropertyOf);
   }
   
-  public Property withRange(java.util.Set<hydra.ext.org.w3.rdf.syntax.RdfsClass> range) {
+  public Property withRange(hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.RdfsClass> range) {
     return new Property(domain, range, subPropertyOf);
   }
   
-  public Property withSubPropertyOf(java.util.Set<hydra.ext.org.w3.rdf.syntax.Property> subPropertyOf) {
+  public Property withSubPropertyOf(hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property> subPropertyOf) {
     return new Property(domain, range, subPropertyOf);
   }
 }

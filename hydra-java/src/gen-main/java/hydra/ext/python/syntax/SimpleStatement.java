@@ -214,9 +214,9 @@ public abstract class SimpleStatement implements Serializable, Comparable<Simple
   }
   
   public static final class StarExpressions extends hydra.ext.python.syntax.SimpleStatement implements Serializable {
-    public final java.util.List<hydra.ext.python.syntax.StarExpression> value;
+    public final hydra.util.ConsList<hydra.ext.python.syntax.StarExpression> value;
     
-    public StarExpressions (java.util.List<hydra.ext.python.syntax.StarExpression> value) {
+    public StarExpressions (hydra.util.ConsList<hydra.ext.python.syntax.StarExpression> value) {
       this.value = value;
     }
     
@@ -601,9 +601,9 @@ public abstract class SimpleStatement implements Serializable, Comparable<Simple
   }
   
   public static final class Global extends hydra.ext.python.syntax.SimpleStatement implements Serializable {
-    public final java.util.List<hydra.ext.python.syntax.Name> value;
+    public final hydra.util.ConsList<hydra.ext.python.syntax.Name> value;
     
-    public Global (java.util.List<hydra.ext.python.syntax.Name> value) {
+    public Global (hydra.util.ConsList<hydra.ext.python.syntax.Name> value) {
       this.value = value;
     }
     
@@ -643,9 +643,9 @@ public abstract class SimpleStatement implements Serializable, Comparable<Simple
   }
   
   public static final class Nonlocal extends hydra.ext.python.syntax.SimpleStatement implements Serializable {
-    public final java.util.List<hydra.ext.python.syntax.Name> value;
+    public final hydra.util.ConsList<hydra.ext.python.syntax.Name> value;
     
-    public Nonlocal (java.util.List<hydra.ext.python.syntax.Name> value) {
+    public Nonlocal (hydra.util.ConsList<hydra.ext.python.syntax.Name> value) {
       this.value = value;
     }
     

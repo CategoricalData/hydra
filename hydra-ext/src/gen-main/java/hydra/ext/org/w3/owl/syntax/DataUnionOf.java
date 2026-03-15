@@ -12,9 +12,9 @@ public class DataUnionOf implements Serializable, Comparable<DataUnionOf> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.DataRange> value;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DataRange> value;
   
-  public DataUnionOf (java.util.List<hydra.ext.org.w3.owl.syntax.DataRange> value) {
+  public DataUnionOf (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DataRange> value) {
     this.value = value;
   }
   

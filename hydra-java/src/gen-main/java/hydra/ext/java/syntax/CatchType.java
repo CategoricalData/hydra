@@ -13,9 +13,9 @@ public class CatchType implements Serializable, Comparable<CatchType> {
   
   public final hydra.ext.java.syntax.UnannClassType type;
   
-  public final java.util.List<hydra.ext.java.syntax.ClassType> types;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.ClassType> types;
   
-  public CatchType (hydra.ext.java.syntax.UnannClassType type, java.util.List<hydra.ext.java.syntax.ClassType> types) {
+  public CatchType (hydra.ext.java.syntax.UnannClassType type, hydra.util.ConsList<hydra.ext.java.syntax.ClassType> types) {
     this.type = type;
     this.types = types;
   }
@@ -55,7 +55,7 @@ public class CatchType implements Serializable, Comparable<CatchType> {
     return new CatchType(type, types);
   }
   
-  public CatchType withTypes(java.util.List<hydra.ext.java.syntax.ClassType> types) {
+  public CatchType withTypes(hydra.util.ConsList<hydra.ext.java.syntax.ClassType> types) {
     return new CatchType(type, types);
   }
 }

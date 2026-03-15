@@ -21,7 +21,7 @@ public interface Classes {
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
           hydra.core.Name tname = ((inj).value).typeName;
-          hydra.util.Lazy<java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.classes.TypeClass>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(java.util.List.of(
+          hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.classes.TypeClass>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.classes.TypeClass>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.classes.TypeClass>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.classes.TypeClass>>>(new hydra.core.Name("equality"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.classes.TypeClass>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<java.lang.Void, hydra.classes.TypeClass>) (t -> new hydra.classes.TypeClass.Equality()),
               hydra.extract.helpers.Helpers.decodeUnit(
@@ -33,7 +33,7 @@ public interface Classes {
                 cx,
                 input)))))))));
           return hydra.lib.maybes.Maybe.applyLazy(
-            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.classes.TypeClass>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.classes.TypeClass>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "no such field ",
               (fname).value,
               " in union type ",

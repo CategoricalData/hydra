@@ -31,14 +31,14 @@ public class TestGroup implements Serializable, Comparable<TestGroup> {
   /**
    * Nested test groups
    */
-  public final java.util.List<hydra.testing.TestGroup> subgroups;
+  public final hydra.util.ConsList<hydra.testing.TestGroup> subgroups;
   
   /**
    * The test cases in this group
    */
-  public final java.util.List<hydra.testing.TestCaseWithMetadata> cases;
+  public final hydra.util.ConsList<hydra.testing.TestCaseWithMetadata> cases;
   
-  public TestGroup (String name, hydra.util.Maybe<String> description, java.util.List<hydra.testing.TestGroup> subgroups, java.util.List<hydra.testing.TestCaseWithMetadata> cases) {
+  public TestGroup (String name, hydra.util.Maybe<String> description, hydra.util.ConsList<hydra.testing.TestGroup> subgroups, hydra.util.ConsList<hydra.testing.TestCaseWithMetadata> cases) {
     this.name = name;
     this.description = description;
     this.subgroups = subgroups;
@@ -100,11 +100,11 @@ public class TestGroup implements Serializable, Comparable<TestGroup> {
     return new TestGroup(name, description, subgroups, cases);
   }
   
-  public TestGroup withSubgroups(java.util.List<hydra.testing.TestGroup> subgroups) {
+  public TestGroup withSubgroups(hydra.util.ConsList<hydra.testing.TestGroup> subgroups) {
     return new TestGroup(name, description, subgroups, cases);
   }
   
-  public TestGroup withCases(java.util.List<hydra.testing.TestCaseWithMetadata> cases) {
+  public TestGroup withCases(hydra.util.ConsList<hydra.testing.TestCaseWithMetadata> cases) {
     return new TestGroup(name, description, subgroups, cases);
   }
 }

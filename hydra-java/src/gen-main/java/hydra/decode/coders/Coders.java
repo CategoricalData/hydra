@@ -21,7 +21,7 @@ public interface Coders {
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
           hydra.core.Name tname = ((inj).value).typeName;
-          hydra.util.Lazy<java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.coders.CoderDirection>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(java.util.List.of(
+          hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.coders.CoderDirection>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.coders.CoderDirection>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.coders.CoderDirection>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.coders.CoderDirection>>>(new hydra.core.Name("encode"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.coders.CoderDirection>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<java.lang.Void, hydra.coders.CoderDirection>) (t -> new hydra.coders.CoderDirection.Encode()),
               hydra.extract.helpers.Helpers.decodeUnit(
@@ -33,7 +33,7 @@ public interface Coders {
                 cx,
                 input)))))))));
           return hydra.lib.maybes.Maybe.applyLazy(
-            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.coders.CoderDirection>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.coders.CoderDirection>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "no such field ",
               (fname).value,
               " in union type ",
@@ -110,7 +110,7 @@ public interface Coders {
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
           hydra.core.Name tname = ((inj).value).typeName;
-          hydra.util.Lazy<java.util.Map<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.coders.TraversalOrder>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(java.util.List.of(
+          hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.coders.TraversalOrder>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.coders.TraversalOrder>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.coders.TraversalOrder>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.coders.TraversalOrder>>>(new hydra.core.Name("pre"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.coders.TraversalOrder>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<java.lang.Void, hydra.coders.TraversalOrder>) (t -> new hydra.coders.TraversalOrder.Pre()),
               hydra.extract.helpers.Helpers.decodeUnit(
@@ -122,7 +122,7 @@ public interface Coders {
                 cx,
                 input)))))))));
           return hydra.lib.maybes.Maybe.applyLazy(
-            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.coders.TraversalOrder>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(java.util.List.of(
+            () -> hydra.util.Either.<hydra.error.DecodingError, hydra.coders.TraversalOrder>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "no such field ",
               (fname).value,
               " in union type ",

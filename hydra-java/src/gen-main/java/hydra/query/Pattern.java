@@ -154,9 +154,9 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
    * The conjunction ('and') of several other patterns
    */
   public static final class Conjunction extends hydra.query.Pattern implements Serializable {
-    public final java.util.List<hydra.query.Pattern> value;
+    public final hydra.util.ConsList<hydra.query.Pattern> value;
     
-    public Conjunction (java.util.List<hydra.query.Pattern> value) {
+    public Conjunction (hydra.util.ConsList<hydra.query.Pattern> value) {
       this.value = value;
     }
     
@@ -199,9 +199,9 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
    * The disjunction (inclusive 'or') of several other patterns
    */
   public static final class Disjunction extends hydra.query.Pattern implements Serializable {
-    public final java.util.List<hydra.query.Pattern> value;
+    public final hydra.util.ConsList<hydra.query.Pattern> value;
     
-    public Disjunction (java.util.List<hydra.query.Pattern> value) {
+    public Disjunction (hydra.util.ConsList<hydra.query.Pattern> value) {
       this.value = value;
     }
     

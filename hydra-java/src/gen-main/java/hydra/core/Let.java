@@ -17,14 +17,14 @@ public class Let implements Serializable, Comparable<Let> {
   /**
    * The list of variable bindings
    */
-  public final java.util.List<hydra.core.Binding> bindings;
+  public final hydra.util.ConsList<hydra.core.Binding> bindings;
   
   /**
    * The body term in which the variables are bound
    */
   public final hydra.core.Term body;
   
-  public Let (java.util.List<hydra.core.Binding> bindings, hydra.core.Term body) {
+  public Let (hydra.util.ConsList<hydra.core.Binding> bindings, hydra.core.Term body) {
     this.bindings = bindings;
     this.body = body;
   }
@@ -60,7 +60,7 @@ public class Let implements Serializable, Comparable<Let> {
     return ((Comparable) body).compareTo(other.body);
   }
   
-  public Let withBindings(java.util.List<hydra.core.Binding> bindings) {
+  public Let withBindings(hydra.util.ConsList<hydra.core.Binding> bindings) {
     return new Let(bindings, body);
   }
   

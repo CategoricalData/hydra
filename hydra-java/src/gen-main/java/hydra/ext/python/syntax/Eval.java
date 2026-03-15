@@ -9,9 +9,9 @@ public class Eval implements Serializable, Comparable<Eval> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.python.syntax.Expression> value;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.Expression> value;
   
-  public Eval (java.util.List<hydra.ext.python.syntax.Expression> value) {
+  public Eval (hydra.util.ConsList<hydra.ext.python.syntax.Expression> value) {
     this.value = value;
   }
   

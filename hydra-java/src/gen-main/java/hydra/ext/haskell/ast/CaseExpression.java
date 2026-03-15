@@ -22,9 +22,9 @@ public class CaseExpression implements Serializable, Comparable<CaseExpression> 
   /**
    * The pattern-matching alternatives
    */
-  public final java.util.List<hydra.ext.haskell.ast.Alternative> alternatives;
+  public final hydra.util.ConsList<hydra.ext.haskell.ast.Alternative> alternatives;
   
-  public CaseExpression (hydra.ext.haskell.ast.Expression case_, java.util.List<hydra.ext.haskell.ast.Alternative> alternatives) {
+  public CaseExpression (hydra.ext.haskell.ast.Expression case_, hydra.util.ConsList<hydra.ext.haskell.ast.Alternative> alternatives) {
     this.case_ = case_;
     this.alternatives = alternatives;
   }
@@ -64,7 +64,7 @@ public class CaseExpression implements Serializable, Comparable<CaseExpression> 
     return new CaseExpression(case_, alternatives);
   }
   
-  public CaseExpression withAlternatives(java.util.List<hydra.ext.haskell.ast.Alternative> alternatives) {
+  public CaseExpression withAlternatives(hydra.util.ConsList<hydra.ext.haskell.ast.Alternative> alternatives) {
     return new CaseExpression(case_, alternatives);
   }
 }

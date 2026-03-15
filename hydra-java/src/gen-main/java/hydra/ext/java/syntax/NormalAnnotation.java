@@ -13,9 +13,9 @@ public class NormalAnnotation implements Serializable, Comparable<NormalAnnotati
   
   public final hydra.ext.java.syntax.TypeName typeName;
   
-  public final java.util.List<hydra.ext.java.syntax.ElementValuePair> pairs;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.ElementValuePair> pairs;
   
-  public NormalAnnotation (hydra.ext.java.syntax.TypeName typeName, java.util.List<hydra.ext.java.syntax.ElementValuePair> pairs) {
+  public NormalAnnotation (hydra.ext.java.syntax.TypeName typeName, hydra.util.ConsList<hydra.ext.java.syntax.ElementValuePair> pairs) {
     this.typeName = typeName;
     this.pairs = pairs;
   }
@@ -55,7 +55,7 @@ public class NormalAnnotation implements Serializable, Comparable<NormalAnnotati
     return new NormalAnnotation(typeName, pairs);
   }
   
-  public NormalAnnotation withPairs(java.util.List<hydra.ext.java.syntax.ElementValuePair> pairs) {
+  public NormalAnnotation withPairs(hydra.util.ConsList<hydra.ext.java.syntax.ElementValuePair> pairs) {
     return new NormalAnnotation(typeName, pairs);
   }
 }

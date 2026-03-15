@@ -13,13 +13,13 @@ public class Annotation implements Serializable, Comparable<Annotation> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
   public final hydra.ext.org.w3.owl.syntax.AnnotationProperty property;
   
   public final hydra.ext.org.w3.owl.syntax.AnnotationValue value;
   
-  public Annotation (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.AnnotationProperty property, hydra.ext.org.w3.owl.syntax.AnnotationValue value) {
+  public Annotation (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.AnnotationProperty property, hydra.ext.org.w3.owl.syntax.AnnotationValue value) {
     this.annotations = annotations;
     this.property = property;
     this.value = value;
@@ -62,7 +62,7 @@ public class Annotation implements Serializable, Comparable<Annotation> {
     return ((Comparable) value).compareTo(other.value);
   }
   
-  public Annotation withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public Annotation withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new Annotation(annotations, property, value);
   }
   

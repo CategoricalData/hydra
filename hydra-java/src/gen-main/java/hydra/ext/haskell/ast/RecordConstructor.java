@@ -22,9 +22,9 @@ public class RecordConstructor implements Serializable, Comparable<RecordConstru
   /**
    * The named fields of the record
    */
-  public final java.util.List<hydra.ext.haskell.ast.FieldWithComments> fields;
+  public final hydra.util.ConsList<hydra.ext.haskell.ast.FieldWithComments> fields;
   
-  public RecordConstructor (hydra.ext.haskell.ast.Name name, java.util.List<hydra.ext.haskell.ast.FieldWithComments> fields) {
+  public RecordConstructor (hydra.ext.haskell.ast.Name name, hydra.util.ConsList<hydra.ext.haskell.ast.FieldWithComments> fields) {
     this.name = name;
     this.fields = fields;
   }
@@ -64,7 +64,7 @@ public class RecordConstructor implements Serializable, Comparable<RecordConstru
     return new RecordConstructor(name, fields);
   }
   
-  public RecordConstructor withFields(java.util.List<hydra.ext.haskell.ast.FieldWithComments> fields) {
+  public RecordConstructor withFields(hydra.util.ConsList<hydra.ext.haskell.ast.FieldWithComments> fields) {
     return new RecordConstructor(name, fields);
   }
 }

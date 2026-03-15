@@ -17,14 +17,14 @@ public class GraphSchema<T> implements Serializable, Comparable<GraphSchema<T>> 
   /**
    * A unique vertex type for each vertex label which may occur in a graph
    */
-  public final java.util.Map<hydra.pg.model.VertexLabel, hydra.pg.model.VertexType<T>> vertices;
+  public final hydra.util.PersistentMap<hydra.pg.model.VertexLabel, hydra.pg.model.VertexType<T>> vertices;
   
   /**
    * A unique edge type for each edge label which may occur in a graph
    */
-  public final java.util.Map<hydra.pg.model.EdgeLabel, hydra.pg.model.EdgeType<T>> edges;
+  public final hydra.util.PersistentMap<hydra.pg.model.EdgeLabel, hydra.pg.model.EdgeType<T>> edges;
   
-  public GraphSchema (java.util.Map<hydra.pg.model.VertexLabel, hydra.pg.model.VertexType<T>> vertices, java.util.Map<hydra.pg.model.EdgeLabel, hydra.pg.model.EdgeType<T>> edges) {
+  public GraphSchema (hydra.util.PersistentMap<hydra.pg.model.VertexLabel, hydra.pg.model.VertexType<T>> vertices, hydra.util.PersistentMap<hydra.pg.model.EdgeLabel, hydra.pg.model.EdgeType<T>> edges) {
     this.vertices = vertices;
     this.edges = edges;
   }
@@ -62,11 +62,11 @@ public class GraphSchema<T> implements Serializable, Comparable<GraphSchema<T>> 
       other.edges.hashCode());
   }
   
-  public GraphSchema withVertices(java.util.Map<hydra.pg.model.VertexLabel, hydra.pg.model.VertexType<T>> vertices) {
+  public GraphSchema withVertices(hydra.util.PersistentMap<hydra.pg.model.VertexLabel, hydra.pg.model.VertexType<T>> vertices) {
     return new GraphSchema(vertices, edges);
   }
   
-  public GraphSchema withEdges(java.util.Map<hydra.pg.model.EdgeLabel, hydra.pg.model.EdgeType<T>> edges) {
+  public GraphSchema withEdges(hydra.util.PersistentMap<hydra.pg.model.EdgeLabel, hydra.pg.model.EdgeType<T>> edges) {
     return new GraphSchema(vertices, edges);
   }
 }

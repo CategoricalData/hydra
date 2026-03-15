@@ -9,9 +9,9 @@ public class IriRef implements Serializable, Comparable<IriRef> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.io.shex.syntax.IriRef_Elmt> value;
+  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.IriRef_Elmt> value;
   
-  public IriRef (java.util.List<hydra.ext.io.shex.syntax.IriRef_Elmt> value) {
+  public IriRef (hydra.util.ConsList<hydra.ext.io.shex.syntax.IriRef_Elmt> value) {
     this.value = value;
   }
   

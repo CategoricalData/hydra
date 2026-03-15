@@ -8,13 +8,13 @@ package hydra.json.parser;
 public interface Parser {
   static hydra.parsing.Parser<java.lang.Void> whitespace() {
     return hydra.parsers.Parsers.map(
-      (java.util.function.Function<java.util.List<Integer>, java.lang.Void>) (ignored -> null),
+      (java.util.function.Function<hydra.util.ConsList<Integer>, java.lang.Void>) (ignored -> null),
       hydra.parsers.Parsers.many(hydra.parsers.Parsers.satisfy((java.util.function.Function<Integer, Boolean>) (c -> hydra.lib.lists.Foldl.apply(
         (java.util.function.Function<Boolean, java.util.function.Function<Boolean, Boolean>>) (p0 -> p1 -> hydra.lib.logic.Or.apply(
           p0,
           p1)),
         false,
-        java.util.List.of(
+        hydra.util.ConsList.of(
           hydra.lib.equality.Equal.apply(
             c,
             32),
@@ -148,7 +148,7 @@ public interface Parser {
   }
   
   static hydra.parsing.Parser<Integer> jsonEscapeChar() {
-    return hydra.parsers.Parsers.choice(java.util.List.of(
+    return hydra.parsers.Parsers.choice(hydra.util.ConsList.of(
       hydra.parsers.Parsers.map(
         (java.util.function.Function<Integer, Integer>) (ignored -> 34),
         hydra.parsers.Parsers.char_(34)),
@@ -194,14 +194,14 @@ public interface Parser {
       hydra.parsers.Parsers.char_(34),
       (java.util.function.Function<Integer, hydra.parsing.Parser<hydra.json.model.Value>>) (ignored -> hydra.parsers.Parsers.bind(
         hydra.parsers.Parsers.many(hydra.json.parser.Parser.jsonStringChar()),
-        (java.util.function.Function<java.util.List<Integer>, hydra.parsing.Parser<hydra.json.model.Value>>) (chars -> hydra.parsers.Parsers.bind(
+        (java.util.function.Function<hydra.util.ConsList<Integer>, hydra.parsing.Parser<hydra.json.model.Value>>) (chars -> hydra.parsers.Parsers.bind(
           hydra.parsers.Parsers.char_(34),
           (java.util.function.Function<Integer, hydra.parsing.Parser<hydra.json.model.Value>>) (_2 -> hydra.parsers.Parsers.pure(new hydra.json.model.Value.String_(hydra.lib.strings.FromList.apply(chars))))))))));
   }
   
   static hydra.parsing.Parser<hydra.json.model.Value> jsonArray() {
     return hydra.parsers.Parsers.map(
-      (java.util.function.Function<java.util.List<hydra.json.model.Value>, hydra.json.model.Value>) (x -> new hydra.json.model.Value.Array(x)),
+      (java.util.function.Function<hydra.util.ConsList<hydra.json.model.Value>, hydra.json.model.Value>) (x -> new hydra.json.model.Value.Array(x)),
       hydra.parsers.Parsers.between(
         hydra.json.parser.Parser.token(hydra.parsers.Parsers.char_(91)),
         hydra.json.parser.Parser.token(hydra.parsers.Parsers.char_(93)),
@@ -216,7 +216,7 @@ public interface Parser {
         hydra.parsers.Parsers.char_(34),
         (java.util.function.Function<Integer, hydra.parsing.Parser<String>>) (ignored -> hydra.parsers.Parsers.bind(
           hydra.parsers.Parsers.many(hydra.json.parser.Parser.jsonStringChar()),
-          (java.util.function.Function<java.util.List<Integer>, hydra.parsing.Parser<String>>) (chars -> hydra.parsers.Parsers.bind(
+          (java.util.function.Function<hydra.util.ConsList<Integer>, hydra.parsing.Parser<String>>) (chars -> hydra.parsers.Parsers.bind(
             hydra.parsers.Parsers.char_(34),
             (java.util.function.Function<Integer, hydra.parsing.Parser<String>>) (_2 -> hydra.parsers.Parsers.pure(hydra.lib.strings.FromList.apply(chars))))))))),
       (java.util.function.Function<String, hydra.parsing.Parser<hydra.util.Pair<String, hydra.json.model.Value>>>) (key -> hydra.parsers.Parsers.bind(
@@ -228,7 +228,7 @@ public interface Parser {
   
   static hydra.parsing.Parser<hydra.json.model.Value> jsonObject() {
     return hydra.parsers.Parsers.map(
-      (java.util.function.Function<java.util.List<hydra.util.Pair<String, hydra.json.model.Value>>, hydra.json.model.Value>) (arg_ -> new hydra.json.model.Value.Object_(hydra.lib.maps.FromList.apply(arg_))),
+      (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<String, hydra.json.model.Value>>, hydra.json.model.Value>) (arg_ -> new hydra.json.model.Value.Object_(hydra.lib.maps.FromList.apply(arg_))),
       hydra.parsers.Parsers.between(
         hydra.json.parser.Parser.token(hydra.parsers.Parsers.char_(123)),
         hydra.json.parser.Parser.token(hydra.parsers.Parsers.char_(125)),
@@ -238,7 +238,7 @@ public interface Parser {
   }
   
   static hydra.parsing.Parser<hydra.json.model.Value> jsonValue() {
-    return hydra.parsers.Parsers.choice(java.util.List.of(
+    return hydra.parsers.Parsers.choice(hydra.util.ConsList.of(
       hydra.json.parser.Parser.jsonNull(),
       hydra.json.parser.Parser.jsonBool(),
       hydra.json.parser.Parser.jsonNumber(),

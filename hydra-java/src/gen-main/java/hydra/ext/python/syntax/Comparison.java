@@ -13,9 +13,9 @@ public class Comparison implements Serializable, Comparable<Comparison> {
   
   public final hydra.ext.python.syntax.BitwiseOr lhs;
   
-  public final java.util.List<hydra.ext.python.syntax.CompareOpBitwiseOrPair> rhs;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.CompareOpBitwiseOrPair> rhs;
   
-  public Comparison (hydra.ext.python.syntax.BitwiseOr lhs, java.util.List<hydra.ext.python.syntax.CompareOpBitwiseOrPair> rhs) {
+  public Comparison (hydra.ext.python.syntax.BitwiseOr lhs, hydra.util.ConsList<hydra.ext.python.syntax.CompareOpBitwiseOrPair> rhs) {
     this.lhs = lhs;
     this.rhs = rhs;
   }
@@ -55,7 +55,7 @@ public class Comparison implements Serializable, Comparable<Comparison> {
     return new Comparison(lhs, rhs);
   }
   
-  public Comparison withRhs(java.util.List<hydra.ext.python.syntax.CompareOpBitwiseOrPair> rhs) {
+  public Comparison withRhs(hydra.util.ConsList<hydra.ext.python.syntax.CompareOpBitwiseOrPair> rhs) {
     return new Comparison(lhs, rhs);
   }
 }

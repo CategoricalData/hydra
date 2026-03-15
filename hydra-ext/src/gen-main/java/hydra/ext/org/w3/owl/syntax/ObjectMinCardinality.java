@@ -20,9 +20,9 @@ public class ObjectMinCardinality implements Serializable, Comparable<ObjectMinC
   
   public final hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property;
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> class_;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ClassExpression> class_;
   
-  public ObjectMinCardinality (java.math.BigInteger bound, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property, java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> class_) {
+  public ObjectMinCardinality (java.math.BigInteger bound, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property, hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ClassExpression> class_) {
     this.bound = bound;
     this.property = property;
     this.class_ = class_;
@@ -71,7 +71,7 @@ public class ObjectMinCardinality implements Serializable, Comparable<ObjectMinC
     return new ObjectMinCardinality(bound, property, class_);
   }
   
-  public ObjectMinCardinality withClass(java.util.List<hydra.ext.org.w3.owl.syntax.ClassExpression> class_) {
+  public ObjectMinCardinality withClass(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.ClassExpression> class_) {
     return new ObjectMinCardinality(bound, property, class_);
   }
 }

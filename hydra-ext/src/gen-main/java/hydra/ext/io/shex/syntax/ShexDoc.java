@@ -13,13 +13,13 @@ public class ShexDoc implements Serializable, Comparable<ShexDoc> {
   
   public static final hydra.core.Name PREFIX_DECL = new hydra.core.Name("PrefixDecl");
   
-  public final java.util.List<hydra.ext.io.shex.syntax.Directive> listOfDirective;
+  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.Directive> listOfDirective;
   
   public final hydra.util.Maybe<hydra.ext.io.shex.syntax.ShexDoc_Sequence_Option> Sequence;
   
   public final hydra.ext.io.shex.syntax.PrefixDecl PrefixDecl;
   
-  public ShexDoc (java.util.List<hydra.ext.io.shex.syntax.Directive> listOfDirective, hydra.util.Maybe<hydra.ext.io.shex.syntax.ShexDoc_Sequence_Option> Sequence, hydra.ext.io.shex.syntax.PrefixDecl PrefixDecl) {
+  public ShexDoc (hydra.util.ConsList<hydra.ext.io.shex.syntax.Directive> listOfDirective, hydra.util.Maybe<hydra.ext.io.shex.syntax.ShexDoc_Sequence_Option> Sequence, hydra.ext.io.shex.syntax.PrefixDecl PrefixDecl) {
     this.listOfDirective = listOfDirective;
     this.Sequence = Sequence;
     this.PrefixDecl = PrefixDecl;
@@ -64,7 +64,7 @@ public class ShexDoc implements Serializable, Comparable<ShexDoc> {
     return ((Comparable) PrefixDecl).compareTo(other.PrefixDecl);
   }
   
-  public ShexDoc withListOfDirective(java.util.List<hydra.ext.io.shex.syntax.Directive> listOfDirective) {
+  public ShexDoc withListOfDirective(hydra.util.ConsList<hydra.ext.io.shex.syntax.Directive> listOfDirective) {
     return new ShexDoc(listOfDirective, Sequence, PrefixDecl);
   }
   

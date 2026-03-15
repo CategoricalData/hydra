@@ -19,11 +19,11 @@ public class EdgeProjectionPattern implements Serializable, Comparable<EdgeProje
   
   public final hydra.util.Maybe<hydra.pg.model.EdgeLabel> label;
   
-  public final java.util.List<hydra.pg.query.PropertyPattern> properties;
+  public final hydra.util.ConsList<hydra.pg.query.PropertyPattern> properties;
   
   public final hydra.util.Maybe<hydra.pg.query.VertexPattern> vertex;
   
-  public EdgeProjectionPattern (hydra.pg.model.Direction direction, hydra.util.Maybe<hydra.pg.model.EdgeLabel> label, java.util.List<hydra.pg.query.PropertyPattern> properties, hydra.util.Maybe<hydra.pg.query.VertexPattern> vertex) {
+  public EdgeProjectionPattern (hydra.pg.model.Direction direction, hydra.util.Maybe<hydra.pg.model.EdgeLabel> label, hydra.util.ConsList<hydra.pg.query.PropertyPattern> properties, hydra.util.Maybe<hydra.pg.query.VertexPattern> vertex) {
     this.direction = direction;
     this.label = label;
     this.properties = properties;
@@ -85,7 +85,7 @@ public class EdgeProjectionPattern implements Serializable, Comparable<EdgeProje
     return new EdgeProjectionPattern(direction, label, properties, vertex);
   }
   
-  public EdgeProjectionPattern withProperties(java.util.List<hydra.pg.query.PropertyPattern> properties) {
+  public EdgeProjectionPattern withProperties(hydra.util.ConsList<hydra.pg.query.PropertyPattern> properties) {
     return new EdgeProjectionPattern(direction, label, properties, vertex);
   }
   

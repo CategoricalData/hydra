@@ -29,9 +29,9 @@ public class Vertex<V> implements Serializable, Comparable<Vertex<V>> {
   /**
    * A key/value map of vertex properties
    */
-  public final java.util.Map<hydra.pg.model.PropertyKey, V> properties;
+  public final hydra.util.PersistentMap<hydra.pg.model.PropertyKey, V> properties;
   
-  public Vertex (hydra.pg.model.VertexLabel label, V id, java.util.Map<hydra.pg.model.PropertyKey, V> properties) {
+  public Vertex (hydra.pg.model.VertexLabel label, V id, hydra.util.PersistentMap<hydra.pg.model.PropertyKey, V> properties) {
     this.label = label;
     this.id = id;
     this.properties = properties;
@@ -82,7 +82,7 @@ public class Vertex<V> implements Serializable, Comparable<Vertex<V>> {
     return new Vertex(label, id, properties);
   }
   
-  public Vertex withProperties(java.util.Map<hydra.pg.model.PropertyKey, V> properties) {
+  public Vertex withProperties(hydra.util.PersistentMap<hydra.pg.model.PropertyKey, V> properties) {
     return new Vertex(label, id, properties);
   }
 }

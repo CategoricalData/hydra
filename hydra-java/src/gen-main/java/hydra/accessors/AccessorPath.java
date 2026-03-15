@@ -12,9 +12,9 @@ public class AccessorPath implements Serializable, Comparable<AccessorPath> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.accessors.TermAccessor> value;
+  public final hydra.util.ConsList<hydra.accessors.TermAccessor> value;
   
-  public AccessorPath (java.util.List<hydra.accessors.TermAccessor> value) {
+  public AccessorPath (hydra.util.ConsList<hydra.accessors.TermAccessor> value) {
     this.value = value;
   }
   

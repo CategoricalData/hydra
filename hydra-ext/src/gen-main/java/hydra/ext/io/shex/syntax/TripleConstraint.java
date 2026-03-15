@@ -27,11 +27,11 @@ public class TripleConstraint implements Serializable, Comparable<TripleConstrai
   
   public final hydra.util.Maybe<hydra.ext.io.shex.syntax.Cardinality> Cardinality;
   
-  public final java.util.List<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation;
+  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation;
   
   public final hydra.ext.io.shex.syntax.SemanticActions SemanticActions;
   
-  public TripleConstraint (hydra.util.Maybe<hydra.ext.io.shex.syntax.SenseFlags> SenseFlags, hydra.ext.io.shex.syntax.Predicate Predicate, hydra.ext.io.shex.syntax.InlineShapeExpression InlineShapeExpression, hydra.util.Maybe<hydra.ext.io.shex.syntax.Cardinality> Cardinality, java.util.List<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation, hydra.ext.io.shex.syntax.SemanticActions SemanticActions) {
+  public TripleConstraint (hydra.util.Maybe<hydra.ext.io.shex.syntax.SenseFlags> SenseFlags, hydra.ext.io.shex.syntax.Predicate Predicate, hydra.ext.io.shex.syntax.InlineShapeExpression InlineShapeExpression, hydra.util.Maybe<hydra.ext.io.shex.syntax.Cardinality> Cardinality, hydra.util.ConsList<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation, hydra.ext.io.shex.syntax.SemanticActions SemanticActions) {
     this.SenseFlags = SenseFlags;
     this.Predicate = Predicate;
     this.InlineShapeExpression = InlineShapeExpression;
@@ -115,7 +115,7 @@ public class TripleConstraint implements Serializable, Comparable<TripleConstrai
     return new TripleConstraint(SenseFlags, Predicate, InlineShapeExpression, Cardinality, listOfAnnotation, SemanticActions);
   }
   
-  public TripleConstraint withListOfAnnotation(java.util.List<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation) {
+  public TripleConstraint withListOfAnnotation(hydra.util.ConsList<hydra.ext.io.shex.syntax.Annotation> listOfAnnotation) {
     return new TripleConstraint(SenseFlags, Predicate, InlineShapeExpression, Cardinality, listOfAnnotation, SemanticActions);
   }
   

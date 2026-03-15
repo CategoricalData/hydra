@@ -22,9 +22,9 @@ public class FreeVariablesTestCase implements Serializable, Comparable<FreeVaria
   /**
    * The expected set of free variable names
    */
-  public final java.util.Set<hydra.core.Name> output;
+  public final hydra.util.PersistentSet<hydra.core.Name> output;
   
-  public FreeVariablesTestCase (hydra.core.Term input, java.util.Set<hydra.core.Name> output) {
+  public FreeVariablesTestCase (hydra.core.Term input, hydra.util.PersistentSet<hydra.core.Name> output) {
     this.input = input;
     this.output = output;
   }
@@ -64,7 +64,7 @@ public class FreeVariablesTestCase implements Serializable, Comparable<FreeVaria
     return new FreeVariablesTestCase(input, output);
   }
   
-  public FreeVariablesTestCase withOutput(java.util.Set<hydra.core.Name> output) {
+  public FreeVariablesTestCase withOutput(hydra.util.PersistentSet<hydra.core.Name> output) {
     return new FreeVariablesTestCase(input, output);
   }
 }

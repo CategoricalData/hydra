@@ -11,11 +11,11 @@ public class PackageDeclaration implements Serializable, Comparable<PackageDecla
   
   public static final hydra.core.Name IDENTIFIERS = new hydra.core.Name("identifiers");
   
-  public final java.util.List<hydra.ext.java.syntax.PackageModifier> modifiers;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.PackageModifier> modifiers;
   
-  public final java.util.List<hydra.ext.java.syntax.Identifier> identifiers;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.Identifier> identifiers;
   
-  public PackageDeclaration (java.util.List<hydra.ext.java.syntax.PackageModifier> modifiers, java.util.List<hydra.ext.java.syntax.Identifier> identifiers) {
+  public PackageDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.PackageModifier> modifiers, hydra.util.ConsList<hydra.ext.java.syntax.Identifier> identifiers) {
     this.modifiers = modifiers;
     this.identifiers = identifiers;
   }
@@ -53,11 +53,11 @@ public class PackageDeclaration implements Serializable, Comparable<PackageDecla
       other.identifiers.hashCode());
   }
   
-  public PackageDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.PackageModifier> modifiers) {
+  public PackageDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.PackageModifier> modifiers) {
     return new PackageDeclaration(modifiers, identifiers);
   }
   
-  public PackageDeclaration withIdentifiers(java.util.List<hydra.ext.java.syntax.Identifier> identifiers) {
+  public PackageDeclaration withIdentifiers(hydra.util.ConsList<hydra.ext.java.syntax.Identifier> identifiers) {
     return new PackageDeclaration(modifiers, identifiers);
   }
 }

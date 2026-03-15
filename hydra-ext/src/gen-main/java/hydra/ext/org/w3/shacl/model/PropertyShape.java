@@ -29,7 +29,7 @@ public class PropertyShape implements Serializable, Comparable<PropertyShape> {
   /**
    * Any property shape -specific constraint parameters
    */
-  public final java.util.Set<hydra.ext.org.w3.shacl.model.PropertyShapeConstraint> constraints;
+  public final hydra.util.PersistentSet<hydra.ext.org.w3.shacl.model.PropertyShapeConstraint> constraints;
   
   /**
    * See https://www.w3.org/TR/shacl/#defaultValue
@@ -53,7 +53,7 @@ public class PropertyShape implements Serializable, Comparable<PropertyShape> {
   
   public final hydra.ext.org.w3.rdf.syntax.Iri path;
   
-  public PropertyShape (hydra.ext.org.w3.shacl.model.CommonProperties common, java.util.Set<hydra.ext.org.w3.shacl.model.PropertyShapeConstraint> constraints, hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.Node> defaultValue, hydra.ext.org.w3.rdf.syntax.LangStrings description, hydra.ext.org.w3.rdf.syntax.LangStrings name, hydra.util.Maybe<java.math.BigInteger> order, hydra.ext.org.w3.rdf.syntax.Iri path) {
+  public PropertyShape (hydra.ext.org.w3.shacl.model.CommonProperties common, hydra.util.PersistentSet<hydra.ext.org.w3.shacl.model.PropertyShapeConstraint> constraints, hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.Node> defaultValue, hydra.ext.org.w3.rdf.syntax.LangStrings description, hydra.ext.org.w3.rdf.syntax.LangStrings name, hydra.util.Maybe<java.math.BigInteger> order, hydra.ext.org.w3.rdf.syntax.Iri path) {
     this.common = common;
     this.constraints = constraints;
     this.defaultValue = defaultValue;
@@ -132,7 +132,7 @@ public class PropertyShape implements Serializable, Comparable<PropertyShape> {
     return new PropertyShape(common, constraints, defaultValue, description, name, order, path);
   }
   
-  public PropertyShape withConstraints(java.util.Set<hydra.ext.org.w3.shacl.model.PropertyShapeConstraint> constraints) {
+  public PropertyShape withConstraints(hydra.util.PersistentSet<hydra.ext.org.w3.shacl.model.PropertyShapeConstraint> constraints) {
     return new PropertyShape(common, constraints, defaultValue, description, name, order, path);
   }
   

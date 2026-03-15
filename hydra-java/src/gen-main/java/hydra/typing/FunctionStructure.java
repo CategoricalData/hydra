@@ -27,17 +27,17 @@ public class FunctionStructure<Env> implements Serializable, Comparable<Function
   /**
    * Type parameters (from type lambdas)
    */
-  public final java.util.List<hydra.core.Name> typeParams;
+  public final hydra.util.ConsList<hydra.core.Name> typeParams;
   
   /**
    * Value parameters (from lambdas)
    */
-  public final java.util.List<hydra.core.Name> params;
+  public final hydra.util.ConsList<hydra.core.Name> params;
   
   /**
    * Let bindings accumulated from the term
    */
-  public final java.util.List<hydra.core.Binding> bindings;
+  public final hydra.util.ConsList<hydra.core.Binding> bindings;
   
   /**
    * The body term after removing all lambdas, lets, etc.
@@ -47,7 +47,7 @@ public class FunctionStructure<Env> implements Serializable, Comparable<Function
   /**
    * Domain types of the value parameters
    */
-  public final java.util.List<hydra.core.Type> domains;
+  public final hydra.util.ConsList<hydra.core.Type> domains;
   
   /**
    * The return type of the function (if type inference succeeded)
@@ -59,7 +59,7 @@ public class FunctionStructure<Env> implements Serializable, Comparable<Function
    */
   public final Env environment;
   
-  public FunctionStructure (java.util.List<hydra.core.Name> typeParams, java.util.List<hydra.core.Name> params, java.util.List<hydra.core.Binding> bindings, hydra.core.Term body, java.util.List<hydra.core.Type> domains, hydra.util.Maybe<hydra.core.Type> codomain, Env environment) {
+  public FunctionStructure (hydra.util.ConsList<hydra.core.Name> typeParams, hydra.util.ConsList<hydra.core.Name> params, hydra.util.ConsList<hydra.core.Binding> bindings, hydra.core.Term body, hydra.util.ConsList<hydra.core.Type> domains, hydra.util.Maybe<hydra.core.Type> codomain, Env environment) {
     this.typeParams = typeParams;
     this.params = params;
     this.bindings = bindings;
@@ -138,15 +138,15 @@ public class FunctionStructure<Env> implements Serializable, Comparable<Function
     return ((Comparable) environment).compareTo(other.environment);
   }
   
-  public FunctionStructure withTypeParams(java.util.List<hydra.core.Name> typeParams) {
+  public FunctionStructure withTypeParams(hydra.util.ConsList<hydra.core.Name> typeParams) {
     return new FunctionStructure(typeParams, params, bindings, body, domains, codomain, environment);
   }
   
-  public FunctionStructure withParams(java.util.List<hydra.core.Name> params) {
+  public FunctionStructure withParams(hydra.util.ConsList<hydra.core.Name> params) {
     return new FunctionStructure(typeParams, params, bindings, body, domains, codomain, environment);
   }
   
-  public FunctionStructure withBindings(java.util.List<hydra.core.Binding> bindings) {
+  public FunctionStructure withBindings(hydra.util.ConsList<hydra.core.Binding> bindings) {
     return new FunctionStructure(typeParams, params, bindings, body, domains, codomain, environment);
   }
   
@@ -154,7 +154,7 @@ public class FunctionStructure<Env> implements Serializable, Comparable<Function
     return new FunctionStructure(typeParams, params, bindings, body, domains, codomain, environment);
   }
   
-  public FunctionStructure withDomains(java.util.List<hydra.core.Type> domains) {
+  public FunctionStructure withDomains(hydra.util.ConsList<hydra.core.Type> domains) {
     return new FunctionStructure(typeParams, params, bindings, body, domains, codomain, environment);
   }
   

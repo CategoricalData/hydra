@@ -145,9 +145,9 @@ public interface Error_ {
   }
   
   static String notAForallTypeError(hydra.error.NotAForallTypeError e) {
-    java.util.List<hydra.core.Type> args = (e).typeArguments;
+    hydra.util.ConsList<hydra.core.Type> args = (e).typeArguments;
     hydra.core.Type typ = (e).type;
-    return hydra.lib.strings.Cat.apply(java.util.List.of(
+    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
       "not a forall type: ",
       hydra.show.core.Core.type(typ),
       ". Trying to apply ",
@@ -171,10 +171,10 @@ public interface Error_ {
   
   static String typeArityMismatchError(hydra.error.TypeArityMismatchError e) {
     Integer actual = (e).actualArity;
-    java.util.List<hydra.core.Type> args = (e).typeArguments;
+    hydra.util.ConsList<hydra.core.Type> args = (e).typeArguments;
     Integer expected = (e).expectedArity;
     hydra.core.Type typ = (e).type;
-    return hydra.lib.strings.Cat.apply(java.util.List.of(
+    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
       "type ",
       hydra.show.core.Core.type(typ),
       " applied to the wrong number of type arguments (expected ",
@@ -190,7 +190,7 @@ public interface Error_ {
   static String typeMismatchError(hydra.error.TypeMismatchError e) {
     hydra.core.Type actual = (e).actualType;
     hydra.core.Type expected = (e).expectedType;
-    return hydra.lib.strings.Cat.apply(java.util.List.of(
+    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
       "type mismatch: expected ",
       hydra.show.core.Core.type(expected),
       " but found ",
@@ -199,8 +199,8 @@ public interface Error_ {
   
   static String unboundTypeVariablesError(hydra.error.UnboundTypeVariablesError e) {
     hydra.core.Type typ = (e).type;
-    java.util.Set<hydra.core.Name> vars = (e).variables;
-    return hydra.lib.strings.Cat.apply(java.util.List.of(
+    hydra.util.PersistentSet<hydra.core.Name> vars = (e).variables;
+    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
       "unbound type variables: {",
       hydra.lib.strings.Intercalate.apply(
         ", ",
@@ -214,7 +214,7 @@ public interface Error_ {
   static String undefinedFieldError(hydra.error.UndefinedFieldError e) {
     hydra.core.Name fname = (e).fieldName;
     hydra.core.Name tname = (e).typeName;
-    return hydra.lib.strings.Cat.apply(java.util.List.of(
+    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
       "no such field \"",
       (fname).value,
       "\" in type \"",
@@ -236,8 +236,8 @@ public interface Error_ {
   
   static String unequalTypesError(hydra.error.UnequalTypesError e) {
     String desc = (e).description;
-    java.util.List<hydra.core.Type> types = (e).types;
-    return hydra.lib.strings.Cat.apply(java.util.List.of(
+    hydra.util.ConsList<hydra.core.Type> types = (e).types;
+    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
       "unequal types ",
       hydra.formatting.Formatting.showList(
         hydra.show.core.Core::type,
@@ -249,7 +249,7 @@ public interface Error_ {
   static String unexpectedTermVariantError(hydra.error.UnexpectedTermVariantError e) {
     hydra.core.Term actual = (e).actualTerm;
     hydra.variants.TermVariant expected = (e).expectedVariant;
-    return hydra.lib.strings.Cat.apply(java.util.List.of(
+    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
       "expected ",
       hydra.show.meta.Meta.termVariant(expected),
       " term but found ",
@@ -259,7 +259,7 @@ public interface Error_ {
   static String unexpectedTypeVariantError(hydra.error.UnexpectedTypeVariantError e) {
     hydra.core.Type actual = (e).actualType;
     hydra.variants.TypeVariant expected = (e).expectedVariant;
-    return hydra.lib.strings.Cat.apply(java.util.List.of(
+    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
       "expected ",
       hydra.show.meta.Meta.typeVariant(expected),
       " type but found ",
@@ -270,7 +270,7 @@ public interface Error_ {
     hydra.core.Type lt = (e).leftType;
     String msg = (e).message;
     hydra.core.Type rt = (e).rightType;
-    return hydra.lib.strings.Cat.apply(java.util.List.of(
+    return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
       "unification error: cannot unify ",
       hydra.show.core.Core.type(lt),
       " with ",

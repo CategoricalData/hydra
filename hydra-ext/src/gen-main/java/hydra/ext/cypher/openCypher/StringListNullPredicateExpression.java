@@ -13,9 +13,9 @@ public class StringListNullPredicateExpression implements Serializable, Comparab
   
   public final hydra.ext.cypher.openCypher.AddOrSubtractExpression left;
   
-  public final java.util.List<hydra.ext.cypher.openCypher.StringListNullPredicateRightHandSide> right;
+  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.StringListNullPredicateRightHandSide> right;
   
-  public StringListNullPredicateExpression (hydra.ext.cypher.openCypher.AddOrSubtractExpression left, java.util.List<hydra.ext.cypher.openCypher.StringListNullPredicateRightHandSide> right) {
+  public StringListNullPredicateExpression (hydra.ext.cypher.openCypher.AddOrSubtractExpression left, hydra.util.ConsList<hydra.ext.cypher.openCypher.StringListNullPredicateRightHandSide> right) {
     this.left = left;
     this.right = right;
   }
@@ -55,7 +55,7 @@ public class StringListNullPredicateExpression implements Serializable, Comparab
     return new StringListNullPredicateExpression(left, right);
   }
   
-  public StringListNullPredicateExpression withRight(java.util.List<hydra.ext.cypher.openCypher.StringListNullPredicateRightHandSide> right) {
+  public StringListNullPredicateExpression withRight(hydra.util.ConsList<hydra.ext.cypher.openCypher.StringListNullPredicateRightHandSide> right) {
     return new StringListNullPredicateExpression(left, right);
   }
 }

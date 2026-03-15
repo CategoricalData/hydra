@@ -29,7 +29,7 @@ public class CommonProperties implements Serializable, Comparable<CommonProperti
   /**
    * Common constraint parameters attached to this shape
    */
-  public final java.util.Set<hydra.ext.org.w3.shacl.model.CommonConstraint> constraints;
+  public final hydra.util.PersistentSet<hydra.ext.org.w3.shacl.model.CommonConstraint> constraints;
   
   /**
    * See https://www.w3.org/TR/shacl/#deactivated
@@ -49,24 +49,24 @@ public class CommonProperties implements Serializable, Comparable<CommonProperti
   /**
    * See https://www.w3.org/TR/shacl/#targetClass
    */
-  public final java.util.Set<hydra.ext.org.w3.rdf.syntax.RdfsClass> targetClass;
+  public final hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.RdfsClass> targetClass;
   
   /**
    * See https://www.w3.org/TR/shacl/#targetNode
    */
-  public final java.util.Set<hydra.ext.org.w3.rdf.syntax.IriOrLiteral> targetNode;
+  public final hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.IriOrLiteral> targetNode;
   
   /**
    * See https://www.w3.org/TR/shacl/#targetObjectsOf
    */
-  public final java.util.Set<hydra.ext.org.w3.rdf.syntax.Property> targetObjectsOf;
+  public final hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property> targetObjectsOf;
   
   /**
    * See https://www.w3.org/TR/shacl/#targetSubjectsOf
    */
-  public final java.util.Set<hydra.ext.org.w3.rdf.syntax.Property> targetSubjectsOf;
+  public final hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property> targetSubjectsOf;
   
-  public CommonProperties (java.util.Set<hydra.ext.org.w3.shacl.model.CommonConstraint> constraints, hydra.util.Maybe<Boolean> deactivated, hydra.ext.org.w3.rdf.syntax.LangStrings message, hydra.ext.org.w3.shacl.model.Severity severity, java.util.Set<hydra.ext.org.w3.rdf.syntax.RdfsClass> targetClass, java.util.Set<hydra.ext.org.w3.rdf.syntax.IriOrLiteral> targetNode, java.util.Set<hydra.ext.org.w3.rdf.syntax.Property> targetObjectsOf, java.util.Set<hydra.ext.org.w3.rdf.syntax.Property> targetSubjectsOf) {
+  public CommonProperties (hydra.util.PersistentSet<hydra.ext.org.w3.shacl.model.CommonConstraint> constraints, hydra.util.Maybe<Boolean> deactivated, hydra.ext.org.w3.rdf.syntax.LangStrings message, hydra.ext.org.w3.shacl.model.Severity severity, hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.RdfsClass> targetClass, hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.IriOrLiteral> targetNode, hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property> targetObjectsOf, hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property> targetSubjectsOf) {
     this.constraints = constraints;
     this.deactivated = deactivated;
     this.message = message;
@@ -154,7 +154,7 @@ public class CommonProperties implements Serializable, Comparable<CommonProperti
       other.targetSubjectsOf.hashCode());
   }
   
-  public CommonProperties withConstraints(java.util.Set<hydra.ext.org.w3.shacl.model.CommonConstraint> constraints) {
+  public CommonProperties withConstraints(hydra.util.PersistentSet<hydra.ext.org.w3.shacl.model.CommonConstraint> constraints) {
     return new CommonProperties(constraints, deactivated, message, severity, targetClass, targetNode, targetObjectsOf, targetSubjectsOf);
   }
   
@@ -170,19 +170,19 @@ public class CommonProperties implements Serializable, Comparable<CommonProperti
     return new CommonProperties(constraints, deactivated, message, severity, targetClass, targetNode, targetObjectsOf, targetSubjectsOf);
   }
   
-  public CommonProperties withTargetClass(java.util.Set<hydra.ext.org.w3.rdf.syntax.RdfsClass> targetClass) {
+  public CommonProperties withTargetClass(hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.RdfsClass> targetClass) {
     return new CommonProperties(constraints, deactivated, message, severity, targetClass, targetNode, targetObjectsOf, targetSubjectsOf);
   }
   
-  public CommonProperties withTargetNode(java.util.Set<hydra.ext.org.w3.rdf.syntax.IriOrLiteral> targetNode) {
+  public CommonProperties withTargetNode(hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.IriOrLiteral> targetNode) {
     return new CommonProperties(constraints, deactivated, message, severity, targetClass, targetNode, targetObjectsOf, targetSubjectsOf);
   }
   
-  public CommonProperties withTargetObjectsOf(java.util.Set<hydra.ext.org.w3.rdf.syntax.Property> targetObjectsOf) {
+  public CommonProperties withTargetObjectsOf(hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property> targetObjectsOf) {
     return new CommonProperties(constraints, deactivated, message, severity, targetClass, targetNode, targetObjectsOf, targetSubjectsOf);
   }
   
-  public CommonProperties withTargetSubjectsOf(java.util.Set<hydra.ext.org.w3.rdf.syntax.Property> targetSubjectsOf) {
+  public CommonProperties withTargetSubjectsOf(hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.Property> targetSubjectsOf) {
     return new CommonProperties(constraints, deactivated, message, severity, targetClass, targetNode, targetObjectsOf, targetSubjectsOf);
   }
 }

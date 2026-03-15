@@ -1078,9 +1078,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
   
   public static final class V extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
     
-    public V (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
+    public V (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
       this.value = value;
     }
     
@@ -1120,9 +1120,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
   
   public static final class E extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
     
-    public E (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
+    public E (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
       this.value = value;
     }
     
@@ -1408,9 +1408,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
   
   public static final class And extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
     
-    public And (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
+    public And (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
       this.value = value;
     }
     
@@ -1572,9 +1572,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
   
   public static final class Both extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
     
-    public Both (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
+    public Both (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
     
@@ -1614,9 +1614,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
   
   public static final class BothE extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
     
-    public BothE (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
+    public BothE (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
     
@@ -1851,9 +1851,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
   
   public static final class Coalesce extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
     
-    public Coalesce (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
+    public Coalesce (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
       this.value = value;
     }
     
@@ -2280,9 +2280,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
   
   public static final class ElementMap extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
     
-    public ElementMap (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
+    public ElementMap (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
     
@@ -2920,9 +2920,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
   
   public static final class In extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
     
-    public In (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
+    public In (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
     
@@ -2962,9 +2962,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
   
   public static final class InE extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
     
-    public InE (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
+    public InE (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
     
@@ -3114,9 +3114,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
   
   public static final class Inject extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value;
     
-    public Inject (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
+    public Inject (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument> value) {
       this.value = value;
     }
     
@@ -3428,9 +3428,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
   
   public static final class Match extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
     
-    public Match (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
+    public Match (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
       this.value = value;
     }
     
@@ -3796,9 +3796,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
   
   public static final class Or extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
     
-    public Or (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
+    public Or (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
       this.value = value;
     }
     
@@ -3915,9 +3915,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
   
   public static final class Out extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
     
-    public Out (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
+    public Out (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
     
@@ -3957,9 +3957,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
   
   public static final class OutE extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
     
-    public OutE (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
+    public OutE (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
     
@@ -4228,9 +4228,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
   
   public static final class Properties extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
     
-    public Properties (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
+    public Properties (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
     
@@ -4310,9 +4310,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
   
   public static final class PropertyMap extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
     
-    public PropertyMap (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
+    public PropertyMap (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
     
@@ -5302,9 +5302,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
   
   public static final class Union extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value;
     
-    public Union (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
+    public Union (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal> value) {
       this.value = value;
     }
     
@@ -5459,9 +5459,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
   
   public static final class Values extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
     
-    public Values (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
+    public Values (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
     
@@ -5616,9 +5616,9 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
   }
   
   public static final class Element extends hydra.ext.org.apache.tinkerpop.gremlin.TraversalMethod implements Serializable {
-    public final java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
+    public final hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value;
     
-    public Element (java.util.List<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
+    public Element (hydra.util.ConsList<hydra.ext.org.apache.tinkerpop.gremlin.StringNullableArgument> value) {
       this.value = value;
     }
     

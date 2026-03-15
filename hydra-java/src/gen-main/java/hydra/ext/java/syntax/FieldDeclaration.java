@@ -13,13 +13,13 @@ public class FieldDeclaration implements Serializable, Comparable<FieldDeclarati
   
   public static final hydra.core.Name VARIABLE_DECLARATORS = new hydra.core.Name("variableDeclarators");
   
-  public final java.util.List<hydra.ext.java.syntax.FieldModifier> modifiers;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.FieldModifier> modifiers;
   
   public final hydra.ext.java.syntax.UnannType unannType;
   
-  public final java.util.List<hydra.ext.java.syntax.VariableDeclarator> variableDeclarators;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.VariableDeclarator> variableDeclarators;
   
-  public FieldDeclaration (java.util.List<hydra.ext.java.syntax.FieldModifier> modifiers, hydra.ext.java.syntax.UnannType unannType, java.util.List<hydra.ext.java.syntax.VariableDeclarator> variableDeclarators) {
+  public FieldDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.FieldModifier> modifiers, hydra.ext.java.syntax.UnannType unannType, hydra.util.ConsList<hydra.ext.java.syntax.VariableDeclarator> variableDeclarators) {
     this.modifiers = modifiers;
     this.unannType = unannType;
     this.variableDeclarators = variableDeclarators;
@@ -64,7 +64,7 @@ public class FieldDeclaration implements Serializable, Comparable<FieldDeclarati
       other.variableDeclarators.hashCode());
   }
   
-  public FieldDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.FieldModifier> modifiers) {
+  public FieldDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.FieldModifier> modifiers) {
     return new FieldDeclaration(modifiers, unannType, variableDeclarators);
   }
   
@@ -72,7 +72,7 @@ public class FieldDeclaration implements Serializable, Comparable<FieldDeclarati
     return new FieldDeclaration(modifiers, unannType, variableDeclarators);
   }
   
-  public FieldDeclaration withVariableDeclarators(java.util.List<hydra.ext.java.syntax.VariableDeclarator> variableDeclarators) {
+  public FieldDeclaration withVariableDeclarators(hydra.util.ConsList<hydra.ext.java.syntax.VariableDeclarator> variableDeclarators) {
     return new FieldDeclaration(modifiers, unannType, variableDeclarators);
   }
 }

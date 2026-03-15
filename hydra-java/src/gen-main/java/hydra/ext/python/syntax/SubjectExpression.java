@@ -38,9 +38,9 @@ public abstract class SubjectExpression implements Serializable, Comparable<Subj
   }
   
   public static final class Tuple extends hydra.ext.python.syntax.SubjectExpression implements Serializable {
-    public final java.util.List<hydra.ext.python.syntax.StarNamedExpression> value;
+    public final hydra.util.ConsList<hydra.ext.python.syntax.StarNamedExpression> value;
     
-    public Tuple (java.util.List<hydra.ext.python.syntax.StarNamedExpression> value) {
+    public Tuple (hydra.util.ConsList<hydra.ext.python.syntax.StarNamedExpression> value) {
       this.value = value;
     }
     

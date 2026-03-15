@@ -13,9 +13,9 @@ public class TypeBound_ClassOrInterface implements Serializable, Comparable<Type
   
   public final hydra.ext.java.syntax.ClassOrInterfaceType type;
   
-  public final java.util.List<hydra.ext.java.syntax.AdditionalBound> additional;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.AdditionalBound> additional;
   
-  public TypeBound_ClassOrInterface (hydra.ext.java.syntax.ClassOrInterfaceType type, java.util.List<hydra.ext.java.syntax.AdditionalBound> additional) {
+  public TypeBound_ClassOrInterface (hydra.ext.java.syntax.ClassOrInterfaceType type, hydra.util.ConsList<hydra.ext.java.syntax.AdditionalBound> additional) {
     this.type = type;
     this.additional = additional;
   }
@@ -55,7 +55,7 @@ public class TypeBound_ClassOrInterface implements Serializable, Comparable<Type
     return new TypeBound_ClassOrInterface(type, additional);
   }
   
-  public TypeBound_ClassOrInterface withAdditional(java.util.List<hydra.ext.java.syntax.AdditionalBound> additional) {
+  public TypeBound_ClassOrInterface withAdditional(hydra.util.ConsList<hydra.ext.java.syntax.AdditionalBound> additional) {
     return new TypeBound_ClassOrInterface(type, additional);
   }
 }

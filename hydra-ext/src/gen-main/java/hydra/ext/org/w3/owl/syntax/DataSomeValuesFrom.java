@@ -11,11 +11,11 @@ public class DataSomeValuesFrom implements Serializable, Comparable<DataSomeValu
   
   public static final hydra.core.Name RANGE = new hydra.core.Name("range");
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> property;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> property;
   
   public final hydra.ext.org.w3.owl.syntax.DataRange range;
   
-  public DataSomeValuesFrom (java.util.List<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> property, hydra.ext.org.w3.owl.syntax.DataRange range) {
+  public DataSomeValuesFrom (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> property, hydra.ext.org.w3.owl.syntax.DataRange range) {
     this.property = property;
     this.range = range;
   }
@@ -51,7 +51,7 @@ public class DataSomeValuesFrom implements Serializable, Comparable<DataSomeValu
     return ((Comparable) range).compareTo(other.range);
   }
   
-  public DataSomeValuesFrom withProperty(java.util.List<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> property) {
+  public DataSomeValuesFrom withProperty(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.DataPropertyExpression> property) {
     return new DataSomeValuesFrom(property, range);
   }
   

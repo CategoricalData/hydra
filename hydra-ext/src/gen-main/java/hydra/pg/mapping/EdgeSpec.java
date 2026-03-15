@@ -43,9 +43,9 @@ public class EdgeSpec implements Serializable, Comparable<EdgeSpec> {
   /**
    * Zero or more property specifications for each target edge
    */
-  public final java.util.List<hydra.pg.mapping.PropertySpec> properties;
+  public final hydra.util.ConsList<hydra.pg.mapping.PropertySpec> properties;
   
-  public EdgeSpec (hydra.pg.model.EdgeLabel label, hydra.pg.mapping.ValueSpec id, hydra.pg.mapping.ValueSpec out, hydra.pg.mapping.ValueSpec in, java.util.List<hydra.pg.mapping.PropertySpec> properties) {
+  public EdgeSpec (hydra.pg.model.EdgeLabel label, hydra.pg.mapping.ValueSpec id, hydra.pg.mapping.ValueSpec out, hydra.pg.mapping.ValueSpec in, hydra.util.ConsList<hydra.pg.mapping.PropertySpec> properties) {
     this.label = label;
     this.id = id;
     this.out = out;
@@ -118,7 +118,7 @@ public class EdgeSpec implements Serializable, Comparable<EdgeSpec> {
     return new EdgeSpec(label, id, out, in, properties);
   }
   
-  public EdgeSpec withProperties(java.util.List<hydra.pg.mapping.PropertySpec> properties) {
+  public EdgeSpec withProperties(hydra.util.ConsList<hydra.pg.mapping.PropertySpec> properties) {
     return new EdgeSpec(label, id, out, in, properties);
   }
 }

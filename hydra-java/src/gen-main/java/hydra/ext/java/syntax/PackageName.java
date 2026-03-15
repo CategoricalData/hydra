@@ -9,9 +9,9 @@ public class PackageName implements Serializable, Comparable<PackageName> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.java.syntax.Identifier> value;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.Identifier> value;
   
-  public PackageName (java.util.List<hydra.ext.java.syntax.Identifier> value) {
+  public PackageName (hydra.util.ConsList<hydra.ext.java.syntax.Identifier> value) {
     this.value = value;
   }
   

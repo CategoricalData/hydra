@@ -15,11 +15,11 @@ public class ArrayCreationExpression_ClassOrInterface implements Serializable, C
   
   public final hydra.ext.java.syntax.ClassOrInterfaceType type;
   
-  public final java.util.List<hydra.ext.java.syntax.DimExpr> dimExprs;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.DimExpr> dimExprs;
   
   public final hydra.util.Maybe<hydra.ext.java.syntax.Dims> dims;
   
-  public ArrayCreationExpression_ClassOrInterface (hydra.ext.java.syntax.ClassOrInterfaceType type, java.util.List<hydra.ext.java.syntax.DimExpr> dimExprs, hydra.util.Maybe<hydra.ext.java.syntax.Dims> dims) {
+  public ArrayCreationExpression_ClassOrInterface (hydra.ext.java.syntax.ClassOrInterfaceType type, hydra.util.ConsList<hydra.ext.java.syntax.DimExpr> dimExprs, hydra.util.Maybe<hydra.ext.java.syntax.Dims> dims) {
     this.type = type;
     this.dimExprs = dimExprs;
     this.dims = dims;
@@ -68,7 +68,7 @@ public class ArrayCreationExpression_ClassOrInterface implements Serializable, C
     return new ArrayCreationExpression_ClassOrInterface(type, dimExprs, dims);
   }
   
-  public ArrayCreationExpression_ClassOrInterface withDimExprs(java.util.List<hydra.ext.java.syntax.DimExpr> dimExprs) {
+  public ArrayCreationExpression_ClassOrInterface withDimExprs(hydra.util.ConsList<hydra.ext.java.syntax.DimExpr> dimExprs) {
     return new ArrayCreationExpression_ClassOrInterface(type, dimExprs, dims);
   }
   

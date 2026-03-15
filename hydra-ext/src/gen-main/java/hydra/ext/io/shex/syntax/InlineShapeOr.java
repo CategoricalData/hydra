@@ -13,9 +13,9 @@ public class InlineShapeOr implements Serializable, Comparable<InlineShapeOr> {
   
   public final hydra.ext.io.shex.syntax.ShapeAnd ShapeAnd;
   
-  public final java.util.List<hydra.ext.io.shex.syntax.InlineShapeAnd> listOfSequence;
+  public final hydra.util.ConsList<hydra.ext.io.shex.syntax.InlineShapeAnd> listOfSequence;
   
-  public InlineShapeOr (hydra.ext.io.shex.syntax.ShapeAnd ShapeAnd, java.util.List<hydra.ext.io.shex.syntax.InlineShapeAnd> listOfSequence) {
+  public InlineShapeOr (hydra.ext.io.shex.syntax.ShapeAnd ShapeAnd, hydra.util.ConsList<hydra.ext.io.shex.syntax.InlineShapeAnd> listOfSequence) {
     this.ShapeAnd = ShapeAnd;
     this.listOfSequence = listOfSequence;
   }
@@ -55,7 +55,7 @@ public class InlineShapeOr implements Serializable, Comparable<InlineShapeOr> {
     return new InlineShapeOr(ShapeAnd, listOfSequence);
   }
   
-  public InlineShapeOr withListOfSequence(java.util.List<hydra.ext.io.shex.syntax.InlineShapeAnd> listOfSequence) {
+  public InlineShapeOr withListOfSequence(hydra.util.ConsList<hydra.ext.io.shex.syntax.InlineShapeAnd> listOfSequence) {
     return new InlineShapeOr(ShapeAnd, listOfSequence);
   }
 }

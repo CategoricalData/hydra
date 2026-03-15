@@ -11,11 +11,11 @@ public class SwitchBlockStatementGroup implements Serializable, Comparable<Switc
   
   public static final hydra.core.Name STATEMENTS = new hydra.core.Name("statements");
   
-  public final java.util.List<hydra.ext.java.syntax.SwitchLabel> labels;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.SwitchLabel> labels;
   
-  public final java.util.List<hydra.ext.java.syntax.BlockStatement> statements;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement> statements;
   
-  public SwitchBlockStatementGroup (java.util.List<hydra.ext.java.syntax.SwitchLabel> labels, java.util.List<hydra.ext.java.syntax.BlockStatement> statements) {
+  public SwitchBlockStatementGroup (hydra.util.ConsList<hydra.ext.java.syntax.SwitchLabel> labels, hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement> statements) {
     this.labels = labels;
     this.statements = statements;
   }
@@ -53,11 +53,11 @@ public class SwitchBlockStatementGroup implements Serializable, Comparable<Switc
       other.statements.hashCode());
   }
   
-  public SwitchBlockStatementGroup withLabels(java.util.List<hydra.ext.java.syntax.SwitchLabel> labels) {
+  public SwitchBlockStatementGroup withLabels(hydra.util.ConsList<hydra.ext.java.syntax.SwitchLabel> labels) {
     return new SwitchBlockStatementGroup(labels, statements);
   }
   
-  public SwitchBlockStatementGroup withStatements(java.util.List<hydra.ext.java.syntax.BlockStatement> statements) {
+  public SwitchBlockStatementGroup withStatements(hydra.util.ConsList<hydra.ext.java.syntax.BlockStatement> statements) {
     return new SwitchBlockStatementGroup(labels, statements);
   }
 }

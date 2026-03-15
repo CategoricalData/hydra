@@ -9,9 +9,9 @@ public class ImportName implements Serializable, Comparable<ImportName> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.python.syntax.DottedAsName> value;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.DottedAsName> value;
   
-  public ImportName (java.util.List<hydra.ext.python.syntax.DottedAsName> value) {
+  public ImportName (hydra.util.ConsList<hydra.ext.python.syntax.DottedAsName> value) {
     this.value = value;
   }
   

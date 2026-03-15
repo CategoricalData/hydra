@@ -38,9 +38,9 @@ public abstract class ForInit implements Serializable, Comparable<ForInit> {
   }
   
   public static final class Statements extends hydra.ext.java.syntax.ForInit implements Serializable {
-    public final java.util.List<hydra.ext.java.syntax.StatementExpression> value;
+    public final hydra.util.ConsList<hydra.ext.java.syntax.StatementExpression> value;
     
-    public Statements (java.util.List<hydra.ext.java.syntax.StatementExpression> value) {
+    public Statements (hydra.util.ConsList<hydra.ext.java.syntax.StatementExpression> value) {
       this.value = value;
     }
     

@@ -9,9 +9,9 @@ public class File implements Serializable, Comparable<File> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.python.syntax.Statement> value;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.Statement> value;
   
-  public File (java.util.List<hydra.ext.python.syntax.Statement> value) {
+  public File (hydra.util.ConsList<hydra.ext.python.syntax.Statement> value) {
     this.value = value;
   }
   

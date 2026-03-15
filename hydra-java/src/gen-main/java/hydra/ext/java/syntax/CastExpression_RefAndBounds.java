@@ -13,9 +13,9 @@ public class CastExpression_RefAndBounds implements Serializable, Comparable<Cas
   
   public final hydra.ext.java.syntax.ReferenceType type;
   
-  public final java.util.List<hydra.ext.java.syntax.AdditionalBound> bounds;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.AdditionalBound> bounds;
   
-  public CastExpression_RefAndBounds (hydra.ext.java.syntax.ReferenceType type, java.util.List<hydra.ext.java.syntax.AdditionalBound> bounds) {
+  public CastExpression_RefAndBounds (hydra.ext.java.syntax.ReferenceType type, hydra.util.ConsList<hydra.ext.java.syntax.AdditionalBound> bounds) {
     this.type = type;
     this.bounds = bounds;
   }
@@ -55,7 +55,7 @@ public class CastExpression_RefAndBounds implements Serializable, Comparable<Cas
     return new CastExpression_RefAndBounds(type, bounds);
   }
   
-  public CastExpression_RefAndBounds withBounds(java.util.List<hydra.ext.java.syntax.AdditionalBound> bounds) {
+  public CastExpression_RefAndBounds withBounds(hydra.util.ConsList<hydra.ext.java.syntax.AdditionalBound> bounds) {
     return new CastExpression_RefAndBounds(type, bounds);
   }
 }

@@ -134,9 +134,9 @@ public abstract class LambdaStarEtc implements Serializable, Comparable<LambdaSt
   }
   
   public static final class ParamMaybeDefault extends hydra.ext.python.syntax.LambdaStarEtc implements Serializable {
-    public final java.util.List<hydra.ext.python.syntax.LambdaParamMaybeDefault> value;
+    public final hydra.util.ConsList<hydra.ext.python.syntax.LambdaParamMaybeDefault> value;
     
-    public ParamMaybeDefault (java.util.List<hydra.ext.python.syntax.LambdaParamMaybeDefault> value) {
+    public ParamMaybeDefault (hydra.util.ConsList<hydra.ext.python.syntax.LambdaParamMaybeDefault> value) {
       this.value = value;
     }
     

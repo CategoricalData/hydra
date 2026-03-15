@@ -13,9 +13,9 @@ public class RegularQuery implements Serializable, Comparable<RegularQuery> {
   
   public final hydra.ext.cypher.openCypher.SingleQuery head;
   
-  public final java.util.List<hydra.ext.cypher.openCypher.Union> rest;
+  public final hydra.util.ConsList<hydra.ext.cypher.openCypher.Union> rest;
   
-  public RegularQuery (hydra.ext.cypher.openCypher.SingleQuery head, java.util.List<hydra.ext.cypher.openCypher.Union> rest) {
+  public RegularQuery (hydra.ext.cypher.openCypher.SingleQuery head, hydra.util.ConsList<hydra.ext.cypher.openCypher.Union> rest) {
     this.head = head;
     this.rest = rest;
   }
@@ -55,7 +55,7 @@ public class RegularQuery implements Serializable, Comparable<RegularQuery> {
     return new RegularQuery(head, rest);
   }
   
-  public RegularQuery withRest(java.util.List<hydra.ext.cypher.openCypher.Union> rest) {
+  public RegularQuery withRest(hydra.util.ConsList<hydra.ext.cypher.openCypher.Union> rest) {
     return new RegularQuery(head, rest);
   }
 }

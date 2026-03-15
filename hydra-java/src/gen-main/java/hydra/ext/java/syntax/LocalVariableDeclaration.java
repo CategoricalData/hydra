@@ -13,13 +13,13 @@ public class LocalVariableDeclaration implements Serializable, Comparable<LocalV
   
   public static final hydra.core.Name DECLARATORS = new hydra.core.Name("declarators");
   
-  public final java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers;
   
   public final hydra.ext.java.syntax.LocalVariableType type;
   
-  public final java.util.List<hydra.ext.java.syntax.VariableDeclarator> declarators;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.VariableDeclarator> declarators;
   
-  public LocalVariableDeclaration (java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers, hydra.ext.java.syntax.LocalVariableType type, java.util.List<hydra.ext.java.syntax.VariableDeclarator> declarators) {
+  public LocalVariableDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers, hydra.ext.java.syntax.LocalVariableType type, hydra.util.ConsList<hydra.ext.java.syntax.VariableDeclarator> declarators) {
     this.modifiers = modifiers;
     this.type = type;
     this.declarators = declarators;
@@ -64,7 +64,7 @@ public class LocalVariableDeclaration implements Serializable, Comparable<LocalV
       other.declarators.hashCode());
   }
   
-  public LocalVariableDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.VariableModifier> modifiers) {
+  public LocalVariableDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers) {
     return new LocalVariableDeclaration(modifiers, type, declarators);
   }
   
@@ -72,7 +72,7 @@ public class LocalVariableDeclaration implements Serializable, Comparable<LocalV
     return new LocalVariableDeclaration(modifiers, type, declarators);
   }
   
-  public LocalVariableDeclaration withDeclarators(java.util.List<hydra.ext.java.syntax.VariableDeclarator> declarators) {
+  public LocalVariableDeclaration withDeclarators(hydra.util.ConsList<hydra.ext.java.syntax.VariableDeclarator> declarators) {
     return new LocalVariableDeclaration(modifiers, type, declarators);
   }
 }

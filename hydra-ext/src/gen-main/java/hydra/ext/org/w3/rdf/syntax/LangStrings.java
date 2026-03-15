@@ -12,9 +12,9 @@ public class LangStrings implements Serializable, Comparable<LangStrings> {
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.Map<hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.LanguageTag>, String> value;
+  public final hydra.util.PersistentMap<hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.LanguageTag>, String> value;
   
-  public LangStrings (java.util.Map<hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.LanguageTag>, String> value) {
+  public LangStrings (hydra.util.PersistentMap<hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.LanguageTag>, String> value) {
     this.value = value;
   }
   

@@ -13,13 +13,13 @@ public class ReceiverParameter implements Serializable, Comparable<ReceiverParam
   
   public static final hydra.core.Name IDENTIFIER = new hydra.core.Name("identifier");
   
-  public final java.util.List<hydra.ext.java.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations;
   
   public final hydra.ext.java.syntax.UnannType unannType;
   
   public final hydra.util.Maybe<hydra.ext.java.syntax.Identifier> identifier;
   
-  public ReceiverParameter (java.util.List<hydra.ext.java.syntax.Annotation> annotations, hydra.ext.java.syntax.UnannType unannType, hydra.util.Maybe<hydra.ext.java.syntax.Identifier> identifier) {
+  public ReceiverParameter (hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations, hydra.ext.java.syntax.UnannType unannType, hydra.util.Maybe<hydra.ext.java.syntax.Identifier> identifier) {
     this.annotations = annotations;
     this.unannType = unannType;
     this.identifier = identifier;
@@ -64,7 +64,7 @@ public class ReceiverParameter implements Serializable, Comparable<ReceiverParam
       other.identifier.hashCode());
   }
   
-  public ReceiverParameter withAnnotations(java.util.List<hydra.ext.java.syntax.Annotation> annotations) {
+  public ReceiverParameter withAnnotations(hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {
     return new ReceiverParameter(annotations, unannType, identifier);
   }
   

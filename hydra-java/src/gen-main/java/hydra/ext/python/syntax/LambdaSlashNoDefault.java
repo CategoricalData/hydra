@@ -9,9 +9,9 @@ public class LambdaSlashNoDefault implements Serializable, Comparable<LambdaSlas
   
   public static final hydra.core.Name PARAMETERS = new hydra.core.Name("parameters");
   
-  public final java.util.List<hydra.ext.python.syntax.LambdaParamNoDefault> parameters;
+  public final hydra.util.ConsList<hydra.ext.python.syntax.LambdaParamNoDefault> parameters;
   
-  public LambdaSlashNoDefault (java.util.List<hydra.ext.python.syntax.LambdaParamNoDefault> parameters) {
+  public LambdaSlashNoDefault (hydra.util.ConsList<hydra.ext.python.syntax.LambdaParamNoDefault> parameters) {
     this.parameters = parameters;
   }
   

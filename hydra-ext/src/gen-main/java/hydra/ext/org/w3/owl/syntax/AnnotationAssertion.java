@@ -15,7 +15,7 @@ public class AnnotationAssertion implements Serializable, Comparable<AnnotationA
   
   public static final hydra.core.Name VALUE = new hydra.core.Name("value");
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
   public final hydra.ext.org.w3.owl.syntax.AnnotationProperty property;
   
@@ -23,7 +23,7 @@ public class AnnotationAssertion implements Serializable, Comparable<AnnotationA
   
   public final hydra.ext.org.w3.owl.syntax.AnnotationValue value;
   
-  public AnnotationAssertion (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.AnnotationProperty property, hydra.ext.org.w3.owl.syntax.AnnotationSubject subject, hydra.ext.org.w3.owl.syntax.AnnotationValue value) {
+  public AnnotationAssertion (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.AnnotationProperty property, hydra.ext.org.w3.owl.syntax.AnnotationSubject subject, hydra.ext.org.w3.owl.syntax.AnnotationValue value) {
     this.annotations = annotations;
     this.property = property;
     this.subject = subject;
@@ -73,7 +73,7 @@ public class AnnotationAssertion implements Serializable, Comparable<AnnotationA
     return ((Comparable) value).compareTo(other.value);
   }
   
-  public AnnotationAssertion withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public AnnotationAssertion withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new AnnotationAssertion(annotations, property, subject, value);
   }
   

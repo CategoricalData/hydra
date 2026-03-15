@@ -11,11 +11,11 @@ public class ReflexiveObjectProperty implements Serializable, Comparable<Reflexi
   
   public static final hydra.core.Name PROPERTY = new hydra.core.Name("property");
   
-  public final java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
+  public final hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations;
   
   public final hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property;
   
-  public ReflexiveObjectProperty (java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property) {
+  public ReflexiveObjectProperty (hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations, hydra.ext.org.w3.owl.syntax.ObjectPropertyExpression property) {
     this.annotations = annotations;
     this.property = property;
   }
@@ -51,7 +51,7 @@ public class ReflexiveObjectProperty implements Serializable, Comparable<Reflexi
     return ((Comparable) property).compareTo(other.property);
   }
   
-  public ReflexiveObjectProperty withAnnotations(java.util.List<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
+  public ReflexiveObjectProperty withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {
     return new ReflexiveObjectProperty(annotations, property);
   }
   

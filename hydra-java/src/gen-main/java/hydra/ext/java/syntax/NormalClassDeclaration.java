@@ -19,19 +19,19 @@ public class NormalClassDeclaration implements Serializable, Comparable<NormalCl
   
   public static final hydra.core.Name BODY = new hydra.core.Name("body");
   
-  public final java.util.List<hydra.ext.java.syntax.ClassModifier> modifiers;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.ClassModifier> modifiers;
   
   public final hydra.ext.java.syntax.TypeIdentifier identifier;
   
-  public final java.util.List<hydra.ext.java.syntax.TypeParameter> parameters;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> parameters;
   
   public final hydra.util.Maybe<hydra.ext.java.syntax.ClassType> extends_;
   
-  public final java.util.List<hydra.ext.java.syntax.InterfaceType> implements_;
+  public final hydra.util.ConsList<hydra.ext.java.syntax.InterfaceType> implements_;
   
   public final hydra.ext.java.syntax.ClassBody body;
   
-  public NormalClassDeclaration (java.util.List<hydra.ext.java.syntax.ClassModifier> modifiers, hydra.ext.java.syntax.TypeIdentifier identifier, java.util.List<hydra.ext.java.syntax.TypeParameter> parameters, hydra.util.Maybe<hydra.ext.java.syntax.ClassType> extends_, java.util.List<hydra.ext.java.syntax.InterfaceType> implements_, hydra.ext.java.syntax.ClassBody body) {
+  public NormalClassDeclaration (hydra.util.ConsList<hydra.ext.java.syntax.ClassModifier> modifiers, hydra.ext.java.syntax.TypeIdentifier identifier, hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> parameters, hydra.util.Maybe<hydra.ext.java.syntax.ClassType> extends_, hydra.util.ConsList<hydra.ext.java.syntax.InterfaceType> implements_, hydra.ext.java.syntax.ClassBody body) {
     this.modifiers = modifiers;
     this.identifier = identifier;
     this.parameters = parameters;
@@ -101,7 +101,7 @@ public class NormalClassDeclaration implements Serializable, Comparable<NormalCl
     return ((Comparable) body).compareTo(other.body);
   }
   
-  public NormalClassDeclaration withModifiers(java.util.List<hydra.ext.java.syntax.ClassModifier> modifiers) {
+  public NormalClassDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.ClassModifier> modifiers) {
     return new NormalClassDeclaration(modifiers, identifier, parameters, extends_, implements_, body);
   }
   
@@ -109,7 +109,7 @@ public class NormalClassDeclaration implements Serializable, Comparable<NormalCl
     return new NormalClassDeclaration(modifiers, identifier, parameters, extends_, implements_, body);
   }
   
-  public NormalClassDeclaration withParameters(java.util.List<hydra.ext.java.syntax.TypeParameter> parameters) {
+  public NormalClassDeclaration withParameters(hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> parameters) {
     return new NormalClassDeclaration(modifiers, identifier, parameters, extends_, implements_, body);
   }
   
@@ -117,7 +117,7 @@ public class NormalClassDeclaration implements Serializable, Comparable<NormalCl
     return new NormalClassDeclaration(modifiers, identifier, parameters, extends_, implements_, body);
   }
   
-  public NormalClassDeclaration withImplements(java.util.List<hydra.ext.java.syntax.InterfaceType> implements_) {
+  public NormalClassDeclaration withImplements(hydra.util.ConsList<hydra.ext.java.syntax.InterfaceType> implements_) {
     return new NormalClassDeclaration(modifiers, identifier, parameters, extends_, implements_, body);
   }
   

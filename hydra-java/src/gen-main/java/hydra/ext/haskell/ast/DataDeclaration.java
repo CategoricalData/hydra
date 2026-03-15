@@ -28,7 +28,7 @@ public class DataDeclaration implements Serializable, Comparable<DataDeclaration
   /**
    * Type class constraints
    */
-  public final java.util.List<hydra.ext.haskell.ast.Assertion> context;
+  public final hydra.util.ConsList<hydra.ext.haskell.ast.Assertion> context;
   
   /**
    * The declaration head
@@ -38,14 +38,14 @@ public class DataDeclaration implements Serializable, Comparable<DataDeclaration
   /**
    * The data constructors
    */
-  public final java.util.List<hydra.ext.haskell.ast.ConstructorWithComments> constructors;
+  public final hydra.util.ConsList<hydra.ext.haskell.ast.ConstructorWithComments> constructors;
   
   /**
    * Derived type class instances
    */
-  public final java.util.List<hydra.ext.haskell.ast.Deriving> deriving;
+  public final hydra.util.ConsList<hydra.ext.haskell.ast.Deriving> deriving;
   
-  public DataDeclaration (hydra.ext.haskell.ast.DataOrNewtype keyword, java.util.List<hydra.ext.haskell.ast.Assertion> context, hydra.ext.haskell.ast.DeclarationHead head, java.util.List<hydra.ext.haskell.ast.ConstructorWithComments> constructors, java.util.List<hydra.ext.haskell.ast.Deriving> deriving) {
+  public DataDeclaration (hydra.ext.haskell.ast.DataOrNewtype keyword, hydra.util.ConsList<hydra.ext.haskell.ast.Assertion> context, hydra.ext.haskell.ast.DeclarationHead head, hydra.util.ConsList<hydra.ext.haskell.ast.ConstructorWithComments> constructors, hydra.util.ConsList<hydra.ext.haskell.ast.Deriving> deriving) {
     this.keyword = keyword;
     this.context = context;
     this.head = head;
@@ -110,7 +110,7 @@ public class DataDeclaration implements Serializable, Comparable<DataDeclaration
     return new DataDeclaration(keyword, context, head, constructors, deriving);
   }
   
-  public DataDeclaration withContext(java.util.List<hydra.ext.haskell.ast.Assertion> context) {
+  public DataDeclaration withContext(hydra.util.ConsList<hydra.ext.haskell.ast.Assertion> context) {
     return new DataDeclaration(keyword, context, head, constructors, deriving);
   }
   
@@ -118,11 +118,11 @@ public class DataDeclaration implements Serializable, Comparable<DataDeclaration
     return new DataDeclaration(keyword, context, head, constructors, deriving);
   }
   
-  public DataDeclaration withConstructors(java.util.List<hydra.ext.haskell.ast.ConstructorWithComments> constructors) {
+  public DataDeclaration withConstructors(hydra.util.ConsList<hydra.ext.haskell.ast.ConstructorWithComments> constructors) {
     return new DataDeclaration(keyword, context, head, constructors, deriving);
   }
   
-  public DataDeclaration withDeriving(java.util.List<hydra.ext.haskell.ast.Deriving> deriving) {
+  public DataDeclaration withDeriving(hydra.util.ConsList<hydra.ext.haskell.ast.Deriving> deriving) {
     return new DataDeclaration(keyword, context, head, constructors, deriving);
   }
 }
