@@ -8,6 +8,8 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.ConsList;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -37,19 +39,20 @@ public class Group extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<List<Term>, Term>) lst -> {
-                // Simplified implementation
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<ConsList<Term>, Term>) lst -> {
+                // Convert to ArrayList for index-based access
+                ArrayList<Term> items = lst.toArrayList();
                 List<List<Term>> groups = new ArrayList<>();
-                if (!lst.isEmpty()) {
+                if (!items.isEmpty()) {
                     List<Term> currentGroup = new ArrayList<>();
-                    currentGroup.add(lst.get(0));
-                    for (int i = 1; i < lst.size(); i++) {
-                        if (lst.get(i).equals(lst.get(i - 1))) {
-                            currentGroup.add(lst.get(i));
+                    currentGroup.add(items.get(0));
+                    for (int i = 1; i < items.size(); i++) {
+                        if (items.get(i).equals(items.get(i - 1))) {
+                            currentGroup.add(items.get(i));
                         } else {
                             groups.add(currentGroup);
                             currentGroup = new ArrayList<>();
-                            currentGroup.add(lst.get(i));
+                            currentGroup.add(items.get(i));
                         }
                     }
                     groups.add(currentGroup);
@@ -64,26 +67,27 @@ public class Group extends PrimitiveFunction {
      * @param lst the list to group
      * @return the list of groups of consecutive equal elements
      */
-    public static <X> List<List<X>> apply(List<X> lst) {
-        List<List<X>> groups = new ArrayList<>();
-        if (lst.isEmpty()) {
-            return groups;
+    public static <X> ConsList<ConsList<X>> apply(ConsList<X> lst) {
+        ArrayList<X> items = lst.toArrayList();
+        List<ConsList<X>> groups = new ArrayList<>();
+        if (items.isEmpty()) {
+            return ConsList.empty();
         }
         List<X> currentGroup = new ArrayList<>();
-        currentGroup.add(lst.get(0));
-        for (int i = 1; i < lst.size(); i++) {
-            X current = lst.get(i);
-            X previous = lst.get(i - 1);
+        currentGroup.add(items.get(0));
+        for (int i = 1; i < items.size(); i++) {
+            X current = items.get(i);
+            X previous = items.get(i - 1);
             if ((current == null && previous == null)
                     || (current != null && current.equals(previous))) {
                 currentGroup.add(current);
             } else {
-                groups.add(currentGroup);
+                groups.add(ConsList.fromList(currentGroup));
                 currentGroup = new ArrayList<>();
                 currentGroup.add(current);
             }
         }
-        groups.add(currentGroup);
-        return groups;
+        groups.add(ConsList.fromList(currentGroup));
+        return ConsList.fromList(groups);
     }
 }

@@ -8,10 +8,10 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Function;
+
+import hydra.util.PersistentSet;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
@@ -58,7 +58,7 @@ public class Difference extends PrimitiveFunction {
      * @param s1 the first set
      * @return a function that takes the second set and returns the set difference
      */
-    public static <X> Function<Set<X>, Set<X>> apply(Set<X> s1) {
+    public static <X> Function<PersistentSet<X>, PersistentSet<X>> apply(PersistentSet<X> s1) {
         return (s2) -> apply(s1, s2);
     }
 
@@ -69,9 +69,7 @@ public class Difference extends PrimitiveFunction {
      * @param s2 the second set
      * @return a new set containing elements in s1 but not in s2
      */
-    public static <X> Set<X> apply(Set<X> s1, Set<X> s2) {
-        java.util.LinkedHashSet<X> newSet = new java.util.LinkedHashSet<>(s1);
-        newSet.removeAll(s2);
-        return FromList.orderedSet(newSet);
+    public static <X> PersistentSet<X> apply(PersistentSet<X> s1, PersistentSet<X> s2) {
+        return s1.difference(s2);
     }
 }

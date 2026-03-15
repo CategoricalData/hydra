@@ -8,9 +8,10 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.ConsList;
+
 import java.util.LinkedList;
 import java.util.List;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 
 import static hydra.dsl.Types.function;
@@ -60,7 +61,7 @@ public class Apply extends PrimitiveFunction {
      * @param functions the list of functions to apply
      * @return a function that applies all functions to all arguments
      */
-    public static <X, Y> Function<List<X>, List<Y>> apply(List<Function<X, Y>> functions) {
+    public static <X, Y> Function<ConsList<X>, ConsList<Y>> apply(ConsList<Function<X, Y>> functions) {
         return (args) -> apply(functions, args);
     }
 
@@ -72,13 +73,13 @@ public class Apply extends PrimitiveFunction {
      * @param args the list of arguments
      * @return the list of results from applying each function to each argument
      */
-    public static <X, Y> List<Y> apply(List<Function<X, Y>> functions, List<X> args) {
-        List<Y> results = new LinkedList<>();
+    public static <X, Y> ConsList<Y> apply(ConsList<Function<X, Y>> functions, ConsList<X> args) {
+        LinkedList<Y> results = new LinkedList<>();
         for (Function<X, Y> f : functions) {
             for (X a : args) {
                 results.add(f.apply(a));
             }
         }
-        return results;
+        return ConsList.fromList(results);
     }
 }

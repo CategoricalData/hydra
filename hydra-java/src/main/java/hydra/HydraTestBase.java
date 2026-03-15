@@ -95,19 +95,19 @@ public class HydraTestBase {
      * @return an empty graph
      */
     protected static Graph emptyGraph() {
-        Map<Name, Term> boundTerms = Collections.emptyMap();
-        Map<Name, TypeScheme> boundTypes = Collections.emptyMap();
-        Map<Name, hydra.core.TypeVariableMetadata> classConstraints = Collections.emptyMap();
-        java.util.Set<Name> lambdaVariables = Collections.emptySet();
-        Map<Name, Term> metadata = Collections.emptyMap();
+        hydra.util.PersistentMap<Name, Term> boundTerms = hydra.util.PersistentMap.empty();
+        hydra.util.PersistentMap<Name, TypeScheme> boundTypes = hydra.util.PersistentMap.empty();
+        hydra.util.PersistentMap<Name, hydra.core.TypeVariableMetadata> classConstraints = hydra.util.PersistentMap.empty();
+        hydra.util.PersistentSet<Name> lambdaVariables = hydra.util.PersistentSet.empty();
+        hydra.util.PersistentMap<Name, Term> metadata = hydra.util.PersistentMap.empty();
 
-        Map<Name, Primitive> primitives = new HashMap<>();
+        hydra.util.PersistentMap<Name, Primitive> primitives = hydra.util.PersistentMap.empty();
         for (PrimitiveFunction prim : Libraries.standardPrimitives()) {
-            primitives.put(prim.name(), prim.toNative());
+            primitives = primitives.insert(prim.name(), prim.toNative());
         }
 
-        Map<Name, TypeScheme> schemaTypes = Collections.emptyMap();
-        java.util.Set<Name> typeVariables = Collections.emptySet();
+        hydra.util.PersistentMap<Name, TypeScheme> schemaTypes = hydra.util.PersistentMap.empty();
+        hydra.util.PersistentSet<Name> typeVariables = hydra.util.PersistentSet.empty();
 
         return new Graph(boundTerms, boundTypes, classConstraints, lambdaVariables, metadata, primitives, schemaTypes, typeVariables);
     }

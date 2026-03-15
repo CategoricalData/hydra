@@ -28,6 +28,6 @@ public class VertexTypeBuilder<T> extends ElementTypeBuilder<T, VertexType<T>, V
 
     @Override
     public VertexType<T> build() {
-        return new VertexType<T>(label, id, properties);
+        return new VertexType<T>(label, id, propertiesAsList());
     }
 }

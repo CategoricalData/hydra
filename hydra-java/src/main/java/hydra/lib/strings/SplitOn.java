@@ -7,6 +7,8 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.ConsList;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
@@ -56,7 +58,7 @@ public class SplitOn extends PrimitiveFunction {
      * @param delim the delimiter string
      * @return a function that takes a string and returns the split result
      */
-    public static Function<String, List<String>> apply(String delim) {
+    public static Function<String, ConsList<String>> apply(String delim) {
         return (string) -> apply(delim, string);
     }
 
@@ -68,8 +70,8 @@ public class SplitOn extends PrimitiveFunction {
      * @param string the string to split
      * @return the list of substrings
      */
-    public static List<String> apply(String delim, String string) {
-        List<String> parts = new ArrayList<>();
+    public static ConsList<String> apply(String delim, String string) {
+        ArrayList<String> parts = new ArrayList<>();
 
         if (delim.isEmpty()) {
             parts.add("");
@@ -94,6 +96,6 @@ public class SplitOn extends PrimitiveFunction {
             parts.add(string.substring(k));
         }
 
-        return parts;
+        return ConsList.fromList(parts);
     }
 }

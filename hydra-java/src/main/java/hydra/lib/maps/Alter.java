@@ -9,6 +9,8 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Maybe;
 
+import hydra.util.PersistentMap;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +54,7 @@ public class Alter extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(2)), mp -> {
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(2)), (PersistentMap<Term, Term> mp) -> {
                 Term f = args.get(0);
                 Term key = args.get(1);
                 Maybe<Term> currentValue = Lookup.apply(key, mp);
@@ -63,11 +65,11 @@ public class Alter extends PrimitiveFunction {
                     t -> Either.right(t), graph, ((Either.Right<InContext<Error_>, Term>) r).value);
                 if (maybeResult.isLeft()) return (Either) maybeResult;
                 Maybe<Term> newValue = ((Either.Right<InContext<Error_>, Maybe<Term>>) maybeResult).value;
-                Map<Term, Term> result = FromList.orderedMap(mp);
+                PersistentMap<Term, Term> result;
                 if (newValue.isJust()) {
-                    result.put(key, newValue.fromJust());
+                    result = mp.insert(key, newValue.fromJust());
                 } else {
-                    result.remove(key);
+                    result = mp.delete(key);
                 }
                 return Either.right(Terms.map(result));
             });
@@ -80,7 +82,7 @@ public class Alter extends PrimitiveFunction {
      * @param f the function to apply to the optional value
      * @return a curried function that takes a key and a map and returns the modified map
      */
-    public static <K, V> Function<K, Function<Map<K, V>, Map<K, V>>> apply(
+    public static <K, V> Function<K, Function<PersistentMap<K, V>, PersistentMap<K, V>>> apply(
             Function<Maybe<V>, Maybe<V>> f) {
         return key -> mp -> apply(f, key, mp);
     }
@@ -94,15 +96,7 @@ public class Alter extends PrimitiveFunction {
      * @param mp the map to alter
      * @return the modified map
      */
-    public static <K, V> Map<K, V> apply(Function<Maybe<V>, Maybe<V>> f, K key, Map<K, V> mp) {
-        Map<K, V> result = FromList.orderedMap(mp);
-        Maybe<V> currentValue = Lookup.apply(key, mp);
-        Maybe<V> newValue = f.apply(currentValue);
-        if (newValue.isJust()) {
-            result.put(key, newValue.fromJust());
-        } else {
-            result.remove(key);
-        }
-        return result;
+    public static <K, V> PersistentMap<K, V> apply(Function<Maybe<V>, Maybe<V>> f, K key, PersistentMap<K, V> mp) {
+        return mp.alter(f, key);
     }
 }

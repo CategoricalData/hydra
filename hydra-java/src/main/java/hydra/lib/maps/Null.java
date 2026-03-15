@@ -8,6 +8,8 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.PersistentMap;
+
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -51,8 +53,8 @@ public class Null extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> {
-            Either<InContext<Error_>, Map<Term, Term>> r = hydra.extract.core.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(0));
-            return hydra.lib.eithers.Map.apply(map -> Terms.boolean_(apply(map)), r);
+            Either<InContext<Error_>, PersistentMap<Term, Term>> r = hydra.extract.core.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(0));
+            return hydra.lib.eithers.Map.apply(map -> Terms.boolean_(map.isEmpty()), r);
         };
     }
 
@@ -63,7 +65,7 @@ public class Null extends PrimitiveFunction {
      * @param map the map to check
      * @return true if the map is empty, false otherwise
      */
-    public static <K, V> Boolean apply(Map<K, V> map) {
+    public static <K, V> Boolean apply(PersistentMap<K, V> map) {
         return map.isEmpty();
     }
 }

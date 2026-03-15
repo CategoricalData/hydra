@@ -8,6 +8,8 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.ConsList;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -35,7 +37,7 @@ public class Intersperse extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(list -> Terms.list(apply(args.get(0), list)), hydra.extract.core.Core.list(cx, graph, args.get(1)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<ConsList<Term>, Term>) list -> Terms.list(Intersperse.apply(args.get(0), list)), hydra.extract.core.Core.list(cx, graph, args.get(1)));
     }
 
     /**
@@ -44,7 +46,7 @@ public class Intersperse extends PrimitiveFunction {
      * @param delim the separator element to insert
      * @return a function that intersperses the separator into a list
      */
-    public static <X> Function<List<X>, List<X>> apply(X delim) {
+    public static <X> Function<ConsList<X>, ConsList<X>> apply(X delim) {
         return (list) -> apply(delim, list);
     }
 
@@ -55,8 +57,8 @@ public class Intersperse extends PrimitiveFunction {
      * @param list the list to intersperse
      * @return the list with the separator inserted between elements
      */
-    public static <X> List<X> apply(X delim, List<X> list) {
-        List<X> result = new ArrayList<>();
+    public static <X> ConsList<X> apply(X delim, ConsList<X> list) {
+        ArrayList<X> result = new ArrayList<>();
         boolean first = true;
         for (X a : list) {
             if (first) {
@@ -66,6 +68,6 @@ public class Intersperse extends PrimitiveFunction {
             }
             result.add(a);
         }
-        return result;
+        return ConsList.fromList(result);
     }
 }

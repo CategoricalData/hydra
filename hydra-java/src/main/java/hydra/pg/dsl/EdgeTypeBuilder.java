@@ -35,6 +35,6 @@ public class EdgeTypeBuilder<T> extends ElementTypeBuilder<T, EdgeType<T>, EdgeT
 
     @Override
     public EdgeType<T> build() {
-        return new EdgeType<T>(label, id, outLabel, inLabel, properties);
+        return new EdgeType<T>(label, id, outLabel, inLabel, propertiesAsList());
     }
 }

@@ -8,6 +8,8 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.ConsList;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -59,7 +61,7 @@ public class Foldl extends PrimitiveFunction {
      * @param mapping the binary function (accumulator -&gt; element -&gt; accumulator)
      * @return a curried function for folding
      */
-    public static <X, Y> Function<Y, Function<List<X>, Y>> apply(Function<Y, Function<X, Y>> mapping) {
+    public static <X, Y> Function<Y, Function<ConsList<X>, Y>> apply(Function<Y, Function<X, Y>> mapping) {
         return y -> xs -> apply(mapping, y, xs);
     }
 
@@ -71,7 +73,7 @@ public class Foldl extends PrimitiveFunction {
      * @param init the initial accumulator value
      * @return a function that takes a list and returns the folded result
      */
-    public static <X, Y> Function<List<X>, Y> apply(Function<Y, Function<X, Y>> mapping, Y init) {
+    public static <X, Y> Function<ConsList<X>, Y> apply(Function<Y, Function<X, Y>> mapping, Y init) {
         return xs -> apply(mapping, init, xs);
     }
 
@@ -85,11 +87,7 @@ public class Foldl extends PrimitiveFunction {
      * @param xs the list to fold
      * @return the final accumulated result
      */
-    public static <X, Y> Y apply(Function<Y, Function<X, Y>> mapping, Y init, List<X> xs) {
-        Y cur = init;
-        for (X x : xs) {
-            cur = mapping.apply(cur).apply(x);
-        }
-        return cur;
+    public static <X, Y> Y apply(Function<Y, Function<X, Y>> mapping, Y init, ConsList<X> xs) {
+        return xs.foldl((acc, x) -> mapping.apply(acc).apply(x), init);
     }
 }

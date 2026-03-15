@@ -8,6 +8,8 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.ConsList;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -37,7 +39,7 @@ public class Drop extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.int32(cx, graph, args.get(0)), n ->
-            hydra.lib.eithers.Map.apply((Function<List<Term>, Term>) lst -> Terms.list(apply(n, lst)), hydra.extract.core.Core.list(cx, graph, args.get(1))));
+            hydra.lib.eithers.Map.apply((Function<ConsList<Term>, Term>) lst -> Terms.list(apply(n, lst)), hydra.extract.core.Core.list(cx, graph, args.get(1))));
     }
 
     /**
@@ -46,7 +48,7 @@ public class Drop extends PrimitiveFunction {
      * @param n the number of elements to drop
      * @return a function that drops n elements from a list
      */
-    public static <X> Function<List<X>, List<X>> apply(Integer n) {
+    public static <X> Function<ConsList<X>, ConsList<X>> apply(Integer n) {
         return lst -> apply(n, lst);
     }
 
@@ -57,13 +59,13 @@ public class Drop extends PrimitiveFunction {
      * @param lst the list to drop from
      * @return the remaining list
      */
-    public static <X> List<X> apply(Integer n, List<X> lst) {
+    public static <X> ConsList<X> apply(Integer n, ConsList<X> lst) {
         if (n <= 0) {
             return lst;
         }
         if (n >= lst.size()) {
-            return List.of();
+            return ConsList.empty();
         }
-        return lst.subList(n, lst.size());
+        return lst.drop(n);
     }
 }

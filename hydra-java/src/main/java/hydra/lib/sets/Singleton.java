@@ -8,10 +8,10 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Function;
+
+import hydra.util.PersistentSet;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
@@ -59,7 +59,7 @@ public class Singleton extends PrimitiveFunction {
      * @param elem the element to put in the set
      * @return a new set containing only the specified element
      */
-    public static <X> Set<X> apply(X elem) {
-        return FromList.orderedSet(java.util.List.of(elem));
+    public static <X> PersistentSet<X> apply(X elem) {
+        return PersistentSet.singleton(elem);
     }
 }

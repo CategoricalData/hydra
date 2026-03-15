@@ -11,8 +11,9 @@ import hydra.tools.PrimitiveFunction;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.TreeSet;
 import java.util.function.Function;
+
+import hydra.util.PersistentSet;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
@@ -62,34 +63,28 @@ public class FromList extends PrimitiveFunction {
      * @return a set containing all unique elements from the list
      */
     @SuppressWarnings("unchecked")
-    public static <X> Set<X> apply(List<X> arg) {
-        return orderedSet(arg);
+    public static <X> PersistentSet<X> apply(List<X> arg) {
+        return (PersistentSet<X>) PersistentSet.fromList((List<Comparable>) (List<?>) arg);
     }
 
     /**
-     * Creates an ordered set from elements. Uses TreeSet when elements are Comparable
+     * Creates an ordered set from elements. Uses PersistentSet when elements are Comparable
      * (matching Haskell's Data.Set behavior), otherwise LinkedHashSet for insertion order.
      */
     @SuppressWarnings("unchecked")
     static <X> Set<X> orderedSet(java.util.Collection<X> elements) {
-        if (elements.isEmpty()) {
-            return new LinkedHashSet<>();
+        if (elements instanceof PersistentSet) {
+            return (Set<X>) elements;
         }
-        // Check if elements are Comparable
+        if (elements.isEmpty()) {
+            return PersistentSet.empty();
+        }
+        // Check if elements are Comparable; if so, use PersistentSet
         for (X elem : elements) {
             if (elem != null) {
                 if (elem instanceof Comparable) {
                     try {
-                        TreeSet<X> result = new TreeSet<>((a, b) -> ((Comparable<X>) a).compareTo(b));
-                        result.addAll(elements);
-                        // Guard against compareTo/equals inconsistency: if TreeSet lost
-                        // elements (compareTo returns 0 for non-equal objects), fall back
-                        // to LinkedHashSet which uses equals/hashCode correctly.
-                        LinkedHashSet<X> lhs = new LinkedHashSet<>(elements);
-                        if (result.size() < lhs.size()) {
-                            return lhs;
-                        }
-                        return result;
+                        return (Set<X>) PersistentSet.fromList(new java.util.ArrayList<>((java.util.Collection<Comparable>) (java.util.Collection<?>) elements));
                     } catch (ClassCastException e) {
                         return new LinkedHashSet<>(elements);
                     }

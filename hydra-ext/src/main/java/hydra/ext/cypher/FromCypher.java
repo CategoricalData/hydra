@@ -64,6 +64,7 @@ import hydra.tools.MapperBase;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import hydra.util.ConsList;
 import hydra.util.Maybe;
 
 import static hydra.pg.dsl.Queries.apply;
@@ -220,7 +221,7 @@ public class FromCypher extends MapperBase {
     public static Expression from(OrExpression cypher) {
         return oneOrMany(cypher.value, FromCypher::from, exps -> new Expression.Associative(new AssociativeExpression(
                 new BinaryOperator.Boolean_(new BinaryBooleanOperator.Or()),
-                map(exps, FromCypher::from))));
+                ConsList.fromList(map(exps, FromCypher::from)))));
     }
 
     /**
@@ -232,7 +233,7 @@ public class FromCypher extends MapperBase {
     public static Expression from(XorExpression cypher) {
         return oneOrMany(cypher.value, FromCypher::from, exps -> new Expression.Associative(new AssociativeExpression(
                 new BinaryOperator.Boolean_(new BinaryBooleanOperator.Xor()),
-                map(exps, FromCypher::from))));
+                ConsList.fromList(map(exps, FromCypher::from)))));
     }
 
     /**
@@ -244,7 +245,7 @@ public class FromCypher extends MapperBase {
     public static Expression from(AndExpression cypher) {
         return oneOrMany(cypher.value, FromCypher::from, exps -> new Expression.Associative(new AssociativeExpression(
                 new BinaryOperator.Boolean_(new BinaryBooleanOperator.And()),
-                map(exps, FromCypher::from))));
+                ConsList.fromList(map(exps, FromCypher::from)))));
     }
 
     /**
@@ -283,7 +284,7 @@ public class FromCypher extends MapperBase {
     public static MatchQuery from(Match cypher) {
         return new MatchQuery(
                 cypher.optional,
-                map(cypher.pattern.value, FromCypher::from),
+                ConsList.fromList(map(cypher.pattern.value, FromCypher::from)),
                 cypher.where.map(w -> from(w.value)));
     }
 
@@ -314,8 +315,8 @@ public class FromCypher extends MapperBase {
                 cypher.variable.map(FromCypher::from),
                 labelOf(cypher),
                 cypher.properties.isJust()
-                        ? from(cypher.properties.fromJust()) : Collections.emptyList(),
-                Collections.emptyList());
+                        ? ConsList.fromList(from(cypher.properties.fromJust())) : ConsList.empty(),
+                ConsList.empty());
     }
 
     /**
@@ -327,7 +328,7 @@ public class FromCypher extends MapperBase {
     public static VertexPattern from(NodePatternChain cypher) {
         VertexPattern vq = from(cypher.nodePattern);
         return cypher.chain.size() > 0
-                ? vq.withEdges(Collections.singletonList(from(cypher.chain)))
+                ? vq.withEdges(ConsList.singleton(from(cypher.chain)))
                 : vq;
     }
 
@@ -379,13 +380,13 @@ public class FromCypher extends MapperBase {
 
             vp = null == cur
                     ? vp
-                    : vp.withEdges(Collections.singletonList(cur));
+                    : vp.withEdges(ConsList.singleton(cur));
             Direction dir = directionOf(chain.relationship);
             Maybe<EdgeLabel> label = labelOf(chain.relationship);
             Maybe<Properties> ps = chain.relationship.detail.flatMap(r -> r.properties);
-            List<PropertyPattern> props = ps.isJust()
-                    ? from(ps.fromJust())
-                    : Collections.emptyList();
+            ConsList<PropertyPattern> props = ps.isJust()
+                    ? ConsList.fromList(from(ps.fromJust()))
+                    : ConsList.empty();
             cur = new EdgeProjectionPattern(dir, label, props, Maybe.just(vp));
         }
 
@@ -443,7 +444,7 @@ public class FromCypher extends MapperBase {
     public static Expression from(PowerOfExpression cypher) {
         return oneOrMany(cypher.value, FromCypher::from, exps -> new Expression.Associative(new AssociativeExpression(
                 new BinaryOperator.Power(),
-                map(exps, FromCypher::from))));
+                ConsList.fromList(map(exps, FromCypher::from)))));
     }
 
     /**
@@ -495,7 +496,7 @@ public class FromCypher extends MapperBase {
      * @return the converted property graph Projections
      */
     public static Projections from(ProjectionItems cypher) {
-        return new Projections(cypher.star, map(cypher.explicit, FromCypher::from));
+        return new Projections(cypher.star, ConsList.fromList(map(cypher.explicit, FromCypher::from)));
     }
 
     /**

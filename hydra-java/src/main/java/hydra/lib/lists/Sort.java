@@ -8,8 +8,9 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.ConsList;
+
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
@@ -38,8 +39,8 @@ public class Sort extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<List<Term>, Term>) lst -> {
-                List<Term> sorted = new ArrayList<>(lst);
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<ConsList<Term>, Term>) lst -> {
+                ArrayList<Term> sorted = lst.toArrayList();
                 sorted.sort(hydra.lib.equality.Compare::compareTerms);
                 return Terms.list(sorted);
             }, hydra.extract.core.Core.list(cx, graph, args.get(0)));
@@ -52,9 +53,9 @@ public class Sort extends PrimitiveFunction {
      * @return the sorted list
      */
     @SuppressWarnings("unchecked")
-    public static <X> List<X> apply(List<X> lst) {
-        List<X> result = new ArrayList<>(lst);
+    public static <X> ConsList<X> apply(ConsList<X> lst) {
+        ArrayList<X> result = lst.toArrayList();
         result.sort((a, b) -> ((Comparable) a).compareTo(b));
-        return result;
+        return ConsList.fromList(result);
     }
 }

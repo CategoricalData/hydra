@@ -7,6 +7,8 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.ConsList;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -54,7 +56,7 @@ public class Cat extends PrimitiveFunction {
      * @param args the list of strings to concatenate
      * @return the concatenated string
      */
-    public static String apply(List<String> args) {
+    public static String apply(ConsList<String> args) {
         return String.join("", args);
     }
 }

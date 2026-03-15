@@ -6,6 +6,8 @@ import hydra.core.TypeScheme;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.ConsList;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -35,7 +37,7 @@ public class At extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.int32(cx, graph, args.get(0)), i -> hydra.lib.eithers.Map.apply(list -> list.get(i), hydra.extract.core.Core.list(cx, graph, args.get(1))));
+        return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.int32(cx, graph, args.get(0)), i -> hydra.lib.eithers.Map.apply((Function<ConsList<Term>, Term>) list -> list.get(i), hydra.extract.core.Core.list(cx, graph, args.get(1))));
     }
 
     /**
@@ -44,7 +46,7 @@ public class At extends PrimitiveFunction {
      * @param i the zero-based index
      * @return a function that gets the element at the given index from a list
      */
-    public static <X> Function<List<X>, X> apply(int i) {
+    public static <X> Function<ConsList<X>, X> apply(int i) {
         return list -> apply(i, list);
     }
 
@@ -56,7 +58,7 @@ public class At extends PrimitiveFunction {
      * @return the element at the given index
      * @throws IllegalArgumentException if the list is empty
      */
-    public static <X> X apply(int i, List<X> list) {
+    public static <X> X apply(int i, ConsList<X> list) {
         if (list.isEmpty()) {
             throw new IllegalArgumentException("Cannot get head of empty list");
         } else {

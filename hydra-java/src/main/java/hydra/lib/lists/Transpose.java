@@ -8,6 +8,8 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.ConsList;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -48,7 +50,7 @@ public class Transpose extends PrimitiveFunction {
                     }, hydra.extract.core.Core.list(cx, graph, inner)));
             }
             return hydra.lib.eithers.Map.apply(matrix -> {
-                List<List<Term>> transposed = apply(matrix);
+                List<List<Term>> transposed = transposeRaw(matrix);
                 List<Term> result = new ArrayList<>();
                 for (List<Term> row : transposed) {
                     result.add(Terms.list(row));
@@ -59,12 +61,9 @@ public class Transpose extends PrimitiveFunction {
     }
 
     /**
-     * Transposes rows and columns.
-     * @param <X> the element type
-     * @param matrix the matrix to transpose
-     * @return the transposed matrix
+     * Internal helper for transposing raw lists (used by implementation()).
      */
-    public static <X> List<List<X>> apply(List<List<X>> matrix) {
+    private static <X> List<List<X>> transposeRaw(List<List<X>> matrix) {
         if (matrix.isEmpty()) {
             return List.of();
         }
@@ -85,5 +84,39 @@ public class Transpose extends PrimitiveFunction {
             }
         }
         return result;
+    }
+
+    /**
+     * Transposes rows and columns.
+     * @param <X> the element type
+     * @param matrix the matrix to transpose
+     * @return the transposed matrix
+     */
+    public static <X> ConsList<ConsList<X>> apply(ConsList<ConsList<X>> matrix) {
+        if (matrix.isEmpty()) {
+            return ConsList.empty();
+        }
+        // Convert to ArrayList for indexed access
+        ArrayList<ArrayList<X>> rows = new ArrayList<>();
+        for (ConsList<X> row : matrix) {
+            rows.add(new ArrayList<>(row));
+        }
+        int maxCols = 0;
+        for (ArrayList<X> row : rows) {
+            maxCols = Math.max(maxCols, row.size());
+        }
+        ArrayList<ConsList<X>> result = new ArrayList<>();
+        for (int col = 0; col < maxCols; col++) {
+            ArrayList<X> newRow = new ArrayList<>();
+            for (ArrayList<X> row : rows) {
+                if (col < row.size()) {
+                    newRow.add(row.get(col));
+                }
+            }
+            if (!newRow.isEmpty()) {
+                result.add(ConsList.fromList(newRow));
+            }
+        }
+        return ConsList.fromList(result);
     }
 }

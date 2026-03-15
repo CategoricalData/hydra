@@ -28,7 +28,7 @@ public abstract class PropertyGraphTestBase extends HydraTestBase {
     protected static final VertexType<LiteralType> VERTEX_TYPE_PERSON_B
             = VERTEX_TYPE_PERSON_A.withId(LiteralTypes.int32());
     protected static final VertexType<LiteralType> VERTEX_TYPE_PERSON_C
-            = VERTEX_TYPE_PERSON_A.withProperties(Arrays.asList());
+            = VERTEX_TYPE_PERSON_A.withProperties(hydra.util.ConsList.empty());
 
     protected static final VertexType<LiteralType> VERTEX_TYPE_ORGANIZATION = Graphs.vertexType(
             "Organization", ID_TYPE)
@@ -50,7 +50,7 @@ public abstract class PropertyGraphTestBase extends HydraTestBase {
     protected static final EdgeType<LiteralType> EDGE_TYPE_WORKSAT_B
             = EDGE_TYPE_WORKSAT_A.withId(LiteralTypes.int32());
     protected static final EdgeType<LiteralType> EDGE_TYPE_WORKSAT_C
-            = EDGE_TYPE_WORKSAT_A.withProperties(Arrays.asList());
+            = EDGE_TYPE_WORKSAT_A.withProperties(hydra.util.ConsList.empty());
 
     protected static final EdgeType<LiteralType> EDGE_TYPE_FOUNDED = Graphs.edgeType(
             "founded", ID_TYPE, "Person", "Organization")

@@ -8,6 +8,8 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.PersistentMap;
+
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -62,7 +64,7 @@ public class Insert extends PrimitiveFunction {
      * @param k the key to insert
      * @return a curried function that takes a value, a map, and returns the updated map
      */
-    public static <K, V> Function<V, Function<Map<K, V>, Map<K, V>>> apply(K k) {
+    public static <K, V> Function<V, Function<PersistentMap<K, V>, PersistentMap<K, V>>> apply(K k) {
         return v -> apply(k, v);
     }
 
@@ -74,7 +76,7 @@ public class Insert extends PrimitiveFunction {
      * @param v the value to insert
      * @return a function that takes a map and returns the updated map
      */
-    public static <K, V> Function<Map<K, V>, Map<K, V>> apply(K k, V v) {
+    public static <K, V> Function<PersistentMap<K, V>, PersistentMap<K, V>> apply(K k, V v) {
         return before -> apply(k, v, before);
     }
 
@@ -87,9 +89,7 @@ public class Insert extends PrimitiveFunction {
      * @param before the map to insert into
      * @return the updated map
      */
-    public static <K, V> Map<K, V> apply(K k, V v, Map<K, V> before) {
-        Map<K, V> after = FromList.orderedMap(before);
-        after.put(k, v);
-        return after;
+    public static <K, V> PersistentMap<K, V> apply(K k, V v, PersistentMap<K, V> before) {
+        return before.insert(k, v);
     }
 }

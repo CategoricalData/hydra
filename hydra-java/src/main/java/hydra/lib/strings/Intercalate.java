@@ -7,6 +7,8 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.ConsList;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -54,7 +56,7 @@ public class Intercalate extends PrimitiveFunction {
      * @param delim the delimiter string
      * @return a function that takes a list of strings and returns the joined result
      */
-    public static Function<List<String>, String> apply(String delim) {
+    public static Function<ConsList<String>, String> apply(String delim) {
         return (strings) -> apply(delim, strings);
     }
 
@@ -64,7 +66,7 @@ public class Intercalate extends PrimitiveFunction {
      * @param strings the list of strings to join
      * @return the joined string
      */
-    public static String apply(String delim, List<String> strings) {
+    public static String apply(String delim, ConsList<String> strings) {
         StringBuilder sb = new StringBuilder();
         boolean first = true;
         for (String s : strings) {

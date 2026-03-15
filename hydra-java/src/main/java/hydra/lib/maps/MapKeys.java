@@ -8,7 +8,8 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.HashMap;
+import hydra.util.PersistentMap;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -70,7 +71,7 @@ public class MapKeys extends PrimitiveFunction {
      * @param mapping the function to apply to each key
      * @return a function that takes a map and returns the map with transformed keys
      */
-    public static <K1, K2, V> Function<java.util.Map<K1, V>, java.util.Map<K2, V>> apply(Function<K1, K2> mapping) {
+    public static <K1, K2, V> Function<PersistentMap<K1, V>, PersistentMap<K2, V>> apply(Function<K1, K2> mapping) {
         return (arg) -> apply(mapping, arg);
     }
 
@@ -83,12 +84,12 @@ public class MapKeys extends PrimitiveFunction {
      * @param arg the input map
      * @return the map with transformed keys
      */
-    public static <K1, K2, V> java.util.Map<K2, V> apply(Function<K1, K2> mapping, java.util.Map<K1, V> arg) {
-        // Build into a LinkedHashMap first since we don't know the output key type's ordering
-        java.util.Map<K2, V> result = new java.util.LinkedHashMap<>();
+    @SuppressWarnings("unchecked")
+    public static <K1, K2, V> PersistentMap<K2, V> apply(Function<K1, K2> mapping, PersistentMap<K1, V> arg) {
+        PersistentMap result = PersistentMap.empty();
         for (java.util.Map.Entry<K1, V> e : arg.entrySet()) {
-            result.put(mapping.apply(e.getKey()), e.getValue());
+            result = result.insert((Comparable) mapping.apply(e.getKey()), e.getValue());
         }
-        return FromList.orderedMap(result);
+        return result;
     }
 }

@@ -8,7 +8,8 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.HashMap;
+import hydra.util.PersistentMap;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -70,7 +71,7 @@ public class Map extends PrimitiveFunction {
      * @param mapping the function to apply to each value
      * @return a function that takes a map and returns the transformed map
      */
-    public static <K, V1, V2> Function<java.util.Map<K, V1>, java.util.Map<K, V2>> apply(Function<V1, V2> mapping) {
+    public static <K, V1, V2> Function<PersistentMap<K, V1>, PersistentMap<K, V2>> apply(Function<V1, V2> mapping) {
         return (arg) -> apply(mapping, arg);
     }
 
@@ -83,11 +84,7 @@ public class Map extends PrimitiveFunction {
      * @param arg the input map
      * @return the transformed map
      */
-    public static <K, V1, V2> java.util.Map<K, V2> apply(Function<V1, V2> mapping, java.util.Map<K, V1> arg) {
-        java.util.Map<K, V2> result = FromList.emptyLike(arg);
-        for (java.util.Map.Entry<K, V1> e : arg.entrySet()) {
-            result.put(e.getKey(), mapping.apply(e.getValue()));
-        }
-        return result;
+    public static <K, V1, V2> PersistentMap<K, V2> apply(Function<V1, V2> mapping, PersistentMap<K, V1> arg) {
+        return arg.mapValues(mapping);
     }
 }

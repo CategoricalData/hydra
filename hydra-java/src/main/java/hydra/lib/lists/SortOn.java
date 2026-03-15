@@ -7,10 +7,10 @@ import hydra.dsl.Terms;
 import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
-import hydra.util.Maybe;
+
+import hydra.util.ConsList;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
@@ -42,8 +42,9 @@ public class SortOn extends PrimitiveFunction {
         return args -> cx -> graph ->
             hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(1)), lst -> {
                 // Pre-compute all keys so we can short-circuit on error
+                ArrayList<Term> indexed = new ArrayList<>(lst);
                 List<Term> keys = new ArrayList<>();
-                for (Term x : lst) {
+                for (Term x : indexed) {
                     Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
                         hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), x));
                     if (r.isLeft()) return (Either) r;
@@ -51,10 +52,10 @@ public class SortOn extends PrimitiveFunction {
                 }
                 // Build index pairs and sort by pre-computed key
                 List<Integer> indices = new ArrayList<>();
-                for (int i = 0; i < lst.size(); i++) indices.add(i);
+                for (int i = 0; i < indexed.size(); i++) indices.add(i);
                 indices.sort(Comparator.comparing(i -> (Comparable) keys.get(i)));
                 List<Term> sorted = new ArrayList<>();
-                for (int i : indices) sorted.add(lst.get(i));
+                for (int i : indices) sorted.add(indexed.get(i));
                 return Either.right(Terms.list(sorted));
             });
     }
@@ -67,7 +68,7 @@ public class SortOn extends PrimitiveFunction {
      * @return a function that sorts a list by the extracted key
      */
     @SuppressWarnings("unchecked")
-    public static <X, Y> Function<List<X>, List<X>> apply(Function<X, Y> f) {
+    public static <X, Y> Function<ConsList<X>, ConsList<X>> apply(Function<X, Y> f) {
         return lst -> apply(f, lst);
     }
 
@@ -80,9 +81,9 @@ public class SortOn extends PrimitiveFunction {
      * @return the sorted list
      */
     @SuppressWarnings("unchecked")
-    public static <X, Y> List<X> apply(Function<X, Y> f, List<X> lst) {
-        List<X> result = new ArrayList<>(lst);
+    public static <X, Y> ConsList<X> apply(Function<X, Y> f, ConsList<X> lst) {
+        ArrayList<X> result = new ArrayList<>(lst);
         result.sort(Comparator.comparing(x -> (Comparable) f.apply(x)));
-        return result;
+        return ConsList.fromList(result);
     }
 }

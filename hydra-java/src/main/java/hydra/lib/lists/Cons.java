@@ -8,7 +8,8 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.ArrayList;
+import hydra.util.ConsList;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -47,10 +48,7 @@ public class Cons extends PrimitiveFunction {
      * @param l the list to prepend to
      * @return the list with the element prepended
      */
-    public static <X> List<X> apply(X el, List<X> l) {
-        List<X> combined = new ArrayList<>();
-        combined.add(el);
-        combined.addAll(l);
-        return combined;
+    public static <X> ConsList<X> apply(X el, ConsList<X> l) {
+        return ConsList.cons(el, l);
     }
 }

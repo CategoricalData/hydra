@@ -321,9 +321,9 @@ public class MergingTest extends PropertyGraphTestBase {
     private static <A, B> Either<String, B> applyCoderEncode(
             hydra.util.Coder<A, B> coder, A value) {
         hydra.context.Context cx = new hydra.context.Context(
-            java.util.Collections.emptyList(),
-            java.util.Collections.emptyList(),
-            java.util.Collections.emptyMap());
+            hydra.util.ConsList.empty(),
+            hydra.util.ConsList.empty(),
+            hydra.util.PersistentMap.empty());
         hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, B> result = coder.encode.apply(cx).apply(value);
         if (result.isRight()) {
             return Either.right(((Either.Right<hydra.context.InContext<hydra.error.Error_>, B>) result).value);

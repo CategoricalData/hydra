@@ -8,10 +8,10 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Function;
+
+import hydra.util.PersistentSet;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
@@ -59,7 +59,7 @@ public class Delete extends PrimitiveFunction {
      * @param elem the element to remove
      * @return a function that takes a set and returns a new set without the element
      */
-    public static <X> Function<Set<X>, Set<X>> apply(X elem) {
+    public static <X> Function<PersistentSet<X>, PersistentSet<X>> apply(X elem) {
         return (arg) -> apply(elem, arg);
     }
 
@@ -70,9 +70,7 @@ public class Delete extends PrimitiveFunction {
      * @param arg the set to remove from
      * @return a new set with the element removed
      */
-    public static <X> Set<X> apply(X elem, Set<X> arg) {
-        java.util.LinkedHashSet<X> newSet = new java.util.LinkedHashSet<>(arg);
-        newSet.remove(elem);
-        return FromList.orderedSet(newSet);
+    public static <X> PersistentSet<X> apply(X elem, PersistentSet<X> arg) {
+        return arg.delete(elem);
     }
 }

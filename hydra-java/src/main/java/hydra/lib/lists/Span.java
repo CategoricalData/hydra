@@ -9,6 +9,8 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Pair;
 
+import hydra.util.ConsList;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -42,8 +44,9 @@ public class Span extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph ->
             hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(1)), lst -> {
+                ArrayList<Term> indexed = new ArrayList<>(lst);
                 int splitAt = 0;
-                for (Term x : lst) {
+                for (Term x : indexed) {
                     Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
                         hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), x));
                     if (r.isLeft()) return (Either) r;
@@ -54,8 +57,8 @@ public class Span extends PrimitiveFunction {
                     splitAt++;
                 }
                 return Either.right(Terms.pair(
-                    Terms.list(new ArrayList<>(lst.subList(0, splitAt))),
-                    Terms.list(new ArrayList<>(lst.subList(splitAt, lst.size())))));
+                    Terms.list(new ArrayList<>(indexed.subList(0, splitAt))),
+                    Terms.list(new ArrayList<>(indexed.subList(splitAt, indexed.size())))));
             });
     }
 
@@ -65,7 +68,7 @@ public class Span extends PrimitiveFunction {
      * @param pred the predicate to test elements
      * @return a function that splits a list when the predicate becomes false
      */
-    public static <X> Function<List<X>, Pair<List<X>, List<X>>> apply(Function<X, Boolean> pred) {
+    public static <X> Function<ConsList<X>, Pair<ConsList<X>, ConsList<X>>> apply(Function<X, Boolean> pred) {
         return lst -> apply(pred, lst);
     }
 
@@ -76,12 +79,14 @@ public class Span extends PrimitiveFunction {
      * @param lst the list to split
      * @return a pair of lists, split at the first element where predicate is false
      */
-    public static <X> Pair<List<X>, List<X>> apply(Function<X, Boolean> pred, List<X> lst) {
+    public static <X> Pair<ConsList<X>, ConsList<X>> apply(Function<X, Boolean> pred, ConsList<X> lst) {
+        ArrayList<X> indexed = new ArrayList<>(lst);
         int i = 0;
-        while (i < lst.size() && pred.apply(lst.get(i))) {
+        while (i < indexed.size() && pred.apply(indexed.get(i))) {
             i++;
         }
-        return new Pair<>(new ArrayList<>(lst.subList(0, i)),
-            new ArrayList<>(lst.subList(i, lst.size())));
+        return new Pair<>(
+            ConsList.fromList(indexed.subList(0, i)),
+            ConsList.fromList(indexed.subList(i, indexed.size())));
     }
 }

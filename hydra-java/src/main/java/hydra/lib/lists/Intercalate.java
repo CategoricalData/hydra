@@ -8,6 +8,8 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.ConsList;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -46,7 +48,7 @@ public class Intercalate extends PrimitiveFunction {
      * @param delim the separator list to insert between lists
      * @return a function that joins lists with the separator
      */
-    public static <X> Function<List<List<X>>, List<X>> apply(List<X> delim) {
+    public static <X> Function<ConsList<ConsList<X>>, ConsList<X>> apply(ConsList<X> delim) {
         return (sublists) -> apply(delim, sublists);
     }
 
@@ -57,10 +59,10 @@ public class Intercalate extends PrimitiveFunction {
      * @param sublists the list of lists to join
      * @return the joined list
      */
-    public static <X> List<X> apply(List<X> delim, List<List<X>> sublists) {
-        List<X> result = new ArrayList<>();
+    public static <X> ConsList<X> apply(ConsList<X> delim, ConsList<ConsList<X>> sublists) {
+        ArrayList<X> result = new ArrayList<>();
         boolean first = true;
-        for (List<X> sublist : sublists) {
+        for (ConsList<X> sublist : sublists) {
             if (first) {
                 first = false;
             } else {
@@ -68,6 +70,6 @@ public class Intercalate extends PrimitiveFunction {
             }
             result.addAll(sublist);
         }
-        return result;
+        return ConsList.fromList(result);
     }
 }
