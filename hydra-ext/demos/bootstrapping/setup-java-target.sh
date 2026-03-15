@@ -44,7 +44,7 @@ for f in Adapters.java Bootstrap.java Coders.java Generation.java HydraTestBase.
     cp "$JAVA_SRC/$f" "$JAVA_DST/"
 done
 
-for d in lib dsl compute util; do
+for d in lib dsl util; do
     cp -r "$JAVA_SRC/$d" "$JAVA_DST/"
 done
 
