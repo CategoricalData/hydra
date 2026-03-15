@@ -42,7 +42,7 @@ import qualified Hydra.Dsl.Meta.Variants                   as Variants
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Error                      as Error
 import qualified Hydra.Dsl.Prims                           as Prims
-import qualified Hydra.Dsl.Tabular                         as Tabular
+import qualified Hydra.Dsl.Meta.Tabular                         as Tabular
 import qualified Hydra.Dsl.Terms                           as Terms
 import qualified Hydra.Dsl.Tests                           as Tests
 import qualified Hydra.Dsl.Types                           as Types
