@@ -13,4 +13,10 @@ main = do
   writeHaskell "src/gen-main/haskell" mainModules mainModules
 
   putStrLn ""
+  putStrLn "Generating DSL source module (hydra.dsls) to src/gen-main/haskell..."
+  putStrLn ""
+
+  writeDslSourceHaskell "src/gen-main/haskell"
+
+  putStrLn ""
   putStrLn "=== Done! ==="

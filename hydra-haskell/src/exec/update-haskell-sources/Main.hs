@@ -31,4 +31,8 @@ main = do
       writeEncoderSourceHaskell "src/gen-main/haskell" mainModules kernelTypesModules
 
       putStrLn ""
+      putStrLn "Generating DSL modules to src/gen-main/haskell..."
+      writeDslHaskell "src/gen-main/haskell" mainModules mainModules
+
+      putStrLn ""
       putStrLn "=== Done! ==="
