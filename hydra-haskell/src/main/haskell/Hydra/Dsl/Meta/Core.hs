@@ -371,16 +371,7 @@ recordTypeName r = Phantoms.project _Record _Record_typeName @@ r
 recordFields :: TTerm Record -> TTerm [Field]
 recordFields r = Phantoms.project _Record _Record_fields @@ r
 
-rowType :: AsTerm t Name => t -> TTerm [FieldType] -> TTerm (RowType)
-rowType typeName fields = Phantoms.record _RowType [
-  _RowType_typeName>>: asTerm typeName,
-  _RowType_fields>>: fields]
-
-rowTypeTypeName :: TTerm RowType -> TTerm Name
-rowTypeTypeName rt = Phantoms.project _RowType _RowType_typeName @@ rt
-
-rowTypeFields :: TTerm RowType -> TTerm [FieldType]
-rowTypeFields rt = Phantoms.project _RowType _RowType_fields @@ rt
+-- Note: RowType has been eliminated. TypeRecord and TypeUnion now directly hold [FieldType].
 
 termAnnotated :: TTerm AnnotatedTerm -> TTerm Term
 termAnnotated = inject _Term _Term_annotated
@@ -480,7 +471,7 @@ typeMaybe = inject _Type _Type_maybe
 typePair :: TTerm PairType -> TTerm Type
 typePair = inject _Type _Type_pair
 
-typeRecord :: TTerm RowType -> TTerm Type
+typeRecord :: TTerm [FieldType] -> TTerm Type
 typeRecord = inject _Type _Type_record
 
 typeScheme :: TTerm [Name] -> TTerm Type -> TTerm (Maybe (M.Map Name TypeVariableMetadata)) -> TTerm TypeScheme
@@ -508,7 +499,7 @@ typeSchemeConstraints ts = Phantoms.project _TypeScheme _TypeScheme_constraints 
 typeSet :: TTerm Type -> TTerm Type
 typeSet = inject _Type _Type_set
 
-typeUnion :: TTerm RowType -> TTerm Type
+typeUnion :: TTerm [FieldType] -> TTerm Type
 typeUnion = inject _Type _Type_union
 
 typeUnit :: TTerm Type
@@ -517,7 +508,7 @@ typeUnit = injectUnit _Type _Type_unit
 typeVariable :: AsTerm t Name => t -> TTerm Type
 typeVariable n = inject _Type _Type_variable (asTerm n)
 
-typeWrap :: TTerm WrappedType -> TTerm Type
+typeWrap :: TTerm Type -> TTerm Type
 typeWrap = inject _Type _Type_wrap
 
 typeApplicationTerm :: TTerm Term -> TTerm Type -> TTerm TypeApplicationTerm
@@ -548,16 +539,7 @@ wrappedTermTypeName wt = Phantoms.project _WrappedTerm _WrappedTerm_typeName @@ 
 wrappedTermBody :: TTerm WrappedTerm -> TTerm Term
 wrappedTermBody wt = Phantoms.project _WrappedTerm _WrappedTerm_body @@ wt
 
-wrappedType :: AsTerm t Name => t -> TTerm Type -> TTerm WrappedType
-wrappedType typeName object = Phantoms.record _WrappedType [
-  _WrappedType_typeName>>: asTerm typeName,
-  _WrappedType_body>>: object]
-
-wrappedTypeTypeName :: TTerm WrappedType -> TTerm Name
-wrappedTypeTypeName wt = Phantoms.project _WrappedType _WrappedType_typeName @@ wt
-
-wrappedTypeBody :: TTerm WrappedType -> TTerm Type
-wrappedTypeBody wt = Phantoms.project _WrappedType _WrappedType_body @@ wt
+-- Note: WrappedType has been eliminated. TypeWrap now directly holds Type.
 
 ----------------------------------------
 -- Non-schema helpers

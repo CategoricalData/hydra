@@ -99,14 +99,12 @@ joinTypes = define "joinTypes" $
     (right (Lists.zipWith (var "joinOne") (var "lefts") (var "rights")))
     (var "cannotUnify")) $
   "joinRowTypes" <~ ("left" ~> "right" ~> Logic.ifElse
-    (Logic.and
-      (Core.equalName_ (Core.rowTypeTypeName (var "left")) (Core.rowTypeTypeName (var "right")))
-      (Core.equalNameList_
-        (Lists.map (unaryFunction Core.fieldTypeName) (Core.rowTypeFields (var "left")))
-        (Lists.map (unaryFunction Core.fieldTypeName) (Core.rowTypeFields (var "right")))))
+    (Core.equalNameList_
+      (Lists.map (unaryFunction Core.fieldTypeName) (var "left"))
+      (Lists.map (unaryFunction Core.fieldTypeName) (var "right")))
     (var "joinList"
-      @@ (Lists.map (unaryFunction Core.fieldTypeType) (Core.rowTypeFields (var "left")))
-      @@ (Lists.map (unaryFunction Core.fieldTypeType) (Core.rowTypeFields (var "right"))))
+      @@ (Lists.map (unaryFunction Core.fieldTypeType) (var "left"))
+      @@ (Lists.map (unaryFunction Core.fieldTypeType) (var "right")))
     (var "cannotUnify")) $
   cases _Type (var "sleft") (Just (var "cannotUnify")) [
     _Type_application>>: "l" ~> cases _Type (var "sright") (Just (var "cannotUnify")) [
@@ -146,11 +144,8 @@ joinTypes = define "joinTypes" $
     _Type_unit>>: constant (cases _Type (var "sright") (Just (var "cannotUnify")) [
       _Type_unit>>: constant (right (list ([] :: [TTerm TypeConstraint])))]),
     _Type_wrap>>: "l" ~> cases _Type (var "sright") (Just (var "cannotUnify")) [
-      _Type_wrap>>: "r" ~> Logic.ifElse
-        (Core.equalName_ (Core.wrappedTypeTypeName (var "l")) (Core.wrappedTypeTypeName (var "r")))
-        (right (list [
-          var "joinOne" @@ (Core.wrappedTypeBody (var "l")) @@ (Core.wrappedTypeBody (var "r"))]))
-        (var "cannotUnify")]]
+      _Type_wrap>>: "r" ~> right (list [
+        var "joinOne" @@ (var "l") @@ (var "r")])]]
 
 unifyTypeConstraints :: TBinding (Context -> M.Map Name TypeScheme -> [TypeConstraint] -> Either (InContext UnificationError) TypeSubst)
 unifyTypeConstraints = define "unifyTypeConstraints" $

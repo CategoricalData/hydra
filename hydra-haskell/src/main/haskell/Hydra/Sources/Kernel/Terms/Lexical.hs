@@ -239,8 +239,8 @@ fieldsOf = define "fieldsOf" $
   cases _Type (var "stripped")
     (Just (list ([] :: [TTerm FieldType]))) [
     _Type_forall>>: "forallType" ~> fieldsOf @@ (Core.forallTypeBody (var "forallType")),
-    _Type_record>>: "rt" ~> Core.rowTypeFields (var "rt"),
-    _Type_union>>: "rt" ~> Core.rowTypeFields (var "rt")]
+    _Type_record>>: "rt" ~> var "rt",
+    _Type_union>>: "rt" ~> var "rt"]
 
 getField :: TBinding (Context -> M.Map Name Term -> Name -> (Term -> Either (InContext Error) b) -> Either (InContext Error) b)
 getField = define "getField" $

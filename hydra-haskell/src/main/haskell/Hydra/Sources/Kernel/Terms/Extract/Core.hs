@@ -602,12 +602,7 @@ recordType = define "recordType" $
   "stripped" <~ Rewriting.deannotateType @@ var "typ" $
   Phantoms.cases _Type (var "stripped")
     (Just (unexpected (var "cx") (Phantoms.string "record type") (ShowCore.type_ @@ var "typ"))) [
-    _Type_record>>: "rowType" ~>
-      Logic.ifElse (Core.equalName_ (Core.rowTypeTypeName (var "rowType")) (var "ename"))
-        (right (Core.rowTypeFields (var "rowType")))
-        (unexpected (var "cx")
-          (Phantoms.string "record of type " ++ (Core.unName (var "ename")))
-          (Phantoms.string "record of type " ++ (Core.unName (Core.rowTypeTypeName (var "rowType")))))]
+    _Type_record>>: "fields" ~> right (var "fields")]
 
 set :: TBinding (Context -> Graph -> Term -> Prelude.Either (InContext Error) (S.Set Term))
 set = define "set" $
@@ -725,12 +720,7 @@ unionType = define "unionType" $
   "stripped" <~ Rewriting.deannotateType @@ var "typ" $
   Phantoms.cases _Type (var "stripped")
     (Just (unexpected (var "cx") (Phantoms.string "union type") (ShowCore.type_ @@ var "typ"))) [
-    _Type_union>>: "rowType" ~>
-      Logic.ifElse (Equality.equal (Core.rowTypeTypeName (var "rowType")) (var "ename"))
-        (right (Core.rowTypeFields (var "rowType")))
-        (unexpected (var "cx")
-          (Phantoms.string "union of type " ++ (Core.unName (var "ename")))
-          (Phantoms.string "union of type " ++ (Core.unName (Core.rowTypeTypeName (var "rowType")))))]
+    _Type_union>>: "fields" ~> right (var "fields")]
 
 unit :: TBinding (Context -> Term -> Prelude.Either (InContext Error) ())
 unit = define "unit" $
@@ -772,9 +762,4 @@ wrappedType = define "wrappedType" $
   "stripped" <~ Rewriting.deannotateType @@ var "typ" $
   Phantoms.cases _Type (var "stripped")
     (Just (unexpected (var "cx") (Phantoms.string "wrapped type") (ShowCore.type_ @@ var "typ"))) [
-    _Type_wrap>>: "wrappedType" ~>
-      Logic.ifElse (Core.equalName_ (Core.wrappedTypeTypeName (var "wrappedType")) (var "ename"))
-        (right (Core.wrappedTypeBody (var "wrappedType")))
-        (unexpected (var "cx")
-          (Phantoms.string "wrapped type " ++ (Core.unName (var "ename")))
-          (Phantoms.string "wrapped type " ++ (Core.unName (Core.wrappedTypeTypeName (var "wrappedType")))))]
+    _Type_wrap>>: "innerType" ~> right (var "innerType")]

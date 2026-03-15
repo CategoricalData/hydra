@@ -212,9 +212,9 @@ product (a:rest) = pair a (product rest)
 
 -- | Create a term-encoded record type with named fields
 -- Example: record (name "Person") ["name">: string, "age">: int32]
--- Accepts TTerm Name or TBinding Name (via AsTerm)
+-- Note: the name parameter is now ignored; record types no longer carry a type name
 record :: AsTerm t Name => t -> [(TTerm Name, TTerm Type)] -> TTerm Type
-record n pairs = typeRecord $ rowType (asTerm n) $ Phantoms.list (toField <$> pairs)
+record _n pairs = typeRecord $ Phantoms.list (toField <$> pairs)
   where
     toField (fn, t) = fieldType fn t
 
@@ -250,9 +250,9 @@ uint64 = typeLiteral $ literalTypeInteger integerTypeUint64
 
 -- | Create a term-encoded union type with named variants
 -- Example: union (name "Result") ["success">: int32, "error">: string]
--- Accepts TTerm Name or TBinding Name (via AsTerm)
+-- Note: the name parameter is now ignored; union types no longer carry a type name
 union :: AsTerm t Name => t -> [(TTerm Name, TTerm Type)] -> TTerm Type
-union n pairs = typeUnion $ rowType (asTerm n) $ Phantoms.list (toField <$> pairs)
+union _n pairs = typeUnion $ Phantoms.list (toField <$> pairs)
   where
     toField (fn, ft) = fieldType fn ft
 
@@ -272,9 +272,9 @@ var :: String -> TTerm Type
 var = variable
 
 -- | Create a term-encoded wrapped type (newtype)
--- Accepts TTerm Name or TBinding Name (via AsTerm)
+-- Note: the name parameter is now ignored; wrapped types no longer carry a type name
 wrap :: AsTerm t Name => t -> TTerm Type -> TTerm Type
-wrap n t = typeWrap $ wrappedType (asTerm n) t
+wrap _n t = typeWrap t
 
 -- | Create a term-encoded enum type with the given variant names (conventionally in camelCase)
 -- Example: enum (name "Color") ["red", "green", "blue"]

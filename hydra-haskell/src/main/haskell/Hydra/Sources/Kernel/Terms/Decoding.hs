@@ -58,6 +58,7 @@ import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 
 import qualified Hydra.Sources.Kernel.Terms.Names as Names
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting
+import qualified Hydra.Sources.Kernel.Terms.Constants as Constants
 import qualified Hydra.Sources.Kernel.Terms.Schemas as Schemas
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 import           Prelude hiding ((++))
@@ -97,15 +98,23 @@ module_ = Module ns elements
       toBinding decodeNamespace,
       toBinding decodePairType,
       toBinding decodeRecordType,
+      toBinding decodeRecordTypeImpl,
+      toBinding decodeRecordTypeNamed,
       toBinding decodeSetType,
       toBinding decodeType,
+      toBinding decodeTypeNamed,
       toBinding decodeUnitType,
       toBinding decodeUnionType,
+      toBinding decodeUnionTypeNamed,
       toBinding decodeWrappedType,
+      toBinding decodeWrappedTypeNamed,
       toBinding decoderFullResultType,
+      toBinding decoderFullResultTypeNamed,
       toBinding decoderResultType,
       toBinding decoderType,
+      toBinding decoderTypeNamed,
       toBinding decoderTypeScheme,
+      toBinding decoderTypeSchemeNamed,
       toBinding filterTypeBindings,
       toBinding isDecodableBinding,
       toBinding prependForallDecoders]
@@ -173,12 +182,9 @@ decoderResultType = define "decoderResultType" $
       decoderResultType @@ (Core.forallTypeBody (var "ft")),
     _Type_literal>>: "_" ~>
       Core.nameLift _Literal,
-    _Type_record>>: "rt" ~>
-      Core.rowTypeTypeName (var "rt"),
-    _Type_union>>: "rt" ~>
-      Core.rowTypeTypeName (var "rt"),
-    _Type_wrap>>: "wt" ~>
-      Core.wrappedTypeTypeName (var "wt")]
+    _Type_record>>: constant (Core.nameLift _Term),
+    _Type_union>>: constant (Core.nameLift _Term),
+    _Type_wrap>>: constant (Core.nameLift _Term)]
 
 -- | Build a decoder type scheme: Term -> Either DecodingError ResultType
 -- For polymorphic types, adds extra arguments for the decoders of type parameters
@@ -205,6 +211,85 @@ decoderTypeScheme = define "decoderTypeScheme" $
       (var "typeVars")
       (decoderType @@ var "typ")
       (var "constraints")
+
+-- | Build a decoder type scheme with element name for nominal types
+decoderTypeSchemeNamed :: TBinding (Name -> Type -> TypeScheme)
+decoderTypeSchemeNamed = define "decoderTypeSchemeNamed" $
+  doc "Build type scheme for a decoder function with element name" $
+  "ename" ~> "typ" ~>
+    "typeVars" <~ collectTypeVariables @@ var "typ" $
+    "allOrdVars" <~ collectOrdConstrainedVariables @@ var "typ" $
+    "ordVars" <~ Lists.filter
+      ("v" ~> Lists.elem (var "v" :: TTerm Name) (var "typeVars" :: TTerm [Name]))
+      (var "allOrdVars") $
+    "constraints" <~ (
+      Logic.ifElse (Lists.null (var "ordVars"))
+        Phantoms.nothing
+        (just $ Maps.fromList $ Lists.map
+          ("v" ~> pair (var "v") (Core.typeVariableMetadata $ Sets.singleton $ Core.nameLift _TypeClass_ordering))
+          (var "ordVars"))) $
+    Core.typeScheme
+      (var "typeVars")
+      (decoderTypeNamed @@ var "ename" @@ var "typ")
+      (var "constraints")
+
+-- | Build decoder function type with element name
+decoderTypeNamed :: TBinding (Name -> Type -> Type)
+decoderTypeNamed = define "decoderTypeNamed" $
+  doc "Build decoder function type with element name" $
+  "ename" ~> "typ" ~>
+    "resultType" <~ (decoderFullResultTypeNamed @@ var "ename" @@ var "typ") $
+    "baseType" <~ Core.typeFunction (Core.functionType
+      (Core.typeVariable (Core.nameLift _Graph))
+      (Core.typeFunction (Core.functionType
+        (Core.typeVariable (Core.nameLift _Term))
+        (Core.typeEither (Core.eitherType
+          (Core.typeVariable (Core.nameLift _DecodingError))
+          (var "resultType")))))) $
+    prependForallDecoders @@ var "baseType" @@ var "typ"
+
+-- | Get full result type for decoder with element name
+decoderFullResultTypeNamed :: TBinding (Name -> Type -> Type)
+decoderFullResultTypeNamed = define "decoderFullResultTypeNamed" $
+  doc "Get full result type for decoder with element name" $
+  "ename" ~> "typ" ~>
+  cases _Type (var "typ") (Just $ Core.typeVariable (Core.nameLift _Term)) [
+    _Type_annotated>>: "at" ~>
+      decoderFullResultTypeNamed @@ var "ename" @@ (Core.annotatedTypeBody (var "at")),
+    _Type_forall>>: "ft" ~>
+      Core.typeApplication $ Core.applicationType
+        (decoderFullResultTypeNamed @@ var "ename" @@ Core.forallTypeBody (var "ft"))
+        (Core.typeVariable (Core.forallTypeParameter (var "ft"))),
+    _Type_record>>: constant (Core.typeVariable (var "ename")),
+    _Type_union>>: constant (Core.typeVariable (var "ename")),
+    _Type_wrap>>: constant (Core.typeVariable (var "ename")),
+    _Type_application>>: "appType" ~>
+      Core.typeApplication $ Core.applicationType
+        (decoderFullResultType @@ Core.applicationTypeFunction (var "appType"))
+        (Core.applicationTypeArgument (var "appType")),
+    _Type_either>>: "et" ~>
+      Core.typeEither $ Core.eitherType
+        (decoderFullResultType @@ Core.eitherTypeLeft (var "et"))
+        (decoderFullResultType @@ Core.eitherTypeRight (var "et")),
+    _Type_list>>: "elemType" ~>
+      Core.typeList (decoderFullResultType @@ var "elemType"),
+    _Type_literal>>: "_" ~>
+      Core.typeVariable (Core.nameLift _Literal),
+    _Type_map>>: "mt" ~>
+      Core.typeMap $ Core.mapType
+        (decoderFullResultType @@ Core.mapTypeKeys (var "mt"))
+        (decoderFullResultType @@ Core.mapTypeValues (var "mt")),
+    _Type_maybe>>: "elemType" ~>
+      Core.typeMaybe (decoderFullResultType @@ var "elemType"),
+    _Type_pair>>: "pt" ~>
+      Core.typePair $ Core.pairType
+        (decoderFullResultType @@ Core.pairTypeFirst (var "pt"))
+        (decoderFullResultType @@ Core.pairTypeSecond (var "pt")),
+    _Type_set>>: "elemType" ~>
+      Core.typeSet (decoderFullResultType @@ var "elemType"),
+    _Type_unit>>: constant Core.typeUnit,
+    _Type_variable>>: "name" ~>
+      Core.typeVariable (var "name")]
 
 -- | Collect type variables from forall types
 -- Note: Graph is NOT included as a type variable - it's a concrete type
@@ -265,7 +350,7 @@ collectOrdConstrainedVariables = define "collectOrdConstrainedVariables" $
     _Type_record>>: "rt" ~>
       Lists.concat $ Lists.map
         ("ft" ~> collectOrdConstrainedVariables @@ Core.fieldTypeType (var "ft"))
-        (Core.rowTypeFields (var "rt")),
+        (var "rt"),
     -- For Set<T>, collect all type variables from T (they all need Ord)
     -- plus recurse into T for nested Sets
     _Type_set>>: "elemType" ~>
@@ -275,9 +360,9 @@ collectOrdConstrainedVariables = define "collectOrdConstrainedVariables" $
     _Type_union>>: "rt" ~>
       Lists.concat $ Lists.map
         ("ft" ~> collectOrdConstrainedVariables @@ Core.fieldTypeType (var "ft"))
-        (Core.rowTypeFields (var "rt")),
+        (var "rt"),
     _Type_wrap>>: "wt" ~>
-      collectOrdConstrainedVariables @@ Core.wrappedTypeBody (var "wt")]
+      collectOrdConstrainedVariables @@ var "wt"]
 
 -- | Collect all type variables from a type expression (for use in Set element types)
 -- Note: Uses 'cases' instead of 'match' to avoid variable shadowing from eta expansion
@@ -313,17 +398,17 @@ collectTypeVariablesFromType = define "collectTypeVariablesFromType" $
     _Type_record>>: "rt" ~>
       Lists.concat $ Lists.map
         ("ft" ~> collectTypeVariablesFromType @@ Core.fieldTypeType (var "ft"))
-        (Core.rowTypeFields (var "rt")),
+        (var "rt"),
     _Type_set>>: "elemType" ~>
       collectTypeVariablesFromType @@ var "elemType",
     _Type_union>>: "rt" ~>
       Lists.concat $ Lists.map
         ("ft" ~> collectTypeVariablesFromType @@ Core.fieldTypeType (var "ft"))
-        (Core.rowTypeFields (var "rt")),
+        (var "rt"),
     _Type_variable>>: "name" ~>
       list [var "name"],
     _Type_wrap>>: "wt" ~>
-      collectTypeVariablesFromType @@ Core.wrappedTypeBody (var "wt")]
+      collectTypeVariablesFromType @@ var "wt"]
 
 -- | Build the decoder function type for a given type
 -- For monomorphic types: Graph -> Term -> Either DecodingError ResultType
@@ -412,18 +497,15 @@ decoderFullResultType = define "decoderFullResultType" $
       Core.typePair $ Core.pairType
         (decoderFullResultType @@ Core.pairTypeFirst (var "pt"))
         (decoderFullResultType @@ Core.pairTypeSecond (var "pt")),
-    _Type_record>>: "rt" ~>
-      Core.typeVariable (Core.rowTypeTypeName (var "rt")),
+    _Type_record>>: constant (Core.typeVariable (Core.nameLift _Term)),
     _Type_set>>: "elemType" ~>
       -- Set a -> Set (decoded a)
       Core.typeSet (decoderFullResultType @@ var "elemType"),
-    _Type_union>>: "rt" ~>
-      Core.typeVariable (Core.rowTypeTypeName (var "rt")),
+    _Type_union>>: constant (Core.typeVariable (Core.nameLift _Term)),
     _Type_unit>>: constant Core.typeUnit,
     _Type_variable>>: "name" ~>
       Core.typeVariable (var "name"),
-    _Type_wrap>>: "wt" ~>
-      Core.typeVariable (Core.wrappedTypeTypeName (var "wt"))]
+    _Type_wrap>>: constant (Core.typeVariable (Core.nameLift _Term))]
 
 -- | Decode a single type binding into a decoder binding
 -- Decodes the Type from the binding's term, then generates decoder
@@ -435,8 +517,8 @@ decodeBinding = define "decodeBinding" $
       "typ" ~>
       right (Core.binding
         (decodeBindingName @@ (Core.bindingName (var "b")))
-        (decodeType @@ (var "typ"))
-        (just (decoderTypeScheme @@ var "typ"))))
+        (decodeTypeNamed @@ (Core.bindingName (var "b")) @@ (var "typ"))
+        (just (decoderTypeSchemeNamed @@ (Core.bindingName (var "b")) @@ var "typ"))))
 
 -- | Generate a fully qualified binding name for a decoder function from a type name
 -- For example, "hydra.util.CaseConvention" -> "hydra.decode.util.caseConvention"
@@ -577,15 +659,23 @@ decodeNamespace = define "decodeNamespace" $
         Strings.intercalate (string ".")
           (Lists.tail (Strings.splitOn (string ".") (Module.unNamespace (var "ns"))))]))
 
--- | Generate a decoder for a record type
--- Matches Term.record and extracts the Record with the expected type name
--- Returns Either DecodingError <RecordType>
-decodeRecordType :: TBinding (RowType -> Term)
+-- | Generate a decoder for a record type with element name
+decodeRecordTypeNamed :: TBinding (Name -> [FieldType] -> Term)
+decodeRecordTypeNamed = define "decodeRecordTypeNamed" $
+  doc "Generate a decoder for a record type with element name" $
+  "ename" ~> "rt" ~> decodeRecordTypeImpl @@ var "ename" @@ var "rt"
+
+-- | Generate a decoder for a record type (no element name)
+decodeRecordType :: TBinding ([FieldType] -> Term)
 decodeRecordType = define "decodeRecordType" $
   doc "Generate a decoder for a record type" $
-  "rt" ~>
-  "typeName" <~ (Core.rowTypeTypeName $ var "rt") $
-  "fieldTypes" <~ (Core.rowTypeFields $ var "rt") $
+  "rt" ~> decodeRecordTypeImpl @@ Core.name (string "unknown") @@ var "rt"
+
+-- | Generate a decoder for a record type (implementation with name parameter)
+decodeRecordTypeImpl :: TBinding (Name -> [FieldType] -> Term)
+decodeRecordTypeImpl = define "decodeRecordTypeImpl" $
+  doc "Generate a decoder for a record type with a type name" $
+  "tname" ~> "rt" ~>
   -- For each field, build a term that decodes it from fieldMap using requireField helper
   -- Returns: Either DecodingError fieldValue
   "decodeFieldTerm" <~ ("ft" ~>
@@ -608,14 +698,13 @@ decodeRecordType = define "decodeRecordType" $
         DC.primitive _eithers_bind
           @@@ (var "decodeFieldTerm" @@ var "ft")
           @@@ (var "toFieldLambda" @@ var "ft" @@ var "acc"))
-      -- Base case: Right with the constructed record (wrapped as Term)
-      (DC.right $ Core.termRecord $ Core.record (var "typeName") $
+      -- Base case: Right with the decoded record value
+      (DC.right $ Core.termRecord $ Core.record (var "tname") $
         Lists.map ("ft" ~> Core.field (Core.fieldTypeName $ var "ft") $ Core.termVariable $ var "localVarName" @@ var "ft")
-          (var "fieldTypes"))
-      (Lists.reverse $ var "fieldTypes")) $
+          (var "rt"))
+      (Lists.reverse $ var "rt")) $
   deannotateAndMatch
-    (just $ leftError (
-      Strings.cat $ list [string "expected record of type ", Core.unName (var "typeName")])) [
+    (just $ leftError (string "expected record")) [
     DC.field _Term_record $ DC.lambda "record" $
       DC.lets [
         -- Build Map Name Term from the record's fields using toFieldMap helper
@@ -687,7 +776,35 @@ decodeSetType = define "decodeSetType" $
   "elemDecoder" <~ decodeType @@ var "elemType" $
   DC.ref Helpers.decodeSet @@@ var "elemDecoder"
 
--- | Generate a decoder term for a given Type
+-- | Generate a decoder term for a given Type with element name context
+decodeTypeNamed :: TBinding (Name -> Type -> Term)
+decodeTypeNamed = define "decodeTypeNamed" $
+  doc "Generate a decoder term for a Type, with element name for nominal types" $
+  "ename" ~> "typ" ~>
+  cases _Type (var "typ")
+    (Just $ DC.lambda "cx" $ DC.lambda "t" $ leftError $ string "unsupported type variant") [
+    _Type_annotated>>: "at" ~> decodeTypeNamed @@ var "ename" @@ (Core.annotatedTypeBody (var "at")),
+    _Type_application>>: "appType" ~>
+      (decodeType @@ Core.applicationTypeFunction (var "appType"))
+        @@@ (decodeType @@ Core.applicationTypeArgument (var "appType")),
+    _Type_either>>: "et" ~> decodeEitherType @@ var "et",
+    _Type_forall>>: "ft" ~>
+      Core.termFunction $ Core.functionLambda $
+        Core.lambda (decodeBindingName @@ Core.forallTypeParameter (var "ft")) nothing
+          (decodeTypeNamed @@ var "ename" @@ Core.forallTypeBody (var "ft")),
+    _Type_list>>: "elemType" ~> decodeListType @@ var "elemType",
+    _Type_literal>>: "lt" ~> decodeLiteralType @@ var "lt",
+    _Type_map>>: "mt" ~> decodeMapType @@ var "mt",
+    _Type_maybe>>: "elemType" ~> decodeMaybeType @@ var "elemType",
+    _Type_pair>>: "pt" ~> decodePairType @@ var "pt",
+    _Type_record>>: "rt" ~> decodeRecordTypeNamed @@ var "ename" @@ var "rt",
+    _Type_set>>: "elemType" ~> decodeSetType @@ var "elemType",
+    _Type_union>>: "rt" ~> decodeUnionTypeNamed @@ var "ename" @@ var "rt",
+    _Type_unit>>: constant decodeUnitType,
+    _Type_wrap>>: "wt" ~> decodeWrappedTypeNamed @@ var "ename" @@ var "wt",
+    _Type_variable>>: "typeName" ~> Core.termVariable (decodeBindingName @@ var "typeName")]
+
+-- | Generate a decoder term for a given Type (without element name context)
 decodeType :: TBinding (Type -> Term)
 decodeType = define "decodeType" $
   doc "Generate a decoder term for a Type" $
@@ -718,58 +835,61 @@ decodeUnitType = define "decodeUnitType" $
   doc "Generate a decoder for the unit type" $
   DC.ref Helpers.decodeUnit
 
--- | Generate a decoder for a union type (including enums)
-decodeUnionType :: TBinding (RowType -> Term)
-decodeUnionType = define "decodeUnionType" $
-  doc "Generate a decoder for a union type" $
-  "rt" ~>
-  "typeName" <~ (Core.rowTypeTypeName $ var "rt") $
+-- | Generate a decoder for a union type with element name
+decodeUnionTypeNamed :: TBinding (Name -> [FieldType] -> Term)
+decodeUnionTypeNamed = define "decodeUnionTypeNamed" $
+  doc "Generate a decoder for a union type with the given element name" $
+  "ename" ~> "rt" ~>
   "toVariantPair" <~ ("ft" ~>
     DC.pair
       (DC.wrap _Name $ DC.string $ Core.unName $ Core.fieldTypeName $ var "ft")
       (DC.lambda "input" $ DC.primitive _eithers_map
-        @@@ (DC.lambda "t" $ Core.termUnion $ Core.injection (var "typeName") $ Core.field (Core.fieldTypeName $ var "ft") $ DC.var "t")
+        @@@ (DC.lambda "t" $ Core.termUnion $ Core.injection (var "ename") $ Core.field (Core.fieldTypeName $ var "ft") $ DC.var "t")
         @@@ ((decodeType @@ (Core.fieldTypeType $ var "ft")) @@@ DC.var "cx" @@@ DC.var "input"))) $
   deannotateAndMatch
-    (just $ leftError $
-      Strings.cat $ list [string "expected union of type ", Core.unName (var "typeName")]) [
+    (just $ leftError $ string "expected union") [
     DC.field _Term_union $ DC.lambda "inj" $ DC.lets [
-      ("tname", DC.project _Injection _Injection_typeName @@@ DC.var "inj"),
       ("field", DC.project _Injection _Injection_field @@@ DC.var "inj"),
       ("fname", DC.project _Field _Field_name @@@ DC.var "field"),
       ("fterm", DC.project _Field _Field_term @@@ DC.var "field"),
       ("variantMap", DC.primitive _maps_fromList
-        @@@ (DC.list $ Lists.map (var "toVariantPair") $ Core.rowTypeFields $ var "rt"))] $
+        @@@ (DC.list $ Lists.map (var "toVariantPair") $ var "rt"))] $
       DC.primitive _maybes_maybe
         @@@ (DC.left $ DC.wrap _DecodingError $ DC.primitive _strings_cat
           @@@ (DC.list $ list [
             DC.string $ string "no such field ",
             DC.unwrap _Name @@@ DC.var "fname",
-            DC.string $ string " in union type ",
-            DC.unwrap _Name @@@ DC.var "tname"]))
+            DC.string $ string " in union"]))
         @@@ (DC.lambda "f" $ DC.var "f" @@@ DC.var "fterm")
         @@@ (DC.primitive _maps_lookup
           @@@ DC.var "fname"
           @@@ DC.var "variantMap")]
 
--- | Generate a decoder for a wrapped type
-decodeWrappedType :: TBinding (WrappedType -> Term)
-decodeWrappedType = define "decodeWrappedType" $
-  doc "Generate a decoder for a wrapped type" $
-  "wt" ~>
-  "bodyDecoder" <~ decodeType @@ Core.wrappedTypeBody (var "wt") $
-  -- Note: We can't use decodeWrapped directly because we need to re-wrap the result
-  -- with the specific type name. This is one case where the helper pattern doesn't fully apply.
+-- | Generate a decoder for a union type (without element name)
+decodeUnionType :: TBinding ([FieldType] -> Term)
+decodeUnionType = define "decodeUnionType" $
+  doc "Generate a decoder for a union type" $
+  "rt" ~> decodeUnionTypeNamed @@ Core.name (string "unknown") @@ var "rt"
+
+-- | Generate a decoder for a wrapped type with element name
+decodeWrappedTypeNamed :: TBinding (Name -> Type -> Term)
+decodeWrappedTypeNamed = define "decodeWrappedTypeNamed" $
+  doc "Generate a decoder for a wrapped type with the given element name" $
+  "ename" ~> "wt" ~>
+  "bodyDecoder" <~ decodeType @@ var "wt" $
   deannotateAndMatch
-    (just $ leftError (
-      Strings.cat $ list [
-        string "expected wrapped type ",
-        Core.unName (Core.wrappedTypeTypeName (var "wt"))])) [
+    (just $ leftError (string "expected wrapped type")) [
     DC.field _Term_wrap $ DC.lambda "wrappedTerm" $
       DC.primitive _eithers_map
-        @@@ (DC.lambda "b" $ DC.wrapDynamic (Core.wrappedTypeTypeName $ var "wt") (DC.var "b"))
+        @@@ (DC.lambda "b" $ DC.wrapDynamic (var "ename") (DC.var "b"))
         @@@ (var "bodyDecoder" @@@ DC.var "cx"
           @@@ (DC.project _WrappedTerm _WrappedTerm_body @@@ DC.var "wrappedTerm"))]
+
+-- | Generate a decoder for a wrapped type (without element name)
+decodeWrappedType :: TBinding (Type -> Term)
+decodeWrappedType = define "decodeWrappedType" $
+  doc "Generate a decoder for a wrapped type" $
+  "wt" ~> decodeWrappedTypeNamed @@ Core.name (string "unknown") @@ var "wt"
 
 -- | Filter bindings to only decodable type definitions
 filterTypeBindings :: TBinding (Context -> Graph -> [Binding] -> Prelude.Either (InContext Error) [Binding])

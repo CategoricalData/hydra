@@ -151,12 +151,12 @@ yamlToJson = define "yamlToJson" $
       Eithers.map ("vs" ~> Json.valueArray $ var "vs") (var "results")]
 
 -- | Decode a YAML Node to a Hydra Term via JSON.
-fromYaml :: TBinding (M.Map Name Type -> Type -> YM.Node -> Either String Term)
+fromYaml :: TBinding (M.Map Name Type -> Name -> Type -> YM.Node -> Either String Term)
 fromYaml = define "fromYaml" $
   doc "Decode a YAML node to a Hydra term via JSON decoding." $
-  "types" ~> "typ" ~> "node" ~>
+  "types" ~> "tname" ~> "typ" ~> "node" ~>
   "jsonResult" <~ (yamlToJson @@ var "node") $
   Eithers.either_
     ("err" ~> left $ var "err")
-    ("json" ~> JsonDecode.fromJson @@ var "types" @@ var "typ" @@ var "json")
+    ("json" ~> JsonDecode.fromJson @@ var "types" @@ var "tname" @@ var "typ" @@ var "json")
     (var "jsonResult")

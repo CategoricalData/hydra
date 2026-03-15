@@ -490,15 +490,15 @@ nameToFilePath = define "nameToFilePath" $
   "suffix" <~ Formatting.convertCase @@ Util.caseConventionPascal @@ var "localConv" @@ var "local" $
   Strings.cat (list [var "prefix", var "suffix", string ".", Module.unFileExtension (var "ext")])
 
-unionTypeToRecordType :: TBinding (RowType -> RowType)
+unionTypeToRecordType :: TBinding ([FieldType] -> [FieldType])
 unionTypeToRecordType = define "unionTypeToRecordType" $
-  doc "Convert a union row type to a record row type" $
+  doc "Convert a union field type list to a record field type list with optional fields" $
   "rt" ~>
   "makeOptional" <~ ("f" ~>
     "fn" <~ Core.fieldTypeName (var "f") $
     "ft" <~ Core.fieldTypeType (var "f") $
     Core.fieldType (var "fn") (Rewriting.mapBeneathTypeAnnotations @@ unaryFunction Core.typeMaybe @@ var "ft")) $
-  Core.rowType (Core.rowTypeTypeName (var "rt")) (Lists.map (var "makeOptional") (Core.rowTypeFields (var "rt")))
+  Lists.map (var "makeOptional") (var "rt")
 
 
 --------------------------------------------------------------------------------

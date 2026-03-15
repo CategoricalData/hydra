@@ -921,7 +921,7 @@ inferTypeOfRecord = define "inferTypeOfRecord" $
   "itypes" <~ Pairs.first (Pairs.second $ var "results") $
   "isubst" <~ Pairs.first (Pairs.second $ Pairs.second $ var "results") $
   "recElemConstraints" <~ Pairs.second (Pairs.second $ Pairs.second $ var "results") $
-  "ityp" <~ Core.typeRecord (Core.rowType (var "tname") $
+  "ityp" <~ Core.typeRecord (
       Lists.zipWith ("n" ~> "t" ~> Core.fieldType (var "n") (var "t")) (var "fnames") (var "itypes")) $
   "mcResult" <<~ mapConstraints @@ var "fcx3" @@ var "cx" @@
     ("subst" ~> yieldWithConstraints
@@ -1046,7 +1046,7 @@ inferTypeOfWrappedTerm = define "inferTypeOfWrappedTerm" $
   "iterm" <~ Typing.inferenceResultTerm (var "result") $
   "itype" <~ Typing.inferenceResultType (var "result") $
   "isubst" <~ Typing.inferenceResultSubst (var "result") $
-  "ityp" <~ Core.typeWrap (Core.wrappedType (var "tname") (var "itype")) $
+  "ityp" <~ Core.typeWrap (var "itype") $
   "mcResult" <<~ mapConstraints @@ var "fcx3" @@ var "cx"
     @@ ("subst" ~> yield
       @@ var "fcx3"
