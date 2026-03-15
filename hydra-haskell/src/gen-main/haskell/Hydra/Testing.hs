@@ -549,6 +549,28 @@ _TestCodec_importTemplate = (Core.Name "importTemplate")
 
 _TestCodec_findImports = (Core.Name "findImports")
 
+-- | A language-agnostic test generator abstraction, parameterized by the namespace/module name type
+data TestGenerator a = 
+  TestGenerator {
+    -- | Build namespaces for a module, resolving all imports and primitives
+    testGeneratorNamespacesForModule :: (Module.Module -> Graph.Graph -> Either String (Module.Namespaces a)),
+    -- | Create a test codec from resolved namespaces
+    testGeneratorCreateCodec :: (Module.Namespaces a -> TestCodec),
+    -- | Generate a complete test file for a module and test group
+    testGeneratorGenerateTestFile :: (Module.Module -> TestGroup -> Graph.Graph -> Either String (String, String)),
+    -- | Generate an aggregator file (e.g., Spec.hs for Haskell, conftest.py for Python). Takes base directory and list of modules, returns (filepath, content) or Nothing if not needed
+    testGeneratorAggregatorFile :: (Maybe (String -> [Module.Module] -> (String, String)))}
+
+_TestGenerator = (Core.Name "hydra.testing.TestGenerator")
+
+_TestGenerator_namespacesForModule = (Core.Name "namespacesForModule")
+
+_TestGenerator_createCodec = (Core.Name "createCodec")
+
+_TestGenerator_generateTestFile = (Core.Name "generateTestFile")
+
+_TestGenerator_aggregatorFile = (Core.Name "aggregatorFile")
+
 -- | A simple test case with an input and an expected output
 data TestCase = 
   -- | An alpha conversion test

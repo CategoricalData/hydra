@@ -1,8 +1,8 @@
 module Hydra.UpdateGenerationTests where
 
 import Hydra.Kernel
-import Hydra.Staging.Testing.Generation.Generate
-import Hydra.Staging.Haskell.TestCodec (haskellTestGenerator)
+import Hydra.Generation (createTestGroupLookup, generateGenerationTestSuite)
+import Hydra.Ext.Haskell.TestCodecIo (haskellTestGenerator)
 import qualified Hydra.Sources.Test.TestSuite as TestSuite
 import qualified Hydra.Test.TestSuite as GenTests
 import System.Exit (exitFailure)

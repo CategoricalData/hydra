@@ -1,6 +1,9 @@
 -- | Entry point for Hydra code generation utilities
 
-module Hydra.Generation where
+module Hydra.Generation (
+  module Hydra.Generation,
+  TestGenerator(..),
+) where
 
 import Hydra.Kernel
 import Hydra.Dsl.Annotations
@@ -8,6 +11,8 @@ import Hydra.Dsl.Bootstrap
 import Hydra.Ext.Haskell.Coder
 import Hydra.Ext.Haskell.Language
 import Hydra.Module (_Module)
+import Hydra.Testing (TestGenerator(..), TestCodec(..), TestGroup(..), TestCaseWithMetadata(..), TestCase(..),
+                       DelegatedEvaluationTestCase(..))
 import qualified Hydra.Json.Model as Json
 import qualified Hydra.Json.Writer as JsonWriter
 import Hydra.Sources.Libraries
@@ -20,6 +25,12 @@ import qualified Hydra.Sources.All as Sources
 import qualified Hydra.Sources.Eval.Lib.All as EvalLib
 import qualified Hydra.Sources.Kernel.Types.Core as CoreTypes
 import qualified Hydra.CodeGeneration as CodeGeneration
+import Hydra.Test.Transform (addGenerationPrefix, collectTestCases, transformToCompiledTests)
+import Hydra.Sources.Test.All (testModules)
+import qualified Hydra.Inference as Inference
+
+import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
+import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 
 import qualified Control.Monad as CM
 import qualified Data.Aeson as A
@@ -35,6 +46,9 @@ import qualified Data.Map as M
 import qualified Data.Text as T
 import qualified System.Directory as SD
 import qualified Data.Maybe as Y
+import Data.Char (isAlphaNum, isUpper, toLower, toUpper)
+import Debug.Trace (trace)
+import qualified Hydra.Lib.Strings as Strings
 
 
 -- | Format an InContext Error with trace information
@@ -296,3 +310,125 @@ loadModulesFromJson doStripTypeSchemes basePath universeModules namespaces = do
           Right mod -> do
             putStrLn $ "  Loaded: " ++ unNamespace ns
             return mod
+
+----------------------------------------
+-- Test Generation
+----------------------------------------
+
+-- | Build namespaces for test group by creating a module with test terms and using the generator's namespacesForModule
+buildNamespacesForTestGroup :: TestGenerator a -> Module -> TestGroup -> Graph -> Either String (Namespaces a)
+buildNamespacesForTestGroup testGen testModule testGroup g = do
+    let testCases = collectTestCases testGroup
+        testTerms = concatMap extractTestTerms testCases
+        testBindings = zipWith (\i term -> Binding (Name $ "_test_" ++ show i) term Nothing) ([0..] :: [Integer]) testTerms
+        tempModule = testModule { moduleElements = testBindings }
+    testGeneratorNamespacesForModule testGen tempModule g
+  where
+    extractTestTerms (TestCaseWithMetadata _ tcase _ _) = case tcase of
+      TestCaseDelegatedEvaluation (DelegatedEvaluationTestCase input output) -> [input, output]
+      _ -> []
+
+-- | Build a mapping from module namespaces to test groups by matching on derived keys.
+buildTestGroupMap :: [Namespace] -> TestGroup -> M.Map Namespace TestGroup
+buildTestGroupMap subModuleNamespaces rootTestGroup =
+  let subGroups = testGroupSubgroups rootTestGroup
+      groupByName = M.fromList [(testGroupName g, g) | g <- subGroups]
+      pairs = [(ns, group) |
+               ns <- subModuleNamespaces,
+               let expectedName = deriveTestGroupName ns,
+               Just group <- [M.lookup expectedName groupByName]]
+  in M.fromList pairs
+  where
+    deriveTestGroupName (Namespace ns) =
+      let parts = Strings.splitOn "." ns
+          withoutPrefix = drop 2 parts
+      in case withoutPrefix of
+        ("lib":rest) -> "hydra.lib." ++ L.intercalate "." rest ++ " primitives"
+        ["json", "coder"] -> "JSON coder"
+        ["json", "parser"] -> "JSON parsing"
+        ["json", "writer"] -> "JSON serialization"
+        [name] -> decamelize name
+        parts' | not (null parts') && last parts' == "all" -> L.intercalate "." (init parts')
+        _ -> L.intercalate "." withoutPrefix
+
+    decamelize s = map toLower $ L.intercalate " " $ splitCamelCase s
+
+    splitCamelCase [] = []
+    splitCamelCase (c:cs) =
+      let (word, rest) = span (not . isUpper) cs
+      in (c:word) : splitCamelCase rest
+
+-- | Create a lookup function from a test group hierarchy
+createTestGroupLookup :: [Namespace] -> TestGroup -> (Namespace -> Maybe TestGroup)
+createTestGroupLookup subModuleNamespaces rootTestGroup =
+  let testGroupMap = buildTestGroupMap subModuleNamespaces rootTestGroup
+  in \ns -> M.lookup ns testGroupMap
+
+-- | Main entry point: generate generation test suite from test modules
+generateGenerationTestSuite :: TestGenerator a -> FilePath -> [Module] -> (Namespace -> Maybe TestGroup) -> IO Bool
+generateGenerationTestSuite testGen outDir modules lookupTestGroup = do
+  putStrLn "Processing test modules..."
+
+  putStrLn $ "Found " ++ show (length modules) ++ " test module(s)"
+  putStrLn "Transforming test suite to generation tests..."
+
+  let moduleTestPairs = [(mod, transformed) |
+        mod <- modules,
+        Just testGroup <- [lookupTestGroup (moduleNamespace mod)],
+        Just transformed <- [transformToCompiledTests testGroup]]
+
+  if null moduleTestPairs
+    then do
+      putStrLn "No generation tests to generate"
+      return True
+    else do
+      putStrLn $ "Found " ++ show (length moduleTestPairs) ++ " module(s) with generation tests, generating to " ++ outDir
+
+      let graph = modulesToGraph (Sources.mainModules ++ testModules) $ modules ++ extraModules
+
+      putStrLn "Starting type inference..."
+      let cx0 = Context [] [] M.empty
+      case Inference.inferGraphTypes cx0 (graphToBindings graph) graph of
+        Left ic -> do
+          putStrLn $ "✗ Type inference failed: " ++ showError (inContextObject ic)
+          return False
+        Right ((g, _inferredBindings), _cx') -> do
+          putStrLn $ "Type inference complete. Generating " ++ show (length moduleTestPairs) ++ " module(s)..."
+
+          result <- generateAllFiles testGen g outDir moduleTestPairs writeFilePair
+
+          case result of
+            Left err -> do
+              putStrLn $ "✗ Generation failed: " ++ err
+              return False
+            Right count -> do
+              putStrLn $ "✓ Successfully generated " ++ show count ++ " test file(s)"
+              return True
+  where
+    writeFilePair (fullPath, content) = do
+      SD.createDirectoryIfMissing True $ FP.takeDirectory fullPath
+      writeFile fullPath content
+      putStrLn $ "  Generated: " ++ fullPath
+    extraModules = [Formatting.module_, Lexical.module_, CoreTypes.module_]
+
+-- | Generate all test files using the provided test generator and write them
+generateAllFiles :: TestGenerator a -> Graph -> FilePath -> [(Module, TestGroup)] -> ((FilePath, String) -> IO ()) -> IO (Either String Int)
+generateAllFiles testGen g baseDir modulePairs writeFile' = go 1 modulePairs
+  where
+    go _ [] = do
+      case testGeneratorAggregatorFile testGen of
+        Just genAggregator -> do
+          let aggregator = genAggregator baseDir (map fst modulePairs)
+          writeFile' aggregator
+          return $ Right (length modulePairs + 1)
+        Nothing -> return $ Right (length modulePairs)
+    go idx ((sourceModule, testGroup):rest) = do
+      let ns = moduleNamespace sourceModule
+          generationModule = sourceModule {moduleNamespace = addGenerationPrefix ns}
+      trace ("  Generating module " ++ show idx ++ ": " ++ show ns) $ return ()
+      case testGeneratorGenerateTestFile testGen generationModule testGroup g of
+        Left err -> return $ Left err
+        Right (filePath, content) -> do
+          let fullPath = FP.combine baseDir filePath
+          writeFile' (fullPath, content)
+          go (idx + 1) rest
