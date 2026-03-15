@@ -326,6 +326,29 @@ Or run individual phases:
 The order is: **Haskell first, then Ext, then Java and Python.** The `sync-all.sh`
 script enforces this order and stops at the first error.
 
+## Benchmarking
+
+The instrumented test runners produce JSON timing data when `HYDRA_BENCHMARK_OUTPUT`
+is set. The `run-benchmark-tests.sh` script automates this:
+
+```bash
+# Run Java benchmarks (5 repetitions, tagged for comparison)
+bin/run-benchmark-tests.sh java --repeat 5 --tag baseline
+
+# Run all implementations
+bin/run-benchmark-tests.sh --repeat 3
+
+# Just show the dashboard for existing runs
+bin/run-benchmark-tests.sh dashboard
+
+# Compare two tagged runs
+python3 bin/benchmark-dashboard.py compare baseline feature
+```
+
+Results are stored in `benchmark/runs/`. See the
+[Benchmarking](https://github.com/CategoricalData/hydra/wiki/Benchmarking) wiki page
+for details.
+
 ## DSL quick reference
 
 ### Haskell DSL operators
