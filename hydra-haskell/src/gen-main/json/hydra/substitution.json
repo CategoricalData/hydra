@@ -1009,511 +1009,144 @@
                                           "values": {"variable": "hydra.core.TypeVariableMetadata"}}},
                                       "variables": []}]}],
                               "body": {
-                                "record": {
-                                  "fields": [
+                                "let": {
+                                  "bindings": [
                                     {
-                                      "name": "boundTerms",
+                                      "name": "cx2",
                                       "term": {
-                                        "application": {
-                                          "argument": {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "boundTerms",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "boundTerms", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {"name": "boundTypes", "term": {"variable": "newBoundTypes"}},
-                                                {
-                                                  "name": "classConstraints",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {
-                                                            "record": {"field": "classConstraints", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "lambdaVariables",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {
-                                                            "record": {"field": "lambdaVariables", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "metadata",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "metadata", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "primitives",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "primitives", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "schemaTypes",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "schemaTypes", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "typeVariables",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {
-                                                            "record": {"field": "typeVariables", "typeName": "hydra.graph.Graph"}}}}}}}],
-                                              "typeName": "hydra.graph.Graph"}},
-                                          "function": {
-                                            "function": {
-                                              "elimination": {"record": {"field": "boundTerms", "typeName": "hydra.graph.Graph"}}}}}}},
-                                    {
-                                      "name": "boundTypes",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "boundTerms",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "boundTerms", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {"name": "boundTypes", "term": {"variable": "newBoundTypes"}},
-                                                {
-                                                  "name": "classConstraints",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {
-                                                            "record": {"field": "classConstraints", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "lambdaVariables",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {
-                                                            "record": {"field": "lambdaVariables", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "metadata",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "metadata", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "primitives",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "primitives", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "schemaTypes",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "schemaTypes", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "typeVariables",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {
-                                                            "record": {"field": "typeVariables", "typeName": "hydra.graph.Graph"}}}}}}}],
-                                              "typeName": "hydra.graph.Graph"}},
-                                          "function": {
-                                            "function": {
-                                              "elimination": {"record": {"field": "boundTypes", "typeName": "hydra.graph.Graph"}}}}}}},
-                                    {
-                                      "name": "classConstraints",
-                                      "term": {"variable": "newClassConstraints"}},
-                                    {
-                                      "name": "lambdaVariables",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "boundTerms",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "boundTerms", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {"name": "boundTypes", "term": {"variable": "newBoundTypes"}},
-                                                {
-                                                  "name": "classConstraints",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {
-                                                            "record": {"field": "classConstraints", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "lambdaVariables",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {
-                                                            "record": {"field": "lambdaVariables", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "metadata",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "metadata", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "primitives",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "primitives", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "schemaTypes",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "schemaTypes", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "typeVariables",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {
-                                                            "record": {"field": "typeVariables", "typeName": "hydra.graph.Graph"}}}}}}}],
-                                              "typeName": "hydra.graph.Graph"}},
-                                          "function": {
-                                            "function": {
-                                              "elimination": {
-                                                "record": {"field": "lambdaVariables", "typeName": "hydra.graph.Graph"}}}}}}},
-                                    {
-                                      "name": "metadata",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "boundTerms",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "boundTerms", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {"name": "boundTypes", "term": {"variable": "newBoundTypes"}},
-                                                {
-                                                  "name": "classConstraints",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {
-                                                            "record": {"field": "classConstraints", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "lambdaVariables",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {
-                                                            "record": {"field": "lambdaVariables", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "metadata",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "metadata", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "primitives",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "primitives", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "schemaTypes",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "schemaTypes", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "typeVariables",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {
-                                                            "record": {"field": "typeVariables", "typeName": "hydra.graph.Graph"}}}}}}}],
-                                              "typeName": "hydra.graph.Graph"}},
-                                          "function": {
-                                            "function": {
-                                              "elimination": {"record": {"field": "metadata", "typeName": "hydra.graph.Graph"}}}}}}},
-                                    {
-                                      "name": "primitives",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "boundTerms",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "boundTerms", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {"name": "boundTypes", "term": {"variable": "newBoundTypes"}},
-                                                {
-                                                  "name": "classConstraints",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {
-                                                            "record": {"field": "classConstraints", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "lambdaVariables",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {
-                                                            "record": {"field": "lambdaVariables", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "metadata",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "metadata", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "primitives",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "primitives", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "schemaTypes",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "schemaTypes", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "typeVariables",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {
-                                                            "record": {"field": "typeVariables", "typeName": "hydra.graph.Graph"}}}}}}}],
-                                              "typeName": "hydra.graph.Graph"}},
-                                          "function": {
-                                            "function": {
-                                              "elimination": {"record": {"field": "primitives", "typeName": "hydra.graph.Graph"}}}}}}},
-                                    {
-                                      "name": "schemaTypes",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "boundTerms",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "boundTerms", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {"name": "boundTypes", "term": {"variable": "newBoundTypes"}},
-                                                {
-                                                  "name": "classConstraints",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {
-                                                            "record": {"field": "classConstraints", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "lambdaVariables",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {
-                                                            "record": {"field": "lambdaVariables", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "metadata",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "metadata", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "primitives",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "primitives", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "schemaTypes",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "schemaTypes", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "typeVariables",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {
-                                                            "record": {"field": "typeVariables", "typeName": "hydra.graph.Graph"}}}}}}}],
-                                              "typeName": "hydra.graph.Graph"}},
-                                          "function": {
-                                            "function": {
-                                              "elimination": {"record": {"field": "schemaTypes", "typeName": "hydra.graph.Graph"}}}}}}},
-                                    {
-                                      "name": "typeVariables",
-                                      "term": {
-                                        "application": {
-                                          "argument": {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "boundTerms",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "boundTerms", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {"name": "boundTypes", "term": {"variable": "newBoundTypes"}},
-                                                {
-                                                  "name": "classConstraints",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {
-                                                            "record": {"field": "classConstraints", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "lambdaVariables",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {
-                                                            "record": {"field": "lambdaVariables", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "metadata",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "metadata", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "primitives",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "primitives", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "schemaTypes",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "schemaTypes", "typeName": "hydra.graph.Graph"}}}}}}},
-                                                {
-                                                  "name": "typeVariables",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {"variable": "cx"},
-                                                      "function": {
-                                                        "function": {
-                                                          "elimination": {
-                                                            "record": {"field": "typeVariables", "typeName": "hydra.graph.Graph"}}}}}}}],
-                                              "typeName": "hydra.graph.Graph"}},
-                                          "function": {
-                                            "function": {
-                                              "elimination": {
-                                                "record": {"field": "typeVariables", "typeName": "hydra.graph.Graph"}}}}}}}],
-                                  "typeName": "hydra.graph.Graph"}}}}}},
+                                        "record": {
+                                          "fields": [
+                                            {
+                                              "name": "boundTerms",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "cx"},
+                                                  "function": {
+                                                    "function": {
+                                                      "elimination": {"record": {"field": "boundTerms", "typeName": "hydra.graph.Graph"}}}}}}},
+                                            {"name": "boundTypes", "term": {"variable": "newBoundTypes"}},
+                                            {
+                                              "name": "classConstraints",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "cx"},
+                                                  "function": {
+                                                    "function": {
+                                                      "elimination": {
+                                                        "record": {"field": "classConstraints", "typeName": "hydra.graph.Graph"}}}}}}},
+                                            {
+                                              "name": "lambdaVariables",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "cx"},
+                                                  "function": {
+                                                    "function": {
+                                                      "elimination": {
+                                                        "record": {"field": "lambdaVariables", "typeName": "hydra.graph.Graph"}}}}}}},
+                                            {
+                                              "name": "metadata",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "cx"},
+                                                  "function": {
+                                                    "function": {
+                                                      "elimination": {"record": {"field": "metadata", "typeName": "hydra.graph.Graph"}}}}}}},
+                                            {
+                                              "name": "primitives",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "cx"},
+                                                  "function": {
+                                                    "function": {
+                                                      "elimination": {"record": {"field": "primitives", "typeName": "hydra.graph.Graph"}}}}}}},
+                                            {
+                                              "name": "schemaTypes",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "cx"},
+                                                  "function": {
+                                                    "function": {
+                                                      "elimination": {"record": {"field": "schemaTypes", "typeName": "hydra.graph.Graph"}}}}}}},
+                                            {
+                                              "name": "typeVariables",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "cx"},
+                                                  "function": {
+                                                    "function": {
+                                                      "elimination": {
+                                                        "record": {"field": "typeVariables", "typeName": "hydra.graph.Graph"}}}}}}}],
+                                          "typeName": "hydra.graph.Graph"}},
+                                      "type": [
+                                        {
+                                          "constraints": null,
+                                          "type": {"variable": "hydra.graph.Graph"},
+                                          "variables": []}]}],
+                                  "body": {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "boundTerms",
+                                          "term": {
+                                            "application": {
+                                              "argument": {"variable": "cx2"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {"record": {"field": "boundTerms", "typeName": "hydra.graph.Graph"}}}}}}},
+                                        {
+                                          "name": "boundTypes",
+                                          "term": {
+                                            "application": {
+                                              "argument": {"variable": "cx2"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {"record": {"field": "boundTypes", "typeName": "hydra.graph.Graph"}}}}}}},
+                                        {
+                                          "name": "classConstraints",
+                                          "term": {"variable": "newClassConstraints"}},
+                                        {
+                                          "name": "lambdaVariables",
+                                          "term": {
+                                            "application": {
+                                              "argument": {"variable": "cx2"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {
+                                                    "record": {"field": "lambdaVariables", "typeName": "hydra.graph.Graph"}}}}}}},
+                                        {
+                                          "name": "metadata",
+                                          "term": {
+                                            "application": {
+                                              "argument": {"variable": "cx2"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {"record": {"field": "metadata", "typeName": "hydra.graph.Graph"}}}}}}},
+                                        {
+                                          "name": "primitives",
+                                          "term": {
+                                            "application": {
+                                              "argument": {"variable": "cx2"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {"record": {"field": "primitives", "typeName": "hydra.graph.Graph"}}}}}}},
+                                        {
+                                          "name": "schemaTypes",
+                                          "term": {
+                                            "application": {
+                                              "argument": {"variable": "cx2"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {"record": {"field": "schemaTypes", "typeName": "hydra.graph.Graph"}}}}}}},
+                                        {
+                                          "name": "typeVariables",
+                                          "term": {
+                                            "application": {
+                                              "argument": {"variable": "cx2"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {
+                                                    "record": {"field": "typeVariables", "typeName": "hydra.graph.Graph"}}}}}}}],
+                                      "typeName": "hydra.graph.Graph"}}}}}}}},
                       "domain": [{"variable": "hydra.graph.Graph"}],
                       "parameter": "cx"}}},
                 "domain": [{"variable": "hydra.typing.TypeSubst"}],

@@ -85,7 +85,7 @@ public class SetsTest {
 
             (hydra.util.PersistentSet<T0>) (hydra.util.PersistentSet.<T0>empty()),
 
-            hydra.lib.sets.FromList.apply((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>of())));
+            hydra.lib.sets.FromList.apply((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>empty())));
 
     }
 
@@ -133,7 +133,7 @@ public class SetsTest {
 
         assertEquals(
 
-            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty()),
 
             hydra.lib.sets.ToList.apply((hydra.util.PersistentSet<T1>) (hydra.util.PersistentSet.<T1>empty())));
 
@@ -484,7 +484,7 @@ public class SetsTest {
 
             (hydra.util.PersistentSet<T0>) (hydra.util.PersistentSet.<T0>empty()),
 
-            hydra.lib.sets.Unions.apply((hydra.util.ConsList<hydra.util.PersistentSet<T0>>) (hydra.util.ConsList.<hydra.util.PersistentSet<T0>>of())));
+            hydra.lib.sets.Unions.apply((hydra.util.ConsList<hydra.util.PersistentSet<T0>>) (hydra.util.ConsList.<hydra.util.PersistentSet<T0>>empty())));
 
     }
 

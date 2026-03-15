@@ -304,7 +304,7 @@ public class ReductionTest {
 
             0,
 
-            hydra.lib.lists.Length.apply((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>of())));
+            hydra.lib.lists.Length.apply((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>empty())));
 
     }
 
@@ -397,7 +397,7 @@ public class ReductionTest {
   2),
 
             hydra.lib.lists.Concat2.apply(
-  (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of()),
+  (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty()),
   hydra.util.ConsList.of(
     1,
     2)));
@@ -428,9 +428,9 @@ public class ReductionTest {
 
         assertEquals(
 
-            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty()),
 
-            hydra.lib.lists.Reverse.apply((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>of())));
+            hydra.lib.lists.Reverse.apply((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>empty())));
 
     }
 
@@ -596,9 +596,9 @@ public class ReductionTest {
 
         assertEquals(
 
-            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty()),
 
-            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()));
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty()));
 
     }
 

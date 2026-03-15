@@ -8,7 +8,7 @@ package hydra.test.serialization;
 public interface Serialization {
   static hydra.testing.TestGroup allTests() {
     return new hydra.testing.TestGroup("serialization", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), hydra.util.ConsList.of(
-      new hydra.testing.TestGroup("associativity", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.TestGroup>) (hydra.util.ConsList.<hydra.testing.TestGroup>of()), hydra.util.ConsList.of(new hydra.testing.TestCaseWithMetadata("right-associative operator", new hydra.testing.TestCase.Serialization(new hydra.testing.SerializationTestCase(hydra.serialization.Serialization.ifx(
+      new hydra.testing.TestGroup("associativity", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.TestGroup>) (hydra.util.ConsList.<hydra.testing.TestGroup>empty()), hydra.util.ConsList.of(new hydra.testing.TestCaseWithMetadata("right-associative operator", new hydra.testing.TestCase.Serialization(new hydra.testing.SerializationTestCase(hydra.serialization.Serialization.ifx(
         hydra.ext.haskell.operators.Operators.arrowOp(),
         hydra.serialization.Serialization.ifx(
           hydra.ext.haskell.operators.Operators.arrowOp(),
@@ -17,8 +17,8 @@ public interface Serialization {
         hydra.serialization.Serialization.ifx(
           hydra.ext.haskell.operators.Operators.arrowOp(),
           hydra.serialization.Serialization.cst("c"),
-          hydra.serialization.Serialization.cst("d"))), "(a -> b) -> c -> d")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>of())))),
-      new hydra.testing.TestGroup("case statements", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.TestGroup>) (hydra.util.ConsList.<hydra.testing.TestGroup>of()), hydra.util.ConsList.of(
+          hydra.serialization.Serialization.cst("d"))), "(a -> b) -> c -> d")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())))),
+      new hydra.testing.TestGroup("case statements", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.TestGroup>) (hydra.util.ConsList.<hydra.testing.TestGroup>empty()), hydra.util.ConsList.of(
         new hydra.testing.TestCaseWithMetadata("simple case statement", new hydra.testing.TestCase.Serialization(new hydra.testing.SerializationTestCase(hydra.serialization.Serialization.ifx(
           new hydra.ast.Op(new hydra.ast.Symbol("of"), new hydra.ast.Padding(new hydra.ast.Ws.Space(), new hydra.ast.Ws.BreakAndIndent("  ")), new hydra.ast.Precedence(0), new hydra.ast.Associativity.None()),
           hydra.serialization.Serialization.spaceSep(hydra.util.ConsList.of(
@@ -35,7 +35,7 @@ public interface Serialization {
             hydra.serialization.Serialization.ifx(
               hydra.ext.haskell.operators.Operators.caseOp(),
               hydra.serialization.Serialization.cst("True"),
-              hydra.serialization.Serialization.cst("Small"))))), "case x > 42 of\n  False -> Big\n  True -> Small")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>of())),
+              hydra.serialization.Serialization.cst("Small"))))), "case x > 42 of\n  False -> Big\n  True -> Small")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
         new hydra.testing.TestCaseWithMetadata("nested case statement", new hydra.testing.TestCase.Serialization(new hydra.testing.SerializationTestCase(hydra.serialization.Serialization.ifx(
           new hydra.ast.Op(new hydra.ast.Symbol("of"), new hydra.ast.Padding(new hydra.ast.Ws.Space(), new hydra.ast.Ws.BreakAndIndent("  ")), new hydra.ast.Precedence(0), new hydra.ast.Associativity.None()),
           hydra.serialization.Serialization.spaceSep(hydra.util.ConsList.of(
@@ -68,24 +68,24 @@ public interface Serialization {
             hydra.serialization.Serialization.ifx(
               hydra.ext.haskell.operators.Operators.caseOp(),
               hydra.serialization.Serialization.cst("False"),
-              hydra.serialization.Serialization.cst("Small"))))), "case x > 42 of\n  True -> case x > 100 of\n    True -> ReallyBig\n    False -> Big\n  False -> Small")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>of())))),
-      new hydra.testing.TestGroup("lambdas", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.TestGroup>) (hydra.util.ConsList.<hydra.testing.TestGroup>of()), hydra.util.ConsList.of(new hydra.testing.TestCaseWithMetadata("simple lambda", new hydra.testing.TestCase.Serialization(new hydra.testing.SerializationTestCase(hydra.serialization.Serialization.ifx(
+              hydra.serialization.Serialization.cst("Small"))))), "case x > 42 of\n  True -> case x > 100 of\n    True -> ReallyBig\n    False -> Big\n  False -> Small")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())))),
+      new hydra.testing.TestGroup("lambdas", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.TestGroup>) (hydra.util.ConsList.<hydra.testing.TestGroup>empty()), hydra.util.ConsList.of(new hydra.testing.TestCaseWithMetadata("simple lambda", new hydra.testing.TestCase.Serialization(new hydra.testing.SerializationTestCase(hydra.serialization.Serialization.ifx(
         hydra.ext.haskell.operators.Operators.lambdaOp(),
         hydra.serialization.Serialization.cst("\\x y"),
         hydra.serialization.Serialization.ifx(
           hydra.ext.haskell.operators.Operators.plusOp(),
           hydra.serialization.Serialization.cst("x"),
-          hydra.serialization.Serialization.cst("y"))), "\\x y -> x + y")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>of())))),
-      new hydra.testing.TestGroup("lists", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.TestGroup>) (hydra.util.ConsList.<hydra.testing.TestGroup>of()), hydra.util.ConsList.of(
+          hydra.serialization.Serialization.cst("y"))), "\\x y -> x + y")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())))),
+      new hydra.testing.TestGroup("lists", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.TestGroup>) (hydra.util.ConsList.<hydra.testing.TestGroup>empty()), hydra.util.ConsList.of(
         new hydra.testing.TestCaseWithMetadata("empty list", new hydra.testing.TestCase.Serialization(new hydra.testing.SerializationTestCase(hydra.serialization.Serialization.bracketList(
           hydra.serialization.Serialization.inlineStyle(),
-          (hydra.util.ConsList<hydra.ast.Expr>) (hydra.util.ConsList.<hydra.ast.Expr>of())), "[]")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>of())),
+          (hydra.util.ConsList<hydra.ast.Expr>) (hydra.util.ConsList.<hydra.ast.Expr>empty())), "[]")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
         new hydra.testing.TestCaseWithMetadata("simple non-empty list", new hydra.testing.TestCase.Serialization(new hydra.testing.SerializationTestCase(hydra.serialization.Serialization.bracketList(
           hydra.serialization.Serialization.inlineStyle(),
           hydra.util.ConsList.of(
             hydra.serialization.Serialization.num(1),
             hydra.serialization.Serialization.num(2),
-            hydra.serialization.Serialization.num(3))), "[1, 2, 3]")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>of())),
+            hydra.serialization.Serialization.num(3))), "[1, 2, 3]")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
         new hydra.testing.TestCaseWithMetadata("nested list", new hydra.testing.TestCase.Serialization(new hydra.testing.SerializationTestCase(hydra.serialization.Serialization.bracketList(
           hydra.serialization.Serialization.inlineStyle(),
           hydra.util.ConsList.of(
@@ -94,7 +94,7 @@ public interface Serialization {
               hydra.util.ConsList.of(
                 hydra.serialization.Serialization.num(1),
                 hydra.serialization.Serialization.num(3))),
-            hydra.serialization.Serialization.num(2))), "[[1, 3], 2]")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>of())),
+            hydra.serialization.Serialization.num(2))), "[[1, 3], 2]")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
         new hydra.testing.TestCaseWithMetadata("list with parenthesized expression inside", new hydra.testing.TestCase.Serialization(new hydra.testing.SerializationTestCase(hydra.serialization.Serialization.bracketList(
           hydra.serialization.Serialization.inlineStyle(),
           hydra.util.ConsList.of(
@@ -112,8 +112,8 @@ public interface Serialization {
                     hydra.ext.haskell.operators.Operators.plusOp(),
                     hydra.serialization.Serialization.num(1),
                     hydra.serialization.Serialization.num(10))))),
-            hydra.serialization.Serialization.num(2))), "[[1, (2 + 3) * (1 + 10)], 2]")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>of())))),
-      new hydra.testing.TestGroup("precedence", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.TestGroup>) (hydra.util.ConsList.<hydra.testing.TestGroup>of()), hydra.util.ConsList.of(
+            hydra.serialization.Serialization.num(2))), "[[1, (2 + 3) * (1 + 10)], 2]")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())))),
+      new hydra.testing.TestGroup("precedence", (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.TestGroup>) (hydra.util.ConsList.<hydra.testing.TestGroup>empty()), hydra.util.ConsList.of(
         new hydra.testing.TestCaseWithMetadata("operators with different precedence - no parens needed", new hydra.testing.TestCase.Serialization(new hydra.testing.SerializationTestCase(hydra.serialization.Serialization.ifx(
           hydra.ext.haskell.operators.Operators.plusOp(),
           hydra.serialization.Serialization.ifx(
@@ -123,7 +123,7 @@ public interface Serialization {
           hydra.serialization.Serialization.ifx(
             hydra.ext.haskell.operators.Operators.multOp(),
             hydra.serialization.Serialization.num(1),
-            hydra.serialization.Serialization.num(10))), "2 * 3 + 1 * 10")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>of())),
+            hydra.serialization.Serialization.num(10))), "2 * 3 + 1 * 10")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
         new hydra.testing.TestCaseWithMetadata("operators with different precedence - parens needed", new hydra.testing.TestCase.Serialization(new hydra.testing.SerializationTestCase(hydra.serialization.Serialization.ifx(
           hydra.ext.haskell.operators.Operators.multOp(),
           hydra.serialization.Serialization.ifx(
@@ -133,20 +133,20 @@ public interface Serialization {
           hydra.serialization.Serialization.ifx(
             hydra.ext.haskell.operators.Operators.plusOp(),
             hydra.serialization.Serialization.num(1),
-            hydra.serialization.Serialization.num(10))), "(2 + 3) * (1 + 10)")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>of())),
+            hydra.serialization.Serialization.num(10))), "(2 + 3) * (1 + 10)")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
         new hydra.testing.TestCaseWithMetadata("associative operator left nesting", new hydra.testing.TestCase.Serialization(new hydra.testing.SerializationTestCase(hydra.serialization.Serialization.ifx(
           hydra.ext.haskell.operators.Operators.multOp(),
           hydra.serialization.Serialization.cst("x"),
           hydra.serialization.Serialization.ifx(
             hydra.ext.haskell.operators.Operators.multOp(),
             hydra.serialization.Serialization.cst("y"),
-            hydra.serialization.Serialization.cst("z"))), "x * y * z")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>of())),
+            hydra.serialization.Serialization.cst("z"))), "x * y * z")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty())),
         new hydra.testing.TestCaseWithMetadata("associative operator right nesting", new hydra.testing.TestCase.Serialization(new hydra.testing.SerializationTestCase(hydra.serialization.Serialization.ifx(
           hydra.ext.haskell.operators.Operators.multOp(),
           hydra.serialization.Serialization.ifx(
             hydra.ext.haskell.operators.Operators.multOp(),
             hydra.serialization.Serialization.cst("x"),
             hydra.serialization.Serialization.cst("y")),
-          hydra.serialization.Serialization.cst("z")), "x * y * z")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>of()))))), (hydra.util.ConsList<hydra.testing.TestCaseWithMetadata>) (hydra.util.ConsList.<hydra.testing.TestCaseWithMetadata>of()));
+          hydra.serialization.Serialization.cst("z")), "x * y * z")), (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()), (hydra.util.ConsList<hydra.testing.Tag>) (hydra.util.ConsList.<hydra.testing.Tag>empty()))))), (hydra.util.ConsList<hydra.testing.TestCaseWithMetadata>) (hydra.util.ConsList.<hydra.testing.TestCaseWithMetadata>empty()));
   }
 }

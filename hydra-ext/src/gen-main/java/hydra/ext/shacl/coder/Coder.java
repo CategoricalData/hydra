@@ -48,7 +48,7 @@ public interface Coder {
   }
   
   static hydra.ext.org.w3.shacl.model.CommonProperties defaultCommonProperties() {
-    return hydra.ext.shacl.coder.Coder.common((hydra.util.ConsList<hydra.ext.org.w3.shacl.model.CommonConstraint>) (hydra.util.ConsList.<hydra.ext.org.w3.shacl.model.CommonConstraint>of()));
+    return hydra.ext.shacl.coder.Coder.common((hydra.util.ConsList<hydra.ext.org.w3.shacl.model.CommonConstraint>) (hydra.util.ConsList.<hydra.ext.org.w3.shacl.model.CommonConstraint>empty()));
   }
   
   static hydra.ext.org.w3.rdf.syntax.Iri elementIri(hydra.core.Binding el) {
@@ -297,7 +297,7 @@ public interface Coder {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>> visit(hydra.core.Term.Maybe mterm) {
         return hydra.lib.maybes.Maybe.applyLazy(
-          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>>right((hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>((hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>) (hydra.util.ConsList.<hydra.ext.org.w3.rdf.syntax.Description>of()), cx)))),
+          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>>right((hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>) ((hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>) (new hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>((hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>) (hydra.util.ConsList.<hydra.ext.org.w3.rdf.syntax.Description>empty()), cx)))),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description>, hydra.context.Context>>>) (_inner -> hydra.ext.shacl.coder.Coder.encodeTerm(
             subject,
             _inner,
@@ -414,7 +414,7 @@ public interface Coder {
   static <T0, T1, T2, T3> hydra.util.Either<T2, hydra.util.Pair<hydra.util.ConsList<T3>, T0>> foldAccumResult(java.util.function.Function<T0, java.util.function.Function<T1, hydra.util.Either<T2, hydra.util.Pair<T3, T0>>>> f, T0 cx, hydra.util.ConsList<T1> xs) {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(xs),
-      () -> hydra.util.Either.<T2, hydra.util.Pair<hydra.util.ConsList<T3>, T0>>right((hydra.util.Pair<hydra.util.ConsList<T3>, T0>) ((hydra.util.Pair<hydra.util.ConsList<T3>, T0>) (new hydra.util.Pair<hydra.util.ConsList<T3>, T0>((hydra.util.ConsList<T3>) (hydra.util.ConsList.<T3>of()), cx)))),
+      () -> hydra.util.Either.<T2, hydra.util.Pair<hydra.util.ConsList<T3>, T0>>right((hydra.util.Pair<hydra.util.ConsList<T3>, T0>) ((hydra.util.Pair<hydra.util.ConsList<T3>, T0>) (new hydra.util.Pair<hydra.util.ConsList<T3>, T0>((hydra.util.ConsList<T3>) (hydra.util.ConsList.<T3>empty()), cx)))),
       () -> hydra.lib.eithers.Bind.apply(
         ((f).apply(cx)).apply(hydra.lib.lists.Head.apply(xs)),
         (java.util.function.Function<hydra.util.Pair<T3, T0>, hydra.util.Either<T2, hydra.util.Pair<hydra.util.ConsList<T3>, T0>>>) (_r -> hydra.lib.eithers.Map.apply(
@@ -505,7 +505,7 @@ public interface Coder {
   }
   
   static <T0> hydra.util.Either<T0, hydra.ext.org.w3.shacl.model.CommonProperties> encodeType_any(java.util.function.Function<hydra.util.ConsList<hydra.ext.org.w3.shacl.model.CommonConstraint>, hydra.ext.org.w3.shacl.model.CommonProperties> hydra_ext_shacl_coder_common2) {
-    return hydra.util.Either.<T0, hydra.ext.org.w3.shacl.model.CommonProperties>right((hydra_ext_shacl_coder_common2).apply((hydra.util.ConsList<hydra.ext.org.w3.shacl.model.CommonConstraint>) (hydra.util.ConsList.<hydra.ext.org.w3.shacl.model.CommonConstraint>of())));
+    return hydra.util.Either.<T0, hydra.ext.org.w3.shacl.model.CommonProperties>right((hydra_ext_shacl_coder_common2).apply((hydra.util.ConsList<hydra.ext.org.w3.shacl.model.CommonConstraint>) (hydra.util.ConsList.<hydra.ext.org.w3.shacl.model.CommonConstraint>empty())));
   }
   
   static hydra.ext.org.w3.shacl.model.Shape node(hydra.util.ConsList<hydra.ext.org.w3.shacl.model.CommonConstraint> constraints) {

@@ -623,9 +623,8 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
 
   -- Helper to rebuild a Graph from bindings, reusing graph0's context
   "rebuildGraph" <~ ("bindings" ~>
-    Graph.graphWithSchemaTypes
-      (Lexical.buildGraph @@ var "bindings" @@ Maps.empty @@ Graph.graphPrimitives (var "graph0"))
-      (Graph.graphSchemaTypes (var "graph0"))) $
+    "g" <~ (Lexical.buildGraph @@ var "bindings" @@ Maps.empty @@ Graph.graphPrimitives (var "graph0")) $
+    Graph.graphWithSchemaTypes (var "g") (Graph.graphSchemaTypes (var "graph0"))) $
 
   -- Step 1: hoist case statements if needed (currently, for the Python target)
   -- Use original ordered bindings instead of graphToBindings (which loses order)
@@ -692,10 +691,9 @@ dataGraphToDefinitions = define "dataGraphToDefinitions" $
       Maybes.cat (Lists.map (var "toDef") (var "elsForNs")))
     (var "namespaces") $
 
+  "g" <~ (Lexical.buildGraph @@ var "bins5" @@ Maps.empty @@ Graph.graphPrimitives (var "adapted")) $
   right $ pair
-    (Graph.graphWithSchemaTypes
-      (Lexical.buildGraph @@ var "bins5" @@ Maps.empty @@ Graph.graphPrimitives (var "adapted"))
-      (Graph.graphSchemaTypes (var "adapted")))
+    (Graph.graphWithSchemaTypes (var "g") (Graph.graphSchemaTypes (var "adapted")))
     (var "defsGrouped")
 
 literalTypeSupported :: TBinding (LanguageConstraints -> LiteralType -> Bool)

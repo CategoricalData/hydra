@@ -259,7 +259,7 @@ public interface Transform {
   
   static <T1, T2> hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>> elementSpecsByTable_current(hydra.util.Maybe<hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> existing) {
     return hydra.lib.maybes.FromMaybe.applyLazy(
-      () -> (hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>) ((hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>) (new hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>of()), (hydra.util.ConsList<T2>) (hydra.util.ConsList.<T2>of())))),
+      () -> (hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>) ((hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>) (new hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>empty()), (hydra.util.ConsList<T2>) (hydra.util.ConsList.<T2>empty())))),
       existing);
   }
   
@@ -279,7 +279,7 @@ public interface Transform {
   
   static <T1, T2> hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>> elementSpecsByTable_current2(hydra.util.Maybe<hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>> existing) {
     return hydra.lib.maybes.FromMaybe.applyLazy(
-      () -> (hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>) ((hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>) (new hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>of()), (hydra.util.ConsList<T2>) (hydra.util.ConsList.<T2>of())))),
+      () -> (hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>) ((hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>) (new hydra.util.Pair<hydra.util.ConsList<T1>, hydra.util.ConsList<T2>>((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>empty()), (hydra.util.ConsList<T2>) (hydra.util.ConsList.<T2>empty())))),
       existing);
   }
   
@@ -507,7 +507,7 @@ public interface Transform {
   }
   
   static <T0> hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<T0>, String>, Boolean> parseCsvLine_initState() {
-    return (hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<T0>, String>, Boolean>) ((hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<T0>, String>, Boolean>) (new hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<T0>, String>, Boolean>((hydra.util.Pair<hydra.util.ConsList<T0>, String>) ((hydra.util.Pair<hydra.util.ConsList<T0>, String>) (new hydra.util.Pair<hydra.util.ConsList<T0>, String>((hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()), ""))), false)));
+    return (hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<T0>, String>, Boolean>) ((hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<T0>, String>, Boolean>) (new hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<T0>, String>, Boolean>((hydra.util.Pair<hydra.util.ConsList<T0>, String>) ((hydra.util.Pair<hydra.util.ConsList<T0>, String>) (new hydra.util.Pair<hydra.util.ConsList<T0>, String>((hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty()), ""))), false)));
   }
   
   static hydra.util.Either<String, hydra.util.Maybe<hydra.util.ConsList<hydra.util.Maybe<String>>>> parseSingleLine(String line) {
@@ -647,7 +647,7 @@ public interface Transform {
         p0 -> p1 -> hydra.demos.genpg.transform.Transform.<hydra.pg.model.Vertex<hydra.core.Term>, hydra.pg.model.Edge<hydra.core.Term>>concatPairs(
           p0,
           p1),
-        (hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<hydra.pg.model.Edge<hydra.core.Term>>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<hydra.pg.model.Edge<hydra.core.Term>>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<hydra.pg.model.Edge<hydra.core.Term>>>((hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>) (hydra.util.ConsList.<hydra.pg.model.Vertex<hydra.core.Term>>of()), (hydra.util.ConsList<hydra.pg.model.Edge<hydra.core.Term>>) (hydra.util.ConsList.<hydra.pg.model.Edge<hydra.core.Term>>of())))),
+        (hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<hydra.pg.model.Edge<hydra.core.Term>>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<hydra.pg.model.Edge<hydra.core.Term>>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<hydra.pg.model.Edge<hydra.core.Term>>>((hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>) (hydra.util.ConsList.<hydra.pg.model.Vertex<hydra.core.Term>>empty()), (hydra.util.ConsList<hydra.pg.model.Edge<hydra.core.Term>>) (hydra.util.ConsList.<hydra.pg.model.Edge<hydra.core.Term>>empty())))),
         pairs)),
       hydra.lib.eithers.MapList.apply(
         (java.util.function.Function<hydra.tabular.DataRow<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.util.ConsList<hydra.pg.model.Vertex<hydra.core.Term>>, hydra.util.ConsList<hydra.pg.model.Edge<hydra.core.Term>>>>>) (row -> hydra.demos.genpg.transform.Transform.transformRecord(

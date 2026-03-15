@@ -172,7 +172,7 @@ public interface Serde {
           deriv)));
         hydra.util.Lazy<hydra.util.ConsList<hydra.ast.Expr>> derivingClause = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(derivCat.get()),
-          () -> (hydra.util.ConsList<hydra.ast.Expr>) (hydra.util.ConsList.<hydra.ast.Expr>of()),
+          () -> (hydra.util.ConsList<hydra.ast.Expr>) (hydra.util.ConsList.<hydra.ast.Expr>empty()),
           () -> hydra.util.ConsList.of(hydra.serialization.Serialization.spaceSep(hydra.lib.lists.Cons.apply(
             hydra.serialization.Serialization.cst("deriving"),
             hydra.util.ConsList.of(hydra.serialization.Serialization.parenList(
@@ -541,13 +541,13 @@ public interface Serde {
       decls));
     hydra.util.Maybe<hydra.ext.haskell.ast.ModuleHead> mh = (module).head;
     hydra.util.Lazy<hydra.util.ConsList<hydra.ast.Expr>> headerLine = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
-      () -> (hydra.util.ConsList<hydra.ast.Expr>) (hydra.util.ConsList.<hydra.ast.Expr>of()),
+      () -> (hydra.util.ConsList<hydra.ast.Expr>) (hydra.util.ConsList.<hydra.ast.Expr>empty()),
       (java.util.function.Function<hydra.ext.haskell.ast.ModuleHead, hydra.util.ConsList<hydra.ast.Expr>>) (h -> hydra.util.ConsList.of(hydra.ext.haskell.serde.Serde.moduleHeadToExpr(h))),
       mh));
     hydra.util.ConsList<hydra.ext.haskell.ast.Import> imports = (module).imports;
     hydra.util.Lazy<hydra.util.ConsList<hydra.ast.Expr>> importLines = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(imports),
-      () -> (hydra.util.ConsList<hydra.ast.Expr>) (hydra.util.ConsList.<hydra.ast.Expr>of()),
+      () -> (hydra.util.ConsList<hydra.ast.Expr>) (hydra.util.ConsList.<hydra.ast.Expr>empty()),
       () -> hydra.util.ConsList.of(hydra.serialization.Serialization.newlineSep(hydra.lib.lists.Map.apply(
         hydra.ext.haskell.serde.Serde::importToExpr,
         imports)))));

@@ -136,7 +136,7 @@ public interface Utils {
   }
   
   static hydra.ext.haskell.ast.Name rawName(String n) {
-    return new hydra.ext.haskell.ast.Name.Normal(new hydra.ext.haskell.ast.QualifiedName((hydra.util.ConsList<hydra.ext.haskell.ast.NamePart>) (hydra.util.ConsList.<hydra.ext.haskell.ast.NamePart>of()), new hydra.ext.haskell.ast.NamePart(n)));
+    return new hydra.ext.haskell.ast.Name.Normal(new hydra.ext.haskell.ast.QualifiedName((hydra.util.ConsList<hydra.ext.haskell.ast.NamePart>) (hydra.util.ConsList.<hydra.ext.haskell.ast.NamePart>empty()), new hydra.ext.haskell.ast.NamePart(n)));
   }
   
   static hydra.ext.haskell.ast.Name recordFieldReference(hydra.module.Namespaces<hydra.ext.haskell.ast.ModuleName> namespaces, hydra.core.Name sname, hydra.core.Name fname) {
@@ -167,7 +167,7 @@ public interface Utils {
   }
   
   static hydra.ext.haskell.ast.ValueBinding simpleValueBinding(hydra.ext.haskell.ast.Name hname, hydra.ext.haskell.ast.Expression rhs, hydra.util.Maybe<hydra.ext.haskell.ast.LocalBindings> bindings) {
-    hydra.util.Lazy<hydra.ext.haskell.ast.Pattern> pat = new hydra.util.Lazy<>(() -> new hydra.ext.haskell.ast.Pattern.Application(new hydra.ext.haskell.ast.ApplicationPattern(hname, (hydra.util.ConsList<hydra.ext.haskell.ast.Pattern>) (hydra.util.ConsList.<hydra.ext.haskell.ast.Pattern>of()))));
+    hydra.util.Lazy<hydra.ext.haskell.ast.Pattern> pat = new hydra.util.Lazy<>(() -> new hydra.ext.haskell.ast.Pattern.Application(new hydra.ext.haskell.ast.ApplicationPattern(hname, (hydra.util.ConsList<hydra.ext.haskell.ast.Pattern>) (hydra.util.ConsList.<hydra.ext.haskell.ast.Pattern>empty()))));
     hydra.ext.haskell.ast.RightHandSide rightHandSide = new hydra.ext.haskell.ast.RightHandSide(rhs);
     return new hydra.ext.haskell.ast.ValueBinding.Simple(new hydra.ext.haskell.ast.SimpleValueBinding(pat.get(), rightHandSide, bindings));
   }
@@ -224,7 +224,7 @@ public interface Utils {
     return (hydra.rewriting.Rewriting.deannotateType(t)).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Type> otherwise(hydra.core.Type instance) {
-        return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Type>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Type>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Type>((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>of()), t)));
+        return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Type>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Type>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Name>, hydra.core.Type>((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()), t)));
       }
       
       @Override

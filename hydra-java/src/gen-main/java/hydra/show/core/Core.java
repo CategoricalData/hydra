@@ -46,7 +46,7 @@ public interface Core {
         hydra.util.ConsList<hydra.core.Field> cases = ((cs).value).cases;
         hydra.util.Maybe<hydra.core.Term> mdef = ((cs).value).default_;
         hydra.util.Lazy<hydra.util.ConsList<hydra.core.Field>> defaultField = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
-          () -> (hydra.util.ConsList<hydra.core.Field>) (hydra.util.ConsList.<hydra.core.Field>of()),
+          () -> (hydra.util.ConsList<hydra.core.Field>) (hydra.util.ConsList.<hydra.core.Field>empty()),
           (java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.core.Field>>) (d -> hydra.util.ConsList.of(new hydra.core.Field(new hydra.core.Name("[default]"), d))),
           mdef));
         hydra.util.Lazy<hydra.util.ConsList<hydra.core.Field>> allFields = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
@@ -428,7 +428,7 @@ public interface Core {
       
       @Override
       public String visit(hydra.core.Term.Application app) {
-        hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> terms = new hydra.util.Lazy<>(() -> ((gatherTerms.get()).apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>of()))).apply((app).value));
+        hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> terms = new hydra.util.Lazy<>(() -> ((gatherTerms.get()).apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()))).apply((app).value));
         hydra.util.Lazy<hydra.util.ConsList<String>> termStrs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
           hydra.show.core.Core::term,
           terms.get()));
@@ -654,7 +654,7 @@ public interface Core {
       
       @Override
       public String visit(hydra.core.Type.Application app) {
-        hydra.util.Lazy<hydra.util.ConsList<hydra.core.Type>> types = new hydra.util.Lazy<>(() -> ((gatherTypes.get()).apply((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()))).apply((app).value));
+        hydra.util.Lazy<hydra.util.ConsList<hydra.core.Type>> types = new hydra.util.Lazy<>(() -> ((gatherTypes.get()).apply((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()))).apply((app).value));
         hydra.util.Lazy<hydra.util.ConsList<String>> typeStrs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
           hydra.show.core.Core::type,
           types.get()));
@@ -692,7 +692,7 @@ public interface Core {
       
       @Override
       public String visit(hydra.core.Type.Function ft) {
-        hydra.util.Lazy<hydra.util.ConsList<hydra.core.Type>> types = new hydra.util.Lazy<>(() -> ((gatherFunctionTypes.get()).apply((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of()))).apply(typ));
+        hydra.util.Lazy<hydra.util.ConsList<hydra.core.Type>> types = new hydra.util.Lazy<>(() -> ((gatherFunctionTypes.get()).apply((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()))).apply(typ));
         hydra.util.Lazy<hydra.util.ConsList<String>> typeStrs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
           hydra.show.core.Core::type,
           types.get()));
@@ -818,7 +818,7 @@ public interface Core {
       (java.util.function.Function<hydra.core.Name, String>) (v1 -> ((toConstraintPair).apply(hydra.lib.pairs.First.apply(p))).apply(v1)),
       hydra.lib.sets.ToList.apply((hydra.lib.pairs.Second.apply(p)).classes)));
     hydra.util.Lazy<hydra.util.ConsList<String>> tc = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
-      () -> (hydra.util.ConsList<String>) (hydra.util.ConsList.<String>of()),
+      () -> (hydra.util.ConsList<String>) (hydra.util.ConsList.<String>empty()),
       (java.util.function.Function<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>, hydra.util.ConsList<String>>) (m -> hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
         toConstraintPairs,
         hydra.lib.maps.ToList.apply(m)))),

@@ -178,7 +178,7 @@ public interface TestCodec {
     return (tcase).accept(new hydra.testing.TestCase.PartialVisitor<>() {
       @Override
       public hydra.util.Either<String, hydra.util.ConsList<String>> otherwise(hydra.testing.TestCase instance) {
-        return hydra.util.Either.<String, hydra.util.ConsList<String>>right((hydra.util.ConsList<String>) (hydra.util.ConsList.<String>of()));
+        return hydra.util.Either.<String, hydra.util.ConsList<String>>right((hydra.util.ConsList<String>) (hydra.util.ConsList.<String>empty()));
       }
       
       @Override
@@ -386,7 +386,7 @@ public interface TestCodec {
       hydra.ext.java.testCodec.TestCodec.generateJavaTestGroupHierarchy(
         g,
         codec,
-        (hydra.util.ConsList<String>) (hydra.util.ConsList.<String>of()),
+        (hydra.util.ConsList<String>) (hydra.util.ConsList.<String>empty()),
         testGroup));
   }
   

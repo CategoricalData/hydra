@@ -222,7 +222,7 @@ public interface Hoisting {
         (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Name, hydra.core.Term>>) (t -> (java.util.function.Function<hydra.core.Name, hydra.core.Term>) (v -> new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda(v, t)))),
         termWithLambdas.get(),
         hydra.lib.lists.Reverse.apply(hydra.lib.maybes.Maybe.applyLazy(
-          () -> (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>of()),
+          () -> (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()),
           projected -> projected.variables,
           newTypeScheme.get()))));
       hydra.util.Lazy<hydra.util.Pair<hydra.core.Binding, hydra.core.Term>> newBindingAndReplacement = new hydra.util.Lazy<>(() -> (hydra.util.Pair<hydra.core.Binding, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Binding, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Binding, hydra.core.Term>(new hydra.core.Binding(globalBindingName, termWithTypeLambdas.get(), newTypeScheme.get()), replacement.get()))));
@@ -350,7 +350,7 @@ public interface Hoisting {
             (cx).lambdaVariables)))));
         hydra.util.Lazy<hydra.util.ConsList<hydra.util.Pair<hydra.core.Binding, hydra.util.ConsList<hydra.core.Name>>>> bindingsWithCapturedVars = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
           (java.util.function.Function<hydra.core.Binding, hydra.util.Pair<hydra.core.Binding, hydra.util.ConsList<hydra.core.Name>>>) (b -> (hydra.util.Pair<hydra.core.Binding, hydra.util.ConsList<hydra.core.Name>>) ((hydra.util.Pair<hydra.core.Binding, hydra.util.ConsList<hydra.core.Name>>) (new hydra.util.Pair<hydra.core.Binding, hydra.util.ConsList<hydra.core.Name>>(b, hydra.lib.maybes.Maybe.applyLazy(
-            () -> (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>of()),
+            () -> (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()),
             (java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, hydra.util.ConsList<hydra.core.Name>>) (vars -> hydra.lib.sets.ToList.apply(hydra.lib.sets.Difference.apply(
               vars,
               polyLetVariables.get()))),
@@ -360,7 +360,7 @@ public interface Hoisting {
           hoistUs.get()));
         hydra.util.Lazy<hydra.util.Pair<hydra.util.ConsList<hydra.util.Pair<hydra.core.Binding, hydra.core.Term>>, hydra.util.PersistentSet<hydra.core.Name>>> hoistPairsAndNames = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
           (java.util.function.Function<hydra.util.Pair<hydra.util.ConsList<hydra.util.Pair<hydra.core.Binding, hydra.core.Term>>, hydra.util.PersistentSet<hydra.core.Name>>, java.util.function.Function<hydra.util.Pair<hydra.core.Binding, hydra.util.ConsList<hydra.core.Name>>, hydra.util.Pair<hydra.util.ConsList<hydra.util.Pair<hydra.core.Binding, hydra.core.Term>>, hydra.util.PersistentSet<hydra.core.Name>>>>) (v1 -> (java.util.function.Function<hydra.util.Pair<hydra.core.Binding, hydra.util.ConsList<hydra.core.Name>>, hydra.util.Pair<hydra.util.ConsList<hydra.util.Pair<hydra.core.Binding, hydra.core.Term>>, hydra.util.PersistentSet<hydra.core.Name>>>) (v2 -> ((((hoistOne).apply(prefix)).apply(cx)).apply(v1)).apply(v2))),
-          (hydra.util.Pair<hydra.util.ConsList<hydra.util.Pair<hydra.core.Binding, hydra.core.Term>>, hydra.util.PersistentSet<hydra.core.Name>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.util.Pair<hydra.core.Binding, hydra.core.Term>>, hydra.util.PersistentSet<hydra.core.Name>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.util.Pair<hydra.core.Binding, hydra.core.Term>>, hydra.util.PersistentSet<hydra.core.Name>>((hydra.util.ConsList<hydra.util.Pair<hydra.core.Binding, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.core.Binding, hydra.core.Term>>of()), alreadyUsedNames.get()))),
+          (hydra.util.Pair<hydra.util.ConsList<hydra.util.Pair<hydra.core.Binding, hydra.core.Term>>, hydra.util.PersistentSet<hydra.core.Name>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.util.Pair<hydra.core.Binding, hydra.core.Term>>, hydra.util.PersistentSet<hydra.core.Name>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.util.Pair<hydra.core.Binding, hydra.core.Term>>, hydra.util.PersistentSet<hydra.core.Name>>((hydra.util.ConsList<hydra.util.Pair<hydra.core.Binding, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.core.Binding, hydra.core.Term>>empty()), alreadyUsedNames.get()))),
           bindingsWithCapturedVars.get()));
         hydra.util.Lazy<hydra.util.ConsList<hydra.util.Pair<hydra.core.Binding, hydra.core.Term>>> hoistPairs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Reverse.apply(hydra.lib.pairs.First.apply(hoistPairsAndNames.get())));
         hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> replacements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
@@ -455,11 +455,11 @@ public interface Hoisting {
   }
   
   static <T0> hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.PersistentSet<hydra.core.Name>> hoistLetBindingsWithPredicate_init(hydra.core.Binding b) {
-    return (hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.PersistentSet<hydra.core.Name>>) ((hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.PersistentSet<hydra.core.Name>>) (new hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.PersistentSet<hydra.core.Name>>((hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()), hydra.lib.sets.Singleton.apply((b).name))));
+    return (hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.PersistentSet<hydra.core.Name>>) ((hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.PersistentSet<hydra.core.Name>>) (new hydra.util.Pair<hydra.util.ConsList<T0>, hydra.util.PersistentSet<hydra.core.Name>>((hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty()), hydra.lib.sets.Singleton.apply((b).name))));
   }
   
   static <T1, T3> hydra.util.Pair<hydra.util.ConsList<T3>, T1> hoistLetBindingsWithPredicate_emptyBindingsAndNames(hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, T1> bindingsAndNames) {
-    return (hydra.util.Pair<hydra.util.ConsList<T3>, T1>) ((hydra.util.Pair<hydra.util.ConsList<T3>, T1>) (new hydra.util.Pair<hydra.util.ConsList<T3>, T1>((hydra.util.ConsList<T3>) (hydra.util.ConsList.<T3>of()), hydra.lib.pairs.Second.apply(bindingsAndNames))));
+    return (hydra.util.Pair<hydra.util.ConsList<T3>, T1>) ((hydra.util.Pair<hydra.util.ConsList<T3>, T1>) (new hydra.util.Pair<hydra.util.ConsList<T3>, T1>((hydra.util.ConsList<T3>) (hydra.util.ConsList.<T3>empty()), hydra.lib.pairs.Second.apply(bindingsAndNames))));
   }
   
   static hydra.core.Let hoistPolymorphicLetBindings(java.util.function.Function<hydra.core.Binding, Boolean> isParentBinding, hydra.core.Let let0) {
@@ -559,7 +559,7 @@ public interface Hoisting {
       hydra.util.Lazy<hydra.util.Pair<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>, hydra.core.Term>> result = new hydra.util.Lazy<>(() -> hydra.hoisting.Hoisting.rewriteAndFoldTermWithTypeContextAndPath(
         collectAndReplace,
         cx,
-        (hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>(counter, (hydra.util.ConsList<hydra.core.Binding>) (hydra.util.ConsList.<hydra.core.Binding>of())))),
+        (hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>) ((hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>) (new hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>(counter, (hydra.util.ConsList<hydra.core.Binding>) (hydra.util.ConsList.<hydra.core.Binding>empty())))),
         subterm));
       hydra.util.Lazy<hydra.util.Pair<Integer, hydra.util.ConsList<hydra.core.Binding>>> finalAcc = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(result.get()));
       hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> bindings = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(finalAcc.get()));
@@ -611,7 +611,7 @@ public interface Hoisting {
     }));
     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> newBindingsReversed = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
       processBinding,
-      (hydra.util.ConsList<hydra.core.Binding>) (hydra.util.ConsList.<hydra.core.Binding>of()),
+      (hydra.util.ConsList<hydra.core.Binding>) (hydra.util.ConsList.<hydra.core.Binding>empty()),
       bindings));
     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> newBindings = new hydra.util.Lazy<>(() -> hydra.lib.lists.Reverse.apply(newBindingsReversed.get()));
     hydra.util.Lazy<hydra.core.Term> newBody = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(bodyResult));

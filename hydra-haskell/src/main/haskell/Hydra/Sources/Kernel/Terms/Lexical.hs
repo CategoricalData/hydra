@@ -184,9 +184,8 @@ elementsToGraph = define "elementsToGraph" $
   doc "Create a graph from a parent graph, schema types, and list of element bindings" $
   "parent" ~> "schemaTypes" ~> "elements" ~>
   "prims" <~ Graph.graphPrimitives (var "parent") $
-  Graph.graphWithSchemaTypes
-    (buildGraph @@ var "elements" @@ Maps.empty @@ var "prims")
-    (var "schemaTypes")
+  "g" <~ (buildGraph @@ var "elements" @@ Maps.empty @@ var "prims") $
+  Graph.graphWithSchemaTypes (var "g") (var "schemaTypes")
 
 emptyContext :: TBinding Context
 emptyContext = define "emptyContext" $

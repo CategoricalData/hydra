@@ -105,7 +105,7 @@ public interface Tarjan {
   }
   
   static hydra.topology.TarjanState initialState() {
-    return new hydra.topology.TarjanState(0, (hydra.util.PersistentMap<Integer, Integer>) ((hydra.util.PersistentMap<Integer, Integer>) (hydra.lib.maps.Empty.<Integer, Integer>apply())), (hydra.util.PersistentMap<Integer, Integer>) ((hydra.util.PersistentMap<Integer, Integer>) (hydra.lib.maps.Empty.<Integer, Integer>apply())), (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of()), (hydra.util.PersistentSet<Integer>) (hydra.lib.sets.Empty.<Integer>apply()), (hydra.util.ConsList<hydra.util.ConsList<Integer>>) (hydra.util.ConsList.<hydra.util.ConsList<Integer>>of()));
+    return new hydra.topology.TarjanState(0, (hydra.util.PersistentMap<Integer, Integer>) ((hydra.util.PersistentMap<Integer, Integer>) (hydra.lib.maps.Empty.<Integer, Integer>apply())), (hydra.util.PersistentMap<Integer, Integer>) ((hydra.util.PersistentMap<Integer, Integer>) (hydra.lib.maps.Empty.<Integer, Integer>apply())), (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty()), (hydra.util.PersistentSet<Integer>) (hydra.lib.sets.Empty.<Integer>apply()), (hydra.util.ConsList<hydra.util.ConsList<Integer>>) (hydra.util.ConsList.<hydra.util.ConsList<Integer>>empty()));
   }
   
   static hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.topology.TarjanState> popStackUntil(Integer v, hydra.topology.TarjanState st0) {
@@ -127,13 +127,13 @@ public interface Tarjan {
         () -> (hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.topology.TarjanState>) ((hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.topology.TarjanState>) (new hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.topology.TarjanState>(hydra.lib.lists.Reverse.apply(acc_.get()), newSt2.get()))),
         () -> ((go.get()).apply(acc_.get())).apply(newSt2.get()));
     })));
-    return ((go.get()).apply((hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of()))).apply(st0);
+    return ((go.get()).apply((hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty()))).apply(st0);
   }
   
   static hydra.topology.TarjanState strongConnect(hydra.util.PersistentMap<Integer, hydra.util.ConsList<Integer>> graph, Integer v, hydra.topology.TarjanState st) {
     Integer i = (st).counter;
     hydra.util.Lazy<hydra.util.ConsList<Integer>> neighbors = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.applyLazy(
-      () -> (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of()),
+      () -> (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty()),
       v,
       graph));
     hydra.util.Lazy<hydra.topology.TarjanState> newSt = new hydra.util.Lazy<>(() -> new hydra.topology.TarjanState(hydra.lib.math.Add.apply(

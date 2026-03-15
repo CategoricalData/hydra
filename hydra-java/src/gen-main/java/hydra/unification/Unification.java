@@ -296,7 +296,7 @@ public interface Unification {
           
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Unit _2) {
-            return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right((hydra.util.ConsList<hydra.typing.TypeConstraint>) (hydra.util.ConsList.<hydra.typing.TypeConstraint>of()));
+            return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right((hydra.util.ConsList<hydra.typing.TypeConstraint>) (hydra.util.ConsList.<hydra.typing.TypeConstraint>empty()));
           }
         });
       }
@@ -346,7 +346,7 @@ public interface Unification {
       hydra.lib.equality.Equal.apply(
         sleft,
         sright),
-      () -> hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<T0>>right((hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of())),
+      () -> hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<T0>>right((hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty())),
       () -> hydra.unification.Unification.<hydra.util.ConsList<T0>>joinTypes_cannotUnify(
         cx,
         hydra_show_core_type2,

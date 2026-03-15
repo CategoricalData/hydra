@@ -40,7 +40,7 @@ public interface Encoding {
     return (typ).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.ConsList<hydra.core.Name> otherwise(hydra.core.Type instance) {
-        return (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>of());
+        return (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty());
       }
       
       @Override
@@ -61,7 +61,7 @@ public interface Encoding {
     return (typ).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.ConsList<hydra.core.Name> otherwise(hydra.core.Type instance) {
-        return (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>of());
+        return (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty());
       }
       
       @Override
@@ -145,7 +145,7 @@ public interface Encoding {
     return (typ).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.ConsList<hydra.core.Name> otherwise(hydra.core.Type instance) {
-        return (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>of());
+        return (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty());
       }
       
       @Override

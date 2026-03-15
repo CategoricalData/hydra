@@ -84,15 +84,17 @@ dereferenceVariable graph name = (Maybes.maybe (Left (Strings.cat2 "no such elem
 elementsToGraph :: (Graph.Graph -> M.Map Core.Name Core.TypeScheme -> [Core.Binding] -> Graph.Graph)
 elementsToGraph parent schemaTypes elements =  
   let prims = (Graph.graphPrimitives parent)
-  in Graph.Graph {
-    Graph.graphBoundTerms = (Graph.graphBoundTerms (buildGraph elements Maps.empty prims)),
-    Graph.graphBoundTypes = (Graph.graphBoundTypes (buildGraph elements Maps.empty prims)),
-    Graph.graphClassConstraints = (Graph.graphClassConstraints (buildGraph elements Maps.empty prims)),
-    Graph.graphLambdaVariables = (Graph.graphLambdaVariables (buildGraph elements Maps.empty prims)),
-    Graph.graphMetadata = (Graph.graphMetadata (buildGraph elements Maps.empty prims)),
-    Graph.graphPrimitives = (Graph.graphPrimitives (buildGraph elements Maps.empty prims)),
-    Graph.graphSchemaTypes = schemaTypes,
-    Graph.graphTypeVariables = (Graph.graphTypeVariables (buildGraph elements Maps.empty prims))}
+  in  
+    let g = (buildGraph elements Maps.empty prims)
+    in Graph.Graph {
+      Graph.graphBoundTerms = (Graph.graphBoundTerms g),
+      Graph.graphBoundTypes = (Graph.graphBoundTypes g),
+      Graph.graphClassConstraints = (Graph.graphClassConstraints g),
+      Graph.graphLambdaVariables = (Graph.graphLambdaVariables g),
+      Graph.graphMetadata = (Graph.graphMetadata g),
+      Graph.graphPrimitives = (Graph.graphPrimitives g),
+      Graph.graphSchemaTypes = schemaTypes,
+      Graph.graphTypeVariables = (Graph.graphTypeVariables g)}
 
 -- | An empty context; no trace, no messages, no other data.
 emptyContext :: Context.Context

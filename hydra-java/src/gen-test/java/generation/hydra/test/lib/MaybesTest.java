@@ -165,7 +165,7 @@ public class MaybesTest {
 
         assertEquals(
 
-            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty()),
 
             hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
   (hydra.util.Maybe<T3>) (hydra.util.Maybe.<T3>nothing()),
@@ -179,9 +179,9 @@ public class MaybesTest {
 
         assertEquals(
 
-            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty()),
 
-            hydra.lib.maybes.Cat.apply((hydra.util.ConsList<hydra.util.Maybe<T0>>) (hydra.util.ConsList.<hydra.util.Maybe<T0>>of())));
+            hydra.lib.maybes.Cat.apply((hydra.util.ConsList<hydra.util.Maybe<T0>>) (hydra.util.ConsList.<hydra.util.Maybe<T0>>empty())));
 
     }
 
@@ -441,7 +441,7 @@ public class MaybesTest {
 
         assertEquals(
 
-            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty()),
 
             hydra.lib.maybes.MapMaybe.apply(
   (java.util.function.Function<Integer, hydra.util.Maybe<Integer>>) (x -> hydra.lib.logic.IfElse.lazy(
@@ -464,7 +464,7 @@ public class MaybesTest {
 
         assertEquals(
 
-            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty()),
 
             hydra.lib.maybes.MapMaybe.apply(
   (java.util.function.Function<Integer, hydra.util.Maybe<Integer>>) (x -> hydra.lib.logic.IfElse.lazy(
@@ -475,7 +475,7 @@ public class MaybesTest {
       x,
       2)),
     () -> (hydra.util.Maybe<Integer>) (hydra.util.Maybe.<Integer>nothing()))),
-  (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of())));
+  (hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty())));
 
     }
 
@@ -561,7 +561,7 @@ public class MaybesTest {
 
         assertEquals(
 
-            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>of()),
+            (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty()),
 
             hydra.lib.maybes.ToList.apply((hydra.util.Maybe<T1>) (hydra.util.Maybe.<T1>nothing())));
 

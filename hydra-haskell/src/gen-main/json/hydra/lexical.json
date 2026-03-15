@@ -943,174 +943,95 @@
                                             "values": {"variable": "hydra.graph.Primitive"}}},
                                         "variables": []}]}],
                                 "body": {
-                                  "record": {
-                                    "fields": [
+                                  "let": {
+                                    "bindings": [
                                       {
-                                        "name": "boundTerms",
+                                        "name": "g",
                                         "term": {
                                           "application": {
-                                            "argument": {
+                                            "argument": {"variable": "prims"},
+                                            "function": {
                                               "application": {
-                                                "argument": {"variable": "prims"},
+                                                "argument": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
+                                                        "type": {"variable": "hydra.core.Name"}}},
+                                                    "type": {"maybe": {"variable": "hydra.core.Term"}}}},
                                                 "function": {
                                                   "application": {
-                                                    "argument": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
-                                                            "type": {"variable": "hydra.core.Name"}}},
-                                                        "type": {"maybe": {"variable": "hydra.core.Term"}}}},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {"variable": "elements"},
-                                                        "function": {"variable": "hydra.lexical.buildGraph"}}}}}}},
-                                            "function": {
-                                              "function": {
-                                                "elimination": {"record": {"field": "boundTerms", "typeName": "hydra.graph.Graph"}}}}}}},
-                                      {
-                                        "name": "boundTypes",
-                                        "term": {
-                                          "application": {
-                                            "argument": {
+                                                    "argument": {"variable": "elements"},
+                                                    "function": {"variable": "hydra.lexical.buildGraph"}}}}}}},
+                                        "type": [
+                                          {
+                                            "constraints": null,
+                                            "type": {"variable": "hydra.graph.Graph"},
+                                            "variables": []}]}],
+                                    "body": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "boundTerms",
+                                            "term": {
                                               "application": {
-                                                "argument": {"variable": "prims"},
+                                                "argument": {"variable": "g"},
                                                 "function": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
-                                                            "type": {"variable": "hydra.core.Name"}}},
-                                                        "type": {"maybe": {"variable": "hydra.core.Term"}}}},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {"variable": "elements"},
-                                                        "function": {"variable": "hydra.lexical.buildGraph"}}}}}}},
-                                            "function": {
-                                              "function": {
-                                                "elimination": {"record": {"field": "boundTypes", "typeName": "hydra.graph.Graph"}}}}}}},
-                                      {
-                                        "name": "classConstraints",
-                                        "term": {
-                                          "application": {
-                                            "argument": {
+                                                  "function": {
+                                                    "elimination": {"record": {"field": "boundTerms", "typeName": "hydra.graph.Graph"}}}}}}},
+                                          {
+                                            "name": "boundTypes",
+                                            "term": {
                                               "application": {
-                                                "argument": {"variable": "prims"},
+                                                "argument": {"variable": "g"},
                                                 "function": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
-                                                            "type": {"variable": "hydra.core.Name"}}},
-                                                        "type": {"maybe": {"variable": "hydra.core.Term"}}}},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {"variable": "elements"},
-                                                        "function": {"variable": "hydra.lexical.buildGraph"}}}}}}},
-                                            "function": {
-                                              "function": {
-                                                "elimination": {
-                                                  "record": {"field": "classConstraints", "typeName": "hydra.graph.Graph"}}}}}}},
-                                      {
-                                        "name": "lambdaVariables",
-                                        "term": {
-                                          "application": {
-                                            "argument": {
+                                                  "function": {
+                                                    "elimination": {"record": {"field": "boundTypes", "typeName": "hydra.graph.Graph"}}}}}}},
+                                          {
+                                            "name": "classConstraints",
+                                            "term": {
                                               "application": {
-                                                "argument": {"variable": "prims"},
+                                                "argument": {"variable": "g"},
                                                 "function": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
-                                                            "type": {"variable": "hydra.core.Name"}}},
-                                                        "type": {"maybe": {"variable": "hydra.core.Term"}}}},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {"variable": "elements"},
-                                                        "function": {"variable": "hydra.lexical.buildGraph"}}}}}}},
-                                            "function": {
-                                              "function": {
-                                                "elimination": {
-                                                  "record": {"field": "lambdaVariables", "typeName": "hydra.graph.Graph"}}}}}}},
-                                      {
-                                        "name": "metadata",
-                                        "term": {
-                                          "application": {
-                                            "argument": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "record": {"field": "classConstraints", "typeName": "hydra.graph.Graph"}}}}}}},
+                                          {
+                                            "name": "lambdaVariables",
+                                            "term": {
                                               "application": {
-                                                "argument": {"variable": "prims"},
+                                                "argument": {"variable": "g"},
                                                 "function": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
-                                                            "type": {"variable": "hydra.core.Name"}}},
-                                                        "type": {"maybe": {"variable": "hydra.core.Term"}}}},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {"variable": "elements"},
-                                                        "function": {"variable": "hydra.lexical.buildGraph"}}}}}}},
-                                            "function": {
-                                              "function": {
-                                                "elimination": {"record": {"field": "metadata", "typeName": "hydra.graph.Graph"}}}}}}},
-                                      {
-                                        "name": "primitives",
-                                        "term": {
-                                          "application": {
-                                            "argument": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "record": {"field": "lambdaVariables", "typeName": "hydra.graph.Graph"}}}}}}},
+                                          {
+                                            "name": "metadata",
+                                            "term": {
                                               "application": {
-                                                "argument": {"variable": "prims"},
+                                                "argument": {"variable": "g"},
                                                 "function": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
-                                                            "type": {"variable": "hydra.core.Name"}}},
-                                                        "type": {"maybe": {"variable": "hydra.core.Term"}}}},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {"variable": "elements"},
-                                                        "function": {"variable": "hydra.lexical.buildGraph"}}}}}}},
-                                            "function": {
-                                              "function": {
-                                                "elimination": {"record": {"field": "primitives", "typeName": "hydra.graph.Graph"}}}}}}},
-                                      {"name": "schemaTypes", "term": {"variable": "schemaTypes"}},
-                                      {
-                                        "name": "typeVariables",
-                                        "term": {
-                                          "application": {
-                                            "argument": {
+                                                  "function": {
+                                                    "elimination": {"record": {"field": "metadata", "typeName": "hydra.graph.Graph"}}}}}}},
+                                          {
+                                            "name": "primitives",
+                                            "term": {
                                               "application": {
-                                                "argument": {"variable": "prims"},
+                                                "argument": {"variable": "g"},
                                                 "function": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "typeApplication": {
-                                                            "body": {"function": {"primitive": "hydra.lib.maps.empty"}},
-                                                            "type": {"variable": "hydra.core.Name"}}},
-                                                        "type": {"maybe": {"variable": "hydra.core.Term"}}}},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {"variable": "elements"},
-                                                        "function": {"variable": "hydra.lexical.buildGraph"}}}}}}},
-                                            "function": {
-                                              "function": {
-                                                "elimination": {
-                                                  "record": {"field": "typeVariables", "typeName": "hydra.graph.Graph"}}}}}}}],
-                                    "typeName": "hydra.graph.Graph"}}}},
+                                                  "function": {
+                                                    "elimination": {"record": {"field": "primitives", "typeName": "hydra.graph.Graph"}}}}}}},
+                                          {"name": "schemaTypes", "term": {"variable": "schemaTypes"}},
+                                          {
+                                            "name": "typeVariables",
+                                            "term": {
+                                              "application": {
+                                                "argument": {"variable": "g"},
+                                                "function": {
+                                                  "function": {
+                                                    "elimination": {
+                                                      "record": {"field": "typeVariables", "typeName": "hydra.graph.Graph"}}}}}}}],
+                                        "typeName": "hydra.graph.Graph"}}}}}},
                             "domain": [{"list": {"variable": "hydra.core.Binding"}}],
                             "parameter": "elements"}}},
                       "domain": [

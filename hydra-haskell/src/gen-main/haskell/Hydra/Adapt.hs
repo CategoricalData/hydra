@@ -316,15 +316,17 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
                     Core.bindingTerm = (pushTypeAppsInward (Core.bindingTerm b)),
                     Core.bindingType = (Core.bindingType b)}) bindings)
             in  
-              let rebuildGraph = (\bindings -> Graph.Graph {
-                      Graph.graphBoundTerms = (Graph.graphBoundTerms (Lexical.buildGraph bindings Maps.empty (Graph.graphPrimitives graph0))),
-                      Graph.graphBoundTypes = (Graph.graphBoundTypes (Lexical.buildGraph bindings Maps.empty (Graph.graphPrimitives graph0))),
-                      Graph.graphClassConstraints = (Graph.graphClassConstraints (Lexical.buildGraph bindings Maps.empty (Graph.graphPrimitives graph0))),
-                      Graph.graphLambdaVariables = (Graph.graphLambdaVariables (Lexical.buildGraph bindings Maps.empty (Graph.graphPrimitives graph0))),
-                      Graph.graphMetadata = (Graph.graphMetadata (Lexical.buildGraph bindings Maps.empty (Graph.graphPrimitives graph0))),
-                      Graph.graphPrimitives = (Graph.graphPrimitives (Lexical.buildGraph bindings Maps.empty (Graph.graphPrimitives graph0))),
-                      Graph.graphSchemaTypes = (Graph.graphSchemaTypes graph0),
-                      Graph.graphTypeVariables = (Graph.graphTypeVariables (Lexical.buildGraph bindings Maps.empty (Graph.graphPrimitives graph0)))})
+              let rebuildGraph = (\bindings ->  
+                      let g = (Lexical.buildGraph bindings Maps.empty (Graph.graphPrimitives graph0))
+                      in Graph.Graph {
+                        Graph.graphBoundTerms = (Graph.graphBoundTerms g),
+                        Graph.graphBoundTypes = (Graph.graphBoundTypes g),
+                        Graph.graphClassConstraints = (Graph.graphClassConstraints g),
+                        Graph.graphLambdaVariables = (Graph.graphLambdaVariables g),
+                        Graph.graphMetadata = (Graph.graphMetadata g),
+                        Graph.graphPrimitives = (Graph.graphPrimitives g),
+                        Graph.graphSchemaTypes = (Graph.graphSchemaTypes graph0),
+                        Graph.graphTypeVariables = (Graph.graphTypeVariables g)})
               in  
                 let bins0 = originalBindings
                 in  
@@ -351,15 +353,17 @@ dataGraphToDefinitions constraints doInfer doExpand doHoistCaseStatements doHois
                                 let defsGrouped = (Lists.map (\ns ->  
                                         let elsForNs = (Maybes.maybe [] Equality.identity (Maps.lookup ns elementsByNamespace))
                                         in (Maybes.cat (Lists.map toDef elsForNs))) namespaces)
-                                in (Right (Graph.Graph {
-                                  Graph.graphBoundTerms = (Graph.graphBoundTerms (Lexical.buildGraph bins5 Maps.empty (Graph.graphPrimitives adapted))),
-                                  Graph.graphBoundTypes = (Graph.graphBoundTypes (Lexical.buildGraph bins5 Maps.empty (Graph.graphPrimitives adapted))),
-                                  Graph.graphClassConstraints = (Graph.graphClassConstraints (Lexical.buildGraph bins5 Maps.empty (Graph.graphPrimitives adapted))),
-                                  Graph.graphLambdaVariables = (Graph.graphLambdaVariables (Lexical.buildGraph bins5 Maps.empty (Graph.graphPrimitives adapted))),
-                                  Graph.graphMetadata = (Graph.graphMetadata (Lexical.buildGraph bins5 Maps.empty (Graph.graphPrimitives adapted))),
-                                  Graph.graphPrimitives = (Graph.graphPrimitives (Lexical.buildGraph bins5 Maps.empty (Graph.graphPrimitives adapted))),
-                                  Graph.graphSchemaTypes = (Graph.graphSchemaTypes adapted),
-                                  Graph.graphTypeVariables = (Graph.graphTypeVariables (Lexical.buildGraph bins5 Maps.empty (Graph.graphPrimitives adapted)))}, defsGrouped))))))))
+                                in  
+                                  let g = (Lexical.buildGraph bins5 Maps.empty (Graph.graphPrimitives adapted))
+                                  in (Right (Graph.Graph {
+                                    Graph.graphBoundTerms = (Graph.graphBoundTerms g),
+                                    Graph.graphBoundTypes = (Graph.graphBoundTypes g),
+                                    Graph.graphClassConstraints = (Graph.graphClassConstraints g),
+                                    Graph.graphLambdaVariables = (Graph.graphLambdaVariables g),
+                                    Graph.graphMetadata = (Graph.graphMetadata g),
+                                    Graph.graphPrimitives = (Graph.graphPrimitives g),
+                                    Graph.graphSchemaTypes = (Graph.graphSchemaTypes adapted),
+                                    Graph.graphTypeVariables = (Graph.graphTypeVariables g)}, defsGrouped))))))))
 
 -- | Check if a literal type is supported by the given language constraints
 literalTypeSupported :: (Coders.LanguageConstraints -> Core.LiteralType -> Bool)

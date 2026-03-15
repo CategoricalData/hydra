@@ -136,10 +136,11 @@ public interface Substitution {
         subst,
         v1)),
       (cx).boundTypes));
+    hydra.graph.Graph cx2 = new hydra.graph.Graph((cx).boundTerms, newBoundTypes.get(), (cx).classConstraints, (cx).lambdaVariables, (cx).metadata, (cx).primitives, (cx).schemaTypes, (cx).typeVariables);
     hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata> newClassConstraints = hydra.substitution.Substitution.substInClassConstraints(
       subst,
       (cx).classConstraints);
-    return new hydra.graph.Graph((new hydra.graph.Graph((cx).boundTerms, newBoundTypes.get(), (cx).classConstraints, (cx).lambdaVariables, (cx).metadata, (cx).primitives, (cx).schemaTypes, (cx).typeVariables)).boundTerms, (new hydra.graph.Graph((cx).boundTerms, newBoundTypes.get(), (cx).classConstraints, (cx).lambdaVariables, (cx).metadata, (cx).primitives, (cx).schemaTypes, (cx).typeVariables)).boundTypes, newClassConstraints, (new hydra.graph.Graph((cx).boundTerms, newBoundTypes.get(), (cx).classConstraints, (cx).lambdaVariables, (cx).metadata, (cx).primitives, (cx).schemaTypes, (cx).typeVariables)).lambdaVariables, (new hydra.graph.Graph((cx).boundTerms, newBoundTypes.get(), (cx).classConstraints, (cx).lambdaVariables, (cx).metadata, (cx).primitives, (cx).schemaTypes, (cx).typeVariables)).metadata, (new hydra.graph.Graph((cx).boundTerms, newBoundTypes.get(), (cx).classConstraints, (cx).lambdaVariables, (cx).metadata, (cx).primitives, (cx).schemaTypes, (cx).typeVariables)).primitives, (new hydra.graph.Graph((cx).boundTerms, newBoundTypes.get(), (cx).classConstraints, (cx).lambdaVariables, (cx).metadata, (cx).primitives, (cx).schemaTypes, (cx).typeVariables)).schemaTypes, (new hydra.graph.Graph((cx).boundTerms, newBoundTypes.get(), (cx).classConstraints, (cx).lambdaVariables, (cx).metadata, (cx).primitives, (cx).schemaTypes, (cx).typeVariables)).typeVariables);
+    return new hydra.graph.Graph((cx2).boundTerms, (cx2).boundTypes, newClassConstraints, (cx2).lambdaVariables, (cx2).metadata, (cx2).primitives, (cx2).schemaTypes, (cx2).typeVariables);
   }
   
   static hydra.core.Term substituteInTerm(hydra.typing.TermSubst subst, hydra.core.Term term0) {

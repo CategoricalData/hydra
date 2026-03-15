@@ -216,7 +216,7 @@ public interface TestTypes {
   }
   
   static hydra.core.Type testTypeUnit() {
-    return new hydra.core.Type.Record(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeUnitName(), (hydra.util.ConsList<hydra.core.FieldType>) (hydra.util.ConsList.<hydra.core.FieldType>of())));
+    return new hydra.core.Type.Record(new hydra.core.RowType(hydra.test.testTypes.TestTypes.testTypeUnitName(), (hydra.util.ConsList<hydra.core.FieldType>) (hydra.util.ConsList.<hydra.core.FieldType>empty())));
   }
   
   static hydra.core.Name testTypeUnitName() {

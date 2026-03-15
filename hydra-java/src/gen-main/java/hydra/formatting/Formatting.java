@@ -16,8 +16,8 @@ public interface Formatting {
     java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<Integer>>, java.util.function.Function<Integer, hydra.util.ConsList<hydra.util.ConsList<Integer>>>> splitOnUppercase = (java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<Integer>>, java.util.function.Function<Integer, hydra.util.ConsList<hydra.util.ConsList<Integer>>>>) (acc -> (java.util.function.Function<Integer, hydra.util.ConsList<hydra.util.ConsList<Integer>>>) (c -> hydra.lib.lists.Concat2.apply(
       hydra.lib.logic.IfElse.lazy(
         hydra.lib.chars.IsUpper.apply(c),
-        () -> hydra.util.ConsList.of((hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of())),
-        () -> (hydra.util.ConsList<hydra.util.ConsList<Integer>>) (hydra.util.ConsList.<hydra.util.ConsList<Integer>>of())),
+        () -> hydra.util.ConsList.of((hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty())),
+        () -> (hydra.util.ConsList<hydra.util.ConsList<Integer>>) (hydra.util.ConsList.<hydra.util.ConsList<Integer>>empty())),
       hydra.lib.lists.Cons.apply(
         hydra.lib.lists.Cons.apply(
           c,
@@ -27,7 +27,7 @@ public interface Formatting {
       hydra.lib.strings.FromList::apply,
       hydra.lib.lists.Foldl.apply(
         splitOnUppercase,
-        hydra.util.ConsList.of((hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of())),
+        hydra.util.ConsList.of((hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty())),
         hydra.lib.lists.Reverse.apply(hydra.lib.strings.ToList.apply(hydra.formatting.Formatting.decapitalize(original))))));
     hydra.util.ConsList<String> byUnderscores = hydra.lib.strings.SplitOn.apply(
       "_",
@@ -197,7 +197,7 @@ public interface Formatting {
     }));
     hydra.util.Lazy<hydra.util.Pair<hydra.util.ConsList<Integer>, Boolean>> result = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
       replace,
-      (hydra.util.Pair<hydra.util.ConsList<Integer>, Boolean>) ((hydra.util.Pair<hydra.util.ConsList<Integer>, Boolean>) (new hydra.util.Pair<hydra.util.ConsList<Integer>, Boolean>((hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>of()), false))),
+      (hydra.util.Pair<hydra.util.ConsList<Integer>, Boolean>) ((hydra.util.Pair<hydra.util.ConsList<Integer>, Boolean>) (new hydra.util.Pair<hydra.util.ConsList<Integer>, Boolean>((hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty()), false))),
       hydra.lib.strings.ToList.apply(input)));
     return hydra.lib.strings.FromList.apply(hydra.lib.lists.Reverse.apply(hydra.lib.pairs.First.apply(result.get())));
   }
@@ -317,6 +317,6 @@ public interface Formatting {
     })));
     return hydra.lib.strings.FromList.apply(hydra.lib.lists.Intercalate.apply(
       hydra.util.ConsList.of(10),
-      ((helper.get()).apply((hydra.util.ConsList<hydra.util.ConsList<Integer>>) (hydra.util.ConsList.<hydra.util.ConsList<Integer>>of()))).apply(hydra.lib.strings.ToList.apply(input))));
+      ((helper.get()).apply((hydra.util.ConsList<hydra.util.ConsList<Integer>>) (hydra.util.ConsList.<hydra.util.ConsList<Integer>>empty()))).apply(hydra.lib.strings.ToList.apply(input))));
   }
 }

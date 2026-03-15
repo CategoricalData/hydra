@@ -157,7 +157,7 @@ public interface Rewriting {
       @Override
       public hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, hydra.core.Term> otherwise(hydra.core.Term instance) {
         return (hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, hydra.core.Term>) ((hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, hydra.core.Term>) (new hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, hydra.core.Term>(hydra.lib.lists.Concat2.apply(
-          (hydra.util.ConsList<hydra.core.Binding>) (hydra.util.ConsList.<hydra.core.Binding>of()),
+          (hydra.util.ConsList<hydra.core.Binding>) (hydra.util.ConsList.<hydra.core.Binding>empty()),
           bindings), body)));
       }
       
@@ -178,7 +178,7 @@ public interface Rewriting {
       return (val0).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Pair<hydra.core.Binding, hydra.util.ConsList<hydra.core.Binding>> otherwise(hydra.core.Term instance) {
-          return (hydra.util.Pair<hydra.core.Binding, hydra.util.ConsList<hydra.core.Binding>>) ((hydra.util.Pair<hydra.core.Binding, hydra.util.ConsList<hydra.core.Binding>>) (new hydra.util.Pair<hydra.core.Binding, hydra.util.ConsList<hydra.core.Binding>>(new hydra.core.Binding(key0, val0, t), (hydra.util.ConsList<hydra.core.Binding>) (hydra.util.ConsList.<hydra.core.Binding>of()))));
+          return (hydra.util.Pair<hydra.core.Binding, hydra.util.ConsList<hydra.core.Binding>>) ((hydra.util.Pair<hydra.core.Binding, hydra.util.ConsList<hydra.core.Binding>>) (new hydra.util.Pair<hydra.core.Binding, hydra.util.ConsList<hydra.core.Binding>>(new hydra.core.Binding(key0, val0, t), (hydra.util.ConsList<hydra.core.Binding>) (hydra.util.ConsList.<hydra.core.Binding>empty()))));
         }
         
         @Override
@@ -326,7 +326,7 @@ public interface Rewriting {
           vars))).apply(((ft).value).body);
       }
     }))));
-    return ((gatherForall.get()).apply((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>of()))).apply(typ);
+    return ((gatherForall.get()).apply((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()))).apply(typ);
   }
   
   static hydra.util.PersistentSet<hydra.core.Name> freeTypeVariablesInTerm(hydra.core.Term term0) {
@@ -510,7 +510,7 @@ public interface Rewriting {
           hydra.lib.sets.Member.apply(
             (v).value,
             boundVars),
-          () -> (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>of()),
+          () -> (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()),
           () -> hydra.util.ConsList.of((v).value));
       }
       
@@ -795,7 +795,7 @@ public interface Rewriting {
               }))));
               hydra.util.ConsList<hydra.core.Name> vars = (ts).variables;
               hydra.util.Lazy<Integer> k = new hydra.util.Lazy<>(() -> hydra.lib.lists.Length.apply(vars));
-              hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> newVars = new hydra.util.Lazy<>(() -> (((gen.get()).apply(0)).apply(k.get())).apply((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>of())));
+              hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> newVars = new hydra.util.Lazy<>(() -> (((gen.get()).apply(0)).apply(k.get())).apply((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty())));
               hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>> newSubst = new hydra.util.Lazy<>(() -> hydra.lib.maps.Union.apply(
                 hydra.lib.maps.FromList.apply(hydra.lib.lists.Zip.apply(
                   vars,
@@ -827,7 +827,7 @@ public interface Rewriting {
                 (java.util.function.Function<hydra.core.TypeScheme, hydra.util.ConsList<hydra.core.Binding>>) (ts -> (withType).apply(ts)),
                 (b.get()).type));
           })));
-          hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> bindings1 = new hydra.util.Lazy<>(() -> ((step.get()).apply((hydra.util.ConsList<hydra.core.Binding>) (hydra.util.ConsList.<hydra.core.Binding>of()))).apply(bindings0));
+          hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> bindings1 = new hydra.util.Lazy<>(() -> ((step.get()).apply((hydra.util.ConsList<hydra.core.Binding>) (hydra.util.ConsList.<hydra.core.Binding>empty()))).apply(bindings0));
           hydra.core.Term body0 = ((lt).value).body;
           return new hydra.core.Term.Let(new hydra.core.Let(bindings1.get(), ((rewriteWithSubst.get()).apply((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) ((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) (new hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) ((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) (new hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>(subst.get(), boundVars.get()))), next.get()))))).apply(body0)));
         }
@@ -1593,7 +1593,7 @@ public interface Rewriting {
           hydra.lib.pairs.Second.apply(r2.get()),
           hydra.lib.pairs.Second.apply(r)))));
       })),
-      (hydra.util.Pair<T2, hydra.util.ConsList<T4>>) ((hydra.util.Pair<T2, hydra.util.ConsList<T4>>) (new hydra.util.Pair<T2, hydra.util.ConsList<T4>>(val, (hydra.util.ConsList<T4>) (hydra.util.ConsList.<T4>of())))),
+      (hydra.util.Pair<T2, hydra.util.ConsList<T4>>) ((hydra.util.Pair<T2, hydra.util.ConsList<T4>>) (new hydra.util.Pair<T2, hydra.util.ConsList<T4>>(val, (hydra.util.ConsList<T4>) (hydra.util.ConsList.<T4>empty())))),
       els);
   }
   
@@ -1608,7 +1608,7 @@ public interface Rewriting {
   static <T0> hydra.util.Pair<T0, hydra.core.Term> rewriteAndFoldTermWithPath(java.util.function.Function<java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>> f, T0 term0, hydra.core.Term v1) {
     return hydra.rewriting.Rewriting.<T0>rewriteAndFoldTermWithPath_recurse(
       f,
-      (hydra.util.ConsList<hydra.accessors.TermAccessor>) (hydra.util.ConsList.<hydra.accessors.TermAccessor>of()),
+      (hydra.util.ConsList<hydra.accessors.TermAccessor>) (hydra.util.ConsList.<hydra.accessors.TermAccessor>empty()),
       term0,
       v1);
   }
@@ -1995,7 +1995,7 @@ public interface Rewriting {
           hydra.lib.pairs.Second.apply(rb.get()),
           hydra.lib.pairs.Second.apply(r)))));
       })),
-      (hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Binding>>) ((hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Binding>>) (new hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Binding>>(hydra.lib.pairs.First.apply(renv), (hydra.util.ConsList<hydra.core.Binding>) (hydra.util.ConsList.<hydra.core.Binding>of())))),
+      (hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Binding>>) ((hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Binding>>) (new hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Binding>>(hydra.lib.pairs.First.apply(renv), (hydra.util.ConsList<hydra.core.Binding>) (hydra.util.ConsList.<hydra.core.Binding>empty())))),
       (l).bindings);
   }
   
@@ -2017,7 +2017,7 @@ public interface Rewriting {
           hydra.lib.pairs.Second.apply(r2.get()),
           hydra.lib.pairs.Second.apply(hydra.lib.pairs.Second.apply(r)))))))));
       })),
-      (hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>>) ((hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>>) (new hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>>(idx, (hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>) ((hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>) (new hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>(val0, (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>of()))))))),
+      (hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>>) ((hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>>) (new hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>>(idx, (hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>) ((hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>) (new hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>(val0, (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()))))))),
       els);
   }
   
@@ -2047,7 +2047,7 @@ public interface Rewriting {
           (hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(hydra.lib.pairs.Second.apply(rk.get()), hydra.lib.pairs.Second.apply(rv.get())))),
           hydra.lib.pairs.Second.apply(hydra.lib.pairs.Second.apply(r)))))))));
       })),
-      (hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>>) ((hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>>) (new hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>>(idx, (hydra.util.Pair<T1, hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>) ((hydra.util.Pair<T1, hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>) (new hydra.util.Pair<T1, hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>(val0, (hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>of()))))))),
+      (hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>>) ((hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>>) (new hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>>(idx, (hydra.util.Pair<T1, hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>) ((hydra.util.Pair<T1, hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>) (new hydra.util.Pair<T1, hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>(val0, (hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>empty()))))))),
       hydra.lib.maps.ToList.apply(m));
   }
   
@@ -2100,7 +2100,7 @@ public interface Rewriting {
           hydra.lib.pairs.Second.apply(r2.get()),
           hydra.lib.pairs.Second.apply(hydra.lib.pairs.Second.apply(r)))))))));
       })),
-      (hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>>) ((hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>>) (new hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>>(idx, (hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>) ((hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>) (new hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>(val0, (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>of()))))))),
+      (hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>>) ((hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>>) (new hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>>(idx, (hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>) ((hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>) (new hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>(val0, (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()))))))),
       hydra.lib.sets.ToList.apply(els));
   }
   
@@ -2216,7 +2216,7 @@ public interface Rewriting {
           hydra.lib.pairs.Second.apply(r2.get()),
           hydra.lib.pairs.Second.apply(r)))));
       })),
-      (hydra.util.Pair<T2, hydra.util.ConsList<T4>>) ((hydra.util.Pair<T2, hydra.util.ConsList<T4>>) (new hydra.util.Pair<T2, hydra.util.ConsList<T4>>(val, (hydra.util.ConsList<T4>) (hydra.util.ConsList.<T4>of())))),
+      (hydra.util.Pair<T2, hydra.util.ConsList<T4>>) ((hydra.util.Pair<T2, hydra.util.ConsList<T4>>) (new hydra.util.Pair<T2, hydra.util.ConsList<T4>>(val, (hydra.util.ConsList<T4>) (hydra.util.ConsList.<T4>empty())))),
       accessorTermPairs);
   }
   
@@ -3579,7 +3579,7 @@ public interface Rewriting {
         return ((v12).value).accept(new hydra.core.Function.PartialVisitor<>() {
           @Override
           public hydra.util.ConsList<hydra.core.Term> otherwise(hydra.core.Function instance) {
-            return (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>of());
+            return (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty());
           }
           
           @Override
@@ -3587,14 +3587,14 @@ public interface Rewriting {
             return ((v13).value).accept(new hydra.core.Elimination.PartialVisitor<>() {
               @Override
               public hydra.util.ConsList<hydra.core.Term> otherwise(hydra.core.Elimination instance) {
-                return (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>of());
+                return (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty());
               }
               
               @Override
               public hydra.util.ConsList<hydra.core.Term> visit(hydra.core.Elimination.Union cs) {
                 return hydra.lib.lists.Concat2.apply(
                   hydra.lib.maybes.Maybe.applyLazy(
-                    () -> (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>of()),
+                    () -> (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()),
                     (java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>) (t -> hydra.util.ConsList.of(t)),
                     ((cs).value).default_),
                   hydra.lib.lists.Map.apply(
@@ -3627,7 +3627,7 @@ public interface Rewriting {
       
       @Override
       public hydra.util.ConsList<hydra.core.Term> visit(hydra.core.Term.Literal ignored) {
-        return (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>of());
+        return (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty());
       }
       
       @Override
@@ -3642,7 +3642,7 @@ public interface Rewriting {
       @Override
       public hydra.util.ConsList<hydra.core.Term> visit(hydra.core.Term.Maybe m) {
         return hydra.lib.maybes.Maybe.applyLazy(
-          () -> (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>of()),
+          () -> (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()),
           (java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>) (t -> hydra.util.ConsList.of(t)),
           (m).value);
       }
@@ -3683,12 +3683,12 @@ public interface Rewriting {
       
       @Override
       public hydra.util.ConsList<hydra.core.Term> visit(hydra.core.Term.Unit ignored) {
-        return (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>of());
+        return (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty());
       }
       
       @Override
       public hydra.util.ConsList<hydra.core.Term> visit(hydra.core.Term.Variable ignored) {
-        return (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>of());
+        return (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty());
       }
       
       @Override
@@ -3714,7 +3714,7 @@ public interface Rewriting {
       
       @Override
       public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Either e) {
-        return (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>of());
+        return (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>empty());
       }
       
       @Override
@@ -3722,7 +3722,7 @@ public interface Rewriting {
         return ((v12).value).accept(new hydra.core.Function.PartialVisitor<>() {
           @Override
           public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> otherwise(hydra.core.Function instance) {
-            return (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>of());
+            return (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>empty());
           }
           
           @Override
@@ -3730,14 +3730,14 @@ public interface Rewriting {
             return ((v13).value).accept(new hydra.core.Elimination.PartialVisitor<>() {
               @Override
               public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> otherwise(hydra.core.Elimination instance) {
-                return (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>of());
+                return (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>empty());
               }
               
               @Override
               public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Elimination.Union cs) {
                 return hydra.lib.lists.Concat2.apply(
                   hydra.lib.maybes.Maybe.applyLazy(
-                    () -> (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>of()),
+                    () -> (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>empty()),
                     (java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>>) (t -> hydra.util.ConsList.of((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.UnionCasesDefault(), t))))),
                     ((cs).value).default_),
                   hydra.lib.lists.Map.apply(
@@ -3772,7 +3772,7 @@ public interface Rewriting {
       
       @Override
       public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Literal ignored) {
-        return (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>of());
+        return (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>empty());
       }
       
       @Override
@@ -3787,14 +3787,14 @@ public interface Rewriting {
       @Override
       public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Maybe m) {
         return hydra.lib.maybes.Maybe.applyLazy(
-          () -> (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>of()),
+          () -> (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>empty()),
           (java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>>) (t -> hydra.util.ConsList.of((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.MaybeTerm(), t))))),
           (m).value);
       }
       
       @Override
       public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Pair p) {
-        return (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>of());
+        return (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>empty());
       }
       
       @Override
@@ -3828,12 +3828,12 @@ public interface Rewriting {
       
       @Override
       public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Unit ignored) {
-        return (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>of());
+        return (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>empty());
       }
       
       @Override
       public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Variable ignored) {
-        return (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>of());
+        return (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>empty());
       }
       
       @Override
@@ -3890,7 +3890,7 @@ public interface Rewriting {
       
       @Override
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Literal ignored) {
-        return (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of());
+        return (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty());
       }
       
       @Override
@@ -3926,12 +3926,12 @@ public interface Rewriting {
       
       @Override
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Unit ignored) {
-        return (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of());
+        return (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty());
       }
       
       @Override
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Variable ignored) {
-        return (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>of());
+        return (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty());
       }
       
       @Override
@@ -4126,7 +4126,7 @@ public interface Rewriting {
     hydra.util.Lazy<hydra.core.Term> term = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(nameAndTerm));
     return (hydra.util.Pair<T0, hydra.util.ConsList<hydra.core.Name>>) ((hydra.util.Pair<T0, hydra.util.ConsList<hydra.core.Name>>) (new hydra.util.Pair<T0, hydra.util.ConsList<hydra.core.Name>>(hydra.rewriting.Rewriting.<T0>topologicalSortBindingMap_name(nameAndTerm), hydra.lib.logic.IfElse.lazy(
       (hasTypeAnnotation).apply(term.get()),
-      () -> (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>of()),
+      () -> (hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()),
       () -> hydra.lib.sets.ToList.apply(hydra.lib.sets.Intersection.apply(
         keys,
         (hydra_rewriting_freeVariablesInTerm2).apply(term.get())))))));
