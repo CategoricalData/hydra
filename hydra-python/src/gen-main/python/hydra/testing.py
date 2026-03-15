@@ -393,6 +393,21 @@ class TestCodec:
     IMPORT_TEMPLATE = hydra.core.Name("importTemplate")
     FIND_IMPORTS = hydra.core.Name("findImports")
 
+@dataclass(frozen=True)
+class TestGenerator(Generic[A]):
+    r"""A language-agnostic test generator abstraction, parameterized by the namespace/module name type."""
+    
+    namespaces_for_module: Annotated[Callable[[hydra.module.Module, hydra.graph.Graph], Either[str, hydra.module.Namespaces[A]]], "Build namespaces for a module, resolving all imports and primitives"]
+    create_codec: Annotated[Callable[[hydra.module.Namespaces[A]], TestCodec], "Create a test codec from resolved namespaces"]
+    generate_test_file: Annotated[Callable[[hydra.module.Module, TestGroup, hydra.graph.Graph], Either[str, tuple[str, str]]], "Generate a complete test file for a module and test group"]
+    aggregator_file: Annotated[Maybe[Callable[[str, frozenlist[hydra.module.Module]], tuple[str, str]]], "Generate an aggregator file (e.g., Spec.hs for Haskell, conftest.py for Python). Takes base directory and list of modules, returns (filepath, content) or Nothing if not needed"]
+    
+    TYPE_ = hydra.core.Name("hydra.testing.TestGenerator")
+    NAMESPACES_FOR_MODULE = hydra.core.Name("namespacesForModule")
+    CREATE_CODEC = hydra.core.Name("createCodec")
+    GENERATE_TEST_FILE = hydra.core.Name("generateTestFile")
+    AGGREGATOR_FILE = hydra.core.Name("aggregatorFile")
+
 class TestCaseAlphaConversion(Node["AlphaConversionTestCase"]):
     r"""An alpha conversion test"""
 

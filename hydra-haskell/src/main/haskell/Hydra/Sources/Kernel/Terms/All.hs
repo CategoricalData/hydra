@@ -22,6 +22,7 @@ import qualified Hydra.Sources.Kernel.Terms.Languages       as Languages
 import qualified Hydra.Sources.Kernel.Terms.Lexical         as Lexical
 import qualified Hydra.Sources.Kernel.Terms.Literals        as Literals
 
+import qualified Hydra.Sources.Kernel.Lib.Names             as LibNames
 import qualified Hydra.Sources.Kernel.Terms.Names           as Names
 import qualified Hydra.Sources.Kernel.Terms.Parsers         as Parsers
 import qualified Hydra.Sources.Kernel.Terms.Reduction       as Reduction
@@ -109,6 +110,7 @@ kernelPrimaryTermsModules = [
   Inference.module_,
   Languages.module_,
   Lexical.module_,
+  LibNames.module_,
   Literals.module_,
 
   Names.module_,
