@@ -8,6 +8,8 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Maybe;
 
+import hydra.util.ConsList;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -36,7 +38,7 @@ public class SafeHead extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(l -> Terms.optional(apply(l)), hydra.extract.core.Core.list(cx, graph, args.get(0)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<ConsList<Term>, Term>) l -> Terms.optional(SafeHead.apply(l)), hydra.extract.core.Core.list(cx, graph, args.get(0)));
     }
 
     /**
@@ -45,11 +47,7 @@ public class SafeHead extends PrimitiveFunction {
      * @param list the list to get the head from
      * @return an optional containing the first element, or empty if the list is empty
      */
-    public static <X> Maybe<X> apply(List<X> list) {
-        if (list.isEmpty()) {
-            return Maybe.nothing();
-        } else {
-            return Maybe.just(list.get(0));
-        }
+    public static <X> Maybe<X> apply(ConsList<X> list) {
+        return list.safeHead();
     }
 }

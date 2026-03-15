@@ -8,10 +8,10 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Function;
+
+import hydra.util.PersistentSet;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
@@ -58,7 +58,7 @@ public class Union extends PrimitiveFunction {
      * @param s1 the first set
      * @return a function that takes the second set and returns the union
      */
-    public static <X> Function<Set<X>, Set<X>> apply(Set<X> s1) {
+    public static <X> Function<PersistentSet<X>, PersistentSet<X>> apply(PersistentSet<X> s1) {
         return (s2) -> apply(s1, s2);
     }
 
@@ -69,9 +69,7 @@ public class Union extends PrimitiveFunction {
      * @param s2 the second set
      * @return a new set containing all elements from both sets
      */
-    public static <X> Set<X> apply(Set<X> s1, Set<X> s2) {
-        java.util.LinkedHashSet<X> combined = new java.util.LinkedHashSet<>(s1);
-        combined.addAll(s2);
-        return FromList.orderedSet(combined);
+    public static <X> PersistentSet<X> apply(PersistentSet<X> s1, PersistentSet<X> s2) {
+        return s1.union(s2);
     }
 }

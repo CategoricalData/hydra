@@ -9,8 +9,8 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Maybe;
 
-import java.util.Arrays;
-import java.util.HashMap;
+import hydra.util.PersistentMap;
+
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -77,7 +77,7 @@ public class Bimap extends PrimitiveFunction {
      * @param kf the key transformation function
      * @return a curried function that takes a value function, a map, and returns the transformed map
      */
-    public static <K1, K2, V1, V2> Function<Function<V1, V2>, Function<Map<K1, V1>, Map<K2, V2>>> apply(
+    public static <K1, K2, V1, V2> Function<Function<V1, V2>, Function<PersistentMap<K1, V1>, PersistentMap<K2, V2>>> apply(
             Function<K1, K2> kf) {
         return vf -> mp -> apply(kf, vf, mp);
     }
@@ -93,13 +93,13 @@ public class Bimap extends PrimitiveFunction {
      * @param mp the input map
      * @return the transformed map
      */
-    public static <K1, K2, V1, V2> Map<K2, V2> apply(
-            Function<K1, K2> kf, Function<V1, V2> vf, Map<K1, V1> mp) {
-        // Key type changes, so we build into LinkedHashMap then let orderedMap sort
-        Map<K2, V2> result = new java.util.LinkedHashMap<>();
-        for (Map.Entry<K1, V1> entry : mp.entrySet()) {
-            result.put(kf.apply(entry.getKey()), vf.apply(entry.getValue()));
+    @SuppressWarnings("unchecked")
+    public static <K1, K2, V1, V2> PersistentMap<K2, V2> apply(
+            Function<K1, K2> kf, Function<V1, V2> vf, PersistentMap<K1, V1> mp) {
+        PersistentMap result = PersistentMap.empty();
+        for (java.util.Map.Entry<K1, V1> e : mp.entrySet()) {
+            result = result.insert((Comparable) kf.apply(e.getKey()), vf.apply(e.getValue()));
         }
-        return FromList.orderedMap(result);
+        return result;
     }
 }

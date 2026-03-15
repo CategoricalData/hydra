@@ -8,6 +8,9 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Pair;
 
+import hydra.util.ConsList;
+import hydra.util.PersistentMap;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -54,7 +57,7 @@ public class FromList extends PrimitiveFunction {
      */
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<List<Pair<Term, Term>>, Term>) pairs -> new Term.Map(apply(pairs)), hydra.extract.core.Core.listOf(cx, term -> hydra.extract.core.Core.pair(cx, t -> Either.right(t), t -> Either.right(t), graph, term), graph, args.get(0)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<ConsList<Pair<Term, Term>>, Term>) pairs -> new Term.Map(apply(pairs)), hydra.extract.core.Core.listOf(cx, term -> hydra.extract.core.Core.pair(cx, t -> Either.right(t), t -> Either.right(t), graph, term), graph, args.get(0)));
     }
 
     /**
@@ -65,26 +68,13 @@ public class FromList extends PrimitiveFunction {
      * @return a map constructed from the pairs
      */
     @SuppressWarnings("unchecked")
-    public static <K, V> Map<K, V> apply(List<Pair<K, V>> pairs) {
-        if (pairs.isEmpty()) {
-            return new LinkedHashMap<>();
-        }
-        // Check first key to determine map type
-        K firstKey = pairs.get(0).first;
-        Map<K, V> mp;
-        if (firstKey instanceof Comparable) {
-            try {
-                mp = new TreeMap<>((a, b) -> ((Comparable<K>) a).compareTo(b));
-            } catch (ClassCastException e) {
-                mp = new LinkedHashMap<>();
-            }
-        } else {
-            mp = new LinkedHashMap<>();
-        }
-        for (Pair<K, V> pair : pairs) {
-            mp.put(pair.first, pair.second);
-        }
-        return mp;
+    public static <K, V> PersistentMap<K, V> apply(ConsList<Pair<K, V>> pairs) {
+        return PersistentMap.fromPairList((List) pairs);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <K, V> PersistentMap<K, V> apply(List<Pair<K, V>> pairs) {
+        return PersistentMap.fromPairList((List) pairs);
     }
 
     /**
@@ -94,6 +84,12 @@ public class FromList extends PrimitiveFunction {
      */
     @SuppressWarnings("unchecked")
     static <K, V> Map<K, V> orderedMap(Map<K, V> source) {
+        if (source instanceof PersistentMap) {
+            // Convert to mutable TreeMap since callers expect a mutable map
+            TreeMap<K, V> result = new TreeMap<>((a, b) -> ((Comparable<K>) a).compareTo(b));
+            result.putAll(source);
+            return result;
+        }
         if (source instanceof TreeMap) {
             // Use the SortedMap copy constructor which iterates linearly,
             // rather than putAll which uses recursive buildFromSorted and
@@ -129,6 +125,10 @@ public class FromList extends PrimitiveFunction {
      */
     @SuppressWarnings("unchecked")
     static <K, V1, V2> Map<K, V2> emptyLike(Map<K, V1> source) {
+        if (source instanceof PersistentMap) {
+            // Return a mutable TreeMap with natural ordering for keys
+            return new TreeMap<>((a, b) -> ((Comparable<K>) a).compareTo(b));
+        }
         if (source instanceof TreeMap) {
             return new TreeMap<>(((TreeMap<K, V1>) source).comparator());
         }

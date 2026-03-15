@@ -443,8 +443,8 @@ public interface Rewriting {
 
     Module module = new Module(
         ns,
-        elements,
-        Collections.emptyList(),
-        Collections.emptyList(),
+        hydra.util.ConsList.fromList(elements),
+        hydra.util.ConsList.empty(),
+        hydra.util.ConsList.empty(),
         Maybe.just("Utilities for type and term rewriting and analysis."));
 }

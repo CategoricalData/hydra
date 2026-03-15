@@ -8,6 +8,9 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.ConsList;
+import hydra.util.PersistentMap;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -53,12 +56,8 @@ public class Keys extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> {
-            Either<InContext<Error_>, Map<Term, Term>> r = hydra.extract.core.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(0));
-            return hydra.lib.eithers.Map.apply(map -> {
-                List<Term> keys = new ArrayList<>(map.keySet());
-                keys.sort(hydra.lib.equality.Compare::compareTerms);
-                return Terms.list(keys);
-            }, r);
+            Either<InContext<Error_>, PersistentMap<Term, Term>> r = hydra.extract.core.Core.map(cx, t -> Either.right(t), t -> Either.right(t), graph, args.get(0));
+            return hydra.lib.eithers.Map.apply(map -> Terms.list(map.keys()), r);
         };
     }
 
@@ -69,16 +68,7 @@ public class Keys extends PrimitiveFunction {
      * @param map the map
      * @return the keys
      */
-    @SuppressWarnings("unchecked")
-    public static <K, V> List<K> apply(Map<K, V> map) {
-        List<K> keys = new ArrayList<>(map.keySet());
-        if (!keys.isEmpty()) {
-            if (keys.get(0) instanceof Comparable) {
-                keys.sort((a, b) -> ((Comparable<K>) a).compareTo(b));
-            } else if (keys.get(0) instanceof Term) {
-                keys.sort((a, b) -> hydra.lib.equality.Compare.compareTerms((Term) a, (Term) b));
-            }
-        }
-        return keys;
+    public static <K, V> ConsList<K> apply(PersistentMap<K, V> map) {
+        return ConsList.fromList(map.keys());
     }
 }

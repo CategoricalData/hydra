@@ -90,26 +90,26 @@ public class TestSuiteRunner {
     }
 
     private static Graph emptyGraph() {
-        Map<Name, Primitive> primitives = new HashMap<>();
+        hydra.util.PersistentMap<Name, Primitive> primitives = hydra.util.PersistentMap.empty();
         for (PrimitiveFunction prim : Libraries.standardPrimitives()) {
-            primitives.put(prim.name(), prim.toNative());
+            primitives = primitives.insert(prim.name(), prim.toNative());
         }
         return new Graph(
-            Collections.emptyMap(),
-            Collections.emptyMap(),
-            Collections.emptyMap(),
-            Collections.emptySet(),
-            Collections.emptyMap(),
+            hydra.util.PersistentMap.empty(),
+            hydra.util.PersistentMap.empty(),
+            hydra.util.PersistentMap.empty(),
+            hydra.util.PersistentSet.empty(),
+            hydra.util.PersistentMap.empty(),
             primitives,
-            Collections.emptyMap(),
-            Collections.emptySet());
+            hydra.util.PersistentMap.empty(),
+            hydra.util.PersistentSet.empty());
     }
 
     private static hydra.context.Context emptyContext() {
         return new hydra.context.Context(
-            Collections.emptyList(),
-            Collections.emptyList(),
-            Collections.emptyMap());
+            hydra.util.ConsList.empty(),
+            hydra.util.ConsList.empty(),
+            hydra.util.PersistentMap.empty());
     }
 
     /**
@@ -150,9 +150,9 @@ public class TestSuiteRunner {
      */
     private static Graph buildTestGraph() {
         // Build primitives map
-        Map<Name, Primitive> primitives = new HashMap<>();
+        hydra.util.PersistentMap<Name, Primitive> primitives = hydra.util.PersistentMap.empty();
         for (PrimitiveFunction prim : Libraries.standardPrimitives()) {
-            primitives.put(prim.name(), prim.toNative());
+            primitives = primitives.insert(prim.name(), prim.toNative());
         }
 
         // Build schema types from test types + kernel types
@@ -160,9 +160,9 @@ public class TestSuiteRunner {
         Map<Name, Type> kernelTypes = buildKernelTypes();
         Map<Name, Type> allTypes = new HashMap<>(kernelTypes);
         allTypes.putAll(testTypes); // test types override kernel types if any overlap
-        Map<Name, TypeScheme> schemaTypes = new HashMap<>();
+        hydra.util.PersistentMap<Name, TypeScheme> schemaTypes = hydra.util.PersistentMap.empty();
         for (Map.Entry<Name, Type> entry : allTypes.entrySet()) {
-            schemaTypes.put(entry.getKey(), hydra.schemas.Schemas.typeToTypeScheme(entry.getValue()));
+            schemaTypes = schemaTypes.insert(entry.getKey(), hydra.schemas.Schemas.typeToTypeScheme(entry.getValue()));
         }
 
         // Build bound terms map from test terms + primitive bridges + kernel constants
@@ -221,15 +221,20 @@ public class TestSuiteRunner {
             boundTerms.put(entry.getKey(), hydra.encode.core.Core.type(entry.getValue()));
         }
 
+        hydra.util.PersistentMap<Name, Term> persistentBoundTerms = hydra.util.PersistentMap.empty();
+        for (Map.Entry<Name, Term> entry : boundTerms.entrySet()) {
+            persistentBoundTerms = persistentBoundTerms.insert(entry.getKey(), entry.getValue());
+        }
+
         return new Graph(
-            boundTerms,
-            Collections.emptyMap(), // boundTypes (TypeSchemes for term bindings — not populated for test graph)
-            Collections.emptyMap(), // classConstraints
-            Collections.emptySet(), // lambdaVariables
-            Collections.emptyMap(), // metadata
+            persistentBoundTerms,
+            hydra.util.PersistentMap.empty(), // boundTypes (TypeSchemes for term bindings — not populated for test graph)
+            hydra.util.PersistentMap.empty(), // classConstraints
+            hydra.util.PersistentSet.empty(), // lambdaVariables
+            hydra.util.PersistentMap.empty(), // metadata
             primitives,
             schemaTypes,
-            Collections.emptySet()  // typeVariables
+            hydra.util.PersistentSet.empty()  // typeVariables
         );
     }
 
@@ -246,14 +251,14 @@ public class TestSuiteRunner {
         //   lambdaVariables=set(), metadata={}, primitives={}, schemaTypes={}, typeVariables=set()}
         addConstantBinding(bindings, "hydra.lexical.emptyGraph",
             record("hydra.graph.Graph",
-                field("boundTerms", new Term.Map(Collections.emptyMap())),
-                field("boundTypes", new Term.Map(Collections.emptyMap())),
-                field("classConstraints", new Term.Map(Collections.emptyMap())),
-                field("lambdaVariables", new Term.Set(Collections.emptySet())),
-                field("metadata", new Term.Map(Collections.emptyMap())),
-                field("primitives", new Term.Map(Collections.emptyMap())),
-                field("schemaTypes", new Term.Map(Collections.emptyMap())),
-                field("typeVariables", new Term.Set(Collections.emptySet()))));
+                field("boundTerms", new Term.Map(hydra.util.PersistentMap.empty())),
+                field("boundTypes", new Term.Map(hydra.util.PersistentMap.empty())),
+                field("classConstraints", new Term.Map(hydra.util.PersistentMap.empty())),
+                field("lambdaVariables", new Term.Set(hydra.util.PersistentSet.empty())),
+                field("metadata", new Term.Map(hydra.util.PersistentMap.empty())),
+                field("primitives", new Term.Map(hydra.util.PersistentMap.empty())),
+                field("schemaTypes", new Term.Map(hydra.util.PersistentMap.empty())),
+                field("typeVariables", new Term.Set(hydra.util.PersistentSet.empty()))));
     }
 
     /**
@@ -728,7 +733,7 @@ public class TestSuiteRunner {
 
                     // Reconstruct type - use context from inference to continue fresh name counter
                     var typeOfResult =
-                        hydra.checking.Checking.typeOf(inferCx, graph, List.of(), inferredTerm);
+                        hydra.checking.Checking.typeOf(inferCx, graph, hydra.util.ConsList.of(), inferredTerm);
                     assertEitherRight(typeOfResult, "Type reconstruction failed");
                     Type reconstructedType = eitherRight(typeOfResult).first;
 
@@ -778,16 +783,16 @@ public class TestSuiteRunner {
             public DynamicTest visit(TestCase.TopologicalSortBindings instance) {
                 TopologicalSortBindingsTestCase tc = instance.value;
                 return withTimeout(name, () -> {
-                    Map<Name, Term> bindingMap = hydra.lib.maps.FromList.apply(tc.bindings);
-                    List<List<Pair<Name, Term>>> result =
+                    hydra.util.PersistentMap<Name, Term> bindingMap = hydra.lib.maps.FromList.apply(tc.bindings);
+                    hydra.util.ConsList<hydra.util.ConsList<Pair<Name, Term>>> result =
                         hydra.rewriting.Rewriting.topologicalSortBindingMap(bindingMap);
                     // Compare as sets of sets (order within SCCs doesn't matter)
                     Set<Set<Pair<Name, Term>>> resultSet = new HashSet<>();
-                    for (List<Pair<Name, Term>> group : result) {
+                    for (hydra.util.ConsList<Pair<Name, Term>> group : result) {
                         resultSet.add(new HashSet<>(group));
                     }
                     Set<Set<Pair<Name, Term>>> expectedSet = new HashSet<>();
-                    for (List<Pair<Name, Term>> group : tc.expected) {
+                    for (hydra.util.ConsList<Pair<Name, Term>> group : tc.expected) {
                         expectedSet.add(new HashSet<>(group));
                     }
                     assertEquals(expectedSet, resultSet);
@@ -917,7 +922,7 @@ public class TestSuiteRunner {
             public DynamicTest visit(TestCase.JsonDecode instance) {
                 JsonDecodeTestCase tc = instance.value;
                 return withTimeout(name, () -> {
-                    java.util.Map<hydra.core.Name, hydra.core.Type> emptyTypes = new java.util.HashMap<>();
+                    hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> emptyTypes = hydra.util.PersistentMap.empty();
                     var decodeResult = hydra.json.decode.Decode.fromJson(emptyTypes, tc.type, tc.json);
 
                     tc.expected.accept(new hydra.util.Either.Visitor<>() {
@@ -974,7 +979,7 @@ public class TestSuiteRunner {
                     hydra.json.model.Value encoded = eitherRight(encodeResult);
 
                     // Decode back
-                    java.util.Map<hydra.core.Name, hydra.core.Type> emptyTypes = new java.util.HashMap<>();
+                    hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> emptyTypes = hydra.util.PersistentMap.empty();
                     var decodeResult = hydra.json.decode.Decode.fromJson(emptyTypes, tc.type, encoded);
                     assertEitherRight(decodeResult, "JSON decode failed");
                     Term decoded = eitherRight(decodeResult);
@@ -992,9 +997,9 @@ public class TestSuiteRunner {
                 SubstInTypeTestCase tc = instance.value;
                 return withTimeout(name, () -> {
                     // Build TypeSubst from list of (Name, Type) pairs
-                    Map<Name, Type> substMap = new HashMap<>();
+                    hydra.util.PersistentMap<Name, Type> substMap = hydra.util.PersistentMap.empty();
                     for (hydra.util.Pair<Name, Type> pair : tc.substitution) {
-                        substMap.put(pair.first, pair.second);
+                        substMap = substMap.insert(pair.first, pair.second);
                     }
                     hydra.typing.TypeSubst subst = new hydra.typing.TypeSubst(substMap);
                     Type result = hydra.substitution.Substitution.substInType(subst, tc.input);
@@ -1016,10 +1021,10 @@ public class TestSuiteRunner {
                 UnifyTypesTestCase tc = instance.value;
                 return withTimeout(name, () -> {
                     // Build schema types map from the list of names
-                    Map<Name, hydra.core.TypeScheme> schemaTypes = new HashMap<>();
+                    hydra.util.PersistentMap<Name, hydra.core.TypeScheme> schemaTypes = hydra.util.PersistentMap.empty();
                     for (Name n : tc.schemaTypes) {
-                        schemaTypes.put(n, new hydra.core.TypeScheme(
-                            java.util.Collections.emptyList(),
+                        schemaTypes = schemaTypes.insert(n, new hydra.core.TypeScheme(
+                            hydra.util.ConsList.empty(),
                             new Type.Variable(n),
                             hydra.util.Maybe.nothing()));
                     }
@@ -1055,9 +1060,9 @@ public class TestSuiteRunner {
                     var result =
                         hydra.unification.Unification.joinTypes(cx, tc.left, tc.right, "test");
 
-                    tc.expected.accept(new hydra.util.Either.Visitor<Void, java.util.List<hydra.typing.TypeConstraint>, Void>() {
+                    tc.expected.accept(new hydra.util.Either.Visitor<Void, hydra.util.ConsList<hydra.typing.TypeConstraint>, Void>() {
                         @Override
-                        public Void visit(hydra.util.Either.Left<Void, java.util.List<hydra.typing.TypeConstraint>> left) {
+                        public Void visit(hydra.util.Either.Left<Void, hydra.util.ConsList<hydra.typing.TypeConstraint>> left) {
                             // Expected failure
                             assertTrue(result instanceof hydra.util.Either.Left,
                                 "Expected join failure but got success");
@@ -1065,7 +1070,7 @@ public class TestSuiteRunner {
                         }
 
                         @Override
-                        public Void visit(hydra.util.Either.Right<Void, java.util.List<hydra.typing.TypeConstraint>> right) {
+                        public Void visit(hydra.util.Either.Right<Void, hydra.util.ConsList<hydra.typing.TypeConstraint>> right) {
                             // Expected success
                             assertEitherRight(result, "Expected join success but got failure");
                             assertEquals(right.value, eitherRight(result));
@@ -1126,7 +1131,7 @@ public class TestSuiteRunner {
                 for (int len : lengths) {
                     terms.add(new Term.Literal(new Literal.Integer_(new IntegerValue.Int32(len))));
                 }
-                return new Term.List(terms);
+                return new Term.List(hydra.util.ConsList.fromList(terms));
             }
 
             @Override
@@ -1143,7 +1148,7 @@ public class TestSuiteRunner {
                 for (Literal label : labels) {
                     terms.add(new Term.Literal(label));
                 }
-                return new Term.List(terms);
+                return new Term.List(hydra.util.ConsList.fromList(terms));
             }
         });
     }
@@ -1230,29 +1235,29 @@ public class TestSuiteRunner {
             input);
     }
 
-    private static java.util.function.Function<Pair<List<hydra.accessors.TermAccessor>, Term>, Boolean> predicateFn(
+    private static java.util.function.Function<Pair<hydra.util.ConsList<hydra.accessors.TermAccessor>, Term>, Boolean> predicateFn(
             HoistPredicate pred) {
         return pred.accept(new HoistPredicate.Visitor<>() {
             @Override
-            public java.util.function.Function<Pair<List<hydra.accessors.TermAccessor>, Term>, Boolean> visit(
+            public java.util.function.Function<Pair<hydra.util.ConsList<hydra.accessors.TermAccessor>, Term>, Boolean> visit(
                     HoistPredicate.Nothing instance) {
                 return pair -> false;
             }
 
             @Override
-            public java.util.function.Function<Pair<List<hydra.accessors.TermAccessor>, Term>, Boolean> visit(
+            public java.util.function.Function<Pair<hydra.util.ConsList<hydra.accessors.TermAccessor>, Term>, Boolean> visit(
                     HoistPredicate.Lists instance) {
                 return pair -> pair.second instanceof Term.List;
             }
 
             @Override
-            public java.util.function.Function<Pair<List<hydra.accessors.TermAccessor>, Term>, Boolean> visit(
+            public java.util.function.Function<Pair<hydra.util.ConsList<hydra.accessors.TermAccessor>, Term>, Boolean> visit(
                     HoistPredicate.Applications instance) {
                 return pair -> pair.second instanceof Term.Application;
             }
 
             @Override
-            public java.util.function.Function<Pair<List<hydra.accessors.TermAccessor>, Term>, Boolean> visit(
+            public java.util.function.Function<Pair<hydra.util.ConsList<hydra.accessors.TermAccessor>, Term>, Boolean> visit(
                     HoistPredicate.CaseStatements instance) {
                 return pair -> pair.second instanceof Term.Function
                     && ((Term.Function) pair.second).value instanceof Function.Elimination;
@@ -1271,7 +1276,7 @@ public class TestSuiteRunner {
 
         // CoderDirection: enum with encode, decode
         types.put(new Name("hydra.coders.CoderDirection"),
-            new Type.Union(new RowType(new Name("hydra.coders.CoderDirection"), List.of(
+            new Type.Union(new RowType(new Name("hydra.coders.CoderDirection"), hydra.util.ConsList.of(
                 new FieldType(new Name("encode"), new Type.Unit()),
                 new FieldType(new Name("decode"), new Type.Unit())))));
 
@@ -1299,7 +1304,7 @@ public class TestSuiteRunner {
             new Type.Function(new FunctionType(
                 new Type.Variable(new Name("v2")),
                 eitherInContextError.apply(new Type.Variable(new Name("v1")))))));
-        Type coderBody = new Type.Record(new RowType(coderName, List.of(
+        Type coderBody = new Type.Record(new RowType(coderName, hydra.util.ConsList.of(
             new FieldType(new Name("encode"), encodeType),
             new FieldType(new Name("decode"), decodeType))));
         // Wrap in foralls: ∀v1.∀v2. coderBody
@@ -1309,7 +1314,7 @@ public class TestSuiteRunner {
 
         // Context: record with trace, messages, other
         types.put(contextName,
-            new Type.Record(new RowType(contextName, List.of(
+            new Type.Record(new RowType(contextName, hydra.util.ConsList.of(
                 new FieldType(new Name("trace"), new Type.List(new Type.Literal(new LiteralType.String_()))),
                 new FieldType(new Name("messages"), new Type.List(new Type.Literal(new LiteralType.String_()))),
                 new FieldType(new Name("other"), new Type.Map(new MapType(
@@ -1319,7 +1324,7 @@ public class TestSuiteRunner {
         // InContext: ∀e. record with object (e) and context (Context)
         types.put(inContextName,
             new Type.Forall(new ForallType(new Name("e"),
-                new Type.Record(new RowType(inContextName, List.of(
+                new Type.Record(new RowType(inContextName, hydra.util.ConsList.of(
                     new FieldType(new Name("object"), new Type.Variable(new Name("e"))),
                     new FieldType(new Name("context"), new Type.Variable(contextName))))))));
 
@@ -1329,13 +1334,13 @@ public class TestSuiteRunner {
             new Type.Wrap(new WrappedType(otherErrorName,
                 new Type.Literal(new LiteralType.String_()))));
         types.put(errorName,
-            new Type.Union(new RowType(errorName, List.of(
+            new Type.Union(new RowType(errorName, hydra.util.ConsList.of(
                 new FieldType(new Name("other"), new Type.Variable(otherErrorName))))));
 
         // Type: the hydra.core.Type union — large recursive type
         Name typeName = new Name("hydra.core.Type");
         types.put(typeName,
-            new Type.Union(new RowType(typeName, List.of(
+            new Type.Union(new RowType(typeName, hydra.util.ConsList.of(
                 new FieldType(new Name("annotated"), new Type.Variable(new Name("annotatedType"))),
                 new FieldType(new Name("application"), new Type.Variable(new Name("applicationElim"))),
                 new FieldType(new Name("either"), new Type.Variable(new Name("eitherType"))),
@@ -1362,7 +1367,7 @@ public class TestSuiteRunner {
         // ForallType: record with parameter (Name) and body (Type)
         Name forallTypeName = new Name("hydra.core.ForallType");
         types.put(forallTypeName,
-            new Type.Record(new RowType(forallTypeName, List.of(
+            new Type.Record(new RowType(forallTypeName, hydra.util.ConsList.of(
                 new FieldType(new Name("parameter"), new Type.Variable(nameName)),
                 new FieldType(new Name("body"), new Type.Variable(typeName))))));
 

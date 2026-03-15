@@ -6,6 +6,8 @@ import hydra.core.TypeScheme;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.ConsList;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -32,7 +34,7 @@ public class Last extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(Last::apply, hydra.extract.core.Core.list(cx, graph, args.get(0)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<ConsList<Term>, Term>) Last::apply, hydra.extract.core.Core.list(cx, graph, args.get(0)));
     }
 
     /**
@@ -41,7 +43,7 @@ public class Last extends PrimitiveFunction {
      * @param list the list to get the last element from
      * @return the last element
      */
-    public static <X> X apply(List<X> list) {
-        return list.get(list.size() - 1);
+    public static <X> X apply(ConsList<X> list) {
+        return list.last();
     }
 }

@@ -22,16 +22,17 @@ import hydra.core.TypeApplicationTerm;
 import hydra.core.TypeLambda;
 import hydra.core.WrappedTerm;
 import hydra.util.Comparison;
+import hydra.util.ConsList;
 import hydra.util.Either;
 import hydra.util.Maybe;
 import hydra.util.Pair;
+import hydra.util.PersistentMap;
+import hydra.util.PersistentSet;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -56,6 +57,16 @@ public interface Terms {
      * @return the annotated term
      */
     static Term annot(Map<Name, Term> ann, Term base) {
+        return new Term.Annotated(new AnnotatedTerm(base, PersistentMap.fromMap(ann)));
+    }
+
+    /**
+     * Attach an annotation to a term.
+     * @param ann the annotation map (persistent)
+     * @param base the base term to annotate
+     * @return the annotated term
+     */
+    static Term annot(PersistentMap<Name, Term> ann, Term base) {
         return new Term.Annotated(new AnnotatedTerm(base, ann));
     }
 
@@ -67,9 +78,7 @@ public interface Terms {
      * @return the annotated term
      */
     static Term annot(Name key, Term value, Term base) {
-        Map<Name, Term> mp = new HashMap<>();
-        mp.put(key, value);
-        return annot(mp, base);
+        return annot(PersistentMap.singleton(key, value), base);
     }
 
     /**
@@ -89,6 +98,16 @@ public interface Terms {
      * @return the annotated term
      */
     static Term annotated(Term base, Map<Name, Term> ann) {
+        return annot(PersistentMap.fromMap(ann), base);
+    }
+
+    /**
+     * Attach an annotation to a term (alternative argument order, persistent map).
+     * @param base the base term to annotate
+     * @param ann the annotation map (persistent)
+     * @return the annotated term
+     */
+    static Term annotated(Term base, PersistentMap<Name, Term> ann) {
         return annot(ann, base);
     }
 
@@ -602,7 +621,7 @@ public interface Terms {
      * @return the match term
      */
     static Term match(Name typeName, Maybe<Term> defaultCase, Field... fields) {
-        return elimination(new Elimination.Union(new CaseStatement(typeName, defaultCase, Arrays.asList(fields))));
+        return elimination(new Elimination.Union(new CaseStatement(typeName, defaultCase, ConsList.of(fields))));
     }
 
     /**
@@ -613,6 +632,17 @@ public interface Terms {
      * @return the match term
      */
     static Term match(Name typeName, Maybe<Term> defaultCase, List<Field> fields) {
+        return elimination(new Elimination.Union(new CaseStatement(typeName, defaultCase, ConsList.fromList(fields))));
+    }
+
+    /**
+     * Create a pattern match on a union type (with ConsList of fields).
+     * @param typeName the union type name
+     * @param defaultCase the optional default case
+     * @param fields the case fields
+     * @return the match term
+     */
+    static Term match(Name typeName, Maybe<Term> defaultCase, ConsList<Field> fields) {
         return elimination(new Elimination.Union(new CaseStatement(typeName, defaultCase, fields)));
     }
 
@@ -639,7 +669,7 @@ public interface Terms {
      */
     static Term let_(String varName, Term defined, Term body) {
         Binding binding = new Binding(name(varName), defined, Maybe.nothing());
-        return new Term.Let(new Let(Collections.singletonList(binding), body));
+        return new Term.Let(new Let(ConsList.singleton(binding), body));
     }
 
     /**
@@ -654,7 +684,7 @@ public interface Terms {
         for (Field f : bindings) {
             letBindings.add(new Binding(f.name, f.term, Maybe.nothing()));
         }
-        return new Term.Let(new Let(letBindings, body));
+        return new Term.Let(new Let(ConsList.fromList(letBindings), body));
     }
 
     /**
@@ -664,6 +694,16 @@ public interface Terms {
      * @return the let term
      */
     static Term letsTyped(List<Binding> bindings, Term body) {
+        return new Term.Let(new Let(ConsList.fromList(bindings), body));
+    }
+
+    /**
+     * Create a let term with typed bindings (ConsList).
+     * @param bindings the ConsList of typed bindings
+     * @param body the body term
+     * @return the let term
+     */
+    static Term letsTyped(ConsList<Binding> bindings, Term body) {
         return new Term.Let(new Let(bindings, body));
     }
 
@@ -709,7 +749,7 @@ public interface Terms {
      * @return the list term
      */
     static Term list(Term... elements) {
-        return new Term.List(Arrays.asList(elements));
+        return new Term.List(ConsList.of(elements));
     }
 
     /**
@@ -718,6 +758,15 @@ public interface Terms {
      * @return the list term
      */
     static Term list(List<Term> elements) {
+        return new Term.List(ConsList.fromList(elements));
+    }
+
+    /**
+     * Create a list of terms (ConsList).
+     * @param elements the ConsList elements
+     * @return the list term
+     */
+    static Term list(ConsList<Term> elements) {
         return new Term.List(elements);
     }
 
@@ -741,6 +790,15 @@ public interface Terms {
      * @return the map term
      */
     static Term map(Map<Term, Term> value) {
+        return new Term.Map(PersistentMap.fromMap(value));
+    }
+
+    /**
+     * Create a map/dictionary term (persistent map).
+     * @param value the persistent map value
+     * @return the map term
+     */
+    static Term map(PersistentMap<Term, Term> value) {
         return new Term.Map(value);
     }
 
@@ -751,6 +809,19 @@ public interface Terms {
      * @return the set term
      */
     static Term set(Set<Term> value) {
+        PersistentSet<Term> ps = PersistentSet.empty();
+        for (Term elem : value) {
+            ps = ps.insert(elem);
+        }
+        return new Term.Set(ps);
+    }
+
+    /**
+     * Create a set of terms (persistent set).
+     * @param value the persistent set value
+     * @return the set term
+     */
+    static Term set(PersistentSet<Term> value) {
         return new Term.Set(value);
     }
 
@@ -942,7 +1013,7 @@ public interface Terms {
      * @return the record term
      */
     static Term record(Name typeName, Field... fields) {
-        return new Term.Record(new Record(typeName, Arrays.asList(fields)));
+        return new Term.Record(new Record(typeName, ConsList.of(fields)));
     }
 
     /**
@@ -952,6 +1023,16 @@ public interface Terms {
      * @return the record term
      */
     static Term record(Name typeName, List<Field> fields) {
+        return new Term.Record(new Record(typeName, ConsList.fromList(fields)));
+    }
+
+    /**
+     * Create a record term (ConsList).
+     * @param typeName the record type name
+     * @param fields the record fields
+     * @return the record term
+     */
+    static Term record(Name typeName, ConsList<Field> fields) {
         return new Term.Record(new Record(typeName, fields));
     }
 

@@ -8,10 +8,14 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.ConsList;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
+
+import hydra.util.PersistentSet;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
@@ -64,14 +68,7 @@ public class ToList extends PrimitiveFunction {
      * @param arg the set to convert
      * @return a list containing all elements from the set
      */
-    @SuppressWarnings("unchecked")
-    public static <X> List<X> apply(Set<X> arg) {
-        // If the set is already ordered (TreeSet), just convert directly.
-        // Otherwise, sort if elements are Comparable to match Haskell's Data.Set.toList behavior.
-        List<X> result = new ArrayList<>(arg);
-        if (!(arg instanceof java.util.SortedSet) && !result.isEmpty() && result.get(0) instanceof Comparable) {
-            result.sort((a, b) -> ((Comparable<X>) a).compareTo(b));
-        }
-        return result;
+    public static <X> ConsList<X> apply(PersistentSet<X> arg) {
+        return ConsList.fromList(arg.toList());
     }
 }

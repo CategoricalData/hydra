@@ -9,8 +9,9 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
 import java.util.List;
-import java.util.Set;
 import java.util.function.Function;
+
+import hydra.util.PersistentSet;
 
 import static hydra.dsl.Types.boolean_;
 import static hydra.dsl.Types.function;
@@ -58,7 +59,7 @@ public class IsEmpty extends PrimitiveFunction {
      * @param arg the set to check
      * @return true if the set is empty, false otherwise
      */
-    public static <X> Boolean apply(Set<X> arg) {
+    public static <X> Boolean apply(PersistentSet<X> arg) {
         return arg.isEmpty();
     }
 }

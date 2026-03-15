@@ -8,6 +8,8 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.ConsList;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -43,9 +45,10 @@ public class Foldr extends PrimitiveFunction {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(2)), xs -> {
                 Term acc = args.get(1);
                 // Fold from the right by iterating in reverse
-                for (int i = xs.size() - 1; i >= 0; i--) {
+                java.util.ArrayList<Term> indexed = new java.util.ArrayList<>(xs);
+                for (int i = indexed.size() - 1; i >= 0; i--) {
                     Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
-                        hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), xs.get(i), acc));
+                        hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), indexed.get(i), acc));
                     if (r.isLeft()) return r;
                     acc = ((Either.Right<InContext<Error_>, Term>) r).value;
                 }
@@ -60,7 +63,7 @@ public class Foldr extends PrimitiveFunction {
      * @param mapping the binary function (element -&gt; accumulator -&gt; accumulator)
      * @return a curried function for folding
      */
-    public static <X, Y> Function<Y, Function<List<X>, Y>> apply(Function<X, Function<Y, Y>> mapping) {
+    public static <X, Y> Function<Y, Function<ConsList<X>, Y>> apply(Function<X, Function<Y, Y>> mapping) {
         return y -> xs -> apply(mapping, y, xs);
     }
 
@@ -72,7 +75,7 @@ public class Foldr extends PrimitiveFunction {
      * @param init the initial accumulator value
      * @return a function that takes a list and returns the folded result
      */
-    public static <X, Y> Function<List<X>, Y> apply(Function<X, Function<Y, Y>> mapping, Y init) {
+    public static <X, Y> Function<ConsList<X>, Y> apply(Function<X, Function<Y, Y>> mapping, Y init) {
         return xs -> apply(mapping, init, xs);
     }
 
@@ -86,11 +89,7 @@ public class Foldr extends PrimitiveFunction {
      * @param xs the list to fold
      * @return the final accumulated result
      */
-    public static <X, Y> Y apply(Function<X, Function<Y, Y>> mapping, Y init, List<X> xs) {
-        Y cur = init;
-        for (int i = xs.size() - 1; i >= 0; i--) {
-            cur = mapping.apply(xs.get(i)).apply(cur);
-        }
-        return cur;
+    public static <X, Y> Y apply(Function<X, Function<Y, Y>> mapping, Y init, ConsList<X> xs) {
+        return xs.foldr((x, acc) -> mapping.apply(x).apply(acc), init);
     }
 }

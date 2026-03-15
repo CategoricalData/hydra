@@ -10,7 +10,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import hydra.util.ConsList;
 import hydra.util.Maybe;
+import hydra.util.PersistentMap;
 
 import java.util.Set;
 import java.util.function.Function;
@@ -71,7 +73,7 @@ public abstract class JsonEncoding {
    * @return the JSON value
    */
   protected static <L> Value toJson(List<L> list, Function<L, Value> mapping) {
-    return new Value.Array(list.stream().map(mapping).collect(Collectors.toList()));
+    return new Value.Array(ConsList.fromList(list.stream().map(mapping).collect(Collectors.toList())));
   }
 
   /**
@@ -102,7 +104,7 @@ public abstract class JsonEncoding {
    * @return the empty JSON object
    */
   protected static Value unit() {
-    return new Value.Object_(Collections.emptyMap());
+    return new Value.Object_(PersistentMap.empty());
   }
 
   /**
@@ -399,7 +401,7 @@ public abstract class JsonEncoding {
      * @return the JSON object value
      */
     public Value build() {
-      return new Value.Object_(map);
+      return new Value.Object_(PersistentMap.fromMap(map));
     }
   }
 }

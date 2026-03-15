@@ -9,9 +9,10 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
 import java.util.List;
-import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import hydra.util.PersistentSet;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.scheme;
@@ -63,7 +64,7 @@ public class Map extends PrimitiveFunction {
      * @param mapping the function to apply to each element
      * @return a function that takes a set and returns a new set with the function applied
      */
-    public static <X, Y> Function<Set<X>, Set<Y>> apply(Function<X, Y> mapping) {
+    public static <X, Y> Function<PersistentSet<X>, PersistentSet<Y>> apply(Function<X, Y> mapping) {
         return (arg) -> apply(mapping, arg);
     }
 
@@ -75,8 +76,8 @@ public class Map extends PrimitiveFunction {
      * @param arg the set to transform
      * @return a new set with the function applied to all elements
      */
-    public static <X, Y> Set<Y> apply(Function<X, Y> mapping, Set<X> arg) {
-        java.util.List<Y> mapped = arg.stream().map(mapping).collect(Collectors.toList());
-        return FromList.orderedSet(mapped);
+    @SuppressWarnings("unchecked")
+    public static <X, Y> PersistentSet<Y> apply(Function<X, Y> mapping, PersistentSet<X> arg) {
+        return (PersistentSet<Y>) arg.map(x -> (Comparable) mapping.apply(x));
     }
 }

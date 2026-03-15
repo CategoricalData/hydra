@@ -8,6 +8,8 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.ConsList;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -37,7 +39,7 @@ public class Take extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.int32(cx, graph, args.get(0)), n ->
-            hydra.lib.eithers.Map.apply((Function<List<Term>, Term>) lst -> Terms.list(apply(n, lst)), hydra.extract.core.Core.list(cx, graph, args.get(1))));
+            hydra.lib.eithers.Map.apply((Function<ConsList<Term>, Term>) lst -> Terms.list(apply(n, lst)), hydra.extract.core.Core.list(cx, graph, args.get(1))));
     }
 
     /**
@@ -46,7 +48,7 @@ public class Take extends PrimitiveFunction {
      * @param n the number of elements to take
      * @return a function that takes the first n elements from a list
      */
-    public static <X> Function<List<X>, List<X>> apply(Integer n) {
+    public static <X> Function<ConsList<X>, ConsList<X>> apply(Integer n) {
         return lst -> apply(n, lst);
     }
 
@@ -57,13 +59,13 @@ public class Take extends PrimitiveFunction {
      * @param lst the list to take from
      * @return the sublist containing the first n elements
      */
-    public static <X> List<X> apply(Integer n, List<X> lst) {
+    public static <X> ConsList<X> apply(Integer n, ConsList<X> lst) {
         if (n <= 0) {
-            return List.of();
+            return ConsList.empty();
         }
         if (n >= lst.size()) {
             return lst;
         }
-        return lst.subList(0, n);
+        return lst.take(n);
     }
 }

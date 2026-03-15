@@ -8,6 +8,8 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 import hydra.util.Maybe;
 
+import hydra.util.ConsList;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -61,7 +63,7 @@ public class ToList extends PrimitiveFunction {
      * @param opt the optional value
      * @return a singleton list if Just, an empty list if Nothing
      */
-    public static <X> List<X> apply(Maybe<X> opt) {
-        return opt.map(Collections::singletonList).orElse(Collections.emptyList());
+    public static <X> ConsList<X> apply(Maybe<X> opt) {
+        return opt.map(ConsList::singleton).orElse(ConsList.empty());
     }
 }

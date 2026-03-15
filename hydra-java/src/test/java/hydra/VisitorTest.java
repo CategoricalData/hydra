@@ -31,7 +31,7 @@ public class VisitorTest {
     private final Type maybeInt = new Type.Maybe(int32Type);
     private final Type recordType = new Type.Record(new RowType(
             new Name("LatLon"),
-            Arrays.asList(
+            hydra.util.ConsList.of(
                     new FieldType(new Name("lat"), float64Type),
                     new FieldType(new Name("lon"), float64Type))));
 

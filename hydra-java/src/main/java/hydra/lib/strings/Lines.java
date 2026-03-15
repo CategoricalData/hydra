@@ -7,6 +7,8 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.ConsList;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
@@ -58,15 +60,15 @@ public class Lines extends PrimitiveFunction {
      * @param s the string to split
      * @return the list of lines
      */
-    public static List<String> apply(String s) {
+    public static ConsList<String> apply(String s) {
         if (s.isEmpty()) {
-            return Arrays.asList();
+            return ConsList.empty();
         }
         String[] parts = s.split("\\n", -1);
         // Remove trailing empty string if the string ends with newline
         if (parts.length > 0 && parts[parts.length - 1].isEmpty()) {
-            return Arrays.asList(Arrays.copyOf(parts, parts.length - 1));
+            return ConsList.fromList(Arrays.asList(Arrays.copyOf(parts, parts.length - 1)));
         }
-        return Arrays.asList(parts);
+        return ConsList.fromList(Arrays.asList(parts));
     }
 }

@@ -8,7 +8,8 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.ArrayList;
+import hydra.util.ConsList;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -47,10 +48,7 @@ public class Concat2 extends PrimitiveFunction {
      * @param l2 the second list
      * @return the concatenated list
      */
-    public static <X> List<X> apply(List<X> l1, List<X> l2) {
-        List<X> combined = new ArrayList<>();
-        combined.addAll(l1);
-        combined.addAll(l2);
-        return combined;
+    public static <X> ConsList<X> apply(ConsList<X> l1, ConsList<X> l2) {
+        return l1.concat(l2);
     }
 }

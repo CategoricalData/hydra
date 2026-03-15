@@ -16,6 +16,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import hydra.util.ConsList;
+import hydra.util.PersistentMap;
+
 /**
  * A bidirectional coder between Hydra's native JSON values and the JSON objects supported by json-io.
  */
@@ -119,7 +122,7 @@ public class JsonIoCoder extends Coder<Value, Object> {
                 if (r.isLeft()) return Either.left(((Either.Left<String, Value>) r).value);
                 list.add(((Either.Right<String, Value>) r).value);
             }
-            return Either.right(new Value.Array(list));
+            return Either.right(new Value.Array(ConsList.fromList(list)));
         } else if (value instanceof JsonObject) {
             Map<String, Value> map = new LinkedHashMap<>();
             Collection<Map.Entry<Object, Object>> entries = ((JsonObject) value).entrySet();
@@ -131,7 +134,7 @@ public class JsonIoCoder extends Coder<Value, Object> {
                 map.put(((Either.Right<String, String>) keyResult).value,
                         ((Either.Right<String, Value>) valResult).value);
             }
-            return Either.right(new Value.Object_(map));
+            return Either.right(new Value.Object_(PersistentMap.fromMap(map)));
         } else if (value instanceof String) {
             return Either.right(new Value.String_((String) value));
         } else if (value instanceof Boolean) {

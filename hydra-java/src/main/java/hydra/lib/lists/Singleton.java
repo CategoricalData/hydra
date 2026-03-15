@@ -8,7 +8,8 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.Collections;
+import hydra.util.ConsList;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -36,7 +37,7 @@ public class Singleton extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> Either.right(Terms.list(Collections.singletonList(args.get(0))));
+        return args -> cx -> graph -> Either.right(Terms.list(apply(args.get(0))));
     }
 
     /**
@@ -45,7 +46,7 @@ public class Singleton extends PrimitiveFunction {
      * @param elem the element to wrap in a list
      * @return the singleton list
      */
-    public static <X> List<X> apply(X elem) {
-        return Collections.singletonList(elem);
+    public static <X> ConsList<X> apply(X elem) {
+        return ConsList.singleton(elem);
     }
 }

@@ -443,9 +443,9 @@ public interface CoreTypes {
      */
     Module module = new Module(
         ns,
-        elements,
-        Collections.emptyList(),
-        Collections.singletonList(ns),
+        hydra.util.ConsList.fromList(elements),
+        hydra.util.ConsList.empty(),
+        hydra.util.ConsList.of(ns),
         Maybe.just("Hydra's core data model, consisting of the fundamental "
             + "hydra.core.Term type and all of its dependencies."));
 

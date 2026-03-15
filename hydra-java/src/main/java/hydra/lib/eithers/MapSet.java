@@ -7,6 +7,8 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.PersistentSet;
+
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -69,16 +71,16 @@ public class MapSet extends PrimitiveFunction {
     /**
      * Map a function over a set, returning Left on the first failure or Right with all results.
      */
-    public static <A, B, Z> hydra.util.Either<Z, Set<B>> apply(
+    public static <A, B, Z> hydra.util.Either<Z, PersistentSet<B>> apply(
             Function<A, hydra.util.Either<Z, B>> fn,
-            Set<A> items) {
-        Set<B> results = new HashSet<>();
+            PersistentSet<A> items) {
+        PersistentSet<B> results = PersistentSet.empty();
         for (A item : items) {
             hydra.util.Either<Z, B> result = fn.apply(item);
             if (result.isLeft()) {
                 return new hydra.util.Either.Left<>(((hydra.util.Either.Left<Z, B>) result).value);
             }
-            results.add(((hydra.util.Either.Right<Z, B>) result).value);
+            results = results.insert(((hydra.util.Either.Right<Z, B>) result).value);
         }
         return new hydra.util.Either.Right<>(results);
     }
@@ -86,7 +88,7 @@ public class MapSet extends PrimitiveFunction {
     /**
      * Curried version for method references.
      */
-    public static <A, B, Z> Function<Set<A>, hydra.util.Either<Z, Set<B>>> apply(
+    public static <A, B, Z> Function<PersistentSet<A>, hydra.util.Either<Z, PersistentSet<B>>> apply(
             Function<A, hydra.util.Either<Z, B>> fn) {
         return items -> apply(fn, items);
     }

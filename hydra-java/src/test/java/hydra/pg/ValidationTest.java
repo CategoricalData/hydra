@@ -48,19 +48,17 @@ public class ValidationTest extends PropertyGraphTestBase {
 
     @Test
     public void testMissingRequiredVertexPropertyFails() {
-        assertInvalid(VERTEX_TYPE_PERSON_A, VERTEX_PERSON_2.withProperties(new HashMap<>()));
+        assertInvalid(VERTEX_TYPE_PERSON_A, VERTEX_PERSON_2.withProperties(hydra.util.PersistentMap.empty()));
         assertInvalid(VERTEX_TYPE_PERSON_A, VERTEX_PERSON_2.withProperties(
-                new HashMap<PropertyKey, Literal>() {{
-                    put(new PropertyKey("nickname"), Literals.string("Ix"));
-                }}));
+                hydra.util.PersistentMap.<PropertyKey, Literal>empty()
+                    .insert(new PropertyKey("nickname"), Literals.string("Ix"))));
     }
 
     @Test
     public void testMissingOptionalVertexPropertySucceeds() {
         assertValid(VERTEX_TYPE_PERSON_A, VERTEX_PERSON_2.withProperties(
-                new HashMap<PropertyKey, Literal>() {{
-                    put(new PropertyKey("name"), Literals.string("Ford"));
-                }}));
+                hydra.util.PersistentMap.<PropertyKey, Literal>empty()
+                    .insert(new PropertyKey("name"), Literals.string("Ford"))));
     }
 
     @Test

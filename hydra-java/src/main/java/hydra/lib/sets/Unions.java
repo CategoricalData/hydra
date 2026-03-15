@@ -8,10 +8,10 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.function.Function;
+
+import hydra.util.PersistentSet;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
@@ -60,11 +60,11 @@ public class Unions extends PrimitiveFunction {
      * @param sets the list of sets to combine
      * @return a new set containing all elements from all input sets
      */
-    public static <X> Set<X> apply(List<Set<X>> sets) {
-        Set<X> combined = new LinkedHashSet<>();
-        for (Set<X> s : sets) {
-            combined.addAll(s);
+    public static <X> PersistentSet<X> apply(List<PersistentSet<X>> sets) {
+        PersistentSet<X> result = PersistentSet.empty();
+        for (PersistentSet<X> s : sets) {
+            result = result.union(s);
         }
-        return FromList.orderedSet(combined);
+        return result;
     }
 }

@@ -8,10 +8,11 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.ConsList;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
@@ -58,7 +59,7 @@ public class Map extends PrimitiveFunction {
      * @param mapping the function to apply to each element
      * @return a function that maps the function over a list
      */
-    public static <X, Y> Function<List<X>, List<Y>> apply(Function<X, Y> mapping) {
+    public static <X, Y> Function<ConsList<X>, ConsList<Y>> apply(Function<X, Y> mapping) {
         return (arg) -> apply(mapping, arg);
     }
 
@@ -70,7 +71,7 @@ public class Map extends PrimitiveFunction {
      * @param arg the list to map over
      * @return a new list containing the results of applying the function to each element
      */
-    public static <X, Y> List<Y> apply(Function<X, Y> mapping, List<X> arg) {
-        return arg.stream().map(mapping).collect(Collectors.toList());
+    public static <X, Y> ConsList<Y> apply(Function<X, Y> mapping, ConsList<X> arg) {
+        return arg.map(mapping);
     }
 }

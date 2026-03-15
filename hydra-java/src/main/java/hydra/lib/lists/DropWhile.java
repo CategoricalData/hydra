@@ -8,6 +8,8 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.ConsList;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -40,8 +42,9 @@ public class DropWhile extends PrimitiveFunction {
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph ->
             hydra.lib.eithers.Bind.apply(hydra.extract.core.Core.list(cx, graph, args.get(1)), lst -> {
+                ArrayList<Term> indexed = new ArrayList<>(lst);
                 int dropCount = 0;
-                for (Term x : lst) {
+                for (Term x : indexed) {
                     Either<InContext<Error_>, Term> r = hydra.reduction.Reduction.reduceTerm(
                         hydra.lexical.Lexical.emptyContext(), graph, true, Terms.apply(args.get(0), x));
                     if (r.isLeft()) return (Either) r;
@@ -51,7 +54,7 @@ public class DropWhile extends PrimitiveFunction {
                     if (!((Either.Right<InContext<Error_>, Boolean>) b).value) break;
                     dropCount++;
                 }
-                return Either.right(Terms.list(new ArrayList<>(lst.subList(dropCount, lst.size()))));
+                return Either.right(Terms.list(new ArrayList<>(indexed.subList(dropCount, indexed.size()))));
             });
     }
 
@@ -61,7 +64,7 @@ public class DropWhile extends PrimitiveFunction {
      * @param pred the predicate to test elements
      * @return a function that drops elements while the predicate holds
      */
-    public static <X> Function<List<X>, List<X>> apply(Predicate<X> pred) {
+    public static <X> Function<ConsList<X>, ConsList<X>> apply(Predicate<X> pred) {
         return lst -> apply((Function<X, Boolean>) x -> pred.test(x), lst);
     }
 
@@ -71,7 +74,7 @@ public class DropWhile extends PrimitiveFunction {
      * @param pred the predicate as a Function (used by generated code)
      * @return a function that drops elements while the predicate holds
      */
-    public static <X> Function<List<X>, List<X>> apply(Function<X, Boolean> pred) {
+    public static <X> Function<ConsList<X>, ConsList<X>> apply(Function<X, Boolean> pred) {
         return lst -> apply(pred, lst);
     }
 
@@ -82,7 +85,7 @@ public class DropWhile extends PrimitiveFunction {
      * @param lst the list to drop from
      * @return the remaining list after dropping
      */
-    public static <X> List<X> apply(Predicate<X> pred, List<X> lst) {
+    public static <X> ConsList<X> apply(Predicate<X> pred, ConsList<X> lst) {
         return apply((Function<X, Boolean>) x -> pred.test(x), lst);
     }
 
@@ -93,11 +96,12 @@ public class DropWhile extends PrimitiveFunction {
      * @param lst the list to drop from
      * @return the remaining list after dropping
      */
-    public static <X> List<X> apply(Function<X, Boolean> pred, List<X> lst) {
-        List<X> result = new ArrayList<>(lst);
-        while (!result.isEmpty() && pred.apply(result.get(0))) {
-            result = result.subList(1, result.size());
+    public static <X> ConsList<X> apply(Function<X, Boolean> pred, ConsList<X> lst) {
+        ArrayList<X> indexed = new ArrayList<>(lst);
+        int i = 0;
+        while (i < indexed.size() && pred.apply(indexed.get(i))) {
+            i++;
         }
-        return result;
+        return ConsList.fromList(indexed.subList(i, indexed.size()));
     }
 }

@@ -7,6 +7,8 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.ConsList;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -48,7 +50,7 @@ public class FromList extends PrimitiveFunction {
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
         return args -> cx -> graph -> {
-            Either<InContext<Error_>, List<Integer>> list = hydra.extract.core.Core.listOf(cx, t -> hydra.extract.core.Core.int32(cx, graph, t), graph, args.get(0));
+            Either<InContext<Error_>, ConsList<Integer>> list = hydra.extract.core.Core.listOf(cx, t -> hydra.extract.core.Core.int32(cx, graph, t), graph, args.get(0));
             return hydra.lib.eithers.Map.apply(l -> Terms.string(FromList.apply(l)), list);
         };
     }
@@ -58,7 +60,7 @@ public class FromList extends PrimitiveFunction {
      * @param list the list of character code points
      * @return the resulting string
      */
-    public static String apply(List<Integer> list) {
+    public static String apply(ConsList<Integer> list) {
         StringBuilder sb = new StringBuilder();
         for (Integer i : list) {
             sb.appendCodePoint(i);

@@ -7,6 +7,8 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.ConsList;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -68,10 +70,10 @@ public class MapList extends PrimitiveFunction {
     /**
      * Map a function over a list, returning Left on the first failure or Right with all results.
      */
-    public static <A, B, Z> hydra.util.Either<Z, List<B>> apply(
+    public static <A, B, Z> hydra.util.Either<Z, ConsList<B>> apply(
             Function<A, hydra.util.Either<Z, B>> fn,
-            List<A> items) {
-        List<B> results = new ArrayList<>();
+            ConsList<A> items) {
+        ArrayList<B> results = new ArrayList<>();
         for (A item : items) {
             hydra.util.Either<Z, B> result = fn.apply(item);
             if (result.isLeft()) {
@@ -79,13 +81,13 @@ public class MapList extends PrimitiveFunction {
             }
             results.add(((hydra.util.Either.Right<Z, B>) result).value);
         }
-        return new hydra.util.Either.Right<>(results);
+        return new hydra.util.Either.Right<>(ConsList.fromList(results));
     }
 
     /**
      * Curried version for method references.
      */
-    public static <A, B, Z> Function<List<A>, hydra.util.Either<Z, List<B>>> apply(
+    public static <A, B, Z> Function<ConsList<A>, hydra.util.Either<Z, ConsList<B>>> apply(
             Function<A, hydra.util.Either<Z, B>> fn) {
         return items -> apply(fn, items);
     }

@@ -2,6 +2,7 @@ package hydra.pg.dsl;
 
 import hydra.pg.model.PropertyKey;
 import hydra.pg.model.PropertyType;
+import hydra.util.ConsList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,15 @@ import java.util.List;
  */
 public abstract class ElementTypeBuilder<T, S, B extends ElementTypeBuilder<T, S, B>> {
     protected final List<PropertyType<T>> properties = new ArrayList<>();
+
+    /**
+     * Returns the accumulated properties as a ConsList.
+     *
+     * @return the properties as a ConsList
+     */
+    protected ConsList<PropertyType<T>> propertiesAsList() {
+        return ConsList.fromList(properties);
+    }
 
     /**
      * Returns the concrete builder instance for fluent method chaining.

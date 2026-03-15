@@ -7,6 +7,8 @@ import hydra.dsl.Terms;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.ConsList;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -39,8 +41,8 @@ public class Rights extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(eithers -> {
-                List<Term> rights = new ArrayList<>();
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((ConsList<hydra.util.Either<Term, Term>> eithers) -> {
+                ArrayList<Term> rights = new ArrayList<>();
                 for (hydra.util.Either<Term, Term> e : eithers) {
                     e.accept(new hydra.util.Either.Visitor<Term, Term, Void>() {
                         @Override
@@ -55,7 +57,7 @@ public class Rights extends PrimitiveFunction {
                         }
                     });
                 }
-                return new Term.List(rights);
+                return new Term.List(ConsList.fromList(rights));
             }, hydra.extract.core.Core.listOf(cx, arg -> hydra.extract.core.Core.eitherTerm(cx, t -> Either.right(t), t -> Either.right(t), graph, arg), graph, args.get(0)));
     }
 
@@ -67,13 +69,13 @@ public class Rights extends PrimitiveFunction {
      * @param eithers the list of Either values
      * @return a list containing only the Right values
      */
-    public static <A, B> List<B> apply(List<hydra.util.Either<A, B>> eithers) {
-        List<B> result = new ArrayList<>();
+    public static <A, B> ConsList<B> apply(ConsList<hydra.util.Either<A, B>> eithers) {
+        ArrayList<B> result = new ArrayList<>();
         for (hydra.util.Either<A, B> either : eithers) {
             if (either.isRight()) {
                 result.add(((hydra.util.Either.Right<A, B>) either).value);
             }
         }
-        return result;
+        return ConsList.fromList(result);
     }
 }

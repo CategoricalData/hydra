@@ -16,9 +16,12 @@ import hydra.module.Module;
 import hydra.module.Namespace;
 import hydra.rewriting.Rewriting;
 import hydra.tools.PrimitiveFunction;
+import hydra.util.ConsList;
 import hydra.util.Either;
 import hydra.util.Maybe;
 import hydra.util.Pair;
+import hydra.util.PersistentMap;
+import hydra.util.PersistentSet;
 
 import java.io.File;
 import java.io.IOException;
@@ -44,19 +47,19 @@ public class Generation {
      * Create an empty graph with standard primitives (the bootstrap graph).
      */
     public static Graph bootstrapGraph() {
-        Map<Name, Term> boundTerms = Collections.emptyMap();
-        Map<Name, TypeScheme> boundTypes = Collections.emptyMap();
-        Map<Name, hydra.core.TypeVariableMetadata> classConstraints = Collections.emptyMap();
-        java.util.Set<Name> lambdaVariables = Collections.emptySet();
-        Map<Name, Term> metadata = Collections.emptyMap();
+        PersistentMap<Name, Term> boundTerms = PersistentMap.empty();
+        PersistentMap<Name, TypeScheme> boundTypes = PersistentMap.empty();
+        PersistentMap<Name, hydra.core.TypeVariableMetadata> classConstraints = PersistentMap.empty();
+        PersistentSet<Name> lambdaVariables = PersistentSet.empty();
+        PersistentMap<Name, Term> metadata = PersistentMap.empty();
 
-        Map<Name, Primitive> primitives = new HashMap<>();
+        PersistentMap<Name, Primitive> primitives = PersistentMap.empty();
         for (PrimitiveFunction prim : Libraries.standardPrimitives()) {
-            primitives.put(prim.name(), prim.toNative());
+            primitives = primitives.insert(prim.name(), prim.toNative());
         }
 
-        Map<Name, TypeScheme> schemaTypes = Collections.emptyMap();
-        java.util.Set<Name> typeVariables = Collections.emptySet();
+        PersistentMap<Name, TypeScheme> schemaTypes = PersistentMap.empty();
+        PersistentSet<Name> typeVariables = PersistentSet.empty();
 
         return new Graph(boundTerms, boundTypes, classConstraints, lambdaVariables, metadata, primitives, schemaTypes, typeVariables);
     }
@@ -98,25 +101,25 @@ public class Generation {
         private Value parseObject() {
             expect('{');
             skipWhitespace();
-            Map<String, Value> map = new java.util.LinkedHashMap<>();
+            PersistentMap<String, Value> map = PersistentMap.empty();
             if (pos < input.length() && input.charAt(pos) != '}') {
-                parseKeyValue(map);
+                map = parseKeyValue(map);
                 while (pos < input.length() && input.charAt(pos) == ',') {
                     pos++;
-                    parseKeyValue(map);
+                    map = parseKeyValue(map);
                 }
             }
             expect('}');
             return new Value.Object_(map);
         }
 
-        private void parseKeyValue(Map<String, Value> map) {
+        private PersistentMap<String, Value> parseKeyValue(PersistentMap<String, Value> map) {
             skipWhitespace();
             String key = parseRawString();
             skipWhitespace();
             expect(':');
             Value val = parseValue();
-            map.put(key, val);
+            return map.insert(key, val);
         }
 
         private Value parseArray() {
@@ -131,7 +134,7 @@ public class Generation {
                 }
             }
             expect(']');
-            return new Value.Array(list);
+            return new Value.Array(ConsList.fromList(list));
         }
 
         private Value parseString() {
@@ -238,7 +241,7 @@ public class Generation {
     public static Module decodeModuleFromJson(Graph bsGraph, List<Module> universeModules,
             boolean stripTypeSchemes, Value jsonVal) {
         Either<String, Module> result = CodeGeneration.decodeModuleFromJson(
-                bsGraph, universeModules, stripTypeSchemes, jsonVal);
+                bsGraph, ConsList.fromList(universeModules), stripTypeSchemes, jsonVal);
         return result.accept(new Either.Visitor<String, Module, Module>() {
             @Override
             public Module visit(Either.Left<String, Module> instance) {
@@ -259,7 +262,7 @@ public class Generation {
     public static Module decodeModuleFromJson(Graph bsGraph, Map<Name, hydra.core.Type> schemaMap,
             boolean stripTypeSchemes, Value jsonVal) {
         hydra.core.Type modType = new hydra.core.Type.Variable(new Name("hydra.module.Module"));
-        Either<String, hydra.core.Term> jsonResult = hydra.json.decode.Decode.fromJson(schemaMap, modType, jsonVal);
+        Either<String, hydra.core.Term> jsonResult = hydra.json.decode.Decode.fromJson(PersistentMap.fromMap(schemaMap), modType, jsonVal);
         return jsonResult.accept(new Either.Visitor<String, hydra.core.Term, Module>() {
             @Override
             public Module visit(Either.Left<String, hydra.core.Term> instance) {
@@ -336,14 +339,14 @@ public class Generation {
     }
 
 
-    private static Map<String, Value> expectObject(Value val, String context) {
+    private static PersistentMap<String, Value> expectObject(Value val, String context) {
         if (val instanceof Value.Object_) {
             return ((Value.Object_) val).value;
         }
         throw new RuntimeException("Expected JSON object for " + context + ", got " + val.getClass().getSimpleName());
     }
 
-    private static List<Value> expectArray(Value val, String context) {
+    private static ConsList<Value> expectArray(Value val, String context) {
         if (val instanceof Value.Array) {
             return ((Value.Array) val).value;
         }
@@ -364,8 +367,8 @@ public class Generation {
     public static List<Namespace> readManifestField(String basePath, String fieldName) throws IOException {
         String manifestPath = basePath + File.separator + "manifest.json";
         Value manifestVal = parseJsonFile(manifestPath);
-        Map<String, Value> obj = expectObject(manifestVal, "manifest.json");
-        List<Value> arr = expectArray(obj.get(fieldName), "manifest." + fieldName);
+        PersistentMap<String, Value> obj = expectObject(manifestVal, "manifest.json");
+        ConsList<Value> arr = expectArray(obj.get(fieldName), "manifest." + fieldName);
         List<Namespace> result = new ArrayList<>(arr.size());
         for (Value v : arr) {
             result.add(new Namespace(expectString(v, fieldName + " entry")));
@@ -377,7 +380,7 @@ public class Generation {
      * Generate source files and write them to disk.
      */
     public static void generateSources(
-            Function<Module, Function<List<Definition>, Function<hydra.context.Context, Function<Graph, Either<hydra.context.InContext<hydra.error.Error_>, Map<String, String>>>>>> coder,
+            Function<Module, Function<ConsList<Definition>, Function<hydra.context.Context, Function<Graph, Either<hydra.context.InContext<hydra.error.Error_>, PersistentMap<String, String>>>>>> coder,
             hydra.coders.Language language,
             boolean doInfer,
             boolean doExpand,
@@ -388,17 +391,17 @@ public class Generation {
             List<Module> modulesToGenerate) {
         Graph bsGraph = bootstrapGraph();
         hydra.context.Context cx = new hydra.context.Context(
-                Collections.emptyList(), Collections.emptyList(), Collections.emptyMap());
-        Either<hydra.context.InContext<hydra.error.Error_>, List<Pair<String, String>>> result =
+                ConsList.empty(), ConsList.empty(), PersistentMap.empty());
+        Either<hydra.context.InContext<hydra.error.Error_>, ConsList<Pair<String, String>>> result =
                 CodeGeneration.generateSourceFiles(coder, language,
                         doInfer, doExpand, doHoistCase, doHoistPoly,
-                        bsGraph, universe, modulesToGenerate, cx);
-        List<Pair<String, String>> files;
+                        bsGraph, ConsList.fromList(universe), ConsList.fromList(modulesToGenerate), cx);
+        ConsList<Pair<String, String>> files;
         if (result.isLeft()) {
-            hydra.context.InContext<hydra.error.Error_> err = ((Either.Left<hydra.context.InContext<hydra.error.Error_>, List<Pair<String, String>>>) result).value;
+            hydra.context.InContext<hydra.error.Error_> err = ((Either.Left<hydra.context.InContext<hydra.error.Error_>, ConsList<Pair<String, String>>>) result).value;
             throw new RuntimeException("Code generation failed: " + hydra.show.error.Error_.error(err.object));
         }
-        files = ((Either.Right<hydra.context.InContext<hydra.error.Error_>, List<Pair<String, String>>>) result).value;
+        files = ((Either.Right<hydra.context.InContext<hydra.error.Error_>, ConsList<Pair<String, String>>>) result).value;
         for (Pair<String, String> pair : files) {
             String filePath = basePath + File.separator + pair.first;
             String content = pair.second;
@@ -470,7 +473,7 @@ public class Generation {
             Maybe<TypeScheme> newType = Annotations.isNativeType(b) ? b.type : Maybe.nothing();
             stripped.add(new Binding(b.name, newTerm, newType));
         }
-        return new Module(m.namespace, stripped, m.typeDependencies, m.termDependencies, m.description);
+        return new Module(m.namespace, ConsList.fromList(stripped), m.typeDependencies, m.termDependencies, m.description);
     }
 
     /**

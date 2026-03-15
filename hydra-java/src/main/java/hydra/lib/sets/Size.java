@@ -9,8 +9,9 @@ import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
 import java.util.List;
-import java.util.Set;
 import java.util.function.Function;
+
+import hydra.util.PersistentSet;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.int32;
@@ -59,7 +60,7 @@ public class Size extends PrimitiveFunction {
      * @param arg the set to measure
      * @return the number of elements in the set
      */
-    public static <X> Integer apply(Set<X> arg) {
+    public static <X> Integer apply(PersistentSet<X> arg) {
         return arg.size();
     }
 }

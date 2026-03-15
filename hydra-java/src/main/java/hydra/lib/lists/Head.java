@@ -6,6 +6,8 @@ import hydra.core.TypeScheme;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
+import hydra.util.ConsList;
+
 import java.util.List;
 import java.util.function.Function;
 
@@ -33,7 +35,7 @@ public class Head extends PrimitiveFunction {
 
     @Override
     protected Function<List<Term>, Function<Context, Function<Graph, Either<InContext<Error_>, Term>>>> implementation() {
-        return args -> cx -> graph -> hydra.lib.eithers.Map.apply(Head::apply, hydra.extract.core.Core.list(cx, graph, args.get(0)));
+        return args -> cx -> graph -> hydra.lib.eithers.Map.apply((Function<ConsList<Term>, Term>) Head::apply, hydra.extract.core.Core.list(cx, graph, args.get(0)));
     }
 
     /**
@@ -43,11 +45,10 @@ public class Head extends PrimitiveFunction {
      * @return the first element
      * @throws IllegalArgumentException if the list is empty
      */
-    public static <X> X apply(List<X> list) {
+    public static <X> X apply(ConsList<X> list) {
         if (list.isEmpty()) {
             throw new IllegalArgumentException("Cannot get head of empty list");
-        } else {
-            return list.get(0);
         }
+        return list.head();
     }
 }

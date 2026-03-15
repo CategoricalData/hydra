@@ -8,10 +8,11 @@ import hydra.dsl.Types;
 import hydra.graph.Graph;
 import hydra.tools.PrimitiveFunction;
 
-import java.util.Collection;
+import hydra.util.ConsList;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import static hydra.dsl.Types.function;
 import static hydra.dsl.Types.list;
@@ -47,7 +48,7 @@ public class Concat extends PrimitiveFunction {
      * @param sublists the list of lists to concatenate
      * @return a single list containing all elements from all sublists in order
      */
-    public static <X> List<X> apply(List<List<X>> sublists) {
-        return sublists.stream().flatMap(Collection::stream).collect(Collectors.toList());
+    public static <X> ConsList<X> apply(ConsList<ConsList<X>> sublists) {
+        return ConsList.concatAll(sublists);
     }
 }

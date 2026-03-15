@@ -19,6 +19,7 @@ import hydra.core.WrappedTerm;
 import hydra.module.Namespace;
 import hydra.phantoms.TBinding;
 import hydra.phantoms.TTerm;
+import hydra.util.ConsList;
 import hydra.util.Maybe;
 
 import java.util.ArrayList;
@@ -151,7 +152,7 @@ public interface Phantoms {
      */
     @SuppressWarnings("unchecked")
     static <A> Expr<A> record(Name typeName, List<Field> fields) {
-        return new Expr<>(new Term.Record(new Record(typeName, fields)));
+        return new Expr<>(new Term.Record(new Record(typeName, ConsList.fromList(fields))));
     }
 
     /**
@@ -207,7 +208,7 @@ public interface Phantoms {
     static <R> Expr<R> match(Name typeName, Maybe<TTerm<?>> dflt, List<Field> fields) {
         Maybe<Term> dfltTerm = dflt.map(t -> t.value);
         return new Expr<>(new Term.Function(new Function.Elimination(
-                new Elimination.Union(new CaseStatement(typeName, dfltTerm, fields)))));
+                new Elimination.Union(new CaseStatement(typeName, dfltTerm, ConsList.fromList(fields))))));
     }
 
     /**
@@ -242,7 +243,7 @@ public interface Phantoms {
      */
     @SuppressWarnings("unchecked")
     static <A, B> Expr<B> let(String name, TTerm<A> value, TTerm<B> body) {
-        List<Binding> bindings = Collections.singletonList(
+        ConsList<Binding> bindings = ConsList.singleton(
                 new Binding(new Name(name), value.value, Maybe.nothing()));
         return new Expr<>(new Term.Let(new Let(bindings, body.value)));
     }
@@ -256,7 +257,7 @@ public interface Phantoms {
         for (Field f : fields) {
             bindings.add(new Binding(f.name, f.term, Maybe.nothing()));
         }
-        return new Expr<>(new Term.Let(new Let(bindings, body.value)));
+        return new Expr<>(new Term.Let(new Let(ConsList.fromList(bindings), body.value)));
     }
 
     // ===== Composition =====

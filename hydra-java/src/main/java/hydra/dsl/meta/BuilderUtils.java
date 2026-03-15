@@ -7,6 +7,7 @@ import hydra.core.Name;
 import hydra.core.Term;
 import hydra.core.Function;
 import hydra.phantoms.TTerm;
+import hydra.util.ConsList;
 import hydra.util.Maybe;
 
 import java.util.Collections;
@@ -32,7 +33,7 @@ class BuilderUtils {
                             new Lambda(new Name(intro.name), Maybe.nothing(), result)));
                     break;
                 case LET:
-                    List<Binding> bindings = Collections.singletonList(
+                    ConsList<Binding> bindings = ConsList.singleton(
                             new Binding(new Name(intro.name), intro.value.value, Maybe.nothing()));
                     result = new Term.Let(new Let(bindings, result));
                     break;
