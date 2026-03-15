@@ -333,9 +333,8 @@ elementCoder = define "elementCoder" $
       (Just $ unexpectedE (var "cx") (string "record type") (string "other type")) [
       _Type_maybe>>: "ot" ~>
         elementCoder @@ var "mparent" @@ var "schema" @@ var "ot" @@ var "vidType" @@ var "eidType" @@ var "cx" @@ var "g",
-      _Type_record>>: "rt" ~> lets [
-        "name">: Core.rowTypeTypeName $ var "rt",
-        "fields">: Core.rowTypeFields $ var "rt",
+      _Type_record>>: "fields" ~> lets [
+        "name">: Core.name (string "placeholder"),
         "outVertexKey">: Core.name $ project PGM._AnnotationSchema PGM._AnnotationSchema_outVertex @@ (project PGM._Schema PGM._Schema_annotations @@ var "schema"),
         "outVertexLabelKey">: Core.name $ project PGM._AnnotationSchema PGM._AnnotationSchema_outVertexLabel @@ (project PGM._Schema PGM._Schema_annotations @@ var "schema"),
         "inVertexKey">: Core.name $ project PGM._AnnotationSchema PGM._AnnotationSchema_inVertex @@ (project PGM._Schema PGM._Schema_annotations @@ var "schema"),

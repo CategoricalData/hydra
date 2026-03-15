@@ -234,7 +234,7 @@ encodeNamedType = define "encodeNamedType" $
     cases _Type (Rewriting.deannotateType @@ var "typ")
       (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError $ Strings.cat2 (string "Expected record or union type, found: ") (ShowCore.type_ @@ var "typ")) (var "cx")) [
       _Type_record>>: lambda "rt" $
-        "gfields" <<~ (Eithers.mapList (lambda "f" $ encodeFieldType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "f") (Core.rowTypeFields (var "rt"))) $
+        "gfields" <<~ (Eithers.mapList (lambda "f" $ encodeFieldType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "f") (var "rt")) $
         "desc" <<~ (descriptionFromType @@ var "cx" @@ var "g" @@ var "typ") $
         right (inject G._TypeDefinition G._TypeDefinition_object $ record G._ObjectTypeDefinition [
           G._ObjectTypeDefinition_Description>>: var "desc",
@@ -243,7 +243,7 @@ encodeNamedType = define "encodeNamedType" $
           G._ObjectTypeDefinition_Directives>>: nothing,
           G._ObjectTypeDefinition_FieldsDefinition>>: just (wrap G._FieldsDefinition (var "gfields"))]),
       _Type_union>>: lambda "rt" $
-        "values" <<~ (Eithers.mapList (lambda "f" $ encodeEnumFieldType @@ var "cx" @@ var "g" @@ var "f") (Core.rowTypeFields (var "rt"))) $
+        "values" <<~ (Eithers.mapList (lambda "f" $ encodeEnumFieldType @@ var "cx" @@ var "g" @@ var "f") (var "rt")) $
         "desc" <<~ (descriptionFromType @@ var "cx" @@ var "g" @@ var "typ") $
         right (inject G._TypeDefinition G._TypeDefinition_enum $ record G._EnumTypeDefinition [
           G._EnumTypeDefinition_Description>>: var "desc",
@@ -252,14 +252,14 @@ encodeNamedType = define "encodeNamedType" $
           G._EnumTypeDefinition_EnumValuesDefinition>>: just (wrap G._EnumValuesDefinition (var "values"))]),
       _Type_either>>: lambda "et" $
         encodeNamedType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "name" @@
-          (inject _Type _Type_record $ Core.rowType (var "name") (list [
+          (inject _Type _Type_record $ list [
             Core.fieldType (Core.name $ string "left") (MetaTypes.optional (project _EitherType _EitherType_left @@ var "et")),
-            Core.fieldType (Core.name $ string "right") (MetaTypes.optional (project _EitherType _EitherType_right @@ var "et"))])),
+            Core.fieldType (Core.name $ string "right") (MetaTypes.optional (project _EitherType _EitherType_right @@ var "et"))]),
       _Type_pair>>: lambda "pt" $
         encodeNamedType @@ var "cx" @@ var "g" @@ var "prefixes" @@ var "name" @@
-          (inject _Type _Type_record $ Core.rowType (var "name") (list [
+          (inject _Type _Type_record $ list [
             Core.fieldType (Core.name $ string "first") (project _PairType _PairType_first @@ var "pt"),
-            Core.fieldType (Core.name $ string "second") (project _PairType _PairType_second @@ var "pt")])),
+            Core.fieldType (Core.name $ string "second") (project _PairType _PairType_second @@ var "pt")]),
       _Type_list>>: lambda "lt_" $
         wrapAsRecord (var "name") (var "cx") (var "g") (var "prefixes") (inject _Type _Type_list (var "lt_")),
       _Type_set>>: lambda "st" $
@@ -271,14 +271,14 @@ encodeNamedType = define "encodeNamedType" $
       _Type_variable>>: lambda "vn" $
         wrapAsRecord (var "name") (var "cx") (var "g") (var "prefixes") (inject _Type _Type_variable (var "vn")),
       _Type_wrap>>: lambda "wt" $
-        wrapAsRecord (var "name") (var "cx") (var "g") (var "prefixes") (Core.wrappedTypeBody (var "wt"))]
+        wrapAsRecord (var "name") (var "cx") (var "g") (var "prefixes") (var "wt")]
 
 -- | Helper: wrap a type in a record with a single "value" field
 wrapAsRecord :: TTerm Name -> TTerm Context -> TTerm Graph -> TTerm (M.Map Namespace String) -> TTerm Type -> TTerm (Either (InContext Error) G.TypeDefinition)
 wrapAsRecord name cx g prefixes innerTyp =
   encodeNamedType @@ cx @@ g @@ prefixes @@ name @@
-    (inject _Type _Type_record $ Core.rowType name (list [
-      Core.fieldType (Core.name $ string "value") innerTyp]))
+    (inject _Type _Type_record $ list [
+      Core.fieldType (Core.name $ string "value") innerTyp])
 
 -- | Encode a Hydra type as a GraphQL type reference
 encodeType :: TBinding (Context -> Graph -> M.Map Namespace String -> Type -> Either (InContext Error) G.Type)
@@ -301,12 +301,12 @@ encodeType = define "encodeType" $
           _Type_literal>>: lambda "lt_" $
             Eithers.map (lambda "nt" $ inject G._Type G._Type_named (var "nt"))
               (encodeLiteralType @@ var "cx" @@ var "lt_"),
-          _Type_record>>: lambda "rt" $
-            right (inject G._Type G._Type_named (wrap G._NamedType (encodeTypeName @@ var "prefixes" @@ (Core.rowTypeTypeName (var "rt"))))),
-          _Type_union>>: lambda "rt" $
-            right (inject G._Type G._Type_named (wrap G._NamedType (encodeTypeName @@ var "prefixes" @@ (Core.rowTypeTypeName (var "rt"))))),
-          _Type_wrap>>: lambda "wt" $
-            right (inject G._Type G._Type_named (wrap G._NamedType (encodeTypeName @@ var "prefixes" @@ (Core.wrappedTypeTypeName (var "wt"))))),
+          _Type_record>>: constant $
+            Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous record type")) (var "cx"),
+          _Type_union>>: constant $
+            Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous union type")) (var "cx"),
+          _Type_wrap>>: constant $
+            Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous wrap type")) (var "cx"),
           _Type_variable>>: lambda "n" $
             right (inject G._Type G._Type_named (wrap G._NamedType (encodeTypeName @@ var "prefixes" @@ (var "n"))))],
       -- Non-optional types become non-null
@@ -322,18 +322,15 @@ encodeType = define "encodeType" $
       _Type_literal>>: lambda "lt_" $
         Eithers.map (lambda "nt" $ inject G._Type G._Type_nonNull (inject G._NonNullType G._NonNullType_named (var "nt")))
           (encodeLiteralType @@ var "cx" @@ var "lt_"),
-      _Type_record>>: lambda "rt" $
-        right (inject G._Type G._Type_nonNull (inject G._NonNullType G._NonNullType_named
-          (wrap G._NamedType (encodeTypeName @@ var "prefixes" @@ (Core.rowTypeTypeName (var "rt")))))),
-      _Type_union>>: lambda "rt" $
-        right (inject G._Type G._Type_nonNull (inject G._NonNullType G._NonNullType_named
-          (wrap G._NamedType (encodeTypeName @@ var "prefixes" @@ (Core.rowTypeTypeName (var "rt")))))),
+      _Type_record>>: constant $
+        Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous record type")) (var "cx"),
+      _Type_union>>: constant $
+        Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous union type")) (var "cx"),
       _Type_variable>>: lambda "n" $
         right (inject G._Type G._Type_nonNull (inject G._NonNullType G._NonNullType_named
           (wrap G._NamedType (encodeTypeName @@ var "prefixes" @@ (var "n"))))),
-      _Type_wrap>>: lambda "wt" $
-        right (inject G._Type G._Type_nonNull (inject G._NonNullType G._NonNullType_named
-          (wrap G._NamedType (encodeTypeName @@ var "prefixes" @@ (Core.wrappedTypeTypeName (var "wt"))))))]
+      _Type_wrap>>: constant $
+        Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous wrap type")) (var "cx")]
 
 -- | Encode a Hydra Name as a GraphQL Name with namespace prefix
 encodeTypeName :: TBinding (M.Map Namespace String -> Name -> G.Name)

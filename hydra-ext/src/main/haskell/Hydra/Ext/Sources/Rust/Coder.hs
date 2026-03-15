@@ -405,12 +405,12 @@ encodeType = def "encodeType" $
                           record R._ParenthesizedArgs [
                             R._ParenthesizedArgs_inputs>>: list [var "dom"],
                             R._ParenthesizedArgs_output>>: just (var "cod")]]]]])),
-      _Type_record>>: lambda "rt" $
-        right (rustPath @@ (Formatting.capitalize @@ (Names.localNameOf @@ Core.rowTypeTypeName (var "rt")))),
-      _Type_union>>: lambda "rt" $
-        right (rustPath @@ (Formatting.capitalize @@ (Names.localNameOf @@ Core.rowTypeTypeName (var "rt")))),
-      _Type_wrap>>: lambda "wt" $
-        right (rustPath @@ (Formatting.capitalize @@ (Names.localNameOf @@ Core.wrappedTypeTypeName (var "wt")))),
+      _Type_record>>: lambda "_" $
+        Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous record type")) (var "cx"),
+      _Type_union>>: lambda "_" $
+        Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous union type")) (var "cx"),
+      _Type_wrap>>: lambda "_" $
+        Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous wrap type")) (var "cx"),
       _Type_variable>>: lambda "name" $
         right (rustPath @@ (Formatting.capitalize @@ Core.unName (var "name"))),
       _Type_forall>>: lambda "fa" $
@@ -671,7 +671,7 @@ encodeEnumVariant = def "encodeEnumVariant" $
     "isUnit" <~ (cases _Type (var "dtyp") (Just $ boolean False) [
       _Type_unit>>: constant $ boolean True,
       _Type_record>>: lambda "rt" $
-        Lists.null (Core.rowTypeFields (var "rt"))]) $
+        Lists.null (var "rt")]) $
     Logic.ifElse (var "isUnit")
       -- Unit variant
       (right (record R._EnumVariant [
@@ -687,7 +687,7 @@ encodeEnumVariant = def "encodeEnumVariant" $
               R._EnumVariant_body>>: inject R._EnumVariantBody R._EnumVariantBody_tuple $ list [var "sftyp"],
               R._EnumVariant_doc>>: nothing]))
         [_Type_record>>: lambda "rt" $
-          "sfields" <<~ (Eithers.mapList (encodeStructField @@ var "cx" @@ var "g") (Core.rowTypeFields (var "rt"))) $
+          "sfields" <<~ (Eithers.mapList (encodeStructField @@ var "cx" @@ var "g") (var "rt")) $
             right (record R._EnumVariant [
               R._EnumVariant_name>>: Formatting.capitalize @@ var "fname",
               R._EnumVariant_body>>: inject R._EnumVariantBody R._EnumVariantBody_struct (var "sfields"),
@@ -725,7 +725,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
               R._TypeAlias_public>>: boolean True,
               R._TypeAlias_doc>>: nothing]))
       [_Type_record>>: lambda "rt" $
-        "sfields" <<~ (Eithers.mapList (encodeStructField @@ var "cx" @@ var "g") (Core.rowTypeFields (var "rt"))) $
+        "sfields" <<~ (Eithers.mapList (encodeStructField @@ var "cx" @@ var "g") (var "rt")) $
           right (inject R._Item R._Item_struct $
             record R._StructDef [
               R._StructDef_name>>: var "lname",
@@ -736,7 +736,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
               R._StructDef_public>>: boolean True,
               R._StructDef_doc>>: nothing]),
       _Type_union>>: lambda "rt" $
-        "variants" <<~ (Eithers.mapList (encodeEnumVariant @@ var "cx" @@ var "g") (Core.rowTypeFields (var "rt"))) $
+        "variants" <<~ (Eithers.mapList (encodeEnumVariant @@ var "cx" @@ var "g") (var "rt")) $
           right (inject R._Item R._Item_enum $
             record R._EnumDef [
               R._EnumDef_name>>: var "lname",
@@ -747,7 +747,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
               R._EnumDef_public>>: boolean True,
               R._EnumDef_doc>>: nothing]),
       _Type_wrap>>: lambda "wt" $
-        "styp" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.wrappedTypeBody (var "wt")) $
+        "styp" <<~ (encodeType @@ var "cx" @@ var "g" @@ var "wt") $
           right (inject R._Item R._Item_struct $
             record R._StructDef [
               R._StructDef_name>>: var "lname",

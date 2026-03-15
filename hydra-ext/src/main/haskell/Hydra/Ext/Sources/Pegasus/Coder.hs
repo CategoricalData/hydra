@@ -291,24 +291,24 @@ encodeType_ = def "encodeType" $
         right (left (inject PDL._Schema PDL._Schema_named (pdlNameForElement @@ var "aliases" @@ true @@ var "name"))),
       _Type_wrap>>: lambda "wt" $
         -- Unwrap to inner type
-        encodeType_ @@ var "cx" @@ var "g" @@ var "aliases" @@ Core.wrappedTypeBody (var "wt"),
+        encodeType_ @@ var "cx" @@ var "g" @@ var "aliases" @@ var "wt",
       _Type_maybe>>: lambda "ot" $
         err (var "cx") (string "optionals unexpected at top level"),
       _Type_record>>: lambda "rt" $
-        "rfields" <<~ (Eithers.mapList (encodeRecordField @@ var "cx" @@ var "g" @@ var "aliases") (Core.rowTypeFields (var "rt"))) $
+        "rfields" <<~ (Eithers.mapList (encodeRecordField @@ var "cx" @@ var "g" @@ var "aliases") (var "rt")) $
         right (right (inject PDL._NamedSchemaType PDL._NamedSchemaType_record (record PDL._RecordSchema [
           PDL._RecordSchema_fields>>: var "rfields",
           PDL._RecordSchema_includes>>: list ([] :: [TTerm PDL.NamedSchema])]))),
       _Type_union>>: lambda "rt" $
         Logic.ifElse (Lists.foldl (lambda "b" $ lambda "t" $
             Logic.and (var "b") (Equality.equal (Rewriting.deannotateType @@ var "t") (MetaTypes.unit)))
-          true (Lists.map (lambda "f" $ Core.fieldTypeType (var "f")) (Core.rowTypeFields (var "rt"))))
+          true (Lists.map (lambda "f" $ Core.fieldTypeType (var "f")) (var "rt")))
           -- Enum case
-          ("fs" <<~ (Eithers.mapList (encodeEnumField @@ var "cx" @@ var "g") (Core.rowTypeFields (var "rt"))) $
+          ("fs" <<~ (Eithers.mapList (encodeEnumField @@ var "cx" @@ var "g") (var "rt")) $
            right (right (inject PDL._NamedSchemaType PDL._NamedSchemaType_enum (record PDL._EnumSchema [
              PDL._EnumSchema_fields>>: var "fs"]))))
           -- Union case
-          ("members" <<~ (Eithers.mapList (encodeUnionField @@ var "cx" @@ var "g" @@ var "aliases") (Core.rowTypeFields (var "rt"))) $
+          ("members" <<~ (Eithers.mapList (encodeUnionField @@ var "cx" @@ var "g" @@ var "aliases") (var "rt")) $
            right (left (inject PDL._Schema PDL._Schema_union (wrap PDL._UnionSchema (var "members")))))]
 
 encode :: TBinding (Context -> Graph -> M.Map Namespace String -> Type -> Either (InContext Error) PDL.Schema)
@@ -323,7 +323,7 @@ encode = def "encode" $
               (var "res")) [
           -- special case for the unit type
           _Type_record>>: lambda "rt" $
-            Logic.ifElse (Lists.null (Core.rowTypeFields (var "rt")))
+            Logic.ifElse (Lists.null (var "rt"))
               (encode @@ var "cx" @@ var "g" @@ var "aliases" @@ MetaTypes.int32)
               ("res" <<~ (encodeType_ @@ var "cx" @@ var "g" @@ var "aliases" @@ var "t") $
                Eithers.either_

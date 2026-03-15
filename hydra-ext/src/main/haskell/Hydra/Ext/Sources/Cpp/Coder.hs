@@ -532,17 +532,17 @@ encodeType = def "encodeType" $
        "st" <<~ (encodeType @@ var "cx" @@ var "g" @@ Core.pairTypeSecond (var "pt")) $
          right (toConstType @@ (createTemplateType @@ string "std::pair" @@ list [var "ft", var "st"])),
      _Type_record>>: lambda "rt" $
-       right (createTypeReference @@ (isStructType @@ var "t") @@ Core.rowTypeTypeName (var "rt")),
+       Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous record type")) (var "cx"),
      _Type_set>>: lambda "et" $
        Eithers.map (lambda "enc" $ toConstType @@ (createTemplateType @@ string "std::set" @@ list [var "enc"]))
          (encodeType @@ var "cx" @@ var "g" @@ var "et"),
      _Type_union>>: lambda "rt" $
-       right (createTypeReference @@ (isStructType @@ var "t") @@ Core.rowTypeTypeName (var "rt")),
+       Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous union type")) (var "cx"),
      _Type_variable>>: lambda "name" $
        right (inject Cpp._TypeExpression Cpp._TypeExpression_basic $
          inject Cpp._BasicType Cpp._BasicType_named (sanitizeCppName @@ Core.unName (var "name"))),
      _Type_wrap>>: lambda "wt" $
-       right (createTypeReference @@ (isStructType @@ var "t") @@ Core.wrappedTypeTypeName (var "wt")),
+       Ctx.failInContext (Error.errorOther $ Error.otherError (string "unexpected anonymous wrapped type")) (var "cx"),
      _Type_unit>>: constant $
        right (createTemplateType @@ string "std::tuple" @@ list ([] :: [TTerm Cpp.TypeExpression]))]
 
@@ -601,7 +601,7 @@ encodeTypeDefinition = def "encodeTypeDefinition" $
      _Type_union>>: lambda "rt" $
        encodeUnionType @@ var "cx" @@ var "g" @@ var "name" @@ var "rt" @@ nothing,
      _Type_wrap>>: lambda "wt" $
-       encodeWrappedType @@ var "cx" @@ var "g" @@ var "name" @@ Core.wrappedTypeBody (var "wt") @@ nothing]
+       encodeWrappedType @@ var "cx" @@ var "g" @@ var "name" @@ var "wt" @@ nothing]
 
 
 -- ============================================================================
@@ -622,12 +622,11 @@ encodeFieldType = def "encodeFieldType" $
         Cpp._VariableDeclaration_isAuto>>: boolean False])
 
 -- | Encode a record type as a C++ class with fields and constructor
-encodeRecordType :: TBinding (Context -> Graph -> Name -> RowType -> Maybe String -> Either (InContext Error) [Cpp.Declaration])
+encodeRecordType :: TBinding (Context -> Graph -> Name -> [FieldType] -> Maybe String -> Either (InContext Error) [Cpp.Declaration])
 encodeRecordType = def "encodeRecordType" $
   "cx" ~> "g" ~> lambda "name" $ lambda "rt" $ lambda "comment" $
-    "tfields" <~ Core.rowTypeFields (var "rt") $
-    "cppFields" <<~ (Eithers.mapList (lambda "f" $ encodeFieldType @@ boolean False @@ var "f" @@ var "cx" @@ var "g") (var "tfields")) $
-    "constructorParams" <<~ (Eithers.mapList (lambda "f" $ encodeFieldType @@ boolean True @@ var "f" @@ var "cx" @@ var "g") (var "tfields")) $
+    "cppFields" <<~ (Eithers.mapList (lambda "f" $ encodeFieldType @@ boolean False @@ var "f" @@ var "cx" @@ var "g") (var "rt")) $
+    "constructorParams" <<~ (Eithers.mapList (lambda "f" $ encodeFieldType @@ boolean True @@ var "f" @@ var "cx" @@ var "g") (var "rt")) $
       let classDecl = cppClassDeclaration @@ (className @@ var "name") @@ list ([] :: [TTerm Cpp.BaseSpecifier]) @@
             (just (wrap Cpp._ClassBody (
               Lists.concat (list [
@@ -660,16 +659,16 @@ encodeRecordType = def "encodeRecordType" $
                           (var "cppFields"),
                       Cpp._ConstructorDeclaration_body>>: createConstructorBody @@ var "constructorParams"]]]
               ))))
-          ltOp = createLessThanOperator @@ var "name" @@ var "tfields"
+          ltOp = createLessThanOperator @@ var "name" @@ var "rt"
       in right (list [classDecl, ltOp])
 
 -- | Encode a union type (dispatches to enum or variant based on content)
-encodeUnionType :: TBinding (Context -> Graph -> Name -> RowType -> Maybe String -> Either (InContext Error) [Cpp.Declaration])
+encodeUnionType :: TBinding (Context -> Graph -> Name -> [FieldType] -> Maybe String -> Either (InContext Error) [Cpp.Declaration])
 encodeUnionType = def "encodeUnionType" $
   "cx" ~> "g" ~> lambda "name" $ lambda "rt" $ lambda "comment" $
     Logic.ifElse (Schemas.isEnumRowType @@ var "rt")
-      (encodeEnumType @@ var "cx" @@ var "g" @@ var "name" @@ Core.rowTypeFields (var "rt") @@ var "comment")
-      (encodeVariantType @@ var "cx" @@ var "g" @@ var "name" @@ Core.rowTypeFields (var "rt") @@ var "comment")
+      (encodeEnumType @@ var "cx" @@ var "g" @@ var "name" @@ var "rt" @@ var "comment")
+      (encodeVariantType @@ var "cx" @@ var "g" @@ var "name" @@ var "rt" @@ var "comment")
 
 -- | Encode an enum type as a C++ enum class
 encodeEnumType :: TBinding (Context -> Graph -> Name -> [FieldType] -> Maybe String -> Either (InContext Error) [Cpp.Declaration])
@@ -708,12 +707,10 @@ encodeWrappedType :: TBinding (Context -> Graph -> Name -> Type -> Maybe String 
 encodeWrappedType = def "encodeWrappedType" $
   "cx" ~> "g" ~> lambda "name" $ lambda "typ" $ lambda "comment" $
     encodeRecordType @@ var "cx" @@ var "g" @@ var "name"
-      @@ (record _RowType [
-            _RowType_typeName>>: var "name",
-            _RowType_fields>>: list [
-              record _FieldType [
-                _FieldType_name>>: wrap _Name (string "value"),
-                _FieldType_type>>: var "typ"]]])
+      @@ list [
+            record _FieldType [
+              _FieldType_name>>: wrap _Name (string "value"),
+              _FieldType_type>>: var "typ"]]
       @@ var "comment"
 
 

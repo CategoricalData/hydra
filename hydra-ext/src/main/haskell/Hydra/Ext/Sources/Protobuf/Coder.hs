@@ -176,8 +176,8 @@ structuralTypeName = def "structuralTypeName" $
                 _IntegerType_uint32>>: constant $ string "uint32",
                 _IntegerType_uint64>>: constant $ string "uint64"],
             _LiteralType_string>>: constant $ string "string"],
-        _Type_record>>: "rt" ~> Names.localNameOf @@ (Core.rowTypeTypeName (var "rt")),
-        _Type_union>>: "rt" ~> Names.localNameOf @@ (Core.rowTypeTypeName (var "rt")),
+        _Type_record>>: constant $ string "record",
+        _Type_union>>: constant $ string "union",
         _Type_variable>>: "name" ~> Names.localNameOf @@ var "name",
         _Type_unit>>: constant $ string "unit",
         _Type_list>>: constant $ string "list",
@@ -264,8 +264,8 @@ encodeSimpleTypeForHelper = def "encodeSimpleTypeForHelper" $
         Eithers.map
           ("st" ~> inject P3._SimpleType P3._SimpleType_scalar (var "st"))
           (asTerm encodeScalarType @@ var "cx" @@ var "lt"),
-      _Type_record>>: "rt" ~> var "forNominal" @@ (Core.rowTypeTypeName (var "rt")),
-      _Type_union>>: "rt" ~> var "forNominal" @@ (Core.rowTypeTypeName (var "rt")),
+      _Type_record>>: constant $ asTerm unexpectedE @@ var "cx" @@ string "named type reference" @@ string "anonymous record type",
+      _Type_union>>: constant $ asTerm unexpectedE @@ var "cx" @@ string "named type reference" @@ string "anonymous union type",
       _Type_unit>>: constant $ right (inject P3._SimpleType P3._SimpleType_reference (wrap P3._TypeName (string "google.protobuf.Empty"))),
       _Type_variable>>: "name" ~> var "forNominal" @@ var "name"]
 
@@ -378,8 +378,8 @@ constructModule = def "constructModule" $
             Maybes.maybe
               (cases _Type (var "t2")
                 (Just false) [
-                _Type_record>>: "rt" ~> Lists.foldl ("b3" ~> "f" ~> Logic.or (var "b3") (var "checkFieldType" @@ (Rewriting.deannotateType @@ Core.fieldTypeType (var "f")))) false (Core.rowTypeFields (var "rt")),
-                _Type_union>>: "rt" ~> Lists.foldl ("b3" ~> "f" ~> Logic.or (var "b3") (var "checkFieldType" @@ (Rewriting.deannotateType @@ Core.fieldTypeType (var "f")))) false (Core.rowTypeFields (var "rt"))])
+                _Type_record>>: "fts" ~> Lists.foldl ("b3" ~> "f" ~> Logic.or (var "b3") (var "checkFieldType" @@ (Rewriting.deannotateType @@ Core.fieldTypeType (var "f")))) false (var "fts"),
+                _Type_union>>: "fts" ~> Lists.foldl ("b3" ~> "f" ~> Logic.or (var "b3") (var "checkFieldType" @@ (Rewriting.deannotateType @@ Core.fieldTypeType (var "f")))) false (var "fts")])
               ("b3" ~> var "b3")
               (var "checkResult"))) @@
           false @@ var "t")) false (var "ts"),
@@ -439,7 +439,7 @@ encodeDefinition = def "encodeDefinition" $
     "cx1">: Annotations.resetCount @@ asTerm key_proto_field_index @@ var "cx",
     "cx2">: Pairs.second (Annotations.nextCount @@ asTerm key_proto_field_index @@ var "cx1"),
     "wrapAsRecordType">: "t" ~>
-      inject _Type _Type_record (Core.rowType (var "name") (list [Core.fieldType (Core.name (string "value")) (var "t")])),
+      inject _Type _Type_record (list [Core.fieldType (Core.name (string "value")) (var "t")]),
     "toEitherString">: "result" ~>
       Eithers.bimap
         ("ic" ~> ShowError.error_ @@ (project _InContext _InContext_object @@ var "ic"))
@@ -448,15 +448,15 @@ encodeDefinition = def "encodeDefinition" $
     "encode">: "cx0" ~> "options" ~> "t" ~>
       cases _Type (asTerm simplifyType @@ var "t")
         (Just $ var "encode" @@ var "cx0" @@ var "options" @@ (var "wrapAsRecordType" @@ var "t")) [
-        _Type_record>>: "rt" ~>
+        _Type_record>>: "fts" ~>
           Eithers.map
             ("md" ~> inject P3._Definition P3._Definition_message (var "md"))
-            (var "toEitherString" @@ (asTerm encodeRecordType @@ var "cx0" @@ var "g" @@ var "localNs" @@ var "options" @@ var "rt")),
-        _Type_union>>: "rt" ~> Logic.ifElse (asTerm isEnumDefinition @@ var "t")
+            (var "toEitherString" @@ (asTerm encodeRecordType @@ var "cx0" @@ var "g" @@ var "localNs" @@ var "options" @@ var "name" @@ var "fts")),
+        _Type_union>>: "fts" ~> Logic.ifElse (asTerm isEnumDefinition @@ var "t")
           (Eithers.map
             ("ed" ~> inject P3._Definition P3._Definition_enum (var "ed"))
-            (var "toEitherString" @@ (asTerm encodeEnumDefinition @@ var "cx0" @@ var "g" @@ var "options" @@ var "rt")))
-          (var "encode" @@ var "cx0" @@ var "options" @@ (var "wrapAsRecordType" @@ (inject _Type _Type_union (var "rt"))))]] $
+            (var "toEitherString" @@ (asTerm encodeEnumDefinition @@ var "cx0" @@ var "g" @@ var "options" @@ var "name" @@ var "fts")))
+          (var "encode" @@ var "cx0" @@ var "options" @@ (var "wrapAsRecordType" @@ (inject _Type _Type_union (var "fts"))))]] $
     "options" <<~ (var "toEitherString" @@ (asTerm findOptions @@ var "cx" @@ var "g" @@ var "typ")) $
     var "encode" @@ var "cx2" @@ var "options" @@ var "typ"
 
@@ -464,12 +464,10 @@ encodeDefinition = def "encodeDefinition" $
 -- Enum encoding
 -- =============================================================================
 
-encodeEnumDefinition :: TBinding (Context -> Graph -> [P3.Option] -> RowType -> Either (InContext Error) P3.EnumDefinition)
+encodeEnumDefinition :: TBinding (Context -> Graph -> [P3.Option] -> Name -> [FieldType] -> Either (InContext Error) P3.EnumDefinition)
 encodeEnumDefinition = def "encodeEnumDefinition" $
   doc "Encode a Hydra union type as a Protobuf enum definition" $
-  "cx" ~> "g" ~> "options" ~> "rt" ~> lets [
-    "tname">: Core.rowTypeTypeName (var "rt"),
-    "fields">: Core.rowTypeFields (var "rt"),
+  "cx" ~> "g" ~> "options" ~> "tname" ~> "fts" ~> lets [
     "unspecifiedField">: record P3._EnumValue [
       P3._EnumValue_name>>: asTerm encodeEnumValueName @@ var "tname" @@ (Core.name (string "unspecified")),
       P3._EnumValue_number>>: int32 0,
@@ -482,10 +480,10 @@ encodeEnumDefinition = def "encodeEnumDefinition" $
         P3._EnumValue_name>>: asTerm encodeEnumValueName @@ var "tname" @@ var "fname",
         P3._EnumValue_number>>: var "idx",
         P3._EnumValue_options>>: var "opts"],
-    "indices">: Math.range (int32 1) (Lists.length (var "fields"))] $
+    "indices">: Math.range (int32 1) (Lists.length (var "fts"))] $
     "values" <<~ (Eithers.mapList
       ("p" ~> var "encodeEnumField" @@ (Pairs.first (var "p")) @@ (Pairs.second (var "p")))
-      (Lists.zip (var "fields") (var "indices"))) $
+      (Lists.zip (var "fts") (var "indices"))) $
     right $ record P3._EnumDefinition [
       P3._EnumDefinition_name>>: asTerm encodeTypeName @@ var "tname",
       P3._EnumDefinition_values>>: Lists.cons (var "unspecifiedField") (var "values"),
@@ -553,11 +551,11 @@ encodeFieldType = def "encodeFieldType" $
             Eithers.map
               ("st" ~> inject P3._FieldType P3._FieldType_simple (var "st"))
               (asTerm encodeScalarTypeWrapped @@ var "cx0" @@ var "lt")],
-        _Type_union>>: "rt" ~>
+        _Type_union>>: "fts" ~>
           "pfields" <<~ (asTerm mapAccumResult @@
             ("cx_" ~> "f" ~> asTerm encodeFieldType @@ var "cx_" @@ var "g0" @@ var "ns0" @@ var "f") @@
             var "cx0" @@
-            (Core.rowTypeFields (var "rt"))) $ lets [
+            (var "fts")) $ lets [
             "fields_">: Pairs.first (var "pfields")] $
             right $ inject P3._FieldType P3._FieldType_oneof (var "fields_")],
     "encodeSimpleType_">: "cx0" ~> "g0" ~> "ns0" ~> "noms" ~> "typ" ~> lets [
@@ -568,8 +566,8 @@ encodeFieldType = def "encodeFieldType" $
           Eithers.map
             ("st" ~> inject P3._SimpleType P3._SimpleType_scalar (var "st"))
             (asTerm encodeScalarType @@ var "cx0" @@ var "lt"),
-        _Type_record>>: "rt" ~> var "forNominal" @@ (Core.rowTypeTypeName (var "rt")),
-        _Type_union>>: "rt" ~> var "forNominal" @@ (Core.rowTypeTypeName (var "rt")),
+        _Type_record>>: constant $ asTerm unexpectedE @@ var "cx0" @@ string "named type reference" @@ string "anonymous record type",
+        _Type_union>>: constant $ asTerm unexpectedE @@ var "cx0" @@ string "named type reference" @@ string "anonymous union type",
         _Type_unit>>: constant $ right (inject P3._SimpleType P3._SimpleType_reference (wrap P3._TypeName (string "google.protobuf.Empty"))),
         _Type_variable>>: "name" ~> Logic.ifElse (var "noms")
           (var "forNominal" @@ var "name")
@@ -601,16 +599,14 @@ encodeFieldType = def "encodeFieldType" $
 -- =============================================================================
 
 -- | Returns the message definition; counter is threaded via context
-encodeRecordType :: TBinding (Context -> Graph -> Namespace -> [P3.Option] -> RowType -> Either (InContext Error) P3.MessageDefinition)
+encodeRecordType :: TBinding (Context -> Graph -> Namespace -> [P3.Option] -> Name -> [FieldType] -> Either (InContext Error) P3.MessageDefinition)
 encodeRecordType = def "encodeRecordType" $
   doc "Encode a Hydra record type as a Protobuf message definition" $
-  "cx" ~> "g" ~> "localNs" ~> "options" ~> "rt" ~> lets [
-    "tname">: Core.rowTypeTypeName (var "rt"),
-    "fields">: Core.rowTypeFields (var "rt")] $
+  "cx" ~> "g" ~> "localNs" ~> "options" ~> "tname" ~> "fts" ~>
     "result" <<~ (asTerm mapAccumResult @@
       ("cx_" ~> "f" ~> asTerm encodeFieldType @@ var "cx_" @@ var "g" @@ var "localNs" @@ var "f") @@
       var "cx" @@
-      var "fields") $ lets [
+      var "fts") $ lets [
       "pfields">: Pairs.first (var "result")] $
       right $ record P3._MessageDefinition [
         P3._MessageDefinition_name>>: asTerm encodeTypeName @@ var "tname",
@@ -740,11 +736,11 @@ findOptions = def "findOptions" $
 isEnumFields :: TBinding ([FieldType] -> Bool)
 isEnumFields = def "isEnumFields" $
   doc "Check if all fields are unit types (i.e., this is an enum)" $
-  "fields" ~>
+  "fts" ~>
     Lists.foldl
       ("b" ~> "f" ~> Logic.and (var "b") (Schemas.isUnitType @@ (asTerm simplifyType @@ Core.fieldTypeType (var "f"))))
       true
-      (var "fields")
+      (var "fts")
 
 isEnumDefinition :: TBinding (Type -> Bool)
 isEnumDefinition = def "isEnumDefinition" $
@@ -752,7 +748,7 @@ isEnumDefinition = def "isEnumDefinition" $
   "typ" ~>
     cases _Type (asTerm simplifyType @@ var "typ")
       (Just false) [
-      _Type_union>>: "rt" ~> asTerm isEnumFields @@ (Core.rowTypeFields (var "rt"))]
+      _Type_union>>: "fts" ~> asTerm isEnumFields @@ (var "fts")]
 
 -- =============================================================================
 -- Namespace conversion
@@ -800,4 +796,4 @@ simplifyType = def "simplifyType" $
   "typ" ~>
     cases _Type (Rewriting.deannotateType @@ var "typ")
       (Just $ Rewriting.deannotateType @@ var "typ") [
-      _Type_wrap>>: "wt" ~> asTerm simplifyType @@ (Core.wrappedTypeBody (var "wt"))]
+      _Type_wrap>>: "wt" ~> asTerm simplifyType @@ (var "wt")]

@@ -116,18 +116,17 @@ literalYamlCoder = define "literalYamlCoder" $
       (var "decodeString")]) $
   right $ var "encoded"
 
-recordCoder :: TBinding (RowType -> Context -> Graph -> Either (InContext Error) (Coder Term YM.Node))
+recordCoder :: TBinding (Name -> [FieldType] -> Context -> Graph -> Either (InContext Error) (Coder Term YM.Node))
 recordCoder = define "recordCoder" $
   doc "Create a YAML coder for record types" $
-  "rt" ~> "cx" ~> "g" ~>
-  "fields" <~ (Core.rowTypeFields $ var "rt") $
+  "tname" ~> "rt" ~> "cx" ~> "g" ~>
   "getCoder" <~ ("f" ~>
     "coder" <<~ termCoder @@ (Core.fieldTypeType $ var "f") @@ var "cx" @@ var "g" $
     right $ pair (var "f") (var "coder")) $
-  "coders" <<~ Eithers.mapList (var "getCoder") (var "fields") $
+  "coders" <<~ Eithers.mapList (var "getCoder") (var "rt") $
   right $ Compute.coder
     ("cx" ~> "term" ~> encodeRecord @@ var "coders" @@ var "cx" @@ var "g" @@ var "term")
-    ("cx" ~> "val" ~> decodeRecord @@ var "rt" @@ var "coders" @@ var "cx" @@ var "val")
+    ("cx" ~> "val" ~> decodeRecord @@ var "tname" @@ var "coders" @@ var "cx" @@ var "val")
 
 encodeRecord :: TBinding ([(FieldType, Coder Term YM.Node)] -> Context -> Graph -> Term -> Either (InContext Error) YM.Node)
 encodeRecord = define "encodeRecord" $
@@ -158,10 +157,10 @@ encodeRecord = define "encodeRecord" $
   "maybeFields" <<~ Eithers.mapList (var "encodeField") (Lists.zip (var "coders") (var "fields")) $
   right (Yaml.nodeMapping $ Maps.fromList $ Maybes.cat $ var "maybeFields")
 
-decodeRecord :: TBinding (RowType -> [(FieldType, Coder Term YM.Node)] -> Context -> YM.Node -> Either (InContext Error) Term)
+decodeRecord :: TBinding (Name -> [(FieldType, Coder Term YM.Node)] -> Context -> YM.Node -> Either (InContext Error) Term)
 decodeRecord = define "decodeRecord" $
   doc "Decode a YAML value to a record term" $
-  "rt" ~> "coders" ~> "cx" ~> "n" ~>
+  "tname" ~> "coders" ~> "cx" ~> "n" ~>
   "decodeObjectBody" <~ ("m" ~>
     "decodeField" <~ ("coder" ~>
       "ft" <~ (Pairs.first $ var "coder") $
@@ -172,7 +171,7 @@ decodeRecord = define "decodeRecord" $
       "v" <<~ Compute.coderDecode (var "coder'") @@ var "cx" @@ var "yamlValue" $
       right (Core.field (var "fname") (var "v"))) $
     "fields" <<~ Eithers.mapList (var "decodeField") (var "coders") $
-    right (Core.termRecord $ Core.record (Core.rowTypeTypeName $ var "rt") (var "fields"))) $
+    right (Core.termRecord $ Core.record (var "tname") (var "fields"))) $
   cases YM._Node (var "n")
     (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (string "expected mapping")) (var "cx")) [
     YM._Node_mapping>>: var "decodeObjectBody"]
@@ -274,7 +273,7 @@ termCoder = define "termCoder" $
       right $ Compute.coder
         (var "encodeMaybe" @@ var "maybeElementCoder")
         (var "decodeMaybe" @@ var "maybeElementCoder"),
-    _Type_record>>: "rt" ~> recordCoder @@ var "rt" @@ var "cx" @@ var "g",
+    _Type_record>>: "rt" ~> recordCoder @@ Core.name (string "yaml") @@ var "rt" @@ var "cx" @@ var "g",
     _Type_unit>>: constant $ right $ (var "hydra.ext.org.yaml.coder.unitCoder" :: TTerm (Coder Term YM.Node))]) $
   var "result"
 
