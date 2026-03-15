@@ -2,7 +2,7 @@
   "description": ["A model for Hydra transformation workflows"],
   "elements": [
     {
-      "name": "hydra.workflow.HydraSchemaSpec",
+      "name": "hydra.ext.workflow.HydraSchemaSpec",
       "term": {
         "annotated": {
           "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
@@ -26,7 +26,7 @@
                                       "name": "typeName",
                                       "term": {
                                         "wrap": {
-                                          "body": {"literal": {"string": "hydra.workflow.HydraSchemaSpec"}},
+                                          "body": {"literal": {"string": "hydra.ext.workflow.HydraSchemaSpec"}},
                                           "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "fields",
@@ -175,7 +175,7 @@
           "type": {"variable": "hydra.core.Type"},
           "variables": []}]},
     {
-      "name": "hydra.workflow.SchemaSpec",
+      "name": "hydra.ext.workflow.SchemaSpec",
       "term": {
         "annotated": {
           "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
@@ -199,7 +199,7 @@
                                       "name": "typeName",
                                       "term": {
                                         "wrap": {
-                                          "body": {"literal": {"string": "hydra.workflow.SchemaSpec"}},
+                                          "body": {"literal": {"string": "hydra.ext.workflow.SchemaSpec"}},
                                           "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "fields",
@@ -231,7 +231,7 @@
                                                                       "name": "variable",
                                                                       "term": {
                                                                         "wrap": {
-                                                                          "body": {"literal": {"string": "hydra.workflow.HydraSchemaSpec"}},
+                                                                          "body": {"literal": {"string": "hydra.ext.workflow.HydraSchemaSpec"}},
                                                                           "typeName": "hydra.core.Name"}}},
                                                                     "typeName": "hydra.core.Type"}}},
                                                               {
@@ -391,7 +391,7 @@
           "type": {"variable": "hydra.core.Type"},
           "variables": []}]},
     {
-      "name": "hydra.workflow.TransformWorkflow",
+      "name": "hydra.ext.workflow.TransformWorkflow",
       "term": {
         "annotated": {
           "annotation": [{"@key": "type", "@value": {"variable": "hydra.core.Type"}}],
@@ -415,7 +415,7 @@
                                       "name": "typeName",
                                       "term": {
                                         "wrap": {
-                                          "body": {"literal": {"string": "hydra.workflow.TransformWorkflow"}},
+                                          "body": {"literal": {"string": "hydra.ext.workflow.TransformWorkflow"}},
                                           "typeName": "hydra.core.Name"}}},
                                     {
                                       "name": "fields",
@@ -499,7 +499,7 @@
                                                                       "name": "variable",
                                                                       "term": {
                                                                         "wrap": {
-                                                                          "body": {"literal": {"string": "hydra.workflow.SchemaSpec"}},
+                                                                          "body": {"literal": {"string": "hydra.ext.workflow.SchemaSpec"}},
                                                                           "typeName": "hydra.core.Name"}}},
                                                                     "typeName": "hydra.core.Type"}}},
                                                               {
@@ -660,6 +660,6 @@
           "constraints": null,
           "type": {"variable": "hydra.core.Type"},
           "variables": []}]}],
-  "namespace": "hydra.workflow",
+  "namespace": "hydra.ext.workflow",
   "termDependencies": ["hydra.graph", "hydra.module"],
   "typeDependencies": ["hydra.core"]}

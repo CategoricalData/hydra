@@ -1786,6 +1786,5 @@
     "hydra.typing",
     "hydra.util",
     "hydra.variants",
-    "hydra.workflow",
     "hydra.pg.graphson.syntax",
     "hydra.json.model"]}

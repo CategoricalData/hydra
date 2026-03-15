@@ -16,6 +16,7 @@ module Hydra.Ext.Tools.AvroWorkflows (
 ) where
 
 import Hydra.Kernel
+import Hydra.Ext.Workflow
 import qualified Hydra.Show.Error as ShowError
 import Hydra.Dsl.Annotations
 import qualified Hydra.Ext.Org.Apache.Avro.Schema as Avro

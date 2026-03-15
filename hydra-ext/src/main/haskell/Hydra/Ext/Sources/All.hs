@@ -122,6 +122,7 @@ import qualified Hydra.Ext.Sources.Tinkerpop.Gremlin           as Gremlin
 import qualified Hydra.Ext.Sources.Tinkerpop.Language          as TinkerpopLanguage
 import qualified Hydra.Ext.Sources.TypeScript.Model            as TypeScriptModel
 import qualified Hydra.Ext.Sources.Xml.Schema                  as XmlSchema
+import qualified Hydra.Ext.Sources.Workflow                     as Workflow
 import qualified Hydra.Ext.Sources.Yaml.Coder                  as YamlCoder
 import qualified Hydra.Ext.Sources.Yaml.Language                as YamlLanguage
 import qualified Hydra.Ext.Sources.Yaml.Serde                   as YamlSerde
@@ -206,6 +207,7 @@ otherExtModules = [
   Pdl.module_,
   sqlModule,
   StacItems.module_,
+  Workflow.module_,
   GenPGTransform.module_]
 
 cppModules :: [Module]
