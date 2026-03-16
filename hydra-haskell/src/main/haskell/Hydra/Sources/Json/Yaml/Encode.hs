@@ -19,7 +19,7 @@ import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Grammar                    as Grammar
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
-import qualified Hydra.Dsl.Meta.Json                       as Json
+import qualified Hydra.Dsl.Json.Model                       as Json
 import qualified Hydra.Dsl.Meta.Lib.Chars                  as Chars
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
@@ -39,7 +39,7 @@ import qualified Hydra.Dsl.Meta.Types                      as MetaTypes
 import qualified Hydra.Dsl.Typing                     as Typing
 import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Dsl.Meta.Variants                   as Variants
-import qualified Hydra.Dsl.Meta.Yaml                       as Yaml
+import qualified Hydra.Dsl.Ext.Org.Yaml.Model                       as Yaml
 import qualified Hydra.Dsl.Prims                           as Prims
 import qualified Hydra.Dsl.Meta.Tabular                         as Tabular
 import qualified Hydra.Dsl.Terms                           as Terms
