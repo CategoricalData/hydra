@@ -148,10 +148,12 @@ module_ = Module ns elements
 alternativeToExpr :: TBinding (H.Alternative -> Expr)
 alternativeToExpr = haskellSerdeDefinition "alternativeToExpr" $
   doc "Convert a pattern-matching alternative to an AST expression" $
-  lambda "alt" $ 
-    Serialization.ifx @@ HaskellOperators.caseOp @@
-      (patternToExpr @@ (project H._Alternative H._Alternative_pattern @@ var "alt")) @@
-      (caseRhsToExpr @@ (project H._Alternative H._Alternative_rhs @@ var "alt"))
+  lambda "alt" $
+    -- Use structuralSpaceSep to avoid triggering parenthesize on the RHS
+    Serialization.structuralSpaceSep @@ list [
+      patternToExpr @@ (project H._Alternative H._Alternative_pattern @@ var "alt"),
+      Serialization.cst @@ string "->",
+      caseRhsToExpr @@ (project H._Alternative H._Alternative_rhs @@ var "alt")]
 
 applicationExpressionToExpr :: TBinding (H.ApplicationExpression -> Expr)
 applicationExpressionToExpr = haskellSerdeDefinition "applicationExpressionToExpr" $
@@ -284,7 +286,7 @@ declarationToExpr = haskellSerdeDefinition "declarationToExpr" $
         "vb">: project H._TypedBinding H._TypedBinding_valueBinding @@ var "typedBinding",
         "name">: project H._TypeSignature H._TypeSignature_name @@ var "typeSig",
         "htype">: project H._TypeSignature H._TypeSignature_type @@ var "typeSig"] $
-        Serialization.newlineSep @@ (Lists.cons (Serialization.ifx @@ HaskellOperators.typeOp @@ (nameToExpr @@ var "name") @@ (typeToExpr @@ var "htype")) (list [
+        Serialization.newlineSep @@ (Lists.cons (Serialization.structuralSpaceSep @@ list [nameToExpr @@ var "name", Serialization.cst @@ string "::", typeToExpr @@ var "htype"]) (list [
           valueBindingToExpr @@ var "vb"]))]
 
 declarationWithCommentsToExpr :: TBinding (H.DeclarationWithComments -> Expr)
@@ -316,7 +318,7 @@ expressionToExpr = haskellSerdeDefinition "expressionToExpr" $
         "bindings">: project H._LetExpression H._LetExpression_bindings @@ var "letExpr",
         "inner">: project H._LetExpression H._LetExpression_inner @@ var "letExpr",
         "encodeBinding">: lambda "binding" $
-          Serialization.indentSubsequentLines @@ (string "      ") @@ (localBindingToExpr @@ var "binding")] $
+          Serialization.indentSubsequentLines @@ (string "    ") @@ (localBindingToExpr @@ var "binding")] $
         Serialization.indentBlock @@ (Lists.cons (Serialization.cst @@ (string "")) (Lists.cons
           (Serialization.spaceSep @@ (Lists.cons (Serialization.cst @@ (string "let")) (list [Serialization.customIndentBlock @@ (string "    ") @@ (Lists.map (var "encodeBinding") (var "bindings"))])))
           (list [Serialization.spaceSep @@ (Lists.cons (Serialization.cst @@ (string "in")) (list [expressionToExpr @@ var "inner"]))]))),
@@ -550,8 +552,16 @@ typeSignatureToExpr = haskellSerdeDefinition "typeSignatureToExpr" $
   doc "Convert a type signature to an AST expression" $
   lambda "typeSig" $ lets [
     "name">: project H._TypeSignature H._TypeSignature_name @@ var "typeSig",
-    "typ">: project H._TypeSignature H._TypeSignature_type @@ var "typeSig"] $
-    Serialization.spaceSep @@ (Lists.cons (nameToExpr @@ var "name") (Lists.cons (Serialization.cst @@ (string "::")) (list [typeToExpr @@ var "typ"])))
+    "typ">: project H._TypeSignature H._TypeSignature_type @@ var "typeSig",
+    "nameExpr">: nameToExpr @@ var "name",
+    "typeExpr">: typeToExpr @@ var "typ",
+    "inlineSig">: Serialization.structuralSpaceSep @@ list [var "nameExpr", Serialization.cst @@ string "::", var "typeExpr"]] $
+    -- If the inline form exceeds 120 chars, break the type onto the next line with indentation
+    Logic.ifElse (Equality.gt (Serialization.expressionLength @@ var "inlineSig") (int32 120))
+      (Serialization.newlineSep @@ list [
+        Serialization.spaceSep @@ list [var "nameExpr", Serialization.cst @@ string "::"],
+        Serialization.tabIndent @@ var "typeExpr"])
+      (var "inlineSig")
 
 typeToExpr :: TBinding (H.Type -> Expr)
 typeToExpr = haskellSerdeDefinition "typeToExpr" $
@@ -585,7 +595,16 @@ valueBindingToExpr = haskellSerdeDefinition "valueBindingToExpr" $
         "pat">: project H._SimpleValueBinding H._SimpleValueBinding_pattern @@ var "simpleVB",
         "rhs">: project H._SimpleValueBinding H._SimpleValueBinding_rhs @@ var "simpleVB",
         "local">: project H._SimpleValueBinding H._SimpleValueBinding_localBindings @@ var "simpleVB",
-        "body">: Serialization.ifx @@ HaskellOperators.defineOp @@ (patternToExpr @@ var "pat") @@ (rightHandSideToExpr @@ var "rhs")] $
+        "lhsExpr">: patternToExpr @@ var "pat",
+        "rhsExpr">: rightHandSideToExpr @@ var "rhs",
+        -- Use structuralSpaceSep to avoid triggering parenthesize on the RHS
+        "inlineBody">: Serialization.structuralSpaceSep @@ list [var "lhsExpr", Serialization.cst @@ string "=", var "rhsExpr"],
+        -- If the inline form exceeds 120 chars, break the RHS onto the next line with indentation
+        "body">: Logic.ifElse (Equality.gt (Serialization.expressionLength @@ var "inlineBody") (int32 120))
+          (Serialization.newlineSep @@ list [
+            Serialization.spaceSep @@ list [var "lhsExpr", Serialization.cst @@ string "="],
+            Serialization.tabIndent @@ var "rhsExpr"])
+          (var "inlineBody")] $
         Maybes.maybe
           (var "body")
           (lambda "localBindings" $ lets [
