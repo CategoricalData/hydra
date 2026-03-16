@@ -578,13 +578,13 @@ mathRound :: Core.Name
 mathRound = Core.Name "hydra.lib.math.round"
 
 mathRoundBigfloat :: Core.Name
-mathRoundBigfloat = (Core.Name "hydra.lib.math.roundBigfloat")
+mathRoundBigfloat = Core.Name "hydra.lib.math.roundBigfloat"
 
 mathRoundFloat32 :: Core.Name
-mathRoundFloat32 = (Core.Name "hydra.lib.math.roundFloat32")
+mathRoundFloat32 = Core.Name "hydra.lib.math.roundFloat32"
 
 mathRoundFloat64 :: Core.Name
-mathRoundFloat64 = (Core.Name "hydra.lib.math.roundFloat64")
+mathRoundFloat64 = Core.Name "hydra.lib.math.roundFloat64"
 
 mathSignum :: Core.Name
 mathSignum = Core.Name "hydra.lib.math.signum"
