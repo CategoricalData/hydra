@@ -89,7 +89,10 @@ def elements_to_graph(parent: hydra.graph.Graph, schema_types: FrozenDict[hydra.
     r"""Create a graph from a parent graph, schema types, and list of element bindings."""
     
     prims = parent.primitives
-    return hydra.graph.Graph(build_graph(elements, hydra.lib.maps.empty(), prims).bound_terms, build_graph(elements, hydra.lib.maps.empty(), prims).bound_types, build_graph(elements, hydra.lib.maps.empty(), prims).class_constraints, build_graph(elements, hydra.lib.maps.empty(), prims).lambda_variables, build_graph(elements, hydra.lib.maps.empty(), prims).metadata, build_graph(elements, hydra.lib.maps.empty(), prims).primitives, schema_types, build_graph(elements, hydra.lib.maps.empty(), prims).type_variables)
+    @lru_cache(1)
+    def g() -> hydra.graph.Graph:
+        return build_graph(elements, hydra.lib.maps.empty(), prims)
+    return hydra.graph.Graph(g().bound_terms, g().bound_types, g().class_constraints, g().lambda_variables, g().metadata, g().primitives, schema_types, g().type_variables)
 
 @lru_cache(1)
 def empty_context() -> hydra.context.Context:
