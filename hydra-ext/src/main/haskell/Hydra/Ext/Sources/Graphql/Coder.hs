@@ -152,7 +152,7 @@ findPrefixes = lambda "modNs" $ lambda "tdefs" $ lets [
     (lambda "ns_" $ pair (var "ns_")
       (Logic.ifElse (Equality.equal (var "ns_") (var "modNs"))
         (string "")
-        (Strings.cat2 (Formatting.sanitizeWithUnderscores @@ Sets.empty @@ (Core.unNamespace $ var "ns_")) (string "_"))))
+        (Strings.cat2 (Formatting.sanitizeWithUnderscores @@ Sets.empty @@ (Module.unNamespace $ var "ns_")) (string "_"))))
     (var "namespaces")
 
 -- | Encode a TypeDefinition to a GraphQL TypeDefinition

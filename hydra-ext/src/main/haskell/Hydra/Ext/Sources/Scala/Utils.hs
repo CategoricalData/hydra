@@ -202,7 +202,7 @@ sprim = def "sprim" $
   doc "Create a Scala primitive reference from a Hydra name" $
   lambda "name" $ lets [
     "qname">: Names.qualifyName @@ var "name",
-    "prefix">: Lists.last (Strings.splitOn (string ".") (Core.unNamespace (Maybes.fromJust (Module.qualifiedNameNamespace $ var "qname")))),
+    "prefix">: Lists.last (Strings.splitOn (string ".") (Module.unNamespace (Maybes.fromJust (Module.qualifiedNameNamespace $ var "qname")))),
     "local">: Module.qualifiedNameLocal $ var "qname"] $
     sname @@ (var "prefix" ++ string "." ++ var "local")
 

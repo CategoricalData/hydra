@@ -394,7 +394,7 @@ encodeNamespace = def "encodeNamespace" $
     Strings.intercalate (string "::")
       (Lists.map
         (lambda "seg" $ Formatting.convertCaseCamelToLowerSnake @@ var "seg")
-        (Strings.splitOn (string ".") (Core.unNamespace (var "ns"))))
+        (Strings.splitOn (string ".") (Module.unNamespace (var "ns"))))
 
 -- | Encode a field name in lower_snake_case
 encodeFieldName :: TBinding (Name -> String)
@@ -1129,8 +1129,8 @@ findTypeDependencies = def "findTypeDependencies" $
     Lists.filter
       (lambda "n" $
         Logic.not (Equality.equal
-          (Maybes.map (unaryFunction Core.unNamespace) (Names.namespaceOf @@ var "n"))
-          (just (Core.unNamespace (var "ns")))))
+          (Maybes.map (unaryFunction Module.unNamespace) (Names.namespaceOf @@ var "n"))
+          (just (Module.unNamespace (var "ns")))))
       (Sets.toList (Lists.foldl
         (lambda "acc" $ lambda "d" $
           Sets.union (var "acc") (Rewriting.typeDependencyNames @@ boolean True @@ Module.typeDefinitionType (var "d")))

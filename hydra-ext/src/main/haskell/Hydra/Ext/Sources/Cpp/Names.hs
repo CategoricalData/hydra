@@ -199,7 +199,7 @@ encodeName = def "encodeName" $
     "cppLocal">: sanitizeCppName @@ (Formatting.convertCase @@ Util.caseConventionCamel @@ var "conv" @@ var "local"),
     "cppNs">: lambda "nsVal" $ Strings.intercalate (string "::")
       (Lists.map (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake)
-        (Strings.splitOn (string ".") (Core.unNamespace $ var "nsVal")))] $
+        (Strings.splitOn (string ".") (Module.unNamespace $ var "nsVal")))] $
     Logic.ifElse (var "isQualified")
       (Maybes.maybe
         (Maybes.maybe
@@ -217,7 +217,7 @@ encodeNamespace = def "encodeNamespace" $
   lambda "nsVal" $
     Strings.intercalate (string "::")
       (Lists.map (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake)
-        (Strings.splitOn (string ".") (Core.unNamespace $ var "nsVal")))
+        (Strings.splitOn (string ".") (Module.unNamespace $ var "nsVal")))
 
 -- | Encode a type variable name
 encodeTypeVariable :: TBinding (Name -> String)
