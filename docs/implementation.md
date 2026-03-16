@@ -974,24 +974,16 @@ Key features:
 
 Recent fix for Issue #206:
 ```haskell
--- Python/Coder.hs (lines 556-574)
-TermUnion (Injection tname field) -> do
-  rt <- inGraphContext $ requireUnionType tname
-  if isEnumRowType rt
-    then return $ projectFromExpression (pyNameToPyExpression $ encodeNameQualified env tname)
-      $ encodeEnumValue env $ fieldName field
-    else do
-      -- Omit argument for unit-valued variants (resolves #206)
-      args <- if EncodeCore.isUnitTerm (fieldTerm field)
-        then return []
-        else do
-          parg <- encode $ fieldTerm field
-          return [parg]
-
-      -- Explicitly casting to the union type avoids occasional Python type errors...
-      updateMeta $ \m -> m { pythonModuleMetadataUsesCast = True }
-      return $ castTo (typeVariableReference env tname) $
-        functionCall (pyNameToPyPrimary $ variantName True env tname (fieldName field)) args
+-- Python/Coder.hs (TermUnion case, now in DSL form)
+_Term_union>>: "inj" ~>
+  "tname" <~ Core.injectionTypeName (var "inj") $
+  "field" <~ Core.injectionField (var "inj") $
+  "rt" <<~ (Schemas.requireUnionType @@ var "cx" @@ (pythonEnvironmentGetGraph @@ var "env") @@ var "tname") $
+  Logic.ifElse (Schemas.isEnumRowType @@ var "rt")
+    (projectFromExpression (pyNameToPyExpression (encodeNameQualified @@ var "env" @@ var "tname"))
+      (encodeEnumValue @@ var "env" @@ Core.fieldName (var "field")))
+    -- Omit argument for unit-valued variants (resolves #206)
+    ...
 ```
 
 ### Serialization (Serde) layer
