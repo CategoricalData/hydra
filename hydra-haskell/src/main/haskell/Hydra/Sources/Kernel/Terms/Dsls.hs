@@ -96,6 +96,96 @@ collectForallVars = define "collectForallVars" $
       Lists.cons (Core.forallTypeParameter (var "ft"))
         (collectForallVars @@ Core.forallTypeBody (var "ft"))]
 
+-- | Inject a Record-typed term into the Term.record variant
+-- Produces TermUnion(Injection _Term (Field _Term_record innerRecord))
+injectTermRecord :: TTerm Term -> TTerm Term
+injectTermRecord t = Core.termUnion $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_record) t)
+
+-- | Inject a term into the Term.function variant
+injectTermFunction :: TTerm Term -> TTerm Term
+injectTermFunction t = Core.termUnion $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_function) t)
+
+-- | Inject a term into the Term.application variant
+injectTermApplication :: TTerm Term -> TTerm Term
+injectTermApplication t = Core.termUnion $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_application) t)
+
+-- | Inject a term into the Term.union variant
+injectTermUnion :: TTerm Term -> TTerm Term
+injectTermUnion t = Core.termUnion $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_union) t)
+
+-- | Inject a term into the Term.wrap variant
+injectTermWrap :: TTerm Term -> TTerm Term
+injectTermWrap t = Core.termUnion $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_wrap) t)
+
+-- | Inject into Function.elimination
+injectFunctionElimination :: TTerm Term -> TTerm Term
+injectFunctionElimination t = Core.termUnion $ Core.injection (Core.nameLift _Function) (Core.field (Core.nameLift _Function_elimination) t)
+
+-- | Inject into Elimination.record
+injectEliminationRecord :: TTerm Term -> TTerm Term
+injectEliminationRecord t = Core.termUnion $ Core.injection (Core.nameLift _Elimination) (Core.field (Core.nameLift _Elimination_record) t)
+
+-- | Inject into Elimination.wrap
+injectEliminationWrap :: TTerm Term -> TTerm Term
+injectEliminationWrap t = Core.termUnion $ Core.injection (Core.nameLift _Elimination) (Core.field (Core.nameLift _Elimination_wrap) t)
+
+-- | Build a deep Name: TermWrap(_Name, TermLiteral(LiteralString(s)))
+deepName :: TTerm String -> TTerm Term
+deepName s = Core.termWrap $ Core.wrappedTerm (Core.nameLift _Name) (Core.termLiteral $ Core.literalString s)
+
+-- | Build a deep Projection as a Term value
+deepProjection :: TTerm Name -> TTerm Name -> TTerm Term
+deepProjection typeName fieldName =
+  injectTermFunction $ injectFunctionElimination $ injectEliminationRecord $
+    Core.termRecord $ Core.record (Core.nameLift _Projection) (list [
+      Core.field (Core.nameLift _Projection_typeName) (deepName (Core.unName typeName)),
+      Core.field (Core.nameLift _Projection_field) (deepName (Core.unName fieldName))])
+
+-- | Build a deep Application as a Term value
+deepApplication :: TTerm Term -> TTerm Term -> TTerm Term
+deepApplication fun arg =
+  injectTermApplication $
+    Core.termRecord $ Core.record (Core.nameLift _Application) (list [
+      Core.field (Core.nameLift _Application_function) fun,
+      Core.field (Core.nameLift _Application_argument) arg])
+
+-- | Build a deep Field record
+deepField :: TTerm Name -> TTerm Term -> TTerm Term
+deepField name term =
+  Core.termRecord $ Core.record (Core.nameLift _Field) (list [
+    Core.field (Core.nameLift _Field_name) (deepName (Core.unName name)),
+    Core.field (Core.nameLift _Field_term) term])
+
+-- | Build a deep Record as a Term value (injected into Term.record)
+deepRecord :: TTerm Name -> TTerm [Term] -> TTerm Term
+deepRecord typeName fields =
+  injectTermRecord $
+    Core.termRecord $ Core.record (Core.nameLift _Record) (list [
+      Core.field (Core.nameLift _Record_typeName) (deepName (Core.unName typeName)),
+      Core.field (Core.nameLift _Record_fields) (Core.termList fields)])
+
+-- | Build a deep Injection as a Term value (injected into Term.union)
+deepInjection :: TTerm Name -> TTerm Term -> TTerm Term
+deepInjection typeName fieldTerm =
+  injectTermUnion $
+    Core.termRecord $ Core.record (Core.nameLift _Injection) (list [
+      Core.field (Core.nameLift _Injection_typeName) (deepName (Core.unName typeName)),
+      Core.field (Core.nameLift _Injection_field) fieldTerm])
+
+-- | Build a deep WrappedTerm as a Term value (injected into Term.wrap)
+deepWrap :: TTerm Name -> TTerm Term -> TTerm Term
+deepWrap typeName body =
+  injectTermWrap $
+    Core.termRecord $ Core.record (Core.nameLift _WrappedTerm) (list [
+      Core.field (Core.nameLift _WrappedTerm_typeName) (deepName (Core.unName typeName)),
+      Core.field (Core.nameLift _WrappedTerm_body) body])
+
+-- | Build a deep EliminationWrap as a Term.function value
+deepUnwrap :: TTerm Name -> TTerm Term
+deepUnwrap typeName =
+  injectTermFunction $ injectFunctionElimination $ injectEliminationWrap $
+    deepName (Core.unName typeName)
+
 -- | Unwrap a TTerm argument: apply (EliminationWrap _TTerm) to the variable
 unwrapTTerm :: TTerm Term -> TTerm Term
 unwrapTTerm v = Core.termApplication $ Core.application
@@ -166,25 +256,12 @@ generateRecordConstructor = define "generateRecordConstructor" $
   doc "Generate a record constructor function" $
   "origType" ~> "typeName" ~> "rt" ~>
   "fieldTypes" <~ (Core.rowTypeFields $ var "rt") $
-  -- Build deep Field records: each field is Record{typeName=_Field, fields=[name, term]}
-  "deepFields" <~ (Lists.map
-    ("ft" ~>
-      Core.termRecord $ Core.record (Core.nameLift _Field) (list [
-        Core.field (Core.nameLift _Field_name)
-          (Core.termWrap $ Core.wrappedTerm (Core.nameLift _Name)
-            (Core.termLiteral $ Core.literalString (Core.unName (Core.fieldTypeName (var "ft"))))),
-        Core.field (Core.nameLift _Field_term)
-          (unwrapTTerm (Core.termVariable (Core.name (Names.localNameOf @@ Core.fieldTypeName (var "ft")))))]))
+  -- Build deep fields and record using helpers
+  "dFields" <~ (Lists.map
+    ("ft" ~> deepField (Core.fieldTypeName (var "ft"))
+      (unwrapTTerm (Core.termVariable (Core.name (Names.localNameOf @@ Core.fieldTypeName (var "ft"))))))
     (var "fieldTypes")) $
-  -- Build deep Record: Record{typeName=_Record, fields=[typeName, fields]}
-  "deepRecord" <~ (Core.termRecord $ Core.record (Core.nameLift _Record) (list [
-    Core.field (Core.nameLift _Record_typeName)
-      (Core.termWrap $ Core.wrappedTerm (Core.nameLift _Name)
-        (Core.termLiteral $ Core.literalString (Core.unName (var "typeName")))),
-    Core.field (Core.nameLift _Record_fields)
-      (Core.termList (var "deepFields"))])) $
-  -- Wrap in TTerm
-  "recordTerm" <~ (wrapTermInTTerm (var "deepRecord")) $
+  "recordTerm" <~ (wrapTermInTTerm (deepRecord (var "typeName") (var "dFields"))) $
   -- Build (paramName, TTerm<fieldType>) pairs for lambda construction
   "paramPairs" <~ (Lists.map
     ("ft" ~> pair
@@ -225,9 +302,8 @@ generateRecordAccessor = define "generateRecordAccessor" $
   "paramDomain" <~ (wrapInTTerm (Core.typeVariable (var "typeName"))) $
   "body" <~ (Core.termFunction $ Core.functionLambda $
     Core.lambda (Core.name (string "x")) (just (var "paramDomain")) $
-      wrapTermInTTerm (Core.termApplication $ Core.application
-        (Core.termFunction $ Core.functionElimination $ Core.eliminationRecord $
-          Core.projection (var "typeName") (var "fieldName"))
+      wrapTermInTTerm (deepApplication
+        (deepProjection (var "typeName") (var "fieldName"))
         (unwrapTTerm (Core.termVariable (Core.name (string "x")))))) $
   "ts" <~ (dslTypeScheme @@ var "origType"
     @@ list [Core.typeVariable (var "typeName")]
@@ -253,17 +329,15 @@ generateRecordWithUpdater = define "generateRecordWithUpdater" $
     string "With",
     Formatting.capitalize @@ (Names.localNameOf @@ var "targetFieldName")]) $
   "updaterName" <~ (dslElementName @@ var "typeName" @@ var "updaterLocalName") $
-  -- Build fields: project from original, except target field uses newVal
-  "newFields" <~ (Lists.map
-    ("ft" ~> Core.field
-      (Core.fieldTypeName (var "ft"))
+  -- Build deep fields: project from unwrapped original, except target uses unwrapped newVal
+  "dFields" <~ (Lists.map
+    ("ft" ~> deepField (Core.fieldTypeName (var "ft"))
       (Logic.ifElse (Equality.equal
         (Core.unName (Core.fieldTypeName (var "ft")))
         (Core.unName (var "targetFieldName")))
         (unwrapTTerm (Core.termVariable (Core.name (string "newVal"))))
-        (Core.termApplication $ Core.application
-          (Core.termFunction $ Core.functionElimination $ Core.eliminationRecord $
-            Core.projection (var "typeName") (Core.fieldTypeName (var "ft")))
+        (deepApplication
+          (deepProjection (var "typeName") (Core.fieldTypeName (var "ft")))
           (unwrapTTerm (Core.termVariable (Core.name (string "original")))))))
     (var "allFields")) $
   "recDomain" <~ (wrapInTTerm (Core.typeVariable (var "typeName"))) $
@@ -271,7 +345,7 @@ generateRecordWithUpdater = define "generateRecordWithUpdater" $
   "body" <~ (
     Core.termFunction $ Core.functionLambda $ Core.lambda (Core.name (string "original")) (just (var "recDomain")) $
     Core.termFunction $ Core.functionLambda $ Core.lambda (Core.name (string "newVal")) (just (var "fieldDomain")) $
-    wrapTermInTTerm (Core.termRecord $ Core.record (var "typeName") (var "newFields"))) $
+    wrapTermInTTerm (deepRecord (var "typeName") (var "dFields"))) $
   "recType" <~ (Core.typeVariable (var "typeName")) $
   "ts" <~ (dslTypeScheme @@ var "origType"
     @@ list [var "recType", Core.fieldTypeType (var "targetField")]
@@ -302,11 +376,11 @@ generateUnionInjector = define "generateUnionInjector" $
   -- Check if field type is unit (for unit variants like enum members)
   "isUnit" <~ (isUnitType_ @@ var "fieldType") $
   -- Build simple injection
-  "injectionField" <~ (Core.field (var "fieldName") (
-    Logic.ifElse (var "isUnit")
-      Core.termUnit
-      (unwrapTTerm (Core.termVariable (Core.name (string "x")))))) $
-  "injectionTerm" <~ (wrapTermInTTerm (Core.termUnion $ Core.injection (var "typeName") (var "injectionField"))) $
+  -- Build deep injection: deepField for the variant, then deepInjection into the union type
+  "dFieldValue" <~ (Logic.ifElse (var "isUnit")
+    (Core.termUnion $ Core.injection (Core.nameLift _Term) (Core.field (Core.nameLift _Term_unit) Core.termUnit))
+    (unwrapTTerm (Core.termVariable (Core.name (string "x"))))) $
+  "injectionTerm" <~ (wrapTermInTTerm (deepInjection (var "typeName") (deepField (var "fieldName") (var "dFieldValue")))) $
   -- For non-unit variants, wrap in a typed lambda; for unit, it's a constant TTerm
   "variantDomain" <~ (wrapInTTerm (Core.fieldTypeType (var "ft"))) $
   "body" <~ (Logic.ifElse (var "isUnit")
@@ -350,15 +424,15 @@ generateWrappedTypeAccessors = define "generateWrappedTypeAccessors" $
   "wrapBody" <~ (
     Core.termFunction $ Core.functionLambda $
       Core.lambda (Core.name (string "x")) (just (var "wrapDomain")) $
-        wrapTermInTTerm (Core.termWrap $ Core.wrappedTerm (var "typeName")
+        wrapTermInTTerm (deepWrap (var "typeName")
           (unwrapTTerm (Core.termVariable (Core.name (string "x")))))) $
-  -- Unwrap: \(x :: TTerm<WrapperType>) -> TTerm(unwrap typeName (unTTerm x))
+  -- Unwrap: \(x :: TTerm<WrapperType>) -> TTerm(apply (unwrap typeName) (unTTerm x))
   "unwrapDomain" <~ (wrapInTTerm (var "wrapperType")) $
   "unwrapBody" <~ (
     Core.termFunction $ Core.functionLambda $
       Core.lambda (Core.name (string "x")) (just (var "unwrapDomain")) $
-        wrapTermInTTerm (Core.termApplication $ Core.application
-          (Core.termFunction $ Core.functionElimination $ Core.eliminationWrap (var "typeName"))
+        wrapTermInTTerm (deepApplication
+          (deepUnwrap (var "typeName"))
           (unwrapTTerm (Core.termVariable (Core.name (string "x")))))) $
   "wrapTs" <~ (dslTypeScheme @@ var "origType" @@ list [var "innerType"] @@ var "wrapperType") $
   "unwrapTs" <~ (dslTypeScheme @@ var "origType" @@ list [var "wrapperType"] @@ var "innerType") $
