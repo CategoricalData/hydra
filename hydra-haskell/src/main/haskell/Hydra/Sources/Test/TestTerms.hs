@@ -11,7 +11,7 @@ import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
-import qualified Hydra.Dsl.Meta.Module        as DModule
+import qualified Hydra.Dsl.Module        as DModule
 import           Prelude hiding ((++))
 
 

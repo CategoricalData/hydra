@@ -7,12 +7,12 @@ import Hydra.Kernel hiding (literalType, matchRecord, matchUnion)
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Meta.Accessors    as Accessors
 import qualified Hydra.Dsl.Annotations       as Annotations
-import qualified Hydra.Dsl.Meta.Ast          as Ast
+import qualified Hydra.Dsl.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Meta.Coders       as Coders
 import qualified Hydra.Dsl.Meta.Compute      as Compute
 import qualified Hydra.Dsl.Meta.Core         as Core
-import qualified Hydra.Dsl.Meta.Grammar      as Grammar
+import qualified Hydra.Dsl.Grammar      as Grammar
 import qualified Hydra.Dsl.Grammars          as Grammars
 import qualified Hydra.Dsl.Meta.Graph        as Graph
 import qualified Hydra.Dsl.Meta.Json         as Json
@@ -33,7 +33,7 @@ import qualified Hydra.Dsl.LiteralTypes      as LiteralTypes
 import qualified Hydra.Dsl.Meta.Base         as MetaBase
 import qualified Hydra.Dsl.Meta.Terms        as MetaTerms
 import qualified Hydra.Dsl.Meta.Types        as MetaTypes
-import qualified Hydra.Dsl.Meta.Module       as Module
+import qualified Hydra.Dsl.Module       as Module
 import qualified Hydra.Dsl.Meta.Parsing      as Parsing
 --import qualified Hydra.Dsl.Meta.Phantoms as Phantoms
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
@@ -42,9 +42,9 @@ import qualified Hydra.Dsl.Meta.Tabular           as Tabular
 import qualified Hydra.Dsl.Meta.Testing      as Testing
 import qualified Hydra.Dsl.Terms             as Terms
 import qualified Hydra.Dsl.Tests             as Tests
-import qualified Hydra.Dsl.Meta.Topology     as Topology
+import qualified Hydra.Dsl.Topology     as Topology
 import qualified Hydra.Dsl.Types             as Types
-import qualified Hydra.Dsl.Meta.Typing       as Typing
+import qualified Hydra.Dsl.Typing       as Typing
 import qualified Hydra.Dsl.Meta.Error        as Error
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All

@@ -21,7 +21,7 @@ import qualified Data.Map                     as M
 import Hydra.Testing
 import Hydra.Sources.Libraries
 import Hydra.Dsl.AsTerm
-import qualified Hydra.Dsl.Meta.Ast as Ast
+import qualified Hydra.Dsl.Ast as Ast
 import qualified Hydra.Dsl.Meta.Lib.Math as Math
 import qualified Hydra.Sources.Kernel.Terms.Serialization as Serialization
 

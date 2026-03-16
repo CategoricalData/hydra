@@ -10,7 +10,7 @@ import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
 import Hydra.Dsl.Meta.Base (name, (>:))
-import qualified Hydra.Dsl.Meta.Module        as DModule
+import qualified Hydra.Dsl.Module        as DModule
 import qualified Hydra.Dsl.Types              as Types
 import           Prelude hiding ((++))
 
