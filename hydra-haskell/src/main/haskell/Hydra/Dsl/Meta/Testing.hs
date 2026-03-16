@@ -3,8 +3,44 @@
 -- | Meta-DSL for constructing test-related terms
 -- TODO: merge with Hydra.Dsl.Tests
 
-module Hydra.Dsl.Meta.Testing where
+module Hydra.Dsl.Meta.Testing (
+  module Hydra.Dsl.Testing,
+  module Hydra.Dsl.Meta.Testing,
+) where
 
+import Hydra.Dsl.Testing hiding (
+  alphaConversionTestCase, caseConversionTestCase, deannotateTermTestCase,
+  deannotateTypeTestCase, delegatedEvaluationTestCase, etaExpansionTestCase,
+  evaluationStyleEager, evaluationStyleLazy, evaluationTestCase,
+  flattenLetTermsTestCase, foldOverTermTestCase, freeVariablesTestCase,
+  hoistCaseStatementsTestCase, hoistLetBindingsTestCase,
+  hoistPolymorphicLetBindingsTestCase, hoistPredicateApplications,
+  hoistPredicateCaseStatements, hoistPredicateLists, hoistPredicateNothing,
+  hoistSubtermsTestCase, inferenceFailureTestCase, inferenceTestCase,
+  joinTypesTestCase, jsonDecodeTestCase, jsonEncodeTestCase,
+  jsonRoundtripTestCase, liftLambdaAboveLetTestCase, normalizeTypeVariablesTestCase,
+  parserTestCase, rewriteTermTestCase, rewriteTypeTestCase,
+  serializationTestCase, simplifyTermTestCase, substInTypeTestCase, tag,
+  termRewriterReplaceFooWithBar, termRewriterReplaceInt32WithInt64,
+  testCaseAlphaConversion, testCaseCaseConversion, testCaseDeannotateTerm,
+  testCaseDeannotateType, testCaseDelegatedEvaluation, testCaseEtaExpansion,
+  testCaseEvaluation, testCaseFlattenLetTerms, testCaseFoldOverTerm,
+  testCaseFreeVariables, testCaseHoistCaseStatements, testCaseHoistLetBindings,
+  testCaseHoistPolymorphicLetBindings, testCaseHoistSubterms, testCaseInference,
+  testCaseInferenceFailure, testCaseJoinTypes, testCaseJsonDecode,
+  testCaseJsonEncode, testCaseJsonParser, testCaseJsonRoundtrip, testCaseJsonWriter,
+  testCaseLiftLambdaAboveLet, testCaseNormalizeTypeVariables, testCaseRewriteTerm,
+  testCaseRewriteType, testCaseSerialization, testCaseSimplifyTerm,
+  testCaseSubstInType, testCaseTopologicalSort, testCaseTopologicalSortBindings,
+  testCaseTopologicalSortSCC, testCaseTypeReduction, testCaseUnifyTypes,
+  testCaseUnshadowVariables, testCaseVariableOccursInType, testCaseWithMetadata,
+  testCaseWithMetadataCase, testCaseWithMetadataDescription,
+  testCaseWithMetadataName, testCaseWithMetadataTags, testGroup,
+  topologicalSortBindingsTestCase, topologicalSortSCCTestCase,
+  topologicalSortTestCase, typeReductionTestCase,
+  typeRewriterReplaceStringWithInt32, unifyTypesTestCase,
+  unshadowVariablesTestCase, variableOccursInTypeTestCase, writerTestCase, unTag,
+  testCaseTypeChecking, typeCheckingTestCase)
 import Hydra.Kernel
 import Hydra.Ast (Expr)
 import Hydra.Json.Model (Value)

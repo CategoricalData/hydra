@@ -18,7 +18,7 @@ import qualified Data.Map                     as M
 import Hydra.Json.Model (Value)
 import Hydra.Testing
 import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Meta.Json as Json
+import qualified Hydra.Dsl.Json.Model as Json
 
 
 ns :: Namespace
