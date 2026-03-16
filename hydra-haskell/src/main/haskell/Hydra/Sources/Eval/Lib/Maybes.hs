@@ -4,11 +4,11 @@ module Hydra.Sources.Eval.Lib.Maybes where
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (maybe)
 import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Meta.Accessors     as Accessors
+import qualified Hydra.Dsl.Accessors     as Accessors
 import qualified Hydra.Dsl.Annotations   as Annotations
 import qualified Hydra.Dsl.Ast           as Ast
 import qualified Hydra.Dsl.Bootstrap     as Bootstrap
-import qualified Hydra.Dsl.Meta.Coders        as Coders
+import qualified Hydra.Dsl.Coders        as Coders
 import qualified Hydra.Dsl.Util       as Util
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Grammar       as Grammar
@@ -53,7 +53,7 @@ import qualified Data.Set                as S
 import qualified Data.Maybe              as Y
 
 import qualified Hydra.Dsl.Meta.Context      as Ctx
-import qualified Hydra.Dsl.Meta.Error        as Error
+import qualified Hydra.Dsl.Error        as Error
 import qualified Hydra.Sources.Kernel.Terms.Extract.Core as ExtractCore
 import qualified Hydra.Sources.Kernel.Terms.Show.Core as ShowCore
 

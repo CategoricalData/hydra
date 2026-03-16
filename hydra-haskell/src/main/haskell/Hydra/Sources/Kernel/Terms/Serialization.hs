@@ -14,11 +14,11 @@ import Hydra.Kernel hiding (
   suffix, sym, symbolSep, tabIndent, tabIndentDoubleSpace, tabIndentSingleSpace, unsupportedType,
   unsupportedVariant, withComma, withSemi)
 import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Meta.Accessors    as Accessors
+import qualified Hydra.Dsl.Accessors    as Accessors
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Meta.Coders       as Coders
+import qualified Hydra.Dsl.Coders       as Coders
 import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Grammar      as Grammar
@@ -43,7 +43,7 @@ import qualified Hydra.Dsl.Meta.Base         as MetaBase
 import qualified Hydra.Dsl.Meta.Terms        as MetaTerms
 import qualified Hydra.Dsl.Meta.Types        as MetaTypes
 import qualified Hydra.Dsl.Module       as Module
-import qualified Hydra.Dsl.Meta.Parsing      as Parsing
+import qualified Hydra.Dsl.Parsing      as Parsing
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Prims             as Prims
 import qualified Hydra.Dsl.Meta.Tabular           as Tabular

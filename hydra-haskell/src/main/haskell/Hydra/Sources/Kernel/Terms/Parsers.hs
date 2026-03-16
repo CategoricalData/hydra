@@ -4,11 +4,11 @@ module Hydra.Sources.Kernel.Terms.Parsers where
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (map)
 import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Meta.Accessors    as Accessors
+import qualified Hydra.Dsl.Accessors    as Accessors
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Meta.Coders       as Coders
+import qualified Hydra.Dsl.Coders       as Coders
 import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Grammar      as Grammar
@@ -33,7 +33,7 @@ import qualified Hydra.Dsl.Meta.Base         as MetaBase
 import qualified Hydra.Dsl.Meta.Terms        as MetaTerms
 import qualified Hydra.Dsl.Meta.Types        as MetaTypes
 import qualified Hydra.Dsl.Module       as Module
-import qualified Hydra.Dsl.Meta.Parsing      as Parsing
+import qualified Hydra.Dsl.Parsing      as Parsing
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms hiding (apply, bind, char, map)
 import qualified Hydra.Dsl.Prims             as Prims
 import qualified Hydra.Dsl.Meta.Tabular           as Tabular
@@ -93,13 +93,13 @@ alt :: TBinding (Parser a -> Parser a -> Parser a)
 alt = define "alt" $
   doc "Try the first parser; if it fails without consuming input, try the second" $
   "p1" ~> "p2" ~>
-  "parse" <~ ("input" ~> cases _ParseResult (Parsing.runParser (var "p1") (var "input")) Nothing [
+  "parse" <~ ("input" ~> cases _ParseResult (unwrap _Parser @@ (var "p1") @@ (var "input")) Nothing [
     _ParseResult_success>>: "s" ~>
       Parsing.parseResultSuccess (var "s"),
     _ParseResult_failure>>: "e" ~>
       -- Only try alternative if no input was consumed
       Logic.ifElse (Equality.equal (Parsing.parseErrorRemainder $ var "e") (var "input"))
-        (Parsing.runParser (var "p2") (var "input"))
+        (unwrap _Parser @@ (var "p2") @@ (var "input"))
         (Parsing.parseResultFailure (var "e"))]) $
   Parsing.parser (var "parse")
 
@@ -114,9 +114,9 @@ apply :: TBinding (Parser (a -> b) -> Parser a -> Parser b)
 apply = define "apply" $
   doc "Apply a parser containing a function to a parser containing a value" $
   "pf" ~> "pa" ~>
-  "parse" <~ ("input" ~> cases _ParseResult (Parsing.runParser (var "pf") (var "input")) Nothing [
+  "parse" <~ ("input" ~> cases _ParseResult (unwrap _Parser @@ (var "pf") @@ (var "input")) Nothing [
     _ParseResult_success>>: "sf" ~>
-      cases _ParseResult (Parsing.runParser (var "pa") (Parsing.parseSuccessRemainder $ var "sf")) Nothing [
+      cases _ParseResult (unwrap _Parser @@ (var "pa") @@ (Parsing.parseSuccessRemainder $ var "sf")) Nothing [
         _ParseResult_success>>: "sa" ~>
           Parsing.parseResultSuccess (Parsing.parseSuccess
             ((Parsing.parseSuccessValue $ var "sf") @@ (Parsing.parseSuccessValue $ var "sa"))
@@ -142,10 +142,10 @@ bind :: TBinding (Parser a -> (a -> Parser b) -> Parser b)
 bind = define "bind" $
   doc "Sequence two parsers, passing the result of the first to a function that produces the second" $
   "pa" ~> "f" ~>
-  "parse" <~ ("input" ~> cases _ParseResult (Parsing.runParser (var "pa") (var "input")) Nothing [
+  "parse" <~ ("input" ~> cases _ParseResult (unwrap _Parser @@ (var "pa") @@ (var "input")) Nothing [
     _ParseResult_success>>: "s" ~>
-      Parsing.runParser
-        (var "f" @@ (Parsing.parseSuccessValue $ var "s"))
+      unwrap _Parser @@
+        (var "f" @@ (Parsing.parseSuccessValue $ var "s")) @@
         (Parsing.parseSuccessRemainder $ var "s"),
     _ParseResult_failure>>: "e" ~>
       Parsing.parseResultFailure (var "e")]) $
@@ -190,7 +190,7 @@ lazy = define "lazy" $
     <> " This is essential for breaking recursive parser definitions.") $
   "f" ~>
   Parsing.parser ("input" ~>
-    Parsing.runParser (var "f" @@ unit) (var "input"))
+    unwrap _Parser @@ (var "f" @@ unit) @@ (var "input"))
 
 -- | Parse zero or more occurrences
 many :: TBinding (Parser a -> Parser [a])
@@ -204,7 +204,7 @@ map :: TBinding ((a -> b) -> Parser a -> Parser b)
 map = define "map" $
   doc "Apply a function to the result of a parser" $
   "f" ~> "pa" ~>
-  "parse" <~ ("input" ~> cases _ParseResult (Parsing.runParser (var "pa") (var "input")) Nothing [
+  "parse" <~ ("input" ~> cases _ParseResult (unwrap _Parser @@ (var "pa") @@ (var "input")) Nothing [
     _ParseResult_success>>: "s" ~>
       Parsing.parseResultSuccess (Parsing.parseSuccess
         (var "f" @@ (Parsing.parseSuccessValue $ var "s"))
@@ -235,7 +235,7 @@ runParser :: TBinding (Parser a -> String -> ParseResult a)
 runParser = define "runParser" $
   doc "Run a parser on the given input string" $
   "p" ~> "input" ~>
-    Parsing.runParser (var "p") (var "input")
+    unwrap _Parser @@ (var "p") @@ (var "input")
 
 -- | Parse a character that satisfies a predicate (characters represented as codepoints)
 satisfy :: TBinding ((Int -> Bool) -> Parser Int)

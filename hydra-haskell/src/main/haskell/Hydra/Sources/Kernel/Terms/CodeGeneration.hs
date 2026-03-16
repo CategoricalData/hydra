@@ -15,11 +15,11 @@ import Hydra.Kernel hiding (
   moduleTermDepsTransitive, moduleTypeDepsTransitive,
   namespaceToPath, stripModuleTypeSchemes, transitiveDeps)
 import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Meta.Accessors    as Accessors
+import qualified Hydra.Dsl.Accessors    as Accessors
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Meta.Coders       as Coders
+import qualified Hydra.Dsl.Coders       as Coders
 import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Meta.Core         as Core
@@ -45,7 +45,7 @@ import qualified Hydra.Dsl.Meta.Base         as MetaBase
 import qualified Hydra.Dsl.Meta.Terms        as MetaTerms
 import qualified Hydra.Dsl.Meta.Types        as MetaTypes
 import qualified Hydra.Dsl.Module       as Module
-import qualified Hydra.Dsl.Meta.Parsing      as Parsing
+import qualified Hydra.Dsl.Parsing      as Parsing
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Prims             as Prims
 import qualified Hydra.Dsl.Meta.Tabular           as Tabular
@@ -55,7 +55,7 @@ import qualified Hydra.Dsl.Tests             as Tests
 import qualified Hydra.Dsl.Topology     as Topology
 import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Typing       as Typing
-import qualified Hydra.Dsl.Meta.Error        as Error
+import qualified Hydra.Dsl.Error        as Error
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Json.Model                as JsonModel
@@ -251,7 +251,7 @@ generateSourceFiles = define "generateSourceFiles" $
     ("m" ~> pair (Module.moduleNamespace $ var "m") (var "m"))
     (Lists.concat2 (var "universeModules") (var "modsToGenerate"))) $
 
-  "constraints" <~ Coders.languageConstraintsProjection (var "lang") $
+  "constraints" <~ Coders.languageConstraints (var "lang") $
 
   -- Partition modules into type and term modules
   "isTypeModule" <~ ("mod" ~> Logic.not $ Lists.null $
@@ -493,7 +493,7 @@ inferAndGenerateLexicon = define "inferAndGenerateLexicon" $
     (Lists.concat $ Lists.map ("m" ~> Module.moduleElements (var "m")) (var "kernelModules")) $
   "inferResultWithCx" <<~ Eithers.bimap ("ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic")) ("x" ~> var "x") (Inference.inferGraphTypes @@ var "cx" @@ var "dataElements" @@ var "g0") $
   "g1" <~ Pairs.first (Pairs.first $ var "inferResultWithCx") $
-  Eithers.bimap Error.unDecodingError ("x" ~> var "x") (generateLexicon @@ var "g1")
+  Eithers.bimap (unwrap _DecodingError) ("x" ~> var "x") (generateLexicon @@ var "g1")
 
 -- | Escape unescaped control characters (< 0x20) inside JSON string literals.
 -- Operates on a list of int32 character codes (bytes).
@@ -550,7 +550,7 @@ decodeModuleFromJson = define "decodeModuleFromJson" $
     ("term" ~>
       -- Step 2: Term -> Module (via decoderFor _Module)
       Eithers.either_
-        ("decErr" ~> left (Error.unDecodingError @@ var "decErr"))
+        ("decErr" ~> left (unwrap _DecodingError @@ var "decErr"))
         ("mod" ~> right (Logic.ifElse (var "doStripTypeSchemes")
           (stripModuleTypeSchemes @@ var "mod")
           (var "mod")))

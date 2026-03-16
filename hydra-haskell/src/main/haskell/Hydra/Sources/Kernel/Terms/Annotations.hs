@@ -14,11 +14,11 @@ import Hydra.Kernel hiding (
   setDescription, setTermAnnotation, setTermDescription, setType, setTypeAnnotation, setTypeClasses,
   setTypeDescription, termAnnotationInternal, typeAnnotationInternal, typeElement, whenFlag)
 import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Meta.Accessors    as Accessors
+import qualified Hydra.Dsl.Accessors    as Accessors
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Meta.Coders       as Coders
+import qualified Hydra.Dsl.Coders       as Coders
 import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Meta.Core         as Core
@@ -44,7 +44,7 @@ import qualified Hydra.Dsl.Meta.Base         as MetaBase
 import qualified Hydra.Dsl.Meta.Terms        as MetaTerms
 import qualified Hydra.Dsl.Meta.Types        as MetaTypes
 import qualified Hydra.Dsl.Module       as Module
-import qualified Hydra.Dsl.Meta.Parsing      as Parsing
+import qualified Hydra.Dsl.Parsing      as Parsing
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Prims             as Prims
 import qualified Hydra.Dsl.Meta.Tabular           as Tabular
@@ -54,7 +54,7 @@ import qualified Hydra.Dsl.Tests             as Tests
 import qualified Hydra.Dsl.Topology     as Topology
 import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Typing       as Typing
-import qualified Hydra.Dsl.Meta.Error        as Error
+import qualified Hydra.Dsl.Error        as Error
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
@@ -248,7 +248,7 @@ getTypeClasses = define "getTypeClasses" $
       ExtractCore.map
         @@ var "cx"
         @@ ("t" ~> Eithers.bimap
-          ("de" ~> Ctx.inContext (Error.errorOther $ Error.otherError (Error.unDecodingError @@ var "de")) (var "cx"))
+          ("de" ~> Ctx.inContext (Error.errorOther $ Error.otherError (unwrap _DecodingError @@ var "de")) (var "cx"))
           ("x" ~> var "x")
           (decoderFor _Name @@ var "graph" @@ var "t"))
         @@ (ExtractCore.setOf @@ var "cx" @@ var "decodeClass" @@ var "graph")

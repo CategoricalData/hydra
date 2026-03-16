@@ -5,11 +5,11 @@ module Hydra.Sources.Kernel.Terms.Encoding where
 -- Standard imports for kernel terms modules
 import Hydra.Kernel hiding (literalType)
 import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Meta.Accessors    as Accessors
+import qualified Hydra.Dsl.Accessors    as Accessors
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Meta.Coders       as Coders
+import qualified Hydra.Dsl.Coders       as Coders
 import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Grammar      as Grammar
@@ -34,7 +34,7 @@ import qualified Hydra.Dsl.Meta.Base         as MetaBase
 import qualified Hydra.Dsl.Meta.Terms        as MetaTerms
 import qualified Hydra.Dsl.Meta.Types        as MetaTypes
 import qualified Hydra.Dsl.Module       as Module
-import qualified Hydra.Dsl.Meta.Parsing      as Parsing
+import qualified Hydra.Dsl.Parsing      as Parsing
 import qualified Hydra.Dsl.Meta.Phantoms     as Phantoms
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms hiding (
   elimination, field, fieldType, floatType, floatValue, function, injection, integerType, integerValue, lambda, literal,
@@ -48,7 +48,7 @@ import qualified Hydra.Dsl.Topology     as Topology
 import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Typing       as Typing
 import qualified Hydra.Dsl.Meta.Context      as Ctx
-import qualified Hydra.Dsl.Meta.Error        as Error
+import qualified Hydra.Dsl.Error        as Error
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
@@ -122,7 +122,7 @@ define = definitionInModule module_
 
 -- | Bridge helper: format InContext DecodingError as a string
 formatDecodingError :: TTerm (InContext DecodingError -> String)
-formatDecodingError = "ic" ~> Error.unDecodingError @@ Ctx.inContextObject (var "ic")
+formatDecodingError = "ic" ~> unwrap _DecodingError @@ Ctx.inContextObject (var "ic")
 
 -- | Encode a single type binding into an encoder binding
 -- This decodes the term to a Type, then generates an encoder function.
@@ -503,7 +503,7 @@ encodeModule = define "encodeModule" $
       (right nothing)
       ("encodedBindings" <<~ Eithers.mapList ("b" ~>
         Eithers.bimap
-          ("ic" ~> Ctx.inContext (Error.errorOther $ Error.otherError (Error.unDecodingError @@ Ctx.inContextObject (var "ic"))) (Ctx.inContextContext (var "ic")))
+          ("ic" ~> Ctx.inContext (Error.errorOther $ Error.otherError (unwrap _DecodingError @@ Ctx.inContextObject (var "ic"))) (Ctx.inContextContext (var "ic")))
           ("x" ~> var "x")
           (encodeBinding @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
         -- The encoder module depends on encoder modules for both the type and term dependencies

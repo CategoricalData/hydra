@@ -19,10 +19,10 @@ import qualified Hydra.Dsl.Meta.Lib.Math                   as Math
 import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Meta.Coders                     as Coders
+import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
-import qualified Hydra.Dsl.Meta.Error                      as Error
+import qualified Hydra.Dsl.Error                      as Error
 import qualified Hydra.Dsl.Module                     as Module
 import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Adapt           as Adapt
@@ -575,7 +575,7 @@ encodeFieldType = def "encodeFieldType" $
             "term">: Core.bindingTerm (var "el")] $
             Eithers.bind
               (Eithers.bimap
-                ("de" ~> Ctx.inContext (Error.errorOther $ Error.otherError (Error.unDecodingError @@ var "de")) (var "cx0"))
+                ("de" ~> Ctx.inContext (Error.errorOther $ Error.otherError ((unwrap _DecodingError) @@ var "de")) (var "cx0"))
                 ("t" ~> var "t")
                 (decodeType @@ var "g0" @@ var "term"))
               ("resolvedTyp" ~> var "encodeSimpleType_" @@ var "cx0" @@ var "g0" @@ var "ns0" @@ var "noms" @@ var "resolvedTyp"))]] $

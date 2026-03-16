@@ -4,11 +4,11 @@ module Hydra.Sources.Eval.Lib.All where
 -- Standard imports for kernel terms modules
 import Hydra.Kernel
 import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Meta.Accessors     as Accessors
+import qualified Hydra.Dsl.Accessors     as Accessors
 import qualified Hydra.Dsl.Annotations   as Annotations
 import qualified Hydra.Dsl.Ast           as Ast
 import qualified Hydra.Dsl.Bootstrap     as Bootstrap
-import qualified Hydra.Dsl.Meta.Coders        as Coders
+import qualified Hydra.Dsl.Coders        as Coders
 import qualified Hydra.Dsl.Util       as Util
 import qualified Hydra.Dsl.Meta.Core          as Core
 import qualified Hydra.Dsl.Grammar       as Grammar

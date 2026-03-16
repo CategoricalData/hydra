@@ -61,11 +61,11 @@ import Hydra.Kernel hiding (
   typeSchemeToFType,
   unshadowVariables)
 import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Meta.Accessors    as Accessors
+import qualified Hydra.Dsl.Accessors    as Accessors
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Meta.Coders       as Coders
+import qualified Hydra.Dsl.Coders       as Coders
 import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Grammar      as Grammar
@@ -90,7 +90,7 @@ import qualified Hydra.Dsl.Meta.Base         as MetaBase
 import qualified Hydra.Dsl.Meta.Terms        as MetaTerms
 import qualified Hydra.Dsl.Meta.Types        as MetaTypes
 import qualified Hydra.Dsl.Module       as Module
-import qualified Hydra.Dsl.Meta.Parsing      as Parsing
+import qualified Hydra.Dsl.Parsing      as Parsing
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Prims             as Prims
 import qualified Hydra.Dsl.Meta.Tabular           as Tabular
@@ -1169,7 +1169,7 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
         pair (Pairs.first $ var "rf") (Core.termFunction $ Pairs.second $ var "rf"),
       _Term_let>>: "l" ~>
         "renv" <~ var "recurse"
-          @@ Lists.concat2 (var "path") (list [Accessors.termAccessorLetEnvironment])
+          @@ Lists.concat2 (var "path") (list [Accessors.termAccessorLetBody])
           @@ var "val0"
           @@ (Core.letBody $ var "l") $
         "rbindings" <~ Lists.foldl
@@ -1220,7 +1220,7 @@ rewriteAndFoldTermWithPath = define "rewriteAndFoldTermWithPath" $
         ("t" ~> var "forSingleWithAccessor"
           @@ var "recurse"
           @@ ("t1" ~> Core.termMaybe $ just $ var "t1")
-          @@ Accessors.termAccessorOptionalTerm
+          @@ Accessors.termAccessorMaybeTerm
           @@ var "val0"
           @@ var "t"),
       _Term_pair>>: "p" ~>
@@ -1899,7 +1899,7 @@ subtermsWithAccessors = define "subtermsWithAccessors" $
             (Core.caseStatementCases $ var "cs"))],
       _Function_lambda>>: "l" ~> single Accessors.termAccessorLambdaBody $ Core.lambdaBody $ var "l"],
     _Term_let>>: "lt" ~> Lists.cons
-      (result Accessors.termAccessorLetEnvironment $ Core.letBody $ var "lt")
+      (result Accessors.termAccessorLetBody $ Core.letBody $ var "lt")
       (Lists.map
         ("b" ~> result (Accessors.termAccessorLetBinding $ Core.bindingName $ var "b") $ Core.bindingTerm $ var "b")
         (Core.letBindings $ var "lt")),
@@ -1916,7 +1916,7 @@ subtermsWithAccessors = define "subtermsWithAccessors" $
           result (Accessors.termAccessorMapValue $ int32 0) $ Pairs.second $ var "p"])
         (Maps.toList $ var "m")),
     _Term_maybe>>: "m" ~> Maybes.maybe none
-      ("t" ~> single Accessors.termAccessorOptionalTerm $ var "t")
+      ("t" ~> single Accessors.termAccessorMaybeTerm $ var "t")
       (var "m"),
     _Term_pair>>: "p" ~> none, -- TODO: add accessors when TermAccessor type is updated
     _Term_record>>: "rt" ~> Lists.map

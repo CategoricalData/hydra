@@ -13,14 +13,14 @@ import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
 import qualified Hydra.Dsl.Grammars                        as Grammars
 import qualified Hydra.Dsl.LiteralTypes                    as LiteralTypes
 import qualified Hydra.Dsl.Literals                        as Literals
-import qualified Hydra.Dsl.Meta.Accessors                  as Accessors
+import qualified Hydra.Dsl.Accessors                  as Accessors
 import qualified Hydra.Dsl.Ast                        as Ast
 import qualified Hydra.Dsl.Meta.Base                       as MetaBase
-import qualified Hydra.Dsl.Meta.Coders                     as Coders
+import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
-import qualified Hydra.Dsl.Meta.Error                      as Error
+import qualified Hydra.Dsl.Error                      as Error
 import qualified Hydra.Dsl.Grammar                    as Grammar
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
@@ -169,7 +169,7 @@ haskellTestCodec = define "haskellTestCodec" $
   doc "Create a Haskell TestCodec that uses the real Haskell coder" $
   lambda "namespaces" $
     record _TestCodec [
-      _TestCodec_language>>: Coders.languageName (string "haskell"),
+      _TestCodec_language>>: Coders.languageName_ (string "haskell"),
       _TestCodec_fileExtension>>: wrap _FileExtension (string "hs"),
       _TestCodec_encodeTerm>>: termToHaskell @@ var "namespaces",
       _TestCodec_encodeType>>: typeToHaskell @@ var "namespaces",

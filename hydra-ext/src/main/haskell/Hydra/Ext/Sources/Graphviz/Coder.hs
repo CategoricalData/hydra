@@ -10,10 +10,10 @@ import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
 import qualified Hydra.Dsl.Grammars                        as Grammars
 import qualified Hydra.Dsl.LiteralTypes                    as LiteralTypes
 import qualified Hydra.Dsl.Literals                        as Literals
-import qualified Hydra.Dsl.Meta.Accessors                  as Accessors
+import qualified Hydra.Dsl.Accessors                  as Accessors
 import qualified Hydra.Dsl.Ast                        as Ast
 import qualified Hydra.Dsl.Meta.Base                       as MetaBase
-import qualified Hydra.Dsl.Meta.Coders                     as Coders
+import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Grammar                    as Grammar
@@ -414,7 +414,7 @@ termToDotStmts = define "termToDotStmts" $
             -- Encode the let body
             $ var "encode" @@ nothing @@ false @@ var "ids1" @@ just (var "selfId")
                 @@ var "stmts1"
-                @@ pair Accessors.termAccessorLetEnvironment (var "env"),
+                @@ pair Accessors.termAccessorLetBody (var "env"),
           _Term_variable>>: "name" ~>
             Maybes.maybe
               (var "dflt")

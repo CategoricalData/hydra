@@ -9,15 +9,15 @@ import Hydra.Kernel hiding (
   composeCoders, dataGraphToDefinitions, literalTypeSupported, pushTypeAppsInward, schemaGraphToDefinitions,
   simpleLanguageAdapter, termAlternatives, typeAlternatives)
 import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Meta.Accessors    as Accessors
+import qualified Hydra.Dsl.Accessors    as Accessors
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Meta.Coders       as Coders
+import qualified Hydra.Dsl.Coders       as Coders
 import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Meta.Core         as Core
-import qualified Hydra.Dsl.Meta.Error        as Error
+import qualified Hydra.Dsl.Error        as Error
 import qualified Hydra.Dsl.Grammar      as Grammar
 import qualified Hydra.Dsl.Grammars          as Grammars
 import qualified Hydra.Dsl.Meta.Graph        as Graph
@@ -40,7 +40,7 @@ import qualified Hydra.Dsl.Meta.Base         as MetaBase
 import qualified Hydra.Dsl.Meta.Terms        as MetaTerms
 import qualified Hydra.Dsl.Meta.Types        as MetaTypes
 import qualified Hydra.Dsl.Module       as Module
-import qualified Hydra.Dsl.Meta.Parsing      as Parsing
+import qualified Hydra.Dsl.Parsing      as Parsing
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Prims             as Prims
 import qualified Hydra.Dsl.Meta.Tabular           as Tabular
@@ -53,7 +53,7 @@ import qualified Hydra.Dsl.Typing       as Typing
 import qualified Hydra.Dsl.Util         as Util
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import qualified Hydra.Dsl.Meta.Context      as Ctx
-import qualified Hydra.Dsl.Meta.Error        as Error
+import qualified Hydra.Dsl.Error        as Error
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
 import qualified Data.Int                    as I
@@ -117,7 +117,7 @@ formatError :: TTerm (InContext Error -> String)
 formatError = "ic" ~> ShowError.error_ @@ Ctx.inContextObject (var "ic")
 
 formatDecodingError :: TTerm (InContext DecodingError -> String)
-formatDecodingError = "ic" ~> Error.unDecodingError @@ Ctx.inContextObject (var "ic")
+formatDecodingError = "ic" ~> unwrap _DecodingError @@ Ctx.inContextObject (var "ic")
 
 define :: String -> TTerm a -> TBinding a
 define = definitionInModule module_
@@ -789,7 +789,7 @@ adaptTypeForLanguage :: TBinding (Language -> Type -> Prelude.Either String Type
 adaptTypeForLanguage = define "adaptTypeForLanguage" $
   doc "Adapt a type using the constraints of a given language" $
   "lang" ~> "typ" ~>
-  "constraints" <~ Coders.languageConstraintsProjection (var "lang") $
+  "constraints" <~ Coders.languageConstraints (var "lang") $
   "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
   adaptType @@ var "constraints" @@ var "litmap" @@ var "typ"
 
@@ -797,7 +797,7 @@ adaptTermForLanguage :: TBinding (Language -> Context -> Graph -> Term -> Prelud
 adaptTermForLanguage = define "adaptTermForLanguage" $
   doc "Adapt a term using the constraints of a given language" $
   "lang" ~> "cx" ~> "g" ~> "term" ~>
-  "constraints" <~ Coders.languageConstraintsProjection (var "lang") $
+  "constraints" <~ Coders.languageConstraints (var "lang") $
   "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
   adaptTerm @@ var "constraints" @@ var "litmap" @@ var "cx" @@ var "g" @@ var "term"
 
@@ -817,7 +817,7 @@ simpleLanguageAdapter :: TBinding (Language -> Context -> Graph -> Type -> Prelu
 simpleLanguageAdapter = define "simpleLanguageAdapter" $
   doc "Given a target language and a source type, produce an adapter which rewrites the type and its terms according to the language's constraints. The encode direction adapts terms; the decode direction is identity." $
   "lang" ~> "cx" ~> "g" ~> "typ" ~>
-  "constraints" <~ Coders.languageConstraintsProjection (var "lang") $
+  "constraints" <~ Coders.languageConstraints (var "lang") $
   "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
   "adaptedType" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ var "typ" $
   right $ Util.adapter
