@@ -12,7 +12,7 @@ public interface Relational {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.relational.ColumnName>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.ColumnName> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.ColumnName>left(new hydra.error.DecodingError("expected wrapped type hydra.relational.ColumnName"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.ColumnName>left(new hydra.error.DecodingError("expected wrapped type"));
         }
         
         @Override
@@ -58,7 +58,7 @@ public interface Relational {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.relational.ColumnSchema<T0>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.ColumnSchema<T0>> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.ColumnSchema<T0>>left(new hydra.error.DecodingError("expected record of type hydra.relational.ColumnSchema"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.ColumnSchema<T0>>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override
@@ -92,7 +92,7 @@ public interface Relational {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.relational.ForeignKey>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.ForeignKey> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.ForeignKey>left(new hydra.error.DecodingError("expected record of type hydra.relational.ForeignKey"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.ForeignKey>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override
@@ -134,7 +134,7 @@ public interface Relational {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.relational.PrimaryKey>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.PrimaryKey> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.PrimaryKey>left(new hydra.error.DecodingError("expected wrapped type hydra.relational.PrimaryKey"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.PrimaryKey>left(new hydra.error.DecodingError("expected wrapped type"));
         }
         
         @Override
@@ -160,7 +160,7 @@ public interface Relational {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.relational.Relation<T0>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.Relation<T0>> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.Relation<T0>>left(new hydra.error.DecodingError("expected wrapped type hydra.relational.Relation"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.Relation<T0>>left(new hydra.error.DecodingError("expected wrapped type"));
         }
         
         @Override
@@ -187,7 +187,7 @@ public interface Relational {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.relational.RelationName>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.RelationName> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.RelationName>left(new hydra.error.DecodingError("expected wrapped type hydra.relational.RelationName"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.RelationName>left(new hydra.error.DecodingError("expected wrapped type"));
         }
         
         @Override
@@ -233,7 +233,7 @@ public interface Relational {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.relational.RelationSchema<T0>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.RelationSchema<T0>> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.RelationSchema<T0>>left(new hydra.error.DecodingError("expected record of type hydra.relational.RelationSchema"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.RelationSchema<T0>>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override
@@ -295,7 +295,7 @@ public interface Relational {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.relational.Relationship<T0>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.Relationship<T0>> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.Relationship<T0>>left(new hydra.error.DecodingError("expected wrapped type hydra.relational.Relationship"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.Relationship<T0>>left(new hydra.error.DecodingError("expected wrapped type"));
         }
         
         @Override
@@ -325,7 +325,7 @@ public interface Relational {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.relational.Row<T0>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.relational.Row<T0>> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.Row<T0>>left(new hydra.error.DecodingError("expected wrapped type hydra.relational.Row"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.relational.Row<T0>>left(new hydra.error.DecodingError("expected wrapped type"));
         }
         
         @Override

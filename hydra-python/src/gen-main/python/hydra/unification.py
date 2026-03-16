@@ -44,8 +44,8 @@ def join_types(cx: hydra.context.Context, left: hydra.core.Type, right: hydra.co
         return hydra.lib.logic.if_else(hydra.lib.equality.equal(sleft(), sright()), (lambda : Right(())), (lambda : cannot_unify()))
     def join_list(lefts: frozenlist[hydra.core.Type], rights: frozenlist[hydra.core.Type]) -> Either[hydra.context.InContext[hydra.error.UnificationError], frozenlist[hydra.typing.TypeConstraint]]:
         return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(lefts), hydra.lib.lists.length(rights)), (lambda : Right(hydra.lib.lists.zip_with((lambda x1, x2: join_one(x1, x2)), lefts, rights))), (lambda : cannot_unify()))
-    def join_row_types(left2: hydra.core.RowType, right2: hydra.core.RowType) -> Either[hydra.context.InContext[hydra.error.UnificationError], frozenlist[hydra.typing.TypeConstraint]]:
-        return hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.equality.equal(left2.type_name.value, right2.type_name.value), hydra.lib.logic.and_(hydra.lib.equality.equal(hydra.lib.lists.length(hydra.lib.lists.map((lambda v1: v1.name), left2.fields)), hydra.lib.lists.length(hydra.lib.lists.map((lambda v1: v1.name), right2.fields))), hydra.lib.lists.foldl(hydra.lib.logic.and_, True, hydra.lib.lists.zip_with((lambda left3, right3: hydra.lib.equality.equal(left3.value, right3.value)), hydra.lib.lists.map((lambda v1: v1.name), left2.fields), hydra.lib.lists.map((lambda v1: v1.name), right2.fields))))), (lambda : join_list(hydra.lib.lists.map((lambda v1: v1.type), left2.fields), hydra.lib.lists.map((lambda v1: v1.type), right2.fields))), (lambda : cannot_unify()))
+    def join_row_types(left2: frozenlist[hydra.core.FieldType], right2: frozenlist[hydra.core.FieldType]) -> Either[hydra.context.InContext[hydra.error.UnificationError], frozenlist[hydra.typing.TypeConstraint]]:
+        return hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.equality.equal(hydra.lib.lists.length(hydra.lib.lists.map((lambda v1: v1.name), left2)), hydra.lib.lists.length(hydra.lib.lists.map((lambda v1: v1.name), right2))), hydra.lib.lists.foldl(hydra.lib.logic.and_, True, hydra.lib.lists.zip_with((lambda left3, right3: hydra.lib.equality.equal(left3.value, right3.value)), hydra.lib.lists.map((lambda v1: v1.name), left2), hydra.lib.lists.map((lambda v1: v1.name), right2)))), (lambda : join_list(hydra.lib.lists.map((lambda v1: v1.type), left2), hydra.lib.lists.map((lambda v1: v1.type), right2))), (lambda : cannot_unify()))
     def _hoist_body_1(l, v1):
         match v1:
             case hydra.core.TypeApplication(value=r):
@@ -126,7 +126,7 @@ def join_types(cx: hydra.context.Context, left: hydra.core.Type, right: hydra.co
     def _hoist_body_12(l, v1):
         match v1:
             case hydra.core.TypeWrap(value=r):
-                return hydra.lib.logic.if_else(hydra.lib.equality.equal(l.type_name.value, r.type_name.value), (lambda : Right((join_one(l.body, r.body),))), (lambda : cannot_unify()))
+                return Right((join_one(l, r),))
             
             case _:
                 return cannot_unify()

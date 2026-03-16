@@ -24,8 +24,7 @@ import qualified Data.Set as S
 eliminationVariant :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Variants.EliminationVariant)
 eliminationVariant cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -35,15 +34,13 @@ eliminationVariant cx raw = (Eithers.either (\err -> Left (Error.DecodingError e
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.variants.EliminationVariant"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 functionVariant :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Variants.FunctionVariant)
 functionVariant cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -53,15 +50,13 @@ functionVariant cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.variants.FunctionVariant"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 literalVariant :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Variants.LiteralVariant)
 literalVariant cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -73,15 +68,13 @@ literalVariant cx raw = (Eithers.either (\err -> Left (Error.DecodingError err))
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.variants.LiteralVariant"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 termVariant :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Variants.TermVariant)
 termVariant cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -106,15 +99,13 @@ termVariant cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.variants.TermVariant"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 typeVariant :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Variants.TypeVariant)
 typeVariant cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -137,6 +128,5 @@ typeVariant cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.variants.TypeVariant"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))

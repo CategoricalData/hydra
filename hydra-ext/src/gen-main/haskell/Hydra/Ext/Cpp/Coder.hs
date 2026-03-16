@@ -219,12 +219,18 @@ encodeType cx g typ =
     Core.TypePair v0 -> (Eithers.bind (encodeType cx g (Core.pairTypeFirst v0)) (\ft -> Eithers.bind (encodeType cx g (Core.pairTypeSecond v0)) (\st -> Right (toConstType (createTemplateType "std::pair" [
       ft,
       st])))))
-    Core.TypeRecord v0 -> (Right (createTypeReference (isStructType t) (Core.rowTypeTypeName v0)))
+    Core.TypeRecord _ -> (Left (Context.InContext {
+      Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected anonymous record type")),
+      Context.inContextContext = cx}))
     Core.TypeSet v0 -> (Eithers.map (\enc -> toConstType (createTemplateType "std::set" [
       enc])) (encodeType cx g v0))
-    Core.TypeUnion v0 -> (Right (createTypeReference (isStructType t) (Core.rowTypeTypeName v0)))
+    Core.TypeUnion _ -> (Left (Context.InContext {
+      Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected anonymous union type")),
+      Context.inContextContext = cx}))
     Core.TypeVariable v0 -> (Right (Syntax.TypeExpressionBasic (Syntax.BasicTypeNamed (sanitizeCppName (Core.unName v0)))))
-    Core.TypeWrap v0 -> (Right (createTypeReference (isStructType t) (Core.wrappedTypeTypeName v0)))
+    Core.TypeWrap _ -> (Left (Context.InContext {
+      Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected anonymous wrapped type")),
+      Context.inContextContext = cx}))
     Core.TypeUnit -> (Right (createTemplateType "std::tuple" []))
     _ -> (Left (Context.InContext {
       Context.inContextObject = (Error.ErrorOther (Error.OtherError "Unsupported type")),
@@ -261,7 +267,7 @@ encodeTypeDefinition cx g name typ =
     Core.TypeForall v0 -> (encodeTypeDefinition cx g name (Core.forallTypeBody v0))
     Core.TypeRecord v0 -> (encodeRecordType cx g name v0 Nothing)
     Core.TypeUnion v0 -> (encodeUnionType cx g name v0 Nothing)
-    Core.TypeWrap v0 -> (encodeWrappedType cx g name (Core.wrappedTypeBody v0) Nothing)
+    Core.TypeWrap v0 -> (encodeWrappedType cx g name v0 Nothing)
     _ -> (Left (Context.InContext {
       Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "unexpected type in definition: " (Core_.type_ typ)))),
       Context.inContextContext = cx}))) t)
@@ -277,31 +283,29 @@ encodeFieldType isParameter ft cx g =
       Syntax.variableDeclarationInitializer = Nothing,
       Syntax.variableDeclarationIsAuto = False})))
 
-encodeRecordType :: (Context.Context -> t0 -> Core.Name -> Core.RowType -> t1 -> Either (Context.InContext Error.Error) [Syntax.Declaration])
-encodeRecordType cx g name rt comment =  
-  let tfields = (Core.rowTypeFields rt)
-  in (Eithers.bind (Eithers.mapList (\f -> encodeFieldType False f cx g) tfields) (\cppFields -> Eithers.bind (Eithers.mapList (\f -> encodeFieldType True f cx g) tfields) (\constructorParams -> Right [
-    cppClassDeclaration (className name) [] (Just (Syntax.ClassBody (Lists.concat [
-      [
-        memberSpecificationPublic],
-      (Lists.map (\field -> Syntax.MemberSpecificationMember (Syntax.MemberDeclarationVariable field)) cppFields),
-      [
-        Syntax.MemberSpecificationMember (Syntax.MemberDeclarationConstructor (Syntax.ConstructorDeclaration {
-          Syntax.constructorDeclarationName = (className name),
-          Syntax.constructorDeclarationParameters = (Lists.map (\p -> Syntax.Parameter {
-            Syntax.parameterType = (Maybes.fromMaybe (Syntax.TypeExpressionBasic Syntax.BasicTypeInt) (Syntax.variableDeclarationType p)),
-            Syntax.parameterName = (Syntax.variableDeclarationName p),
-            Syntax.parameterUnnamed = False,
-            Syntax.parameterDefaultValue = Nothing}) constructorParams),
-          Syntax.constructorDeclarationInitializers = (Lists.map (\field -> Syntax.MemInitializer {
-            Syntax.memInitializerName = (Syntax.variableDeclarationName field),
-            Syntax.memInitializerArguments = [
-              createIdentifierExpr (Syntax.variableDeclarationName field)]}) cppFields),
-          Syntax.constructorDeclarationBody = (createConstructorBody constructorParams)}))]]))),
-    (createLessThanOperator name tfields)])))
+encodeRecordType :: (Context.Context -> t0 -> Core.Name -> [Core.FieldType] -> t1 -> Either (Context.InContext Error.Error) [Syntax.Declaration])
+encodeRecordType cx g name rt comment = (Eithers.bind (Eithers.mapList (\f -> encodeFieldType False f cx g) rt) (\cppFields -> Eithers.bind (Eithers.mapList (\f -> encodeFieldType True f cx g) rt) (\constructorParams -> Right [
+  cppClassDeclaration (className name) [] (Just (Syntax.ClassBody (Lists.concat [
+    [
+      memberSpecificationPublic],
+    (Lists.map (\field -> Syntax.MemberSpecificationMember (Syntax.MemberDeclarationVariable field)) cppFields),
+    [
+      Syntax.MemberSpecificationMember (Syntax.MemberDeclarationConstructor (Syntax.ConstructorDeclaration {
+        Syntax.constructorDeclarationName = (className name),
+        Syntax.constructorDeclarationParameters = (Lists.map (\p -> Syntax.Parameter {
+          Syntax.parameterType = (Maybes.fromMaybe (Syntax.TypeExpressionBasic Syntax.BasicTypeInt) (Syntax.variableDeclarationType p)),
+          Syntax.parameterName = (Syntax.variableDeclarationName p),
+          Syntax.parameterUnnamed = False,
+          Syntax.parameterDefaultValue = Nothing}) constructorParams),
+        Syntax.constructorDeclarationInitializers = (Lists.map (\field -> Syntax.MemInitializer {
+          Syntax.memInitializerName = (Syntax.variableDeclarationName field),
+          Syntax.memInitializerArguments = [
+            createIdentifierExpr (Syntax.variableDeclarationName field)]}) cppFields),
+        Syntax.constructorDeclarationBody = (createConstructorBody constructorParams)}))]]))),
+  (createLessThanOperator name rt)])))
 
-encodeUnionType :: (Context.Context -> t0 -> Core.Name -> Core.RowType -> t1 -> Either (Context.InContext Error.Error) [Syntax.Declaration])
-encodeUnionType cx g name rt comment = (Logic.ifElse (Schemas.isEnumRowType rt) (encodeEnumType cx g name (Core.rowTypeFields rt) comment) (encodeVariantType cx g name (Core.rowTypeFields rt) comment))
+encodeUnionType :: (Context.Context -> t0 -> Core.Name -> [Core.FieldType] -> t1 -> Either (Context.InContext Error.Error) [Syntax.Declaration])
+encodeUnionType cx g name rt comment = (Logic.ifElse (Schemas.isEnumRowType rt) (encodeEnumType cx g name rt comment) (encodeVariantType cx g name rt comment))
 
 encodeEnumType :: (t0 -> t1 -> Core.Name -> [Core.FieldType] -> t2 -> Either t3 [Syntax.Declaration])
 encodeEnumType cx g name tfields comment = (Right [
@@ -325,12 +329,10 @@ encodeVariantType cx g name variants comment = (Eithers.bind (Eithers.mapList (\
     createAcceptImplementation name variants]])))
 
 encodeWrappedType :: (Context.Context -> t0 -> Core.Name -> Core.Type -> t1 -> Either (Context.InContext Error.Error) [Syntax.Declaration])
-encodeWrappedType cx g name typ comment = (encodeRecordType cx g name (Core.RowType {
-  Core.rowTypeTypeName = name,
-  Core.rowTypeFields = [
-    Core.FieldType {
-      Core.fieldTypeName = (Core.Name "value"),
-      Core.fieldTypeType = typ}]}) comment)
+encodeWrappedType cx g name typ comment = (encodeRecordType cx g name [
+  Core.FieldType {
+    Core.fieldTypeName = (Core.Name "value"),
+    Core.fieldTypeType = typ}] comment)
 
 createVisitorInterface :: (Core.Name -> [Core.FieldType] -> Syntax.Declaration)
 createVisitorInterface tname variants = (Syntax.DeclarationTemplate (Syntax.TemplateDeclaration {

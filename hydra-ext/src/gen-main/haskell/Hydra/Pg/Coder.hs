@@ -113,17 +113,16 @@ elementCoder mparent schema source vidType eidType cx g =
   in ((\x -> case x of
     Core.TypeMaybe v0 -> (elementCoder mparent schema v0 vidType eidType cx g)
     Core.TypeRecord v0 ->  
-      let name = (Core.rowTypeTypeName v0) 
-          fields = (Core.rowTypeFields v0)
+      let name = (Core.Name "placeholder") 
           outVertexKey = (Core.Name (Mapping.annotationSchemaOutVertex (Mapping.schemaAnnotations schema)))
           outVertexLabelKey = (Core.Name (Mapping.annotationSchemaOutVertexLabel (Mapping.schemaAnnotations schema)))
           inVertexKey = (Core.Name (Mapping.annotationSchemaInVertex (Mapping.schemaAnnotations schema)))
           inVertexLabelKey = (Core.Name (Mapping.annotationSchemaInVertexLabel (Mapping.schemaAnnotations schema)))
-      in (Eithers.bind (findProjectionSpec cx g name outVertexKey outVertexLabelKey fields) (\mOutSpec -> Eithers.bind (findProjectionSpec cx g name inVertexKey inVertexLabelKey fields) (\mInSpec ->  
+      in (Eithers.bind (findProjectionSpec cx g name outVertexKey outVertexLabelKey v0) (\mOutSpec -> Eithers.bind (findProjectionSpec cx g name inVertexKey inVertexLabelKey v0) (\mInSpec ->  
         let kind = (Logic.ifElse (hasVertexAdapters dir mOutSpec mInSpec) Model.ElementKindEdge Model.ElementKindVertex)
-        in (Eithers.bind (findPropertySpecs cx g schema kind fields) (\propSpecs -> Eithers.bind (Eithers.mapList (propertyAdapter cx g schema) propSpecs) (\propAdapters -> (\x -> case x of
-          Model.ElementKindVertex -> (constructVertexCoder cx g schema source vidType eidType name fields propAdapters)
-          Model.ElementKindEdge -> (constructEdgeCoder cx g parentLabel schema source vidType eidType dir name fields propAdapters mOutSpec mInSpec)) kind))))))
+        in (Eithers.bind (findPropertySpecs cx g schema kind v0) (\propSpecs -> Eithers.bind (Eithers.mapList (propertyAdapter cx g schema) propSpecs) (\propAdapters -> (\x -> case x of
+          Model.ElementKindVertex -> (constructVertexCoder cx g schema source vidType eidType name v0 propAdapters)
+          Model.ElementKindEdge -> (constructEdgeCoder cx g parentLabel schema source vidType eidType dir name v0 propAdapters mOutSpec mInSpec)) kind))))))
     _ -> (Left (Context.InContext {
       Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "Expected " "record type") ", found: ") "other type"))),
       Context.inContextContext = cx}))) (Rewriting.deannotateType source))

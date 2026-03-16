@@ -1032,7 +1032,7 @@ public interface Core {
           ((record).typeName).value))), cx))))));
   }
   
-  static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.FieldType>> recordType(hydra.context.Context cx, hydra.core.Name ename, hydra.core.Type typ) {
+  static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.FieldType>> recordType(hydra.context.Context cx, T0 ename, hydra.core.Type typ) {
     hydra.core.Type stripped = hydra.rewriting.Rewriting.deannotateType(typ);
     return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
@@ -1047,23 +1047,8 @@ public interface Core {
       }
       
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.FieldType>> visit(hydra.core.Type.Record rowType) {
-        return hydra.lib.logic.IfElse.lazy(
-          hydra.lib.equality.Equal.apply(
-            (((rowType).value).typeName).value,
-            (ename).value),
-          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.FieldType>>right(((rowType).value).fields),
-          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.FieldType>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
-            hydra.lib.strings.Cat2.apply(
-              hydra.lib.strings.Cat2.apply(
-                "expected ",
-                hydra.lib.strings.Cat2.apply(
-                  "record of type ",
-                  (ename).value)),
-              " but found "),
-            hydra.lib.strings.Cat2.apply(
-              "record of type ",
-              (((rowType).value).typeName).value)))), cx))));
+      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.FieldType>> visit(hydra.core.Type.Record fields) {
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.FieldType>>right((fields).value);
       }
     });
   }
@@ -1321,7 +1306,7 @@ public interface Core {
     });
   }
   
-  static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.FieldType>> unionType(hydra.context.Context cx, hydra.core.Name ename, hydra.core.Type typ) {
+  static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.FieldType>> unionType(hydra.context.Context cx, T0 ename, hydra.core.Type typ) {
     hydra.core.Type stripped = hydra.rewriting.Rewriting.deannotateType(typ);
     return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
@@ -1336,23 +1321,8 @@ public interface Core {
       }
       
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.FieldType>> visit(hydra.core.Type.Union rowType) {
-        return hydra.lib.logic.IfElse.lazy(
-          hydra.lib.equality.Equal.apply(
-            ((rowType).value).typeName,
-            ename),
-          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.FieldType>>right(((rowType).value).fields),
-          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.FieldType>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
-            hydra.lib.strings.Cat2.apply(
-              hydra.lib.strings.Cat2.apply(
-                "expected ",
-                hydra.lib.strings.Cat2.apply(
-                  "union of type ",
-                  (ename).value)),
-              " but found "),
-            hydra.lib.strings.Cat2.apply(
-              "union of type ",
-              (((rowType).value).typeName).value)))), cx))));
+      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.FieldType>> visit(hydra.core.Type.Union fields) {
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.FieldType>>right((fields).value);
       }
     });
   }
@@ -1433,7 +1403,7 @@ public interface Core {
       })));
   }
   
-  static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> wrappedType(hydra.context.Context cx, hydra.core.Name ename, hydra.core.Type typ) {
+  static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> wrappedType(hydra.context.Context cx, T0 ename, hydra.core.Type typ) {
     hydra.core.Type stripped = hydra.rewriting.Rewriting.deannotateType(typ);
     return (stripped).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
@@ -1448,23 +1418,8 @@ public interface Core {
       }
       
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> visit(hydra.core.Type.Wrap wrappedType) {
-        return hydra.lib.logic.IfElse.lazy(
-          hydra.lib.equality.Equal.apply(
-            (((wrappedType).value).typeName).value,
-            (ename).value),
-          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>right(((wrappedType).value).body),
-          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
-            hydra.lib.strings.Cat2.apply(
-              hydra.lib.strings.Cat2.apply(
-                "expected ",
-                hydra.lib.strings.Cat2.apply(
-                  "wrapped type ",
-                  (ename).value)),
-              " but found "),
-            hydra.lib.strings.Cat2.apply(
-              "wrapped type ",
-              (((wrappedType).value).typeName).value)))), cx))));
+      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> visit(hydra.core.Type.Wrap innerType) {
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>right((innerType).value);
       }
     });
   }

@@ -235,9 +235,6 @@ def pair_type(x: hydra.core.PairType) -> hydra.core.Term:
 def record(x: hydra.core.Record) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Record"), (hydra.core.Field(hydra.core.Name("typeName"), name(x.type_name)), hydra.core.Field(hydra.core.Name("fields"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda x1: field(x1)), x.fields))))))))
 
-def row_type(x: hydra.core.RowType) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.RowType"), (hydra.core.Field(hydra.core.Name("typeName"), name(x.type_name)), hydra.core.Field(hydra.core.Name("fields"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda x1: field_type(x1)), x.fields))))))))
-
 def term(v1: hydra.core.Term) -> hydra.core.Term:
     match v1:
         case hydra.core.TermAnnotated(value=y):
@@ -330,13 +327,13 @@ def type(v1: hydra.core.Type) -> hydra.core.Term:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("pair"), pair_type(y10)))))
         
         case hydra.core.TypeRecord(value=y11):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("record"), row_type(y11)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("record"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda x1: field_type(x1)), y11)))))))
         
         case hydra.core.TypeSet(value=y12):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("set"), type(y12)))))
         
         case hydra.core.TypeUnion(value=y13):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("union"), row_type(y13)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("union"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda x1: field_type(x1)), y13)))))))
         
         case hydra.core.TypeUnit():
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("unit"), cast(hydra.core.Term, hydra.core.TermUnit())))))
@@ -345,7 +342,7 @@ def type(v1: hydra.core.Type) -> hydra.core.Term:
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("variable"), name(y15)))))
         
         case hydra.core.TypeWrap(value=y16):
-            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("wrap"), wrapped_type(y16)))))
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Type"), hydra.core.Field(hydra.core.Name("wrap"), type(y16)))))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -361,6 +358,3 @@ def type_scheme(x: hydra.core.TypeScheme) -> hydra.core.Term:
 
 def wrapped_term(x: hydra.core.WrappedTerm) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.WrappedTerm"), (hydra.core.Field(hydra.core.Name("typeName"), name(x.type_name)), hydra.core.Field(hydra.core.Name("body"), term(x.body))))))
-
-def wrapped_type(x: hydra.core.WrappedType) -> hydra.core.Term:
-    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.WrappedType"), (hydra.core.Field(hydra.core.Name("typeName"), name(x.type_name)), hydra.core.Field(hydra.core.Name("body"), type(x.body))))))

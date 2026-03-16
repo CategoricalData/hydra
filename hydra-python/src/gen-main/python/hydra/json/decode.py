@@ -181,8 +181,8 @@ def expect_object(value: hydra.json.model.Value) -> Either[str, FrozenDict[str, 
         case _:
             return Left("expected object")
 
-def from_json(types: FrozenDict[hydra.core.Name, hydra.core.Type], typ: hydra.core.Type, value: hydra.json.model.Value):
-    r"""Decode a JSON value to a Hydra term given a type. Returns Left for type mismatches."""
+def from_json(types: FrozenDict[hydra.core.Name, hydra.core.Type], tname: hydra.core.Name, typ: hydra.core.Type, value: hydra.json.model.Value):
+    r"""Decode a JSON value to a Hydra term given a type and type name. Returns Left for type mismatches."""
     
     @lru_cache(1)
     def stripped() -> hydra.core.Type:
@@ -193,7 +193,7 @@ def from_json(types: FrozenDict[hydra.core.Name, hydra.core.Type], typ: hydra.co
         
         case hydra.core.TypeList(value=elem_type):
             def decode_elem(v: hydra.json.model.Value) -> Either[str, hydra.core.Term]:
-                return from_json(types, elem_type, v)
+                return from_json(types, tname, elem_type, v)
             @lru_cache(1)
             def arr_result() -> Either[str, frozenlist[hydra.json.model.Value]]:
                 return expect_array(value)
@@ -201,7 +201,7 @@ def from_json(types: FrozenDict[hydra.core.Name, hydra.core.Type], typ: hydra.co
         
         case hydra.core.TypeSet(value=elem_type2):
             def decode_elem(v: hydra.json.model.Value) -> Either[str, hydra.core.Term]:
-                return from_json(types, elem_type2, v)
+                return from_json(types, tname, elem_type2, v)
             @lru_cache(1)
             def arr_result() -> Either[str, frozenlist[hydra.json.model.Value]]:
                 return expect_array(value)
@@ -209,7 +209,7 @@ def from_json(types: FrozenDict[hydra.core.Name, hydra.core.Type], typ: hydra.co
         
         case hydra.core.TypeMaybe(value=inner_type):
             def decode_just(arr: frozenlist[hydra.json.model.Value]) -> Either[str, hydra.core.Term]:
-                return hydra.lib.eithers.map((lambda v: cast(hydra.core.Term, hydra.core.TermMaybe(Just(v)))), from_json(types, inner_type, hydra.lib.lists.head(arr)))
+                return hydra.lib.eithers.map((lambda v: cast(hydra.core.Term, hydra.core.TermMaybe(Just(v)))), from_json(types, tname, inner_type, hydra.lib.lists.head(arr)))
             def decode_maybe_array(arr: frozenlist[hydra.json.model.Value]) -> Either[str, hydra.core.Term]:
                 @lru_cache(1)
                 def len() -> int:
@@ -231,7 +231,7 @@ def from_json(types: FrozenDict[hydra.core.Name, hydra.core.Type], typ: hydra.co
             @lru_cache(1)
             def obj_result() -> Either[str, FrozenDict[str, hydra.json.model.Value]]:
                 return expect_object(value)
-            return hydra.lib.eithers.either((lambda err: Left(err)), (lambda obj: (decode_field := (lambda ft: (fname := ft.name, ftype := ft.type, mval := hydra.lib.maps.lookup(fname.value, obj), default_val := cast(hydra.json.model.Value, hydra.json.model.ValueNull()), json_val := hydra.lib.maybes.from_maybe((lambda : default_val), mval), decoded := from_json(types, ftype, json_val), hydra.lib.eithers.map((lambda v: hydra.core.Field(fname, v)), decoded))[6]), fields := rt.fields, decoded_fields := hydra.lib.eithers.map_list((lambda x1: decode_field(x1)), fields), hydra.lib.eithers.map((lambda fs: cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(rt.type_name, fs)))), decoded_fields))[3]), obj_result())
+            return hydra.lib.eithers.either((lambda err: Left(err)), (lambda obj: (decode_field := (lambda ft: (fname := ft.name, ftype := ft.type, mval := hydra.lib.maps.lookup(fname.value, obj), default_val := cast(hydra.json.model.Value, hydra.json.model.ValueNull()), json_val := hydra.lib.maybes.from_maybe((lambda : default_val), mval), decoded := from_json(types, tname, ftype, json_val), hydra.lib.eithers.map((lambda v: hydra.core.Field(fname, v)), decoded))[6]), decoded_fields := hydra.lib.eithers.map_list((lambda x1: decode_field(x1)), rt), hydra.lib.eithers.map((lambda fs: cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(tname, fs)))), decoded_fields))[2]), obj_result())
         
         case hydra.core.TypeUnion(value=rt2):
             def decode_variant(key: str, val: Maybe[hydra.json.model.Value], ftype: hydra.core.Type) -> Either[str, hydra.core.Term]:
@@ -240,14 +240,14 @@ def from_json(types: FrozenDict[hydra.core.Name, hydra.core.Type], typ: hydra.co
                     return hydra.lib.maybes.from_maybe((lambda : cast(hydra.json.model.Value, hydra.json.model.ValueNull())), val)
                 @lru_cache(1)
                 def decoded() -> Either[str, hydra.core.Term]:
-                    return from_json(types, ftype, json_val())
-                return hydra.lib.eithers.map((lambda v: cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(rt2.type_name, hydra.core.Field(hydra.core.Name(key), v))))), decoded())
+                    return from_json(types, tname, ftype, json_val())
+                return hydra.lib.eithers.map((lambda v: cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(tname, hydra.core.Field(hydra.core.Name(key), v))))), decoded())
             def try_field(key: str, val: Maybe[hydra.json.model.Value], ft: hydra.core.FieldType) -> Maybe[Either[str, hydra.core.Term]]:
                 return hydra.lib.logic.if_else(hydra.lib.equality.equal(ft.name.value, key), (lambda : Just(decode_variant(key, val, ft.type))), (lambda : Nothing()))
             def find_and_decode(key: str, val: Maybe[hydra.json.model.Value], fts: frozenlist[hydra.core.FieldType]) -> Either[str, hydra.core.Term]:
                 return hydra.lib.logic.if_else(hydra.lib.lists.null(fts), (lambda : Left(hydra.lib.strings.cat(("unknown variant: ", key)))), (lambda : hydra.lib.maybes.maybe((lambda : find_and_decode(key, val, hydra.lib.lists.tail(fts))), (lambda r: r), try_field(key, val, hydra.lib.lists.head(fts)))))
             def decode_single_key(obj: FrozenDict[str, hydra.json.model.Value]) -> Either[str, hydra.core.Term]:
-                return find_and_decode(hydra.lib.lists.head(hydra.lib.maps.keys(obj)), hydra.lib.maps.lookup(hydra.lib.lists.head(hydra.lib.maps.keys(obj)), obj), rt2.fields)
+                return find_and_decode(hydra.lib.lists.head(hydra.lib.maps.keys(obj)), hydra.lib.maps.lookup(hydra.lib.lists.head(hydra.lib.maps.keys(obj)), obj), rt2)
             def process_union(obj: FrozenDict[str, hydra.json.model.Value]) -> Either[str, hydra.core.Term]:
                 return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(hydra.lib.maps.keys(obj)), 1), (lambda : decode_single_key(obj)), (lambda : Left("expected single-key object for union")))
             @lru_cache(1)
@@ -262,27 +262,10 @@ def from_json(types: FrozenDict[hydra.core.Name, hydra.core.Type], typ: hydra.co
             return hydra.lib.eithers.map((lambda _2: cast(hydra.core.Term, hydra.core.TermUnit())), obj_result())
         
         case hydra.core.TypeWrap(value=wn):
-            def extract_inner_type(lt: hydra.core.Type):
-                def _hoist_extract_inner_type_1(lt, v1):
-                    match v1:
-                        case hydra.core.TypeWrap(value=wt):
-                            return wt.body
-                        
-                        case _:
-                            return lt
-                return _hoist_extract_inner_type_1(lt, lt)
-            def decode_and_wrap(lt: hydra.core.Type) -> Either[str, hydra.core.Term]:
-                @lru_cache(1)
-                def inner_type() -> hydra.core.Type:
-                    return extract_inner_type(lt)
-                @lru_cache(1)
-                def decoded() -> Either[str, hydra.core.Term]:
-                    return from_json(types, inner_type(), value)
-                return hydra.lib.eithers.map((lambda v: cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(wn.type_name, v)))), decoded())
             @lru_cache(1)
-            def looked_up() -> Maybe[hydra.core.Type]:
-                return hydra.lib.maps.lookup(wn.type_name, types)
-            return hydra.lib.maybes.maybe((lambda : Left(hydra.lib.strings.cat(("unknown wrapped type: ", wn.type_name.value)))), (lambda lt: decode_and_wrap(lt)), looked_up())
+            def decoded() -> Either[str, hydra.core.Term]:
+                return from_json(types, tname, wn, value)
+            return hydra.lib.eithers.map((lambda v: cast(hydra.core.Term, hydra.core.TermWrap(hydra.core.WrappedTerm(tname, v)))), decoded())
         
         case hydra.core.TypeMap(value=mt):
             key_type = mt.keys
@@ -290,7 +273,7 @@ def from_json(types: FrozenDict[hydra.core.Name, hydra.core.Type], typ: hydra.co
             @lru_cache(1)
             def arr_result() -> Either[str, frozenlist[hydra.json.model.Value]]:
                 return expect_array(value)
-            return hydra.lib.eithers.either((lambda err: Left(err)), (lambda arr: (decode_entry := (lambda entry_json: (obj_result := expect_object(entry_json), hydra.lib.eithers.either((lambda err: Left(err)), (lambda entry_obj: (key_json := hydra.lib.maps.lookup("@key", entry_obj), val_json := hydra.lib.maps.lookup("@value", entry_obj), hydra.lib.maybes.maybe((lambda : Left("missing @key in map entry")), (lambda kj: hydra.lib.maybes.maybe((lambda : Left("missing @value in map entry")), (lambda vj: (decoded_key := from_json(types, key_type, kj), decoded_val := from_json(types, val_type, vj), hydra.lib.eithers.either((lambda err: Left(err)), (lambda k: hydra.lib.eithers.map((lambda v: (k, v)), decoded_val)), decoded_key))[2]), val_json)), key_json))[2]), obj_result))[1]), entries := hydra.lib.eithers.map_list((lambda x1: decode_entry(x1)), arr), hydra.lib.eithers.map((lambda es: cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.from_list(es)))), entries))[2]), arr_result())
+            return hydra.lib.eithers.either((lambda err: Left(err)), (lambda arr: (decode_entry := (lambda entry_json: (obj_result := expect_object(entry_json), hydra.lib.eithers.either((lambda err: Left(err)), (lambda entry_obj: (key_json := hydra.lib.maps.lookup("@key", entry_obj), val_json := hydra.lib.maps.lookup("@value", entry_obj), hydra.lib.maybes.maybe((lambda : Left("missing @key in map entry")), (lambda kj: hydra.lib.maybes.maybe((lambda : Left("missing @value in map entry")), (lambda vj: (decoded_key := from_json(types, tname, key_type, kj), decoded_val := from_json(types, tname, val_type, vj), hydra.lib.eithers.either((lambda err: Left(err)), (lambda k: hydra.lib.eithers.map((lambda v: (k, v)), decoded_val)), decoded_key))[2]), val_json)), key_json))[2]), obj_result))[1]), entries := hydra.lib.eithers.map_list((lambda x1: decode_entry(x1)), arr), hydra.lib.eithers.map((lambda es: cast(hydra.core.Term, hydra.core.TermMap(hydra.lib.maps.from_list(es)))), entries))[2]), arr_result())
         
         case hydra.core.TypePair(value=pt):
             first_type = pt.first
@@ -298,7 +281,7 @@ def from_json(types: FrozenDict[hydra.core.Name, hydra.core.Type], typ: hydra.co
             @lru_cache(1)
             def obj_result() -> Either[str, FrozenDict[str, hydra.json.model.Value]]:
                 return expect_object(value)
-            return hydra.lib.eithers.either((lambda err: Left(err)), (lambda obj: (first_json := hydra.lib.maps.lookup("@first", obj), second_json := hydra.lib.maps.lookup("@second", obj), hydra.lib.maybes.maybe((lambda : Left("missing @first in pair")), (lambda fj: hydra.lib.maybes.maybe((lambda : Left("missing @second in pair")), (lambda sj: (decoded_first := from_json(types, first_type, fj), decoded_second := from_json(types, second_type, sj), hydra.lib.eithers.either((lambda err: Left(err)), (lambda f: hydra.lib.eithers.map((lambda s: cast(hydra.core.Term, hydra.core.TermPair((f, s)))), decoded_second)), decoded_first))[2]), second_json)), first_json))[2]), obj_result())
+            return hydra.lib.eithers.either((lambda err: Left(err)), (lambda obj: (first_json := hydra.lib.maps.lookup("@first", obj), second_json := hydra.lib.maps.lookup("@second", obj), hydra.lib.maybes.maybe((lambda : Left("missing @first in pair")), (lambda fj: hydra.lib.maybes.maybe((lambda : Left("missing @second in pair")), (lambda sj: (decoded_first := from_json(types, tname, first_type, fj), decoded_second := from_json(types, tname, second_type, sj), hydra.lib.eithers.either((lambda err: Left(err)), (lambda f: hydra.lib.eithers.map((lambda s: cast(hydra.core.Term, hydra.core.TermPair((f, s)))), decoded_second)), decoded_first))[2]), second_json)), first_json))[2]), obj_result())
         
         case hydra.core.TypeEither(value=et):
             left_type = et.left
@@ -306,13 +289,13 @@ def from_json(types: FrozenDict[hydra.core.Name, hydra.core.Type], typ: hydra.co
             @lru_cache(1)
             def obj_result() -> Either[str, FrozenDict[str, hydra.json.model.Value]]:
                 return expect_object(value)
-            return hydra.lib.eithers.either((lambda err: Left(err)), (lambda obj: (left_json := hydra.lib.maps.lookup("@left", obj), right_json := hydra.lib.maps.lookup("@right", obj), hydra.lib.maybes.maybe((lambda : hydra.lib.maybes.maybe((lambda : Left("expected @left or @right in Either")), (lambda rj: (decoded := from_json(types, right_type, rj), hydra.lib.eithers.map((lambda v: cast(hydra.core.Term, hydra.core.TermEither(Right(v)))), decoded))[1]), right_json)), (lambda lj: (decoded := from_json(types, left_type, lj), hydra.lib.eithers.map((lambda v: cast(hydra.core.Term, hydra.core.TermEither(Left(v)))), decoded))[1]), left_json))[2]), obj_result())
+            return hydra.lib.eithers.either((lambda err: Left(err)), (lambda obj: (left_json := hydra.lib.maps.lookup("@left", obj), right_json := hydra.lib.maps.lookup("@right", obj), hydra.lib.maybes.maybe((lambda : hydra.lib.maybes.maybe((lambda : Left("expected @left or @right in Either")), (lambda rj: (decoded := from_json(types, tname, right_type, rj), hydra.lib.eithers.map((lambda v: cast(hydra.core.Term, hydra.core.TermEither(Right(v)))), decoded))[1]), right_json)), (lambda lj: (decoded := from_json(types, tname, left_type, lj), hydra.lib.eithers.map((lambda v: cast(hydra.core.Term, hydra.core.TermEither(Left(v)))), decoded))[1]), left_json))[2]), obj_result())
         
         case hydra.core.TypeVariable(value=name):
             @lru_cache(1)
             def looked_up() -> Maybe[hydra.core.Type]:
                 return hydra.lib.maps.lookup(name, types)
-            return hydra.lib.maybes.maybe((lambda : Left(hydra.lib.strings.cat(("unknown type variable: ", name.value)))), (lambda resolved_type: from_json(types, resolved_type, value)), looked_up())
+            return hydra.lib.maybes.maybe((lambda : Left(hydra.lib.strings.cat(("unknown type variable: ", name.value)))), (lambda resolved_type: from_json(types, name, resolved_type, value)), looked_up())
         
         case _:
             return Left(hydra.lib.strings.cat(("unsupported type for JSON decoding: ", hydra.show.core.type(typ))))

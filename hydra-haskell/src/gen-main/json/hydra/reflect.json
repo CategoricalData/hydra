@@ -1487,7 +1487,7 @@
                               "union": {
                                 "field": {"name": "record", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TypeVariant"}},
-                            "domain": [{"variable": "hydra.core.RowType"}],
+                            "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                             "parameter": "_"}}}},
                     {
                       "name": "set",
@@ -1509,7 +1509,7 @@
                               "union": {
                                 "field": {"name": "union", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TypeVariant"}},
-                            "domain": [{"variable": "hydra.core.RowType"}],
+                            "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                             "parameter": "_"}}}},
                     {
                       "name": "unit",
@@ -1542,7 +1542,7 @@
                               "union": {
                                 "field": {"name": "wrap", "term": {"unit": {}}},
                                 "typeName": "hydra.variants.TypeVariant"}},
-                            "domain": [{"variable": "hydra.core.WrappedType"}],
+                            "domain": [{"variable": "hydra.core.Type"}],
                             "parameter": "_"}}}}],
                   "default": null,
                   "typeName": "hydra.core.Type"}}}}}},

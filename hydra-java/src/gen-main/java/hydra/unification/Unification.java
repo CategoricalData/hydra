@@ -25,39 +25,35 @@ public interface Unification {
         hydra.show.core.Core::type,
         sleft,
         sright))));
-    java.util.function.Function<hydra.core.RowType, java.util.function.Function<hydra.core.RowType, hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>>> joinRowTypes = (java.util.function.Function<hydra.core.RowType, java.util.function.Function<hydra.core.RowType, hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>>>) (left2 -> (java.util.function.Function<hydra.core.RowType, hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>>) (right2 -> hydra.lib.logic.IfElse.lazy(
+    java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>>> joinRowTypes = (java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>>>) (left2 -> (java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>>) (right2 -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.logic.And.apply(
         hydra.lib.equality.Equal.apply(
-          ((left2).typeName).value,
-          ((right2).typeName).value),
-        hydra.lib.logic.And.apply(
-          hydra.lib.equality.Equal.apply(
-            hydra.lib.lists.Length.apply(hydra.lib.lists.Map.apply(
+          hydra.lib.lists.Length.apply(hydra.lib.lists.Map.apply(
+            projected -> projected.name,
+            left2)),
+          hydra.lib.lists.Length.apply(hydra.lib.lists.Map.apply(
+            projected -> projected.name,
+            right2))),
+        hydra.lib.lists.Foldl.apply(
+          (java.util.function.Function<Boolean, java.util.function.Function<Boolean, Boolean>>) (p0 -> p1 -> hydra.lib.logic.And.apply(
+            p0,
+            p1)),
+          true,
+          hydra.lib.lists.ZipWith.apply(
+            (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Name, Boolean>>) (left3 -> (java.util.function.Function<hydra.core.Name, Boolean>) (right3 -> hydra.lib.equality.Equal.apply(
+              (left3).value,
+              (right3).value))),
+            hydra.lib.lists.Map.apply(
               projected -> projected.name,
-              (left2).fields)),
-            hydra.lib.lists.Length.apply(hydra.lib.lists.Map.apply(
+              left2),
+            hydra.lib.lists.Map.apply(
               projected -> projected.name,
-              (right2).fields))),
-          hydra.lib.lists.Foldl.apply(
-            (java.util.function.Function<Boolean, java.util.function.Function<Boolean, Boolean>>) (p0 -> p1 -> hydra.lib.logic.And.apply(
-              p0,
-              p1)),
-            true,
-            hydra.lib.lists.ZipWith.apply(
-              (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Name, Boolean>>) (left3 -> (java.util.function.Function<hydra.core.Name, Boolean>) (right3 -> hydra.lib.equality.Equal.apply(
-                (left3).value,
-                (right3).value))),
-              hydra.lib.lists.Map.apply(
-                projected -> projected.name,
-                (left2).fields),
-              hydra.lib.lists.Map.apply(
-                projected -> projected.name,
-                (right2).fields))))),
+              right2)))),
       () -> ((joinList).apply(hydra.lib.lists.Map.apply(
         projected -> projected.type,
-        (left2).fields))).apply(hydra.lib.lists.Map.apply(
+        left2))).apply(hydra.lib.lists.Map.apply(
         projected -> projected.type,
-        (right2).fields)),
+        right2)),
       () -> hydra.unification.Unification.joinTypes_cannotUnify(
         cx,
         hydra.show.core.Core::type,
@@ -315,16 +311,7 @@ public interface Unification {
           
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Wrap r) {
-            return hydra.lib.logic.IfElse.lazy(
-              hydra.lib.equality.Equal.apply(
-                (((l).value).typeName).value,
-                (((r).value).typeName).value),
-              () -> hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right(hydra.util.ConsList.of(((joinOne).apply(((l).value).body)).apply(((r).value).body))),
-              () -> hydra.unification.Unification.joinTypes_cannotUnify(
-                cx,
-                hydra.show.core.Core::type,
-                sleft,
-                sright));
+            return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right(hydra.util.ConsList.of(((joinOne).apply((l).value)).apply((r).value)));
           }
         });
       }

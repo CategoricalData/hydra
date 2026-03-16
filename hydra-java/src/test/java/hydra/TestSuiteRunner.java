@@ -1277,7 +1277,7 @@ public class TestSuiteRunner {
 
         // CoderDirection: enum with encode, decode
         types.put(new Name("hydra.coders.CoderDirection"),
-            new Type.Union(List.of(
+            new Type.Union(ConsList.of(
                 new FieldType(new Name("encode"), new Type.Unit()),
                 new FieldType(new Name("decode"), new Type.Unit()))));
 
@@ -1305,7 +1305,7 @@ public class TestSuiteRunner {
             new Type.Function(new FunctionType(
                 new Type.Variable(new Name("v2")),
                 eitherInContextError.apply(new Type.Variable(new Name("v1")))))));
-        Type coderBody = new Type.Record(List.of(
+        Type coderBody = new Type.Record(ConsList.of(
             new FieldType(new Name("encode"), encodeType),
             new FieldType(new Name("decode"), decodeType)));
         // Wrap in foralls: ∀v1.∀v2. coderBody
@@ -1315,7 +1315,7 @@ public class TestSuiteRunner {
 
         // Context: record with trace, messages, other
         types.put(contextName,
-            new Type.Record(List.of(
+            new Type.Record(ConsList.of(
                 new FieldType(new Name("trace"), new Type.List(new Type.Literal(new LiteralType.String_()))),
                 new FieldType(new Name("messages"), new Type.List(new Type.Literal(new LiteralType.String_()))),
                 new FieldType(new Name("other"), new Type.Map(new MapType(
@@ -1325,7 +1325,7 @@ public class TestSuiteRunner {
         // InContext: ∀e. record with object (e) and context (Context)
         types.put(inContextName,
             new Type.Forall(new ForallType(new Name("e"),
-                new Type.Record(List.of(
+                new Type.Record(ConsList.of(
                     new FieldType(new Name("object"), new Type.Variable(new Name("e"))),
                     new FieldType(new Name("context"), new Type.Variable(contextName)))))));
 
@@ -1335,13 +1335,13 @@ public class TestSuiteRunner {
             new Type.Wrap(
                 new Type.Literal(new LiteralType.String_())));
         types.put(errorName,
-            new Type.Union(List.of(
+            new Type.Union(ConsList.of(
                 new FieldType(new Name("other"), new Type.Variable(otherErrorName)))));
 
         // Type: the hydra.core.Type union — large recursive type
         Name typeName = new Name("hydra.core.Type");
         types.put(typeName,
-            new Type.Union(List.of(
+            new Type.Union(ConsList.of(
                 new FieldType(new Name("annotated"), new Type.Variable(new Name("annotatedType"))),
                 new FieldType(new Name("application"), new Type.Variable(new Name("applicationElim"))),
                 new FieldType(new Name("either"), new Type.Variable(new Name("eitherType"))),
@@ -1368,7 +1368,7 @@ public class TestSuiteRunner {
         // ForallType: record with parameter (Name) and body (Type)
         Name forallTypeName = new Name("hydra.core.ForallType");
         types.put(forallTypeName,
-            new Type.Record(List.of(
+            new Type.Record(ConsList.of(
                 new FieldType(new Name("parameter"), new Type.Variable(nameName)),
                 new FieldType(new Name("body"), new Type.Variable(typeName)))));
 

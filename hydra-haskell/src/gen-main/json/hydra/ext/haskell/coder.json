@@ -1609,12 +1609,7 @@
                                                                                                                 "application": {
                                                                                                                   "argument": {
                                                                                                                     "application": {
-                                                                                                                      "argument": {
-                                                                                                                        "application": {
-                                                                                                                          "argument": {"variable": "rt"},
-                                                                                                                          "function": {
-                                                                                                                            "function": {
-                                                                                                                              "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
+                                                                                                                      "argument": {"variable": "rt"},
                                                                                                                       "function": {
                                                                                                                         "application": {
                                                                                                                           "argument": {"variable": "toFieldMapEntry"},
@@ -1899,7 +1894,7 @@
                                                                                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                                           "type": {"list": {"variable": "hydra.ext.haskell.ast.Alternative"}}}},
                                                                                                                       "type": {"variable": "hydra.ext.haskell.ast.Expression"}}}}}}}}},
-                                                                                                      "domain": [{"variable": "hydra.core.RowType"}],
+                                                                                                      "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                                                                                       "parameter": "rt"}}},
                                                                                                 "function": {
                                                                                                   "application": {
@@ -1924,7 +1919,7 @@
                                                                                                                   "application": {
                                                                                                                     "argument": {"variable": "hydra.error.Error"},
                                                                                                                     "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                                                            "type": {"variable": "hydra.core.RowType"}}},
+                                                                                                            "type": {"list": {"variable": "hydra.core.FieldType"}}}},
                                                                                                         "type": {"variable": "hydra.ext.haskell.ast.Expression"}}}}}}},
                                                                                             "type": [
                                                                                               {
@@ -6469,11 +6464,9 @@
                                                                 "body": {
                                                                   "application": {
                                                                     "argument": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "rt"},
-                                                                        "function": {
-                                                                          "function": {
-                                                                            "elimination": {"record": {"field": "typeName", "typeName": "hydra.core.RowType"}}}}}},
+                                                                      "wrap": {
+                                                                        "body": {"literal": {"string": "placeholder"}},
+                                                                        "typeName": "hydra.core.Name"}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {"variable": "ref"},
@@ -6481,8 +6474,8 @@
                                                                           "application": {
                                                                             "argument": {"variable": "hydra.error.Error"},
                                                                             "function": {"variable": "hydra.context.InContext"}}}}}}},
-                                                                "domain": [{"variable": "hydra.core.RowType"}],
-                                                                "parameter": "rt"}}}},
+                                                                "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                                "parameter": "_"}}}},
                                                         {
                                                           "name": "set",
                                                           "term": {
@@ -6546,33 +6539,20 @@
                                                             "function": {
                                                               "lambda": {
                                                                 "body": {
-                                                                  "let": {
-                                                                    "bindings": [
-                                                                      {
-                                                                        "name": "typeName",
-                                                                        "term": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "wrap": {
+                                                                        "body": {"literal": {"string": "placeholder"}},
+                                                                        "typeName": "hydra.core.Name"}},
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {"variable": "ref"},
+                                                                        "type": {
                                                                           "application": {
-                                                                            "argument": {"variable": "rt"},
-                                                                            "function": {
-                                                                              "function": {
-                                                                                "elimination": {"record": {"field": "typeName", "typeName": "hydra.core.RowType"}}}}}},
-                                                                        "type": [
-                                                                          {
-                                                                            "constraints": null,
-                                                                            "type": {"variable": "hydra.core.Name"},
-                                                                            "variables": []}]}],
-                                                                    "body": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "typeName"},
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {"variable": "ref"},
-                                                                            "type": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.error.Error"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}}}}}}}},
-                                                                "domain": [{"variable": "hydra.core.RowType"}],
-                                                                "parameter": "rt"}}}},
+                                                                            "argument": {"variable": "hydra.error.Error"},
+                                                                            "function": {"variable": "hydra.context.InContext"}}}}}}},
+                                                                "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                                "parameter": "_"}}}},
                                                         {
                                                           "name": "unit",
                                                           "term": {
@@ -6613,34 +6593,20 @@
                                                             "function": {
                                                               "lambda": {
                                                                 "body": {
-                                                                  "let": {
-                                                                    "bindings": [
-                                                                      {
-                                                                        "name": "name",
-                                                                        "term": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "wrap": {
+                                                                        "body": {"literal": {"string": "placeholder"}},
+                                                                        "typeName": "hydra.core.Name"}},
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {"variable": "ref"},
+                                                                        "type": {
                                                                           "application": {
-                                                                            "argument": {"variable": "wrapped"},
-                                                                            "function": {
-                                                                              "function": {
-                                                                                "elimination": {
-                                                                                  "record": {"field": "typeName", "typeName": "hydra.core.WrappedType"}}}}}},
-                                                                        "type": [
-                                                                          {
-                                                                            "constraints": null,
-                                                                            "type": {"variable": "hydra.core.Name"},
-                                                                            "variables": []}]}],
-                                                                    "body": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "name"},
-                                                                        "function": {
-                                                                          "typeApplication": {
-                                                                            "body": {"variable": "ref"},
-                                                                            "type": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.error.Error"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}}}}}}}},
-                                                                "domain": [{"variable": "hydra.core.WrappedType"}],
-                                                                "parameter": "wrapped"}}}}],
+                                                                            "argument": {"variable": "hydra.error.Error"},
+                                                                            "function": {"variable": "hydra.context.InContext"}}}}}}},
+                                                                "domain": [{"variable": "hydra.core.Type"}],
+                                                                "parameter": "_"}}}}],
                                                       "default": [
                                                         {
                                                           "typeApplication": {
@@ -10651,12 +10617,7 @@
                                                                                               "application": {
                                                                                                 "argument": {
                                                                                                   "application": {
-                                                                                                    "argument": {
-                                                                                                      "application": {
-                                                                                                        "argument": {"variable": "rt"},
-                                                                                                        "function": {
-                                                                                                          "function": {
-                                                                                                            "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
+                                                                                                    "argument": {"variable": "rt"},
                                                                                                     "function": {
                                                                                                       "application": {
                                                                                                         "argument": {"variable": "lname"},
@@ -10674,7 +10635,7 @@
                                                                                                                 "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                                         "type": {"variable": "hydra.ext.haskell.ast.ConstructorWithComments"}}},
                                                                                                     "type": {"variable": "hydra.ext.haskell.ast.Declaration"}}}}}}},
-                                                                                        "domain": [{"variable": "hydra.core.RowType"}],
+                                                                                        "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                                                                         "parameter": "rt"}}}},
                                                                                 {
                                                                                   "name": "union",
@@ -10729,12 +10690,7 @@
                                                                                               "application": {
                                                                                                 "argument": {
                                                                                                   "application": {
-                                                                                                    "argument": {
-                                                                                                      "application": {
-                                                                                                        "argument": {"variable": "rt"},
-                                                                                                        "function": {
-                                                                                                          "function": {
-                                                                                                            "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
+                                                                                                    "argument": {"variable": "rt"},
                                                                                                     "function": {
                                                                                                       "application": {
                                                                                                         "argument": {
@@ -10791,7 +10747,7 @@
                                                                                                         "type": {
                                                                                                           "list": {"variable": "hydra.ext.haskell.ast.ConstructorWithComments"}}}},
                                                                                                     "type": {"variable": "hydra.ext.haskell.ast.Declaration"}}}}}}},
-                                                                                        "domain": [{"variable": "hydra.core.RowType"}],
+                                                                                        "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                                                                         "parameter": "rt"}}}},
                                                                                 {
                                                                                   "name": "wrap",
@@ -10799,86 +10755,70 @@
                                                                                     "function": {
                                                                                       "lambda": {
                                                                                         "body": {
-                                                                                          "let": {
-                                                                                            "bindings": [
-                                                                                              {
-                                                                                                "name": "wt",
-                                                                                                "term": {
-                                                                                                  "application": {
-                                                                                                    "argument": {"variable": "wrapped"},
-                                                                                                    "function": {
-                                                                                                      "function": {
-                                                                                                        "elimination": {"record": {"field": "body", "typeName": "hydra.core.WrappedType"}}}}}},
-                                                                                                "type": [
-                                                                                                  {
-                                                                                                    "constraints": null,
-                                                                                                    "type": {"variable": "hydra.core.Type"},
-                                                                                                    "variables": []}]}],
-                                                                                            "body": {
-                                                                                              "application": {
-                                                                                                "argument": {
-                                                                                                  "function": {
-                                                                                                    "lambda": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "function": {
+                                                                                                "lambda": {
+                                                                                                  "body": {
+                                                                                                    "typeApplication": {
                                                                                                       "body": {
                                                                                                         "typeApplication": {
                                                                                                           "body": {
-                                                                                                            "typeApplication": {
-                                                                                                              "body": {
-                                                                                                                "either": {
-                                                                                                                  "@right": {
-                                                                                                                    "union": {
-                                                                                                                      "field": {
-                                                                                                                        "name": "data",
-                                                                                                                        "term": {
-                                                                                                                          "record": {
-                                                                                                                            "fields": [
-                                                                                                                              {
-                                                                                                                                "name": "keyword",
-                                                                                                                                "term": {
-                                                                                                                                  "union": {
-                                                                                                                                    "field": {"name": "newtype", "term": {"unit": {}}},
-                                                                                                                                    "typeName": "hydra.ext.haskell.ast.DataOrNewtype"}}},
-                                                                                                                              {
-                                                                                                                                "name": "context",
-                                                                                                                                "term": {
-                                                                                                                                  "typeApplication": {
-                                                                                                                                    "body": {"list": []},
-                                                                                                                                    "type": {"variable": "hydra.ext.haskell.ast.Assertion"}}}},
-                                                                                                                              {"name": "head", "term": {"variable": "hd"}},
-                                                                                                                              {"name": "constructors", "term": {"list": [{"variable": "cons"}]}},
-                                                                                                                              {"name": "deriving", "term": {"list": [{"variable": "deriv"}]}}],
-                                                                                                                            "typeName": "hydra.ext.haskell.ast.DataDeclaration"}}},
-                                                                                                                      "typeName": "hydra.ext.haskell.ast.Declaration"}}}},
-                                                                                                              "type": {
-                                                                                                                "application": {
-                                                                                                                  "argument": {"variable": "hydra.error.Error"},
-                                                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                                                          "type": {"variable": "hydra.ext.haskell.ast.Declaration"}}},
-                                                                                                      "domain": [{"variable": "hydra.ext.haskell.ast.ConstructorWithComments"}],
-                                                                                                      "parameter": "cons"}}},
-                                                                                                "function": {
+                                                                                                            "either": {
+                                                                                                              "@right": {
+                                                                                                                "union": {
+                                                                                                                  "field": {
+                                                                                                                    "name": "data",
+                                                                                                                    "term": {
+                                                                                                                      "record": {
+                                                                                                                        "fields": [
+                                                                                                                          {
+                                                                                                                            "name": "keyword",
+                                                                                                                            "term": {
+                                                                                                                              "union": {
+                                                                                                                                "field": {"name": "newtype", "term": {"unit": {}}},
+                                                                                                                                "typeName": "hydra.ext.haskell.ast.DataOrNewtype"}}},
+                                                                                                                          {
+                                                                                                                            "name": "context",
+                                                                                                                            "term": {
+                                                                                                                              "typeApplication": {
+                                                                                                                                "body": {"list": []},
+                                                                                                                                "type": {"variable": "hydra.ext.haskell.ast.Assertion"}}}},
+                                                                                                                          {"name": "head", "term": {"variable": "hd"}},
+                                                                                                                          {"name": "constructors", "term": {"list": [{"variable": "cons"}]}},
+                                                                                                                          {"name": "deriving", "term": {"list": [{"variable": "deriv"}]}}],
+                                                                                                                        "typeName": "hydra.ext.haskell.ast.DataDeclaration"}}},
+                                                                                                                  "typeName": "hydra.ext.haskell.ast.Declaration"}}}},
+                                                                                                          "type": {
+                                                                                                            "application": {
+                                                                                                              "argument": {"variable": "hydra.error.Error"},
+                                                                                                              "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                                      "type": {"variable": "hydra.ext.haskell.ast.Declaration"}}},
+                                                                                                  "domain": [{"variable": "hydra.ext.haskell.ast.ConstructorWithComments"}],
+                                                                                                  "parameter": "cons"}}},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {
                                                                                                   "application": {
-                                                                                                    "argument": {
-                                                                                                      "application": {
-                                                                                                        "argument": {"variable": "wt"},
-                                                                                                        "function": {
-                                                                                                          "application": {
-                                                                                                            "argument": {"variable": "elementName"},
-                                                                                                            "function": {"variable": "newtypeCons"}}}}},
+                                                                                                    "argument": {"variable": "wrapped"},
                                                                                                     "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "elementName"},
+                                                                                                        "function": {"variable": "newtypeCons"}}}}},
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
                                                                                                       "typeApplication": {
                                                                                                         "body": {
                                                                                                           "typeApplication": {
-                                                                                                            "body": {
-                                                                                                              "typeApplication": {
-                                                                                                                "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
-                                                                                                                "type": {
-                                                                                                                  "application": {
-                                                                                                                    "argument": {"variable": "hydra.error.Error"},
-                                                                                                                    "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                                                            "type": {"variable": "hydra.ext.haskell.ast.ConstructorWithComments"}}},
-                                                                                                        "type": {"variable": "hydra.ext.haskell.ast.Declaration"}}}}}}}}},
-                                                                                        "domain": [{"variable": "hydra.core.WrappedType"}],
+                                                                                                            "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                                            "type": {
+                                                                                                              "application": {
+                                                                                                                "argument": {"variable": "hydra.error.Error"},
+                                                                                                                "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                                        "type": {"variable": "hydra.ext.haskell.ast.ConstructorWithComments"}}},
+                                                                                                    "type": {"variable": "hydra.ext.haskell.ast.Declaration"}}}}}}},
+                                                                                        "domain": [{"variable": "hydra.core.Type"}],
                                                                                         "parameter": "wrapped"}}}}],
                                                                               "default": [
                                                                                 {

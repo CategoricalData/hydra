@@ -116,9 +116,7 @@ public interface Schemas {
     return hydra.lib.eithers.Map.apply(
       (java.util.function.Function<hydra.util.ConsList<hydra.util.PersistentSet<hydra.core.Name>>, hydra.util.PersistentSet<hydra.module.Namespace>>) (namesList -> hydra.lib.sets.FromList.apply(hydra.lib.maybes.Cat.apply(hydra.lib.lists.Map.apply(
         hydra.names.Names::namespaceOf,
-        hydra.lib.sets.ToList.apply(hydra.lib.sets.Delete.apply(
-          hydra.constants.Constants.placeholderName(),
-          hydra.lib.sets.Unions.apply(namesList))))))),
+        hydra.lib.sets.ToList.apply(hydra.lib.sets.Unions.apply(namesList)))))),
       hydra.lib.eithers.MapList.apply(
         depNames,
         els));
@@ -268,12 +266,12 @@ public interface Schemas {
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>> visit(hydra.core.Type.Record rt) {
-        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>>right((toMap).apply(((rt).value).fields));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>>right((toMap).apply((rt).value));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>> visit(hydra.core.Type.Union rt) {
-        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>>right((toMap).apply(((rt).value).fields));
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>>right((toMap).apply((rt).value));
       }
       
       @Override
@@ -524,7 +522,7 @@ public interface Schemas {
     });
   }
   
-  static Boolean isEnumRowType(hydra.core.RowType rt) {
+  static Boolean isEnumRowType(hydra.util.ConsList<hydra.core.FieldType> rt) {
     return hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<Boolean, java.util.function.Function<Boolean, Boolean>>) (p0 -> p1 -> hydra.lib.logic.And.apply(
         p0,
@@ -532,7 +530,7 @@ public interface Schemas {
       true,
       hydra.lib.lists.Map.apply(
         (java.util.function.Function<hydra.core.FieldType, Boolean>) (f -> hydra.schemas.Schemas.isUnitType(hydra.rewriting.Rewriting.deannotateType((f).type))),
-        (rt).fields));
+        rt));
   }
   
   static Boolean isEnumType(hydra.core.Type typ) {
@@ -637,9 +635,7 @@ public interface Schemas {
       
       @Override
       public Boolean visit(hydra.core.Type.Union rt) {
-        return hydra.lib.equality.Equal.apply(
-          "hydra.core.Type",
-          (((rt).value).typeName).value);
+        return false;
       }
       
       @Override
@@ -790,15 +786,15 @@ public interface Schemas {
       defs)))));
   }
   
-  static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.RowType> requireRecordType(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Name name) {
-    java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.RowType>> toRecord = (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.RowType>>) (t -> (t).accept(new hydra.core.Type.PartialVisitor<>() {
+  static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.FieldType>> requireRecordType(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Name name) {
+    java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.util.ConsList<hydra.core.FieldType>>> toRecord = (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.util.ConsList<hydra.core.FieldType>>>) (t -> (t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
-      public hydra.util.Maybe<hydra.core.RowType> otherwise(hydra.core.Type instance) {
-        return (hydra.util.Maybe<hydra.core.RowType>) (hydra.util.Maybe.<hydra.core.RowType>nothing());
+      public hydra.util.Maybe<hydra.util.ConsList<hydra.core.FieldType>> otherwise(hydra.core.Type instance) {
+        return (hydra.util.Maybe<hydra.util.ConsList<hydra.core.FieldType>>) (hydra.util.Maybe.<hydra.util.ConsList<hydra.core.FieldType>>nothing());
       }
       
       @Override
-      public hydra.util.Maybe<hydra.core.RowType> visit(hydra.core.Type.Record rt) {
+      public hydra.util.Maybe<hydra.util.ConsList<hydra.core.FieldType>> visit(hydra.core.Type.Record rt) {
         return hydra.util.Maybe.just((rt).value);
       }
     }));
@@ -880,12 +876,12 @@ public interface Schemas {
   }
   
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> requireUnionField(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Name tname, hydra.core.Name fname) {
-    java.util.function.Function<hydra.core.RowType, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>> withRowType = (java.util.function.Function<hydra.core.RowType, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>>) (rt -> {
+    java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>> withRowType = (java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>>) (rt -> {
       hydra.util.Lazy<hydra.util.ConsList<hydra.core.FieldType>> matches = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
         (java.util.function.Function<hydra.core.FieldType, Boolean>) (ft -> hydra.lib.equality.Equal.apply(
           (ft).name,
           fname)),
-        (rt).fields));
+        rt));
       return hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(matches.get()),
         () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
@@ -903,15 +899,15 @@ public interface Schemas {
       withRowType);
   }
   
-  static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.RowType> requireUnionType(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Name name) {
-    java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.RowType>> toUnion = (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.RowType>>) (t -> (t).accept(new hydra.core.Type.PartialVisitor<>() {
+  static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.FieldType>> requireUnionType(hydra.context.Context cx, hydra.graph.Graph graph, hydra.core.Name name) {
+    java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.util.ConsList<hydra.core.FieldType>>> toUnion = (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.util.ConsList<hydra.core.FieldType>>>) (t -> (t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
-      public hydra.util.Maybe<hydra.core.RowType> otherwise(hydra.core.Type instance) {
-        return (hydra.util.Maybe<hydra.core.RowType>) (hydra.util.Maybe.<hydra.core.RowType>nothing());
+      public hydra.util.Maybe<hydra.util.ConsList<hydra.core.FieldType>> otherwise(hydra.core.Type instance) {
+        return (hydra.util.Maybe<hydra.util.ConsList<hydra.core.FieldType>>) (hydra.util.Maybe.<hydra.util.ConsList<hydra.core.FieldType>>nothing());
       }
       
       @Override
-      public hydra.util.Maybe<hydra.core.RowType> visit(hydra.core.Type.Union rt) {
+      public hydra.util.Maybe<hydra.util.ConsList<hydra.core.FieldType>> visit(hydra.core.Type.Union rt) {
         return hydra.util.Maybe.just((rt).value);
       }
     }));

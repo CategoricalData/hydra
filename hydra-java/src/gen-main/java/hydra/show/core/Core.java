@@ -634,8 +634,7 @@ public interface Core {
         }
       });
     })));
-    java.util.function.Function<hydra.core.RowType, String> showRowType = (java.util.function.Function<hydra.core.RowType, String>) (rt -> {
-      hydra.util.ConsList<hydra.core.FieldType> flds = (rt).fields;
+    java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, String> showRowType = (java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, String>) (flds -> {
       hydra.util.Lazy<hydra.util.ConsList<String>> fieldStrs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
         hydra.show.core.Core::fieldType,
         flds));
@@ -783,13 +782,9 @@ public interface Core {
       
       @Override
       public String visit(hydra.core.Type.Wrap wt) {
-        String tname = (((wt).value).typeName).value;
-        hydra.core.Type typ1 = ((wt).value).body;
         return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
-          "wrap[",
-          tname,
-          "](",
-          hydra.show.core.Core.type(typ1),
+          "wrap(",
+          hydra.show.core.Core.type((wt).value),
           ")"));
       }
     });

@@ -8993,12 +8993,7 @@
                                                                                                               "name": "fields",
                                                                                                               "term": {
                                                                                                                 "application": {
-                                                                                                                  "argument": {
-                                                                                                                    "application": {
-                                                                                                                      "argument": {"variable": "rt"},
-                                                                                                                      "function": {
-                                                                                                                        "function": {
-                                                                                                                          "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
+                                                                                                                  "argument": {"variable": "rt"},
                                                                                                                   "function": {
                                                                                                                     "application": {
                                                                                                                       "argument": {"variable": "forFieldType"},
@@ -9013,7 +9008,7 @@
                                                                                                     "typeName": "hydra.core.Term"}}]}}},
                                                                                         "type": {"literal": {"string": {}}}}},
                                                                                     "type": {"list": {"variable": "hydra.core.Term"}}}},
-                                                                                "domain": [{"variable": "hydra.core.RowType"}],
+                                                                                "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                                                                 "parameter": "rt"}}},
                                                                           "function": {
                                                                             "application": {
@@ -9035,7 +9030,7 @@
                                                                                         "function": {
                                                                                           "lambda": {
                                                                                             "body": {"variable": "x"},
-                                                                                            "domain": [{"variable": "hydra.core.RowType"}],
+                                                                                            "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                                                                             "parameter": "x"}}},
                                                                                       "function": {
                                                                                         "application": {
@@ -9073,9 +9068,9 @@
                                                                                                             "application": {
                                                                                                               "argument": {"variable": "hydra.error.Error"},
                                                                                                               "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                                                      "type": {"variable": "hydra.core.RowType"}}},
+                                                                                                      "type": {"list": {"variable": "hydra.core.FieldType"}}}},
                                                                                                   "type": {"literal": {"string": {}}}}},
-                                                                                              "type": {"variable": "hydra.core.RowType"}}}}}}}}},
+                                                                                              "type": {"list": {"variable": "hydra.core.FieldType"}}}}}}}}}},
                                                                               "function": {
                                                                                 "typeApplication": {
                                                                                   "body": {
@@ -9084,7 +9079,7 @@
                                                                                         "typeApplication": {
                                                                                           "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                                           "type": {"literal": {"string": {}}}}},
-                                                                                      "type": {"variable": "hydra.core.RowType"}}},
+                                                                                      "type": {"list": {"variable": "hydra.core.FieldType"}}}},
                                                                                   "type": {"list": {"variable": "hydra.core.Term"}}}}}}}}}}}}}}}}}},
                                                   "domain": [{"variable": "hydra.core.Injection"}],
                                                   "parameter": "inj"}}}},
@@ -9245,114 +9240,75 @@
                                         "let": {
                                           "bindings": [
                                             {
-                                              "name": "tname",
+                                              "name": "toOptField",
                                               "term": {
-                                                "application": {
-                                                  "argument": {"variable": "rt"},
-                                                  "function": {
-                                                    "function": {
-                                                      "elimination": {"record": {"field": "typeName", "typeName": "hydra.core.RowType"}}}}}},
+                                                "function": {
+                                                  "lambda": {
+                                                    "body": {
+                                                      "record": {
+                                                        "fields": [
+                                                          {
+                                                            "name": "name",
+                                                            "term": {
+                                                              "application": {
+                                                                "argument": {"variable": "f"},
+                                                                "function": {
+                                                                  "function": {
+                                                                    "elimination": {"record": {"field": "name", "typeName": "hydra.core.FieldType"}}}}}}},
+                                                          {
+                                                            "name": "type",
+                                                            "term": {
+                                                              "union": {
+                                                                "field": {
+                                                                  "name": "maybe",
+                                                                  "term": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "f"},
+                                                                      "function": {
+                                                                        "function": {
+                                                                          "elimination": {"record": {"field": "type", "typeName": "hydra.core.FieldType"}}}}}}},
+                                                                "typeName": "hydra.core.Type"}}}],
+                                                        "typeName": "hydra.core.FieldType"}},
+                                                    "domain": [{"variable": "hydra.core.FieldType"}],
+                                                    "parameter": "f"}}},
                                               "type": [
                                                 {
                                                   "constraints": null,
-                                                  "type": {"variable": "hydra.core.Name"},
+                                                  "type": {
+                                                    "function": {
+                                                      "codomain": {"variable": "hydra.core.FieldType"},
+                                                      "domain": {"variable": "hydra.core.FieldType"}}},
                                                   "variables": []}]}],
                                           "body": {
                                             "let": {
                                               "bindings": [
                                                 {
-                                                  "name": "fields",
+                                                  "name": "optFields",
                                                   "term": {
                                                     "application": {
                                                       "argument": {"variable": "rt"},
                                                       "function": {
-                                                        "function": {
-                                                          "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
+                                                        "application": {
+                                                          "argument": {"variable": "toOptField"},
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "typeApplication": {
+                                                                  "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                  "type": {"variable": "hydra.core.FieldType"}}},
+                                                              "type": {"variable": "hydra.core.FieldType"}}}}}}},
                                                   "type": [
                                                     {
                                                       "constraints": null,
                                                       "type": {"list": {"variable": "hydra.core.FieldType"}},
                                                       "variables": []}]}],
                                               "body": {
-                                                "let": {
-                                                  "bindings": [
-                                                    {
-                                                      "name": "toOptField",
-                                                      "term": {
-                                                        "function": {
-                                                          "lambda": {
-                                                            "body": {
-                                                              "record": {
-                                                                "fields": [
-                                                                  {
-                                                                    "name": "name",
-                                                                    "term": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "f"},
-                                                                        "function": {
-                                                                          "function": {
-                                                                            "elimination": {"record": {"field": "name", "typeName": "hydra.core.FieldType"}}}}}}},
-                                                                  {
-                                                                    "name": "type",
-                                                                    "term": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "maybe",
-                                                                          "term": {
-                                                                            "application": {
-                                                                              "argument": {"variable": "f"},
-                                                                              "function": {
-                                                                                "function": {
-                                                                                  "elimination": {"record": {"field": "type", "typeName": "hydra.core.FieldType"}}}}}}},
-                                                                        "typeName": "hydra.core.Type"}}}],
-                                                                "typeName": "hydra.core.FieldType"}},
-                                                            "domain": [{"variable": "hydra.core.FieldType"}],
-                                                            "parameter": "f"}}},
-                                                      "type": [
-                                                        {
-                                                          "constraints": null,
-                                                          "type": {
-                                                            "function": {
-                                                              "codomain": {"variable": "hydra.core.FieldType"},
-                                                              "domain": {"variable": "hydra.core.FieldType"}}},
-                                                          "variables": []}]}],
-                                                  "body": {
-                                                    "let": {
-                                                      "bindings": [
-                                                        {
-                                                          "name": "optFields",
-                                                          "term": {
-                                                            "application": {
-                                                              "argument": {"variable": "fields"},
-                                                              "function": {
-                                                                "application": {
-                                                                  "argument": {"variable": "toOptField"},
-                                                                  "function": {
-                                                                    "typeApplication": {
-                                                                      "body": {
-                                                                        "typeApplication": {
-                                                                          "body": {"function": {"primitive": "hydra.lib.lists.map"}},
-                                                                          "type": {"variable": "hydra.core.FieldType"}}},
-                                                                      "type": {"variable": "hydra.core.FieldType"}}}}}}},
-                                                          "type": [
-                                                            {
-                                                              "constraints": null,
-                                                              "type": {"list": {"variable": "hydra.core.FieldType"}},
-                                                              "variables": []}]}],
-                                                      "body": {
-                                                        "list": [
-                                                          {
-                                                            "union": {
-                                                              "field": {
-                                                                "name": "record",
-                                                                "term": {
-                                                                  "record": {
-                                                                    "fields": [
-                                                                      {"name": "typeName", "term": {"variable": "tname"}},
-                                                                      {"name": "fields", "term": {"variable": "optFields"}}],
-                                                                    "typeName": "hydra.core.RowType"}}},
-                                                              "typeName": "hydra.core.Type"}}]}}}}}}}}},
-                                      "domain": [{"variable": "hydra.core.RowType"}],
+                                                "list": [
+                                                  {
+                                                    "union": {
+                                                      "field": {"name": "record", "term": {"variable": "optFields"}},
+                                                      "typeName": "hydra.core.Type"}}]}}}}},
+                                      "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                       "parameter": "rt"}}}},
                               {
                                 "name": "unit",

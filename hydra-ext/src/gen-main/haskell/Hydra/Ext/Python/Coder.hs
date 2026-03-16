@@ -346,13 +346,13 @@ encodeType env typ =
     Core.TypePair v0 -> (Eithers.bind (encodeType env (Core.pairTypeFirst v0)) (\pyFirst -> Eithers.bind (encodeType env (Core.pairTypeSecond v0)) (\pySecond -> Right (Utils.nameAndParams (Syntax.Name "tuple") [
       pyFirst,
       pySecond]))))
-    Core.TypeRecord v0 -> (Right (Names.typeVariableReference env (Core.rowTypeTypeName v0)))
+    Core.TypeRecord _ -> dflt
     Core.TypeSet v0 -> (Eithers.bind (encodeType env v0) (\pyet -> Right (Utils.nameAndParams (Syntax.Name "frozenset") [
       pyet])))
-    Core.TypeUnion v0 -> (Right (Names.typeVariableReference env (Core.rowTypeTypeName v0)))
+    Core.TypeUnion _ -> dflt
     Core.TypeUnit -> (Right (Utils.pyNameToPyExpression Utils.pyNone))
     Core.TypeVariable v0 -> (Right (Names.typeVariableReference env v0))
-    Core.TypeWrap v0 -> (Right (Names.typeVariableReference env (Core.wrappedTypeTypeName v0)))
+    Core.TypeWrap _ -> dflt
     Core.TypeAnnotated _ -> dflt) (Rewriting.deannotateType typ))
 
 -- | Encode a type to a Python expression, quoting if the type has free variables
@@ -496,12 +496,10 @@ isCaseStatementApplication term =
           _ -> Nothing) (Rewriting.deannotateAndDetypeTerm body))))
 
 -- | Check if a variant field has unit type
-isVariantUnitType :: (Core.RowType -> Core.Name -> Bool)
+isVariantUnitType :: ([Core.FieldType] -> Core.Name -> Bool)
 isVariantUnitType rowType fieldName =  
-  let fields = (Core.rowTypeFields rowType)
-  in  
-    let mfield = (Lists.find (\ft -> Equality.equal (Core.fieldTypeName ft) fieldName) fields)
-    in (Maybes.fromMaybe False (Maybes.map (\ft -> Schemas.isUnitType (Rewriting.deannotateType (Core.fieldTypeType ft))) mfield))
+  let mfield = (Lists.find (\ft -> Equality.equal (Core.fieldTypeName ft) fieldName) rowType)
+  in (Maybes.fromMaybe False (Maybes.map (\ft -> Schemas.isUnitType (Rewriting.deannotateType (Core.fieldTypeType ft))) mfield))
 
 -- | Create a wildcard case block with a given body statement
 wildcardCaseBlock :: (Syntax.Statement -> Syntax.CaseBlock)
@@ -545,11 +543,11 @@ classVariantPatternWithCapture env pyVariantName varName =
           keywordPattern]))}))
 
 -- | Check if union cases are fully covered
-isCasesFull :: (Core.RowType -> [t0] -> Bool)
+isCasesFull :: ([t0] -> [t1] -> Bool)
 isCasesFull rowType cases_ =  
   let numCases = (Lists.length cases_)
   in  
-    let numFields = (Lists.length (Core.rowTypeFields rowType))
+    let numFields = (Lists.length rowType)
     in (Logic.not (Equality.lt numCases numFields))
 
 -- | Create a ClosedPattern for a variant based on its characteristics
@@ -675,7 +673,7 @@ encodeDefaultCaseBlock encodeTerm isFull mdflt tname = (Eithers.bind (Maybes.may
         Syntax.caseBlockBody = body}])))
 
 -- | Encode a single case (Field) into a CaseBlock for a match statement
-encodeCaseBlock :: (t0 -> Helpers.PythonEnvironment -> Core.Name -> Core.RowType -> Bool -> (Helpers.PythonEnvironment -> Core.Term -> Either t1 [Syntax.Statement]) -> Core.Field -> Either t1 Syntax.CaseBlock)
+encodeCaseBlock :: (t0 -> Helpers.PythonEnvironment -> Core.Name -> [Core.FieldType] -> Bool -> (Helpers.PythonEnvironment -> Core.Term -> Either t1 [Syntax.Statement]) -> Core.Field -> Either t1 Syntax.CaseBlock)
 encodeCaseBlock cx env tname rowType isEnum encodeBody field =  
   let fname = (Core.fieldName field)
   in  
@@ -766,37 +764,35 @@ dataclassDecorator = (Syntax.NamedExpressionSimple (Utils.pyPrimaryToPyExpressio
   Syntax.argsKwargOrDoubleStarred = []})))))
 
 -- | Encode a record type as a Python dataclass
-encodeRecordType :: (Context.Context -> Helpers.PythonEnvironment -> Core.Name -> Core.RowType -> Maybe String -> Either (Context.InContext Error.Error) Syntax.Statement)
-encodeRecordType cx env name rowType comment =  
-  let tfields = (Core.rowTypeFields rowType)
-  in (Eithers.bind (Eithers.mapList (encodeFieldType cx env) tfields) (\pyFields ->  
-    let constStmts = (encodeNameConstants env name tfields)
+encodeRecordType :: (Context.Context -> Helpers.PythonEnvironment -> Core.Name -> [Core.FieldType] -> Maybe String -> Either (Context.InContext Error.Error) Syntax.Statement)
+encodeRecordType cx env name rowType comment = (Eithers.bind (Eithers.mapList (encodeFieldType cx env) rowType) (\pyFields ->  
+  let constStmts = (encodeNameConstants env name rowType)
+  in  
+    let body = (Utils.indentedBlock comment [
+            pyFields,
+            constStmts])
     in  
-      let body = (Utils.indentedBlock comment [
-              pyFields,
-              constStmts])
+      let boundVars = (Helpers.pythonEnvironmentBoundTypeVariables env)
       in  
-        let boundVars = (Helpers.pythonEnvironmentBoundTypeVariables env)
+        let tparamList = (Pairs.first boundVars)
         in  
-          let tparamList = (Pairs.first boundVars)
+          let mGenericArg = (genericArg tparamList)
           in  
-            let mGenericArg = (genericArg tparamList)
+            let args = (Maybes.maybe Nothing (\a -> Just (Utils.pyExpressionsToPyArgs [
+                    a])) mGenericArg)
             in  
-              let args = (Maybes.maybe Nothing (\a -> Just (Utils.pyExpressionsToPyArgs [
-                      a])) mGenericArg)
+              let decs = (Just (Syntax.Decorators [
+                      dataclassDecorator]))
               in  
-                let decs = (Just (Syntax.Decorators [
-                        dataclassDecorator]))
+                let pyName = (Names.encodeName False Util.CaseConventionPascal env name)
                 in  
-                  let pyName = (Names.encodeName False Util.CaseConventionPascal env name)
-                  in  
-                    let noTypeParams = []
-                    in (Right (Utils.pyClassDefinitionToPyStatement (Syntax.ClassDefinition {
-                      Syntax.classDefinitionDecorators = decs,
-                      Syntax.classDefinitionName = pyName,
-                      Syntax.classDefinitionTypeParams = noTypeParams,
-                      Syntax.classDefinitionArguments = args,
-                      Syntax.classDefinitionBody = body})))))
+                  let noTypeParams = []
+                  in (Right (Utils.pyClassDefinitionToPyStatement (Syntax.ClassDefinition {
+                    Syntax.classDefinitionDecorators = decs,
+                    Syntax.classDefinitionName = pyName,
+                    Syntax.classDefinitionTypeParams = noTypeParams,
+                    Syntax.classDefinitionArguments = args,
+                    Syntax.classDefinitionBody = body})))))
 
 -- | Encode an enum value assignment statement with optional comment
 encodeEnumValueAssignment :: (Context.Context -> Helpers.PythonEnvironment -> Core.FieldType -> Either (Context.InContext Error.Error) [Syntax.Statement])
@@ -855,37 +851,35 @@ encodeUnionField cx env unionName fieldType =
                   Syntax.classDefinitionBody = body}))))))
 
 -- | Encode a union type as an enum (for unit-only fields) or variant classes
-encodeUnionType :: (Context.Context -> Helpers.PythonEnvironment -> Core.Name -> Core.RowType -> Maybe String -> Either (Context.InContext Error.Error) [Syntax.Statement])
-encodeUnionType cx env name rowType comment =  
-  let tfields = (Core.rowTypeFields rowType)
-  in (Logic.ifElse (Schemas.isEnumRowType rowType) (Eithers.bind (Eithers.mapList (encodeEnumValueAssignment cx env) tfields) (\vals ->  
-    let body = (Utils.indentedBlock comment vals)
+encodeUnionType :: (Context.Context -> Helpers.PythonEnvironment -> Core.Name -> [Core.FieldType] -> Maybe String -> Either (Context.InContext Error.Error) [Syntax.Statement])
+encodeUnionType cx env name rowType comment = (Logic.ifElse (Schemas.isEnumRowType rowType) (Eithers.bind (Eithers.mapList (encodeEnumValueAssignment cx env) rowType) (\vals ->  
+  let body = (Utils.indentedBlock comment vals)
+  in  
+    let enumName = (Syntax.Name "Enum")
     in  
-      let enumName = (Syntax.Name "Enum")
+      let args = (Just (Utils.pyExpressionsToPyArgs [
+              Utils.pyNameToPyExpression enumName]))
       in  
-        let args = (Just (Utils.pyExpressionsToPyArgs [
-                Utils.pyNameToPyExpression enumName]))
+        let pyName = (Names.encodeName False Util.CaseConventionPascal env name)
         in  
-          let pyName = (Names.encodeName False Util.CaseConventionPascal env name)
-          in  
-            let typeConstStmt = (Utils.dottedAssignmentStatement pyName (Names.encodeConstantForTypeName env name) (Utils.functionCall (Utils.pyNameToPyPrimary (Names.encodeName True Util.CaseConventionPascal env (Core.Name "hydra.core.Name"))) [
-                    Utils.doubleQuotedString (Core.unName name)]))
-            in (Right [
-              Utils.pyClassDefinitionToPyStatement (Syntax.ClassDefinition {
-                Syntax.classDefinitionDecorators = Nothing,
-                Syntax.classDefinitionName = pyName,
-                Syntax.classDefinitionTypeParams = [],
-                Syntax.classDefinitionArguments = args,
-                Syntax.classDefinitionBody = body}),
-              typeConstStmt]))) ( 
-    let constStmts = (encodeNameConstants env name tfields)
-    in (Eithers.bind (Eithers.mapList (encodeUnionField cx env name) tfields) (\fieldStmts ->  
-      let tparams = (environmentTypeParameters env)
+          let typeConstStmt = (Utils.dottedAssignmentStatement pyName (Names.encodeConstantForTypeName env name) (Utils.functionCall (Utils.pyNameToPyPrimary (Names.encodeName True Util.CaseConventionPascal env (Core.Name "hydra.core.Name"))) [
+                  Utils.doubleQuotedString (Core.unName name)]))
+          in (Right [
+            Utils.pyClassDefinitionToPyStatement (Syntax.ClassDefinition {
+              Syntax.classDefinitionDecorators = Nothing,
+              Syntax.classDefinitionName = pyName,
+              Syntax.classDefinitionTypeParams = [],
+              Syntax.classDefinitionArguments = args,
+              Syntax.classDefinitionBody = body}),
+            typeConstStmt]))) ( 
+  let constStmts = (encodeNameConstants env name rowType)
+  in (Eithers.bind (Eithers.mapList (encodeUnionField cx env name) rowType) (\fieldStmts ->  
+    let tparams = (environmentTypeParameters env)
+    in  
+      let unionAlts = (Lists.map (encodeUnionFieldAlt env name) rowType)
       in  
-        let unionAlts = (Lists.map (encodeUnionFieldAlt env name) tfields)
-        in  
-          let unionStmts = (unionTypeStatementsFor env (Names.encodeName False Util.CaseConventionPascal env name) tparams comment (Utils.orExpression unionAlts) constStmts)
-          in (Right (Lists.concat2 fieldStmts unionStmts))))))
+        let unionStmts = (unionTypeStatementsFor env (Names.encodeName False Util.CaseConventionPascal env name) tparams comment (Utils.orExpression unionAlts) constStmts)
+        in (Right (Lists.concat2 fieldStmts unionStmts))))))
 
 -- | Encode a union field as a primary expression for | alternatives
 encodeUnionFieldAlt :: (Helpers.PythonEnvironment -> Core.Name -> Core.FieldType -> Syntax.Primary)
@@ -934,9 +928,7 @@ encodeTypeAssignmentInner cx env name typ comment =
       Core.TypeRecord v0 -> (Eithers.map (\s -> [
         s]) (encodeRecordType cx env name v0 comment))
       Core.TypeUnion v0 -> (encodeUnionType cx env name v0 comment)
-      Core.TypeWrap v0 ->  
-        let innerType = (Core.wrappedTypeBody v0)
-        in (encodeWrappedType env name innerType comment)
+      Core.TypeWrap v0 -> (encodeWrappedType env name v0 comment)
       _ -> dflt) stripped)
 
 -- | Create an expression that calls hydra.dsl.python.unsupported(message) at runtime
@@ -1933,13 +1925,11 @@ encodeTermInline cx env noCast term =
             in (Eithers.bind (Schemas.requireUnionType cx (pythonEnvironmentGetGraph env) tname) (\rt -> Logic.ifElse (Schemas.isEnumRowType rt) (Right (Utils.projectFromExpression (Utils.pyNameToPyExpression (Names.encodeNameQualified env tname)) (Names.encodeEnumValue env (Core.fieldName field)))) ( 
               let fname = (Core.fieldName field)
               in  
-                let ftypes = (Core.rowTypeFields rt)
-                in  
-                  let isUnitVariant = (Maybes.maybe False (\ft -> Schemas.isUnitType (Rewriting.deannotateType (Core.fieldTypeType ft))) (Lists.find (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) (Core.unName fname)) ftypes))
-                  in (Eithers.bind (Logic.ifElse (Logic.or (Schemas.isUnitTerm (Core.fieldTerm field)) isUnitVariant) (Right []) (Eithers.bind (encode (Core.fieldTerm field)) (\parg -> Right [
-                    parg]))) (\args ->  
-                    let deconflictedName = (deconflictVariantName True env tname fname (Helpers.pythonEnvironmentGraph env))
-                    in (Right (Utils.castTo (Names.typeVariableReference env tname) (Utils.functionCall (Utils.pyNameToPyPrimary deconflictedName) args))))))))
+                let isUnitVariant = (Maybes.maybe False (\ft -> Schemas.isUnitType (Rewriting.deannotateType (Core.fieldTypeType ft))) (Lists.find (\ft -> Equality.equal (Core.unName (Core.fieldTypeName ft)) (Core.unName fname)) rt))
+                in (Eithers.bind (Logic.ifElse (Logic.or (Schemas.isUnitTerm (Core.fieldTerm field)) isUnitVariant) (Right []) (Eithers.bind (encode (Core.fieldTerm field)) (\parg -> Right [
+                  parg]))) (\args ->  
+                  let deconflictedName = (deconflictVariantName True env tname fname (Helpers.pythonEnvironmentGraph env))
+                  in (Right (Utils.castTo (Names.typeVariableReference env tname) (Utils.functionCall (Utils.pyNameToPyPrimary deconflictedName) args))))))))
         Core.TermUnit -> (Right (Utils.pyNameToPyExpression Utils.pyNone))
         Core.TermVariable v0 -> (encodeVariable cx env v0 [])
         Core.TermWrap v0 ->  
@@ -2006,7 +1996,7 @@ extendMetaForType topLevel isTermAnnot typ meta =
               Core.FloatTypeBigfloat -> (setMetaUsesDecimal metaWithSubtypes True)
               _ -> metaWithSubtypes) v1)
             _ -> metaWithSubtypes) v0)
-          Core.TypeUnion v0 -> (Logic.ifElse (Schemas.isEnumRowType v0) (setMetaUsesEnum metaWithSubtypes True) (Logic.ifElse (Logic.not (Lists.null (Core.rowTypeFields v0))) (setMetaUsesNode metaWithSubtypes True) metaWithSubtypes))
+          Core.TypeUnion v0 -> (Logic.ifElse (Schemas.isEnumRowType v0) (setMetaUsesEnum metaWithSubtypes True) (Logic.ifElse (Logic.not (Lists.null v0)) (setMetaUsesNode metaWithSubtypes True) metaWithSubtypes))
           Core.TypeForall v0 ->  
             let body = (Core.forallTypeBody v0)
             in  
@@ -2015,12 +2005,10 @@ extendMetaForType topLevel isTermAnnot typ meta =
                 Core.TypeRecord _ -> (setMetaUsesGeneric metaForWrap True)
                 _ -> metaForWrap) (Rewriting.deannotateType body))
           Core.TypeRecord v0 ->  
-            let fields = (Core.rowTypeFields v0)
+            let hasAnnotated = (Lists.foldl (\b -> \ft -> Logic.or b (Annotations.hasTypeDescription (Core.fieldTypeType ft))) False v0)
             in  
-              let hasAnnotated = (Lists.foldl (\b -> \ft -> Logic.or b (Annotations.hasTypeDescription (Core.fieldTypeType ft))) False fields)
-              in  
-                let meta1 = (Logic.ifElse (Lists.null fields) metaWithSubtypes (setMetaUsesDataclass metaWithSubtypes True))
-                in (Logic.ifElse hasAnnotated (setMetaUsesAnnotated meta1 True) meta1)
+              let meta1 = (Logic.ifElse (Lists.null v0) metaWithSubtypes (setMetaUsesDataclass metaWithSubtypes True))
+              in (Logic.ifElse hasAnnotated (setMetaUsesAnnotated meta1 True) meta1)
           Core.TypeWrap _ -> (Logic.ifElse isTermAnnot metaWithSubtypes (setMetaUsesNode metaWithSubtypes True))
           _ -> metaWithSubtypes) (Rewriting.deannotateType typ))
 

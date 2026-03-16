@@ -27,7 +27,7 @@ annotatedTerm cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) 
     in (Eithers.bind (Helpers.requireField "body" term fieldMap cx) (\field_body -> Eithers.bind (Helpers.requireField "annotation" (Helpers.decodeMap name term) fieldMap cx) (\field_annotation -> Right (Core.AnnotatedTerm {
       Core.annotatedTermBody = field_body,
       Core.annotatedTermAnnotation = field_annotation}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.core.AnnotatedTerm"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 annotatedType :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.AnnotatedType)
 annotatedType cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -36,7 +36,7 @@ annotatedType cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) 
     in (Eithers.bind (Helpers.requireField "body" type_ fieldMap cx) (\field_body -> Eithers.bind (Helpers.requireField "annotation" (Helpers.decodeMap name term) fieldMap cx) (\field_annotation -> Right (Core.AnnotatedType {
       Core.annotatedTypeBody = field_body,
       Core.annotatedTypeAnnotation = field_annotation}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.core.AnnotatedType"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 application :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Application)
 application cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -45,7 +45,7 @@ application cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\
     in (Eithers.bind (Helpers.requireField "function" term fieldMap cx) (\field_function -> Eithers.bind (Helpers.requireField "argument" term fieldMap cx) (\field_argument -> Right (Core.Application {
       Core.applicationFunction = field_function,
       Core.applicationArgument = field_argument}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.core.Application"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 applicationType :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.ApplicationType)
 applicationType cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -54,7 +54,7 @@ applicationType cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)
     in (Eithers.bind (Helpers.requireField "function" type_ fieldMap cx) (\field_function -> Eithers.bind (Helpers.requireField "argument" type_ fieldMap cx) (\field_argument -> Right (Core.ApplicationType {
       Core.applicationTypeFunction = field_function,
       Core.applicationTypeArgument = field_argument}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.core.ApplicationType"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 binding :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Binding)
 binding cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -64,7 +64,7 @@ binding cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stri
       Core.bindingName = field_name,
       Core.bindingTerm = field_term,
       Core.bindingType = field_type})))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.core.Binding"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 caseStatement :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.CaseStatement)
 caseStatement cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -74,7 +74,7 @@ caseStatement cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) 
       Core.caseStatementTypeName = field_typeName,
       Core.caseStatementDefault = field_default,
       Core.caseStatementCases = field_cases})))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.core.CaseStatement"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 eitherType :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.EitherType)
 eitherType cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -83,7 +83,7 @@ eitherType cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\s
     in (Eithers.bind (Helpers.requireField "left" type_ fieldMap cx) (\field_left -> Eithers.bind (Helpers.requireField "right" type_ fieldMap cx) (\field_right -> Right (Core.EitherType {
       Core.eitherTypeLeft = field_left,
       Core.eitherTypeRight = field_right}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.core.EitherType"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 pairType :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.PairType)
 pairType cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -92,13 +92,12 @@ pairType cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\str
     in (Eithers.bind (Helpers.requireField "first" type_ fieldMap cx) (\field_first -> Eithers.bind (Helpers.requireField "second" type_ fieldMap cx) (\field_second -> Right (Core.PairType {
       Core.pairTypeFirst = field_first,
       Core.pairTypeSecond = field_second}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.core.PairType"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 elimination :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Elimination)
 elimination cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -108,9 +107,8 @@ elimination cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.core.Elimination"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 field :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Field)
 field cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -119,7 +117,7 @@ field cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripp
     in (Eithers.bind (Helpers.requireField "name" name fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "term" term fieldMap cx) (\field_term -> Right (Core.Field {
       Core.fieldName = field_name,
       Core.fieldTerm = field_term}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.core.Field"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 fieldType :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.FieldType)
 fieldType cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -128,13 +126,12 @@ fieldType cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\st
     in (Eithers.bind (Helpers.requireField "name" name fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "type" type_ fieldMap cx) (\field_type -> Right (Core.FieldType {
       Core.fieldTypeName = field_name,
       Core.fieldTypeType = field_type}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.core.FieldType"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 floatType :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.FloatType)
 floatType cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -144,15 +141,13 @@ floatType cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\st
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.core.FloatType"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 floatValue :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.FloatValue)
 floatValue cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -180,9 +175,8 @@ floatValue cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\s
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.core.FloatValue"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 forallType :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.ForallType)
 forallType cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -191,13 +185,12 @@ forallType cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\s
     in (Eithers.bind (Helpers.requireField "parameter" name fieldMap cx) (\field_parameter -> Eithers.bind (Helpers.requireField "body" type_ fieldMap cx) (\field_body -> Right (Core.ForallType {
       Core.forallTypeParameter = field_parameter,
       Core.forallTypeBody = field_body}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.core.ForallType"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 function :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Function)
 function cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -207,9 +200,8 @@ function cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\str
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.core.Function"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 functionType :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.FunctionType)
 functionType cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -218,7 +210,7 @@ functionType cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (
     in (Eithers.bind (Helpers.requireField "domain" type_ fieldMap cx) (\field_domain -> Eithers.bind (Helpers.requireField "codomain" type_ fieldMap cx) (\field_codomain -> Right (Core.FunctionType {
       Core.functionTypeDomain = field_domain,
       Core.functionTypeCodomain = field_codomain}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.core.FunctionType"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 injection :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Injection)
 injection cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -227,13 +219,12 @@ injection cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\st
     in (Eithers.bind (Helpers.requireField "typeName" name fieldMap cx) (\field_typeName -> Eithers.bind (Helpers.requireField "field" field fieldMap cx) (\field_field -> Right (Core.Injection {
       Core.injectionTypeName = field_typeName,
       Core.injectionField = field_field}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.core.Injection"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 integerType :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.IntegerType)
 integerType cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -249,15 +240,13 @@ integerType cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.core.IntegerType"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 integerValue :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.IntegerValue)
 integerValue cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -327,9 +316,8 @@ integerValue cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.core.IntegerValue"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 lambda :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Lambda)
 lambda cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -339,7 +327,7 @@ lambda cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\strip
       Core.lambdaParameter = field_parameter,
       Core.lambdaDomain = field_domain,
       Core.lambdaBody = field_body})))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.core.Lambda"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 let_ :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Let)
 let_ cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -348,13 +336,12 @@ let_ cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\strippe
     in (Eithers.bind (Helpers.requireField "bindings" (Helpers.decodeList binding) fieldMap cx) (\field_bindings -> Eithers.bind (Helpers.requireField "body" term fieldMap cx) (\field_body -> Right (Core.Let {
       Core.letBindings = field_bindings,
       Core.letBody = field_body}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.core.Let"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 literal :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Literal)
 literal cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -378,15 +365,13 @@ literal cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stri
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.core.Literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 literalType :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.LiteralType)
 literalType cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -398,9 +383,8 @@ literalType cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.core.LiteralType"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 mapType :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.MapType)
 mapType cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -409,7 +393,7 @@ mapType cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stri
     in (Eithers.bind (Helpers.requireField "keys" type_ fieldMap cx) (\field_keys -> Eithers.bind (Helpers.requireField "values" type_ fieldMap cx) (\field_values -> Right (Core.MapType {
       Core.mapTypeKeys = field_keys,
       Core.mapTypeValues = field_values}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.core.MapType"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 name :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Name)
 name cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -418,7 +402,7 @@ name cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\strippe
       Core.LiteralString v2 -> (Right v2)
       _ -> (Left (Error.DecodingError "expected string literal"))) v1)
     _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0)))
-  _ -> (Left (Error.DecodingError "expected wrapped type hydra.core.Name"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected wrapped type"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 projection :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Projection)
 projection cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -427,7 +411,7 @@ projection cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\s
     in (Eithers.bind (Helpers.requireField "typeName" name fieldMap cx) (\field_typeName -> Eithers.bind (Helpers.requireField "field" name fieldMap cx) (\field_field -> Right (Core.Projection {
       Core.projectionTypeName = field_typeName,
       Core.projectionField = field_field}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.core.Projection"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 record :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Record)
 record cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -436,20 +420,12 @@ record cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\strip
     in (Eithers.bind (Helpers.requireField "typeName" name fieldMap cx) (\field_typeName -> Eithers.bind (Helpers.requireField "fields" (Helpers.decodeList field) fieldMap cx) (\field_fields -> Right (Core.Record {
       Core.recordTypeName = field_typeName,
       Core.recordFields = field_fields}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.core.Record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
-
-rowType :: (Graph.Graph -> Core.Term -> Either Error.DecodingError [Core.FieldType])
-rowType cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v0 ->  
-    let fieldMap = (Helpers.toFieldMap v0)
-    in (Eithers.bind (Helpers.requireField "typeName" name fieldMap cx) (\field_typeName -> Eithers.bind (Helpers.requireField "fields" (Helpers.decodeList fieldType) fieldMap cx) (\field_fields -> Right field_fields)))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.core.RowType"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 term :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Term)
 term cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -474,15 +450,13 @@ term cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\strippe
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.core.Term"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 type_ :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Type)
 type_ cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -496,18 +470,17 @@ type_ cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripp
                 (Core.Name "map", (\input -> Eithers.map (\t -> Core.TypeMap t) (mapType cx input))),
                 (Core.Name "maybe", (\input -> Eithers.map (\t -> Core.TypeMaybe t) (type_ cx input))),
                 (Core.Name "pair", (\input -> Eithers.map (\t -> Core.TypePair t) (pairType cx input))),
-                (Core.Name "record", (\input -> Eithers.map (\t -> Core.TypeRecord t) (rowType cx input))),
+                (Core.Name "record", (\input -> Eithers.map (\t -> Core.TypeRecord t) (Helpers.decodeList fieldType cx input))),
                 (Core.Name "set", (\input -> Eithers.map (\t -> Core.TypeSet t) (type_ cx input))),
-                (Core.Name "union", (\input -> Eithers.map (\t -> Core.TypeUnion t) (rowType cx input))),
+                (Core.Name "union", (\input -> Eithers.map (\t -> Core.TypeUnion t) (Helpers.decodeList fieldType cx input))),
                 (Core.Name "unit", (\input -> Eithers.map (\t -> Core.TypeUnit) (Helpers.decodeUnit cx input))),
                 (Core.Name "variable", (\input -> Eithers.map (\t -> Core.TypeVariable t) (name cx input))),
-                (Core.Name "wrap", (\input -> Eithers.map (\t -> Core.TypeWrap t) (wrappedType cx input)))])
+                (Core.Name "wrap", (\input -> Eithers.map (\t -> Core.TypeWrap t) (type_ cx input)))])
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.core.Type"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 typeApplicationTerm :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.TypeApplicationTerm)
 typeApplicationTerm cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -516,7 +489,7 @@ typeApplicationTerm cx raw = (Eithers.either (\err -> Left (Error.DecodingError 
     in (Eithers.bind (Helpers.requireField "body" term fieldMap cx) (\field_body -> Eithers.bind (Helpers.requireField "type" type_ fieldMap cx) (\field_type -> Right (Core.TypeApplicationTerm {
       Core.typeApplicationTermBody = field_body,
       Core.typeApplicationTermType = field_type}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.core.TypeApplicationTerm"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 typeLambda :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.TypeLambda)
 typeLambda cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -525,7 +498,7 @@ typeLambda cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\s
     in (Eithers.bind (Helpers.requireField "parameter" name fieldMap cx) (\field_parameter -> Eithers.bind (Helpers.requireField "body" term fieldMap cx) (\field_body -> Right (Core.TypeLambda {
       Core.typeLambdaParameter = field_parameter,
       Core.typeLambdaBody = field_body}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.core.TypeLambda"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 typeScheme :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.TypeScheme)
 typeScheme cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -535,7 +508,7 @@ typeScheme cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\s
       Core.typeSchemeVariables = field_variables,
       Core.typeSchemeType = field_type,
       Core.typeSchemeConstraints = field_constraints})))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.core.TypeScheme"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 typeVariableMetadata :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.TypeVariableMetadata)
 typeVariableMetadata cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -543,7 +516,7 @@ typeVariableMetadata cx raw = (Eithers.either (\err -> Left (Error.DecodingError
     let fieldMap = (Helpers.toFieldMap v0)
     in (Eithers.bind (Helpers.requireField "classes" (Helpers.decodeSet name) fieldMap cx) (\field_classes -> Right (Core.TypeVariableMetadata {
       Core.typeVariableMetadataClasses = field_classes})))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.core.TypeVariableMetadata"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 wrappedTerm :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.WrappedTerm)
 wrappedTerm cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -552,11 +525,4 @@ wrappedTerm cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\
     in (Eithers.bind (Helpers.requireField "typeName" name fieldMap cx) (\field_typeName -> Eithers.bind (Helpers.requireField "body" term fieldMap cx) (\field_body -> Right (Core.WrappedTerm {
       Core.wrappedTermTypeName = field_typeName,
       Core.wrappedTermBody = field_body}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.core.WrappedTerm"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
-
-wrappedType :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Core.Type)
-wrappedType cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v0 ->  
-    let fieldMap = (Helpers.toFieldMap v0)
-    in (Eithers.bind (Helpers.requireField "typeName" name fieldMap cx) (\field_typeName -> Eithers.bind (Helpers.requireField "body" type_ fieldMap cx) (\field_body -> Right field_body)))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.core.WrappedType"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))

@@ -12,7 +12,7 @@ public interface Model {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.json.model.Value>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.json.model.Value> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.json.model.Value>left(new hydra.error.DecodingError("expected union of type hydra.json.model.Value"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.json.model.Value>left(new hydra.error.DecodingError("expected union"));
         }
         
         @Override
@@ -20,7 +20,6 @@ public interface Model {
           hydra.core.Field field = ((inj).value).field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
-          hydra.core.Name tname = ((inj).value).typeName;
           hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.json.model.Value>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.json.model.Value>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.json.model.Value>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.json.model.Value>>>(new hydra.core.Name("array"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.json.model.Value>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<hydra.util.ConsList<hydra.json.model.Value>, hydra.json.model.Value>) (t -> new hydra.json.model.Value.Array(t)),
@@ -167,8 +166,7 @@ public interface Model {
             () -> hydra.util.Either.<hydra.error.DecodingError, hydra.json.model.Value>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "no such field ",
               (fname).value,
-              " in union type ",
-              (tname).value)))),
+              " in union")))),
             (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.json.model.Value>>, hydra.util.Either<hydra.error.DecodingError, hydra.json.model.Value>>) (f -> (f).apply(fterm)),
             hydra.lib.maps.Lookup.apply(
               fname,

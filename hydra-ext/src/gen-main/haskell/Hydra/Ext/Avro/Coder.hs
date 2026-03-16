@@ -122,11 +122,9 @@ avroHydraAdapter cx schema env0 =
       in (Maybes.maybe (Eithers.bind ((\x -> case x of
         Schema.NamedTypeEnum v1 ->  
           let syms = (Schema.enumSymbols v1) 
-              typ = (Core.TypeUnion (Core.RowType {
-                      Core.rowTypeTypeName = hydraName,
-                      Core.rowTypeFields = (Lists.map (\s -> Core.FieldType {
-                        Core.fieldTypeName = (Core.Name s),
-                        Core.fieldTypeType = Core.TypeUnit}) syms)}))
+              typ = (Core.TypeUnion (Lists.map (\s -> Core.FieldType {
+                      Core.fieldTypeName = (Core.Name s),
+                      Core.fieldTypeType = Core.TypeUnit}) syms))
           in (simpleAdapter env1 typ (\_cx -> \jv -> (\x -> case x of
             Model.ValueString v2 -> (Right (Core.TermUnion (Core.Injection {
               Core.injectionTypeName = hydraName,
@@ -175,9 +173,7 @@ avroHydraAdapter cx schema env0 =
                   hfields = (Lists.map (\fad -> Core.FieldType {
                           Core.fieldTypeName = (Core.Name (Schema.fieldName (Pairs.first fad))),
                           Core.fieldTypeType = (Util.adapterTarget (Pairs.second fad))}) (Maps.elems adaptersByFieldName))
-                  target = (Core.TypeRecord (Core.RowType {
-                          Core.rowTypeTypeName = hydraName,
-                          Core.rowTypeFields = hfields}))
+                  target = (Core.TypeRecord hfields)
               in (Right (Util.Adapter {
                 Util.adapterIsLossy = lossy,
                 Util.adapterSource = schema,

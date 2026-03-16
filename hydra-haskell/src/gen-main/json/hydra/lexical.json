@@ -1638,26 +1638,16 @@
                                     "term": {
                                       "function": {
                                         "lambda": {
-                                          "body": {
-                                            "application": {
-                                              "argument": {"variable": "rt"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
-                                          "domain": [{"variable": "hydra.core.RowType"}],
+                                          "body": {"variable": "rt"},
+                                          "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                           "parameter": "rt"}}}},
                                   {
                                     "name": "union",
                                     "term": {
                                       "function": {
                                         "lambda": {
-                                          "body": {
-                                            "application": {
-                                              "argument": {"variable": "rt"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
-                                          "domain": [{"variable": "hydra.core.RowType"}],
+                                          "body": {"variable": "rt"},
+                                          "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                           "parameter": "rt"}}}}],
                                 "default": [
                                   {

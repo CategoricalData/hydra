@@ -24,28 +24,28 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
--- | Decode a JSON value to a Hydra term given a type. Returns Left for type mismatches.
-fromJson :: (M.Map Core.Name Core.Type -> Core.Type -> Model.Value -> Either String Core.Term)
-fromJson types typ value =  
+-- | Decode a JSON value to a Hydra term given a type and type name. Returns Left for type mismatches.
+fromJson :: (M.Map Core.Name Core.Type -> Core.Name -> Core.Type -> Model.Value -> Either String Core.Term)
+fromJson types tname typ value =  
   let stripped = (Rewriting.deannotateType typ)
   in ((\x -> case x of
     Core.TypeLiteral v0 -> (decodeLiteral v0 value)
     Core.TypeList v0 ->  
-      let decodeElem = (\v -> fromJson types v0 v)
+      let decodeElem = (\v -> fromJson types tname v0 v)
       in  
         let arrResult = (expectArray value)
         in (Eithers.either (\err -> Left err) (\arr ->  
           let decoded = (Eithers.mapList decodeElem arr)
           in (Eithers.map (\ts -> Core.TermList ts) decoded)) arrResult)
     Core.TypeSet v0 ->  
-      let decodeElem = (\v -> fromJson types v0 v)
+      let decodeElem = (\v -> fromJson types tname v0 v)
       in  
         let arrResult = (expectArray value)
         in (Eithers.either (\err -> Left err) (\arr ->  
           let decoded = (Eithers.mapList decodeElem arr)
           in (Eithers.map (\elems -> Core.TermSet (Sets.fromList elems)) decoded)) arrResult)
     Core.TypeMaybe v0 ->  
-      let decodeJust = (\arr -> Eithers.map (\v -> Core.TermMaybe (Just v)) (fromJson types v0 (Lists.head arr)))
+      let decodeJust = (\arr -> Eithers.map (\v -> Core.TermMaybe (Just v)) (fromJson types tname v0 (Lists.head arr)))
       in  
         let decodeMaybeArray = (\arr ->  
                 let len = (Lists.length arr)
@@ -68,24 +68,22 @@ fromJson types typ value =
                       in  
                         let jsonVal = (Maybes.fromMaybe defaultVal mval)
                         in  
-                          let decoded = (fromJson types ftype jsonVal)
+                          let decoded = (fromJson types tname ftype jsonVal)
                           in (Eithers.map (\v -> Core.Field {
                             Core.fieldName = fname,
                             Core.fieldTerm = v}) decoded))
         in  
-          let fields = (id v0)
-          in  
-            let decodedFields = (Eithers.mapList decodeField fields)
-            in (Eithers.map (\fs -> Core.TermRecord (Core.Record {
-              Core.recordTypeName = (Core.Name "unknown"),
-              Core.recordFields = fs})) decodedFields)) objResult)
+          let decodedFields = (Eithers.mapList decodeField v0)
+          in (Eithers.map (\fs -> Core.TermRecord (Core.Record {
+            Core.recordTypeName = tname,
+            Core.recordFields = fs})) decodedFields)) objResult)
     Core.TypeUnion v0 ->  
       let decodeVariant = (\key -> \val -> \ftype ->  
               let jsonVal = (Maybes.fromMaybe Model.ValueNull val)
               in  
-                let decoded = (fromJson types ftype jsonVal)
+                let decoded = (fromJson types tname ftype jsonVal)
                 in (Eithers.map (\v -> Core.TermUnion (Core.Injection {
-                  Core.injectionTypeName = (Core.Name "unknown"),
+                  Core.injectionTypeName = tname,
                   Core.injectionField = Core.Field {
                     Core.fieldName = (Core.Name key),
                     Core.fieldTerm = v}})) decoded))
@@ -96,7 +94,7 @@ fromJson types typ value =
                   "unknown variant: ",
                   key])) (Maybes.maybe (findAndDecode key val (Lists.tail fts)) (\r -> r) (tryField key val (Lists.head fts))))
           in  
-            let decodeSingleKey = (\obj -> findAndDecode (Lists.head (Maps.keys obj)) (Maps.lookup (Lists.head (Maps.keys obj)) obj) (id v0))
+            let decodeSingleKey = (\obj -> findAndDecode (Lists.head (Maps.keys obj)) (Maps.lookup (Lists.head (Maps.keys obj)) obj) v0)
             in  
               let processUnion = (\obj -> Logic.ifElse (Equality.equal (Lists.length (Maps.keys obj)) 1) (decodeSingleKey obj) (Left "expected single-key object for union"))
               in  
@@ -106,22 +104,10 @@ fromJson types typ value =
       let objResult = (expectObject value)
       in (Eithers.map (\_ -> Core.TermUnit) objResult)
     Core.TypeWrap v0 ->  
-      let extractInnerType = (\lt -> (\x -> case x of
-              Core.TypeWrap v1 -> (id v1)
-              _ -> lt) lt)
-      in  
-        let decodeAndWrap = (\lt ->  
-                let innerType = (extractInnerType lt)
-                in  
-                  let decoded = (fromJson types innerType value)
-                  in (Eithers.map (\v -> Core.TermWrap (Core.WrappedTerm {
-                    Core.wrappedTermTypeName = (Core.Name "unknown"),
-                    Core.wrappedTermBody = v})) decoded))
-        in  
-          let lookedUp = (Maps.lookup (Core.Name "unknown") types)
-          in (Maybes.maybe (Left (Strings.cat [
-            "unknown wrapped type: ",
-            (Core.unName (Core.Name "unknown"))])) (\lt -> decodeAndWrap lt) lookedUp)
+      let decoded = (fromJson types tname v0 value)
+      in (Eithers.map (\v -> Core.TermWrap (Core.WrappedTerm {
+        Core.wrappedTermTypeName = tname,
+        Core.wrappedTermBody = v})) decoded)
     Core.TypeMap v0 ->  
       let keyType = (Core.mapTypeKeys v0)
       in  
@@ -136,9 +122,9 @@ fromJson types typ value =
                       in  
                         let valJson = (Maps.lookup "@value" entryObj)
                         in (Maybes.maybe (Left "missing @key in map entry") (\kj -> Maybes.maybe (Left "missing @value in map entry") (\vj ->  
-                          let decodedKey = (fromJson types keyType kj)
+                          let decodedKey = (fromJson types tname keyType kj)
                           in  
-                            let decodedVal = (fromJson types valType vj)
+                            let decodedVal = (fromJson types tname valType vj)
                             in (Eithers.either (\err -> Left err) (\k -> Eithers.map (\v -> (k, v)) decodedVal) decodedKey)) valJson) keyJson)) objResult))
             in  
               let entries = (Eithers.mapList decodeEntry arr)
@@ -154,9 +140,9 @@ fromJson types typ value =
             in  
               let secondJson = (Maps.lookup "@second" obj)
               in (Maybes.maybe (Left "missing @first in pair") (\fj -> Maybes.maybe (Left "missing @second in pair") (\sj ->  
-                let decodedFirst = (fromJson types firstType fj)
+                let decodedFirst = (fromJson types tname firstType fj)
                 in  
-                  let decodedSecond = (fromJson types secondType sj)
+                  let decodedSecond = (fromJson types tname secondType sj)
                   in (Eithers.either (\err -> Left err) (\f -> Eithers.map (\s -> Core.TermPair (f, s)) decodedSecond) decodedFirst)) secondJson) firstJson)) objResult)
     Core.TypeEither v0 ->  
       let leftType = (Core.eitherTypeLeft v0)
@@ -169,15 +155,15 @@ fromJson types typ value =
             in  
               let rightJson = (Maps.lookup "@right" obj)
               in (Maybes.maybe (Maybes.maybe (Left "expected @left or @right in Either") (\rj ->  
-                let decoded = (fromJson types rightType rj)
+                let decoded = (fromJson types tname rightType rj)
                 in (Eithers.map (\v -> Core.TermEither (Right v)) decoded)) rightJson) (\lj ->  
-                let decoded = (fromJson types leftType lj)
+                let decoded = (fromJson types tname leftType lj)
                 in (Eithers.map (\v -> Core.TermEither (Left v)) decoded)) leftJson)) objResult)
     Core.TypeVariable v0 ->  
       let lookedUp = (Maps.lookup v0 types)
       in (Maybes.maybe (Left (Strings.cat [
         "unknown type variable: ",
-        (Core.unName v0)])) (\resolvedType -> fromJson types resolvedType value) lookedUp)
+        (Core.unName v0)])) (\resolvedType -> fromJson types v0 resolvedType value) lookedUp)
     _ -> (Left (Strings.cat [
       "unsupported type for JSON decoding: ",
       (Core_.type_ typ)]))) stripped)

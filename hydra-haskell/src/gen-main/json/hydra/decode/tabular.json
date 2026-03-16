@@ -160,8 +160,7 @@
                                                         "either": {
                                                           "@left": {
                                                             "wrap": {
-                                                              "body": {
-                                                                "literal": {"string": "expected record of type hydra.tabular.ColumnType"}},
+                                                              "body": {"literal": {"string": "expected record"}},
                                                               "typeName": "hydra.error.DecodingError"}}}},
                                                       "type": {"variable": "hydra.error.DecodingError"}}},
                                                   "type": {"variable": "hydra.tabular.ColumnType"}}}],
@@ -318,7 +317,7 @@
                                                                   "either": {
                                                                     "@left": {
                                                                       "wrap": {
-                                                                        "body": {"literal": {"string": "expected wrapped type hydra.tabular.DataRow"}},
+                                                                        "body": {"literal": {"string": "expected wrapped type"}},
                                                                         "typeName": "hydra.error.DecodingError"}}}},
                                                                 "type": {"variable": "hydra.error.DecodingError"}}},
                                                             "type": {
@@ -615,8 +614,7 @@
                                                         "either": {
                                                           "@left": {
                                                             "wrap": {
-                                                              "body": {
-                                                                "literal": {"string": "expected wrapped type hydra.tabular.HeaderRow"}},
+                                                              "body": {"literal": {"string": "expected wrapped type"}},
                                                               "typeName": "hydra.error.DecodingError"}}}},
                                                       "type": {"variable": "hydra.error.DecodingError"}}},
                                                   "type": {"variable": "hydra.tabular.HeaderRow"}}}],
@@ -881,7 +879,7 @@
                                                                   "either": {
                                                                     "@left": {
                                                                       "wrap": {
-                                                                        "body": {"literal": {"string": "expected record of type hydra.tabular.Table"}},
+                                                                        "body": {"literal": {"string": "expected record"}},
                                                                         "typeName": "hydra.error.DecodingError"}}}},
                                                                 "type": {"variable": "hydra.error.DecodingError"}}},
                                                             "type": {
@@ -1138,8 +1136,7 @@
                                                         "either": {
                                                           "@left": {
                                                             "wrap": {
-                                                              "body": {
-                                                                "literal": {"string": "expected record of type hydra.tabular.TableType"}},
+                                                              "body": {"literal": {"string": "expected record"}},
                                                               "typeName": "hydra.error.DecodingError"}}}},
                                                       "type": {"variable": "hydra.error.DecodingError"}}},
                                                   "type": {"variable": "hydra.tabular.TableType"}}}],

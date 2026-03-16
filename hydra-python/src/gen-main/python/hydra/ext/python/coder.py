@@ -695,14 +695,14 @@ def encode_type(env: hydra.ext.python.helpers.PythonEnvironment, typ: hydra.core
         case hydra.core.TypePair(value=pair_t):
             return hydra.lib.eithers.bind(encode_type(env, pair_t.first), (lambda py_first: hydra.lib.eithers.bind(encode_type(env, pair_t.second), (lambda py_second: Right(hydra.ext.python.utils.name_and_params(hydra.ext.python.syntax.Name("tuple"), (py_first, py_second)))))))
         
-        case hydra.core.TypeRecord(value=rt):
-            return Right(hydra.ext.python.names.type_variable_reference(env, rt.type_name))
+        case hydra.core.TypeRecord():
+            return dflt()
         
         case hydra.core.TypeSet(value=et3):
             return hydra.lib.eithers.bind(encode_type(env, et3), (lambda pyet: Right(hydra.ext.python.utils.name_and_params(hydra.ext.python.syntax.Name("frozenset"), (pyet,)))))
         
-        case hydra.core.TypeUnion(value=rt2):
-            return Right(hydra.ext.python.names.type_variable_reference(env, rt2.type_name))
+        case hydra.core.TypeUnion():
+            return dflt()
         
         case hydra.core.TypeUnit():
             return Right(hydra.ext.python.utils.py_name_to_py_expression(hydra.ext.python.utils.py_none))
@@ -710,8 +710,8 @@ def encode_type(env: hydra.ext.python.helpers.PythonEnvironment, typ: hydra.core
         case hydra.core.TypeVariable(value=name):
             return Right(hydra.ext.python.names.type_variable_reference(env, name))
         
-        case hydra.core.TypeWrap(value=wt):
-            return Right(hydra.ext.python.names.type_variable_reference(env, wt.type_name))
+        case hydra.core.TypeWrap():
+            return dflt()
         
         case hydra.core.TypeAnnotated():
             return dflt()
@@ -737,13 +737,12 @@ def with_type_lambda(v1: hydra.ext.python.helpers.PythonEnvironment, v2: hydra.c
     
     return hydra.schemas.with_type_lambda_context((lambda x1: python_environment_get_graph(x1)), (lambda x1, x2: python_environment_set_graph(x1, x2)), v1, v2, v3)
 
-def is_variant_unit_type(row_type: hydra.core.RowType, field_name: hydra.core.Name) -> bool:
+def is_variant_unit_type(row_type: frozenlist[hydra.core.FieldType], field_name: hydra.core.Name) -> bool:
     r"""Check if a variant field has unit type."""
     
-    fields = row_type.fields
     @lru_cache(1)
     def mfield() -> Maybe[hydra.core.FieldType]:
-        return hydra.lib.lists.find((lambda ft: hydra.lib.equality.equal(ft.name, field_name)), fields)
+        return hydra.lib.lists.find((lambda ft: hydra.lib.equality.equal(ft.name, field_name)), row_type)
     return hydra.lib.maybes.from_maybe((lambda : False), hydra.lib.maybes.map((lambda ft: hydra.schemas.is_unit_type(hydra.rewriting.deannotate_type(ft.type))), mfield()))
 
 def wrap_lazy_arguments(name: hydra.core.Name, args: frozenlist[hydra.ext.python.syntax.Expression]) -> frozenlist[hydra.ext.python.syntax.Expression]:
@@ -994,7 +993,7 @@ def encode_term_inline(cx: hydra.context.Context, env: hydra.ext.python.helpers.
         case hydra.core.TermUnion(value=inj):
             tname = inj.type_name
             field = inj.field
-            return hydra.lib.eithers.bind(hydra.schemas.require_union_type(cx, python_environment_get_graph(env), tname), (lambda rt: hydra.lib.logic.if_else(hydra.schemas.is_enum_row_type(rt), (lambda : Right(hydra.ext.python.utils.project_from_expression(hydra.ext.python.utils.py_name_to_py_expression(hydra.ext.python.names.encode_name_qualified(env, tname)), hydra.ext.python.names.encode_enum_value(env, field.name)))), (lambda : (fname := field.name, (ftypes := rt.fields, (is_unit_variant := hydra.lib.maybes.maybe((lambda : False), (lambda ft: hydra.schemas.is_unit_type(hydra.rewriting.deannotate_type(ft.type))), hydra.lib.lists.find((lambda ft: hydra.lib.equality.equal(ft.name.value, fname.value)), ftypes)), hydra.lib.eithers.bind(hydra.lib.logic.if_else(hydra.lib.logic.or_(hydra.schemas.is_unit_term(field.term), is_unit_variant), (lambda : Right(())), (lambda : hydra.lib.eithers.bind(encode(field.term), (lambda parg: Right((parg,)))))), (lambda args: (deconflicted_name := deconflict_variant_name(True, env, tname, fname, env.graph), Right(hydra.ext.python.utils.cast_to(hydra.ext.python.names.type_variable_reference(env, tname), hydra.ext.python.utils.function_call(hydra.ext.python.utils.py_name_to_py_primary(deconflicted_name), args))))[1])))[1])[1])[1]))))
+            return hydra.lib.eithers.bind(hydra.schemas.require_union_type(cx, python_environment_get_graph(env), tname), (lambda rt: hydra.lib.logic.if_else(hydra.schemas.is_enum_row_type(rt), (lambda : Right(hydra.ext.python.utils.project_from_expression(hydra.ext.python.utils.py_name_to_py_expression(hydra.ext.python.names.encode_name_qualified(env, tname)), hydra.ext.python.names.encode_enum_value(env, field.name)))), (lambda : (fname := field.name, (is_unit_variant := hydra.lib.maybes.maybe((lambda : False), (lambda ft: hydra.schemas.is_unit_type(hydra.rewriting.deannotate_type(ft.type))), hydra.lib.lists.find((lambda ft: hydra.lib.equality.equal(ft.name.value, fname.value)), rt)), hydra.lib.eithers.bind(hydra.lib.logic.if_else(hydra.lib.logic.or_(hydra.schemas.is_unit_term(field.term), is_unit_variant), (lambda : Right(())), (lambda : hydra.lib.eithers.bind(encode(field.term), (lambda parg: Right((parg,)))))), (lambda args: (deconflicted_name := deconflict_variant_name(True, env, tname, fname, env.graph), Right(hydra.ext.python.utils.cast_to(hydra.ext.python.names.type_variable_reference(env, tname), hydra.ext.python.utils.function_call(hydra.ext.python.utils.py_name_to_py_primary(deconflicted_name), args))))[1])))[1])[1]))))
         
         case hydra.core.TermUnit():
             return Right(hydra.ext.python.utils.py_name_to_py_expression(hydra.ext.python.utils.py_none))
@@ -1028,7 +1027,7 @@ def variant_closed_pattern(env: hydra.ext.python.helpers.PythonEnvironment, type
     
     return hydra.lib.logic.if_else(is_enum, (lambda : enum_variant_pattern(env, type_name, field_name)), (lambda : hydra.lib.logic.if_else(hydra.lib.logic.not_(should_capture), (lambda : class_variant_pattern_unit(py_variant_name)), (lambda : class_variant_pattern_with_capture(env, py_variant_name, var_name)))))
 
-def encode_case_block(cx: T0, env: hydra.ext.python.helpers.PythonEnvironment, tname: hydra.core.Name, row_type: hydra.core.RowType, is_enum: bool, encode_body: Callable[[hydra.ext.python.helpers.PythonEnvironment, hydra.core.Term], Either[T1, frozenlist[hydra.ext.python.syntax.Statement]]], field: hydra.core.Field) -> Either[frozenlist[hydra.ext.python.syntax.Statement], hydra.ext.python.syntax.CaseBlock]:
+def encode_case_block(cx: T0, env: hydra.ext.python.helpers.PythonEnvironment, tname: hydra.core.Name, row_type: frozenlist[hydra.core.FieldType], is_enum: bool, encode_body: Callable[[hydra.ext.python.helpers.PythonEnvironment, hydra.core.Term], Either[T1, frozenlist[hydra.ext.python.syntax.Statement]]], field: hydra.core.Field) -> Either[frozenlist[hydra.ext.python.syntax.Statement], hydra.ext.python.syntax.CaseBlock]:
     r"""Encode a single case (Field) into a CaseBlock for a match statement."""
     
     fname = field.name
@@ -1078,7 +1077,7 @@ def encode_default_case_block(encode_term: Callable[[T0], Either[T1, hydra.ext.p
     
     return hydra.lib.eithers.bind(hydra.lib.maybes.maybe((lambda : Right(hydra.lib.logic.if_else(is_full, (lambda : hydra.ext.python.utils.raise_assertion_error("Unreachable: all variants handled")), (lambda : hydra.ext.python.utils.raise_type_error(hydra.lib.strings.cat2("Unsupported ", hydra.names.local_name_of(tname))))))), (lambda d: hydra.lib.eithers.bind(encode_term(d), (lambda pyexpr: Right(hydra.ext.python.utils.return_single(pyexpr))))), mdflt), (lambda stmt: (patterns := hydra.ext.python.utils.py_closed_pattern_to_py_patterns(cast(hydra.ext.python.syntax.ClosedPattern, hydra.ext.python.syntax.ClosedPatternWildcard())), body := hydra.ext.python.utils.indented_block(Nothing(), ((stmt,),)), Right((hydra.ext.python.syntax.CaseBlock(patterns, Nothing(), body),)))[2]))
 
-def is_cases_full(row_type: hydra.core.RowType, cases_: frozenlist[T0]) -> bool:
+def is_cases_full(row_type: frozenlist[T0], cases_: frozenlist[T1]) -> bool:
     r"""Check if union cases are fully covered."""
     
     @lru_cache(1)
@@ -1086,7 +1085,7 @@ def is_cases_full(row_type: hydra.core.RowType, cases_: frozenlist[T0]) -> bool:
         return hydra.lib.lists.length(cases_)
     @lru_cache(1)
     def num_fields() -> int:
-        return hydra.lib.lists.length(row_type.fields)
+        return hydra.lib.lists.length(row_type)
     return hydra.lib.logic.not_(hydra.lib.equality.lt(num_cases(), num_fields()))
 
 def encode_term_multiline_t_c_o(cx: hydra.context.Context, env: hydra.ext.python.helpers.PythonEnvironment, func_name: hydra.core.Name, param_names: frozenlist[hydra.core.Name], term: hydra.core.Term):
@@ -1282,11 +1281,10 @@ def generic_arg(tparam_list: frozenlist[hydra.core.Name]) -> Maybe[hydra.ext.pyt
     
     return hydra.lib.logic.if_else(hydra.lib.lists.null(tparam_list), (lambda : Nothing()), (lambda : Just(hydra.ext.python.utils.py_primary_to_py_expression(hydra.ext.python.utils.primary_with_expression_slices(cast(hydra.ext.python.syntax.Primary, hydra.ext.python.syntax.PrimarySimple(cast(hydra.ext.python.syntax.Atom, hydra.ext.python.syntax.AtomName(hydra.ext.python.syntax.Name("Generic"))))), hydra.lib.lists.map((lambda n: cast(hydra.ext.python.syntax.Expression, hydra.ext.python.syntax.ExpressionSimple(hydra.ext.python.syntax.Disjunction((hydra.ext.python.syntax.Conjunction((cast(hydra.ext.python.syntax.Inversion, hydra.ext.python.syntax.InversionSimple(hydra.ext.python.syntax.Comparison(hydra.ext.python.syntax.BitwiseOr(Nothing(), hydra.ext.python.syntax.BitwiseXor(Nothing(), hydra.ext.python.syntax.BitwiseAnd(Nothing(), hydra.ext.python.syntax.ShiftExpression(Nothing(), hydra.ext.python.syntax.Sum(Nothing(), hydra.ext.python.syntax.Term(Nothing(), cast(hydra.ext.python.syntax.Factor, hydra.ext.python.syntax.FactorSimple(hydra.ext.python.syntax.Power(hydra.ext.python.syntax.AwaitPrimary(False, cast(hydra.ext.python.syntax.Primary, hydra.ext.python.syntax.PrimarySimple(cast(hydra.ext.python.syntax.Atom, hydra.ext.python.syntax.AtomName(hydra.ext.python.names.encode_type_variable(n)))))), Nothing()))))))))), ()))),)),))))), tparam_list))))))
 
-def encode_record_type(cx: hydra.context.Context, env: hydra.ext.python.helpers.PythonEnvironment, name: hydra.core.Name, row_type: hydra.core.RowType, comment: Maybe[str]) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.python.syntax.Statement]:
+def encode_record_type(cx: hydra.context.Context, env: hydra.ext.python.helpers.PythonEnvironment, name: hydra.core.Name, row_type: frozenlist[hydra.core.FieldType], comment: Maybe[str]) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.python.syntax.Statement]:
     r"""Encode a record type as a Python dataclass."""
     
-    tfields = row_type.fields
-    return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v1: encode_field_type(cx, env, v1)), tfields), (lambda py_fields: (const_stmts := encode_name_constants(env, name, tfields), body := hydra.ext.python.utils.indented_block(comment, (py_fields, const_stmts)), bound_vars := env.bound_type_variables, tparam_list := hydra.lib.pairs.first(bound_vars), m_generic_arg := generic_arg(tparam_list), args := hydra.lib.maybes.maybe((lambda : Nothing()), (lambda a: Just(hydra.ext.python.utils.py_expressions_to_py_args((a,)))), m_generic_arg), decs := Just(hydra.ext.python.syntax.Decorators((dataclass_decorator(),))), py_name := hydra.ext.python.names.encode_name(False, hydra.util.CaseConvention.PASCAL, env, name), no_type_params := (), Right(hydra.ext.python.utils.py_class_definition_to_py_statement(hydra.ext.python.syntax.ClassDefinition(decs, py_name, no_type_params, args, body))))[9]))
+    return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v1: encode_field_type(cx, env, v1)), row_type), (lambda py_fields: (const_stmts := encode_name_constants(env, name, row_type), body := hydra.ext.python.utils.indented_block(comment, (py_fields, const_stmts)), bound_vars := env.bound_type_variables, tparam_list := hydra.lib.pairs.first(bound_vars), m_generic_arg := generic_arg(tparam_list), args := hydra.lib.maybes.maybe((lambda : Nothing()), (lambda a: Just(hydra.ext.python.utils.py_expressions_to_py_args((a,)))), m_generic_arg), decs := Just(hydra.ext.python.syntax.Decorators((dataclass_decorator(),))), py_name := hydra.ext.python.names.encode_name(False, hydra.util.CaseConvention.PASCAL, env, name), no_type_params := (), Right(hydra.ext.python.utils.py_class_definition_to_py_statement(hydra.ext.python.syntax.ClassDefinition(decs, py_name, no_type_params, args, body))))[9]))
 
 def environment_type_parameters(env: hydra.ext.python.helpers.PythonEnvironment) -> frozenlist[hydra.ext.python.syntax.TypeParameter]:
     r"""Get type parameters from environment as Python TypeParameters."""
@@ -1364,11 +1362,10 @@ def union_type_statements_for(env: hydra.ext.python.helpers.PythonEnvironment, n
     
     return hydra.lib.logic.if_else(use_inline_type_params_for(env.version), (lambda : hydra.lib.lists.concat2((hydra.ext.python.utils.type_alias_statement(name, tparams, mcomment, tyexpr),), extra_stmts)), (lambda : hydra.ext.python.utils.union_type_class_statements310(name, mcomment, tyexpr, extra_stmts)))
 
-def encode_union_type(cx: hydra.context.Context, env: hydra.ext.python.helpers.PythonEnvironment, name: hydra.core.Name, row_type: hydra.core.RowType, comment: Maybe[str]) -> Either[hydra.context.InContext[hydra.error.Error], frozenlist[hydra.ext.python.syntax.Statement]]:
+def encode_union_type(cx: hydra.context.Context, env: hydra.ext.python.helpers.PythonEnvironment, name: hydra.core.Name, row_type: frozenlist[hydra.core.FieldType], comment: Maybe[str]) -> Either[hydra.context.InContext[hydra.error.Error], frozenlist[hydra.ext.python.syntax.Statement]]:
     r"""Encode a union type as an enum (for unit-only fields) or variant classes."""
     
-    tfields = row_type.fields
-    return hydra.lib.logic.if_else(hydra.schemas.is_enum_row_type(row_type), (lambda : hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v1: encode_enum_value_assignment(cx, env, v1)), tfields), (lambda vals: (body := hydra.ext.python.utils.indented_block(comment, vals), enum_name := hydra.ext.python.syntax.Name("Enum"), args := Just(hydra.ext.python.utils.py_expressions_to_py_args((hydra.ext.python.utils.py_name_to_py_expression(enum_name),))), py_name := hydra.ext.python.names.encode_name(False, hydra.util.CaseConvention.PASCAL, env, name), type_const_stmt := hydra.ext.python.utils.dotted_assignment_statement(py_name, hydra.ext.python.names.encode_constant_for_type_name(env, name), hydra.ext.python.utils.function_call(hydra.ext.python.utils.py_name_to_py_primary(hydra.ext.python.names.encode_name(True, hydra.util.CaseConvention.PASCAL, env, hydra.core.Name("hydra.core.Name"))), (hydra.ext.python.utils.double_quoted_string(name.value),))), Right((hydra.ext.python.utils.py_class_definition_to_py_statement(hydra.ext.python.syntax.ClassDefinition(Nothing(), py_name, (), args, body)), type_const_stmt)))[5]))), (lambda : (const_stmts := encode_name_constants(env, name, tfields), hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v1: encode_union_field(cx, env, name, v1)), tfields), (lambda field_stmts: (tparams := environment_type_parameters(env), union_alts := hydra.lib.lists.map((lambda v1: encode_union_field_alt(env, name, v1)), tfields), union_stmts := union_type_statements_for(env, hydra.ext.python.names.encode_name(False, hydra.util.CaseConvention.PASCAL, env, name), tparams, comment, hydra.ext.python.utils.or_expression(union_alts), const_stmts), Right(hydra.lib.lists.concat2(field_stmts, union_stmts)))[3])))[1]))
+    return hydra.lib.logic.if_else(hydra.schemas.is_enum_row_type(row_type), (lambda : hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v1: encode_enum_value_assignment(cx, env, v1)), row_type), (lambda vals: (body := hydra.ext.python.utils.indented_block(comment, vals), enum_name := hydra.ext.python.syntax.Name("Enum"), args := Just(hydra.ext.python.utils.py_expressions_to_py_args((hydra.ext.python.utils.py_name_to_py_expression(enum_name),))), py_name := hydra.ext.python.names.encode_name(False, hydra.util.CaseConvention.PASCAL, env, name), type_const_stmt := hydra.ext.python.utils.dotted_assignment_statement(py_name, hydra.ext.python.names.encode_constant_for_type_name(env, name), hydra.ext.python.utils.function_call(hydra.ext.python.utils.py_name_to_py_primary(hydra.ext.python.names.encode_name(True, hydra.util.CaseConvention.PASCAL, env, hydra.core.Name("hydra.core.Name"))), (hydra.ext.python.utils.double_quoted_string(name.value),))), Right((hydra.ext.python.utils.py_class_definition_to_py_statement(hydra.ext.python.syntax.ClassDefinition(Nothing(), py_name, (), args, body)), type_const_stmt)))[5]))), (lambda : (const_stmts := encode_name_constants(env, name, row_type), hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda v1: encode_union_field(cx, env, name, v1)), row_type), (lambda field_stmts: (tparams := environment_type_parameters(env), union_alts := hydra.lib.lists.map((lambda v1: encode_union_field_alt(env, name, v1)), row_type), union_stmts := union_type_statements_for(env, hydra.ext.python.names.encode_name(False, hydra.util.CaseConvention.PASCAL, env, name), tparams, comment, hydra.ext.python.utils.or_expression(union_alts), const_stmts), Right(hydra.lib.lists.concat2(field_stmts, union_stmts)))[3])))[1]))
 
 def encode_wrapped_type(env: hydra.ext.python.helpers.PythonEnvironment, name: hydra.core.Name, typ: hydra.core.Type, comment: Maybe[str]) -> Either[T0, frozenlist[hydra.ext.python.syntax.Statement]]:
     r"""Encode a wrapped type (newtype) to a Python class definition."""
@@ -1417,7 +1414,7 @@ def encode_type_assignment_inner(cx: hydra.context.Context, env: hydra.ext.pytho
                 return encode_union_type(cx, env, name, rt2, comment)
             
             case hydra.core.TypeWrap(value=wt):
-                return (inner_type := wt.body, encode_wrapped_type(env, name, inner_type, comment))[1]
+                return encode_wrapped_type(env, name, wt, comment)
             
             case _:
                 return dflt()
@@ -1540,7 +1537,7 @@ def extend_meta_for_type(top_level: bool, is_term_annot: bool, typ: hydra.core.T
             return _hoist_body_2(lt)
         
         case hydra.core.TypeUnion(value=rt):
-            return hydra.lib.logic.if_else(hydra.schemas.is_enum_row_type(rt), (lambda : set_meta_uses_enum(meta_with_subtypes(), True)), (lambda : hydra.lib.logic.if_else(hydra.lib.logic.not_(hydra.lib.lists.null(rt.fields)), (lambda : set_meta_uses_node(meta_with_subtypes(), True)), (lambda : meta_with_subtypes()))))
+            return hydra.lib.logic.if_else(hydra.schemas.is_enum_row_type(rt), (lambda : set_meta_uses_enum(meta_with_subtypes(), True)), (lambda : hydra.lib.logic.if_else(hydra.lib.logic.not_(hydra.lib.lists.null(rt)), (lambda : set_meta_uses_node(meta_with_subtypes(), True)), (lambda : meta_with_subtypes()))))
         
         case hydra.core.TypeForall(value=ft2):
             body = ft2.body
@@ -1557,13 +1554,12 @@ def extend_meta_for_type(top_level: bool, is_term_annot: bool, typ: hydra.core.T
             return _hoist_body_1(hydra.rewriting.deannotate_type(body))
         
         case hydra.core.TypeRecord(value=rt2):
-            fields = rt2.fields
             @lru_cache(1)
             def has_annotated() -> bool:
-                return hydra.lib.lists.foldl((lambda b, ft: hydra.lib.logic.or_(b, hydra.annotations.has_type_description(ft.type))), False, fields)
+                return hydra.lib.lists.foldl((lambda b, ft: hydra.lib.logic.or_(b, hydra.annotations.has_type_description(ft.type))), False, rt2)
             @lru_cache(1)
             def meta1() -> hydra.ext.python.helpers.PythonModuleMetadata:
-                return hydra.lib.logic.if_else(hydra.lib.lists.null(fields), (lambda : meta_with_subtypes()), (lambda : set_meta_uses_dataclass(meta_with_subtypes(), True)))
+                return hydra.lib.logic.if_else(hydra.lib.lists.null(rt2), (lambda : meta_with_subtypes()), (lambda : set_meta_uses_dataclass(meta_with_subtypes(), True)))
             return hydra.lib.logic.if_else(has_annotated(), (lambda : set_meta_uses_annotated(meta1(), True)), (lambda : meta1()))
         
         case hydra.core.TypeWrap():

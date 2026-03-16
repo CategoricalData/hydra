@@ -154,22 +154,22 @@ encodeType cx g aliases typ = ((\x -> case x of
         Pdl.recordSchemaIncludes = []})))))))
   Core.TypeSet v0 -> (Eithers.bind (encode cx g aliases v0) (\inner -> Right (Left (Pdl.SchemaArray inner))))
   Core.TypeVariable v0 -> (Right (Left (Pdl.SchemaNamed (pdlNameForElement aliases True v0))))
-  Core.TypeWrap v0 -> (encodeType cx g aliases (Core.wrappedTypeBody v0))
+  Core.TypeWrap v0 -> (encodeType cx g aliases v0)
   Core.TypeMaybe _ -> (Left (Context.InContext {
     Context.inContextObject = (Error.ErrorOther (Error.OtherError "optionals unexpected at top level")),
     Context.inContextContext = cx}))
-  Core.TypeRecord v0 -> (Eithers.bind (Eithers.mapList (encodeRecordField cx g aliases) (Core.rowTypeFields v0)) (\rfields -> Right (Right (Pdl.NamedSchemaTypeRecord (Pdl.RecordSchema {
+  Core.TypeRecord v0 -> (Eithers.bind (Eithers.mapList (encodeRecordField cx g aliases) v0) (\rfields -> Right (Right (Pdl.NamedSchemaTypeRecord (Pdl.RecordSchema {
     Pdl.recordSchemaFields = rfields,
     Pdl.recordSchemaIncludes = []})))))
-  Core.TypeUnion v0 -> (Logic.ifElse (Lists.foldl (\b -> \t -> Logic.and b (Equality.equal (Rewriting.deannotateType t) Core.TypeUnit)) True (Lists.map (\f -> Core.fieldTypeType f) (Core.rowTypeFields v0))) (Eithers.bind (Eithers.mapList (encodeEnumField cx g) (Core.rowTypeFields v0)) (\fs -> Right (Right (Pdl.NamedSchemaTypeEnum (Pdl.EnumSchema {
-    Pdl.enumSchemaFields = fs}))))) (Eithers.bind (Eithers.mapList (encodeUnionField cx g aliases) (Core.rowTypeFields v0)) (\members -> Right (Left (Pdl.SchemaUnion (Pdl.UnionSchema members))))))
+  Core.TypeUnion v0 -> (Logic.ifElse (Lists.foldl (\b -> \t -> Logic.and b (Equality.equal (Rewriting.deannotateType t) Core.TypeUnit)) True (Lists.map (\f -> Core.fieldTypeType f) v0)) (Eithers.bind (Eithers.mapList (encodeEnumField cx g) v0) (\fs -> Right (Right (Pdl.NamedSchemaTypeEnum (Pdl.EnumSchema {
+    Pdl.enumSchemaFields = fs}))))) (Eithers.bind (Eithers.mapList (encodeUnionField cx g aliases) v0) (\members -> Right (Left (Pdl.SchemaUnion (Pdl.UnionSchema members))))))
   _ -> (Left (Context.InContext {
     Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "Expected " (Strings.cat2 "PDL-supported type" (Strings.cat2 ", found: " (Core_.type_ typ)))))),
     Context.inContextContext = cx}))) typ)
 
 encode :: (Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> Core.Type -> Either (Context.InContext Error.Error) Pdl.Schema)
 encode cx g aliases t = ((\x -> case x of
-  Core.TypeRecord v0 -> (Logic.ifElse (Lists.null (Core.rowTypeFields v0)) (encode cx g aliases (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) (Eithers.bind (encodeType cx g aliases t) (\res -> Eithers.either (\schema -> Right schema) (\_ -> Left (Context.InContext {
+  Core.TypeRecord v0 -> (Logic.ifElse (Lists.null v0) (encode cx g aliases (Core.TypeLiteral (Core.LiteralTypeInteger Core.IntegerTypeInt32))) (Eithers.bind (encodeType cx g aliases t) (\res -> Eithers.either (\schema -> Right schema) (\_ -> Left (Context.InContext {
     Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "type resolved to an unsupported nested named schema: " (Core_.type_ t)))),
     Context.inContextContext = cx})) res)))
   _ -> (Eithers.bind (encodeType cx g aliases t) (\res -> Eithers.either (\schema -> Right schema) (\_ -> Left (Context.InContext {

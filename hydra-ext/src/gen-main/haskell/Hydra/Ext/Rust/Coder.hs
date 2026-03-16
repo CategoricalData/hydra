@@ -186,7 +186,7 @@ encodeLiteral lit = ((\x -> case x of
       Syntax.integerLiteralValue = v1,
       Syntax.integerLiteralSuffix = Nothing})))) v0)) lit)
 
-encodeType :: (t0 -> t1 -> Core.Type -> Either t2 Syntax.Type)
+encodeType :: (Context.Context -> t0 -> Core.Type -> Either (Context.InContext Error.Error) Syntax.Type)
 encodeType cx g t =  
   let typ = (Rewriting.deannotateType t)
   in ((\x -> case x of
@@ -212,9 +212,15 @@ encodeType cx g t =
               Syntax.parenthesizedArgsInputs = [
                 dom],
               Syntax.parenthesizedArgsOutput = (Just cod)}))}]})])))))
-    Core.TypeRecord v0 -> (Right (rustPath (Formatting.capitalize (Names.localNameOf (Core.rowTypeTypeName v0)))))
-    Core.TypeUnion v0 -> (Right (rustPath (Formatting.capitalize (Names.localNameOf (Core.rowTypeTypeName v0)))))
-    Core.TypeWrap v0 -> (Right (rustPath (Formatting.capitalize (Names.localNameOf (Core.wrappedTypeTypeName v0)))))
+    Core.TypeRecord _ -> (Left (Context.InContext {
+      Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected anonymous record type")),
+      Context.inContextContext = cx}))
+    Core.TypeUnion _ -> (Left (Context.InContext {
+      Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected anonymous union type")),
+      Context.inContextContext = cx}))
+    Core.TypeWrap _ -> (Left (Context.InContext {
+      Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected anonymous wrap type")),
+      Context.inContextContext = cx}))
     Core.TypeVariable v0 -> (Right (rustPath (Formatting.capitalize (Core.unName v0))))
     Core.TypeForall v0 -> (encodeType cx g (Core.forallTypeBody v0))) typ)
 
@@ -356,7 +362,7 @@ encodeElimination cx g elim marg = ((\x -> case x of
     Syntax.tupleIndexExprTuple = sarg,
     Syntax.tupleIndexExprIndex = 0})))))) elim)
 
-encodeStructField :: (t0 -> t1 -> Core.FieldType -> Either t2 Syntax.StructField)
+encodeStructField :: (Context.Context -> t0 -> Core.FieldType -> Either (Context.InContext Error.Error) Syntax.StructField)
 encodeStructField cx g ft =  
   let fname = (Core.unName (Core.fieldTypeName ft))
   in  
@@ -367,7 +373,7 @@ encodeStructField cx g ft =
       Syntax.structFieldPublic = True,
       Syntax.structFieldDoc = Nothing})))
 
-encodeEnumVariant :: (t0 -> t1 -> Core.FieldType -> Either t2 Syntax.EnumVariant)
+encodeEnumVariant :: (Context.Context -> t0 -> Core.FieldType -> Either (Context.InContext Error.Error) Syntax.EnumVariant)
 encodeEnumVariant cx g ft =  
   let fname = (Core.unName (Core.fieldTypeName ft))
   in  
@@ -377,13 +383,13 @@ encodeEnumVariant cx g ft =
       in  
         let isUnit = ((\x -> case x of
                 Core.TypeUnit -> True
-                Core.TypeRecord v0 -> (Lists.null (Core.rowTypeFields v0))
+                Core.TypeRecord v0 -> (Lists.null v0)
                 _ -> False) dtyp)
         in (Logic.ifElse isUnit (Right (Syntax.EnumVariant {
           Syntax.enumVariantName = (Formatting.capitalize fname),
           Syntax.enumVariantBody = Syntax.EnumVariantBodyUnit,
           Syntax.enumVariantDoc = Nothing})) ((\x -> case x of
-          Core.TypeRecord v0 -> (Eithers.bind (Eithers.mapList (encodeStructField cx g) (Core.rowTypeFields v0)) (\sfields -> Right (Syntax.EnumVariant {
+          Core.TypeRecord v0 -> (Eithers.bind (Eithers.mapList (encodeStructField cx g) v0) (\sfields -> Right (Syntax.EnumVariant {
             Syntax.enumVariantName = (Formatting.capitalize fname),
             Syntax.enumVariantBody = (Syntax.EnumVariantBodyStruct sfields),
             Syntax.enumVariantDoc = Nothing})))
@@ -393,7 +399,7 @@ encodeEnumVariant cx g ft =
               sftyp]),
             Syntax.enumVariantDoc = Nothing})))) dtyp))
 
-encodeTypeDefinition :: (t0 -> t1 -> Module.TypeDefinition -> Either t2 Syntax.ItemWithComments)
+encodeTypeDefinition :: (Context.Context -> t0 -> Module.TypeDefinition -> Either (Context.InContext Error.Error) Syntax.ItemWithComments)
 encodeTypeDefinition cx g tdef =  
   let name = (Module.typeDefinitionName tdef)
   in  
@@ -409,7 +415,7 @@ encodeTypeDefinition cx g tdef =
           in  
             let dtyp = (Rewriting.deannotateType typ)
             in (Eithers.bind ((\x -> case x of
-              Core.TypeRecord v0 -> (Eithers.bind (Eithers.mapList (encodeStructField cx g) (Core.rowTypeFields v0)) (\sfields -> Right (Syntax.ItemStruct (Syntax.StructDef {
+              Core.TypeRecord v0 -> (Eithers.bind (Eithers.mapList (encodeStructField cx g) v0) (\sfields -> Right (Syntax.ItemStruct (Syntax.StructDef {
                 Syntax.structDefName = lname,
                 Syntax.structDefGenerics = generics,
                 Syntax.structDefWhereClause = Nothing,
@@ -417,7 +423,7 @@ encodeTypeDefinition cx g tdef =
                 Syntax.structDefDerives = standardDerives,
                 Syntax.structDefPublic = True,
                 Syntax.structDefDoc = Nothing}))))
-              Core.TypeUnion v0 -> (Eithers.bind (Eithers.mapList (encodeEnumVariant cx g) (Core.rowTypeFields v0)) (\variants -> Right (Syntax.ItemEnum (Syntax.EnumDef {
+              Core.TypeUnion v0 -> (Eithers.bind (Eithers.mapList (encodeEnumVariant cx g) v0) (\variants -> Right (Syntax.ItemEnum (Syntax.EnumDef {
                 Syntax.enumDefName = lname,
                 Syntax.enumDefGenerics = generics,
                 Syntax.enumDefWhereClause = Nothing,
@@ -425,7 +431,7 @@ encodeTypeDefinition cx g tdef =
                 Syntax.enumDefDerives = standardDerives,
                 Syntax.enumDefPublic = True,
                 Syntax.enumDefDoc = Nothing}))))
-              Core.TypeWrap v0 -> (Eithers.bind (encodeType cx g (Core.wrappedTypeBody v0)) (\styp -> Right (Syntax.ItemStruct (Syntax.StructDef {
+              Core.TypeWrap v0 -> (Eithers.bind (encodeType cx g v0) (\styp -> Right (Syntax.ItemStruct (Syntax.StructDef {
                 Syntax.structDefName = lname,
                 Syntax.structDefGenerics = generics,
                 Syntax.structDefWhereClause = Nothing,

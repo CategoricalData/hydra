@@ -2044,27 +2044,31 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "either": {
-                                                                  "@right": {
-                                                                    "application": {
-                                                                      "argument": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "rt"},
-                                                                          "function": {
-                                                                            "function": {
-                                                                              "elimination": {"record": {"field": "typeName", "typeName": "hydra.core.RowType"}}}}}},
-                                                                      "function": {
-                                                                        "application": {
-                                                                          "argument": {
-                                                                            "application": {
-                                                                              "argument": {"variable": "t"},
-                                                                              "function": {"variable": "hydra.ext.cpp.coder.isStructType"}}},
-                                                                          "function": {"variable": "hydra.ext.cpp.coder.createTypeReference"}}}}}}},
+                                                                  "@left": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "object",
+                                                                              "term": {
+                                                                                "union": {
+                                                                                  "field": {
+                                                                                    "name": "other",
+                                                                                    "term": {
+                                                                                      "wrap": {
+                                                                                        "body": {"literal": {"string": "unexpected anonymous record type"}},
+                                                                                        "typeName": "hydra.error.OtherError"}}},
+                                                                                  "typeName": "hydra.error.Error"}}},
+                                                                            {"name": "context", "term": {"variable": "cx"}}],
+                                                                          "typeName": "hydra.context.InContext"}},
+                                                                      "type": {"variable": "hydra.error.Error"}}}}},
                                                               "type": {
                                                                 "application": {
                                                                   "argument": {"variable": "hydra.error.Error"},
                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                           "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
-                                                      "domain": [{"variable": "hydra.core.RowType"}],
+                                                      "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                                       "parameter": "rt"}}}},
                                               {
                                                 "name": "set",
@@ -2129,27 +2133,31 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "either": {
-                                                                  "@right": {
-                                                                    "application": {
-                                                                      "argument": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "rt"},
-                                                                          "function": {
-                                                                            "function": {
-                                                                              "elimination": {"record": {"field": "typeName", "typeName": "hydra.core.RowType"}}}}}},
-                                                                      "function": {
-                                                                        "application": {
-                                                                          "argument": {
-                                                                            "application": {
-                                                                              "argument": {"variable": "t"},
-                                                                              "function": {"variable": "hydra.ext.cpp.coder.isStructType"}}},
-                                                                          "function": {"variable": "hydra.ext.cpp.coder.createTypeReference"}}}}}}},
+                                                                  "@left": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "object",
+                                                                              "term": {
+                                                                                "union": {
+                                                                                  "field": {
+                                                                                    "name": "other",
+                                                                                    "term": {
+                                                                                      "wrap": {
+                                                                                        "body": {"literal": {"string": "unexpected anonymous union type"}},
+                                                                                        "typeName": "hydra.error.OtherError"}}},
+                                                                                  "typeName": "hydra.error.Error"}}},
+                                                                            {"name": "context", "term": {"variable": "cx"}}],
+                                                                          "typeName": "hydra.context.InContext"}},
+                                                                      "type": {"variable": "hydra.error.Error"}}}}},
                                                               "type": {
                                                                 "application": {
                                                                   "argument": {"variable": "hydra.error.Error"},
                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                           "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
-                                                      "domain": [{"variable": "hydra.core.RowType"}],
+                                                      "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                                       "parameter": "rt"}}}},
                                               {
                                                 "name": "variable",
@@ -2197,28 +2205,31 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "either": {
-                                                                  "@right": {
-                                                                    "application": {
-                                                                      "argument": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "wt"},
-                                                                          "function": {
-                                                                            "function": {
-                                                                              "elimination": {
-                                                                                "record": {"field": "typeName", "typeName": "hydra.core.WrappedType"}}}}}},
-                                                                      "function": {
-                                                                        "application": {
-                                                                          "argument": {
-                                                                            "application": {
-                                                                              "argument": {"variable": "t"},
-                                                                              "function": {"variable": "hydra.ext.cpp.coder.isStructType"}}},
-                                                                          "function": {"variable": "hydra.ext.cpp.coder.createTypeReference"}}}}}}},
+                                                                  "@left": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "object",
+                                                                              "term": {
+                                                                                "union": {
+                                                                                  "field": {
+                                                                                    "name": "other",
+                                                                                    "term": {
+                                                                                      "wrap": {
+                                                                                        "body": {"literal": {"string": "unexpected anonymous wrapped type"}},
+                                                                                        "typeName": "hydra.error.OtherError"}}},
+                                                                                  "typeName": "hydra.error.Error"}}},
+                                                                            {"name": "context", "term": {"variable": "cx"}}],
+                                                                          "typeName": "hydra.context.InContext"}},
+                                                                      "type": {"variable": "hydra.error.Error"}}}}},
                                                               "type": {
                                                                 "application": {
                                                                   "argument": {"variable": "hydra.error.Error"},
                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                           "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}},
-                                                      "domain": [{"variable": "hydra.core.WrappedType"}],
+                                                      "domain": [{"variable": "hydra.core.Type"}],
                                                       "parameter": "wt"}}}},
                                               {
                                                 "name": "unit",
@@ -2886,7 +2897,7 @@
                                                                                                     "body": {"variable": "hydra.ext.cpp.coder.encodeRecordType"},
                                                                                                     "type": {"variable": "t0"}}},
                                                                                                 "type": {"maybe": {"variable": "t1"}}}}}}}}}}}}}},
-                                                                        "domain": [{"variable": "hydra.core.RowType"}],
+                                                                        "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                                                         "parameter": "rt"}}}},
                                                                 {
                                                                   "name": "union",
@@ -2916,7 +2927,7 @@
                                                                                                     "body": {"variable": "hydra.ext.cpp.coder.encodeUnionType"},
                                                                                                     "type": {"variable": "t0"}}},
                                                                                                 "type": {"maybe": {"variable": "t2"}}}}}}}}}}}}}},
-                                                                        "domain": [{"variable": "hydra.core.RowType"}],
+                                                                        "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                                                         "parameter": "rt"}}}},
                                                                 {
                                                                   "name": "wrap",
@@ -2929,12 +2940,7 @@
                                                                               "typeApplication": {"body": {"maybe": null}, "type": {"variable": "t3"}}},
                                                                             "function": {
                                                                               "application": {
-                                                                                "argument": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "wt"},
-                                                                                    "function": {
-                                                                                      "function": {
-                                                                                        "elimination": {"record": {"field": "body", "typeName": "hydra.core.WrappedType"}}}}}},
+                                                                                "argument": {"variable": "wt"},
                                                                                 "function": {
                                                                                   "application": {
                                                                                     "argument": {"variable": "name"},
@@ -2951,7 +2957,7 @@
                                                                                                     "body": {"variable": "hydra.ext.cpp.coder.encodeWrappedType"},
                                                                                                     "type": {"variable": "t0"}}},
                                                                                                 "type": {"maybe": {"variable": "t3"}}}}}}}}}}}}}},
-                                                                        "domain": [{"variable": "hydra.core.WrappedType"}],
+                                                                        "domain": [{"variable": "hydra.core.Type"}],
                                                                         "parameter": "wt"}}}}],
                                                               "default": [
                                                                 {
@@ -3198,381 +3204,365 @@
                                         "function": {
                                           "lambda": {
                                             "body": {
-                                              "let": {
-                                                "bindings": [
-                                                  {
-                                                    "name": "tfields",
-                                                    "term": {
-                                                      "application": {
-                                                        "argument": {"variable": "rt"},
-                                                        "function": {
-                                                          "function": {
-                                                            "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
-                                                    "type": [
-                                                      {
-                                                        "constraints": null,
-                                                        "type": {"list": {"variable": "hydra.core.FieldType"}},
-                                                        "variables": []}]}],
-                                                "body": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "function": {
-                                                        "lambda": {
-                                                          "body": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "function": {
-                                                                  "lambda": {
+                                              "application": {
+                                                "argument": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "function": {
+                                                              "lambda": {
+                                                                "body": {
+                                                                  "typeApplication": {
                                                                     "body": {
                                                                       "typeApplication": {
                                                                         "body": {
-                                                                          "typeApplication": {
-                                                                            "body": {
-                                                                              "either": {
-                                                                                "@right": {
-                                                                                  "list": [
-                                                                                    {
-                                                                                      "application": {
-                                                                                        "argument": {
-                                                                                          "maybe": [
-                                                                                            {
-                                                                                              "wrap": {
-                                                                                                "body": {
-                                                                                                  "application": {
-                                                                                                    "argument": {
-                                                                                                      "list": [
-                                                                                                        {
-                                                                                                          "list": [{"variable": "hydra.ext.cpp.coder.memberSpecificationPublic"}]},
-                                                                                                        {
+                                                                          "either": {
+                                                                            "@right": {
+                                                                              "list": [
+                                                                                {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "maybe": [
+                                                                                        {
+                                                                                          "wrap": {
+                                                                                            "body": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "list": [
+                                                                                                    {
+                                                                                                      "list": [{"variable": "hydra.ext.cpp.coder.memberSpecificationPublic"}]},
+                                                                                                    {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "cppFields"},
+                                                                                                        "function": {
                                                                                                           "application": {
-                                                                                                            "argument": {"variable": "cppFields"},
-                                                                                                            "function": {
-                                                                                                              "application": {
-                                                                                                                "argument": {
-                                                                                                                  "function": {
-                                                                                                                    "lambda": {
-                                                                                                                      "body": {
-                                                                                                                        "union": {
-                                                                                                                          "field": {
-                                                                                                                            "name": "member",
-                                                                                                                            "term": {
-                                                                                                                              "union": {
-                                                                                                                                "field": {"name": "variable", "term": {"variable": "field"}},
-                                                                                                                                "typeName": "hydra.ext.cpp.syntax.MemberDeclaration"}}},
-                                                                                                                          "typeName": "hydra.ext.cpp.syntax.MemberSpecification"}},
-                                                                                                                      "domain": [{"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}],
-                                                                                                                      "parameter": "field"}}},
-                                                                                                                "function": {
-                                                                                                                  "typeApplication": {
-                                                                                                                    "body": {
-                                                                                                                      "typeApplication": {
-                                                                                                                        "body": {"function": {"primitive": "hydra.lib.lists.map"}},
-                                                                                                                        "type": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}},
-                                                                                                                    "type": {"variable": "hydra.ext.cpp.syntax.MemberSpecification"}}}}}}},
-                                                                                                        {
-                                                                                                          "list": [
-                                                                                                            {
-                                                                                                              "union": {
-                                                                                                                "field": {
-                                                                                                                  "name": "member",
-                                                                                                                  "term": {
+                                                                                                            "argument": {
+                                                                                                              "function": {
+                                                                                                                "lambda": {
+                                                                                                                  "body": {
                                                                                                                     "union": {
                                                                                                                       "field": {
-                                                                                                                        "name": "constructor",
+                                                                                                                        "name": "member",
                                                                                                                         "term": {
-                                                                                                                          "record": {
-                                                                                                                            "fields": [
-                                                                                                                              {
-                                                                                                                                "name": "name",
-                                                                                                                                "term": {
+                                                                                                                          "union": {
+                                                                                                                            "field": {"name": "variable", "term": {"variable": "field"}},
+                                                                                                                            "typeName": "hydra.ext.cpp.syntax.MemberDeclaration"}}},
+                                                                                                                      "typeName": "hydra.ext.cpp.syntax.MemberSpecification"}},
+                                                                                                                  "domain": [{"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}],
+                                                                                                                  "parameter": "field"}}},
+                                                                                                            "function": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {
+                                                                                                                  "typeApplication": {
+                                                                                                                    "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                                                    "type": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}},
+                                                                                                                "type": {"variable": "hydra.ext.cpp.syntax.MemberSpecification"}}}}}}},
+                                                                                                    {
+                                                                                                      "list": [
+                                                                                                        {
+                                                                                                          "union": {
+                                                                                                            "field": {
+                                                                                                              "name": "member",
+                                                                                                              "term": {
+                                                                                                                "union": {
+                                                                                                                  "field": {
+                                                                                                                    "name": "constructor",
+                                                                                                                    "term": {
+                                                                                                                      "record": {
+                                                                                                                        "fields": [
+                                                                                                                          {
+                                                                                                                            "name": "name",
+                                                                                                                            "term": {
+                                                                                                                              "application": {
+                                                                                                                                "argument": {"variable": "name"},
+                                                                                                                                "function": {"variable": "hydra.ext.cpp.coder.className"}}}},
+                                                                                                                          {
+                                                                                                                            "name": "parameters",
+                                                                                                                            "term": {
+                                                                                                                              "application": {
+                                                                                                                                "argument": {"variable": "constructorParams"},
+                                                                                                                                "function": {
                                                                                                                                   "application": {
-                                                                                                                                    "argument": {"variable": "name"},
-                                                                                                                                    "function": {"variable": "hydra.ext.cpp.coder.className"}}}},
-                                                                                                                              {
-                                                                                                                                "name": "parameters",
-                                                                                                                                "term": {
-                                                                                                                                  "application": {
-                                                                                                                                    "argument": {"variable": "constructorParams"},
-                                                                                                                                    "function": {
-                                                                                                                                      "application": {
-                                                                                                                                        "argument": {
-                                                                                                                                          "function": {
-                                                                                                                                            "lambda": {
-                                                                                                                                              "body": {
-                                                                                                                                                "record": {
-                                                                                                                                                  "fields": [
-                                                                                                                                                    {
-                                                                                                                                                      "name": "type",
-                                                                                                                                                      "term": {
-                                                                                                                                                        "application": {
-                                                                                                                                                          "argument": {
-                                                                                                                                                            "application": {
-                                                                                                                                                              "argument": {"variable": "p"},
-                                                                                                                                                              "function": {
-                                                                                                                                                                "function": {
-                                                                                                                                                                  "elimination": {
-                                                                                                                                                                    "record": {
-                                                                                                                                                                      "field": "type",
-                                                                                                                                                                      "typeName": "hydra.ext.cpp.syntax.VariableDeclaration"}}}}}},
-                                                                                                                                                          "function": {
-                                                                                                                                                            "application": {
-                                                                                                                                                              "argument": {
-                                                                                                                                                                "union": {
-                                                                                                                                                                  "field": {
-                                                                                                                                                                    "name": "basic",
-                                                                                                                                                                    "term": {
-                                                                                                                                                                      "union": {
-                                                                                                                                                                        "field": {"name": "int", "term": {"unit": {}}},
-                                                                                                                                                                        "typeName": "hydra.ext.cpp.syntax.BasicType"}}},
-                                                                                                                                                                  "typeName": "hydra.ext.cpp.syntax.TypeExpression"}},
-                                                                                                                                                              "function": {
-                                                                                                                                                                "typeApplication": {
-                                                                                                                                                                  "body": {"function": {"primitive": "hydra.lib.maybes.fromMaybe"}},
-                                                                                                                                                                  "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}}}}}}},
-                                                                                                                                                    {
-                                                                                                                                                      "name": "name",
-                                                                                                                                                      "term": {
+                                                                                                                                    "argument": {
+                                                                                                                                      "function": {
+                                                                                                                                        "lambda": {
+                                                                                                                                          "body": {
+                                                                                                                                            "record": {
+                                                                                                                                              "fields": [
+                                                                                                                                                {
+                                                                                                                                                  "name": "type",
+                                                                                                                                                  "term": {
+                                                                                                                                                    "application": {
+                                                                                                                                                      "argument": {
                                                                                                                                                         "application": {
                                                                                                                                                           "argument": {"variable": "p"},
                                                                                                                                                           "function": {
                                                                                                                                                             "function": {
                                                                                                                                                               "elimination": {
                                                                                                                                                                 "record": {
-                                                                                                                                                                  "field": "name",
-                                                                                                                                                                  "typeName": "hydra.ext.cpp.syntax.VariableDeclaration"}}}}}}},
-                                                                                                                                                    {"name": "unnamed", "term": {"literal": {"boolean": false}}},
-                                                                                                                                                    {
-                                                                                                                                                      "name": "defaultValue",
-                                                                                                                                                      "term": {
-                                                                                                                                                        "typeApplication": {
-                                                                                                                                                          "body": {"maybe": null},
-                                                                                                                                                          "type": {"variable": "hydra.ext.cpp.syntax.Expression"}}}}],
-                                                                                                                                                  "typeName": "hydra.ext.cpp.syntax.Parameter"}},
-                                                                                                                                              "domain": [{"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}],
-                                                                                                                                              "parameter": "p"}}},
-                                                                                                                                        "function": {
-                                                                                                                                          "typeApplication": {
-                                                                                                                                            "body": {
-                                                                                                                                              "typeApplication": {
-                                                                                                                                                "body": {"function": {"primitive": "hydra.lib.lists.map"}},
-                                                                                                                                                "type": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}},
-                                                                                                                                            "type": {"variable": "hydra.ext.cpp.syntax.Parameter"}}}}}}}},
-                                                                                                                              {
-                                                                                                                                "name": "initializers",
-                                                                                                                                "term": {
-                                                                                                                                  "application": {
-                                                                                                                                    "argument": {"variable": "cppFields"},
-                                                                                                                                    "function": {
-                                                                                                                                      "application": {
-                                                                                                                                        "argument": {
-                                                                                                                                          "function": {
-                                                                                                                                            "lambda": {
-                                                                                                                                              "body": {
-                                                                                                                                                "record": {
-                                                                                                                                                  "fields": [
-                                                                                                                                                    {
-                                                                                                                                                      "name": "name",
-                                                                                                                                                      "term": {
+                                                                                                                                                                  "field": "type",
+                                                                                                                                                                  "typeName": "hydra.ext.cpp.syntax.VariableDeclaration"}}}}}},
+                                                                                                                                                      "function": {
                                                                                                                                                         "application": {
-                                                                                                                                                          "argument": {"variable": "field"},
+                                                                                                                                                          "argument": {
+                                                                                                                                                            "union": {
+                                                                                                                                                              "field": {
+                                                                                                                                                                "name": "basic",
+                                                                                                                                                                "term": {
+                                                                                                                                                                  "union": {
+                                                                                                                                                                    "field": {"name": "int", "term": {"unit": {}}},
+                                                                                                                                                                    "typeName": "hydra.ext.cpp.syntax.BasicType"}}},
+                                                                                                                                                              "typeName": "hydra.ext.cpp.syntax.TypeExpression"}},
                                                                                                                                                           "function": {
-                                                                                                                                                            "function": {
-                                                                                                                                                              "elimination": {
-                                                                                                                                                                "record": {
-                                                                                                                                                                  "field": "name",
-                                                                                                                                                                  "typeName": "hydra.ext.cpp.syntax.VariableDeclaration"}}}}}}},
-                                                                                                                                                    {
-                                                                                                                                                      "name": "arguments",
-                                                                                                                                                      "term": {
-                                                                                                                                                        "list": [
-                                                                                                                                                          {
-                                                                                                                                                            "application": {
-                                                                                                                                                              "argument": {
-                                                                                                                                                                "application": {
-                                                                                                                                                                  "argument": {"variable": "field"},
-                                                                                                                                                                  "function": {
-                                                                                                                                                                    "function": {
-                                                                                                                                                                      "elimination": {
-                                                                                                                                                                        "record": {
-                                                                                                                                                                          "field": "name",
-                                                                                                                                                                          "typeName": "hydra.ext.cpp.syntax.VariableDeclaration"}}}}}},
-                                                                                                                                                              "function": {"variable": "hydra.ext.cpp.coder.createIdentifierExpr"}}}]}}],
-                                                                                                                                                  "typeName": "hydra.ext.cpp.syntax.MemInitializer"}},
-                                                                                                                                              "domain": [{"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}],
-                                                                                                                                              "parameter": "field"}}},
-                                                                                                                                        "function": {
-                                                                                                                                          "typeApplication": {
-                                                                                                                                            "body": {
-                                                                                                                                              "typeApplication": {
-                                                                                                                                                "body": {"function": {"primitive": "hydra.lib.lists.map"}},
-                                                                                                                                                "type": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}},
-                                                                                                                                            "type": {"variable": "hydra.ext.cpp.syntax.MemInitializer"}}}}}}}},
-                                                                                                                              {
-                                                                                                                                "name": "body",
-                                                                                                                                "term": {
-                                                                                                                                  "application": {
-                                                                                                                                    "argument": {"variable": "constructorParams"},
+                                                                                                                                                            "typeApplication": {
+                                                                                                                                                              "body": {"function": {"primitive": "hydra.lib.maybes.fromMaybe"}},
+                                                                                                                                                              "type": {"variable": "hydra.ext.cpp.syntax.TypeExpression"}}}}}}}},
+                                                                                                                                                {
+                                                                                                                                                  "name": "name",
+                                                                                                                                                  "term": {
+                                                                                                                                                    "application": {
+                                                                                                                                                      "argument": {"variable": "p"},
+                                                                                                                                                      "function": {
+                                                                                                                                                        "function": {
+                                                                                                                                                          "elimination": {
+                                                                                                                                                            "record": {
+                                                                                                                                                              "field": "name",
+                                                                                                                                                              "typeName": "hydra.ext.cpp.syntax.VariableDeclaration"}}}}}}},
+                                                                                                                                                {"name": "unnamed", "term": {"literal": {"boolean": false}}},
+                                                                                                                                                {
+                                                                                                                                                  "name": "defaultValue",
+                                                                                                                                                  "term": {
+                                                                                                                                                    "typeApplication": {
+                                                                                                                                                      "body": {"maybe": null},
+                                                                                                                                                      "type": {"variable": "hydra.ext.cpp.syntax.Expression"}}}}],
+                                                                                                                                              "typeName": "hydra.ext.cpp.syntax.Parameter"}},
+                                                                                                                                          "domain": [{"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}],
+                                                                                                                                          "parameter": "p"}}},
                                                                                                                                     "function": {
                                                                                                                                       "typeApplication": {
-                                                                                                                                        "body": {"variable": "hydra.ext.cpp.coder.createConstructorBody"},
-                                                                                                                                        "type": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}}}}}],
-                                                                                                                            "typeName": "hydra.ext.cpp.syntax.ConstructorDeclaration"}}},
-                                                                                                                      "typeName": "hydra.ext.cpp.syntax.MemberDeclaration"}}},
-                                                                                                                "typeName": "hydra.ext.cpp.syntax.MemberSpecification"}}]}]},
-                                                                                                    "function": {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
-                                                                                                        "type": {"variable": "hydra.ext.cpp.syntax.MemberSpecification"}}}}},
-                                                                                                "typeName": "hydra.ext.cpp.syntax.ClassBody"}}]},
+                                                                                                                                        "body": {
+                                                                                                                                          "typeApplication": {
+                                                                                                                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                                                                            "type": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}},
+                                                                                                                                        "type": {"variable": "hydra.ext.cpp.syntax.Parameter"}}}}}}}},
+                                                                                                                          {
+                                                                                                                            "name": "initializers",
+                                                                                                                            "term": {
+                                                                                                                              "application": {
+                                                                                                                                "argument": {"variable": "cppFields"},
+                                                                                                                                "function": {
+                                                                                                                                  "application": {
+                                                                                                                                    "argument": {
+                                                                                                                                      "function": {
+                                                                                                                                        "lambda": {
+                                                                                                                                          "body": {
+                                                                                                                                            "record": {
+                                                                                                                                              "fields": [
+                                                                                                                                                {
+                                                                                                                                                  "name": "name",
+                                                                                                                                                  "term": {
+                                                                                                                                                    "application": {
+                                                                                                                                                      "argument": {"variable": "field"},
+                                                                                                                                                      "function": {
+                                                                                                                                                        "function": {
+                                                                                                                                                          "elimination": {
+                                                                                                                                                            "record": {
+                                                                                                                                                              "field": "name",
+                                                                                                                                                              "typeName": "hydra.ext.cpp.syntax.VariableDeclaration"}}}}}}},
+                                                                                                                                                {
+                                                                                                                                                  "name": "arguments",
+                                                                                                                                                  "term": {
+                                                                                                                                                    "list": [
+                                                                                                                                                      {
+                                                                                                                                                        "application": {
+                                                                                                                                                          "argument": {
+                                                                                                                                                            "application": {
+                                                                                                                                                              "argument": {"variable": "field"},
+                                                                                                                                                              "function": {
+                                                                                                                                                                "function": {
+                                                                                                                                                                  "elimination": {
+                                                                                                                                                                    "record": {
+                                                                                                                                                                      "field": "name",
+                                                                                                                                                                      "typeName": "hydra.ext.cpp.syntax.VariableDeclaration"}}}}}},
+                                                                                                                                                          "function": {"variable": "hydra.ext.cpp.coder.createIdentifierExpr"}}}]}}],
+                                                                                                                                              "typeName": "hydra.ext.cpp.syntax.MemInitializer"}},
+                                                                                                                                          "domain": [{"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}],
+                                                                                                                                          "parameter": "field"}}},
+                                                                                                                                    "function": {
+                                                                                                                                      "typeApplication": {
+                                                                                                                                        "body": {
+                                                                                                                                          "typeApplication": {
+                                                                                                                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                                                                            "type": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}},
+                                                                                                                                        "type": {"variable": "hydra.ext.cpp.syntax.MemInitializer"}}}}}}}},
+                                                                                                                          {
+                                                                                                                            "name": "body",
+                                                                                                                            "term": {
+                                                                                                                              "application": {
+                                                                                                                                "argument": {"variable": "constructorParams"},
+                                                                                                                                "function": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {"variable": "hydra.ext.cpp.coder.createConstructorBody"},
+                                                                                                                                    "type": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}}}}}],
+                                                                                                                        "typeName": "hydra.ext.cpp.syntax.ConstructorDeclaration"}}},
+                                                                                                                  "typeName": "hydra.ext.cpp.syntax.MemberDeclaration"}}},
+                                                                                                            "typeName": "hydra.ext.cpp.syntax.MemberSpecification"}}]}]},
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"function": {"primitive": "hydra.lib.lists.concat"}},
+                                                                                                    "type": {"variable": "hydra.ext.cpp.syntax.MemberSpecification"}}}}},
+                                                                                            "typeName": "hydra.ext.cpp.syntax.ClassBody"}}]},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"list": []},
+                                                                                            "type": {"variable": "hydra.ext.cpp.syntax.BaseSpecifier"}}},
                                                                                         "function": {
                                                                                           "application": {
                                                                                             "argument": {
-                                                                                              "typeApplication": {
-                                                                                                "body": {"list": []},
-                                                                                                "type": {"variable": "hydra.ext.cpp.syntax.BaseSpecifier"}}},
-                                                                                            "function": {
                                                                                               "application": {
-                                                                                                "argument": {
-                                                                                                  "application": {
-                                                                                                    "argument": {"variable": "name"},
-                                                                                                    "function": {"variable": "hydra.ext.cpp.coder.className"}}},
-                                                                                                "function": {"variable": "hydra.ext.cpp.coder.cppClassDeclaration"}}}}}}},
-                                                                                    {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "tfields"},
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "name"},
-                                                                                            "function": {
-                                                                                              "typeApplication": {
-                                                                                                "body": {"variable": "hydra.ext.cpp.coder.createLessThanOperator"},
-                                                                                                "type": {"list": {"variable": "hydra.core.FieldType"}}}}}}}}]}}},
-                                                                            "type": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.error.Error"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                        "type": {"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}},
-                                                                    "domain": [{"list": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}],
-                                                                    "parameter": "constructorParams"}}},
-                                                              "function": {
-                                                                "application": {
-                                                                  "argument": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "tfields"},
-                                                                      "function": {
-                                                                        "application": {
-                                                                          "argument": {
-                                                                            "function": {
-                                                                              "lambda": {
-                                                                                "body": {
+                                                                                                "argument": {"variable": "name"},
+                                                                                                "function": {"variable": "hydra.ext.cpp.coder.className"}}},
+                                                                                            "function": {"variable": "hydra.ext.cpp.coder.cppClassDeclaration"}}}}}}},
+                                                                                {
                                                                                   "application": {
-                                                                                    "argument": {"variable": "g"},
+                                                                                    "argument": {"variable": "rt"},
                                                                                     "function": {
                                                                                       "application": {
-                                                                                        "argument": {"variable": "cx"},
+                                                                                        "argument": {"variable": "name"},
+                                                                                        "function": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"variable": "hydra.ext.cpp.coder.createLessThanOperator"},
+                                                                                            "type": {"list": {"variable": "hydra.core.FieldType"}}}}}}}}]}}},
+                                                                        "type": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "hydra.error.Error"},
+                                                                            "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                    "type": {"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}},
+                                                                "domain": [{"list": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}],
+                                                                "parameter": "constructorParams"}}},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {"variable": "rt"},
+                                                                  "function": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "function": {
+                                                                          "lambda": {
+                                                                            "body": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "g"},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "cx"},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "f"},
                                                                                         "function": {
                                                                                           "application": {
-                                                                                            "argument": {"variable": "f"},
+                                                                                            "argument": {"literal": {"boolean": true}},
                                                                                             "function": {
-                                                                                              "application": {
-                                                                                                "argument": {"literal": {"boolean": true}},
-                                                                                                "function": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
                                                                                                   "typeApplication": {
-                                                                                                    "body": {
-                                                                                                      "typeApplication": {
-                                                                                                        "body": {"variable": "hydra.ext.cpp.coder.encodeFieldType"},
-                                                                                                        "type": {"literal": {"boolean": {}}}}},
-                                                                                                    "type": {"variable": "t0"}}}}}}}}}}},
-                                                                                "domain": [{"variable": "hydra.core.FieldType"}],
-                                                                                "parameter": "f"}}},
-                                                                          "function": {
-                                                                            "typeApplication": {
-                                                                              "body": {
-                                                                                "typeApplication": {
-                                                                                  "body": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
-                                                                                      "type": {"variable": "hydra.core.FieldType"}}},
-                                                                                  "type": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.error.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}}}}}},
-                                                                  "function": {
-                                                                    "typeApplication": {
-                                                                      "body": {
+                                                                                                    "body": {"variable": "hydra.ext.cpp.coder.encodeFieldType"},
+                                                                                                    "type": {"literal": {"boolean": {}}}}},
+                                                                                                "type": {"variable": "t0"}}}}}}}}}}},
+                                                                            "domain": [{"variable": "hydra.core.FieldType"}],
+                                                                            "parameter": "f"}}},
+                                                                      "function": {
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.error.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                          "type": {"list": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}}},
-                                                                      "type": {"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}}}}}},
-                                                          "domain": [{"list": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}],
-                                                          "parameter": "cppFields"}}},
-                                                    "function": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "application": {
-                                                            "argument": {"variable": "tfields"},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {
-                                                                  "function": {
-                                                                    "lambda": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
+                                                                                  "type": {"variable": "hydra.core.FieldType"}}},
+                                                                              "type": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}},
+                                                                          "type": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "hydra.error.Error"},
+                                                                              "function": {"variable": "hydra.context.InContext"}}}}}}}}},
+                                                              "function": {
+                                                                "typeApplication": {
+                                                                  "body": {
+                                                                    "typeApplication": {
                                                                       "body": {
+                                                                        "typeApplication": {
+                                                                          "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                          "type": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "hydra.error.Error"},
+                                                                              "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                      "type": {"list": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}}},
+                                                                  "type": {"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}}}}}},
+                                                      "domain": [{"list": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}],
+                                                      "parameter": "cppFields"}}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "rt"},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "function": {
+                                                                "lambda": {
+                                                                  "body": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "g"},
+                                                                      "function": {
                                                                         "application": {
-                                                                          "argument": {"variable": "g"},
+                                                                          "argument": {"variable": "cx"},
                                                                           "function": {
                                                                             "application": {
-                                                                              "argument": {"variable": "cx"},
+                                                                              "argument": {"variable": "f"},
                                                                               "function": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "f"},
+                                                                                  "argument": {"literal": {"boolean": false}},
                                                                                   "function": {
-                                                                                    "application": {
-                                                                                      "argument": {"literal": {"boolean": false}},
-                                                                                      "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
                                                                                         "typeApplication": {
-                                                                                          "body": {
-                                                                                            "typeApplication": {
-                                                                                              "body": {"variable": "hydra.ext.cpp.coder.encodeFieldType"},
-                                                                                              "type": {"literal": {"boolean": {}}}}},
-                                                                                          "type": {"variable": "t0"}}}}}}}}}}},
-                                                                      "domain": [{"variable": "hydra.core.FieldType"}],
-                                                                      "parameter": "f"}}},
-                                                                "function": {
-                                                                  "typeApplication": {
-                                                                    "body": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
-                                                                            "type": {"variable": "hydra.core.FieldType"}}},
-                                                                        "type": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}},
-                                                                    "type": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "hydra.error.Error"},
-                                                                        "function": {"variable": "hydra.context.InContext"}}}}}}}}},
-                                                        "function": {
-                                                          "typeApplication": {
-                                                            "body": {
+                                                                                          "body": {"variable": "hydra.ext.cpp.coder.encodeFieldType"},
+                                                                                          "type": {"literal": {"boolean": {}}}}},
+                                                                                      "type": {"variable": "t0"}}}}}}}}}}},
+                                                                  "domain": [{"variable": "hydra.core.FieldType"}],
+                                                                  "parameter": "f"}}},
+                                                            "function": {
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "typeApplication": {
-                                                                    "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
-                                                                    "type": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "hydra.error.Error"},
-                                                                        "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                "type": {"list": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}}},
-                                                            "type": {"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}}}}}}}},
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
+                                                                        "type": {"variable": "hydra.core.FieldType"}}},
+                                                                    "type": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}},
+                                                                "type": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "hydra.error.Error"},
+                                                                    "function": {"variable": "hydra.context.InContext"}}}}}}}}},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                "type": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "hydra.error.Error"},
+                                                                    "function": {"variable": "hydra.context.InContext"}}}}},
+                                                            "type": {"list": {"variable": "hydra.ext.cpp.syntax.VariableDeclaration"}}}},
+                                                        "type": {"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}}}}}},
                                             "domain": [{"variable": "t1"}],
                                             "parameter": "comment"}}},
-                                      "domain": [{"variable": "hydra.core.RowType"}],
+                                      "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                       "parameter": "rt"}}},
                                 "domain": [{"variable": "hydra.core.Name"}],
                                 "parameter": "name"}}},
@@ -3603,7 +3593,7 @@
                                       "function": {"variable": "hydra.context.InContext"}}},
                                   "right": {"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}},
                               "domain": {"variable": "t1"}}},
-                          "domain": {"variable": "hydra.core.RowType"}}},
+                          "domain": {"list": {"variable": "hydra.core.FieldType"}}}},
                       "domain": {"variable": "hydra.core.Name"}}},
                   "domain": {"variable": "t0"}}},
               "domain": {"variable": "hydra.context.Context"}}},
@@ -3636,12 +3626,7 @@
                                                     "argument": {"variable": "comment"},
                                                     "function": {
                                                       "application": {
-                                                        "argument": {
-                                                          "application": {
-                                                            "argument": {"variable": "rt"},
-                                                            "function": {
-                                                              "function": {
-                                                                "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
+                                                        "argument": {"variable": "rt"},
                                                         "function": {
                                                           "application": {
                                                             "argument": {"variable": "name"},
@@ -3665,12 +3650,7 @@
                                                         "argument": {"variable": "comment"},
                                                         "function": {
                                                           "application": {
-                                                            "argument": {
-                                                              "application": {
-                                                                "argument": {"variable": "rt"},
-                                                                "function": {
-                                                                  "function": {
-                                                                    "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
+                                                            "argument": {"variable": "rt"},
                                                             "function": {
                                                               "application": {
                                                                 "argument": {"variable": "name"},
@@ -3714,7 +3694,7 @@
                                                                 "right": {"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}}}}}}}}}},
                                             "domain": [{"variable": "t1"}],
                                             "parameter": "comment"}}},
-                                      "domain": [{"variable": "hydra.core.RowType"}],
+                                      "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                       "parameter": "rt"}}},
                                 "domain": [{"variable": "hydra.core.Name"}],
                                 "parameter": "name"}}},
@@ -3745,7 +3725,7 @@
                                       "function": {"variable": "hydra.context.InContext"}}},
                                   "right": {"list": {"variable": "hydra.ext.cpp.syntax.Declaration"}}}},
                               "domain": {"variable": "t1"}}},
-                          "domain": {"variable": "hydra.core.RowType"}}},
+                          "domain": {"list": {"variable": "hydra.core.FieldType"}}}},
                       "domain": {"variable": "hydra.core.Name"}}},
                   "domain": {"variable": "t0"}}},
               "domain": {"variable": "hydra.context.Context"}}},
@@ -4107,25 +4087,18 @@
                                                 "function": {
                                                   "application": {
                                                     "argument": {
-                                                      "record": {
-                                                        "fields": [
-                                                          {"name": "typeName", "term": {"variable": "name"}},
-                                                          {
-                                                            "name": "fields",
-                                                            "term": {
-                                                              "list": [
-                                                                {
-                                                                  "record": {
-                                                                    "fields": [
-                                                                      {
-                                                                        "name": "name",
-                                                                        "term": {
-                                                                          "wrap": {
-                                                                            "body": {"literal": {"string": "value"}},
-                                                                            "typeName": "hydra.core.Name"}}},
-                                                                      {"name": "type", "term": {"variable": "typ"}}],
-                                                                    "typeName": "hydra.core.FieldType"}}]}}],
-                                                        "typeName": "hydra.core.RowType"}},
+                                                      "list": [
+                                                        {
+                                                          "record": {
+                                                            "fields": [
+                                                              {
+                                                                "name": "name",
+                                                                "term": {
+                                                                  "wrap": {
+                                                                    "body": {"literal": {"string": "value"}},
+                                                                    "typeName": "hydra.core.Name"}}},
+                                                              {"name": "type", "term": {"variable": "typ"}}],
+                                                            "typeName": "hydra.core.FieldType"}}]},
                                                     "function": {
                                                       "application": {
                                                         "argument": {"variable": "name"},

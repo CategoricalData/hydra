@@ -1081,162 +1081,146 @@
                                                       "function": {
                                                         "lambda": {
                                                           "body": {
-                                                            "let": {
-                                                              "bindings": [
-                                                                {
-                                                                  "name": "fields",
-                                                                  "term": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "rt"},
-                                                                      "function": {
-                                                                        "function": {
-                                                                          "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
-                                                                  "type": [
-                                                                    {
-                                                                      "constraints": null,
-                                                                      "type": {"list": {"variable": "hydra.core.FieldType"}},
-                                                                      "variables": []}]}],
-                                                              "body": {
-                                                                "application": {
-                                                                  "argument": {
-                                                                    "function": {
-                                                                      "lambda": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "function": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
                                                                             "body": {
-                                                                              "typeApplication": {
-                                                                                "body": {
-                                                                                  "either": {
-                                                                                    "@right": {
-                                                                                      "union": {
-                                                                                        "field": {
-                                                                                          "name": "defn",
-                                                                                          "term": {
-                                                                                            "union": {
-                                                                                              "field": {
-                                                                                                "name": "class",
-                                                                                                "term": {
-                                                                                                  "record": {
-                                                                                                    "fields": [
-                                                                                                      {
-                                                                                                        "name": "mods",
-                                                                                                        "term": {
-                                                                                                          "list": [
-                                                                                                            {
+                                                                              "either": {
+                                                                                "@right": {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "defn",
+                                                                                      "term": {
+                                                                                        "union": {
+                                                                                          "field": {
+                                                                                            "name": "class",
+                                                                                            "term": {
+                                                                                              "record": {
+                                                                                                "fields": [
+                                                                                                  {
+                                                                                                    "name": "mods",
+                                                                                                    "term": {
+                                                                                                      "list": [
+                                                                                                        {
+                                                                                                          "union": {
+                                                                                                            "field": {"name": "case", "term": {"unit": {}}},
+                                                                                                            "typeName": "hydra.ext.scala.meta.Mod"}}]}},
+                                                                                                  {"name": "name", "term": {"variable": "tname"}},
+                                                                                                  {"name": "tparams", "term": {"variable": "tparams"}},
+                                                                                                  {
+                                                                                                    "name": "ctor",
+                                                                                                    "term": {
+                                                                                                      "record": {
+                                                                                                        "fields": [
+                                                                                                          {
+                                                                                                            "name": "mods",
+                                                                                                            "term": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {"list": []},
+                                                                                                                "type": {"variable": "hydra.ext.scala.meta.Mod"}}}},
+                                                                                                          {
+                                                                                                            "name": "name",
+                                                                                                            "term": {
                                                                                                               "union": {
-                                                                                                                "field": {"name": "case", "term": {"unit": {}}},
-                                                                                                                "typeName": "hydra.ext.scala.meta.Mod"}}]}},
-                                                                                                      {"name": "name", "term": {"variable": "tname"}},
-                                                                                                      {"name": "tparams", "term": {"variable": "tparams"}},
-                                                                                                      {
-                                                                                                        "name": "ctor",
-                                                                                                        "term": {
-                                                                                                          "record": {
-                                                                                                            "fields": [
-                                                                                                              {
-                                                                                                                "name": "mods",
-                                                                                                                "term": {
-                                                                                                                  "typeApplication": {
-                                                                                                                    "body": {"list": []},
-                                                                                                                    "type": {"variable": "hydra.ext.scala.meta.Mod"}}}},
-                                                                                                              {
-                                                                                                                "name": "name",
-                                                                                                                "term": {
-                                                                                                                  "union": {
-                                                                                                                    "field": {"name": "value", "term": {"literal": {"string": ""}}},
-                                                                                                                    "typeName": "hydra.ext.scala.meta.Name"}}},
-                                                                                                              {"name": "paramss", "term": {"list": [{"variable": "params"}]}}],
-                                                                                                            "typeName": "hydra.ext.scala.meta.Ctor_Primary"}}},
-                                                                                                      {
-                                                                                                        "name": "template",
-                                                                                                        "term": {
-                                                                                                          "record": {
-                                                                                                            "fields": [
-                                                                                                              {
-                                                                                                                "name": "early",
-                                                                                                                "term": {
-                                                                                                                  "typeApplication": {
-                                                                                                                    "body": {"list": []},
-                                                                                                                    "type": {"variable": "hydra.ext.scala.meta.Stat"}}}},
-                                                                                                              {
-                                                                                                                "name": "inits",
-                                                                                                                "term": {
-                                                                                                                  "typeApplication": {
-                                                                                                                    "body": {"list": []},
-                                                                                                                    "type": {"variable": "hydra.ext.scala.meta.Init"}}}},
-                                                                                                              {
-                                                                                                                "name": "self",
-                                                                                                                "term": {
-                                                                                                                  "wrap": {"body": {"unit": {}}, "typeName": "hydra.ext.scala.meta.Self"}}},
-                                                                                                              {
-                                                                                                                "name": "stats",
-                                                                                                                "term": {
-                                                                                                                  "typeApplication": {
-                                                                                                                    "body": {"list": []},
-                                                                                                                    "type": {"variable": "hydra.ext.scala.meta.Stat"}}}}],
-                                                                                                            "typeName": "hydra.ext.scala.meta.Template"}}}],
-                                                                                                    "typeName": "hydra.ext.scala.meta.Defn_Class"}}},
-                                                                                              "typeName": "hydra.ext.scala.meta.Defn"}}},
-                                                                                        "typeName": "hydra.ext.scala.meta.Stat"}}}},
-                                                                                "type": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "hydra.error.Error"},
-                                                                                    "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                            "type": {"variable": "hydra.ext.scala.meta.Stat"}}},
-                                                                        "domain": [{"list": {"variable": "hydra.ext.scala.meta.Data_Param"}}],
-                                                                        "parameter": "params"}}},
-                                                                  "function": {
+                                                                                                                "field": {"name": "value", "term": {"literal": {"string": ""}}},
+                                                                                                                "typeName": "hydra.ext.scala.meta.Name"}}},
+                                                                                                          {"name": "paramss", "term": {"list": [{"variable": "params"}]}}],
+                                                                                                        "typeName": "hydra.ext.scala.meta.Ctor_Primary"}}},
+                                                                                                  {
+                                                                                                    "name": "template",
+                                                                                                    "term": {
+                                                                                                      "record": {
+                                                                                                        "fields": [
+                                                                                                          {
+                                                                                                            "name": "early",
+                                                                                                            "term": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {"list": []},
+                                                                                                                "type": {"variable": "hydra.ext.scala.meta.Stat"}}}},
+                                                                                                          {
+                                                                                                            "name": "inits",
+                                                                                                            "term": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {"list": []},
+                                                                                                                "type": {"variable": "hydra.ext.scala.meta.Init"}}}},
+                                                                                                          {
+                                                                                                            "name": "self",
+                                                                                                            "term": {
+                                                                                                              "wrap": {"body": {"unit": {}}, "typeName": "hydra.ext.scala.meta.Self"}}},
+                                                                                                          {
+                                                                                                            "name": "stats",
+                                                                                                            "term": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {"list": []},
+                                                                                                                "type": {"variable": "hydra.ext.scala.meta.Stat"}}}}],
+                                                                                                        "typeName": "hydra.ext.scala.meta.Template"}}}],
+                                                                                                "typeName": "hydra.ext.scala.meta.Defn_Class"}}},
+                                                                                          "typeName": "hydra.ext.scala.meta.Defn"}}},
+                                                                                    "typeName": "hydra.ext.scala.meta.Stat"}}}},
+                                                                            "type": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "hydra.error.Error"},
+                                                                                "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                        "type": {"variable": "hydra.ext.scala.meta.Stat"}}},
+                                                                    "domain": [{"list": {"variable": "hydra.ext.scala.meta.Data_Param"}}],
+                                                                    "parameter": "params"}}},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {
                                                                     "application": {
-                                                                      "argument": {
+                                                                      "argument": {"variable": "rt"},
+                                                                      "function": {
                                                                         "application": {
-                                                                          "argument": {"variable": "fields"},
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "argument": {
-                                                                                "function": {
-                                                                                  "lambda": {
-                                                                                    "body": {
+                                                                          "argument": {
+                                                                            "function": {
+                                                                              "lambda": {
+                                                                                "body": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "f"},
+                                                                                    "function": {
                                                                                       "application": {
-                                                                                        "argument": {"variable": "f"},
+                                                                                        "argument": {"variable": "g"},
                                                                                         "function": {
                                                                                           "application": {
-                                                                                            "argument": {"variable": "g"},
+                                                                                            "argument": {"variable": "cx"},
                                                                                             "function": {
-                                                                                              "application": {
-                                                                                                "argument": {"variable": "cx"},
-                                                                                                "function": {
-                                                                                                  "typeApplication": {
-                                                                                                    "body": {"variable": "hydra.ext.scala.coder.fieldToParam"},
-                                                                                                    "type": {"variable": "t0"}}}}}}}}},
-                                                                                    "domain": [{"variable": "hydra.core.FieldType"}],
-                                                                                    "parameter": "f"}}},
-                                                                              "function": {
-                                                                                "typeApplication": {
-                                                                                  "body": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {
-                                                                                        "typeApplication": {
-                                                                                          "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
-                                                                                          "type": {"variable": "hydra.core.FieldType"}}},
-                                                                                      "type": {"variable": "hydra.ext.scala.meta.Data_Param"}}},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.error.Error"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}}}}}},
-                                                                      "function": {
-                                                                        "typeApplication": {
-                                                                          "body": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"variable": "hydra.ext.scala.coder.fieldToParam"},
+                                                                                                "type": {"variable": "t0"}}}}}}}}},
+                                                                                "domain": [{"variable": "hydra.core.FieldType"}],
+                                                                                "parameter": "f"}}},
+                                                                          "function": {
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.error.Error"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                              "type": {"list": {"variable": "hydra.ext.scala.meta.Data_Param"}}}},
-                                                                          "type": {"variable": "hydra.ext.scala.meta.Stat"}}}}}}}}},
-                                                          "domain": [{"variable": "hydra.core.RowType"}],
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
+                                                                                      "type": {"variable": "hydra.core.FieldType"}}},
+                                                                                  "type": {"variable": "hydra.ext.scala.meta.Data_Param"}}},
+                                                                              "type": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "hydra.error.Error"},
+                                                                                  "function": {"variable": "hydra.context.InContext"}}}}}}}}},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                              "type": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "hydra.error.Error"},
+                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                          "type": {"list": {"variable": "hydra.ext.scala.meta.Data_Param"}}}},
+                                                                      "type": {"variable": "hydra.ext.scala.meta.Stat"}}}}}}},
+                                                          "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                                           "parameter": "rt"}}}},
                                                   {
                                                     "name": "union",
@@ -1244,166 +1228,150 @@
                                                       "function": {
                                                         "lambda": {
                                                           "body": {
-                                                            "let": {
-                                                              "bindings": [
-                                                                {
-                                                                  "name": "fields",
-                                                                  "term": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "rt"},
-                                                                      "function": {
-                                                                        "function": {
-                                                                          "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
-                                                                  "type": [
-                                                                    {
-                                                                      "constraints": null,
-                                                                      "type": {"list": {"variable": "hydra.core.FieldType"}},
-                                                                      "variables": []}]}],
-                                                              "body": {
-                                                                "application": {
-                                                                  "argument": {
-                                                                    "function": {
-                                                                      "lambda": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "function": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
                                                                             "body": {
-                                                                              "typeApplication": {
-                                                                                "body": {
-                                                                                  "either": {
-                                                                                    "@right": {
-                                                                                      "union": {
-                                                                                        "field": {
-                                                                                          "name": "defn",
-                                                                                          "term": {
-                                                                                            "union": {
-                                                                                              "field": {
-                                                                                                "name": "enum",
-                                                                                                "term": {
-                                                                                                  "record": {
-                                                                                                    "fields": [
-                                                                                                      {
-                                                                                                        "name": "mods",
-                                                                                                        "term": {
-                                                                                                          "typeApplication": {
-                                                                                                            "body": {"list": []},
-                                                                                                            "type": {"variable": "hydra.ext.scala.meta.Mod"}}}},
-                                                                                                      {"name": "name", "term": {"variable": "tname"}},
-                                                                                                      {"name": "tparams", "term": {"variable": "tparams"}},
-                                                                                                      {
-                                                                                                        "name": "ctor",
-                                                                                                        "term": {
-                                                                                                          "record": {
-                                                                                                            "fields": [
-                                                                                                              {
-                                                                                                                "name": "mods",
-                                                                                                                "term": {
-                                                                                                                  "typeApplication": {
-                                                                                                                    "body": {"list": []},
-                                                                                                                    "type": {"variable": "hydra.ext.scala.meta.Mod"}}}},
-                                                                                                              {
-                                                                                                                "name": "name",
-                                                                                                                "term": {
-                                                                                                                  "union": {
-                                                                                                                    "field": {"name": "value", "term": {"literal": {"string": ""}}},
-                                                                                                                    "typeName": "hydra.ext.scala.meta.Name"}}},
-                                                                                                              {
-                                                                                                                "name": "paramss",
-                                                                                                                "term": {
-                                                                                                                  "typeApplication": {
-                                                                                                                    "body": {"list": []},
-                                                                                                                    "type": {"list": {"variable": "hydra.ext.scala.meta.Data_Param"}}}}}],
-                                                                                                            "typeName": "hydra.ext.scala.meta.Ctor_Primary"}}},
-                                                                                                      {
-                                                                                                        "name": "template",
-                                                                                                        "term": {
-                                                                                                          "record": {
-                                                                                                            "fields": [
-                                                                                                              {
-                                                                                                                "name": "early",
-                                                                                                                "term": {
-                                                                                                                  "typeApplication": {
-                                                                                                                    "body": {"list": []},
-                                                                                                                    "type": {"variable": "hydra.ext.scala.meta.Stat"}}}},
-                                                                                                              {
-                                                                                                                "name": "inits",
-                                                                                                                "term": {
-                                                                                                                  "typeApplication": {
-                                                                                                                    "body": {"list": []},
-                                                                                                                    "type": {"variable": "hydra.ext.scala.meta.Init"}}}},
-                                                                                                              {
-                                                                                                                "name": "self",
-                                                                                                                "term": {
-                                                                                                                  "wrap": {"body": {"unit": {}}, "typeName": "hydra.ext.scala.meta.Self"}}},
-                                                                                                              {"name": "stats", "term": {"variable": "cases"}}],
-                                                                                                            "typeName": "hydra.ext.scala.meta.Template"}}}],
-                                                                                                    "typeName": "hydra.ext.scala.meta.Defn_Enum"}}},
-                                                                                              "typeName": "hydra.ext.scala.meta.Defn"}}},
-                                                                                        "typeName": "hydra.ext.scala.meta.Stat"}}}},
-                                                                                "type": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "hydra.error.Error"},
-                                                                                    "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                            "type": {"variable": "hydra.ext.scala.meta.Stat"}}},
-                                                                        "domain": [{"list": {"variable": "hydra.ext.scala.meta.Stat"}}],
-                                                                        "parameter": "cases"}}},
-                                                                  "function": {
+                                                                              "either": {
+                                                                                "@right": {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "defn",
+                                                                                      "term": {
+                                                                                        "union": {
+                                                                                          "field": {
+                                                                                            "name": "enum",
+                                                                                            "term": {
+                                                                                              "record": {
+                                                                                                "fields": [
+                                                                                                  {
+                                                                                                    "name": "mods",
+                                                                                                    "term": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"list": []},
+                                                                                                        "type": {"variable": "hydra.ext.scala.meta.Mod"}}}},
+                                                                                                  {"name": "name", "term": {"variable": "tname"}},
+                                                                                                  {"name": "tparams", "term": {"variable": "tparams"}},
+                                                                                                  {
+                                                                                                    "name": "ctor",
+                                                                                                    "term": {
+                                                                                                      "record": {
+                                                                                                        "fields": [
+                                                                                                          {
+                                                                                                            "name": "mods",
+                                                                                                            "term": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {"list": []},
+                                                                                                                "type": {"variable": "hydra.ext.scala.meta.Mod"}}}},
+                                                                                                          {
+                                                                                                            "name": "name",
+                                                                                                            "term": {
+                                                                                                              "union": {
+                                                                                                                "field": {"name": "value", "term": {"literal": {"string": ""}}},
+                                                                                                                "typeName": "hydra.ext.scala.meta.Name"}}},
+                                                                                                          {
+                                                                                                            "name": "paramss",
+                                                                                                            "term": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {"list": []},
+                                                                                                                "type": {"list": {"variable": "hydra.ext.scala.meta.Data_Param"}}}}}],
+                                                                                                        "typeName": "hydra.ext.scala.meta.Ctor_Primary"}}},
+                                                                                                  {
+                                                                                                    "name": "template",
+                                                                                                    "term": {
+                                                                                                      "record": {
+                                                                                                        "fields": [
+                                                                                                          {
+                                                                                                            "name": "early",
+                                                                                                            "term": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {"list": []},
+                                                                                                                "type": {"variable": "hydra.ext.scala.meta.Stat"}}}},
+                                                                                                          {
+                                                                                                            "name": "inits",
+                                                                                                            "term": {
+                                                                                                              "typeApplication": {
+                                                                                                                "body": {"list": []},
+                                                                                                                "type": {"variable": "hydra.ext.scala.meta.Init"}}}},
+                                                                                                          {
+                                                                                                            "name": "self",
+                                                                                                            "term": {
+                                                                                                              "wrap": {"body": {"unit": {}}, "typeName": "hydra.ext.scala.meta.Self"}}},
+                                                                                                          {"name": "stats", "term": {"variable": "cases"}}],
+                                                                                                        "typeName": "hydra.ext.scala.meta.Template"}}}],
+                                                                                                "typeName": "hydra.ext.scala.meta.Defn_Enum"}}},
+                                                                                          "typeName": "hydra.ext.scala.meta.Defn"}}},
+                                                                                    "typeName": "hydra.ext.scala.meta.Stat"}}}},
+                                                                            "type": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "hydra.error.Error"},
+                                                                                "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                        "type": {"variable": "hydra.ext.scala.meta.Stat"}}},
+                                                                    "domain": [{"list": {"variable": "hydra.ext.scala.meta.Stat"}}],
+                                                                    "parameter": "cases"}}},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {
                                                                     "application": {
-                                                                      "argument": {
+                                                                      "argument": {"variable": "rt"},
+                                                                      "function": {
                                                                         "application": {
-                                                                          "argument": {"variable": "fields"},
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "argument": {
-                                                                                "function": {
-                                                                                  "lambda": {
-                                                                                    "body": {
+                                                                          "argument": {
+                                                                            "function": {
+                                                                              "lambda": {
+                                                                                "body": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "f"},
+                                                                                    "function": {
                                                                                       "application": {
-                                                                                        "argument": {"variable": "f"},
+                                                                                        "argument": {"variable": "tparams"},
                                                                                         "function": {
                                                                                           "application": {
-                                                                                            "argument": {"variable": "tparams"},
+                                                                                            "argument": {"variable": "lname"},
                                                                                             "function": {
                                                                                               "application": {
-                                                                                                "argument": {"variable": "lname"},
+                                                                                                "argument": {"variable": "g"},
                                                                                                 "function": {
                                                                                                   "application": {
-                                                                                                    "argument": {"variable": "g"},
+                                                                                                    "argument": {"variable": "cx"},
                                                                                                     "function": {
-                                                                                                      "application": {
-                                                                                                        "argument": {"variable": "cx"},
-                                                                                                        "function": {
-                                                                                                          "typeApplication": {
-                                                                                                            "body": {"variable": "hydra.ext.scala.coder.fieldToEnumCase"},
-                                                                                                            "type": {"variable": "t0"}}}}}}}}}}}}},
-                                                                                    "domain": [{"variable": "hydra.core.FieldType"}],
-                                                                                    "parameter": "f"}}},
-                                                                              "function": {
-                                                                                "typeApplication": {
-                                                                                  "body": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {
-                                                                                        "typeApplication": {
-                                                                                          "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
-                                                                                          "type": {"variable": "hydra.core.FieldType"}}},
-                                                                                      "type": {"variable": "hydra.ext.scala.meta.Stat"}}},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.error.Error"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}}}}}},
-                                                                      "function": {
-                                                                        "typeApplication": {
-                                                                          "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"variable": "hydra.ext.scala.coder.fieldToEnumCase"},
+                                                                                                        "type": {"variable": "t0"}}}}}}}}}}}}},
+                                                                                "domain": [{"variable": "hydra.core.FieldType"}],
+                                                                                "parameter": "f"}}},
+                                                                          "function": {
                                                                             "typeApplication": {
                                                                               "body": {
                                                                                 "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.error.Error"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                              "type": {"list": {"variable": "hydra.ext.scala.meta.Stat"}}}},
-                                                                          "type": {"variable": "hydra.ext.scala.meta.Stat"}}}}}}}}},
-                                                          "domain": [{"variable": "hydra.core.RowType"}],
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
+                                                                                      "type": {"variable": "hydra.core.FieldType"}}},
+                                                                                  "type": {"variable": "hydra.ext.scala.meta.Stat"}}},
+                                                                              "type": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "hydra.error.Error"},
+                                                                                  "function": {"variable": "hydra.context.InContext"}}}}}}}}},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                              "type": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "hydra.error.Error"},
+                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                          "type": {"list": {"variable": "hydra.ext.scala.meta.Stat"}}}},
+                                                                      "type": {"variable": "hydra.ext.scala.meta.Stat"}}}}}}},
+                                                          "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                                           "parameter": "rt"}}}},
                                                   {
                                                     "name": "wrap",
@@ -1411,91 +1379,75 @@
                                                       "function": {
                                                         "lambda": {
                                                           "body": {
-                                                            "let": {
-                                                              "bindings": [
-                                                                {
-                                                                  "name": "inner",
-                                                                  "term": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "wt"},
-                                                                      "function": {
-                                                                        "function": {
-                                                                          "elimination": {"record": {"field": "body", "typeName": "hydra.core.WrappedType"}}}}}},
-                                                                  "type": [
-                                                                    {
-                                                                      "constraints": null,
-                                                                      "type": {"variable": "hydra.core.Type"},
-                                                                      "variables": []}]}],
-                                                              "body": {
-                                                                "application": {
-                                                                  "argument": {
-                                                                    "function": {
-                                                                      "lambda": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "function": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "typeApplication": {
                                                                         "body": {
                                                                           "typeApplication": {
                                                                             "body": {
-                                                                              "typeApplication": {
-                                                                                "body": {
-                                                                                  "either": {
-                                                                                    "@right": {
-                                                                                      "union": {
-                                                                                        "field": {
-                                                                                          "name": "defn",
-                                                                                          "term": {
-                                                                                            "union": {
-                                                                                              "field": {
-                                                                                                "name": "type",
-                                                                                                "term": {
-                                                                                                  "record": {
-                                                                                                    "fields": [
-                                                                                                      {
-                                                                                                        "name": "mods",
-                                                                                                        "term": {
-                                                                                                          "typeApplication": {
-                                                                                                            "body": {"list": []},
-                                                                                                            "type": {"variable": "hydra.ext.scala.meta.Mod"}}}},
-                                                                                                      {"name": "name", "term": {"variable": "tname"}},
-                                                                                                      {"name": "tparams", "term": {"variable": "tparams"}},
-                                                                                                      {"name": "body", "term": {"variable": "styp"}}],
-                                                                                                    "typeName": "hydra.ext.scala.meta.Defn_Type"}}},
-                                                                                              "typeName": "hydra.ext.scala.meta.Defn"}}},
-                                                                                        "typeName": "hydra.ext.scala.meta.Stat"}}}},
-                                                                                "type": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "hydra.error.Error"},
-                                                                                    "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                            "type": {"variable": "hydra.ext.scala.meta.Stat"}}},
-                                                                        "domain": [{"variable": "hydra.ext.scala.meta.Type"}],
-                                                                        "parameter": "styp"}}},
-                                                                  "function": {
+                                                                              "either": {
+                                                                                "@right": {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "defn",
+                                                                                      "term": {
+                                                                                        "union": {
+                                                                                          "field": {
+                                                                                            "name": "type",
+                                                                                            "term": {
+                                                                                              "record": {
+                                                                                                "fields": [
+                                                                                                  {
+                                                                                                    "name": "mods",
+                                                                                                    "term": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"list": []},
+                                                                                                        "type": {"variable": "hydra.ext.scala.meta.Mod"}}}},
+                                                                                                  {"name": "name", "term": {"variable": "tname"}},
+                                                                                                  {"name": "tparams", "term": {"variable": "tparams"}},
+                                                                                                  {"name": "body", "term": {"variable": "styp"}}],
+                                                                                                "typeName": "hydra.ext.scala.meta.Defn_Type"}}},
+                                                                                          "typeName": "hydra.ext.scala.meta.Defn"}}},
+                                                                                    "typeName": "hydra.ext.scala.meta.Stat"}}}},
+                                                                            "type": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "hydra.error.Error"},
+                                                                                "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                        "type": {"variable": "hydra.ext.scala.meta.Stat"}}},
+                                                                    "domain": [{"variable": "hydra.ext.scala.meta.Type"}],
+                                                                    "parameter": "styp"}}},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {
                                                                     "application": {
-                                                                      "argument": {
+                                                                      "argument": {"variable": "wt"},
+                                                                      "function": {
                                                                         "application": {
-                                                                          "argument": {"variable": "inner"},
+                                                                          "argument": {"variable": "g"},
                                                                           "function": {
                                                                             "application": {
-                                                                              "argument": {"variable": "g"},
+                                                                              "argument": {"variable": "cx"},
                                                                               "function": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "cx"},
-                                                                                  "function": {
-                                                                                    "typeApplication": {
-                                                                                      "body": {"variable": "hydra.ext.scala.coder.encodeType"},
-                                                                                      "type": {"variable": "t0"}}}}}}}}},
-                                                                      "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"variable": "hydra.ext.scala.coder.encodeType"},
+                                                                                  "type": {"variable": "t0"}}}}}}}}},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
                                                                         "typeApplication": {
                                                                           "body": {
                                                                             "typeApplication": {
-                                                                              "body": {
-                                                                                "typeApplication": {
-                                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
-                                                                                  "type": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "hydra.error.Error"},
-                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                              "type": {"variable": "hydra.ext.scala.meta.Type"}}},
-                                                                          "type": {"variable": "hydra.ext.scala.meta.Stat"}}}}}}}}},
-                                                          "domain": [{"variable": "hydra.core.WrappedType"}],
+                                                                              "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                              "type": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "hydra.error.Error"},
+                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                          "type": {"variable": "hydra.ext.scala.meta.Type"}}},
+                                                                      "type": {"variable": "hydra.ext.scala.meta.Stat"}}}}}}},
+                                                          "domain": [{"variable": "hydra.core.Type"}],
                                                           "parameter": "wt"}}}}],
                                                 "default": [
                                                   {
@@ -5606,41 +5558,32 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "either": {
-                                                                  "@right": {
-                                                                    "union": {
-                                                                      "field": {
-                                                                        "name": "ref",
-                                                                        "term": {
-                                                                          "union": {
-                                                                            "field": {
-                                                                              "name": "name",
+                                                                  "@left": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "object",
                                                                               "term": {
-                                                                                "record": {
-                                                                                  "fields": [
-                                                                                    {
-                                                                                      "name": "value",
-                                                                                      "term": {
-                                                                                        "application": {
-                                                                                          "argument": {
-                                                                                            "application": {
-                                                                                              "argument": {"variable": "rt"},
-                                                                                              "function": {
-                                                                                                "function": {
-                                                                                                  "elimination": {"record": {"field": "typeName", "typeName": "hydra.core.RowType"}}}}}},
-                                                                                          "function": {
-                                                                                            "application": {
-                                                                                              "argument": {"literal": {"boolean": true}},
-                                                                                              "function": {"variable": "hydra.ext.scala.utils.scalaTypeName"}}}}}}],
-                                                                                  "typeName": "hydra.ext.scala.meta.Type_Name"}}},
-                                                                            "typeName": "hydra.ext.scala.meta.Type_Ref"}}},
-                                                                      "typeName": "hydra.ext.scala.meta.Type"}}}},
+                                                                                "union": {
+                                                                                  "field": {
+                                                                                    "name": "other",
+                                                                                    "term": {
+                                                                                      "wrap": {
+                                                                                        "body": {"literal": {"string": "unexpected anonymous record type"}},
+                                                                                        "typeName": "hydra.error.OtherError"}}},
+                                                                                  "typeName": "hydra.error.Error"}}},
+                                                                            {"name": "context", "term": {"variable": "cx"}}],
+                                                                          "typeName": "hydra.context.InContext"}},
+                                                                      "type": {"variable": "hydra.error.Error"}}}}},
                                                               "type": {
                                                                 "application": {
                                                                   "argument": {"variable": "hydra.error.Error"},
                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                           "type": {"variable": "hydra.ext.scala.meta.Type"}}},
-                                                      "domain": [{"variable": "hydra.core.RowType"}],
-                                                      "parameter": "rt"}}}},
+                                                      "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                      "parameter": "_"}}}},
                                               {
                                                 "name": "set",
                                                 "term": {
@@ -5725,41 +5668,32 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "either": {
-                                                                  "@right": {
-                                                                    "union": {
-                                                                      "field": {
-                                                                        "name": "ref",
-                                                                        "term": {
-                                                                          "union": {
-                                                                            "field": {
-                                                                              "name": "name",
+                                                                  "@left": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "object",
                                                                               "term": {
-                                                                                "record": {
-                                                                                  "fields": [
-                                                                                    {
-                                                                                      "name": "value",
-                                                                                      "term": {
-                                                                                        "application": {
-                                                                                          "argument": {
-                                                                                            "application": {
-                                                                                              "argument": {"variable": "rt"},
-                                                                                              "function": {
-                                                                                                "function": {
-                                                                                                  "elimination": {"record": {"field": "typeName", "typeName": "hydra.core.RowType"}}}}}},
-                                                                                          "function": {
-                                                                                            "application": {
-                                                                                              "argument": {"literal": {"boolean": true}},
-                                                                                              "function": {"variable": "hydra.ext.scala.utils.scalaTypeName"}}}}}}],
-                                                                                  "typeName": "hydra.ext.scala.meta.Type_Name"}}},
-                                                                            "typeName": "hydra.ext.scala.meta.Type_Ref"}}},
-                                                                      "typeName": "hydra.ext.scala.meta.Type"}}}},
+                                                                                "union": {
+                                                                                  "field": {
+                                                                                    "name": "other",
+                                                                                    "term": {
+                                                                                      "wrap": {
+                                                                                        "body": {"literal": {"string": "unexpected anonymous union type"}},
+                                                                                        "typeName": "hydra.error.OtherError"}}},
+                                                                                  "typeName": "hydra.error.Error"}}},
+                                                                            {"name": "context", "term": {"variable": "cx"}}],
+                                                                          "typeName": "hydra.context.InContext"}},
+                                                                      "type": {"variable": "hydra.error.Error"}}}}},
                                                               "type": {
                                                                 "application": {
                                                                   "argument": {"variable": "hydra.error.Error"},
                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                           "type": {"variable": "hydra.ext.scala.meta.Type"}}},
-                                                      "domain": [{"variable": "hydra.core.RowType"}],
-                                                      "parameter": "rt"}}}},
+                                                      "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                      "parameter": "_"}}}},
                                               {
                                                 "name": "wrap",
                                                 "term": {
@@ -5771,42 +5705,32 @@
                                                             "typeApplication": {
                                                               "body": {
                                                                 "either": {
-                                                                  "@right": {
-                                                                    "union": {
-                                                                      "field": {
-                                                                        "name": "ref",
-                                                                        "term": {
-                                                                          "union": {
-                                                                            "field": {
-                                                                              "name": "name",
+                                                                  "@left": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "record": {
+                                                                          "fields": [
+                                                                            {
+                                                                              "name": "object",
                                                                               "term": {
-                                                                                "record": {
-                                                                                  "fields": [
-                                                                                    {
-                                                                                      "name": "value",
-                                                                                      "term": {
-                                                                                        "application": {
-                                                                                          "argument": {
-                                                                                            "application": {
-                                                                                              "argument": {"variable": "wt"},
-                                                                                              "function": {
-                                                                                                "function": {
-                                                                                                  "elimination": {
-                                                                                                    "record": {"field": "typeName", "typeName": "hydra.core.WrappedType"}}}}}},
-                                                                                          "function": {
-                                                                                            "application": {
-                                                                                              "argument": {"literal": {"boolean": true}},
-                                                                                              "function": {"variable": "hydra.ext.scala.utils.scalaTypeName"}}}}}}],
-                                                                                  "typeName": "hydra.ext.scala.meta.Type_Name"}}},
-                                                                            "typeName": "hydra.ext.scala.meta.Type_Ref"}}},
-                                                                      "typeName": "hydra.ext.scala.meta.Type"}}}},
+                                                                                "union": {
+                                                                                  "field": {
+                                                                                    "name": "other",
+                                                                                    "term": {
+                                                                                      "wrap": {
+                                                                                        "body": {"literal": {"string": "unexpected anonymous wrap type"}},
+                                                                                        "typeName": "hydra.error.OtherError"}}},
+                                                                                  "typeName": "hydra.error.Error"}}},
+                                                                            {"name": "context", "term": {"variable": "cx"}}],
+                                                                          "typeName": "hydra.context.InContext"}},
+                                                                      "type": {"variable": "hydra.error.Error"}}}}},
                                                               "type": {
                                                                 "application": {
                                                                   "argument": {"variable": "hydra.error.Error"},
                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                           "type": {"variable": "hydra.ext.scala.meta.Type"}}},
-                                                      "domain": [{"variable": "hydra.core.WrappedType"}],
-                                                      "parameter": "wt"}}}},
+                                                      "domain": [{"variable": "hydra.core.Type"}],
+                                                      "parameter": "_"}}}},
                                               {
                                                 "name": "forall",
                                                 "term": {
@@ -6353,12 +6277,7 @@
                                                                                 "application": {
                                                                                   "argument": {
                                                                                     "application": {
-                                                                                      "argument": {
-                                                                                        "application": {
-                                                                                          "argument": {"variable": "rt"},
-                                                                                          "function": {
-                                                                                            "function": {
-                                                                                              "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
+                                                                                      "argument": {"variable": "rt"},
                                                                                       "function": {
                                                                                         "typeApplication": {
                                                                                           "body": {"function": {"primitive": "hydra.lib.lists.length"}},
@@ -6367,7 +6286,7 @@
                                                                                     "typeApplication": {
                                                                                       "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
                                                                                       "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                                          "domain": [{"variable": "hydra.core.RowType"}],
+                                                                          "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                                                           "parameter": "rt"}}}}],
                                                                 "default": [{"literal": {"boolean": false}}],
                                                                 "typeName": "hydra.core.Type"}}}}}},

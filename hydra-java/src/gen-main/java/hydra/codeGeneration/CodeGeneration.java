@@ -594,6 +594,7 @@ public interface CodeGeneration {
           term))),
       hydra.json.decode.Decode.fromJson(
         schemaMap,
+        new hydra.core.Name("hydra.module.Module"),
         modType,
         jsonVal));
   }

@@ -330,14 +330,12 @@ term t =
 -- | Show a type as a string
 type_ :: (Core.Type -> String)
 type_ typ =  
-  let showRowType = (\rt ->  
-          let flds = rt
-          in  
-            let fieldStrs = (Lists.map fieldType flds)
-            in (Strings.cat [
-              "{",
-              (Strings.intercalate ", " fieldStrs),
-              "}"]))
+  let showRowType = (\flds ->  
+          let fieldStrs = (Lists.map fieldType flds)
+          in (Strings.cat [
+            "{",
+            (Strings.intercalate ", " fieldStrs),
+            "}"]))
   in  
     let gatherTypes = (\prev -> \app ->  
             let lhs = (Core.applicationTypeFunction app)
@@ -429,16 +427,10 @@ type_ typ =
         Core.TypeUnion v0 -> (Strings.cat2 "union" (showRowType v0))
         Core.TypeUnit -> "unit"
         Core.TypeVariable v0 -> (Core.unName v0)
-        Core.TypeWrap v0 ->  
-          let tname = (Core.unName (Core.Name "unknown"))
-          in  
-            let typ1 = v0
-            in (Strings.cat [
-              "wrap[",
-              tname,
-              "](",
-              (type_ typ1),
-              ")"])) typ)
+        Core.TypeWrap v0 -> (Strings.cat [
+          "wrap(",
+          (type_ v0),
+          ")"])) typ)
 
 -- | Show a type scheme as a string
 typeScheme :: (Core.TypeScheme -> String)

@@ -57,7 +57,7 @@ def parse_error(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("message", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.error.DecodingError(err))), (lambda stripped2: _hoist_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_message: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("remainder", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.error.DecodingError(err))), (lambda stripped2: _hoist_body_4(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_remainder: Right(hydra.parsing.ParseError(field_message, field_remainder))))))
             
             case _:
-                return Left(hydra.error.DecodingError("expected record of type hydra.parsing.ParseError"))
+                return Left(hydra.error.DecodingError("expected record"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.error.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_parsing_parse_error_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
 def parse_success(a: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.error.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
@@ -84,22 +84,21 @@ def parse_success(a: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra
                 return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("value", a, field_map(), cx), (lambda field_value: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("remainder", (lambda cx2, raw2: hydra.lib.eithers.either((lambda err: Left(hydra.error.DecodingError(err))), (lambda stripped2: _hoist_body_2(stripped2)), hydra.lexical.strip_and_dereference_term_either(cx2, raw2))), field_map(), cx), (lambda field_remainder: Right(hydra.parsing.ParseSuccess(field_value, field_remainder))))))
             
             case _:
-                return Left(hydra.error.DecodingError("expected record of type hydra.parsing.ParseSuccess"))
+                return Left(hydra.error.DecodingError("expected record"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.error.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_parsing_parse_success_1(a, cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
 
 def parse_result(a: Callable[[hydra.graph.Graph, hydra.core.Term], Either[hydra.error.DecodingError, T0]], cx: hydra.graph.Graph, raw: hydra.core.Term):
     def _hoist_hydra_decode_parsing_parse_result_1(a, cx, v1):
         match v1:
             case hydra.core.TermUnion(value=inj):
-                tname = inj.type_name
                 field = inj.field
                 fname = field.name
                 fterm = field.term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.error.DecodingError, hydra.parsing.ParseResult[T0]]]]:
                     return hydra.lib.maps.from_list(((hydra.core.Name("success"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultSuccess(t))), parse_success(a, cx, input)))), (hydra.core.Name("failure"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.parsing.ParseResult, hydra.parsing.ParseResultFailure(t))), parse_error(cx, input))))))
-                return hydra.lib.maybes.maybe((lambda : Left(hydra.error.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union type ", tname.value))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
+                return hydra.lib.maybes.maybe((lambda : Left(hydra.error.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union"))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
             
             case _:
-                return Left(hydra.error.DecodingError("expected union of type hydra.parsing.ParseResult"))
+                return Left(hydra.error.DecodingError("expected union"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.error.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_parsing_parse_result_1(a, cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))

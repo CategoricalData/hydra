@@ -385,13 +385,11 @@ record cx expected graph term0 = (Eithers.bind (termRecord cx graph term0) (\rec
   Context.inContextContext = cx}))))
 
 -- | Extract the field types from a record type
-recordType :: (Context.Context -> Core.Name -> Core.Type -> Either (Context.InContext Error.Error) [Core.FieldType])
+recordType :: (Context.Context -> t0 -> Core.Type -> Either (Context.InContext Error.Error) [Core.FieldType])
 recordType cx ename typ =  
   let stripped = (Rewriting.deannotateType typ)
   in ((\x -> case x of
-    Core.TypeRecord v0 -> (Logic.ifElse (Equality.equal (Core.unName (Core.Name "unknown")) (Core.unName ename)) (Right (v0)) (Left (Context.InContext {
-      Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " (Strings.cat2 "record of type " (Core.unName ename))) " but found ") (Strings.cat2 "record of type " (Core.unName (Core.Name "unknown")))))),
-      Context.inContextContext = cx})))
+    Core.TypeRecord v0 -> (Right v0)
     _ -> (Left (Context.InContext {
       Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "record type") " but found ") (Core_.type_ typ)))),
       Context.inContextContext = cx}))) stripped)
@@ -487,13 +485,11 @@ uint8Value cx v = ((\x -> case x of
     Context.inContextContext = cx}))) v)
 
 -- | Extract the field types from a union type
-unionType :: (Context.Context -> Core.Name -> Core.Type -> Either (Context.InContext Error.Error) [Core.FieldType])
+unionType :: (Context.Context -> t0 -> Core.Type -> Either (Context.InContext Error.Error) [Core.FieldType])
 unionType cx ename typ =  
   let stripped = (Rewriting.deannotateType typ)
   in ((\x -> case x of
-    Core.TypeUnion v0 -> (Logic.ifElse (Equality.equal (Core.Name "unknown") ename) (Right (v0)) (Left (Context.InContext {
-      Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " (Strings.cat2 "union of type " (Core.unName ename))) " but found ") (Strings.cat2 "union of type " (Core.unName (Core.Name "unknown")))))),
-      Context.inContextContext = cx})))
+    Core.TypeUnion v0 -> (Right v0)
     _ -> (Left (Context.InContext {
       Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "union type") " but found ") (Core_.type_ typ)))),
       Context.inContextContext = cx}))) stripped)
@@ -521,13 +517,11 @@ wrap cx expected graph term0 = (Eithers.bind (Lexical.stripAndDereferenceTerm cx
     Context.inContextContext = cx}))) term))
 
 -- | Extract the wrapped type from a wrapper type
-wrappedType :: (Context.Context -> Core.Name -> Core.Type -> Either (Context.InContext Error.Error) Core.Type)
+wrappedType :: (Context.Context -> t0 -> Core.Type -> Either (Context.InContext Error.Error) Core.Type)
 wrappedType cx ename typ =  
   let stripped = (Rewriting.deannotateType typ)
   in ((\x -> case x of
-    Core.TypeWrap v0 -> (Logic.ifElse (Equality.equal (Core.unName (Core.Name "unknown")) (Core.unName ename)) (Right (v0)) (Left (Context.InContext {
-      Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " (Strings.cat2 "wrapped type " (Core.unName ename))) " but found ") (Strings.cat2 "wrapped type " (Core.unName (Core.Name "unknown")))))),
-      Context.inContextContext = cx})))
+    Core.TypeWrap v0 -> (Right v0)
     _ -> (Left (Context.InContext {
       Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 (Strings.cat2 (Strings.cat2 "expected " "wrapped type") " but found ") (Core_.type_ typ)))),
       Context.inContextContext = cx}))) stripped)

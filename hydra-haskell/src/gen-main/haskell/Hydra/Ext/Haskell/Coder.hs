@@ -159,7 +159,7 @@ encodeFunction depth namespaces fun cx g = ((\x -> case x of
           fields = (Core.caseStatementCases v1)
           caseExpr = (Eithers.bind (Schemas.requireUnionType cx g dn) (\rt ->  
                   let toFieldMapEntry = (\f -> (Core.fieldTypeName f, f)) 
-                      fieldMap = (Maps.fromList (Lists.map toFieldMapEntry (rt)))
+                      fieldMap = (Maps.fromList (Lists.map toFieldMapEntry rt))
                   in (Eithers.bind (Eithers.mapList (toAlt fieldMap) fields) (\ecases -> Eithers.bind (Maybes.cases def (Right []) (\d -> Eithers.bind (Eithers.map (\x -> Ast.CaseRhs x) (encodeTerm depth namespaces d cx g)) (\cs ->  
                     let lhs = (Ast.PatternName (Utils.rawName Constants.ignoredVariable)) 
                         alt = Ast.Alternative {
@@ -379,18 +379,14 @@ encodeType namespaces typ cx g =
     Core.TypePair v0 -> (Eithers.bind (encode (Core.pairTypeFirst v0)) (\f -> Eithers.bind (encode (Core.pairTypeSecond v0)) (\s -> Right (Ast.TypeTuple [
       f,
       s]))))
-    Core.TypeRecord v0 -> (ref (Core.Name "unknown"))
+    Core.TypeRecord _ -> (ref (Core.Name "placeholder"))
     Core.TypeSet v0 -> (Eithers.bind (encode v0) (\hst -> Right (Utils.toTypeApplication [
       Ast.TypeVariable (Utils.rawName "S.Set"),
       hst])))
-    Core.TypeUnion v0 ->  
-      let typeName = (Core.Name "unknown")
-      in (ref typeName)
+    Core.TypeUnion _ -> (ref (Core.Name "placeholder"))
     Core.TypeUnit -> (Right unitTuple)
     Core.TypeVariable v0 -> (ref v0)
-    Core.TypeWrap v0 ->  
-      let name = (Core.Name "unknown")
-      in (ref name)
+    Core.TypeWrap _ -> (ref (Core.Name "placeholder"))
     _ -> (Left (Context.InContext {
       Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "unexpected type: " (Core__.type_ typ)))),
       Context.inContextContext = cx}))) (Rewriting.deannotateType typ))
@@ -607,7 +603,7 @@ toTypeDeclarationsFrom namespaces elementName typ cx g =
         t_ = (Pairs.second unpackResult)
         hd = (declHead hname (Lists.reverse vars))
     in (Eithers.bind ((\x -> case x of
-      Core.TypeRecord v0 -> (Eithers.bind (recordCons lname (v0)) (\cons -> Right (Ast.DeclarationData (Ast.DataDeclaration {
+      Core.TypeRecord v0 -> (Eithers.bind (recordCons lname v0) (\cons -> Right (Ast.DeclarationData (Ast.DataDeclaration {
         Ast.dataDeclarationKeyword = Ast.DataOrNewtypeData,
         Ast.dataDeclarationContext = [],
         Ast.dataDeclarationHead = hd,
@@ -615,23 +611,21 @@ toTypeDeclarationsFrom namespaces elementName typ cx g =
           cons],
         Ast.dataDeclarationDeriving = [
           deriv]}))))
-      Core.TypeUnion v0 -> (Eithers.bind (Eithers.mapList (unionCons (Sets.fromList (Maps.keys (Graph.graphBoundTerms g))) lname) (v0)) (\cons -> Right (Ast.DeclarationData (Ast.DataDeclaration {
+      Core.TypeUnion v0 -> (Eithers.bind (Eithers.mapList (unionCons (Sets.fromList (Maps.keys (Graph.graphBoundTerms g))) lname) v0) (\cons -> Right (Ast.DeclarationData (Ast.DataDeclaration {
         Ast.dataDeclarationKeyword = Ast.DataOrNewtypeData,
         Ast.dataDeclarationContext = [],
         Ast.dataDeclarationHead = hd,
         Ast.dataDeclarationConstructors = cons,
         Ast.dataDeclarationDeriving = [
           deriv]}))))
-      Core.TypeWrap v0 ->  
-        let wt = (v0)
-        in (Eithers.bind (newtypeCons elementName wt) (\cons -> Right (Ast.DeclarationData (Ast.DataDeclaration {
-          Ast.dataDeclarationKeyword = Ast.DataOrNewtypeNewtype,
-          Ast.dataDeclarationContext = [],
-          Ast.dataDeclarationHead = hd,
-          Ast.dataDeclarationConstructors = [
-            cons],
-          Ast.dataDeclarationDeriving = [
-            deriv]}))))
+      Core.TypeWrap v0 -> (Eithers.bind (newtypeCons elementName v0) (\cons -> Right (Ast.DeclarationData (Ast.DataDeclaration {
+        Ast.dataDeclarationKeyword = Ast.DataOrNewtypeNewtype,
+        Ast.dataDeclarationContext = [],
+        Ast.dataDeclarationHead = hd,
+        Ast.dataDeclarationConstructors = [
+          cons],
+        Ast.dataDeclarationDeriving = [
+          deriv]}))))
       _ -> (Eithers.bind (adaptTypeToHaskellAndEncode namespaces typ cx g) (\htype -> Right (Ast.DeclarationType (Ast.TypeDeclaration {
         Ast.typeDeclarationName = hd,
         Ast.typeDeclarationType = htype}))))) (Rewriting.deannotateType t_)) (\decl -> Eithers.bind (Annotations.getTypeDescription cx g typ) (\comments -> Eithers.bind (Logic.ifElse includeTypeDefinitions (Eithers.bind (typeDecl namespaces elementName typ cx g) (\decl_ -> Right [

@@ -91,7 +91,7 @@ dependencyNamespaces cx graph binds withPrims withNoms withSchema els =
                     Context.contextOther = (Context.contextOther cx)}}) (\_wc_a -> _wc_a) (Eithers.bimap (\_e -> Error.ErrorOther (Error.OtherError (Error.unDecodingError _e))) (\_a -> _a) (Core_.term graph term)))) (Right (Sets.unions [
                   dataNames,
                   schemaNames])))))
-  in (Eithers.map (\namesList -> Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList (Sets.delete Constants.placeholderName (Sets.unions namesList)))))) (Eithers.mapList depNames els))
+  in (Eithers.map (\namesList -> Sets.fromList (Maybes.cat (Lists.map Names.namespaceOf (Sets.toList (Sets.unions namesList))))) (Eithers.mapList depNames els))
 
 -- | Dereference a type name to get the actual type (Either version)
 dereferenceType :: (Context.Context -> Graph.Graph -> Core.Name -> Either (Context.InContext Error.Error) (Maybe Core.Type))
@@ -359,7 +359,7 @@ isType :: (Core.Type -> Bool)
 isType t = ((\x -> case x of
   Core.TypeApplication v0 -> (isType (Core.applicationTypeFunction v0))
   Core.TypeForall v0 -> (isType (Core.forallTypeBody v0))
-  Core.TypeUnion v0 -> (Equality.equal "hydra.core.Type" (Core.unName (Core.Name "unknown")))
+  Core.TypeUnion _ -> False
   Core.TypeVariable v0 -> (Equality.equal v0 (Core.Name "hydra.core.Type"))
   _ -> False) (Rewriting.deannotateType t))
 

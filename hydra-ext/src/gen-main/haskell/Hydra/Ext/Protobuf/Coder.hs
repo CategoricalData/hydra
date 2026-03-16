@@ -85,8 +85,8 @@ structuralTypeName localNs ref =
                 _ -> "int64") v1)
               Core.LiteralTypeString -> "string"
               _ -> "value") v0)
-            Core.TypeRecord v0 -> (Names.localNameOf (Core.rowTypeTypeName v0))
-            Core.TypeUnion v0 -> (Names.localNameOf (Core.rowTypeTypeName v0))
+            Core.TypeRecord _ -> "record"
+            Core.TypeUnion _ -> "union"
             Core.TypeVariable v0 -> (Names.localNameOf v0)
             Core.TypeUnit -> "unit"
             Core.TypeList _ -> "list"
@@ -163,8 +163,8 @@ encodeSimpleTypeForHelper cx localNs typ =
   let forNominal = (\name -> Right (Proto3.SimpleTypeReference (encodeTypeReference localNs name)))
   in ((\x -> case x of
     Core.TypeLiteral v0 -> (Eithers.map (\st -> Proto3.SimpleTypeScalar st) (encodeScalarType cx v0))
-    Core.TypeRecord v0 -> (forNominal (Core.rowTypeTypeName v0))
-    Core.TypeUnion v0 -> (forNominal (Core.rowTypeTypeName v0))
+    Core.TypeRecord _ -> (unexpectedE cx "named type reference" "anonymous record type")
+    Core.TypeUnion _ -> (unexpectedE cx "named type reference" "anonymous union type")
     Core.TypeUnit -> (Right (Proto3.SimpleTypeReference (Proto3.TypeName "google.protobuf.Empty")))
     Core.TypeVariable v0 -> (forNominal v0)
     _ -> (unexpectedE cx "simple type in structural type helper" (Core___.type_ (Rewriting.removeTypeAnnotations typ)))) (simplifyType typ))
@@ -234,8 +234,8 @@ constructModule cx g mod typeDefs =
       checkFields = (\checkType -> \checkFieldType -> \ts -> Lists.foldl (\b -> \t -> Logic.or b (Rewriting.foldOverType Coders.TraversalOrderPre (\b2 -> \t2 -> Logic.or b2 ( 
               let checkResult = (checkType t2)
               in (Maybes.maybe ((\x -> case x of
-                Core.TypeRecord v0 -> (Lists.foldl (\b3 -> \f -> Logic.or b3 (checkFieldType (Rewriting.deannotateType (Core.fieldTypeType f)))) False (Core.rowTypeFields v0))
-                Core.TypeUnion v0 -> (Lists.foldl (\b3 -> \f -> Logic.or b3 (checkFieldType (Rewriting.deannotateType (Core.fieldTypeType f)))) False (Core.rowTypeFields v0))
+                Core.TypeRecord v0 -> (Lists.foldl (\b3 -> \f -> Logic.or b3 (checkFieldType (Rewriting.deannotateType (Core.fieldTypeType f)))) False v0)
+                Core.TypeUnion v0 -> (Lists.foldl (\b3 -> \f -> Logic.or b3 (checkFieldType (Rewriting.deannotateType (Core.fieldTypeType f)))) False v0)
                 _ -> False) t2) (\b3 -> b3) checkResult))) False t)) False ts)
       wrapperImport = (Logic.ifElse (checkFields (\_ -> Nothing) checkFieldType_wrapper types) [
               Proto3.FileReference "google/protobuf/wrappers.proto"] [])
@@ -272,28 +272,24 @@ encodeDefinition :: (Context.Context -> Graph.Graph -> Module.Namespace -> Core.
 encodeDefinition cx g localNs name typ =  
   let cx1 = (Annotations.resetCount key_proto_field_index cx) 
       cx2 = (Pairs.second (Annotations.nextCount key_proto_field_index cx1))
-      wrapAsRecordType = (\t -> Core.TypeRecord (Core.RowType {
-              Core.rowTypeTypeName = name,
-              Core.rowTypeFields = [
-                Core.FieldType {
-                  Core.fieldTypeName = (Core.Name "value"),
-                  Core.fieldTypeType = t}]}))
+      wrapAsRecordType = (\t -> Core.TypeRecord [
+              Core.FieldType {
+                Core.fieldTypeName = (Core.Name "value"),
+                Core.fieldTypeType = t}])
       toEitherString = (\result -> Eithers.bimap (\ic -> Error_.error (Context.inContextObject ic)) (\a -> a) result)
       encode = (\cx0 -> \options -> \t -> (\x -> case x of
-              Core.TypeRecord v0 -> (Eithers.map (\md -> Proto3.DefinitionMessage md) (toEitherString (encodeRecordType cx0 g localNs options v0)))
-              Core.TypeUnion v0 -> (Logic.ifElse (isEnumDefinition t) (Eithers.map (\ed -> Proto3.DefinitionEnum ed) (toEitherString (encodeEnumDefinition cx0 g options v0))) (encode cx0 options (wrapAsRecordType (Core.TypeUnion v0))))
+              Core.TypeRecord v0 -> (Eithers.map (\md -> Proto3.DefinitionMessage md) (toEitherString (encodeRecordType cx0 g localNs options name v0)))
+              Core.TypeUnion v0 -> (Logic.ifElse (isEnumDefinition t) (Eithers.map (\ed -> Proto3.DefinitionEnum ed) (toEitherString (encodeEnumDefinition cx0 g options name v0))) (encode cx0 options (wrapAsRecordType (Core.TypeUnion v0))))
               _ -> (encode cx0 options (wrapAsRecordType t))) (simplifyType t))
   in (Eithers.bind (toEitherString (findOptions cx g typ)) (\options -> encode cx2 options typ))
 
 -- | Encode a Hydra union type as a Protobuf enum definition
-encodeEnumDefinition :: (Context.Context -> Graph.Graph -> [Proto3.Option] -> Core.RowType -> Either (Context.InContext Error.Error) Proto3.EnumDefinition)
-encodeEnumDefinition cx g options rt =  
-  let tname = (Core.rowTypeTypeName rt) 
-      fields = (Core.rowTypeFields rt)
-      unspecifiedField = Proto3.EnumValue {
-              Proto3.enumValueName = (encodeEnumValueName tname (Core.Name "unspecified")),
-              Proto3.enumValueNumber = 0,
-              Proto3.enumValueOptions = []}
+encodeEnumDefinition :: (Context.Context -> Graph.Graph -> [Proto3.Option] -> Core.Name -> [Core.FieldType] -> Either (Context.InContext Error.Error) Proto3.EnumDefinition)
+encodeEnumDefinition cx g options tname fts =  
+  let unspecifiedField = Proto3.EnumValue {
+          Proto3.enumValueName = (encodeEnumValueName tname (Core.Name "unspecified")),
+          Proto3.enumValueNumber = 0,
+          Proto3.enumValueOptions = []} 
       encodeEnumField = (\field -> \idx ->  
               let fname = (Core.fieldTypeName field) 
                   ftype = (Core.fieldTypeType field)
@@ -301,8 +297,8 @@ encodeEnumDefinition cx g options rt =
                 Proto3.enumValueName = (encodeEnumValueName tname fname),
                 Proto3.enumValueNumber = idx,
                 Proto3.enumValueOptions = opts}))))
-      indices = (Math.range 1 (Lists.length fields))
-  in (Eithers.bind (Eithers.mapList (\p -> encodeEnumField (Pairs.first p) (Pairs.second p)) (Lists.zip fields indices)) (\values -> Right (Proto3.EnumDefinition {
+      indices = (Math.range 1 (Lists.length fts))
+  in (Eithers.bind (Eithers.mapList (\p -> encodeEnumField (Pairs.first p) (Pairs.second p)) (Lists.zip fts indices)) (\values -> Right (Proto3.EnumDefinition {
     Proto3.enumDefinitionName = (encodeTypeName tname),
     Proto3.enumDefinitionValues = (Lists.cons unspecifiedField values),
     Proto3.enumDefinitionOptions = options})))
@@ -341,7 +337,7 @@ encodeFieldType cx g localNs ft =
               Core.TypeMaybe v0 -> ((\x -> case x of
                 Core.TypeLiteral v1 -> (Eithers.map (\st -> Proto3.FieldTypeSimple st) (encodeScalarTypeWrapped cx0 v1))
                 _ -> (encodeType_ cx0 g0 ns0 v0)) (Rewriting.deannotateType v0))
-              Core.TypeUnion v0 -> (Eithers.bind (mapAccumResult (\cx_ -> \f -> encodeFieldType cx_ g0 ns0 f) cx0 (Core.rowTypeFields v0)) (\pfields ->  
+              Core.TypeUnion v0 -> (Eithers.bind (mapAccumResult (\cx_ -> \f -> encodeFieldType cx_ g0 ns0 f) cx0 v0) (\pfields ->  
                 let fields_ = (Pairs.first pfields)
                 in (Right (Proto3.FieldTypeOneof fields_))))
               _ -> (Eithers.map (\st -> Proto3.FieldTypeSimple st) (encodeSimpleType_ cx0 g0 ns0 True typ))) (simplifyType typ))
@@ -349,8 +345,8 @@ encodeFieldType cx g localNs ft =
               let forNominal = (\name -> Right (Proto3.SimpleTypeReference (encodeTypeReference ns0 name)))
               in ((\x -> case x of
                 Core.TypeLiteral v0 -> (Eithers.map (\st -> Proto3.SimpleTypeScalar st) (encodeScalarType cx0 v0))
-                Core.TypeRecord v0 -> (forNominal (Core.rowTypeTypeName v0))
-                Core.TypeUnion v0 -> (forNominal (Core.rowTypeTypeName v0))
+                Core.TypeRecord _ -> (unexpectedE cx0 "named type reference" "anonymous record type")
+                Core.TypeUnion _ -> (unexpectedE cx0 "named type reference" "anonymous union type")
                 Core.TypeUnit -> (Right (Proto3.SimpleTypeReference (Proto3.TypeName "google.protobuf.Empty")))
                 Core.TypeVariable v0 -> (Logic.ifElse noms (forNominal v0) (Eithers.bind (Lexical.requireElement cx0 g0 v0) (\el ->  
                   let term = (Core.bindingTerm el)
@@ -370,16 +366,13 @@ encodeFieldType cx g localNs ft =
       Proto3.fieldOptions = options}, cx1))))))
 
 -- | Encode a Hydra record type as a Protobuf message definition
-encodeRecordType :: (Context.Context -> Graph.Graph -> Module.Namespace -> [Proto3.Option] -> Core.RowType -> Either (Context.InContext Error.Error) Proto3.MessageDefinition)
-encodeRecordType cx g localNs options rt =  
-  let tname = (Core.rowTypeTypeName rt) 
-      fields = (Core.rowTypeFields rt)
-  in (Eithers.bind (mapAccumResult (\cx_ -> \f -> encodeFieldType cx_ g localNs f) cx fields) (\result ->  
-    let pfields = (Pairs.first result)
-    in (Right (Proto3.MessageDefinition {
-      Proto3.messageDefinitionName = (encodeTypeName tname),
-      Proto3.messageDefinitionFields = pfields,
-      Proto3.messageDefinitionOptions = options}))))
+encodeRecordType :: (Context.Context -> Graph.Graph -> Module.Namespace -> [Proto3.Option] -> Core.Name -> [Core.FieldType] -> Either (Context.InContext Error.Error) Proto3.MessageDefinition)
+encodeRecordType cx g localNs options tname fts = (Eithers.bind (mapAccumResult (\cx_ -> \f -> encodeFieldType cx_ g localNs f) cx fts) (\result ->  
+  let pfields = (Pairs.first result)
+  in (Right (Proto3.MessageDefinition {
+    Proto3.messageDefinitionName = (encodeTypeName tname),
+    Proto3.messageDefinitionFields = pfields,
+    Proto3.messageDefinitionOptions = options}))))
 
 -- | Encode a Hydra literal type as a Protobuf scalar type
 encodeScalarType :: (Context.Context -> Core.LiteralType -> Either (Context.InContext Error.Error) Proto3.ScalarType)
@@ -462,12 +455,12 @@ findOptions cx g typ = (Eithers.bind (Annotations.getTypeDescription cx g typ) (
 
 -- | Check if all fields are unit types (i.e., this is an enum)
 isEnumFields :: ([Core.FieldType] -> Bool)
-isEnumFields fields = (Lists.foldl (\b -> \f -> Logic.and b (Schemas.isUnitType (simplifyType (Core.fieldTypeType f)))) True fields)
+isEnumFields fts = (Lists.foldl (\b -> \f -> Logic.and b (Schemas.isUnitType (simplifyType (Core.fieldTypeType f)))) True fts)
 
 -- | Check if a type is an enum definition
 isEnumDefinition :: (Core.Type -> Bool)
 isEnumDefinition typ = ((\x -> case x of
-  Core.TypeUnion v0 -> (isEnumFields (Core.rowTypeFields v0))
+  Core.TypeUnion v0 -> (isEnumFields v0)
   _ -> False) (simplifyType typ))
 
 -- | Convert a Hydra namespace to a Protobuf file reference
@@ -487,5 +480,5 @@ readBooleanAnnotation cx g key typ = (Maybes.maybe (Right False) (\term -> Core_
 -- | Simplify a type by removing annotations and unwrapping newtypes
 simplifyType :: (Core.Type -> Core.Type)
 simplifyType typ = ((\x -> case x of
-  Core.TypeWrap v0 -> (simplifyType (Core.wrappedTypeBody v0))
+  Core.TypeWrap v0 -> (simplifyType v0)
   _ -> (Rewriting.deannotateType typ)) (Rewriting.deannotateType typ))

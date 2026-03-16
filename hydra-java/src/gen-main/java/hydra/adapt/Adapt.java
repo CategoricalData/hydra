@@ -1112,14 +1112,14 @@ public interface Adapt {
         return hydra.lib.eithers.Bind.apply(
           hydra.lib.eithers.Bimap.apply(
             (java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, String>) (ic -> hydra.show.error.Error_.error(((java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, hydra.error.Error_>) (projected -> projected.object)).apply(ic))),
-            (java.util.function.Function<hydra.core.RowType, hydra.core.RowType>) (x -> x),
+            (java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.util.ConsList<hydra.core.FieldType>>) (x -> x),
             hydra.schemas.Schemas.requireUnionType(
               cx,
               graph,
               tname)),
-          (java.util.function.Function<hydra.core.RowType, hydra.util.Either<String, hydra.util.ConsList<hydra.core.Term>>>) (rt -> hydra.util.Either.<String, hydra.util.ConsList<hydra.core.Term>>right(hydra.util.ConsList.of(new hydra.core.Term.Record(new hydra.core.Record(tname, hydra.lib.lists.Map.apply(
+          (java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.util.Either<String, hydra.util.ConsList<hydra.core.Term>>>) (rt -> hydra.util.Either.<String, hydra.util.ConsList<hydra.core.Term>>right(hydra.util.ConsList.of(new hydra.core.Term.Record(new hydra.core.Record(tname, hydra.lib.lists.Map.apply(
             forFieldType,
-            (rt).fields)))))));
+            rt)))))));
       }
       
       @Override
@@ -1155,13 +1155,11 @@ public interface Adapt {
       
       @Override
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Union rt) {
-        hydra.util.ConsList<hydra.core.FieldType> fields = ((rt).value).fields;
         java.util.function.Function<hydra.core.FieldType, hydra.core.FieldType> toOptField = (java.util.function.Function<hydra.core.FieldType, hydra.core.FieldType>) (f -> new hydra.core.FieldType((f).name, new hydra.core.Type.Maybe((f).type)));
         hydra.util.Lazy<hydra.util.ConsList<hydra.core.FieldType>> optFields = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
           toOptField,
-          fields));
-        hydra.core.Name tname = ((rt).value).typeName;
-        return hydra.util.ConsList.of(new hydra.core.Type.Record(new hydra.core.RowType(tname, optFields.get())));
+          (rt).value));
+        return hydra.util.ConsList.of(new hydra.core.Type.Record(optFields.get()));
       }
       
       @Override

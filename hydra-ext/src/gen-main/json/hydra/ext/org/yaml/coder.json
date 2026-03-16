@@ -1200,258 +1200,99 @@
                         "function": {
                           "lambda": {
                             "body": {
-                              "let": {
-                                "bindings": [
-                                  {
-                                    "name": "fields",
-                                    "term": {
-                                      "application": {
-                                        "argument": {"variable": "rt"},
-                                        "function": {
-                                          "function": {
-                                            "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
-                                    "type": [
-                                      {
-                                        "constraints": null,
-                                        "type": {"list": {"variable": "hydra.core.FieldType"}},
-                                        "variables": []}]}],
-                                "body": {
-                                  "let": {
-                                    "bindings": [
-                                      {
-                                        "name": "getCoder",
-                                        "term": {
-                                          "function": {
-                                            "lambda": {
-                                              "body": {
-                                                "application": {
-                                                  "argument": {
-                                                    "function": {
-                                                      "lambda": {
-                                                        "body": {
-                                                          "typeApplication": {
-                                                            "body": {
-                                                              "typeApplication": {
-                                                                "body": {
-                                                                  "either": {
-                                                                    "@right": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "typeApplication": {
-                                                                            "body": {
-                                                                              "pair": {"@first": {"variable": "f"}, "@second": {"variable": "coder"}}},
-                                                                            "type": {"variable": "hydra.core.FieldType"}}},
-                                                                        "type": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.ext.org.yaml.model.Node"},
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.core.Term"},
-                                                                                "function": {"variable": "hydra.util.Coder"}}}}}}}}},
-                                                                "type": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "hydra.error.Error"},
-                                                                    "function": {"variable": "hydra.context.InContext"}}}}},
-                                                            "type": {
-                                                              "pair": {
-                                                                "first": {"variable": "hydra.core.FieldType"},
-                                                                "second": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "hydra.ext.org.yaml.model.Node"},
-                                                                    "function": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "hydra.core.Term"},
-                                                                        "function": {"variable": "hydra.util.Coder"}}}}}}}}},
-                                                        "domain": [
-                                                          {
-                                                            "application": {
-                                                              "argument": {"variable": "hydra.ext.org.yaml.model.Node"},
-                                                              "function": {
-                                                                "application": {
-                                                                  "argument": {"variable": "hydra.core.Term"},
-                                                                  "function": {"variable": "hydra.util.Coder"}}}}}],
-                                                        "parameter": "coder"}}},
-                                                  "function": {
-                                                    "application": {
-                                                      "argument": {
-                                                        "application": {
-                                                          "argument": {"variable": "g"},
-                                                          "function": {
-                                                            "application": {
-                                                              "argument": {"variable": "cx"},
-                                                              "function": {
-                                                                "application": {
-                                                                  "argument": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "f"},
-                                                                      "function": {
-                                                                        "function": {
-                                                                          "elimination": {"record": {"field": "type", "typeName": "hydra.core.FieldType"}}}}}},
-                                                                  "function": {"variable": "hydra.ext.org.yaml.coder.termCoder"}}}}}}},
+                              "function": {
+                                "lambda": {
+                                  "body": {
+                                    "let": {
+                                      "bindings": [
+                                        {
+                                          "name": "getCoder",
+                                          "term": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "application": {
+                                                    "argument": {
                                                       "function": {
-                                                        "typeApplication": {
+                                                        "lambda": {
                                                           "body": {
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                  "body": {
+                                                                    "either": {
+                                                                      "@right": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "pair": {"@first": {"variable": "f"}, "@second": {"variable": "coder"}}},
+                                                                              "type": {"variable": "hydra.core.FieldType"}}},
+                                                                          "type": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "hydra.ext.org.yaml.model.Node"},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "hydra.core.Term"},
+                                                                                  "function": {"variable": "hydra.util.Coder"}}}}}}}}},
                                                                   "type": {
                                                                     "application": {
                                                                       "argument": {"variable": "hydra.error.Error"},
                                                                       "function": {"variable": "hydra.context.InContext"}}}}},
                                                               "type": {
-                                                                "application": {
-                                                                  "argument": {"variable": "hydra.ext.org.yaml.model.Node"},
-                                                                  "function": {
+                                                                "pair": {
+                                                                  "first": {"variable": "hydra.core.FieldType"},
+                                                                  "second": {
                                                                     "application": {
-                                                                      "argument": {"variable": "hydra.core.Term"},
-                                                                      "function": {"variable": "hydra.util.Coder"}}}}}}},
-                                                          "type": {
-                                                            "pair": {
-                                                              "first": {"variable": "hydra.core.FieldType"},
-                                                              "second": {
-                                                                "application": {
-                                                                  "argument": {"variable": "hydra.ext.org.yaml.model.Node"},
-                                                                  "function": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "hydra.core.Term"},
-                                                                      "function": {"variable": "hydra.util.Coder"}}}}}}}}}}}}},
-                                              "domain": [{"variable": "hydra.core.FieldType"}],
-                                              "parameter": "f"}}},
-                                        "type": [
-                                          {
-                                            "constraints": null,
-                                            "type": {
-                                              "function": {
-                                                "codomain": {
-                                                  "either": {
-                                                    "left": {
+                                                                      "argument": {"variable": "hydra.ext.org.yaml.model.Node"},
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "hydra.core.Term"},
+                                                                          "function": {"variable": "hydra.util.Coder"}}}}}}}}},
+                                                          "domain": [
+                                                            {
+                                                              "application": {
+                                                                "argument": {"variable": "hydra.ext.org.yaml.model.Node"},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "hydra.core.Term"},
+                                                                    "function": {"variable": "hydra.util.Coder"}}}}}],
+                                                          "parameter": "coder"}}},
+                                                    "function": {
                                                       "application": {
-                                                        "argument": {"variable": "hydra.error.Error"},
-                                                        "function": {"variable": "hydra.context.InContext"}}},
-                                                    "right": {
-                                                      "pair": {
-                                                        "first": {"variable": "hydra.core.FieldType"},
-                                                        "second": {
+                                                        "argument": {
                                                           "application": {
-                                                            "argument": {"variable": "hydra.ext.org.yaml.model.Node"},
+                                                            "argument": {"variable": "g"},
                                                             "function": {
                                                               "application": {
-                                                                "argument": {"variable": "hydra.core.Term"},
-                                                                "function": {"variable": "hydra.util.Coder"}}}}}}}}},
-                                                "domain": {"variable": "hydra.core.FieldType"}}},
-                                            "variables": []}]}],
-                                    "body": {
-                                      "application": {
-                                        "argument": {
-                                          "function": {
-                                            "lambda": {
-                                              "body": {
-                                                "typeApplication": {
-                                                  "body": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "either": {
-                                                          "@right": {
-                                                            "typeApplication": {
-                                                              "body": {
-                                                                "typeApplication": {
-                                                                  "body": {
-                                                                    "record": {
-                                                                      "fields": [
-                                                                        {
-                                                                          "name": "encode",
-                                                                          "term": {
-                                                                            "function": {
-                                                                              "lambda": {
-                                                                                "body": {
-                                                                                  "function": {
-                                                                                    "lambda": {
-                                                                                      "body": {
-                                                                                        "application": {
-                                                                                          "argument": {"variable": "term"},
-                                                                                          "function": {
-                                                                                            "application": {
-                                                                                              "argument": {"variable": "g"},
-                                                                                              "function": {
-                                                                                                "application": {
-                                                                                                  "argument": {"variable": "cx"},
-                                                                                                  "function": {
-                                                                                                    "application": {
-                                                                                                      "argument": {"variable": "coders"},
-                                                                                                      "function": {"variable": "hydra.ext.org.yaml.coder.encodeRecord"}}}}}}}}},
-                                                                                      "domain": [{"variable": "hydra.core.Term"}],
-                                                                                      "parameter": "term"}}},
-                                                                                "domain": [{"variable": "hydra.context.Context"}],
-                                                                                "parameter": "cx"}}}},
-                                                                        {
-                                                                          "name": "decode",
-                                                                          "term": {
-                                                                            "function": {
-                                                                              "lambda": {
-                                                                                "body": {
-                                                                                  "function": {
-                                                                                    "lambda": {
-                                                                                      "body": {
-                                                                                        "application": {
-                                                                                          "argument": {"variable": "val"},
-                                                                                          "function": {
-                                                                                            "application": {
-                                                                                              "argument": {"variable": "cx"},
-                                                                                              "function": {
-                                                                                                "application": {
-                                                                                                  "argument": {"variable": "coders"},
-                                                                                                  "function": {
-                                                                                                    "application": {
-                                                                                                      "argument": {"variable": "rt"},
-                                                                                                      "function": {"variable": "hydra.ext.org.yaml.coder.decodeRecord"}}}}}}}}},
-                                                                                      "domain": [{"variable": "hydra.ext.org.yaml.model.Node"}],
-                                                                                      "parameter": "val"}}},
-                                                                                "domain": [{"variable": "hydra.context.Context"}],
-                                                                                "parameter": "cx"}}}}],
-                                                                      "typeName": "hydra.util.Coder"}},
-                                                                  "type": {"variable": "hydra.core.Term"}}},
-                                                              "type": {"variable": "hydra.ext.org.yaml.model.Node"}}}}},
-                                                      "type": {
-                                                        "application": {
-                                                          "argument": {"variable": "hydra.error.Error"},
-                                                          "function": {"variable": "hydra.context.InContext"}}}}},
-                                                  "type": {
-                                                    "application": {
-                                                      "argument": {"variable": "hydra.ext.org.yaml.model.Node"},
-                                                      "function": {
-                                                        "application": {
-                                                          "argument": {"variable": "hydra.core.Term"},
-                                                          "function": {"variable": "hydra.util.Coder"}}}}}}},
-                                              "domain": [
-                                                {
-                                                  "list": {
-                                                    "pair": {
-                                                      "first": {"variable": "hydra.core.FieldType"},
-                                                      "second": {
-                                                        "application": {
-                                                          "argument": {"variable": "hydra.ext.org.yaml.model.Node"},
-                                                          "function": {
-                                                            "application": {
-                                                              "argument": {"variable": "hydra.core.Term"},
-                                                              "function": {"variable": "hydra.util.Coder"}}}}}}}}],
-                                              "parameter": "coders"}}},
-                                        "function": {
-                                          "application": {
-                                            "argument": {
-                                              "application": {
-                                                "argument": {"variable": "fields"},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {"variable": "getCoder"},
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {
+                                                                "argument": {"variable": "cx"},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "f"},
+                                                                        "function": {
+                                                                          "function": {
+                                                                            "elimination": {"record": {"field": "type", "typeName": "hydra.core.FieldType"}}}}}},
+                                                                    "function": {"variable": "hydra.ext.org.yaml.coder.termCoder"}}}}}}},
+                                                        "function": {
                                                           "typeApplication": {
                                                             "body": {
                                                               "typeApplication": {
-                                                                "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
-                                                                "type": {"variable": "hydra.core.FieldType"}}},
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                    "type": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "hydra.error.Error"},
+                                                                        "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                "type": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "hydra.ext.org.yaml.model.Node"},
+                                                                    "function": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "hydra.core.Term"},
+                                                                        "function": {"variable": "hydra.util.Coder"}}}}}}},
                                                             "type": {
                                                               "pair": {
                                                                 "first": {"variable": "hydra.core.FieldType"},
@@ -1461,24 +1302,21 @@
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {"variable": "hydra.core.Term"},
-                                                                        "function": {"variable": "hydra.util.Coder"}}}}}}}}},
-                                                        "type": {
-                                                          "application": {
-                                                            "argument": {"variable": "hydra.error.Error"},
-                                                            "function": {"variable": "hydra.context.InContext"}}}}}}}}},
-                                            "function": {
-                                              "typeApplication": {
-                                                "body": {
-                                                  "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {
-                                                        "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
-                                                        "type": {
-                                                          "application": {
-                                                            "argument": {"variable": "hydra.error.Error"},
-                                                            "function": {"variable": "hydra.context.InContext"}}}}},
-                                                    "type": {
-                                                      "list": {
+                                                                        "function": {"variable": "hydra.util.Coder"}}}}}}}}}}}}},
+                                                "domain": [{"variable": "hydra.core.FieldType"}],
+                                                "parameter": "f"}}},
+                                          "type": [
+                                            {
+                                              "constraints": null,
+                                              "type": {
+                                                "function": {
+                                                  "codomain": {
+                                                    "either": {
+                                                      "left": {
+                                                        "application": {
+                                                          "argument": {"variable": "hydra.error.Error"},
+                                                          "function": {"variable": "hydra.context.InContext"}}},
+                                                      "right": {
                                                         "pair": {
                                                           "first": {"variable": "hydra.core.FieldType"},
                                                           "second": {
@@ -1487,20 +1325,171 @@
                                                               "function": {
                                                                 "application": {
                                                                   "argument": {"variable": "hydra.core.Term"},
-                                                                  "function": {"variable": "hydra.util.Coder"}}}}}}}}}},
-                                                "type": {
-                                                  "application": {
-                                                    "argument": {"variable": "hydra.ext.org.yaml.model.Node"},
-                                                    "function": {
+                                                                  "function": {"variable": "hydra.util.Coder"}}}}}}}}},
+                                                  "domain": {"variable": "hydra.core.FieldType"}}},
+                                              "variables": []}]}],
+                                      "body": {
+                                        "application": {
+                                          "argument": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "typeApplication": {
+                                                    "body": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "either": {
+                                                            "@right": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "record": {
+                                                                        "fields": [
+                                                                          {
+                                                                            "name": "encode",
+                                                                            "term": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "body": {
+                                                                                    "function": {
+                                                                                      "lambda": {
+                                                                                        "body": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "term"},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "g"},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "cx"},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "coders"},
+                                                                                                        "function": {"variable": "hydra.ext.org.yaml.coder.encodeRecord"}}}}}}}}},
+                                                                                        "domain": [{"variable": "hydra.core.Term"}],
+                                                                                        "parameter": "term"}}},
+                                                                                  "domain": [{"variable": "hydra.context.Context"}],
+                                                                                  "parameter": "cx"}}}},
+                                                                          {
+                                                                            "name": "decode",
+                                                                            "term": {
+                                                                              "function": {
+                                                                                "lambda": {
+                                                                                  "body": {
+                                                                                    "function": {
+                                                                                      "lambda": {
+                                                                                        "body": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "val"},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "cx"},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "coders"},
+                                                                                                    "function": {
+                                                                                                      "application": {
+                                                                                                        "argument": {"variable": "tname"},
+                                                                                                        "function": {"variable": "hydra.ext.org.yaml.coder.decodeRecord"}}}}}}}}},
+                                                                                        "domain": [{"variable": "hydra.ext.org.yaml.model.Node"}],
+                                                                                        "parameter": "val"}}},
+                                                                                  "domain": [{"variable": "hydra.context.Context"}],
+                                                                                  "parameter": "cx"}}}}],
+                                                                        "typeName": "hydra.util.Coder"}},
+                                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                                "type": {"variable": "hydra.ext.org.yaml.model.Node"}}}}},
+                                                        "type": {
+                                                          "application": {
+                                                            "argument": {"variable": "hydra.error.Error"},
+                                                            "function": {"variable": "hydra.context.InContext"}}}}},
+                                                    "type": {
                                                       "application": {
-                                                        "argument": {"variable": "hydra.core.Term"},
-                                                        "function": {"variable": "hydra.util.Coder"}}}}}}}}}}}}}}},
-                            "domain": [{"variable": "hydra.graph.Graph"}],
-                            "parameter": "g"}}},
-                      "domain": [{"variable": "hydra.context.Context"}],
-                      "parameter": "cx"}}},
-                "domain": [{"variable": "hydra.core.RowType"}],
-                "parameter": "rt"}}}}},
+                                                        "argument": {"variable": "hydra.ext.org.yaml.model.Node"},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {"variable": "hydra.core.Term"},
+                                                            "function": {"variable": "hydra.util.Coder"}}}}}}},
+                                                "domain": [
+                                                  {
+                                                    "list": {
+                                                      "pair": {
+                                                        "first": {"variable": "hydra.core.FieldType"},
+                                                        "second": {
+                                                          "application": {
+                                                            "argument": {"variable": "hydra.ext.org.yaml.model.Node"},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"variable": "hydra.core.Term"},
+                                                                "function": {"variable": "hydra.util.Coder"}}}}}}}}],
+                                                "parameter": "coders"}}},
+                                          "function": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {"variable": "rt"},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"variable": "getCoder"},
+                                                      "function": {
+                                                        "typeApplication": {
+                                                          "body": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "typeApplication": {
+                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
+                                                                  "type": {"variable": "hydra.core.FieldType"}}},
+                                                              "type": {
+                                                                "pair": {
+                                                                  "first": {"variable": "hydra.core.FieldType"},
+                                                                  "second": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "hydra.ext.org.yaml.model.Node"},
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "hydra.core.Term"},
+                                                                          "function": {"variable": "hydra.util.Coder"}}}}}}}}},
+                                                          "type": {
+                                                            "application": {
+                                                              "argument": {"variable": "hydra.error.Error"},
+                                                              "function": {"variable": "hydra.context.InContext"}}}}}}}}},
+                                              "function": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                          "type": {
+                                                            "application": {
+                                                              "argument": {"variable": "hydra.error.Error"},
+                                                              "function": {"variable": "hydra.context.InContext"}}}}},
+                                                      "type": {
+                                                        "list": {
+                                                          "pair": {
+                                                            "first": {"variable": "hydra.core.FieldType"},
+                                                            "second": {
+                                                              "application": {
+                                                                "argument": {"variable": "hydra.ext.org.yaml.model.Node"},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "hydra.core.Term"},
+                                                                    "function": {"variable": "hydra.util.Coder"}}}}}}}}}},
+                                                  "type": {
+                                                    "application": {
+                                                      "argument": {"variable": "hydra.ext.org.yaml.model.Node"},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {"variable": "hydra.core.Term"},
+                                                          "function": {"variable": "hydra.util.Coder"}}}}}}}}}}}}},
+                                  "domain": [{"variable": "hydra.graph.Graph"}],
+                                  "parameter": "g"}}},
+                            "domain": [{"variable": "hydra.context.Context"}],
+                            "parameter": "cx"}}},
+                      "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                      "parameter": "rt"}}},
+                "domain": [{"variable": "hydra.core.Name"}],
+                "parameter": "tname"}}}}},
       "type": [
         {
           "constraints": null,
@@ -1511,21 +1500,24 @@
                   "codomain": {
                     "function": {
                       "codomain": {
-                        "either": {
-                          "left": {
-                            "application": {
-                              "argument": {"variable": "hydra.error.Error"},
-                              "function": {"variable": "hydra.context.InContext"}}},
-                          "right": {
-                            "application": {
-                              "argument": {"variable": "hydra.ext.org.yaml.model.Node"},
-                              "function": {
+                        "function": {
+                          "codomain": {
+                            "either": {
+                              "left": {
                                 "application": {
-                                  "argument": {"variable": "hydra.core.Term"},
-                                  "function": {"variable": "hydra.util.Coder"}}}}}}},
-                      "domain": {"variable": "hydra.graph.Graph"}}},
-                  "domain": {"variable": "hydra.context.Context"}}},
-              "domain": {"variable": "hydra.core.RowType"}}},
+                                  "argument": {"variable": "hydra.error.Error"},
+                                  "function": {"variable": "hydra.context.InContext"}}},
+                              "right": {
+                                "application": {
+                                  "argument": {"variable": "hydra.ext.org.yaml.model.Node"},
+                                  "function": {
+                                    "application": {
+                                      "argument": {"variable": "hydra.core.Term"},
+                                      "function": {"variable": "hydra.util.Coder"}}}}}}},
+                          "domain": {"variable": "hydra.graph.Graph"}}},
+                      "domain": {"variable": "hydra.context.Context"}}},
+                  "domain": {"list": {"variable": "hydra.core.FieldType"}}}},
+              "domain": {"variable": "hydra.core.Name"}}},
           "variables": []}]},
     {
       "name": "hydra.ext.org.yaml.coder.encodeRecord",
@@ -2490,14 +2482,7 @@
                                                                                 "term": {
                                                                                   "record": {
                                                                                     "fields": [
-                                                                                      {
-                                                                                        "name": "typeName",
-                                                                                        "term": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "rt"},
-                                                                                            "function": {
-                                                                                              "function": {
-                                                                                                "elimination": {"record": {"field": "typeName", "typeName": "hydra.core.RowType"}}}}}}},
+                                                                                      {"name": "typeName", "term": {"variable": "tname"}},
                                                                                       {"name": "fields", "term": {"variable": "fields"}}],
                                                                                     "typeName": "hydra.core.Record"}}},
                                                                               "typeName": "hydra.core.Term"}}}},
@@ -2631,8 +2616,8 @@
                                       "argument": {"variable": "hydra.core.Term"},
                                       "function": {"variable": "hydra.util.Coder"}}}}}}}}],
                       "parameter": "coders"}}},
-                "domain": [{"variable": "hydra.core.RowType"}],
-                "parameter": "rt"}}}}},
+                "domain": [{"variable": "hydra.core.Name"}],
+                "parameter": "tname"}}}}},
       "type": [
         {
           "constraints": null,
@@ -2664,7 +2649,7 @@
                               "application": {
                                 "argument": {"variable": "hydra.core.Term"},
                                 "function": {"variable": "hydra.util.Coder"}}}}}}}}}},
-              "domain": {"variable": "hydra.core.RowType"}}},
+              "domain": {"variable": "hydra.core.Name"}}},
           "variables": []}]},
     {
       "name": "hydra.ext.org.yaml.coder.termCoder",
@@ -4988,8 +4973,14 @@
                                                                                           "function": {
                                                                                             "application": {
                                                                                               "argument": {"variable": "rt"},
-                                                                                              "function": {"variable": "hydra.ext.org.yaml.coder.recordCoder"}}}}}}},
-                                                                                  "domain": [{"variable": "hydra.core.RowType"}],
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "argument": {
+                                                                                                    "wrap": {
+                                                                                                      "body": {"literal": {"string": "yaml"}},
+                                                                                                      "typeName": "hydra.core.Name"}},
+                                                                                                  "function": {"variable": "hydra.ext.org.yaml.coder.recordCoder"}}}}}}}}},
+                                                                                  "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                                                                   "parameter": "rt"}}}},
                                                                           {
                                                                             "name": "unit",

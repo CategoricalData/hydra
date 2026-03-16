@@ -12,7 +12,7 @@ public interface Module {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.module.Definition>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.module.Definition> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.module.Definition>left(new hydra.error.DecodingError("expected union of type hydra.module.Definition"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.module.Definition>left(new hydra.error.DecodingError("expected union"));
         }
         
         @Override
@@ -20,7 +20,6 @@ public interface Module {
           hydra.core.Field field = ((inj).value).field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
-          hydra.core.Name tname = ((inj).value).typeName;
           hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.module.Definition>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.module.Definition>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.module.Definition>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.module.Definition>>>(new hydra.core.Name("term"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.module.Definition>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<hydra.module.TermDefinition, hydra.module.Definition>) (t -> new hydra.module.Definition.Term(t)),
@@ -36,8 +35,7 @@ public interface Module {
             () -> hydra.util.Either.<hydra.error.DecodingError, hydra.module.Definition>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "no such field ",
               (fname).value,
-              " in union type ",
-              (tname).value)))),
+              " in union")))),
             (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.module.Definition>>, hydra.util.Either<hydra.error.DecodingError, hydra.module.Definition>>) (f -> (f).apply(fterm)),
             hydra.lib.maps.Lookup.apply(
               fname,
@@ -55,7 +53,7 @@ public interface Module {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.module.FileExtension>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.module.FileExtension> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.module.FileExtension>left(new hydra.error.DecodingError("expected wrapped type hydra.module.FileExtension"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.module.FileExtension>left(new hydra.error.DecodingError("expected wrapped type"));
         }
         
         @Override
@@ -101,7 +99,7 @@ public interface Module {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.module.Module>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.module.Module> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.module.Module>left(new hydra.error.DecodingError("expected record of type hydra.module.Module"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.module.Module>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override
@@ -196,7 +194,7 @@ public interface Module {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.module.Namespace>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.module.Namespace> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.module.Namespace>left(new hydra.error.DecodingError("expected wrapped type hydra.module.Namespace"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.module.Namespace>left(new hydra.error.DecodingError("expected wrapped type"));
         }
         
         @Override
@@ -242,7 +240,7 @@ public interface Module {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.module.Namespaces<T0>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.module.Namespaces<T0>> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.module.Namespaces<T0>>left(new hydra.error.DecodingError("expected record of type hydra.module.Namespaces"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.module.Namespaces<T0>>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override
@@ -286,7 +284,7 @@ public interface Module {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.module.QualifiedName>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.module.QualifiedName> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.module.QualifiedName>left(new hydra.error.DecodingError("expected record of type hydra.module.QualifiedName"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.module.QualifiedName>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override
@@ -348,7 +346,7 @@ public interface Module {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.module.TermDefinition>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.module.TermDefinition> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.module.TermDefinition>left(new hydra.error.DecodingError("expected record of type hydra.module.TermDefinition"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.module.TermDefinition>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override
@@ -392,7 +390,7 @@ public interface Module {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.module.TypeDefinition>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.module.TypeDefinition> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.module.TypeDefinition>left(new hydra.error.DecodingError("expected record of type hydra.module.TypeDefinition"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.module.TypeDefinition>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override

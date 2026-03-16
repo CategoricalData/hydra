@@ -2650,7 +2650,8 @@
             {
               "@key": "description",
               "@value": {
-                "literal": {"string": "Convert a union row type to a record row type"}}}],
+                "literal": {
+                  "string": "Convert a union field type list to a record field type list with optional fields"}}}],
           "body": {
             "function": {
               "lambda": {
@@ -2727,46 +2728,27 @@
                                 "domain": {"variable": "hydra.core.FieldType"}}},
                             "variables": []}]}],
                     "body": {
-                      "record": {
-                        "fields": [
-                          {
-                            "name": "typeName",
-                            "term": {
-                              "application": {
-                                "argument": {"variable": "rt"},
-                                "function": {
-                                  "function": {
-                                    "elimination": {"record": {"field": "typeName", "typeName": "hydra.core.RowType"}}}}}}},
-                          {
-                            "name": "fields",
-                            "term": {
-                              "application": {
-                                "argument": {
-                                  "application": {
-                                    "argument": {"variable": "rt"},
-                                    "function": {
-                                      "function": {
-                                        "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
-                                "function": {
-                                  "application": {
-                                    "argument": {"variable": "makeOptional"},
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {
-                                          "typeApplication": {
-                                            "body": {"function": {"primitive": "hydra.lib.lists.map"}},
-                                            "type": {"variable": "hydra.core.FieldType"}}},
-                                        "type": {"variable": "hydra.core.FieldType"}}}}}}}}],
-                        "typeName": "hydra.core.RowType"}}}},
-                "domain": [{"variable": "hydra.core.RowType"}],
+                      "application": {
+                        "argument": {"variable": "rt"},
+                        "function": {
+                          "application": {
+                            "argument": {"variable": "makeOptional"},
+                            "function": {
+                              "typeApplication": {
+                                "body": {
+                                  "typeApplication": {
+                                    "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                    "type": {"variable": "hydra.core.FieldType"}}},
+                                "type": {"variable": "hydra.core.FieldType"}}}}}}}}},
+                "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                 "parameter": "rt"}}}}},
       "type": [
         {
           "constraints": null,
           "type": {
             "function": {
-              "codomain": {"variable": "hydra.core.RowType"},
-              "domain": {"variable": "hydra.core.RowType"}}},
+              "codomain": {"list": {"variable": "hydra.core.FieldType"}},
+              "domain": {"list": {"variable": "hydra.core.FieldType"}}}},
           "variables": []}]},
     {
       "name": "hydra.coderUtils.commentsFromElement",

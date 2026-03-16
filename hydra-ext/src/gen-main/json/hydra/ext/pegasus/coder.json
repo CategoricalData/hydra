@@ -2400,12 +2400,7 @@
                                                       "lambda": {
                                                         "body": {
                                                           "application": {
-                                                            "argument": {
-                                                              "application": {
-                                                                "argument": {"variable": "wt"},
-                                                                "function": {
-                                                                  "function": {
-                                                                    "elimination": {"record": {"field": "body", "typeName": "hydra.core.WrappedType"}}}}}},
+                                                            "argument": {"variable": "wt"},
                                                             "function": {
                                                               "application": {
                                                                 "argument": {"variable": "aliases"},
@@ -2416,7 +2411,7 @@
                                                                       "application": {
                                                                         "argument": {"variable": "cx"},
                                                                         "function": {"variable": "hydra.ext.pegasus.coder.encodeType"}}}}}}}}},
-                                                        "domain": [{"variable": "hydra.core.WrappedType"}],
+                                                        "domain": [{"variable": "hydra.core.Type"}],
                                                         "parameter": "wt"}}}},
                                                 {
                                                   "name": "maybe",
@@ -2512,12 +2507,7 @@
                                                               "application": {
                                                                 "argument": {
                                                                   "application": {
-                                                                    "argument": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "rt"},
-                                                                        "function": {
-                                                                          "function": {
-                                                                            "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
+                                                                    "argument": {"variable": "rt"},
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {
@@ -2559,7 +2549,7 @@
                                                                       "either": {
                                                                         "left": {"variable": "hydra.ext.pegasus.pdl.Schema"},
                                                                         "right": {"variable": "hydra.ext.pegasus.pdl.NamedSchemaType"}}}}}}}}},
-                                                        "domain": [{"variable": "hydra.core.RowType"}],
+                                                        "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                                         "parameter": "rt"}}}},
                                                 {
                                                   "name": "union",
@@ -2610,12 +2600,7 @@
                                                                   "application": {
                                                                     "argument": {
                                                                       "application": {
-                                                                        "argument": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "rt"},
-                                                                            "function": {
-                                                                              "function": {
-                                                                                "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
+                                                                        "argument": {"variable": "rt"},
                                                                         "function": {
                                                                           "application": {
                                                                             "argument": {
@@ -2701,12 +2686,7 @@
                                                                       "application": {
                                                                         "argument": {
                                                                           "application": {
-                                                                            "argument": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "rt"},
-                                                                                "function": {
-                                                                                  "function": {
-                                                                                    "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
+                                                                            "argument": {"variable": "rt"},
                                                                             "function": {
                                                                               "application": {
                                                                                 "argument": {
@@ -2751,12 +2731,7 @@
                                                                       "application": {
                                                                         "argument": {
                                                                           "application": {
-                                                                            "argument": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "rt"},
-                                                                                "function": {
-                                                                                  "function": {
-                                                                                    "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
+                                                                            "argument": {"variable": "rt"},
                                                                             "function": {
                                                                               "application": {
                                                                                 "argument": {
@@ -2834,7 +2809,7 @@
                                                                               "either": {
                                                                                 "left": {"variable": "hydra.ext.pegasus.pdl.Schema"},
                                                                                 "right": {"variable": "hydra.ext.pegasus.pdl.NamedSchemaType"}}}}}}}}}}}}},
-                                                        "domain": [{"variable": "hydra.core.RowType"}],
+                                                        "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                                         "parameter": "rt"}}}}],
                                               "default": [
                                                 {
@@ -3124,12 +3099,7 @@
                                                                   "application": {
                                                                     "argument": {
                                                                       "application": {
-                                                                        "argument": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "rt"},
-                                                                            "function": {
-                                                                              "function": {
-                                                                                "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
+                                                                        "argument": {"variable": "rt"},
                                                                         "function": {
                                                                           "typeApplication": {
                                                                             "body": {"function": {"primitive": "hydra.lib.lists.null"}},
@@ -3144,7 +3114,7 @@
                                                                                 "argument": {"variable": "hydra.error.Error"},
                                                                                 "function": {"variable": "hydra.context.InContext"}}},
                                                                             "right": {"variable": "hydra.ext.pegasus.pdl.Schema"}}}}}}}}}}},
-                                                        "domain": [{"variable": "hydra.core.RowType"}],
+                                                        "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                                         "parameter": "rt"}}}}],
                                               "default": [
                                                 {
@@ -4128,7 +4098,7 @@
                                                                   "pair": {
                                                                     "first": {"variable": "hydra.ext.pegasus.pdl.Schema"},
                                                                     "second": {"literal": {"boolean": {}}}}}}}}}}},
-                                                    "domain": [{"variable": "hydra.core.RowType"}],
+                                                    "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                                     "parameter": "rt"}}}},
                                             {
                                               "name": "union",
@@ -4197,7 +4167,7 @@
                                                                   "pair": {
                                                                     "first": {"variable": "hydra.ext.pegasus.pdl.Schema"},
                                                                     "second": {"literal": {"boolean": {}}}}}}}}}}},
-                                                    "domain": [{"variable": "hydra.core.RowType"}],
+                                                    "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                                     "parameter": "ut"}}}},
                                             {
                                               "name": "literal",
@@ -4611,7 +4581,7 @@
                                                                   "pair": {
                                                                     "first": {"variable": "hydra.ext.pegasus.pdl.Schema"},
                                                                     "second": {"literal": {"boolean": {}}}}}}}}}}},
-                                                    "domain": [{"variable": "hydra.core.WrappedType"}],
+                                                    "domain": [{"variable": "hydra.core.Type"}],
                                                     "parameter": "wt"}}}},
                                             {
                                               "name": "either",

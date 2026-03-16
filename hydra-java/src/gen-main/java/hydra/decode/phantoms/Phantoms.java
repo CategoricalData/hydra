@@ -12,7 +12,7 @@ public interface Phantoms {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>>left(new hydra.error.DecodingError("expected record of type hydra.phantoms.TBinding"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.phantoms.TBinding<T1>>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override
@@ -49,7 +49,7 @@ public interface Phantoms {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TTerm<T1>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.phantoms.TTerm<T1>> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.phantoms.TTerm<T1>>left(new hydra.error.DecodingError("expected wrapped type hydra.phantoms.TTerm"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.phantoms.TTerm<T1>>left(new hydra.error.DecodingError("expected wrapped type"));
         }
         
         @Override

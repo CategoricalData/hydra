@@ -379,11 +379,11 @@ def normalize_comment(s: str) -> str:
         return hydra.formatting.strip_leading_and_trailing_whitespace(s)
     return hydra.lib.logic.if_else(hydra.lib.strings.null(stripped()), (lambda : ""), (lambda : (last_idx := hydra.lib.math.sub(hydra.lib.strings.length(stripped()), 1), (last_char := hydra.lib.strings.char_at(last_idx, stripped()), hydra.lib.logic.if_else(hydra.lib.equality.equal(last_char, 46), (lambda : stripped()), (lambda : hydra.lib.strings.cat2(stripped(), "."))))[1])[1]))
 
-def union_type_to_record_type(rt: hydra.core.RowType) -> hydra.core.RowType:
-    r"""Convert a union row type to a record row type."""
+def union_type_to_record_type(rt: frozenlist[hydra.core.FieldType]) -> frozenlist[hydra.core.FieldType]:
+    r"""Convert a union field type list to a record field type list with optional fields."""
     
     def make_optional(f: hydra.core.FieldType) -> hydra.core.FieldType:
         fn = f.name
         ft = f.type
         return hydra.core.FieldType(fn, hydra.rewriting.map_beneath_type_annotations((lambda x: cast(hydra.core.Type, hydra.core.TypeMaybe(x))), ft))
-    return hydra.core.RowType(rt.type_name, hydra.lib.lists.map((lambda x1: make_optional(x1)), rt.fields))
+    return hydra.lib.lists.map((lambda x1: make_optional(x1)), rt)

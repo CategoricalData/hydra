@@ -43,7 +43,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.context.Context"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "record"),
@@ -268,7 +268,7 @@ module_ = Module.Module {
                       Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                       Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                         Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                        Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.context.InContext"))}))))),
+                        Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                       Core.caseStatementCases = [
                         Core.Field {
                           Core.fieldName = (Core.Name "record"),

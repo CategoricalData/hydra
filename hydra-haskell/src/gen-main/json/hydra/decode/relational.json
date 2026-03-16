@@ -200,8 +200,7 @@
                                                         "either": {
                                                           "@left": {
                                                             "wrap": {
-                                                              "body": {
-                                                                "literal": {"string": "expected wrapped type hydra.relational.ColumnName"}},
+                                                              "body": {"literal": {"string": "expected wrapped type"}},
                                                               "typeName": "hydra.error.DecodingError"}}}},
                                                       "type": {"variable": "hydra.error.DecodingError"}}},
                                                   "type": {"variable": "hydra.relational.ColumnName"}}}],
@@ -432,8 +431,7 @@
                                                                   "either": {
                                                                     "@left": {
                                                                       "wrap": {
-                                                                        "body": {
-                                                                          "literal": {"string": "expected record of type hydra.relational.ColumnSchema"}},
+                                                                        "body": {"literal": {"string": "expected record"}},
                                                                         "typeName": "hydra.error.DecodingError"}}}},
                                                                 "type": {"variable": "hydra.error.DecodingError"}}},
                                                             "type": {
@@ -708,8 +706,7 @@
                                                         "either": {
                                                           "@left": {
                                                             "wrap": {
-                                                              "body": {
-                                                                "literal": {"string": "expected record of type hydra.relational.ForeignKey"}},
+                                                              "body": {"literal": {"string": "expected record"}},
                                                               "typeName": "hydra.error.DecodingError"}}}},
                                                       "type": {"variable": "hydra.error.DecodingError"}}},
                                                   "type": {"variable": "hydra.relational.ForeignKey"}}}],
@@ -849,8 +846,7 @@
                                                         "either": {
                                                           "@left": {
                                                             "wrap": {
-                                                              "body": {
-                                                                "literal": {"string": "expected wrapped type hydra.relational.PrimaryKey"}},
+                                                              "body": {"literal": {"string": "expected wrapped type"}},
                                                               "typeName": "hydra.error.DecodingError"}}}},
                                                       "type": {"variable": "hydra.error.DecodingError"}}},
                                                   "type": {"variable": "hydra.relational.PrimaryKey"}}}],
@@ -1019,8 +1015,7 @@
                                                                   "either": {
                                                                     "@left": {
                                                                       "wrap": {
-                                                                        "body": {
-                                                                          "literal": {"string": "expected wrapped type hydra.relational.Relation"}},
+                                                                        "body": {"literal": {"string": "expected wrapped type"}},
                                                                         "typeName": "hydra.error.DecodingError"}}}},
                                                                 "type": {"variable": "hydra.error.DecodingError"}}},
                                                             "type": {
@@ -1313,8 +1308,7 @@
                                                         "either": {
                                                           "@left": {
                                                             "wrap": {
-                                                              "body": {
-                                                                "literal": {"string": "expected wrapped type hydra.relational.RelationName"}},
+                                                              "body": {"literal": {"string": "expected wrapped type"}},
                                                               "typeName": "hydra.error.DecodingError"}}}},
                                                       "type": {"variable": "hydra.error.DecodingError"}}},
                                                   "type": {"variable": "hydra.relational.RelationName"}}}],
@@ -1675,8 +1669,7 @@
                                                                   "either": {
                                                                     "@left": {
                                                                       "wrap": {
-                                                                        "body": {
-                                                                          "literal": {"string": "expected record of type hydra.relational.RelationSchema"}},
+                                                                        "body": {"literal": {"string": "expected record"}},
                                                                         "typeName": "hydra.error.DecodingError"}}}},
                                                                 "type": {"variable": "hydra.error.DecodingError"}}},
                                                             "type": {
@@ -1890,8 +1883,7 @@
                                                                   "either": {
                                                                     "@left": {
                                                                       "wrap": {
-                                                                        "body": {
-                                                                          "literal": {"string": "expected wrapped type hydra.relational.Relationship"}},
+                                                                        "body": {"literal": {"string": "expected wrapped type"}},
                                                                         "typeName": "hydra.error.DecodingError"}}}},
                                                                 "type": {"variable": "hydra.error.DecodingError"}}},
                                                             "type": {
@@ -2079,7 +2071,7 @@
                                                                   "either": {
                                                                     "@left": {
                                                                       "wrap": {
-                                                                        "body": {"literal": {"string": "expected wrapped type hydra.relational.Row"}},
+                                                                        "body": {"literal": {"string": "expected wrapped type"}},
                                                                         "typeName": "hydra.error.DecodingError"}}}},
                                                                 "type": {"variable": "hydra.error.DecodingError"}}},
                                                             "type": {

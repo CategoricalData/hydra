@@ -5369,28 +5369,13 @@
                                                                                                 {
                                                                                                   "name": "name",
                                                                                                   "term": {
-                                                                                                    "application": {
-                                                                                                      "argument": {"variable": "rt"},
-                                                                                                      "function": {
-                                                                                                        "function": {
-                                                                                                          "elimination": {"record": {"field": "typeName", "typeName": "hydra.core.RowType"}}}}}},
+                                                                                                    "wrap": {
+                                                                                                      "body": {"literal": {"string": "placeholder"}},
+                                                                                                      "typeName": "hydra.core.Name"}},
                                                                                                   "type": [
                                                                                                     {
                                                                                                       "constraints": null,
                                                                                                       "type": {"variable": "hydra.core.Name"},
-                                                                                                      "variables": []}]},
-                                                                                                {
-                                                                                                  "name": "fields",
-                                                                                                  "term": {
-                                                                                                    "application": {
-                                                                                                      "argument": {"variable": "rt"},
-                                                                                                      "function": {
-                                                                                                        "function": {
-                                                                                                          "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
-                                                                                                  "type": [
-                                                                                                    {
-                                                                                                      "constraints": null,
-                                                                                                      "type": {"list": {"variable": "hydra.core.FieldType"}},
                                                                                                       "variables": []}]},
                                                                                                 {
                                                                                                   "name": "outVertexKey",
@@ -6063,8 +6048,8 @@
                                                                                                                         "application": {
                                                                                                                           "argument": {"variable": "hydra.core.Type"},
                                                                                                                           "function": {"variable": "hydra.util.Adapter"}}}}}}}}}}}}}}}}},
-                                                                                          "domain": [{"variable": "hydra.core.RowType"}],
-                                                                                          "parameter": "rt"}}}}],
+                                                                                          "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                                                          "parameter": "fields"}}}}],
                                                                                 "default": [
                                                                                   {
                                                                                     "typeApplication": {

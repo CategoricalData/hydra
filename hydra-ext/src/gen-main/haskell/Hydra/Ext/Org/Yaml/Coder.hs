@@ -84,14 +84,12 @@ literalYamlCoder lt =
           in (Right encoded)
 
 -- | Create a YAML coder for record types
-recordCoder :: (Core.RowType -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (Util.Coder Core.Term Model.Node))
-recordCoder rt cx g =  
-  let fields = (Core.rowTypeFields rt)
-  in  
-    let getCoder = (\f -> Eithers.bind (termCoder (Core.fieldTypeType f) cx g) (\coder -> Right (f, coder)))
-    in (Eithers.bind (Eithers.mapList getCoder fields) (\coders -> Right (Util.Coder {
-      Util.coderEncode = (\cx -> \term -> encodeRecord coders cx g term),
-      Util.coderDecode = (\cx -> \val -> decodeRecord rt coders cx val)})))
+recordCoder :: (Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (Util.Coder Core.Term Model.Node))
+recordCoder tname rt cx g =  
+  let getCoder = (\f -> Eithers.bind (termCoder (Core.fieldTypeType f) cx g) (\coder -> Right (f, coder)))
+  in (Eithers.bind (Eithers.mapList getCoder rt) (\coders -> Right (Util.Coder {
+    Util.coderEncode = (\cx -> \term -> encodeRecord coders cx g term),
+    Util.coderDecode = (\cx -> \val -> decodeRecord tname coders cx val)})))
 
 -- | Encode a record term to YAML
 encodeRecord :: ([(Core.FieldType, (Util.Coder Core.Term Model.Node))] -> Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) Model.Node)
@@ -122,8 +120,8 @@ encodeRecord coders cx graph term =
         in (Eithers.bind (Eithers.mapList encodeField (Lists.zip coders fields)) (\maybeFields -> Right (Model.NodeMapping (Maps.fromList (Maybes.cat maybeFields)))))))
 
 -- | Decode a YAML value to a record term
-decodeRecord :: (Core.RowType -> [(Core.FieldType, (Util.Coder Core.Term Model.Node))] -> Context.Context -> Model.Node -> Either (Context.InContext Error.Error) Core.Term)
-decodeRecord rt coders cx n =  
+decodeRecord :: (Core.Name -> [(Core.FieldType, (Util.Coder Core.Term Model.Node))] -> Context.Context -> Model.Node -> Either (Context.InContext Error.Error) Core.Term)
+decodeRecord tname coders cx n =  
   let decodeObjectBody = (\m ->  
           let decodeField = (\coder ->  
                   let ft = (Pairs.first coder)
@@ -139,7 +137,7 @@ decodeRecord rt coders cx n =
                             Core.fieldName = fname,
                             Core.fieldTerm = v}))))
           in (Eithers.bind (Eithers.mapList decodeField coders) (\fields -> Right (Core.TermRecord (Core.Record {
-            Core.recordTypeName = (Core.rowTypeTypeName rt),
+            Core.recordTypeName = tname,
             Core.recordFields = fields})))))
   in ((\x -> case x of
     Model.NodeMapping v0 -> (decodeObjectBody v0)
@@ -233,7 +231,7 @@ termCoder typ cx g =
                       Core.TypeMaybe v0 -> (Eithers.bind (termCoder v0 cx g) (\maybeElementCoder -> Right (Util.Coder {
                         Util.coderEncode = (encodeMaybe maybeElementCoder),
                         Util.coderDecode = (decodeMaybe maybeElementCoder)})))
-                      Core.TypeRecord v0 -> (recordCoder v0 cx g)
+                      Core.TypeRecord v0 -> (recordCoder (Core.Name "yaml") v0 cx g)
                       Core.TypeUnit -> (Right unitCoder)
                       _ -> (Left (Context.InContext {
                         Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat [

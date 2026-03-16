@@ -81,10 +81,10 @@ def yaml_to_json(node: hydra.ext.org.yaml.model.Node_):
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
-def from_yaml(types: FrozenDict[hydra.core.Name, hydra.core.Type], typ: hydra.core.Type, node: hydra.ext.org.yaml.model.Node_) -> Either[str, hydra.core.Term]:
+def from_yaml(types: FrozenDict[hydra.core.Name, hydra.core.Type], tname: hydra.core.Name, typ: hydra.core.Type, node: hydra.ext.org.yaml.model.Node_) -> Either[str, hydra.core.Term]:
     r"""Decode a YAML node to a Hydra term via JSON decoding."""
     
     @lru_cache(1)
     def json_result() -> Either[str, hydra.json.model.Value]:
         return yaml_to_json(node)
-    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda json: hydra.json.decode.from_json(types, typ, json)), json_result())
+    return hydra.lib.eithers.either((lambda err: Left(err)), (lambda json: hydra.json.decode.from_json(types, tname, typ, json)), json_result())

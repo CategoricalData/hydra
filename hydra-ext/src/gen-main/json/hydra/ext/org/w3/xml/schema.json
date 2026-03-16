@@ -12,26 +12,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.AnySimpleType"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -48,26 +36,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.AnyType"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -84,26 +60,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.AnyURI"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -120,26 +84,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.Base64Binary"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -156,26 +108,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.Boolean"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "boolean", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "boolean", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -192,31 +132,19 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.Byte"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {
-                                    "name": "integer",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "int8", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.IntegerType"}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {
+                            "name": "integer",
+                            "term": {
+                              "union": {
+                                "field": {"name": "int8", "term": {"unit": {}}},
+                                "typeName": "hydra.core.IntegerType"}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -233,26 +161,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.Date"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -269,26 +185,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.DateTime"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -305,26 +209,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.Decimal"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -341,31 +233,19 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.Double"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {
-                                    "name": "float",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "float64", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.FloatType"}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {
+                            "name": "float",
+                            "term": {
+                              "union": {
+                                "field": {"name": "float64", "term": {"unit": {}}},
+                                "typeName": "hydra.core.FloatType"}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -382,26 +262,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.Duration"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -418,26 +286,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.ENTITIES"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -454,26 +310,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.ENTITY"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -490,31 +334,19 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.Float"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {
-                                    "name": "float",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "float32", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.FloatType"}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {
+                            "name": "float",
+                            "term": {
+                              "union": {
+                                "field": {"name": "float32", "term": {"unit": {}}},
+                                "typeName": "hydra.core.FloatType"}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -531,26 +363,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.GDay"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -567,26 +387,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.GMonth"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -603,26 +411,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.GMonthDay"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -639,26 +435,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.GYear"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -675,26 +459,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.GYearMonth"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -711,26 +483,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.HexBinary"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -747,26 +507,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.ID"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -783,26 +531,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.IDREF"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -819,26 +555,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.IDREFS"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -855,31 +579,19 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.Int"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {
-                                    "name": "integer",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "int32", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.IntegerType"}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {
+                            "name": "integer",
+                            "term": {
+                              "union": {
+                                "field": {"name": "int32", "term": {"unit": {}}},
+                                "typeName": "hydra.core.IntegerType"}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -896,31 +608,19 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.Integer"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {
-                                    "name": "integer",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "bigint", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.IntegerType"}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {
+                            "name": "integer",
+                            "term": {
+                              "union": {
+                                "field": {"name": "bigint", "term": {"unit": {}}},
+                                "typeName": "hydra.core.IntegerType"}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -937,26 +637,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.Language"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -973,31 +661,19 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.Long"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {
-                                    "name": "integer",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "int64", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.IntegerType"}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {
+                            "name": "integer",
+                            "term": {
+                              "union": {
+                                "field": {"name": "int64", "term": {"unit": {}}},
+                                "typeName": "hydra.core.IntegerType"}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -1014,26 +690,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.NMTOKEN"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -1050,26 +714,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.NOTATION"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -1086,26 +738,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.Name"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -1122,31 +762,19 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.NegativeInteger"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {
-                                    "name": "integer",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "bigint", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.IntegerType"}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {
+                            "name": "integer",
+                            "term": {
+                              "union": {
+                                "field": {"name": "bigint", "term": {"unit": {}}},
+                                "typeName": "hydra.core.IntegerType"}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -1163,32 +791,19 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {
-                              "literal": {"string": "hydra.ext.org.w3.xml.schema.NonNegativeInteger"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {
-                                    "name": "integer",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "bigint", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.IntegerType"}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {
+                            "name": "integer",
+                            "term": {
+                              "union": {
+                                "field": {"name": "bigint", "term": {"unit": {}}},
+                                "typeName": "hydra.core.IntegerType"}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -1205,32 +820,19 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {
-                              "literal": {"string": "hydra.ext.org.w3.xml.schema.NonPositiveInteger"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {
-                                    "name": "integer",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "bigint", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.IntegerType"}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {
+                            "name": "integer",
+                            "term": {
+                              "union": {
+                                "field": {"name": "bigint", "term": {"unit": {}}},
+                                "typeName": "hydra.core.IntegerType"}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -1247,27 +849,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {
-                              "literal": {"string": "hydra.ext.org.w3.xml.schema.NormalizedString"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -1284,31 +873,19 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.PositiveInteger"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {
-                                    "name": "integer",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "bigint", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.IntegerType"}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {
+                            "name": "integer",
+                            "term": {
+                              "union": {
+                                "field": {"name": "bigint", "term": {"unit": {}}},
+                                "typeName": "hydra.core.IntegerType"}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -1325,26 +902,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.QName"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -1361,31 +926,19 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.Short"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {
-                                    "name": "integer",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "int16", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.IntegerType"}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {
+                            "name": "integer",
+                            "term": {
+                              "union": {
+                                "field": {"name": "int16", "term": {"unit": {}}},
+                                "typeName": "hydra.core.IntegerType"}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -1402,26 +955,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.String"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -1438,26 +979,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.Time"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -1474,26 +1003,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.Token"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -1510,31 +1027,19 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.UnsignedByte"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {
-                                    "name": "integer",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "uint8", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.IntegerType"}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {
+                            "name": "integer",
+                            "term": {
+                              "union": {
+                                "field": {"name": "uint8", "term": {"unit": {}}},
+                                "typeName": "hydra.core.IntegerType"}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -1551,31 +1056,19 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.UnsignedInt"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {
-                                    "name": "integer",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "uint32", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.IntegerType"}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {
+                            "name": "integer",
+                            "term": {
+                              "union": {
+                                "field": {"name": "uint32", "term": {"unit": {}}},
+                                "typeName": "hydra.core.IntegerType"}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -1592,31 +1085,19 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.UnsignedLong"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {
-                                    "name": "integer",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "uint64", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.IntegerType"}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {
+                            "name": "integer",
+                            "term": {
+                              "union": {
+                                "field": {"name": "uint64", "term": {"unit": {}}},
+                                "typeName": "hydra.core.IntegerType"}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -1633,31 +1114,19 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.UnsignedShort"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {
-                                    "name": "integer",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "uint16", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.IntegerType"}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {
+                            "name": "integer",
+                            "term": {
+                              "union": {
+                                "field": {"name": "uint16", "term": {"unit": {}}},
+                                "typeName": "hydra.core.IntegerType"}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -1683,22 +1152,9 @@
                             "field": {
                               "name": "wrap",
                               "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {
-                                            "literal": {"string": "hydra.ext.org.w3.xml.schema.ConstrainingFacet"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "body",
-                                      "term": {
-                                        "union": {
-                                          "field": {"name": "unit", "term": {"unit": {}}},
-                                          "typeName": "hydra.core.Type"}}}],
-                                  "typeName": "hydra.core.WrappedType"}}},
+                                "union": {
+                                  "field": {"name": "unit", "term": {"unit": {}}},
+                                  "typeName": "hydra.core.Type"}}},
                             "typeName": "hydra.core.Type"}}},
                       {
                         "name": "annotation",
@@ -1738,721 +1194,709 @@
               "field": {
                 "name": "union",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.xml.schema.Datatype"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "fields",
-                        "term": {
-                          "list": [
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "anySimpleType"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "anyType"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "anyURI"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "base64Binary"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "boolean"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "byte"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "date"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "dateTime"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "decimal"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "double"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "duration"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "ENTITIES"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "ENTITY"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "float"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "gDay"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "gMonth"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "gMonthDay"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "gYear"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "gYearMonth"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "hexBinary"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {"body": {"literal": {"string": "ID"}}, "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "IDREF"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "IDREFS"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "int"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "integer"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "language"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "long"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "NMTOKEN"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "NOTATION"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "name"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "negativeInteger"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "nonNegativeInteger"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "nonPositiveInteger"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "normalizedString"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "positiveInteger"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "qName"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "short"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "string"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "time"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "token"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "unsignedByte"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "unsignedInt"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "unsignedLong"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "unsignedShort"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}}]}}],
-                    "typeName": "hydra.core.RowType"}}},
+                  "list": [
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "anySimpleType"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "anyType"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "anyURI"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "base64Binary"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "boolean"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "byte"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "date"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "dateTime"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "decimal"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "double"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "duration"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "ENTITIES"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "ENTITY"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "float"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "gDay"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "gMonth"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "gMonthDay"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "gYear"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "gYearMonth"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "hexBinary"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {"body": {"literal": {"string": "ID"}}, "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "IDREF"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "IDREFS"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "int"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "integer"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "language"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "long"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "NMTOKEN"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "NOTATION"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "name"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "negativeInteger"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "nonNegativeInteger"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "nonPositiveInteger"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "normalizedString"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "positiveInteger"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "qName"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "short"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "string"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "time"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "token"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "unsignedByte"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "unsignedInt"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "unsignedLong"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "unsignedShort"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}}]}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {

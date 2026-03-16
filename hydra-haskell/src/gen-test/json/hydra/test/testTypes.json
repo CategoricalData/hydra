@@ -24,78 +24,69 @@
                             "field": {
                               "name": "record",
                               "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {"variable": "hydra.test.testTypes.testTypeBuddyListAName"}},
-                                    {
-                                      "name": "fields",
-                                      "term": {
-                                        "list": [
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "head"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "variable",
-                                                        "term": {
-                                                          "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}},
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "tail"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "maybe",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "application",
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "head"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "variable",
+                                                "term": {
+                                                  "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "tail"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "maybe",
+                                                "term": {
+                                                  "union": {
+                                                    "field": {
+                                                      "name": "application",
+                                                      "term": {
+                                                        "record": {
+                                                          "fields": [
+                                                            {
+                                                              "name": "function",
                                                               "term": {
-                                                                "record": {
-                                                                  "fields": [
-                                                                    {
-                                                                      "name": "function",
-                                                                      "term": {
-                                                                        "union": {
-                                                                          "field": {
-                                                                            "name": "variable",
-                                                                            "term": {"variable": "hydra.test.testTypes.testTypeBuddyListBName"}},
-                                                                          "typeName": "hydra.core.Type"}}},
-                                                                    {
-                                                                      "name": "argument",
-                                                                      "term": {
-                                                                        "union": {
-                                                                          "field": {
-                                                                            "name": "variable",
-                                                                            "term": {
-                                                                              "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
-                                                                          "typeName": "hydra.core.Type"}}}],
-                                                                  "typeName": "hydra.core.ApplicationType"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}}]}}],
-                                  "typeName": "hydra.core.RowType"}}},
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "variable",
+                                                                    "term": {"variable": "hydra.test.testTypes.testTypeBuddyListBName"}},
+                                                                  "typeName": "hydra.core.Type"}}},
+                                                            {
+                                                              "name": "argument",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "variable",
+                                                                    "term": {
+                                                                      "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
+                                                                  "typeName": "hydra.core.Type"}}}],
+                                                          "typeName": "hydra.core.ApplicationType"}}},
+                                                    "typeName": "hydra.core.Type"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}}]}},
                             "typeName": "hydra.core.Type"}}}],
                     "typeName": "hydra.core.ForallType"}}},
               "typeName": "hydra.core.Type"}}}},
@@ -138,78 +129,69 @@
                             "field": {
                               "name": "record",
                               "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {"variable": "hydra.test.testTypes.testTypeBuddyListBName"}},
-                                    {
-                                      "name": "fields",
-                                      "term": {
-                                        "list": [
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "head"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "variable",
-                                                        "term": {
-                                                          "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}},
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "tail"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "maybe",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "application",
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "head"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "variable",
+                                                "term": {
+                                                  "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "tail"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "maybe",
+                                                "term": {
+                                                  "union": {
+                                                    "field": {
+                                                      "name": "application",
+                                                      "term": {
+                                                        "record": {
+                                                          "fields": [
+                                                            {
+                                                              "name": "function",
                                                               "term": {
-                                                                "record": {
-                                                                  "fields": [
-                                                                    {
-                                                                      "name": "function",
-                                                                      "term": {
-                                                                        "union": {
-                                                                          "field": {
-                                                                            "name": "variable",
-                                                                            "term": {"variable": "hydra.test.testTypes.testTypeBuddyListAName"}},
-                                                                          "typeName": "hydra.core.Type"}}},
-                                                                    {
-                                                                      "name": "argument",
-                                                                      "term": {
-                                                                        "union": {
-                                                                          "field": {
-                                                                            "name": "variable",
-                                                                            "term": {
-                                                                              "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
-                                                                          "typeName": "hydra.core.Type"}}}],
-                                                                  "typeName": "hydra.core.ApplicationType"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}}]}}],
-                                  "typeName": "hydra.core.RowType"}}},
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "variable",
+                                                                    "term": {"variable": "hydra.test.testTypes.testTypeBuddyListAName"}},
+                                                                  "typeName": "hydra.core.Type"}}},
+                                                            {
+                                                              "name": "argument",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "variable",
+                                                                    "term": {
+                                                                      "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
+                                                                  "typeName": "hydra.core.Type"}}}],
+                                                          "typeName": "hydra.core.ApplicationType"}}},
+                                                    "typeName": "hydra.core.Type"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}}]}},
                             "typeName": "hydra.core.Type"}}}],
                     "typeName": "hydra.core.ForallType"}}},
               "typeName": "hydra.core.Type"}}}},
@@ -239,64 +221,55 @@
               "field": {
                 "name": "union",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {"variable": "hydra.test.testTypes.testTypeComparisonName"}},
-                      {
-                        "name": "fields",
-                        "term": {
-                          "list": [
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "lessThan"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "equalTo"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "greaterThan"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}}]}}],
-                    "typeName": "hydra.core.RowType"}}},
+                  "list": [
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "lessThan"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "equalTo"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "greaterThan"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}}]}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -350,54 +323,45 @@
                                           "field": {
                                             "name": "union",
                                             "term": {
-                                              "record": {
-                                                "fields": [
-                                                  {
-                                                    "name": "typeName",
-                                                    "term": {"variable": "hydra.test.testTypes.testTypeEitherName"}},
-                                                  {
-                                                    "name": "fields",
-                                                    "term": {
-                                                      "list": [
-                                                        {
-                                                          "record": {
-                                                            "fields": [
-                                                              {
-                                                                "name": "name",
-                                                                "term": {
-                                                                  "wrap": {
-                                                                    "body": {"literal": {"string": "left"}},
-                                                                    "typeName": "hydra.core.Name"}}},
-                                                              {
-                                                                "name": "type",
-                                                                "term": {
-                                                                  "union": {
-                                                                    "field": {
-                                                                      "name": "variable",
-                                                                      "term": {
-                                                                        "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
-                                                                    "typeName": "hydra.core.Type"}}}],
-                                                            "typeName": "hydra.core.FieldType"}},
-                                                        {
-                                                          "record": {
-                                                            "fields": [
-                                                              {
-                                                                "name": "name",
-                                                                "term": {
-                                                                  "wrap": {
-                                                                    "body": {"literal": {"string": "right"}},
-                                                                    "typeName": "hydra.core.Name"}}},
-                                                              {
-                                                                "name": "type",
-                                                                "term": {
-                                                                  "union": {
-                                                                    "field": {
-                                                                      "name": "variable",
-                                                                      "term": {
-                                                                        "wrap": {"body": {"literal": {"string": "b"}}, "typeName": "hydra.core.Name"}}},
-                                                                    "typeName": "hydra.core.Type"}}}],
-                                                            "typeName": "hydra.core.FieldType"}}]}}],
-                                                "typeName": "hydra.core.RowType"}}},
+                                              "list": [
+                                                {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "name",
+                                                        "term": {
+                                                          "wrap": {
+                                                            "body": {"literal": {"string": "left"}},
+                                                            "typeName": "hydra.core.Name"}}},
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "variable",
+                                                              "term": {
+                                                                "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
+                                                            "typeName": "hydra.core.Type"}}}],
+                                                    "typeName": "hydra.core.FieldType"}},
+                                                {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "name",
+                                                        "term": {
+                                                          "wrap": {
+                                                            "body": {"literal": {"string": "right"}},
+                                                            "typeName": "hydra.core.Name"}}},
+                                                      {
+                                                        "name": "type",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "variable",
+                                                              "term": {
+                                                                "wrap": {"body": {"literal": {"string": "b"}}, "typeName": "hydra.core.Name"}}},
+                                                            "typeName": "hydra.core.Type"}}}],
+                                                    "typeName": "hydra.core.FieldType"}}]}},
                                           "typeName": "hydra.core.Type"}}}],
                                   "typeName": "hydra.core.ForallType"}}},
                             "typeName": "hydra.core.Type"}}}],
@@ -429,58 +393,49 @@
               "field": {
                 "name": "union",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {"variable": "hydra.test.testTypes.testTypeHydraLiteralTypeName"}},
-                      {
-                        "name": "fields",
-                        "term": {
-                          "list": [
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "boolean"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "literal",
-                                          "term": {
-                                            "union": {
-                                              "field": {"name": "boolean", "term": {"unit": {}}},
-                                              "typeName": "hydra.core.LiteralType"}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "string"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "literal",
-                                          "term": {
-                                            "union": {
-                                              "field": {"name": "string", "term": {"unit": {}}},
-                                              "typeName": "hydra.core.LiteralType"}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}}]}}],
-                    "typeName": "hydra.core.RowType"}}},
+                  "list": [
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "boolean"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "literal",
+                                  "term": {
+                                    "union": {
+                                      "field": {"name": "boolean", "term": {"unit": {}}},
+                                      "typeName": "hydra.core.LiteralType"}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "string"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "literal",
+                                  "term": {
+                                    "union": {
+                                      "field": {"name": "string", "term": {"unit": {}}},
+                                      "typeName": "hydra.core.LiteralType"}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}}]}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -508,52 +463,43 @@
               "field": {
                 "name": "union",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {"variable": "hydra.test.testTypes.testTypeHydraTypeName"}},
-                      {
-                        "name": "fields",
-                        "term": {
-                          "list": [
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "literal"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "variable",
-                                          "term": {"variable": "hydra.test.testTypes.testTypeHydraLiteralTypeName"}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "list"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "variable",
-                                          "term": {"variable": "hydra.test.testTypes.testTypeHydraTypeName"}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}}]}}],
-                    "typeName": "hydra.core.RowType"}}},
+                  "list": [
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "literal"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "variable",
+                                  "term": {"variable": "hydra.test.testTypes.testTypeHydraLiteralTypeName"}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "list"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "variable",
+                                  "term": {"variable": "hydra.test.testTypes.testTypeHydraTypeName"}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}}]}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -581,65 +527,56 @@
               "field": {
                 "name": "record",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {"variable": "hydra.test.testTypes.testTypeIntListName"}},
-                      {
-                        "name": "fields",
-                        "term": {
-                          "list": [
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "head"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "literal",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "integer",
-                                                "term": {
-                                                  "union": {
-                                                    "field": {"name": "int32", "term": {"unit": {}}},
-                                                    "typeName": "hydra.core.IntegerType"}}},
-                                              "typeName": "hydra.core.LiteralType"}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "tail"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "maybe",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "variable",
-                                                "term": {"variable": "hydra.test.testTypes.testTypeIntListName"}},
-                                              "typeName": "hydra.core.Type"}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}}]}}],
-                    "typeName": "hydra.core.RowType"}}},
+                  "list": [
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "head"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "literal",
+                                  "term": {
+                                    "union": {
+                                      "field": {
+                                        "name": "integer",
+                                        "term": {
+                                          "union": {
+                                            "field": {"name": "int32", "term": {"unit": {}}},
+                                            "typeName": "hydra.core.IntegerType"}}},
+                                      "typeName": "hydra.core.LiteralType"}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "tail"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "maybe",
+                                  "term": {
+                                    "union": {
+                                      "field": {
+                                        "name": "variable",
+                                        "term": {"variable": "hydra.test.testTypes.testTypeIntListName"}},
+                                      "typeName": "hydra.core.Type"}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}}]}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -667,68 +604,59 @@
               "field": {
                 "name": "record",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {"variable": "hydra.test.testTypes.testTypeLatLonName"}},
-                      {
-                        "name": "fields",
-                        "term": {
-                          "list": [
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "lat"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "literal",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "float",
-                                                "term": {
-                                                  "union": {
-                                                    "field": {"name": "float32", "term": {"unit": {}}},
-                                                    "typeName": "hydra.core.FloatType"}}},
-                                              "typeName": "hydra.core.LiteralType"}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "lon"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "literal",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "float",
-                                                "term": {
-                                                  "union": {
-                                                    "field": {"name": "float32", "term": {"unit": {}}},
-                                                    "typeName": "hydra.core.FloatType"}}},
-                                              "typeName": "hydra.core.LiteralType"}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}}]}}],
-                    "typeName": "hydra.core.RowType"}}},
+                  "list": [
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "lat"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "literal",
+                                  "term": {
+                                    "union": {
+                                      "field": {
+                                        "name": "float",
+                                        "term": {
+                                          "union": {
+                                            "field": {"name": "float32", "term": {"unit": {}}},
+                                            "typeName": "hydra.core.FloatType"}}},
+                                      "typeName": "hydra.core.LiteralType"}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "lon"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "literal",
+                                  "term": {
+                                    "union": {
+                                      "field": {
+                                        "name": "float",
+                                        "term": {
+                                          "union": {
+                                            "field": {"name": "float32", "term": {"unit": {}}},
+                                            "typeName": "hydra.core.FloatType"}}},
+                                      "typeName": "hydra.core.LiteralType"}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}}]}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -769,54 +697,45 @@
                             "field": {
                               "name": "record",
                               "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {"variable": "hydra.test.testTypes.testTypeLatLonPolyName"}},
-                                    {
-                                      "name": "fields",
-                                      "term": {
-                                        "list": [
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "lat"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "variable",
-                                                        "term": {
-                                                          "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}},
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "lon"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "variable",
-                                                        "term": {
-                                                          "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}}]}}],
-                                  "typeName": "hydra.core.RowType"}}},
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "lat"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "variable",
+                                                "term": {
+                                                  "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "lon"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "variable",
+                                                "term": {
+                                                  "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}}]}},
                             "typeName": "hydra.core.Type"}}}],
                     "typeName": "hydra.core.ForallType"}}},
               "typeName": "hydra.core.Type"}}}},
@@ -859,78 +778,69 @@
                             "field": {
                               "name": "record",
                               "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {"variable": "hydra.test.testTypes.testTypeListName"}},
-                                    {
-                                      "name": "fields",
-                                      "term": {
-                                        "list": [
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "head"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "variable",
-                                                        "term": {
-                                                          "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}},
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "tail"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "maybe",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "application",
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "head"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "variable",
+                                                "term": {
+                                                  "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "tail"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "maybe",
+                                                "term": {
+                                                  "union": {
+                                                    "field": {
+                                                      "name": "application",
+                                                      "term": {
+                                                        "record": {
+                                                          "fields": [
+                                                            {
+                                                              "name": "function",
                                                               "term": {
-                                                                "record": {
-                                                                  "fields": [
-                                                                    {
-                                                                      "name": "function",
-                                                                      "term": {
-                                                                        "union": {
-                                                                          "field": {
-                                                                            "name": "variable",
-                                                                            "term": {"variable": "hydra.test.testTypes.testTypeListName"}},
-                                                                          "typeName": "hydra.core.Type"}}},
-                                                                    {
-                                                                      "name": "argument",
-                                                                      "term": {
-                                                                        "union": {
-                                                                          "field": {
-                                                                            "name": "variable",
-                                                                            "term": {
-                                                                              "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
-                                                                          "typeName": "hydra.core.Type"}}}],
-                                                                  "typeName": "hydra.core.ApplicationType"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}}]}}],
-                                  "typeName": "hydra.core.RowType"}}},
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "variable",
+                                                                    "term": {"variable": "hydra.test.testTypes.testTypeListName"}},
+                                                                  "typeName": "hydra.core.Type"}}},
+                                                            {
+                                                              "name": "argument",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "variable",
+                                                                    "term": {
+                                                                      "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
+                                                                  "typeName": "hydra.core.Type"}}}],
+                                                          "typeName": "hydra.core.ApplicationType"}}},
+                                                    "typeName": "hydra.core.Type"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}}]}},
                             "typeName": "hydra.core.Type"}}}],
                     "typeName": "hydra.core.ForallType"}}},
               "typeName": "hydra.core.Type"}}}},
@@ -960,68 +870,59 @@
               "field": {
                 "name": "union",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {"variable": "hydra.test.testTypes.testTypeNumberName"}},
-                      {
-                        "name": "fields",
-                        "term": {
-                          "list": [
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "int"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "literal",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "integer",
-                                                "term": {
-                                                  "union": {
-                                                    "field": {"name": "int32", "term": {"unit": {}}},
-                                                    "typeName": "hydra.core.IntegerType"}}},
-                                              "typeName": "hydra.core.LiteralType"}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "float"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "literal",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "float",
-                                                "term": {
-                                                  "union": {
-                                                    "field": {"name": "float32", "term": {"unit": {}}},
-                                                    "typeName": "hydra.core.FloatType"}}},
-                                              "typeName": "hydra.core.LiteralType"}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}}]}}],
-                    "typeName": "hydra.core.RowType"}}},
+                  "list": [
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "int"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "literal",
+                                  "term": {
+                                    "union": {
+                                      "field": {
+                                        "name": "integer",
+                                        "term": {
+                                          "union": {
+                                            "field": {"name": "int32", "term": {"unit": {}}},
+                                            "typeName": "hydra.core.IntegerType"}}},
+                                      "typeName": "hydra.core.LiteralType"}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "float"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "literal",
+                                  "term": {
+                                    "union": {
+                                      "field": {
+                                        "name": "float",
+                                        "term": {
+                                          "union": {
+                                            "field": {"name": "float32", "term": {"unit": {}}},
+                                            "typeName": "hydra.core.FloatType"}}},
+                                      "typeName": "hydra.core.LiteralType"}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}}]}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -1049,84 +950,75 @@
               "field": {
                 "name": "record",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                      {
-                        "name": "fields",
-                        "term": {
-                          "list": [
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "firstName"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "literal",
-                                          "term": {
-                                            "union": {
-                                              "field": {"name": "string", "term": {"unit": {}}},
-                                              "typeName": "hydra.core.LiteralType"}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "lastName"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "literal",
-                                          "term": {
-                                            "union": {
-                                              "field": {"name": "string", "term": {"unit": {}}},
-                                              "typeName": "hydra.core.LiteralType"}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "age"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "literal",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "integer",
-                                                "term": {
-                                                  "union": {
-                                                    "field": {"name": "int32", "term": {"unit": {}}},
-                                                    "typeName": "hydra.core.IntegerType"}}},
-                                              "typeName": "hydra.core.LiteralType"}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}}]}}],
-                    "typeName": "hydra.core.RowType"}}},
+                  "list": [
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "firstName"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "literal",
+                                  "term": {
+                                    "union": {
+                                      "field": {"name": "string", "term": {"unit": {}}},
+                                      "typeName": "hydra.core.LiteralType"}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "lastName"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "literal",
+                                  "term": {
+                                    "union": {
+                                      "field": {"name": "string", "term": {"unit": {}}},
+                                      "typeName": "hydra.core.LiteralType"}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "age"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "literal",
+                                  "term": {
+                                    "union": {
+                                      "field": {
+                                        "name": "integer",
+                                        "term": {
+                                          "union": {
+                                            "field": {"name": "int32", "term": {"unit": {}}},
+                                            "typeName": "hydra.core.IntegerType"}}},
+                                      "typeName": "hydra.core.LiteralType"}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}}]}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -1167,53 +1059,44 @@
                             "field": {
                               "name": "union",
                               "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {"variable": "hydra.test.testTypes.testTypePersonOrSomethingName"}},
-                                    {
-                                      "name": "fields",
-                                      "term": {
-                                        "list": [
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "person"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "variable",
-                                                        "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}},
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "other"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "variable",
-                                                        "term": {
-                                                          "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}}]}}],
-                                  "typeName": "hydra.core.RowType"}}},
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "person"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "variable",
+                                                "term": {"variable": "hydra.test.testTypes.testTypePersonName"}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "other"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "variable",
+                                                "term": {
+                                                  "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}}]}},
                             "typeName": "hydra.core.Type"}}}],
                     "typeName": "hydra.core.ForallType"}}},
               "typeName": "hydra.core.Type"}}}},
@@ -1256,26 +1139,17 @@
                             "field": {
                               "name": "wrap",
                               "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {"variable": "hydra.test.testTypes.testTypePolymorphicWrapperName"}},
-                                    {
-                                      "name": "body",
-                                      "term": {
-                                        "union": {
-                                          "field": {
-                                            "name": "list",
-                                            "term": {
-                                              "union": {
-                                                "field": {
-                                                  "name": "variable",
-                                                  "term": {
-                                                    "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
-                                                "typeName": "hydra.core.Type"}}},
-                                          "typeName": "hydra.core.Type"}}}],
-                                  "typeName": "hydra.core.WrappedType"}}},
+                                "union": {
+                                  "field": {
+                                    "name": "list",
+                                    "term": {
+                                      "union": {
+                                        "field": {
+                                          "name": "variable",
+                                          "term": {
+                                            "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
+                                        "typeName": "hydra.core.Type"}}},
+                                  "typeName": "hydra.core.Type"}}},
                             "typeName": "hydra.core.Type"}}}],
                     "typeName": "hydra.core.ForallType"}}},
               "typeName": "hydra.core.Type"}}}},
@@ -1305,68 +1179,59 @@
               "field": {
                 "name": "union",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {"variable": "hydra.test.testTypes.testTypeSimpleNumberName"}},
-                      {
-                        "name": "fields",
-                        "term": {
-                          "list": [
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "int"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "literal",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "integer",
-                                                "term": {
-                                                  "union": {
-                                                    "field": {"name": "int32", "term": {"unit": {}}},
-                                                    "typeName": "hydra.core.IntegerType"}}},
-                                              "typeName": "hydra.core.LiteralType"}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "float"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "literal",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "float",
-                                                "term": {
-                                                  "union": {
-                                                    "field": {"name": "float32", "term": {"unit": {}}},
-                                                    "typeName": "hydra.core.FloatType"}}},
-                                              "typeName": "hydra.core.LiteralType"}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}}]}}],
-                    "typeName": "hydra.core.RowType"}}},
+                  "list": [
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "int"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "literal",
+                                  "term": {
+                                    "union": {
+                                      "field": {
+                                        "name": "integer",
+                                        "term": {
+                                          "union": {
+                                            "field": {"name": "int32", "term": {"unit": {}}},
+                                            "typeName": "hydra.core.IntegerType"}}},
+                                      "typeName": "hydra.core.LiteralType"}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "float"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "literal",
+                                  "term": {
+                                    "union": {
+                                      "field": {
+                                        "name": "float",
+                                        "term": {
+                                          "union": {
+                                            "field": {"name": "float32", "term": {"unit": {}}},
+                                            "typeName": "hydra.core.FloatType"}}},
+                                      "typeName": "hydra.core.LiteralType"}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}}]}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -1394,23 +1259,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {"variable": "hydra.test.testTypes.testTypeStringAliasName"}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -1464,80 +1320,71 @@
                                           "field": {
                                             "name": "wrap",
                                             "term": {
-                                              "record": {
-                                                "fields": [
-                                                  {
-                                                    "name": "typeName",
-                                                    "term": {"variable": "hydra.test.testTypes.testTypeSymmetricTripleName"}},
-                                                  {
-                                                    "name": "body",
-                                                    "term": {
-                                                      "union": {
-                                                        "field": {
-                                                          "name": "application",
+                                              "union": {
+                                                "field": {
+                                                  "name": "application",
+                                                  "term": {
+                                                    "record": {
+                                                      "fields": [
+                                                        {
+                                                          "name": "function",
                                                           "term": {
-                                                            "record": {
-                                                              "fields": [
-                                                                {
-                                                                  "name": "function",
-                                                                  "term": {
-                                                                    "union": {
-                                                                      "field": {
-                                                                        "name": "application",
+                                                            "union": {
+                                                              "field": {
+                                                                "name": "application",
+                                                                "term": {
+                                                                  "record": {
+                                                                    "fields": [
+                                                                      {
+                                                                        "name": "function",
                                                                         "term": {
-                                                                          "record": {
-                                                                            "fields": [
-                                                                              {
-                                                                                "name": "function",
-                                                                                "term": {
-                                                                                  "union": {
-                                                                                    "field": {
-                                                                                      "name": "application",
+                                                                          "union": {
+                                                                            "field": {
+                                                                              "name": "application",
+                                                                              "term": {
+                                                                                "record": {
+                                                                                  "fields": [
+                                                                                    {
+                                                                                      "name": "function",
                                                                                       "term": {
-                                                                                        "record": {
-                                                                                          "fields": [
-                                                                                            {
-                                                                                              "name": "function",
-                                                                                              "term": {
-                                                                                                "union": {
-                                                                                                  "field": {
-                                                                                                    "name": "variable",
-                                                                                                    "term": {"variable": "hydra.test.testTypes.testTypeTripleName"}},
-                                                                                                  "typeName": "hydra.core.Type"}}},
-                                                                                            {
-                                                                                              "name": "argument",
-                                                                                              "term": {
-                                                                                                "union": {
-                                                                                                  "field": {
-                                                                                                    "name": "variable",
-                                                                                                    "term": {
-                                                                                                      "wrap": {"body": {"literal": {"string": "v"}}, "typeName": "hydra.core.Name"}}},
-                                                                                                  "typeName": "hydra.core.Type"}}}],
-                                                                                          "typeName": "hydra.core.ApplicationType"}}},
-                                                                                    "typeName": "hydra.core.Type"}}},
-                                                                              {
-                                                                                "name": "argument",
-                                                                                "term": {
-                                                                                  "union": {
-                                                                                    "field": {
-                                                                                      "name": "variable",
+                                                                                        "union": {
+                                                                                          "field": {
+                                                                                            "name": "variable",
+                                                                                            "term": {"variable": "hydra.test.testTypes.testTypeTripleName"}},
+                                                                                          "typeName": "hydra.core.Type"}}},
+                                                                                    {
+                                                                                      "name": "argument",
                                                                                       "term": {
-                                                                                        "wrap": {"body": {"literal": {"string": "e"}}, "typeName": "hydra.core.Name"}}},
-                                                                                    "typeName": "hydra.core.Type"}}}],
-                                                                            "typeName": "hydra.core.ApplicationType"}}},
-                                                                      "typeName": "hydra.core.Type"}}},
-                                                                {
-                                                                  "name": "argument",
-                                                                  "term": {
-                                                                    "union": {
-                                                                      "field": {
-                                                                        "name": "variable",
+                                                                                        "union": {
+                                                                                          "field": {
+                                                                                            "name": "variable",
+                                                                                            "term": {
+                                                                                              "wrap": {"body": {"literal": {"string": "v"}}, "typeName": "hydra.core.Name"}}},
+                                                                                          "typeName": "hydra.core.Type"}}}],
+                                                                                  "typeName": "hydra.core.ApplicationType"}}},
+                                                                            "typeName": "hydra.core.Type"}}},
+                                                                      {
+                                                                        "name": "argument",
                                                                         "term": {
-                                                                          "wrap": {"body": {"literal": {"string": "v"}}, "typeName": "hydra.core.Name"}}},
-                                                                      "typeName": "hydra.core.Type"}}}],
-                                                              "typeName": "hydra.core.ApplicationType"}}},
-                                                        "typeName": "hydra.core.Type"}}}],
-                                                "typeName": "hydra.core.WrappedType"}}},
+                                                                          "union": {
+                                                                            "field": {
+                                                                              "name": "variable",
+                                                                              "term": {
+                                                                                "wrap": {"body": {"literal": {"string": "e"}}, "typeName": "hydra.core.Name"}}},
+                                                                            "typeName": "hydra.core.Type"}}}],
+                                                                    "typeName": "hydra.core.ApplicationType"}}},
+                                                              "typeName": "hydra.core.Type"}}},
+                                                        {
+                                                          "name": "argument",
+                                                          "term": {
+                                                            "union": {
+                                                              "field": {
+                                                                "name": "variable",
+                                                                "term": {
+                                                                  "wrap": {"body": {"literal": {"string": "v"}}, "typeName": "hydra.core.Name"}}},
+                                                              "typeName": "hydra.core.Type"}}}],
+                                                      "typeName": "hydra.core.ApplicationType"}}},
+                                                "typeName": "hydra.core.Type"}}},
                                           "typeName": "hydra.core.Type"}}}],
                                   "typeName": "hydra.core.ForallType"}}},
                             "typeName": "hydra.core.Type"}}}],
@@ -1569,63 +1416,54 @@
               "field": {
                 "name": "union",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {"variable": "hydra.test.testTypes.testTypeTimestampName"}},
-                      {
-                        "name": "fields",
-                        "term": {
-                          "list": [
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "unixTimeMillis"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "literal",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "integer",
-                                                "term": {
-                                                  "union": {
-                                                    "field": {"name": "uint64", "term": {"unit": {}}},
-                                                    "typeName": "hydra.core.IntegerType"}}},
-                                              "typeName": "hydra.core.LiteralType"}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "date"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "literal",
-                                          "term": {
-                                            "union": {
-                                              "field": {"name": "string", "term": {"unit": {}}},
-                                              "typeName": "hydra.core.LiteralType"}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}}]}}],
-                    "typeName": "hydra.core.RowType"}}},
+                  "list": [
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "unixTimeMillis"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "literal",
+                                  "term": {
+                                    "union": {
+                                      "field": {
+                                        "name": "integer",
+                                        "term": {
+                                          "union": {
+                                            "field": {"name": "uint64", "term": {"unit": {}}},
+                                            "typeName": "hydra.core.IntegerType"}}},
+                                      "typeName": "hydra.core.LiteralType"}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "date"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "literal",
+                                  "term": {
+                                    "union": {
+                                      "field": {"name": "string", "term": {"unit": {}}},
+                                      "typeName": "hydra.core.LiteralType"}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}}]}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -1692,73 +1530,64 @@
                                                         "field": {
                                                           "name": "record",
                                                           "term": {
-                                                            "record": {
-                                                              "fields": [
-                                                                {
-                                                                  "name": "typeName",
-                                                                  "term": {"variable": "hydra.test.testTypes.testTypeTripleName"}},
-                                                                {
-                                                                  "name": "fields",
-                                                                  "term": {
-                                                                    "list": [
-                                                                      {
-                                                                        "record": {
-                                                                          "fields": [
-                                                                            {
-                                                                              "name": "name",
-                                                                              "term": {
-                                                                                "wrap": {
-                                                                                  "body": {"literal": {"string": "first"}},
-                                                                                  "typeName": "hydra.core.Name"}}},
-                                                                            {
-                                                                              "name": "type",
-                                                                              "term": {
-                                                                                "union": {
-                                                                                  "field": {
-                                                                                    "name": "variable",
-                                                                                    "term": {
-                                                                                      "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
-                                                                                  "typeName": "hydra.core.Type"}}}],
-                                                                          "typeName": "hydra.core.FieldType"}},
-                                                                      {
-                                                                        "record": {
-                                                                          "fields": [
-                                                                            {
-                                                                              "name": "name",
-                                                                              "term": {
-                                                                                "wrap": {
-                                                                                  "body": {"literal": {"string": "second"}},
-                                                                                  "typeName": "hydra.core.Name"}}},
-                                                                            {
-                                                                              "name": "type",
-                                                                              "term": {
-                                                                                "union": {
-                                                                                  "field": {
-                                                                                    "name": "variable",
-                                                                                    "term": {
-                                                                                      "wrap": {"body": {"literal": {"string": "b"}}, "typeName": "hydra.core.Name"}}},
-                                                                                  "typeName": "hydra.core.Type"}}}],
-                                                                          "typeName": "hydra.core.FieldType"}},
-                                                                      {
-                                                                        "record": {
-                                                                          "fields": [
-                                                                            {
-                                                                              "name": "name",
-                                                                              "term": {
-                                                                                "wrap": {
-                                                                                  "body": {"literal": {"string": "third"}},
-                                                                                  "typeName": "hydra.core.Name"}}},
-                                                                            {
-                                                                              "name": "type",
-                                                                              "term": {
-                                                                                "union": {
-                                                                                  "field": {
-                                                                                    "name": "variable",
-                                                                                    "term": {
-                                                                                      "wrap": {"body": {"literal": {"string": "c"}}, "typeName": "hydra.core.Name"}}},
-                                                                                  "typeName": "hydra.core.Type"}}}],
-                                                                          "typeName": "hydra.core.FieldType"}}]}}],
-                                                              "typeName": "hydra.core.RowType"}}},
+                                                            "list": [
+                                                              {
+                                                                "record": {
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "name",
+                                                                      "term": {
+                                                                        "wrap": {
+                                                                          "body": {"literal": {"string": "first"}},
+                                                                          "typeName": "hydra.core.Name"}}},
+                                                                    {
+                                                                      "name": "type",
+                                                                      "term": {
+                                                                        "union": {
+                                                                          "field": {
+                                                                            "name": "variable",
+                                                                            "term": {
+                                                                              "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
+                                                                          "typeName": "hydra.core.Type"}}}],
+                                                                  "typeName": "hydra.core.FieldType"}},
+                                                              {
+                                                                "record": {
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "name",
+                                                                      "term": {
+                                                                        "wrap": {
+                                                                          "body": {"literal": {"string": "second"}},
+                                                                          "typeName": "hydra.core.Name"}}},
+                                                                    {
+                                                                      "name": "type",
+                                                                      "term": {
+                                                                        "union": {
+                                                                          "field": {
+                                                                            "name": "variable",
+                                                                            "term": {
+                                                                              "wrap": {"body": {"literal": {"string": "b"}}, "typeName": "hydra.core.Name"}}},
+                                                                          "typeName": "hydra.core.Type"}}}],
+                                                                  "typeName": "hydra.core.FieldType"}},
+                                                              {
+                                                                "record": {
+                                                                  "fields": [
+                                                                    {
+                                                                      "name": "name",
+                                                                      "term": {
+                                                                        "wrap": {
+                                                                          "body": {"literal": {"string": "third"}},
+                                                                          "typeName": "hydra.core.Name"}}},
+                                                                    {
+                                                                      "name": "type",
+                                                                      "term": {
+                                                                        "union": {
+                                                                          "field": {
+                                                                            "name": "variable",
+                                                                            "term": {
+                                                                              "wrap": {"body": {"literal": {"string": "c"}}, "typeName": "hydra.core.Name"}}},
+                                                                          "typeName": "hydra.core.Type"}}}],
+                                                                  "typeName": "hydra.core.FieldType"}}]}},
                                                         "typeName": "hydra.core.Type"}}}],
                                                 "typeName": "hydra.core.ForallType"}}},
                                           "typeName": "hydra.core.Type"}}}],
@@ -1792,74 +1621,65 @@
               "field": {
                 "name": "union",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {"variable": "hydra.test.testTypes.testTypeUnionMonomorphicName"}},
-                      {
-                        "name": "fields",
-                        "term": {
-                          "list": [
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "bool"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "literal",
-                                          "term": {
-                                            "union": {
-                                              "field": {"name": "boolean", "term": {"unit": {}}},
-                                              "typeName": "hydra.core.LiteralType"}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "string"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "literal",
-                                          "term": {
-                                            "union": {
-                                              "field": {"name": "string", "term": {"unit": {}}},
-                                              "typeName": "hydra.core.LiteralType"}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "unit"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {"name": "unit", "term": {"unit": {}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}}]}}],
-                    "typeName": "hydra.core.RowType"}}},
+                  "list": [
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "bool"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "literal",
+                                  "term": {
+                                    "union": {
+                                      "field": {"name": "boolean", "term": {"unit": {}}},
+                                      "typeName": "hydra.core.LiteralType"}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "string"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "literal",
+                                  "term": {
+                                    "union": {
+                                      "field": {"name": "string", "term": {"unit": {}}},
+                                      "typeName": "hydra.core.LiteralType"}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "unit"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {"name": "unit", "term": {"unit": {}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}}]}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -1900,96 +1720,86 @@
                             "field": {
                               "name": "union",
                               "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {
-                                        "variable": "hydra.test.testTypes.testTypeUnionPolymorphicRecursiveName"}},
-                                    {
-                                      "name": "fields",
-                                      "term": {
-                                        "list": [
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "bool"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "literal",
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "bool"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "literal",
+                                                "term": {
+                                                  "union": {
+                                                    "field": {"name": "boolean", "term": {"unit": {}}},
+                                                    "typeName": "hydra.core.LiteralType"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "value"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "variable",
+                                                "term": {
+                                                  "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "other"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "application",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "function",
                                                         "term": {
                                                           "union": {
-                                                            "field": {"name": "boolean", "term": {"unit": {}}},
-                                                            "typeName": "hydra.core.LiteralType"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}},
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "value"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "variable",
+                                                            "field": {
+                                                              "name": "variable",
+                                                              "term": {
+                                                                "variable": "hydra.test.testTypes.testTypeUnionPolymorphicRecursiveName"}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "argument",
                                                         "term": {
-                                                          "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}},
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "other"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "application",
-                                                        "term": {
-                                                          "record": {
-                                                            "fields": [
-                                                              {
-                                                                "name": "function",
-                                                                "term": {
-                                                                  "union": {
-                                                                    "field": {
-                                                                      "name": "variable",
-                                                                      "term": {
-                                                                        "variable": "hydra.test.testTypes.testTypeUnionPolymorphicRecursiveName"}},
-                                                                    "typeName": "hydra.core.Type"}}},
-                                                              {
-                                                                "name": "argument",
-                                                                "term": {
-                                                                  "union": {
-                                                                    "field": {
-                                                                      "name": "variable",
-                                                                      "term": {
-                                                                        "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
-                                                                    "typeName": "hydra.core.Type"}}}],
-                                                            "typeName": "hydra.core.ApplicationType"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}}]}}],
-                                  "typeName": "hydra.core.RowType"}}},
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "variable",
+                                                              "term": {
+                                                                "wrap": {"body": {"literal": {"string": "a"}}, "typeName": "hydra.core.Name"}}},
+                                                            "typeName": "hydra.core.Type"}}}],
+                                                    "typeName": "hydra.core.ApplicationType"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}}]}},
                             "typeName": "hydra.core.Type"}}}],
                     "typeName": "hydra.core.ForallType"}}},
               "typeName": "hydra.core.Type"}}}},
@@ -2019,16 +1829,7 @@
               "field": {
                 "name": "record",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {"variable": "hydra.test.testTypes.testTypeUnitName"}},
-                      {
-                        "name": "fields",
-                        "term": {
-                          "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.FieldType"}}}}],
-                    "typeName": "hydra.core.RowType"}}},
+                  "typeApplication": {"body": {"list": []}, "type": {"variable": "hydra.core.FieldType"}}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -2171,63 +1972,54 @@
               "field": {
                 "name": "union",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {"variable": "hydra.test.testTypes.eitherStringOrInt8TypeName"}},
-                      {
-                        "name": "fields",
-                        "term": {
-                          "list": [
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "left"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "literal",
-                                          "term": {
-                                            "union": {
-                                              "field": {"name": "string", "term": {"unit": {}}},
-                                              "typeName": "hydra.core.LiteralType"}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "right"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "literal",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "integer",
-                                                "term": {
-                                                  "union": {
-                                                    "field": {"name": "int8", "term": {"unit": {}}},
-                                                    "typeName": "hydra.core.IntegerType"}}},
-                                              "typeName": "hydra.core.LiteralType"}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}}]}}],
-                    "typeName": "hydra.core.RowType"}}},
+                  "list": [
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "left"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "literal",
+                                  "term": {
+                                    "union": {
+                                      "field": {"name": "string", "term": {"unit": {}}},
+                                      "typeName": "hydra.core.LiteralType"}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "right"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "literal",
+                                  "term": {
+                                    "union": {
+                                      "field": {
+                                        "name": "integer",
+                                        "term": {
+                                          "union": {
+                                            "field": {"name": "int8", "term": {"unit": {}}},
+                                            "typeName": "hydra.core.IntegerType"}}},
+                                      "typeName": "hydra.core.LiteralType"}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}}]}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -2585,63 +2377,54 @@
               "field": {
                 "name": "union",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {"variable": "hydra.test.testTypes.stringOrIntName"}},
-                      {
-                        "name": "fields",
-                        "term": {
-                          "list": [
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "left"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "literal",
-                                          "term": {
-                                            "union": {
-                                              "field": {"name": "string", "term": {"unit": {}}},
-                                              "typeName": "hydra.core.LiteralType"}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "right"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "literal",
-                                          "term": {
-                                            "union": {
-                                              "field": {
-                                                "name": "integer",
-                                                "term": {
-                                                  "union": {
-                                                    "field": {"name": "int32", "term": {"unit": {}}},
-                                                    "typeName": "hydra.core.IntegerType"}}},
-                                              "typeName": "hydra.core.LiteralType"}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}}]}}],
-                    "typeName": "hydra.core.RowType"}}},
+                  "list": [
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "left"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "literal",
+                                  "term": {
+                                    "union": {
+                                      "field": {"name": "string", "term": {"unit": {}}},
+                                      "typeName": "hydra.core.LiteralType"}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "right"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "literal",
+                                  "term": {
+                                    "union": {
+                                      "field": {
+                                        "name": "integer",
+                                        "term": {
+                                          "union": {
+                                            "field": {"name": "int32", "term": {"unit": {}}},
+                                            "typeName": "hydra.core.IntegerType"}}},
+                                      "typeName": "hydra.core.LiteralType"}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}}]}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {

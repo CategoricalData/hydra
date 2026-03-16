@@ -3156,9 +3156,9 @@ public interface Rewriting {
         
         @Override
         public hydra.core.Type visit(hydra.core.Type.Record rt) {
-          return new hydra.core.Type.Record(new hydra.core.RowType(((rt).value).typeName, hydra.lib.lists.Map.apply(
+          return new hydra.core.Type.Record(hydra.lib.lists.Map.apply(
             forField,
-            ((rt).value).fields)));
+            (rt).value));
         }
         
         @Override
@@ -3168,9 +3168,9 @@ public interface Rewriting {
         
         @Override
         public hydra.core.Type visit(hydra.core.Type.Union rt) {
-          return new hydra.core.Type.Union(new hydra.core.RowType(((rt).value).typeName, hydra.lib.lists.Map.apply(
+          return new hydra.core.Type.Union(hydra.lib.lists.Map.apply(
             forField,
-            ((rt).value).fields)));
+            (rt).value));
         }
         
         @Override
@@ -3185,7 +3185,7 @@ public interface Rewriting {
         
         @Override
         public hydra.core.Type visit(hydra.core.Type.Wrap wt) {
-          return new hydra.core.Type.Wrap(new hydra.core.WrappedType(((wt).value).typeName, (recurse).apply(((wt).value).body)));
+          return new hydra.core.Type.Wrap((recurse).apply((wt).value));
         }
       });
     }));
@@ -3282,15 +3282,13 @@ public interface Rewriting {
       
       @Override
       public hydra.util.Either<T1, hydra.core.Type> visit(hydra.core.Type.Record rt) {
-        hydra.util.ConsList<hydra.core.FieldType> fields = ((rt).value).fields;
-        hydra.core.Name name = ((rt).value).typeName;
         return hydra.lib.eithers.Bind.apply(
           hydra.lib.eithers.MapList.apply(
             (java.util.function.Function<hydra.core.FieldType, hydra.util.Either<T1, hydra.core.FieldType>>) (v1 -> hydra.rewriting.Rewriting.<T1>rewriteTypeM_forField(
               recurse,
               v1)),
-            fields),
-          (java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.util.Either<T1, hydra.core.Type>>) (rfields -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Record(new hydra.core.RowType(name, rfields)))));
+            (rt).value),
+          (java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.util.Either<T1, hydra.core.Type>>) (rfields -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Record(rfields))));
       }
       
       @Override
@@ -3302,15 +3300,13 @@ public interface Rewriting {
       
       @Override
       public hydra.util.Either<T1, hydra.core.Type> visit(hydra.core.Type.Union rt) {
-        hydra.util.ConsList<hydra.core.FieldType> fields = ((rt).value).fields;
-        hydra.core.Name name = ((rt).value).typeName;
         return hydra.lib.eithers.Bind.apply(
           hydra.lib.eithers.MapList.apply(
             (java.util.function.Function<hydra.core.FieldType, hydra.util.Either<T1, hydra.core.FieldType>>) (v1 -> hydra.rewriting.Rewriting.<T1>rewriteTypeM_forField2(
               recurse,
               v1)),
-            fields),
-          (java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.util.Either<T1, hydra.core.Type>>) (rfields -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Union(new hydra.core.RowType(name, rfields)))));
+            (rt).value),
+          (java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.util.Either<T1, hydra.core.Type>>) (rfields -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Union(rfields))));
       }
       
       @Override
@@ -3326,8 +3322,8 @@ public interface Rewriting {
       @Override
       public hydra.util.Either<T1, hydra.core.Type> visit(hydra.core.Type.Wrap wt) {
         return hydra.lib.eithers.Bind.apply(
-          (recurse).apply(((wt).value).body),
-          (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (t -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Wrap(new hydra.core.WrappedType(((wt).value).typeName, t)))));
+          (recurse).apply((wt).value),
+          (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (t -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Wrap(t))));
       }
     });
   }
@@ -3909,7 +3905,7 @@ public interface Rewriting {
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Record rt) {
         return hydra.lib.lists.Map.apply(
           projected -> projected.type,
-          ((rt).value).fields);
+          (rt).value);
       }
       
       @Override
@@ -3921,7 +3917,7 @@ public interface Rewriting {
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Union rt) {
         return hydra.lib.lists.Map.apply(
           projected -> projected.type,
-          ((rt).value).fields);
+          (rt).value);
       }
       
       @Override
@@ -3936,7 +3932,7 @@ public interface Rewriting {
       
       @Override
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Wrap nt) {
-        return hydra.util.ConsList.of(((nt).value).body);
+        return hydra.util.ConsList.of((nt).value);
       }
     });
   }
@@ -4156,42 +4152,18 @@ public interface Rewriting {
       () -> hydra.rewriting.Rewriting.freeVariablesInType(typ));
   }
   
-  static hydra.util.PersistentSet<hydra.core.Name> typeNamesInType(hydra.core.Type typ0) {
-    java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.util.PersistentSet<hydra.core.Name>>> addNames = (java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.util.PersistentSet<hydra.core.Name>>>) (names -> (java.util.function.Function<hydra.core.Type, hydra.util.PersistentSet<hydra.core.Name>>) (typ -> (typ).accept(new hydra.core.Type.PartialVisitor<>() {
-      @Override
-      public hydra.util.PersistentSet<hydra.core.Name> otherwise(hydra.core.Type instance) {
-        return names;
-      }
-      
-      @Override
-      public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Type.Record rowType) {
-        hydra.core.Name tname = ((rowType).value).typeName;
-        return hydra.lib.sets.Insert.apply(
-          tname,
-          names);
-      }
-      
-      @Override
-      public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Type.Union rowType) {
-        hydra.core.Name tname = ((rowType).value).typeName;
-        return hydra.lib.sets.Insert.apply(
-          tname,
-          names);
-      }
-      
-      @Override
-      public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Type.Wrap wrappedType) {
-        hydra.core.Name tname = ((wrappedType).value).typeName;
-        return hydra.lib.sets.Insert.apply(
-          tname,
-          names);
-      }
-    })));
-    return hydra.rewriting.Rewriting.foldOverType(
+  static <T0> hydra.util.PersistentSet<T0> typeNamesInType(hydra.core.Type typ0) {
+    return hydra.rewriting.Rewriting.<hydra.util.PersistentSet<T0>>foldOverType(
       new hydra.coders.TraversalOrder.Pre(),
-      addNames,
-      (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()),
+      p0 -> p1 -> hydra.rewriting.Rewriting.<hydra.util.PersistentSet<T0>, hydra.core.Type>typeNamesInType_addNames(
+        p0,
+        p1),
+      (hydra.util.PersistentSet<T0>) (hydra.lib.sets.Empty.<T0>apply()),
       typ0);
+  }
+  
+  static <T1, T2> T1 typeNamesInType_addNames(T1 names, T2 typ) {
+    return names;
   }
   
   static hydra.core.Type typeSchemeToFType(hydra.core.TypeScheme ts) {

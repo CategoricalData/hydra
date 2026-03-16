@@ -198,8 +198,7 @@
                                                                       "either": {
                                                                         "@left": {
                                                                           "wrap": {
-                                                                            "body": {
-                                                                              "literal": {"string": "expected record of type hydra.phantoms.TBinding"}},
+                                                                            "body": {"literal": {"string": "expected record"}},
                                                                             "typeName": "hydra.error.DecodingError"}}}},
                                                                     "type": {"variable": "hydra.error.DecodingError"}}},
                                                                 "type": {
@@ -365,7 +364,7 @@
                                                                       "either": {
                                                                         "@left": {
                                                                           "wrap": {
-                                                                            "body": {"literal": {"string": "expected wrapped type hydra.phantoms.TTerm"}},
+                                                                            "body": {"literal": {"string": "expected wrapped type"}},
                                                                             "typeName": "hydra.error.DecodingError"}}}},
                                                                     "type": {"variable": "hydra.error.DecodingError"}}},
                                                                 "type": {

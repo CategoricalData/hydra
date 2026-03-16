@@ -24,8 +24,7 @@ import qualified Data.Set as S
 coderDirection :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Coders.CoderDirection)
 coderDirection cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -34,9 +33,8 @@ coderDirection cx raw = (Eithers.either (\err -> Left (Error.DecodingError err))
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.coders.CoderDirection"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 languageName :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Coders.LanguageName)
 languageName cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -45,13 +43,12 @@ languageName cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (
       Core.LiteralString v2 -> (Right v2)
       _ -> (Left (Error.DecodingError "expected string literal"))) v1)
     _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0)))
-  _ -> (Left (Error.DecodingError "expected wrapped type hydra.coders.LanguageName"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected wrapped type"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 traversalOrder :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Coders.TraversalOrder)
 traversalOrder cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -60,6 +57,5 @@ traversalOrder cx raw = (Eithers.either (\err -> Left (Error.DecodingError err))
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.coders.TraversalOrder"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
