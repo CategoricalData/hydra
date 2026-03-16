@@ -495,6 +495,15 @@ source files.
     failures. Implement it using `hydra.dsl.Terms` helpers to construct
     term-level results.
 
+11. **Floating-point test portability**: Transcendental math functions (`sin`,
+    `exp`, `atanh`, etc.) can produce results that differ by 1 ULP across
+    platforms due to different `libm` implementations — even within GHC. When
+    adding float64 test cases for these functions, use `roundedPrimCase1` /
+    `roundedPrimCase2` (which wrap results in `roundFloat64 12`) instead of
+    raw `primCase` with GHC-computed expected values. See
+    [extending-tests.md](docs/recipes/extending-tests.md#floating-point-test-portability)
+    for details.
+
 ## Version tracking
 
 The canonical version lives in the `VERSION` file at the repository root. Run `bin/bump-version.sh X.Y.Z`
