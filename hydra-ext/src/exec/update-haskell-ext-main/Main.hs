@@ -13,4 +13,10 @@ main = do
   writeHaskell "src/gen-main/haskell" universeModules hydraExtModules
 
   putStrLn ""
+  putStrLn "Generating ext DSL modules to src/gen-main/haskell..."
+  putStrLn ""
+
+  writeDslHaskell "src/gen-main/haskell" universeModules hydraExtModules
+
+  putStrLn ""
   putStrLn "=== Done! ==="
