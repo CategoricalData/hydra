@@ -294,7 +294,48 @@ javaLiteralToJavaPrimary = def "javaLiteralToJavaPrimary" $
 
 javaExpressionToJavaPrimary :: TBinding (Java.Expression -> Java.Primary)
 javaExpressionToJavaPrimary = def "javaExpressionToJavaPrimary" $
-  lambda "e" $ JavaDsl.expressionToPrimary (var "e")
+  doc "Convert an Expression to a Primary, avoiding unnecessary parentheses when the expression is already a simple primary chain" $
+  lambda "e" $
+    -- Try to unwrap Expression -> AssignmentExpression(conditional) -> ConditionalExpression(simple) -> ...
+    -- If the expression is just a wrapped Primary, extract it; otherwise wrap in parens
+    "fallback" <~ JavaDsl.expressionToPrimary (var "e") $
+    cases Java._Expression (var "e") (Just $ var "fallback") [
+      Java._Expression_assignment>>: "ae" ~>
+        cases Java._AssignmentExpression (var "ae") (Just $ var "fallback") [
+          Java._AssignmentExpression_conditional>>: "ce" ~>
+            cases Java._ConditionalExpression (var "ce") (Just $ var "fallback") [
+              Java._ConditionalExpression_simple>>: "cor" ~>
+                "cands" <~ unwrap Java._ConditionalOrExpression @@ var "cor" $
+                Logic.ifElse (Equality.equal (Lists.length $ var "cands") (int32 1))
+                  ("iors" <~ unwrap Java._ConditionalAndExpression @@ (Lists.head $ var "cands") $
+                  Logic.ifElse (Equality.equal (Lists.length $ var "iors") (int32 1))
+                    ("xors" <~ unwrap Java._InclusiveOrExpression @@ (Lists.head $ var "iors") $
+                    Logic.ifElse (Equality.equal (Lists.length $ var "xors") (int32 1))
+                      ("ands" <~ unwrap Java._ExclusiveOrExpression @@ (Lists.head $ var "xors") $
+                      Logic.ifElse (Equality.equal (Lists.length $ var "ands") (int32 1))
+                        ("eqs" <~ unwrap Java._AndExpression @@ (Lists.head $ var "ands") $
+                        Logic.ifElse (Equality.equal (Lists.length $ var "eqs") (int32 1))
+                        (cases Java._EqualityExpression (Lists.head $ var "eqs") (Just $ var "fallback") [
+                          Java._EqualityExpression_unary>>: "rel" ~>
+                            cases Java._RelationalExpression (var "rel") (Just $ var "fallback") [
+                              Java._RelationalExpression_simple>>: "shift" ~>
+                                cases Java._ShiftExpression (var "shift") (Just $ var "fallback") [
+                                  Java._ShiftExpression_unary>>: "add" ~>
+                                    cases Java._AdditiveExpression (var "add") (Just $ var "fallback") [
+                                      Java._AdditiveExpression_unary>>: "mul" ~>
+                                        cases Java._MultiplicativeExpression (var "mul") (Just $ var "fallback") [
+                                          Java._MultiplicativeExpression_unary>>: "unary" ~>
+                                            cases Java._UnaryExpression (var "unary") (Just $ var "fallback") [
+                                              Java._UnaryExpression_other>>: "npm" ~>
+                                                cases Java._UnaryExpressionNotPlusMinus (var "npm") (Just $ var "fallback") [
+                                                  Java._UnaryExpressionNotPlusMinus_postfix>>: "pf" ~>
+                                                    cases Java._PostfixExpression (var "pf") (Just $ var "fallback") [
+                                                      Java._PostfixExpression_primary>>: "p" ~> var "p"]]]]]]]])
+                        (var "fallback"))
+                        (var "fallback"))
+                      (var "fallback"))
+                    (var "fallback"))
+                  (var "fallback")]]]
 
 javaPrimaryToJavaUnaryExpression :: TBinding (Java.Primary -> Java.UnaryExpression)
 javaPrimaryToJavaUnaryExpression = def "javaPrimaryToJavaUnaryExpression" $
