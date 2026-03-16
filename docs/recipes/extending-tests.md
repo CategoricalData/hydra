@@ -260,15 +260,22 @@ When writing test cases for `hydra.lib.math` primitives that use transcendental 
    - `sin(0) = 0`, `cos(0) = 1`, `exp(0) = 1`, `log(1) = 0`, `sqrt(4) = 2`, `atanh(0) = 0`
    - These are mathematically exact and every `libm` implementation agrees on them.
 
-2. **Use `roundFloat64` / `roundFloat32` / `roundBigfloat` for non-trivial inputs.** These primitives
-   round a floating-point value to N significant digits, eliminating platform-dependent differences in the
-   last few digits. Apply rounding to both the expected value (in the test definition) and wrap the test so
-   that the actual result is also rounded before comparison. For example:
+2. **Use `roundedPrimCase1` / `roundedPrimCase2` for non-trivial inputs.** These helpers (defined in
+   `Hydra.Sources.Test.Lib.Math`) wrap both the computed result and the expected value in
+   `roundFloat64 12`, rounding to 12 significant digits. This eliminates platform-dependent differences
+   in the last few digits while preserving meaningful precision. For example:
    ```haskell
    -- In Hydra.Sources.Test.Lib.Math:
-   -- Instead of: test "sinh 1" 1.0 (sinh 1.0)
-   -- Use a rounded expected value and compare rounded results
+   -- Instead of:  test "sinh 1" 1.0 (sinh 1.0)       -- fragile: GHC-computed value may not match
+   -- Use:         roundedPrimCase1 "sinh 1" _math_sinh 1.0 (sinh 1.0)  -- platform-independent
+   --
+   -- For two-argument primitives:
+   --              roundedPrimCase2 "atan2 3 4" _math_atan2 3.0 4.0 (atan2 3.0 4.0)
    ```
+
+   The underlying primitives `roundFloat64`, `roundFloat32`, and `roundBigfloat` (`hydra.lib.math`)
+   round a floating-point value to N significant digits. They are available for general use, not just
+   tests.
 
 3. **Understand which operations are safe.** IEEE 754 guarantees exact results for:
    - Addition, subtraction, multiplication, division
