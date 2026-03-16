@@ -212,8 +212,15 @@ writeDslSourceHaskell basePath = do
 generateDslModules :: [Module] -> [Module] -> IO [Module]
 generateDslModules = generateCoderModulesIO Dsls.dslModule "DSL"
 
+-- | Write DSL modules with doInfer=False. All bindings are fully typed.
 writeDslHaskell :: FilePath -> [Module] -> [Module] -> IO ()
-writeDslHaskell = writeCoderHaskell generateDslModules
+writeDslHaskell basePath universeModules typeModules = do
+    dslMods <- generateDslModules universeModules typeModules
+    let withCoreDeps = fmap addCoreDep dslMods
+    _ <- generateSources moduleToHaskell haskellLanguage False False False False basePath universeModules withCoreDeps
+    return ()
+  where
+    addCoreDep m = m { moduleTypeDependencies = CoreTypes.ns : moduleTypeDependencies m }
 
 ----------------------------------------
 -- Module Inference
