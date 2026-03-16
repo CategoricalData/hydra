@@ -14,7 +14,7 @@ import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
 import qualified Hydra.Dsl.Meta.Coders       as Coders
-import qualified Hydra.Dsl.Meta.Compute      as Compute
+import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Context      as Ctx
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Meta.Error        as Error
@@ -805,13 +805,13 @@ composeCoders :: TBinding (Coder a b -> Coder b c -> Coder a c)
 composeCoders = define "composeCoders" $
   doc "Compose two coders into a single coder" $
   "c1" ~> "c2" ~>
-  Compute.coder
+  Util.coder
     ("cx" ~> "a" ~>
-      "b1" <<~ Compute.coderEncode (var "c1") @@ var "cx" @@ var "a" $
-      Compute.coderEncode (var "c2") @@ var "cx" @@ var "b1")
+      "b1" <<~ Util.coderEncode (var "c1") @@ var "cx" @@ var "a" $
+      Util.coderEncode (var "c2") @@ var "cx" @@ var "b1")
     ("cx" ~> "c" ~>
-      "b2" <<~ Compute.coderDecode (var "c2") @@ var "cx" @@ var "c" $
-      Compute.coderDecode (var "c1") @@ var "cx" @@ var "b2")
+      "b2" <<~ Util.coderDecode (var "c2") @@ var "cx" @@ var "c" $
+      Util.coderDecode (var "c1") @@ var "cx" @@ var "b2")
 
 simpleLanguageAdapter :: TBinding (Language -> Context -> Graph -> Type -> Prelude.Either String (Adapter Type Type Term Term))
 simpleLanguageAdapter = define "simpleLanguageAdapter" $
@@ -820,11 +820,11 @@ simpleLanguageAdapter = define "simpleLanguageAdapter" $
   "constraints" <~ Coders.languageConstraintsProjection (var "lang") $
   "litmap" <~ adaptLiteralTypesMap @@ var "constraints" $
   "adaptedType" <<~ adaptType @@ var "constraints" @@ var "litmap" @@ var "typ" $
-  right $ Compute.adapter
+  right $ Util.adapter
     false
     (var "typ")
     (var "adaptedType")
-    (Compute.coder
+    (Util.coder
       ("cx" ~> "term" ~>
         Eithers.bimap ("_s" ~> Ctx.inContext (Error.errorOther $ Error.otherError $ var "_s") (var "cx")) ("_x" ~> var "_x")
           (adaptTerm @@ var "constraints" @@ var "litmap" @@ var "cx" @@ var "g" @@ var "term"))

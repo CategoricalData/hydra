@@ -17,7 +17,7 @@ import qualified Hydra.Dsl.Meta.Accessors                  as Accessors
 import qualified Hydra.Dsl.Ast                        as Ast
 import qualified Hydra.Dsl.Meta.Base                       as MetaBase
 import qualified Hydra.Dsl.Meta.Coders                     as Coders
-import qualified Hydra.Dsl.Meta.Compute                    as Compute
+import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Error                      as Error
 import qualified Hydra.Dsl.Meta.Core                       as Core
@@ -146,12 +146,12 @@ examplePgSchema :: TBinding (PGM.Schema Graph () String)
 examplePgSchema = define "examplePgSchema" $
   doc "Example property graph schema with string values" $
   record PGM._Schema [
-    PGM._Schema_vertexIdTypes>>: Compute.coder (constant $ constant $ right unit) (constant $ constant $ right MetaTypes.unit),
-    PGM._Schema_vertexIds>>: Compute.coder ("cx" ~> "t" ~> expString @@ var "cx" @@ var "t") ("_cx" ~> "s" ~> right (Core.termLiteral $ Core.literalString $ var "s")),
-    PGM._Schema_edgeIdTypes>>: Compute.coder (constant $ constant $ right unit) (constant $ constant $ right MetaTypes.unit),
-    PGM._Schema_edgeIds>>: Compute.coder ("cx" ~> "t" ~> expString @@ var "cx" @@ var "t") ("_cx" ~> "s" ~> right (Core.termLiteral $ Core.literalString $ var "s")),
-    PGM._Schema_propertyTypes>>: Compute.coder (constant $ constant $ right unit) (constant $ constant $ right MetaTypes.unit),
-    PGM._Schema_propertyValues>>: Compute.coder ("cx" ~> "t" ~> expString @@ var "cx" @@ var "t") ("_cx" ~> "s" ~> right (Core.termLiteral $ Core.literalString $ var "s")),
+    PGM._Schema_vertexIdTypes>>: Util.coder (constant $ constant $ right unit) (constant $ constant $ right MetaTypes.unit),
+    PGM._Schema_vertexIds>>: Util.coder ("cx" ~> "t" ~> expString @@ var "cx" @@ var "t") ("_cx" ~> "s" ~> right (Core.termLiteral $ Core.literalString $ var "s")),
+    PGM._Schema_edgeIdTypes>>: Util.coder (constant $ constant $ right unit) (constant $ constant $ right MetaTypes.unit),
+    PGM._Schema_edgeIds>>: Util.coder ("cx" ~> "t" ~> expString @@ var "cx" @@ var "t") ("_cx" ~> "s" ~> right (Core.termLiteral $ Core.literalString $ var "s")),
+    PGM._Schema_propertyTypes>>: Util.coder (constant $ constant $ right unit) (constant $ constant $ right MetaTypes.unit),
+    PGM._Schema_propertyValues>>: Util.coder ("cx" ~> "t" ~> expString @@ var "cx" @@ var "t") ("_cx" ~> "s" ~> right (Core.termLiteral $ Core.literalString $ var "s")),
     PGM._Schema_annotations>>: defaultTinkerpopAnnotations,
     PGM._Schema_defaultVertexId>>: string "defaultVertexId",
     PGM._Schema_defaultEdgeId>>: string "defaultEdgeId"]
@@ -188,7 +188,7 @@ typeApplicationTermToPropertyGraph = define "typeApplicationTermToPropertyGraph"
                   (project PG._ElementTree PG._ElementTree_self @@ var "t")
                   (Lists.concat (Lists.map (var "flattenTree") (project PG._ElementTree PG._ElementTree_dependencies @@ var "t")))]
               $ var "flattenTree" @@ var "tree")
-            (Compute.coderEncode (Compute.adapterCoder $ var "adapter") @@ var "cx'" @@ var "term")))
+            (Util.coderEncode (Util.adapterCoder $ var "adapter") @@ var "cx'" @@ var "term")))
 
 -- | Get all elements from a lazy graph
 lazyGraphToElements :: TBinding (PG.LazyGraph v -> [PG.Element v])
@@ -206,7 +206,7 @@ pgElementToJson = define "pgElementToJson" $
   "schema" ~> "el" ~> "cx" ~>
     match PG._Element Nothing [
       PG._Element_vertex>>: "vertex" ~>
-        Eithers.bind (Compute.coderDecode (project PGM._Schema PGM._Schema_vertexIds @@ var "schema") @@ var "cx" @@ (project PG._Vertex PG._Vertex_id @@ var "vertex"))
+        Eithers.bind (Util.coderDecode (project PGM._Schema PGM._Schema_vertexIds @@ var "schema") @@ var "cx" @@ (project PG._Vertex PG._Vertex_id @@ var "vertex"))
           ("term" ~> lets [
             "labelJson">: Json.valueString (unwrap PG._VertexLabel @@ (project PG._Vertex PG._Vertex_label @@ var "vertex"))] $
             Eithers.map
@@ -217,9 +217,9 @@ pgElementToJson = define "pgElementToJson" $
                   var "propsJson"]))
               (propsToJson @@ var "schema" @@ var "cx" @@ (project PG._Vertex PG._Vertex_properties @@ var "vertex"))),
       PG._Element_edge>>: "edge" ~>
-        Eithers.bind (Compute.coderDecode (project PGM._Schema PGM._Schema_edgeIds @@ var "schema") @@ var "cx" @@ (project PG._Edge PG._Edge_id @@ var "edge"))
-          ("term" ~> Eithers.bind (Compute.coderDecode (project PGM._Schema PGM._Schema_vertexIds @@ var "schema") @@ var "cx" @@ (project PG._Edge PG._Edge_out @@ var "edge"))
-            ("termOut" ~> Eithers.bind (Compute.coderDecode (project PGM._Schema PGM._Schema_vertexIds @@ var "schema") @@ var "cx" @@ (project PG._Edge PG._Edge_in @@ var "edge"))
+        Eithers.bind (Util.coderDecode (project PGM._Schema PGM._Schema_edgeIds @@ var "schema") @@ var "cx" @@ (project PG._Edge PG._Edge_id @@ var "edge"))
+          ("term" ~> Eithers.bind (Util.coderDecode (project PGM._Schema PGM._Schema_vertexIds @@ var "schema") @@ var "cx" @@ (project PG._Edge PG._Edge_out @@ var "edge"))
+            ("termOut" ~> Eithers.bind (Util.coderDecode (project PGM._Schema PGM._Schema_vertexIds @@ var "schema") @@ var "cx" @@ (project PG._Edge PG._Edge_in @@ var "edge"))
               ("termIn" ~> lets [
                 "labelJson">: Json.valueString (unwrap PG._EdgeLabel @@ (project PG._Edge PG._Edge_label @@ var "edge"))] $
                 Eithers.map
@@ -251,6 +251,6 @@ propsToJson = "schema" ~> "cx" ~> "pairs" ~>
         ("pair" ~> lets [
           "key">: Pairs.first $ var "pair",
           "v">: Pairs.second $ var "pair"] $
-          Eithers.bind (Compute.coderDecode (project PGM._Schema PGM._Schema_propertyValues @@ var "schema") @@ var "cx" @@ var "v")
+          Eithers.bind (Util.coderDecode (project PGM._Schema PGM._Schema_propertyValues @@ var "schema") @@ var "cx" @@ var "v")
             ("term" ~> right (pair (unwrap PG._PropertyKey @@ var "key") (Json.valueString $ ShowCore.term @@ var "term"))))
         (Maps.toList $ var "pairs")))

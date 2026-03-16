@@ -17,7 +17,7 @@ import qualified Hydra.Dsl.Meta.Accessors                  as Accessors
 import qualified Hydra.Dsl.Ast                        as Ast
 import qualified Hydra.Dsl.Meta.Base                       as MetaBase
 import qualified Hydra.Dsl.Meta.Coders                     as Coders
-import qualified Hydra.Dsl.Meta.Compute                    as Compute
+import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Error                      as Error
 import qualified Hydra.Dsl.Meta.Core                       as Core
@@ -237,7 +237,7 @@ pgVertexWithAdjacentEdgesToGraphsonVertex = define "pgVertexWithAdjacentEdgesToG
 graphsonVertexToJsonCoder :: TBinding (Coder G.Vertex JM.Value)
 graphsonVertexToJsonCoder = define "graphsonVertexToJsonCoder" $
   doc "A coder that converts GraphSON vertices to JSON. Decoding is not supported." $
-  Compute.coder
+  Util.coder
     ("_cx" ~> "v" ~> right (Coder.vertexToJson @@ var "v"))
     ("_cx" ~> "_" ~> Ctx.failInContext (Error.errorOther $ Error.otherError $ string "decoding GraphSON JSON is currently unsupported") (var "_cx"))
 
