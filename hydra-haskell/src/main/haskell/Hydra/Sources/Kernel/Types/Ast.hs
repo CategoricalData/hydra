@@ -31,6 +31,7 @@ module_ = Module ns elements [] [Core.ns] $
       opExpr,
       padding,
       precedence,
+      seqExpr,
       symbol,
       ws]
 
@@ -93,7 +94,21 @@ expr = define "Expr" $
       opExpr,
     "brackets">:
       doc "A bracketed expression"
-      bracketExpr]
+      bracketExpr,
+    "seq">:
+      doc "A sequence of expressions joined by a separator, treated as structural layout (not subject to parenthesization)"
+      seqExpr]
+
+seqExpr :: Binding
+seqExpr = define "SeqExpr" $
+  doc "A sequence of expressions joined by a separator operator. Unlike OpExpr, parenthesize ignores SeqExpr boundaries." $
+  T.record [
+    "op">:
+      doc "The separator operator"
+      op,
+    "elements">:
+      doc "The expressions to join" $
+      T.list expr]
 
 indentedExpression :: Binding
 indentedExpression = define "IndentedExpression" $
