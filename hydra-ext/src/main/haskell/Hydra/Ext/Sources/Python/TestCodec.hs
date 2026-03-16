@@ -240,7 +240,7 @@ pythonTestCodec = define "pythonTestCodec" $
   doc "Create a Python TestCodec for pytest-based test generation" $
   lambda "namespaces_" $
     record _TestCodec [
-      _TestCodec_language>>: Coders.languageName "python",
+      _TestCodec_language>>: Coders.languageName (string "python"),
       _TestCodec_fileExtension>>: wrap _FileExtension (string "py"),
       _TestCodec_encodeTerm>>: termToPython @@ var "namespaces_",
       _TestCodec_encodeType>>: typeToPython @@ var "namespaces_",
@@ -259,7 +259,7 @@ pythonTestCodecWithContext = define "pythonTestCodecWithContext" $
   doc "Create an efficient Python TestCodec with a pre-built Graph, skipping casts for performance" $
   lambda "namespaces_" $ lambda "tcontext" $
     record _TestCodec [
-      _TestCodec_language>>: Coders.languageName "python",
+      _TestCodec_language>>: Coders.languageName (string "python"),
       _TestCodec_fileExtension>>: wrap _FileExtension (string "py"),
       _TestCodec_encodeTerm>>: termToPythonWithContext @@ var "namespaces_" @@ var "tcontext" @@ boolean True,
       _TestCodec_encodeType>>: typeToPython @@ var "namespaces_",

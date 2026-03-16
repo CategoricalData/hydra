@@ -169,7 +169,7 @@ haskellTestCodec = define "haskellTestCodec" $
   doc "Create a Haskell TestCodec that uses the real Haskell coder" $
   lambda "namespaces" $
     record _TestCodec [
-      _TestCodec_language>>: Coders.languageName "haskell",
+      _TestCodec_language>>: Coders.languageName (string "haskell"),
       _TestCodec_fileExtension>>: wrap _FileExtension (string "hs"),
       _TestCodec_encodeTerm>>: termToHaskell @@ var "namespaces",
       _TestCodec_encodeType>>: typeToHaskell @@ var "namespaces",

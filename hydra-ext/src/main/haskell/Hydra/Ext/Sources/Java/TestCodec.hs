@@ -180,7 +180,7 @@ javaTestCodec :: TBinding TestCodec
 javaTestCodec = define "javaTestCodec" $
   doc "Create a Java TestCodec for JUnit-based test generation" $
   record _TestCodec [
-    _TestCodec_language>>: Coders.languageName "java",
+    _TestCodec_language>>: Coders.languageName (string "java"),
     _TestCodec_fileExtension>>: wrap _FileExtension (string "java"),
     _TestCodec_encodeTerm>>: asTerm termToJava,
     _TestCodec_encodeType>>: asTerm typeToJava,
