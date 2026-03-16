@@ -6,6 +6,7 @@ module Hydra.Dsl.Error where
 
 import qualified Hydra.Core as Core
 import qualified Hydra.Error as Error
+import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Typing as Typing
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
@@ -15,396 +16,1005 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-checkingErrorIncorrectUnification :: (Error.IncorrectUnificationError -> Error.CheckingError)
-checkingErrorIncorrectUnification x = (Error.CheckingErrorIncorrectUnification x)
-
-checkingErrorNotAForallType :: (Error.NotAForallTypeError -> Error.CheckingError)
-checkingErrorNotAForallType x = (Error.CheckingErrorNotAForallType x)
-
-checkingErrorNotAFunctionType :: (Error.NotAFunctionTypeError -> Error.CheckingError)
-checkingErrorNotAFunctionType x = (Error.CheckingErrorNotAFunctionType x)
-
-checkingErrorTypeArityMismatch :: (Error.TypeArityMismatchError -> Error.CheckingError)
-checkingErrorTypeArityMismatch x = (Error.CheckingErrorTypeArityMismatch x)
-
-checkingErrorTypeMismatch :: (Error.TypeMismatchError -> Error.CheckingError)
-checkingErrorTypeMismatch x = (Error.CheckingErrorTypeMismatch x)
-
-checkingErrorUnboundTypeVariables :: (Error.UnboundTypeVariablesError -> Error.CheckingError)
-checkingErrorUnboundTypeVariables x = (Error.CheckingErrorUnboundTypeVariables x)
-
-checkingErrorUnequalTypes :: (Error.UnequalTypesError -> Error.CheckingError)
-checkingErrorUnequalTypes x = (Error.CheckingErrorUnequalTypes x)
-
-checkingErrorUnsupportedTermVariant :: (Error.UnsupportedTermVariantError -> Error.CheckingError)
-checkingErrorUnsupportedTermVariant x = (Error.CheckingErrorUnsupportedTermVariant x)
-
-checkingErrorUntypedLambda :: (Error.UntypedLambdaError -> Error.CheckingError)
-checkingErrorUntypedLambda x = (Error.CheckingErrorUntypedLambda x)
-
-checkingErrorUntypedLetBinding :: (Error.UntypedLetBindingError -> Error.CheckingError)
-checkingErrorUntypedLetBinding x = (Error.CheckingErrorUntypedLetBinding x)
-
-decodingError :: (String -> Error.DecodingError)
-decodingError x = (Error.DecodingError x)
-
-unDecodingError :: (Error.DecodingError -> String)
-unDecodingError = Error.unDecodingError
-
-duplicateBindingError :: (Core.Name -> Error.DuplicateBindingError)
-duplicateBindingError name = Error.DuplicateBindingError {
-  Error.duplicateBindingErrorName = name}
-
-duplicateBindingErrorName :: (Error.DuplicateBindingError -> Core.Name)
-duplicateBindingErrorName = Error.duplicateBindingErrorName
-
-duplicateBindingErrorWithName :: (t0 -> Core.Name -> Error.DuplicateBindingError)
-duplicateBindingErrorWithName original newVal = Error.DuplicateBindingError {
-  Error.duplicateBindingErrorName = newVal}
-
-duplicateFieldError :: (Core.Name -> Error.DuplicateFieldError)
-duplicateFieldError name = Error.DuplicateFieldError {
-  Error.duplicateFieldErrorName = name}
-
-duplicateFieldErrorName :: (Error.DuplicateFieldError -> Core.Name)
-duplicateFieldErrorName = Error.duplicateFieldErrorName
-
-duplicateFieldErrorWithName :: (t0 -> Core.Name -> Error.DuplicateFieldError)
-duplicateFieldErrorWithName original newVal = Error.DuplicateFieldError {
-  Error.duplicateFieldErrorName = newVal}
-
-errorChecking :: (Error.CheckingError -> Error.Error)
-errorChecking x = (Error.ErrorChecking x)
-
-errorDecoding :: (Error.DecodingError -> Error.Error)
-errorDecoding x = (Error.ErrorDecoding x)
-
-errorDuplicateBinding :: (Error.DuplicateBindingError -> Error.Error)
-errorDuplicateBinding x = (Error.ErrorDuplicateBinding x)
-
-errorDuplicateField :: (Error.DuplicateFieldError -> Error.Error)
-errorDuplicateField x = (Error.ErrorDuplicateField x)
-
-errorOther :: (Error.OtherError -> Error.Error)
-errorOther x = (Error.ErrorOther x)
-
-errorUndefinedField :: (Error.UndefinedFieldError -> Error.Error)
-errorUndefinedField x = (Error.ErrorUndefinedField x)
-
-errorUndefinedTerm :: (Error.UndefinedTermError -> Error.Error)
-errorUndefinedTerm x = (Error.ErrorUndefinedTerm x)
-
-errorUndefinedType :: (Error.UndefinedTypeError -> Error.Error)
-errorUndefinedType x = (Error.ErrorUndefinedType x)
-
-errorUnexpectedTermVariant :: (Error.UnexpectedTermVariantError -> Error.Error)
-errorUnexpectedTermVariant x = (Error.ErrorUnexpectedTermVariant x)
-
-errorUnexpectedTypeVariant :: (Error.UnexpectedTypeVariantError -> Error.Error)
-errorUnexpectedTypeVariant x = (Error.ErrorUnexpectedTypeVariant x)
-
-errorUnification :: (Error.UnificationError -> Error.Error)
-errorUnification x = (Error.ErrorUnification x)
-
-incorrectUnificationError :: (Typing.TypeSubst -> Error.IncorrectUnificationError)
-incorrectUnificationError substitution = Error.IncorrectUnificationError {
-  Error.incorrectUnificationErrorSubstitution = substitution}
-
-incorrectUnificationErrorSubstitution :: (Error.IncorrectUnificationError -> Typing.TypeSubst)
-incorrectUnificationErrorSubstitution = Error.incorrectUnificationErrorSubstitution
-
-incorrectUnificationErrorWithSubstitution :: (t0 -> Typing.TypeSubst -> Error.IncorrectUnificationError)
-incorrectUnificationErrorWithSubstitution original newVal = Error.IncorrectUnificationError {
-  Error.incorrectUnificationErrorSubstitution = newVal}
-
-notAForallTypeError :: (Core.Type -> [Core.Type] -> Error.NotAForallTypeError)
-notAForallTypeError type_ typeArguments = Error.NotAForallTypeError {
-  Error.notAForallTypeErrorType = type_,
-  Error.notAForallTypeErrorTypeArguments = typeArguments}
-
-notAForallTypeErrorType :: (Error.NotAForallTypeError -> Core.Type)
-notAForallTypeErrorType = Error.notAForallTypeErrorType
-
-notAForallTypeErrorTypeArguments :: (Error.NotAForallTypeError -> [Core.Type])
-notAForallTypeErrorTypeArguments = Error.notAForallTypeErrorTypeArguments
-
-notAForallTypeErrorWithType :: (Error.NotAForallTypeError -> Core.Type -> Error.NotAForallTypeError)
-notAForallTypeErrorWithType original newVal = Error.NotAForallTypeError {
-  Error.notAForallTypeErrorType = newVal,
-  Error.notAForallTypeErrorTypeArguments = (Error.notAForallTypeErrorTypeArguments original)}
-
-notAForallTypeErrorWithTypeArguments :: (Error.NotAForallTypeError -> [Core.Type] -> Error.NotAForallTypeError)
-notAForallTypeErrorWithTypeArguments original newVal = Error.NotAForallTypeError {
-  Error.notAForallTypeErrorType = (Error.notAForallTypeErrorType original),
-  Error.notAForallTypeErrorTypeArguments = newVal}
-
-notAFunctionTypeError :: (Core.Type -> Error.NotAFunctionTypeError)
-notAFunctionTypeError type_ = Error.NotAFunctionTypeError {
-  Error.notAFunctionTypeErrorType = type_}
-
-notAFunctionTypeErrorType :: (Error.NotAFunctionTypeError -> Core.Type)
-notAFunctionTypeErrorType = Error.notAFunctionTypeErrorType
-
-notAFunctionTypeErrorWithType :: (t0 -> Core.Type -> Error.NotAFunctionTypeError)
-notAFunctionTypeErrorWithType original newVal = Error.NotAFunctionTypeError {
-  Error.notAFunctionTypeErrorType = newVal}
-
-otherError :: (String -> Error.OtherError)
-otherError x = (Error.OtherError x)
-
-unOtherError :: (Error.OtherError -> String)
-unOtherError = Error.unOtherError
-
-typeArityMismatchError :: (Core.Type -> Int -> Int -> [Core.Type] -> Error.TypeArityMismatchError)
-typeArityMismatchError type_ expectedArity actualArity typeArguments = Error.TypeArityMismatchError {
-  Error.typeArityMismatchErrorType = type_,
-  Error.typeArityMismatchErrorExpectedArity = expectedArity,
-  Error.typeArityMismatchErrorActualArity = actualArity,
-  Error.typeArityMismatchErrorTypeArguments = typeArguments}
-
-typeArityMismatchErrorType :: (Error.TypeArityMismatchError -> Core.Type)
-typeArityMismatchErrorType = Error.typeArityMismatchErrorType
-
-typeArityMismatchErrorExpectedArity :: (Error.TypeArityMismatchError -> Int)
-typeArityMismatchErrorExpectedArity = Error.typeArityMismatchErrorExpectedArity
-
-typeArityMismatchErrorActualArity :: (Error.TypeArityMismatchError -> Int)
-typeArityMismatchErrorActualArity = Error.typeArityMismatchErrorActualArity
-
-typeArityMismatchErrorTypeArguments :: (Error.TypeArityMismatchError -> [Core.Type])
-typeArityMismatchErrorTypeArguments = Error.typeArityMismatchErrorTypeArguments
-
-typeArityMismatchErrorWithType :: (Error.TypeArityMismatchError -> Core.Type -> Error.TypeArityMismatchError)
-typeArityMismatchErrorWithType original newVal = Error.TypeArityMismatchError {
-  Error.typeArityMismatchErrorType = newVal,
-  Error.typeArityMismatchErrorExpectedArity = (Error.typeArityMismatchErrorExpectedArity original),
-  Error.typeArityMismatchErrorActualArity = (Error.typeArityMismatchErrorActualArity original),
-  Error.typeArityMismatchErrorTypeArguments = (Error.typeArityMismatchErrorTypeArguments original)}
-
-typeArityMismatchErrorWithExpectedArity :: (Error.TypeArityMismatchError -> Int -> Error.TypeArityMismatchError)
-typeArityMismatchErrorWithExpectedArity original newVal = Error.TypeArityMismatchError {
-  Error.typeArityMismatchErrorType = (Error.typeArityMismatchErrorType original),
-  Error.typeArityMismatchErrorExpectedArity = newVal,
-  Error.typeArityMismatchErrorActualArity = (Error.typeArityMismatchErrorActualArity original),
-  Error.typeArityMismatchErrorTypeArguments = (Error.typeArityMismatchErrorTypeArguments original)}
-
-typeArityMismatchErrorWithActualArity :: (Error.TypeArityMismatchError -> Int -> Error.TypeArityMismatchError)
-typeArityMismatchErrorWithActualArity original newVal = Error.TypeArityMismatchError {
-  Error.typeArityMismatchErrorType = (Error.typeArityMismatchErrorType original),
-  Error.typeArityMismatchErrorExpectedArity = (Error.typeArityMismatchErrorExpectedArity original),
-  Error.typeArityMismatchErrorActualArity = newVal,
-  Error.typeArityMismatchErrorTypeArguments = (Error.typeArityMismatchErrorTypeArguments original)}
-
-typeArityMismatchErrorWithTypeArguments :: (Error.TypeArityMismatchError -> [Core.Type] -> Error.TypeArityMismatchError)
-typeArityMismatchErrorWithTypeArguments original newVal = Error.TypeArityMismatchError {
-  Error.typeArityMismatchErrorType = (Error.typeArityMismatchErrorType original),
-  Error.typeArityMismatchErrorExpectedArity = (Error.typeArityMismatchErrorExpectedArity original),
-  Error.typeArityMismatchErrorActualArity = (Error.typeArityMismatchErrorActualArity original),
-  Error.typeArityMismatchErrorTypeArguments = newVal}
-
-typeMismatchError :: (Core.Type -> Core.Type -> Error.TypeMismatchError)
-typeMismatchError expectedType actualType = Error.TypeMismatchError {
-  Error.typeMismatchErrorExpectedType = expectedType,
-  Error.typeMismatchErrorActualType = actualType}
-
-typeMismatchErrorExpectedType :: (Error.TypeMismatchError -> Core.Type)
-typeMismatchErrorExpectedType = Error.typeMismatchErrorExpectedType
-
-typeMismatchErrorActualType :: (Error.TypeMismatchError -> Core.Type)
-typeMismatchErrorActualType = Error.typeMismatchErrorActualType
-
-typeMismatchErrorWithExpectedType :: (Error.TypeMismatchError -> Core.Type -> Error.TypeMismatchError)
-typeMismatchErrorWithExpectedType original newVal = Error.TypeMismatchError {
-  Error.typeMismatchErrorExpectedType = newVal,
-  Error.typeMismatchErrorActualType = (Error.typeMismatchErrorActualType original)}
-
-typeMismatchErrorWithActualType :: (Error.TypeMismatchError -> Core.Type -> Error.TypeMismatchError)
-typeMismatchErrorWithActualType original newVal = Error.TypeMismatchError {
-  Error.typeMismatchErrorExpectedType = (Error.typeMismatchErrorExpectedType original),
-  Error.typeMismatchErrorActualType = newVal}
-
-unboundTypeVariablesError :: (S.Set Core.Name -> Core.Type -> Error.UnboundTypeVariablesError)
-unboundTypeVariablesError variables type_ = Error.UnboundTypeVariablesError {
-  Error.unboundTypeVariablesErrorVariables = variables,
-  Error.unboundTypeVariablesErrorType = type_}
-
-unboundTypeVariablesErrorVariables :: (Error.UnboundTypeVariablesError -> S.Set Core.Name)
-unboundTypeVariablesErrorVariables = Error.unboundTypeVariablesErrorVariables
-
-unboundTypeVariablesErrorType :: (Error.UnboundTypeVariablesError -> Core.Type)
-unboundTypeVariablesErrorType = Error.unboundTypeVariablesErrorType
-
-unboundTypeVariablesErrorWithVariables :: (Error.UnboundTypeVariablesError -> S.Set Core.Name -> Error.UnboundTypeVariablesError)
-unboundTypeVariablesErrorWithVariables original newVal = Error.UnboundTypeVariablesError {
-  Error.unboundTypeVariablesErrorVariables = newVal,
-  Error.unboundTypeVariablesErrorType = (Error.unboundTypeVariablesErrorType original)}
-
-unboundTypeVariablesErrorWithType :: (Error.UnboundTypeVariablesError -> Core.Type -> Error.UnboundTypeVariablesError)
-unboundTypeVariablesErrorWithType original newVal = Error.UnboundTypeVariablesError {
-  Error.unboundTypeVariablesErrorVariables = (Error.unboundTypeVariablesErrorVariables original),
-  Error.unboundTypeVariablesErrorType = newVal}
-
-undefinedFieldError :: (Core.Name -> Core.Name -> Error.UndefinedFieldError)
-undefinedFieldError fieldName typeName = Error.UndefinedFieldError {
-  Error.undefinedFieldErrorFieldName = fieldName,
-  Error.undefinedFieldErrorTypeName = typeName}
-
-undefinedFieldErrorFieldName :: (Error.UndefinedFieldError -> Core.Name)
-undefinedFieldErrorFieldName = Error.undefinedFieldErrorFieldName
-
-undefinedFieldErrorTypeName :: (Error.UndefinedFieldError -> Core.Name)
-undefinedFieldErrorTypeName = Error.undefinedFieldErrorTypeName
-
-undefinedFieldErrorWithFieldName :: (Error.UndefinedFieldError -> Core.Name -> Error.UndefinedFieldError)
-undefinedFieldErrorWithFieldName original newVal = Error.UndefinedFieldError {
-  Error.undefinedFieldErrorFieldName = newVal,
-  Error.undefinedFieldErrorTypeName = (Error.undefinedFieldErrorTypeName original)}
-
-undefinedFieldErrorWithTypeName :: (Error.UndefinedFieldError -> Core.Name -> Error.UndefinedFieldError)
-undefinedFieldErrorWithTypeName original newVal = Error.UndefinedFieldError {
-  Error.undefinedFieldErrorFieldName = (Error.undefinedFieldErrorFieldName original),
-  Error.undefinedFieldErrorTypeName = newVal}
-
-undefinedTermError :: (Core.Name -> Error.UndefinedTermError)
-undefinedTermError name = Error.UndefinedTermError {
-  Error.undefinedTermErrorName = name}
-
-undefinedTermErrorName :: (Error.UndefinedTermError -> Core.Name)
-undefinedTermErrorName = Error.undefinedTermErrorName
-
-undefinedTermErrorWithName :: (t0 -> Core.Name -> Error.UndefinedTermError)
-undefinedTermErrorWithName original newVal = Error.UndefinedTermError {
-  Error.undefinedTermErrorName = newVal}
-
-undefinedTypeError :: (Core.Name -> Error.UndefinedTypeError)
-undefinedTypeError name = Error.UndefinedTypeError {
-  Error.undefinedTypeErrorName = name}
-
-undefinedTypeErrorName :: (Error.UndefinedTypeError -> Core.Name)
-undefinedTypeErrorName = Error.undefinedTypeErrorName
-
-undefinedTypeErrorWithName :: (t0 -> Core.Name -> Error.UndefinedTypeError)
-undefinedTypeErrorWithName original newVal = Error.UndefinedTypeError {
-  Error.undefinedTypeErrorName = newVal}
-
-unequalTypesError :: ([Core.Type] -> String -> Error.UnequalTypesError)
-unequalTypesError types description = Error.UnequalTypesError {
-  Error.unequalTypesErrorTypes = types,
-  Error.unequalTypesErrorDescription = description}
-
-unequalTypesErrorTypes :: (Error.UnequalTypesError -> [Core.Type])
-unequalTypesErrorTypes = Error.unequalTypesErrorTypes
-
-unequalTypesErrorDescription :: (Error.UnequalTypesError -> String)
-unequalTypesErrorDescription = Error.unequalTypesErrorDescription
-
-unequalTypesErrorWithTypes :: (Error.UnequalTypesError -> [Core.Type] -> Error.UnequalTypesError)
-unequalTypesErrorWithTypes original newVal = Error.UnequalTypesError {
-  Error.unequalTypesErrorTypes = newVal,
-  Error.unequalTypesErrorDescription = (Error.unequalTypesErrorDescription original)}
-
-unequalTypesErrorWithDescription :: (Error.UnequalTypesError -> String -> Error.UnequalTypesError)
-unequalTypesErrorWithDescription original newVal = Error.UnequalTypesError {
-  Error.unequalTypesErrorTypes = (Error.unequalTypesErrorTypes original),
-  Error.unequalTypesErrorDescription = newVal}
-
-unexpectedTermVariantError :: (Variants.TermVariant -> Core.Term -> Error.UnexpectedTermVariantError)
-unexpectedTermVariantError expectedVariant actualTerm = Error.UnexpectedTermVariantError {
-  Error.unexpectedTermVariantErrorExpectedVariant = expectedVariant,
-  Error.unexpectedTermVariantErrorActualTerm = actualTerm}
-
-unexpectedTermVariantErrorExpectedVariant :: (Error.UnexpectedTermVariantError -> Variants.TermVariant)
-unexpectedTermVariantErrorExpectedVariant = Error.unexpectedTermVariantErrorExpectedVariant
-
-unexpectedTermVariantErrorActualTerm :: (Error.UnexpectedTermVariantError -> Core.Term)
-unexpectedTermVariantErrorActualTerm = Error.unexpectedTermVariantErrorActualTerm
-
-unexpectedTermVariantErrorWithExpectedVariant :: (Error.UnexpectedTermVariantError -> Variants.TermVariant -> Error.UnexpectedTermVariantError)
-unexpectedTermVariantErrorWithExpectedVariant original newVal = Error.UnexpectedTermVariantError {
-  Error.unexpectedTermVariantErrorExpectedVariant = newVal,
-  Error.unexpectedTermVariantErrorActualTerm = (Error.unexpectedTermVariantErrorActualTerm original)}
-
-unexpectedTermVariantErrorWithActualTerm :: (Error.UnexpectedTermVariantError -> Core.Term -> Error.UnexpectedTermVariantError)
-unexpectedTermVariantErrorWithActualTerm original newVal = Error.UnexpectedTermVariantError {
-  Error.unexpectedTermVariantErrorExpectedVariant = (Error.unexpectedTermVariantErrorExpectedVariant original),
-  Error.unexpectedTermVariantErrorActualTerm = newVal}
-
-unexpectedTypeVariantError :: (Variants.TypeVariant -> Core.Type -> Error.UnexpectedTypeVariantError)
-unexpectedTypeVariantError expectedVariant actualType = Error.UnexpectedTypeVariantError {
-  Error.unexpectedTypeVariantErrorExpectedVariant = expectedVariant,
-  Error.unexpectedTypeVariantErrorActualType = actualType}
-
-unexpectedTypeVariantErrorExpectedVariant :: (Error.UnexpectedTypeVariantError -> Variants.TypeVariant)
-unexpectedTypeVariantErrorExpectedVariant = Error.unexpectedTypeVariantErrorExpectedVariant
-
-unexpectedTypeVariantErrorActualType :: (Error.UnexpectedTypeVariantError -> Core.Type)
-unexpectedTypeVariantErrorActualType = Error.unexpectedTypeVariantErrorActualType
-
-unexpectedTypeVariantErrorWithExpectedVariant :: (Error.UnexpectedTypeVariantError -> Variants.TypeVariant -> Error.UnexpectedTypeVariantError)
-unexpectedTypeVariantErrorWithExpectedVariant original newVal = Error.UnexpectedTypeVariantError {
-  Error.unexpectedTypeVariantErrorExpectedVariant = newVal,
-  Error.unexpectedTypeVariantErrorActualType = (Error.unexpectedTypeVariantErrorActualType original)}
-
-unexpectedTypeVariantErrorWithActualType :: (Error.UnexpectedTypeVariantError -> Core.Type -> Error.UnexpectedTypeVariantError)
-unexpectedTypeVariantErrorWithActualType original newVal = Error.UnexpectedTypeVariantError {
-  Error.unexpectedTypeVariantErrorExpectedVariant = (Error.unexpectedTypeVariantErrorExpectedVariant original),
-  Error.unexpectedTypeVariantErrorActualType = newVal}
-
-unificationError :: (Core.Type -> Core.Type -> String -> Error.UnificationError)
-unificationError leftType rightType message = Error.UnificationError {
-  Error.unificationErrorLeftType = leftType,
-  Error.unificationErrorRightType = rightType,
-  Error.unificationErrorMessage = message}
-
-unificationErrorLeftType :: (Error.UnificationError -> Core.Type)
-unificationErrorLeftType = Error.unificationErrorLeftType
-
-unificationErrorRightType :: (Error.UnificationError -> Core.Type)
-unificationErrorRightType = Error.unificationErrorRightType
-
-unificationErrorMessage :: (Error.UnificationError -> String)
-unificationErrorMessage = Error.unificationErrorMessage
-
-unificationErrorWithLeftType :: (Error.UnificationError -> Core.Type -> Error.UnificationError)
-unificationErrorWithLeftType original newVal = Error.UnificationError {
-  Error.unificationErrorLeftType = newVal,
-  Error.unificationErrorRightType = (Error.unificationErrorRightType original),
-  Error.unificationErrorMessage = (Error.unificationErrorMessage original)}
-
-unificationErrorWithRightType :: (Error.UnificationError -> Core.Type -> Error.UnificationError)
-unificationErrorWithRightType original newVal = Error.UnificationError {
-  Error.unificationErrorLeftType = (Error.unificationErrorLeftType original),
-  Error.unificationErrorRightType = newVal,
-  Error.unificationErrorMessage = (Error.unificationErrorMessage original)}
-
-unificationErrorWithMessage :: (Error.UnificationError -> String -> Error.UnificationError)
-unificationErrorWithMessage original newVal = Error.UnificationError {
-  Error.unificationErrorLeftType = (Error.unificationErrorLeftType original),
-  Error.unificationErrorRightType = (Error.unificationErrorRightType original),
-  Error.unificationErrorMessage = newVal}
-
-unsupportedTermVariantError :: (Variants.TermVariant -> Error.UnsupportedTermVariantError)
-unsupportedTermVariantError termVariant = Error.UnsupportedTermVariantError {
-  Error.unsupportedTermVariantErrorTermVariant = termVariant}
-
-unsupportedTermVariantErrorTermVariant :: (Error.UnsupportedTermVariantError -> Variants.TermVariant)
-unsupportedTermVariantErrorTermVariant = Error.unsupportedTermVariantErrorTermVariant
-
-unsupportedTermVariantErrorWithTermVariant :: (t0 -> Variants.TermVariant -> Error.UnsupportedTermVariantError)
-unsupportedTermVariantErrorWithTermVariant original newVal = Error.UnsupportedTermVariantError {
-  Error.unsupportedTermVariantErrorTermVariant = newVal}
-
-untypedLambdaError :: Error.UntypedLambdaError
-untypedLambdaError = Error.UntypedLambdaError {
-}
-
-untypedLetBindingError :: (Core.Binding -> Error.UntypedLetBindingError)
-untypedLetBindingError binding = Error.UntypedLetBindingError {
-  Error.untypedLetBindingErrorBinding = binding}
-
-untypedLetBindingErrorBinding :: (Error.UntypedLetBindingError -> Core.Binding)
-untypedLetBindingErrorBinding = Error.untypedLetBindingErrorBinding
-
-untypedLetBindingErrorWithBinding :: (t0 -> Core.Binding -> Error.UntypedLetBindingError)
-untypedLetBindingErrorWithBinding original newVal = Error.UntypedLetBindingError {
-  Error.untypedLetBindingErrorBinding = newVal}
+checkingErrorIncorrectUnification :: (Phantoms.TTerm Error.IncorrectUnificationError -> Phantoms.TTerm Error.CheckingError)
+checkingErrorIncorrectUnification x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.error.CheckingError"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "incorrectUnification"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
+
+checkingErrorNotAForallType :: (Phantoms.TTerm Error.NotAForallTypeError -> Phantoms.TTerm Error.CheckingError)
+checkingErrorNotAForallType x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.error.CheckingError"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "notAForallType"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
+
+checkingErrorNotAFunctionType :: (Phantoms.TTerm Error.NotAFunctionTypeError -> Phantoms.TTerm Error.CheckingError)
+checkingErrorNotAFunctionType x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.error.CheckingError"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "notAFunctionType"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
+
+checkingErrorTypeArityMismatch :: (Phantoms.TTerm Error.TypeArityMismatchError -> Phantoms.TTerm Error.CheckingError)
+checkingErrorTypeArityMismatch x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.error.CheckingError"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "typeArityMismatch"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
+
+checkingErrorTypeMismatch :: (Phantoms.TTerm Error.TypeMismatchError -> Phantoms.TTerm Error.CheckingError)
+checkingErrorTypeMismatch x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.error.CheckingError"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "typeMismatch"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
+
+checkingErrorUnboundTypeVariables :: (Phantoms.TTerm Error.UnboundTypeVariablesError -> Phantoms.TTerm Error.CheckingError)
+checkingErrorUnboundTypeVariables x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.error.CheckingError"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "unboundTypeVariables"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
+
+checkingErrorUnequalTypes :: (Phantoms.TTerm Error.UnequalTypesError -> Phantoms.TTerm Error.CheckingError)
+checkingErrorUnequalTypes x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.error.CheckingError"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "unequalTypes"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
+
+checkingErrorUnsupportedTermVariant :: (Phantoms.TTerm Error.UnsupportedTermVariantError -> Phantoms.TTerm Error.CheckingError)
+checkingErrorUnsupportedTermVariant x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.error.CheckingError"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "unsupportedTermVariant"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
+
+checkingErrorUntypedLambda :: (Phantoms.TTerm Error.UntypedLambdaError -> Phantoms.TTerm Error.CheckingError)
+checkingErrorUntypedLambda x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.error.CheckingError"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "untypedLambda"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
+
+checkingErrorUntypedLetBinding :: (Phantoms.TTerm Error.UntypedLetBindingError -> Phantoms.TTerm Error.CheckingError)
+checkingErrorUntypedLetBinding x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.error.CheckingError"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "untypedLetBinding"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
+
+decodingError :: (Phantoms.TTerm String -> Phantoms.TTerm Error.DecodingError)
+decodingError x = (Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+  Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
+  Core.wrappedTermBody = (Phantoms.unTTerm x)})))
+
+unDecodingError :: (Phantoms.TTerm Error.DecodingError -> Phantoms.TTerm String)
+unDecodingError x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.error.DecodingError")))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+duplicateBindingError :: (Phantoms.TTerm Core.Name -> Phantoms.TTerm Error.DuplicateBindingError)
+duplicateBindingError name = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.DuplicateBindingError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "name"),
+      Core.fieldTerm = (Phantoms.unTTerm name)}]})))
+
+duplicateBindingErrorName :: (Phantoms.TTerm Error.DuplicateBindingError -> Phantoms.TTerm Core.Name)
+duplicateBindingErrorName x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.DuplicateBindingError"),
+    Core.projectionField = (Core.Name "name")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+duplicateBindingErrorWithName :: (Phantoms.TTerm Error.DuplicateBindingError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Error.DuplicateBindingError)
+duplicateBindingErrorWithName original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.DuplicateBindingError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "name"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
+
+duplicateFieldError :: (Phantoms.TTerm Core.Name -> Phantoms.TTerm Error.DuplicateFieldError)
+duplicateFieldError name = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.DuplicateFieldError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "name"),
+      Core.fieldTerm = (Phantoms.unTTerm name)}]})))
+
+duplicateFieldErrorName :: (Phantoms.TTerm Error.DuplicateFieldError -> Phantoms.TTerm Core.Name)
+duplicateFieldErrorName x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.DuplicateFieldError"),
+    Core.projectionField = (Core.Name "name")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+duplicateFieldErrorWithName :: (Phantoms.TTerm Error.DuplicateFieldError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Error.DuplicateFieldError)
+duplicateFieldErrorWithName original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.DuplicateFieldError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "name"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
+
+errorChecking :: (Phantoms.TTerm Error.CheckingError -> Phantoms.TTerm Error.Error)
+errorChecking x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.error.Error"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "checking"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
+
+errorDecoding :: (Phantoms.TTerm Error.DecodingError -> Phantoms.TTerm Error.Error)
+errorDecoding x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.error.Error"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "decoding"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
+
+errorDuplicateBinding :: (Phantoms.TTerm Error.DuplicateBindingError -> Phantoms.TTerm Error.Error)
+errorDuplicateBinding x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.error.Error"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "duplicateBinding"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
+
+errorDuplicateField :: (Phantoms.TTerm Error.DuplicateFieldError -> Phantoms.TTerm Error.Error)
+errorDuplicateField x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.error.Error"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "duplicateField"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
+
+errorOther :: (Phantoms.TTerm Error.OtherError -> Phantoms.TTerm Error.Error)
+errorOther x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.error.Error"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "other"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
+
+errorUndefinedField :: (Phantoms.TTerm Error.UndefinedFieldError -> Phantoms.TTerm Error.Error)
+errorUndefinedField x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.error.Error"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "undefinedField"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
+
+errorUndefinedTerm :: (Phantoms.TTerm Error.UndefinedTermError -> Phantoms.TTerm Error.Error)
+errorUndefinedTerm x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.error.Error"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "undefinedTerm"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
+
+errorUndefinedType :: (Phantoms.TTerm Error.UndefinedTypeError -> Phantoms.TTerm Error.Error)
+errorUndefinedType x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.error.Error"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "undefinedType"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
+
+errorUnexpectedTermVariant :: (Phantoms.TTerm Error.UnexpectedTermVariantError -> Phantoms.TTerm Error.Error)
+errorUnexpectedTermVariant x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.error.Error"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "unexpectedTermVariant"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
+
+errorUnexpectedTypeVariant :: (Phantoms.TTerm Error.UnexpectedTypeVariantError -> Phantoms.TTerm Error.Error)
+errorUnexpectedTypeVariant x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.error.Error"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "unexpectedTypeVariant"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
+
+errorUnification :: (Phantoms.TTerm Error.UnificationError -> Phantoms.TTerm Error.Error)
+errorUnification x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.error.Error"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "unification"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
+
+incorrectUnificationError :: (Phantoms.TTerm Typing.TypeSubst -> Phantoms.TTerm Error.IncorrectUnificationError)
+incorrectUnificationError substitution = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.IncorrectUnificationError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "substitution"),
+      Core.fieldTerm = (Phantoms.unTTerm substitution)}]})))
+
+incorrectUnificationErrorSubstitution :: (Phantoms.TTerm Error.IncorrectUnificationError -> Phantoms.TTerm Typing.TypeSubst)
+incorrectUnificationErrorSubstitution x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.IncorrectUnificationError"),
+    Core.projectionField = (Core.Name "substitution")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+incorrectUnificationErrorWithSubstitution :: (Phantoms.TTerm Error.IncorrectUnificationError -> Phantoms.TTerm Typing.TypeSubst -> Phantoms.TTerm Error.IncorrectUnificationError)
+incorrectUnificationErrorWithSubstitution original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.IncorrectUnificationError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "substitution"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
+
+notAForallTypeError :: (Phantoms.TTerm Core.Type -> Phantoms.TTerm [Core.Type] -> Phantoms.TTerm Error.NotAForallTypeError)
+notAForallTypeError type_ typeArguments = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.NotAForallTypeError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "type"),
+      Core.fieldTerm = (Phantoms.unTTerm type_)},
+    Core.Field {
+      Core.fieldName = (Core.Name "typeArguments"),
+      Core.fieldTerm = (Phantoms.unTTerm typeArguments)}]})))
+
+notAForallTypeErrorType :: (Phantoms.TTerm Error.NotAForallTypeError -> Phantoms.TTerm Core.Type)
+notAForallTypeErrorType x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.NotAForallTypeError"),
+    Core.projectionField = (Core.Name "type")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+notAForallTypeErrorTypeArguments :: (Phantoms.TTerm Error.NotAForallTypeError -> Phantoms.TTerm [Core.Type])
+notAForallTypeErrorTypeArguments x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.NotAForallTypeError"),
+    Core.projectionField = (Core.Name "typeArguments")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+notAForallTypeErrorWithType :: (Phantoms.TTerm Error.NotAForallTypeError -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Error.NotAForallTypeError)
+notAForallTypeErrorWithType original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.NotAForallTypeError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "type"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "typeArguments"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.NotAForallTypeError"),
+          Core.projectionField = (Core.Name "typeArguments")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
+
+notAForallTypeErrorWithTypeArguments :: (Phantoms.TTerm Error.NotAForallTypeError -> Phantoms.TTerm [Core.Type] -> Phantoms.TTerm Error.NotAForallTypeError)
+notAForallTypeErrorWithTypeArguments original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.NotAForallTypeError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "type"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.NotAForallTypeError"),
+          Core.projectionField = (Core.Name "type")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "typeArguments"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
+
+notAFunctionTypeError :: (Phantoms.TTerm Core.Type -> Phantoms.TTerm Error.NotAFunctionTypeError)
+notAFunctionTypeError type_ = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.NotAFunctionTypeError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "type"),
+      Core.fieldTerm = (Phantoms.unTTerm type_)}]})))
+
+notAFunctionTypeErrorType :: (Phantoms.TTerm Error.NotAFunctionTypeError -> Phantoms.TTerm Core.Type)
+notAFunctionTypeErrorType x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.NotAFunctionTypeError"),
+    Core.projectionField = (Core.Name "type")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+notAFunctionTypeErrorWithType :: (Phantoms.TTerm Error.NotAFunctionTypeError -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Error.NotAFunctionTypeError)
+notAFunctionTypeErrorWithType original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.NotAFunctionTypeError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "type"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
+
+otherError :: (Phantoms.TTerm String -> Phantoms.TTerm Error.OtherError)
+otherError x = (Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+  Core.wrappedTermTypeName = (Core.Name "hydra.error.OtherError"),
+  Core.wrappedTermBody = (Phantoms.unTTerm x)})))
+
+unOtherError :: (Phantoms.TTerm Error.OtherError -> Phantoms.TTerm String)
+unOtherError x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.error.OtherError")))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+typeArityMismatchError :: (Phantoms.TTerm Core.Type -> Phantoms.TTerm Int -> Phantoms.TTerm Int -> Phantoms.TTerm [Core.Type] -> Phantoms.TTerm Error.TypeArityMismatchError)
+typeArityMismatchError type_ expectedArity actualArity typeArguments = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.TypeArityMismatchError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "type"),
+      Core.fieldTerm = (Phantoms.unTTerm type_)},
+    Core.Field {
+      Core.fieldName = (Core.Name "expectedArity"),
+      Core.fieldTerm = (Phantoms.unTTerm expectedArity)},
+    Core.Field {
+      Core.fieldName = (Core.Name "actualArity"),
+      Core.fieldTerm = (Phantoms.unTTerm actualArity)},
+    Core.Field {
+      Core.fieldName = (Core.Name "typeArguments"),
+      Core.fieldTerm = (Phantoms.unTTerm typeArguments)}]})))
+
+typeArityMismatchErrorType :: (Phantoms.TTerm Error.TypeArityMismatchError -> Phantoms.TTerm Core.Type)
+typeArityMismatchErrorType x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.TypeArityMismatchError"),
+    Core.projectionField = (Core.Name "type")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+typeArityMismatchErrorExpectedArity :: (Phantoms.TTerm Error.TypeArityMismatchError -> Phantoms.TTerm Int)
+typeArityMismatchErrorExpectedArity x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.TypeArityMismatchError"),
+    Core.projectionField = (Core.Name "expectedArity")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+typeArityMismatchErrorActualArity :: (Phantoms.TTerm Error.TypeArityMismatchError -> Phantoms.TTerm Int)
+typeArityMismatchErrorActualArity x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.TypeArityMismatchError"),
+    Core.projectionField = (Core.Name "actualArity")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+typeArityMismatchErrorTypeArguments :: (Phantoms.TTerm Error.TypeArityMismatchError -> Phantoms.TTerm [Core.Type])
+typeArityMismatchErrorTypeArguments x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.TypeArityMismatchError"),
+    Core.projectionField = (Core.Name "typeArguments")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+typeArityMismatchErrorWithType :: (Phantoms.TTerm Error.TypeArityMismatchError -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Error.TypeArityMismatchError)
+typeArityMismatchErrorWithType original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.TypeArityMismatchError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "type"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "expectedArity"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.TypeArityMismatchError"),
+          Core.projectionField = (Core.Name "expectedArity")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "actualArity"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.TypeArityMismatchError"),
+          Core.projectionField = (Core.Name "actualArity")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "typeArguments"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.TypeArityMismatchError"),
+          Core.projectionField = (Core.Name "typeArguments")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
+
+typeArityMismatchErrorWithExpectedArity :: (Phantoms.TTerm Error.TypeArityMismatchError -> Phantoms.TTerm Int -> Phantoms.TTerm Error.TypeArityMismatchError)
+typeArityMismatchErrorWithExpectedArity original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.TypeArityMismatchError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "type"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.TypeArityMismatchError"),
+          Core.projectionField = (Core.Name "type")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "expectedArity"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "actualArity"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.TypeArityMismatchError"),
+          Core.projectionField = (Core.Name "actualArity")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "typeArguments"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.TypeArityMismatchError"),
+          Core.projectionField = (Core.Name "typeArguments")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
+
+typeArityMismatchErrorWithActualArity :: (Phantoms.TTerm Error.TypeArityMismatchError -> Phantoms.TTerm Int -> Phantoms.TTerm Error.TypeArityMismatchError)
+typeArityMismatchErrorWithActualArity original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.TypeArityMismatchError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "type"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.TypeArityMismatchError"),
+          Core.projectionField = (Core.Name "type")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "expectedArity"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.TypeArityMismatchError"),
+          Core.projectionField = (Core.Name "expectedArity")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "actualArity"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "typeArguments"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.TypeArityMismatchError"),
+          Core.projectionField = (Core.Name "typeArguments")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
+
+typeArityMismatchErrorWithTypeArguments :: (Phantoms.TTerm Error.TypeArityMismatchError -> Phantoms.TTerm [Core.Type] -> Phantoms.TTerm Error.TypeArityMismatchError)
+typeArityMismatchErrorWithTypeArguments original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.TypeArityMismatchError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "type"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.TypeArityMismatchError"),
+          Core.projectionField = (Core.Name "type")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "expectedArity"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.TypeArityMismatchError"),
+          Core.projectionField = (Core.Name "expectedArity")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "actualArity"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.TypeArityMismatchError"),
+          Core.projectionField = (Core.Name "actualArity")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "typeArguments"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
+
+typeMismatchError :: (Phantoms.TTerm Core.Type -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Error.TypeMismatchError)
+typeMismatchError expectedType actualType = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.TypeMismatchError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "expectedType"),
+      Core.fieldTerm = (Phantoms.unTTerm expectedType)},
+    Core.Field {
+      Core.fieldName = (Core.Name "actualType"),
+      Core.fieldTerm = (Phantoms.unTTerm actualType)}]})))
+
+typeMismatchErrorExpectedType :: (Phantoms.TTerm Error.TypeMismatchError -> Phantoms.TTerm Core.Type)
+typeMismatchErrorExpectedType x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.TypeMismatchError"),
+    Core.projectionField = (Core.Name "expectedType")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+typeMismatchErrorActualType :: (Phantoms.TTerm Error.TypeMismatchError -> Phantoms.TTerm Core.Type)
+typeMismatchErrorActualType x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.TypeMismatchError"),
+    Core.projectionField = (Core.Name "actualType")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+typeMismatchErrorWithExpectedType :: (Phantoms.TTerm Error.TypeMismatchError -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Error.TypeMismatchError)
+typeMismatchErrorWithExpectedType original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.TypeMismatchError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "expectedType"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "actualType"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.TypeMismatchError"),
+          Core.projectionField = (Core.Name "actualType")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
+
+typeMismatchErrorWithActualType :: (Phantoms.TTerm Error.TypeMismatchError -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Error.TypeMismatchError)
+typeMismatchErrorWithActualType original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.TypeMismatchError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "expectedType"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.TypeMismatchError"),
+          Core.projectionField = (Core.Name "expectedType")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "actualType"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
+
+unboundTypeVariablesError :: (Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Error.UnboundTypeVariablesError)
+unboundTypeVariablesError variables type_ = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UnboundTypeVariablesError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "variables"),
+      Core.fieldTerm = (Phantoms.unTTerm variables)},
+    Core.Field {
+      Core.fieldName = (Core.Name "type"),
+      Core.fieldTerm = (Phantoms.unTTerm type_)}]})))
+
+unboundTypeVariablesErrorVariables :: (Phantoms.TTerm Error.UnboundTypeVariablesError -> Phantoms.TTerm (S.Set Core.Name))
+unboundTypeVariablesErrorVariables x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.UnboundTypeVariablesError"),
+    Core.projectionField = (Core.Name "variables")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+unboundTypeVariablesErrorType :: (Phantoms.TTerm Error.UnboundTypeVariablesError -> Phantoms.TTerm Core.Type)
+unboundTypeVariablesErrorType x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.UnboundTypeVariablesError"),
+    Core.projectionField = (Core.Name "type")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+unboundTypeVariablesErrorWithVariables :: (Phantoms.TTerm Error.UnboundTypeVariablesError -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Error.UnboundTypeVariablesError)
+unboundTypeVariablesErrorWithVariables original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UnboundTypeVariablesError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "variables"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "type"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.UnboundTypeVariablesError"),
+          Core.projectionField = (Core.Name "type")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
+
+unboundTypeVariablesErrorWithType :: (Phantoms.TTerm Error.UnboundTypeVariablesError -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Error.UnboundTypeVariablesError)
+unboundTypeVariablesErrorWithType original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UnboundTypeVariablesError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "variables"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.UnboundTypeVariablesError"),
+          Core.projectionField = (Core.Name "variables")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "type"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
+
+undefinedFieldError :: (Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Error.UndefinedFieldError)
+undefinedFieldError fieldName typeName = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UndefinedFieldError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "fieldName"),
+      Core.fieldTerm = (Phantoms.unTTerm fieldName)},
+    Core.Field {
+      Core.fieldName = (Core.Name "typeName"),
+      Core.fieldTerm = (Phantoms.unTTerm typeName)}]})))
+
+undefinedFieldErrorFieldName :: (Phantoms.TTerm Error.UndefinedFieldError -> Phantoms.TTerm Core.Name)
+undefinedFieldErrorFieldName x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.UndefinedFieldError"),
+    Core.projectionField = (Core.Name "fieldName")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+undefinedFieldErrorTypeName :: (Phantoms.TTerm Error.UndefinedFieldError -> Phantoms.TTerm Core.Name)
+undefinedFieldErrorTypeName x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.UndefinedFieldError"),
+    Core.projectionField = (Core.Name "typeName")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+undefinedFieldErrorWithFieldName :: (Phantoms.TTerm Error.UndefinedFieldError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Error.UndefinedFieldError)
+undefinedFieldErrorWithFieldName original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UndefinedFieldError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "fieldName"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "typeName"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.UndefinedFieldError"),
+          Core.projectionField = (Core.Name "typeName")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
+
+undefinedFieldErrorWithTypeName :: (Phantoms.TTerm Error.UndefinedFieldError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Error.UndefinedFieldError)
+undefinedFieldErrorWithTypeName original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UndefinedFieldError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "fieldName"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.UndefinedFieldError"),
+          Core.projectionField = (Core.Name "fieldName")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "typeName"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
+
+undefinedTermError :: (Phantoms.TTerm Core.Name -> Phantoms.TTerm Error.UndefinedTermError)
+undefinedTermError name = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UndefinedTermError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "name"),
+      Core.fieldTerm = (Phantoms.unTTerm name)}]})))
+
+undefinedTermErrorName :: (Phantoms.TTerm Error.UndefinedTermError -> Phantoms.TTerm Core.Name)
+undefinedTermErrorName x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.UndefinedTermError"),
+    Core.projectionField = (Core.Name "name")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+undefinedTermErrorWithName :: (Phantoms.TTerm Error.UndefinedTermError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Error.UndefinedTermError)
+undefinedTermErrorWithName original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UndefinedTermError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "name"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
+
+undefinedTypeError :: (Phantoms.TTerm Core.Name -> Phantoms.TTerm Error.UndefinedTypeError)
+undefinedTypeError name = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UndefinedTypeError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "name"),
+      Core.fieldTerm = (Phantoms.unTTerm name)}]})))
+
+undefinedTypeErrorName :: (Phantoms.TTerm Error.UndefinedTypeError -> Phantoms.TTerm Core.Name)
+undefinedTypeErrorName x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.UndefinedTypeError"),
+    Core.projectionField = (Core.Name "name")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+undefinedTypeErrorWithName :: (Phantoms.TTerm Error.UndefinedTypeError -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Error.UndefinedTypeError)
+undefinedTypeErrorWithName original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UndefinedTypeError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "name"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
+
+unequalTypesError :: (Phantoms.TTerm [Core.Type] -> Phantoms.TTerm String -> Phantoms.TTerm Error.UnequalTypesError)
+unequalTypesError types description = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UnequalTypesError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "types"),
+      Core.fieldTerm = (Phantoms.unTTerm types)},
+    Core.Field {
+      Core.fieldName = (Core.Name "description"),
+      Core.fieldTerm = (Phantoms.unTTerm description)}]})))
+
+unequalTypesErrorTypes :: (Phantoms.TTerm Error.UnequalTypesError -> Phantoms.TTerm [Core.Type])
+unequalTypesErrorTypes x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.UnequalTypesError"),
+    Core.projectionField = (Core.Name "types")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+unequalTypesErrorDescription :: (Phantoms.TTerm Error.UnequalTypesError -> Phantoms.TTerm String)
+unequalTypesErrorDescription x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.UnequalTypesError"),
+    Core.projectionField = (Core.Name "description")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+unequalTypesErrorWithTypes :: (Phantoms.TTerm Error.UnequalTypesError -> Phantoms.TTerm [Core.Type] -> Phantoms.TTerm Error.UnequalTypesError)
+unequalTypesErrorWithTypes original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UnequalTypesError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "types"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "description"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.UnequalTypesError"),
+          Core.projectionField = (Core.Name "description")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
+
+unequalTypesErrorWithDescription :: (Phantoms.TTerm Error.UnequalTypesError -> Phantoms.TTerm String -> Phantoms.TTerm Error.UnequalTypesError)
+unequalTypesErrorWithDescription original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UnequalTypesError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "types"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.UnequalTypesError"),
+          Core.projectionField = (Core.Name "types")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "description"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
+
+unexpectedTermVariantError :: (Phantoms.TTerm Variants.TermVariant -> Phantoms.TTerm Core.Term -> Phantoms.TTerm Error.UnexpectedTermVariantError)
+unexpectedTermVariantError expectedVariant actualTerm = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UnexpectedTermVariantError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "expectedVariant"),
+      Core.fieldTerm = (Phantoms.unTTerm expectedVariant)},
+    Core.Field {
+      Core.fieldName = (Core.Name "actualTerm"),
+      Core.fieldTerm = (Phantoms.unTTerm actualTerm)}]})))
+
+unexpectedTermVariantErrorExpectedVariant :: (Phantoms.TTerm Error.UnexpectedTermVariantError -> Phantoms.TTerm Variants.TermVariant)
+unexpectedTermVariantErrorExpectedVariant x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.UnexpectedTermVariantError"),
+    Core.projectionField = (Core.Name "expectedVariant")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+unexpectedTermVariantErrorActualTerm :: (Phantoms.TTerm Error.UnexpectedTermVariantError -> Phantoms.TTerm Core.Term)
+unexpectedTermVariantErrorActualTerm x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.UnexpectedTermVariantError"),
+    Core.projectionField = (Core.Name "actualTerm")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+unexpectedTermVariantErrorWithExpectedVariant :: (Phantoms.TTerm Error.UnexpectedTermVariantError -> Phantoms.TTerm Variants.TermVariant -> Phantoms.TTerm Error.UnexpectedTermVariantError)
+unexpectedTermVariantErrorWithExpectedVariant original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UnexpectedTermVariantError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "expectedVariant"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "actualTerm"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.UnexpectedTermVariantError"),
+          Core.projectionField = (Core.Name "actualTerm")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
+
+unexpectedTermVariantErrorWithActualTerm :: (Phantoms.TTerm Error.UnexpectedTermVariantError -> Phantoms.TTerm Core.Term -> Phantoms.TTerm Error.UnexpectedTermVariantError)
+unexpectedTermVariantErrorWithActualTerm original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UnexpectedTermVariantError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "expectedVariant"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.UnexpectedTermVariantError"),
+          Core.projectionField = (Core.Name "expectedVariant")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "actualTerm"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
+
+unexpectedTypeVariantError :: (Phantoms.TTerm Variants.TypeVariant -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Error.UnexpectedTypeVariantError)
+unexpectedTypeVariantError expectedVariant actualType = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UnexpectedTypeVariantError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "expectedVariant"),
+      Core.fieldTerm = (Phantoms.unTTerm expectedVariant)},
+    Core.Field {
+      Core.fieldName = (Core.Name "actualType"),
+      Core.fieldTerm = (Phantoms.unTTerm actualType)}]})))
+
+unexpectedTypeVariantErrorExpectedVariant :: (Phantoms.TTerm Error.UnexpectedTypeVariantError -> Phantoms.TTerm Variants.TypeVariant)
+unexpectedTypeVariantErrorExpectedVariant x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.UnexpectedTypeVariantError"),
+    Core.projectionField = (Core.Name "expectedVariant")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+unexpectedTypeVariantErrorActualType :: (Phantoms.TTerm Error.UnexpectedTypeVariantError -> Phantoms.TTerm Core.Type)
+unexpectedTypeVariantErrorActualType x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.UnexpectedTypeVariantError"),
+    Core.projectionField = (Core.Name "actualType")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+unexpectedTypeVariantErrorWithExpectedVariant :: (Phantoms.TTerm Error.UnexpectedTypeVariantError -> Phantoms.TTerm Variants.TypeVariant -> Phantoms.TTerm Error.UnexpectedTypeVariantError)
+unexpectedTypeVariantErrorWithExpectedVariant original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UnexpectedTypeVariantError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "expectedVariant"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "actualType"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.UnexpectedTypeVariantError"),
+          Core.projectionField = (Core.Name "actualType")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
+
+unexpectedTypeVariantErrorWithActualType :: (Phantoms.TTerm Error.UnexpectedTypeVariantError -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Error.UnexpectedTypeVariantError)
+unexpectedTypeVariantErrorWithActualType original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UnexpectedTypeVariantError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "expectedVariant"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.UnexpectedTypeVariantError"),
+          Core.projectionField = (Core.Name "expectedVariant")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "actualType"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
+
+unificationError :: (Phantoms.TTerm Core.Type -> Phantoms.TTerm Core.Type -> Phantoms.TTerm String -> Phantoms.TTerm Error.UnificationError)
+unificationError leftType rightType message = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UnificationError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "leftType"),
+      Core.fieldTerm = (Phantoms.unTTerm leftType)},
+    Core.Field {
+      Core.fieldName = (Core.Name "rightType"),
+      Core.fieldTerm = (Phantoms.unTTerm rightType)},
+    Core.Field {
+      Core.fieldName = (Core.Name "message"),
+      Core.fieldTerm = (Phantoms.unTTerm message)}]})))
+
+unificationErrorLeftType :: (Phantoms.TTerm Error.UnificationError -> Phantoms.TTerm Core.Type)
+unificationErrorLeftType x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.UnificationError"),
+    Core.projectionField = (Core.Name "leftType")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+unificationErrorRightType :: (Phantoms.TTerm Error.UnificationError -> Phantoms.TTerm Core.Type)
+unificationErrorRightType x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.UnificationError"),
+    Core.projectionField = (Core.Name "rightType")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+unificationErrorMessage :: (Phantoms.TTerm Error.UnificationError -> Phantoms.TTerm String)
+unificationErrorMessage x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.UnificationError"),
+    Core.projectionField = (Core.Name "message")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+unificationErrorWithLeftType :: (Phantoms.TTerm Error.UnificationError -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Error.UnificationError)
+unificationErrorWithLeftType original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UnificationError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "leftType"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "rightType"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.UnificationError"),
+          Core.projectionField = (Core.Name "rightType")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "message"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.UnificationError"),
+          Core.projectionField = (Core.Name "message")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
+
+unificationErrorWithRightType :: (Phantoms.TTerm Error.UnificationError -> Phantoms.TTerm Core.Type -> Phantoms.TTerm Error.UnificationError)
+unificationErrorWithRightType original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UnificationError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "leftType"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.UnificationError"),
+          Core.projectionField = (Core.Name "leftType")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "rightType"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "message"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.UnificationError"),
+          Core.projectionField = (Core.Name "message")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
+
+unificationErrorWithMessage :: (Phantoms.TTerm Error.UnificationError -> Phantoms.TTerm String -> Phantoms.TTerm Error.UnificationError)
+unificationErrorWithMessage original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UnificationError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "leftType"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.UnificationError"),
+          Core.projectionField = (Core.Name "leftType")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "rightType"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.error.UnificationError"),
+          Core.projectionField = (Core.Name "rightType")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "message"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
+
+unsupportedTermVariantError :: (Phantoms.TTerm Variants.TermVariant -> Phantoms.TTerm Error.UnsupportedTermVariantError)
+unsupportedTermVariantError termVariant = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UnsupportedTermVariantError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "termVariant"),
+      Core.fieldTerm = (Phantoms.unTTerm termVariant)}]})))
+
+unsupportedTermVariantErrorTermVariant :: (Phantoms.TTerm Error.UnsupportedTermVariantError -> Phantoms.TTerm Variants.TermVariant)
+unsupportedTermVariantErrorTermVariant x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.UnsupportedTermVariantError"),
+    Core.projectionField = (Core.Name "termVariant")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+unsupportedTermVariantErrorWithTermVariant :: (Phantoms.TTerm Error.UnsupportedTermVariantError -> Phantoms.TTerm Variants.TermVariant -> Phantoms.TTerm Error.UnsupportedTermVariantError)
+unsupportedTermVariantErrorWithTermVariant original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UnsupportedTermVariantError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "termVariant"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
+
+untypedLambdaError :: (Phantoms.TTerm Error.UntypedLambdaError)
+untypedLambdaError = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UntypedLambdaError"),
+  Core.recordFields = []})))
+
+untypedLetBindingError :: (Phantoms.TTerm Core.Binding -> Phantoms.TTerm Error.UntypedLetBindingError)
+untypedLetBindingError binding = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UntypedLetBindingError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "binding"),
+      Core.fieldTerm = (Phantoms.unTTerm binding)}]})))
+
+untypedLetBindingErrorBinding :: (Phantoms.TTerm Error.UntypedLetBindingError -> Phantoms.TTerm Core.Binding)
+untypedLetBindingErrorBinding x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.error.UntypedLetBindingError"),
+    Core.projectionField = (Core.Name "binding")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
+
+untypedLetBindingErrorWithBinding :: (Phantoms.TTerm Error.UntypedLetBindingError -> Phantoms.TTerm Core.Binding -> Phantoms.TTerm Error.UntypedLetBindingError)
+untypedLetBindingErrorWithBinding original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.error.UntypedLetBindingError"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "binding"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))

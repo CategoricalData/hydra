@@ -62,7 +62,8 @@ module_ = Module ns elements
       toBinding deduplicateBindings,
       toBinding isDslEligibleBinding,
       toBinding dslTypeScheme,
-      toBinding collectForallVars]
+      toBinding collectForallVars,
+      toBinding nominalResultType]
 
 define :: String -> TTerm x -> TBinding x
 define = definitionInModule module_
@@ -95,6 +96,19 @@ collectForallVars = define "collectForallVars" $
     _Type_forall>>: "ft" ~>
       Lists.cons (Core.forallTypeParameter (var "ft"))
         (collectForallVars @@ Core.forallTypeBody (var "ft"))]
+
+-- | Build the nominal result type for a type definition.
+-- For non-polymorphic types: TypeVariable typeName
+-- For polymorphic types like (forall n. Namespaces n): TypeApplication (TypeVariable typeName) (TypeVariable n)
+nominalResultType :: TBinding (Name -> Type -> Type)
+nominalResultType = define "nominalResultType" $
+  doc "Build the nominal result type with type applications for forall variables" $
+  "typeName" ~> "origType" ~>
+  "vars" <~ (collectForallVars @@ var "origType") $
+  Lists.foldl
+    ("acc" ~> "v" ~> Core.typeApplication $ Core.applicationType (var "acc") (Core.typeVariable (var "v")))
+    (Core.typeVariable (var "typeName"))
+    (var "vars")
 
 -- | Inject a Record-typed term into the Term.record variant
 -- Produces TermUnion(Injection _Term (Field _Term_record innerRecord))
@@ -277,7 +291,7 @@ generateRecordConstructor = define "generateRecordConstructor" $
     (Lists.reverse (var "paramPairs"))) $
   -- Type: TTerm<FieldType1> -> TTerm<FieldType2> -> ... -> TTerm<RecordType>
   "paramTypes" <~ (Lists.map ("ft" ~> Core.fieldTypeType (var "ft")) (var "fieldTypes")) $
-  "resultType" <~ (Core.typeVariable (var "typeName")) $
+  "resultType" <~ (nominalResultType @@ var "typeName" @@ var "origType") $
   "ts" <~ (dslTypeScheme @@ var "origType" @@ var "paramTypes" @@ var "resultType") $
   -- Return as a single-element list with the constructor binding
   list [Core.binding
@@ -299,14 +313,14 @@ generateRecordAccessor = define "generateRecordAccessor" $
     Formatting.capitalize @@ (Names.localNameOf @@ var "fieldName")]) $
   "accessorName" <~ (dslElementName @@ var "typeName" @@ var "accessorLocalName") $
   -- Body: projection as a simple elimination
-  "paramDomain" <~ (wrapInTTerm (Core.typeVariable (var "typeName"))) $
+  "paramDomain" <~ (wrapInTTerm (nominalResultType @@ var "typeName" @@ var "origType")) $
   "body" <~ (Core.termFunction $ Core.functionLambda $
     Core.lambda (Core.name (string "x")) (just (var "paramDomain")) $
       wrapTermInTTerm (deepApplication
         (deepProjection (var "typeName") (var "fieldName"))
         (unwrapTTerm (Core.termVariable (Core.name (string "x")))))) $
   "ts" <~ (dslTypeScheme @@ var "origType"
-    @@ list [Core.typeVariable (var "typeName")]
+    @@ list [nominalResultType @@ var "typeName" @@ var "origType"]
     @@ Core.fieldTypeType (var "ft")) $
   Core.binding
     (var "accessorName")
@@ -340,13 +354,13 @@ generateRecordWithUpdater = define "generateRecordWithUpdater" $
           (deepProjection (var "typeName") (Core.fieldTypeName (var "ft")))
           (unwrapTTerm (Core.termVariable (Core.name (string "original")))))))
     (var "allFields")) $
-  "recDomain" <~ (wrapInTTerm (Core.typeVariable (var "typeName"))) $
+  "recDomain" <~ (wrapInTTerm (nominalResultType @@ var "typeName" @@ var "origType")) $
   "fieldDomain" <~ (wrapInTTerm (Core.fieldTypeType (var "targetField"))) $
   "body" <~ (
     Core.termFunction $ Core.functionLambda $ Core.lambda (Core.name (string "original")) (just (var "recDomain")) $
     Core.termFunction $ Core.functionLambda $ Core.lambda (Core.name (string "newVal")) (just (var "fieldDomain")) $
     wrapTermInTTerm (deepRecord (var "typeName") (var "dFields"))) $
-  "recType" <~ (Core.typeVariable (var "typeName")) $
+  "recType" <~ (nominalResultType @@ var "typeName" @@ var "origType") $
   "ts" <~ (dslTypeScheme @@ var "origType"
     @@ list [var "recType", Core.fieldTypeType (var "targetField")]
     @@ var "recType") $
@@ -387,7 +401,7 @@ generateUnionInjector = define "generateUnionInjector" $
     (var "injectionTerm")
     (Core.termFunction $ Core.functionLambda $
       Core.lambda (Core.name (string "x")) (just (var "variantDomain")) (var "injectionTerm"))) $
-  "unionType" <~ (Core.typeVariable (var "typeName")) $
+  "unionType" <~ (nominalResultType @@ var "typeName" @@ var "origType") $
   "ts" <~ (Logic.ifElse (var "isUnit")
     (dslTypeScheme @@ var "origType" @@ list ([] :: [TTerm Type]) @@ var "unionType")
     (dslTypeScheme @@ var "origType" @@ list [Core.fieldTypeType (var "ft")] @@ var "unionType")) $
@@ -418,7 +432,7 @@ generateWrappedTypeAccessors = define "generateWrappedTypeAccessors" $
   "unwrapLocalName" <~ (Strings.cat $ list [string "un", var "localName"]) $
   "unwrapName" <~ (dslElementName @@ var "typeName" @@ var "unwrapLocalName") $
   "innerType" <~ (Core.wrappedTypeBody (var "wt")) $
-  "wrapperType" <~ (Core.typeVariable (var "typeName")) $
+  "wrapperType" <~ (nominalResultType @@ var "typeName" @@ var "origType") $
   -- Wrap: \(x :: TTerm<InnerType>) -> WrappedTerm typeName x
   "wrapDomain" <~ (wrapInTTerm (var "innerType")) $
   "wrapBody" <~ (

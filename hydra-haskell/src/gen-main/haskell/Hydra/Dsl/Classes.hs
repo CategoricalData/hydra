@@ -5,6 +5,8 @@
 module Hydra.Dsl.Classes where
 
 import qualified Hydra.Classes as Classes
+import qualified Hydra.Core as Core
+import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -12,8 +14,16 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-typeClassEquality :: Classes.TypeClass
-typeClassEquality = Classes.TypeClassEquality
+typeClassEquality :: (Phantoms.TTerm Classes.TypeClass)
+typeClassEquality = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.classes.TypeClass"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "equality"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-typeClassOrdering :: Classes.TypeClass
-typeClassOrdering = Classes.TypeClassOrdering
+typeClassOrdering :: (Phantoms.TTerm Classes.TypeClass)
+typeClassOrdering = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.classes.TypeClass"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "ordering"),
+    Core.fieldTerm = Core.TermUnit}})))

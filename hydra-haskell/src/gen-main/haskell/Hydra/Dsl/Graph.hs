@@ -8,6 +8,7 @@ import qualified Hydra.Context as Context
 import qualified Hydra.Core as Core
 import qualified Hydra.Error as Error
 import qualified Hydra.Graph as Graph
+import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -15,191 +16,745 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-graph :: (M.Map Core.Name Core.Term -> M.Map Core.Name Core.TypeScheme -> M.Map Core.Name Core.TypeVariableMetadata -> S.Set Core.Name -> M.Map Core.Name Core.Term -> M.Map Core.Name Graph.Primitive -> M.Map Core.Name Core.TypeScheme -> S.Set Core.Name -> Graph.Graph)
-graph boundTerms boundTypes classConstraints lambdaVariables metadata primitives schemaTypes typeVariables = Graph.Graph {
-  Graph.graphBoundTerms = boundTerms,
-  Graph.graphBoundTypes = boundTypes,
-  Graph.graphClassConstraints = classConstraints,
-  Graph.graphLambdaVariables = lambdaVariables,
-  Graph.graphMetadata = metadata,
-  Graph.graphPrimitives = primitives,
-  Graph.graphSchemaTypes = schemaTypes,
-  Graph.graphTypeVariables = typeVariables}
+graph :: (Phantoms.TTerm (M.Map Core.Name Core.Term) -> Phantoms.TTerm (M.Map Core.Name Core.TypeScheme) -> Phantoms.TTerm (M.Map Core.Name Core.TypeVariableMetadata) -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm (M.Map Core.Name Core.Term) -> Phantoms.TTerm (M.Map Core.Name Graph.Primitive) -> Phantoms.TTerm (M.Map Core.Name Core.TypeScheme) -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Graph.Graph)
+graph boundTerms boundTypes classConstraints lambdaVariables metadata primitives schemaTypes typeVariables = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.graph.Graph"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "boundTerms"),
+      Core.fieldTerm = (Phantoms.unTTerm boundTerms)},
+    Core.Field {
+      Core.fieldName = (Core.Name "boundTypes"),
+      Core.fieldTerm = (Phantoms.unTTerm boundTypes)},
+    Core.Field {
+      Core.fieldName = (Core.Name "classConstraints"),
+      Core.fieldTerm = (Phantoms.unTTerm classConstraints)},
+    Core.Field {
+      Core.fieldName = (Core.Name "lambdaVariables"),
+      Core.fieldTerm = (Phantoms.unTTerm lambdaVariables)},
+    Core.Field {
+      Core.fieldName = (Core.Name "metadata"),
+      Core.fieldTerm = (Phantoms.unTTerm metadata)},
+    Core.Field {
+      Core.fieldName = (Core.Name "primitives"),
+      Core.fieldTerm = (Phantoms.unTTerm primitives)},
+    Core.Field {
+      Core.fieldName = (Core.Name "schemaTypes"),
+      Core.fieldTerm = (Phantoms.unTTerm schemaTypes)},
+    Core.Field {
+      Core.fieldName = (Core.Name "typeVariables"),
+      Core.fieldTerm = (Phantoms.unTTerm typeVariables)}]})))
 
-graphBoundTerms :: (Graph.Graph -> M.Map Core.Name Core.Term)
-graphBoundTerms = Graph.graphBoundTerms
+graphBoundTerms :: (Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (M.Map Core.Name Core.Term))
+graphBoundTerms x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+    Core.projectionField = (Core.Name "boundTerms")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-graphBoundTypes :: (Graph.Graph -> M.Map Core.Name Core.TypeScheme)
-graphBoundTypes = Graph.graphBoundTypes
+graphBoundTypes :: (Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (M.Map Core.Name Core.TypeScheme))
+graphBoundTypes x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+    Core.projectionField = (Core.Name "boundTypes")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-graphClassConstraints :: (Graph.Graph -> M.Map Core.Name Core.TypeVariableMetadata)
-graphClassConstraints = Graph.graphClassConstraints
+graphClassConstraints :: (Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (M.Map Core.Name Core.TypeVariableMetadata))
+graphClassConstraints x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+    Core.projectionField = (Core.Name "classConstraints")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-graphLambdaVariables :: (Graph.Graph -> S.Set Core.Name)
-graphLambdaVariables = Graph.graphLambdaVariables
+graphLambdaVariables :: (Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (S.Set Core.Name))
+graphLambdaVariables x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+    Core.projectionField = (Core.Name "lambdaVariables")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-graphMetadata :: (Graph.Graph -> M.Map Core.Name Core.Term)
-graphMetadata = Graph.graphMetadata
+graphMetadata :: (Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (M.Map Core.Name Core.Term))
+graphMetadata x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+    Core.projectionField = (Core.Name "metadata")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-graphPrimitives :: (Graph.Graph -> M.Map Core.Name Graph.Primitive)
-graphPrimitives = Graph.graphPrimitives
+graphPrimitives :: (Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (M.Map Core.Name Graph.Primitive))
+graphPrimitives x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+    Core.projectionField = (Core.Name "primitives")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-graphSchemaTypes :: (Graph.Graph -> M.Map Core.Name Core.TypeScheme)
-graphSchemaTypes = Graph.graphSchemaTypes
+graphSchemaTypes :: (Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (M.Map Core.Name Core.TypeScheme))
+graphSchemaTypes x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+    Core.projectionField = (Core.Name "schemaTypes")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-graphTypeVariables :: (Graph.Graph -> S.Set Core.Name)
-graphTypeVariables = Graph.graphTypeVariables
+graphTypeVariables :: (Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (S.Set Core.Name))
+graphTypeVariables x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+    Core.projectionField = (Core.Name "typeVariables")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-graphWithBoundTerms :: (Graph.Graph -> M.Map Core.Name Core.Term -> Graph.Graph)
-graphWithBoundTerms original newVal = Graph.Graph {
-  Graph.graphBoundTerms = newVal,
-  Graph.graphBoundTypes = (Graph.graphBoundTypes original),
-  Graph.graphClassConstraints = (Graph.graphClassConstraints original),
-  Graph.graphLambdaVariables = (Graph.graphLambdaVariables original),
-  Graph.graphMetadata = (Graph.graphMetadata original),
-  Graph.graphPrimitives = (Graph.graphPrimitives original),
-  Graph.graphSchemaTypes = (Graph.graphSchemaTypes original),
-  Graph.graphTypeVariables = (Graph.graphTypeVariables original)}
+graphWithBoundTerms :: (Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (M.Map Core.Name Core.Term) -> Phantoms.TTerm Graph.Graph)
+graphWithBoundTerms original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.graph.Graph"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "boundTerms"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "boundTypes"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "boundTypes")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "classConstraints"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "classConstraints")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "lambdaVariables"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "lambdaVariables")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "metadata"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "metadata")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "primitives"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "primitives")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "schemaTypes"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "schemaTypes")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "typeVariables"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "typeVariables")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-graphWithBoundTypes :: (Graph.Graph -> M.Map Core.Name Core.TypeScheme -> Graph.Graph)
-graphWithBoundTypes original newVal = Graph.Graph {
-  Graph.graphBoundTerms = (Graph.graphBoundTerms original),
-  Graph.graphBoundTypes = newVal,
-  Graph.graphClassConstraints = (Graph.graphClassConstraints original),
-  Graph.graphLambdaVariables = (Graph.graphLambdaVariables original),
-  Graph.graphMetadata = (Graph.graphMetadata original),
-  Graph.graphPrimitives = (Graph.graphPrimitives original),
-  Graph.graphSchemaTypes = (Graph.graphSchemaTypes original),
-  Graph.graphTypeVariables = (Graph.graphTypeVariables original)}
+graphWithBoundTypes :: (Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (M.Map Core.Name Core.TypeScheme) -> Phantoms.TTerm Graph.Graph)
+graphWithBoundTypes original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.graph.Graph"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "boundTerms"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "boundTerms")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "boundTypes"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "classConstraints"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "classConstraints")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "lambdaVariables"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "lambdaVariables")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "metadata"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "metadata")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "primitives"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "primitives")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "schemaTypes"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "schemaTypes")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "typeVariables"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "typeVariables")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-graphWithClassConstraints :: (Graph.Graph -> M.Map Core.Name Core.TypeVariableMetadata -> Graph.Graph)
-graphWithClassConstraints original newVal = Graph.Graph {
-  Graph.graphBoundTerms = (Graph.graphBoundTerms original),
-  Graph.graphBoundTypes = (Graph.graphBoundTypes original),
-  Graph.graphClassConstraints = newVal,
-  Graph.graphLambdaVariables = (Graph.graphLambdaVariables original),
-  Graph.graphMetadata = (Graph.graphMetadata original),
-  Graph.graphPrimitives = (Graph.graphPrimitives original),
-  Graph.graphSchemaTypes = (Graph.graphSchemaTypes original),
-  Graph.graphTypeVariables = (Graph.graphTypeVariables original)}
+graphWithClassConstraints :: (Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (M.Map Core.Name Core.TypeVariableMetadata) -> Phantoms.TTerm Graph.Graph)
+graphWithClassConstraints original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.graph.Graph"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "boundTerms"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "boundTerms")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "boundTypes"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "boundTypes")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "classConstraints"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "lambdaVariables"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "lambdaVariables")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "metadata"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "metadata")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "primitives"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "primitives")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "schemaTypes"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "schemaTypes")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "typeVariables"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "typeVariables")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-graphWithLambdaVariables :: (Graph.Graph -> S.Set Core.Name -> Graph.Graph)
-graphWithLambdaVariables original newVal = Graph.Graph {
-  Graph.graphBoundTerms = (Graph.graphBoundTerms original),
-  Graph.graphBoundTypes = (Graph.graphBoundTypes original),
-  Graph.graphClassConstraints = (Graph.graphClassConstraints original),
-  Graph.graphLambdaVariables = newVal,
-  Graph.graphMetadata = (Graph.graphMetadata original),
-  Graph.graphPrimitives = (Graph.graphPrimitives original),
-  Graph.graphSchemaTypes = (Graph.graphSchemaTypes original),
-  Graph.graphTypeVariables = (Graph.graphTypeVariables original)}
+graphWithLambdaVariables :: (Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Graph.Graph)
+graphWithLambdaVariables original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.graph.Graph"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "boundTerms"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "boundTerms")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "boundTypes"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "boundTypes")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "classConstraints"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "classConstraints")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "lambdaVariables"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "metadata"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "metadata")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "primitives"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "primitives")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "schemaTypes"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "schemaTypes")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "typeVariables"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "typeVariables")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-graphWithMetadata :: (Graph.Graph -> M.Map Core.Name Core.Term -> Graph.Graph)
-graphWithMetadata original newVal = Graph.Graph {
-  Graph.graphBoundTerms = (Graph.graphBoundTerms original),
-  Graph.graphBoundTypes = (Graph.graphBoundTypes original),
-  Graph.graphClassConstraints = (Graph.graphClassConstraints original),
-  Graph.graphLambdaVariables = (Graph.graphLambdaVariables original),
-  Graph.graphMetadata = newVal,
-  Graph.graphPrimitives = (Graph.graphPrimitives original),
-  Graph.graphSchemaTypes = (Graph.graphSchemaTypes original),
-  Graph.graphTypeVariables = (Graph.graphTypeVariables original)}
+graphWithMetadata :: (Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (M.Map Core.Name Core.Term) -> Phantoms.TTerm Graph.Graph)
+graphWithMetadata original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.graph.Graph"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "boundTerms"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "boundTerms")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "boundTypes"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "boundTypes")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "classConstraints"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "classConstraints")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "lambdaVariables"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "lambdaVariables")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "metadata"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "primitives"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "primitives")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "schemaTypes"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "schemaTypes")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "typeVariables"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "typeVariables")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-graphWithPrimitives :: (Graph.Graph -> M.Map Core.Name Graph.Primitive -> Graph.Graph)
-graphWithPrimitives original newVal = Graph.Graph {
-  Graph.graphBoundTerms = (Graph.graphBoundTerms original),
-  Graph.graphBoundTypes = (Graph.graphBoundTypes original),
-  Graph.graphClassConstraints = (Graph.graphClassConstraints original),
-  Graph.graphLambdaVariables = (Graph.graphLambdaVariables original),
-  Graph.graphMetadata = (Graph.graphMetadata original),
-  Graph.graphPrimitives = newVal,
-  Graph.graphSchemaTypes = (Graph.graphSchemaTypes original),
-  Graph.graphTypeVariables = (Graph.graphTypeVariables original)}
+graphWithPrimitives :: (Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (M.Map Core.Name Graph.Primitive) -> Phantoms.TTerm Graph.Graph)
+graphWithPrimitives original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.graph.Graph"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "boundTerms"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "boundTerms")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "boundTypes"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "boundTypes")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "classConstraints"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "classConstraints")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "lambdaVariables"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "lambdaVariables")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "metadata"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "metadata")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "primitives"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "schemaTypes"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "schemaTypes")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "typeVariables"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "typeVariables")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-graphWithSchemaTypes :: (Graph.Graph -> M.Map Core.Name Core.TypeScheme -> Graph.Graph)
-graphWithSchemaTypes original newVal = Graph.Graph {
-  Graph.graphBoundTerms = (Graph.graphBoundTerms original),
-  Graph.graphBoundTypes = (Graph.graphBoundTypes original),
-  Graph.graphClassConstraints = (Graph.graphClassConstraints original),
-  Graph.graphLambdaVariables = (Graph.graphLambdaVariables original),
-  Graph.graphMetadata = (Graph.graphMetadata original),
-  Graph.graphPrimitives = (Graph.graphPrimitives original),
-  Graph.graphSchemaTypes = newVal,
-  Graph.graphTypeVariables = (Graph.graphTypeVariables original)}
+graphWithSchemaTypes :: (Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (M.Map Core.Name Core.TypeScheme) -> Phantoms.TTerm Graph.Graph)
+graphWithSchemaTypes original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.graph.Graph"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "boundTerms"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "boundTerms")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "boundTypes"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "boundTypes")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "classConstraints"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "classConstraints")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "lambdaVariables"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "lambdaVariables")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "metadata"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "metadata")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "primitives"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "primitives")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "schemaTypes"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "typeVariables"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "typeVariables")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-graphWithTypeVariables :: (Graph.Graph -> S.Set Core.Name -> Graph.Graph)
-graphWithTypeVariables original newVal = Graph.Graph {
-  Graph.graphBoundTerms = (Graph.graphBoundTerms original),
-  Graph.graphBoundTypes = (Graph.graphBoundTypes original),
-  Graph.graphClassConstraints = (Graph.graphClassConstraints original),
-  Graph.graphLambdaVariables = (Graph.graphLambdaVariables original),
-  Graph.graphMetadata = (Graph.graphMetadata original),
-  Graph.graphPrimitives = (Graph.graphPrimitives original),
-  Graph.graphSchemaTypes = (Graph.graphSchemaTypes original),
-  Graph.graphTypeVariables = newVal}
+graphWithTypeVariables :: (Phantoms.TTerm Graph.Graph -> Phantoms.TTerm (S.Set Core.Name) -> Phantoms.TTerm Graph.Graph)
+graphWithTypeVariables original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.graph.Graph"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "boundTerms"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "boundTerms")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "boundTypes"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "boundTypes")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "classConstraints"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "classConstraints")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "lambdaVariables"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "lambdaVariables")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "metadata"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "metadata")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "primitives"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "primitives")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "schemaTypes"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Graph"),
+          Core.projectionField = (Core.Name "schemaTypes")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "typeVariables"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
 
-primitive :: (Core.Name -> Core.TypeScheme -> (Context.Context -> Graph.Graph -> [Core.Term] -> Either (Context.InContext Error.Error) Core.Term) -> Graph.Primitive)
-primitive name type_ implementation = Graph.Primitive {
-  Graph.primitiveName = name,
-  Graph.primitiveType = type_,
-  Graph.primitiveImplementation = implementation}
+primitive :: (Phantoms.TTerm Core.Name -> Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm (Context.Context -> Graph.Graph -> [Core.Term] -> Either (Context.InContext Error.Error) Core.Term) -> Phantoms.TTerm Graph.Primitive)
+primitive name type_ implementation = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.graph.Primitive"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "name"),
+      Core.fieldTerm = (Phantoms.unTTerm name)},
+    Core.Field {
+      Core.fieldName = (Core.Name "type"),
+      Core.fieldTerm = (Phantoms.unTTerm type_)},
+    Core.Field {
+      Core.fieldName = (Core.Name "implementation"),
+      Core.fieldTerm = (Phantoms.unTTerm implementation)}]})))
 
-primitiveName :: (Graph.Primitive -> Core.Name)
-primitiveName = Graph.primitiveName
+primitiveName :: (Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm Core.Name)
+primitiveName x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
+    Core.projectionField = (Core.Name "name")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-primitiveType :: (Graph.Primitive -> Core.TypeScheme)
-primitiveType = Graph.primitiveType
+primitiveType :: (Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm Core.TypeScheme)
+primitiveType x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
+    Core.projectionField = (Core.Name "type")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-primitiveImplementation :: (Graph.Primitive -> Context.Context -> Graph.Graph -> [Core.Term] -> Either (Context.InContext Error.Error) Core.Term)
-primitiveImplementation = Graph.primitiveImplementation
+primitiveImplementation :: (Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm (Context.Context -> Graph.Graph -> [Core.Term] -> Either (Context.InContext Error.Error) Core.Term))
+primitiveImplementation x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
+    Core.projectionField = (Core.Name "implementation")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-primitiveWithName :: (Graph.Primitive -> Core.Name -> Graph.Primitive)
-primitiveWithName original newVal = Graph.Primitive {
-  Graph.primitiveName = newVal,
-  Graph.primitiveType = (Graph.primitiveType original),
-  Graph.primitiveImplementation = (Graph.primitiveImplementation original)}
+primitiveWithName :: (Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm Core.Name -> Phantoms.TTerm Graph.Primitive)
+primitiveWithName original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.graph.Primitive"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "name"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "type"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
+          Core.projectionField = (Core.Name "type")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "implementation"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
+          Core.projectionField = (Core.Name "implementation")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-primitiveWithType :: (Graph.Primitive -> Core.TypeScheme -> Graph.Primitive)
-primitiveWithType original newVal = Graph.Primitive {
-  Graph.primitiveName = (Graph.primitiveName original),
-  Graph.primitiveType = newVal,
-  Graph.primitiveImplementation = (Graph.primitiveImplementation original)}
+primitiveWithType :: (Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm Core.TypeScheme -> Phantoms.TTerm Graph.Primitive)
+primitiveWithType original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.graph.Primitive"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "name"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
+          Core.projectionField = (Core.Name "name")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "type"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "implementation"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
+          Core.projectionField = (Core.Name "implementation")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-primitiveWithImplementation :: (Graph.Primitive -> (Context.Context -> Graph.Graph -> [Core.Term] -> Either (Context.InContext Error.Error) Core.Term) -> Graph.Primitive)
-primitiveWithImplementation original newVal = Graph.Primitive {
-  Graph.primitiveName = (Graph.primitiveName original),
-  Graph.primitiveType = (Graph.primitiveType original),
-  Graph.primitiveImplementation = newVal}
+primitiveWithImplementation :: (Phantoms.TTerm Graph.Primitive -> Phantoms.TTerm (Context.Context -> Graph.Graph -> [Core.Term] -> Either (Context.InContext Error.Error) Core.Term) -> Phantoms.TTerm Graph.Primitive)
+primitiveWithImplementation original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.graph.Primitive"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "name"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
+          Core.projectionField = (Core.Name "name")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "type"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.Primitive"),
+          Core.projectionField = (Core.Name "type")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "implementation"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
 
-termCoder :: (Core.Type -> (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) t0) -> (Context.Context -> t0 -> Either (Context.InContext Error.Error) Core.Term) -> Graph.TermCoder t0)
-termCoder type_ encode decode = Graph.TermCoder {
-  Graph.termCoderType = type_,
-  Graph.termCoderEncode = encode,
-  Graph.termCoderDecode = decode}
+termCoder :: (Phantoms.TTerm Core.Type -> Phantoms.TTerm (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) a) -> Phantoms.TTerm (Context.Context -> a -> Either (Context.InContext Error.Error) Core.Term) -> Phantoms.TTerm (Graph.TermCoder a))
+termCoder type_ encode decode = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.graph.TermCoder"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "type"),
+      Core.fieldTerm = (Phantoms.unTTerm type_)},
+    Core.Field {
+      Core.fieldName = (Core.Name "encode"),
+      Core.fieldTerm = (Phantoms.unTTerm encode)},
+    Core.Field {
+      Core.fieldName = (Core.Name "decode"),
+      Core.fieldTerm = (Phantoms.unTTerm decode)}]})))
 
-termCoderType :: (Graph.TermCoder t0 -> Core.Type)
-termCoderType = Graph.termCoderType
+termCoderType :: (Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm Core.Type)
+termCoderType x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.graph.TermCoder"),
+    Core.projectionField = (Core.Name "type")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-termCoderEncode :: (Graph.TermCoder t0 -> Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) t0)
-termCoderEncode = Graph.termCoderEncode
+termCoderEncode :: (Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) a))
+termCoderEncode x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.graph.TermCoder"),
+    Core.projectionField = (Core.Name "encode")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-termCoderDecode :: (Graph.TermCoder t0 -> Context.Context -> t0 -> Either (Context.InContext Error.Error) Core.Term)
-termCoderDecode = Graph.termCoderDecode
+termCoderDecode :: (Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm (Context.Context -> a -> Either (Context.InContext Error.Error) Core.Term))
+termCoderDecode x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.graph.TermCoder"),
+    Core.projectionField = (Core.Name "decode")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-termCoderWithType :: (Graph.TermCoder t0 -> Core.Type -> Graph.TermCoder t0)
-termCoderWithType original newVal = Graph.TermCoder {
-  Graph.termCoderType = newVal,
-  Graph.termCoderEncode = (Graph.termCoderEncode original),
-  Graph.termCoderDecode = (Graph.termCoderDecode original)}
+termCoderWithType :: (Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm Core.Type -> Phantoms.TTerm (Graph.TermCoder a))
+termCoderWithType original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.graph.TermCoder"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "type"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "encode"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.TermCoder"),
+          Core.projectionField = (Core.Name "encode")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "decode"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.TermCoder"),
+          Core.projectionField = (Core.Name "decode")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-termCoderWithEncode :: (Graph.TermCoder t0 -> (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) t0) -> Graph.TermCoder t0)
-termCoderWithEncode original newVal = Graph.TermCoder {
-  Graph.termCoderType = (Graph.termCoderType original),
-  Graph.termCoderEncode = newVal,
-  Graph.termCoderDecode = (Graph.termCoderDecode original)}
+termCoderWithEncode :: (Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) a) -> Phantoms.TTerm (Graph.TermCoder a))
+termCoderWithEncode original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.graph.TermCoder"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "type"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.TermCoder"),
+          Core.projectionField = (Core.Name "type")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "encode"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "decode"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.TermCoder"),
+          Core.projectionField = (Core.Name "decode")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-termCoderWithDecode :: (Graph.TermCoder t0 -> (Context.Context -> t0 -> Either (Context.InContext Error.Error) Core.Term) -> Graph.TermCoder t0)
-termCoderWithDecode original newVal = Graph.TermCoder {
-  Graph.termCoderType = (Graph.termCoderType original),
-  Graph.termCoderEncode = (Graph.termCoderEncode original),
-  Graph.termCoderDecode = newVal}
+termCoderWithDecode :: (Phantoms.TTerm (Graph.TermCoder a) -> Phantoms.TTerm (Context.Context -> a -> Either (Context.InContext Error.Error) Core.Term) -> Phantoms.TTerm (Graph.TermCoder a))
+termCoderWithDecode original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.graph.TermCoder"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "type"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.TermCoder"),
+          Core.projectionField = (Core.Name "type")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "encode"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.graph.TermCoder"),
+          Core.projectionField = (Core.Name "encode")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "decode"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
