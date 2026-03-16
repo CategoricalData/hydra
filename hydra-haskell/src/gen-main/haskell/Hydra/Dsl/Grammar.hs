@@ -4,7 +4,9 @@
 
 module Hydra.Dsl.Grammar where
 
+import qualified Hydra.Core as Core
 import qualified Hydra.Grammar as Grammar
+import qualified Hydra.Phantoms as Phantoms
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -12,107 +14,239 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-constant :: (String -> Grammar.Constant)
-constant x = (Grammar.Constant x)
+constant :: (Phantoms.TTerm String -> Phantoms.TTerm Grammar.Constant)
+constant x = (Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+  Core.wrappedTermTypeName = (Core.Name "hydra.grammar.Constant"),
+  Core.wrappedTermBody = (Phantoms.unTTerm x)})))
 
-unConstant :: (Grammar.Constant -> String)
-unConstant = Grammar.unConstant
+unConstant :: (Phantoms.TTerm Grammar.Constant -> Phantoms.TTerm String)
+unConstant x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.grammar.Constant")))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-grammar :: ([Grammar.Production] -> Grammar.Grammar)
-grammar x = (Grammar.Grammar x)
+grammar :: (Phantoms.TTerm [Grammar.Production] -> Phantoms.TTerm Grammar.Grammar)
+grammar x = (Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+  Core.wrappedTermTypeName = (Core.Name "hydra.grammar.Grammar"),
+  Core.wrappedTermBody = (Phantoms.unTTerm x)})))
 
-unGrammar :: (Grammar.Grammar -> [Grammar.Production])
-unGrammar = Grammar.unGrammar
+unGrammar :: (Phantoms.TTerm Grammar.Grammar -> Phantoms.TTerm [Grammar.Production])
+unGrammar x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.grammar.Grammar")))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-label :: (String -> Grammar.Label)
-label x = (Grammar.Label x)
+label :: (Phantoms.TTerm String -> Phantoms.TTerm Grammar.Label)
+label x = (Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+  Core.wrappedTermTypeName = (Core.Name "hydra.grammar.Label"),
+  Core.wrappedTermBody = (Phantoms.unTTerm x)})))
 
-unLabel :: (Grammar.Label -> String)
-unLabel = Grammar.unLabel
+unLabel :: (Phantoms.TTerm Grammar.Label -> Phantoms.TTerm String)
+unLabel x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.grammar.Label")))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-labeledPattern :: (Grammar.Label -> Grammar.Pattern -> Grammar.LabeledPattern)
-labeledPattern label pattern = Grammar.LabeledPattern {
-  Grammar.labeledPatternLabel = label,
-  Grammar.labeledPatternPattern = pattern}
+labeledPattern :: (Phantoms.TTerm Grammar.Label -> Phantoms.TTerm Grammar.Pattern -> Phantoms.TTerm Grammar.LabeledPattern)
+labeledPattern label pattern = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.grammar.LabeledPattern"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "label"),
+      Core.fieldTerm = (Phantoms.unTTerm label)},
+    Core.Field {
+      Core.fieldName = (Core.Name "pattern"),
+      Core.fieldTerm = (Phantoms.unTTerm pattern)}]})))
 
-labeledPatternLabel :: (Grammar.LabeledPattern -> Grammar.Label)
-labeledPatternLabel = Grammar.labeledPatternLabel
+labeledPatternLabel :: (Phantoms.TTerm Grammar.LabeledPattern -> Phantoms.TTerm Grammar.Label)
+labeledPatternLabel x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.grammar.LabeledPattern"),
+    Core.projectionField = (Core.Name "label")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-labeledPatternPattern :: (Grammar.LabeledPattern -> Grammar.Pattern)
-labeledPatternPattern = Grammar.labeledPatternPattern
+labeledPatternPattern :: (Phantoms.TTerm Grammar.LabeledPattern -> Phantoms.TTerm Grammar.Pattern)
+labeledPatternPattern x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.grammar.LabeledPattern"),
+    Core.projectionField = (Core.Name "pattern")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-labeledPatternWithLabel :: (Grammar.LabeledPattern -> Grammar.Label -> Grammar.LabeledPattern)
-labeledPatternWithLabel original newVal = Grammar.LabeledPattern {
-  Grammar.labeledPatternLabel = newVal,
-  Grammar.labeledPatternPattern = (Grammar.labeledPatternPattern original)}
+labeledPatternWithLabel :: (Phantoms.TTerm Grammar.LabeledPattern -> Phantoms.TTerm Grammar.Label -> Phantoms.TTerm Grammar.LabeledPattern)
+labeledPatternWithLabel original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.grammar.LabeledPattern"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "label"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "pattern"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.grammar.LabeledPattern"),
+          Core.projectionField = (Core.Name "pattern")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-labeledPatternWithPattern :: (Grammar.LabeledPattern -> Grammar.Pattern -> Grammar.LabeledPattern)
-labeledPatternWithPattern original newVal = Grammar.LabeledPattern {
-  Grammar.labeledPatternLabel = (Grammar.labeledPatternLabel original),
-  Grammar.labeledPatternPattern = newVal}
+labeledPatternWithPattern :: (Phantoms.TTerm Grammar.LabeledPattern -> Phantoms.TTerm Grammar.Pattern -> Phantoms.TTerm Grammar.LabeledPattern)
+labeledPatternWithPattern original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.grammar.LabeledPattern"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "label"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.grammar.LabeledPattern"),
+          Core.projectionField = (Core.Name "label")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "pattern"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
 
-patternAlternatives :: ([Grammar.Pattern] -> Grammar.Pattern)
-patternAlternatives x = (Grammar.PatternAlternatives x)
+patternAlternatives :: (Phantoms.TTerm [Grammar.Pattern] -> Phantoms.TTerm Grammar.Pattern)
+patternAlternatives x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.grammar.Pattern"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "alternatives"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
 
-patternConstant :: (Grammar.Constant -> Grammar.Pattern)
-patternConstant x = (Grammar.PatternConstant x)
+patternConstant :: (Phantoms.TTerm Grammar.Constant -> Phantoms.TTerm Grammar.Pattern)
+patternConstant x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.grammar.Pattern"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "constant"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
 
-patternIgnored :: (Grammar.Pattern -> Grammar.Pattern)
-patternIgnored x = (Grammar.PatternIgnored x)
+patternIgnored :: (Phantoms.TTerm Grammar.Pattern -> Phantoms.TTerm Grammar.Pattern)
+patternIgnored x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.grammar.Pattern"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "ignored"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
 
-patternLabeled :: (Grammar.LabeledPattern -> Grammar.Pattern)
-patternLabeled x = (Grammar.PatternLabeled x)
+patternLabeled :: (Phantoms.TTerm Grammar.LabeledPattern -> Phantoms.TTerm Grammar.Pattern)
+patternLabeled x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.grammar.Pattern"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "labeled"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
 
-patternNil :: Grammar.Pattern
-patternNil = Grammar.PatternNil
+patternNil :: (Phantoms.TTerm Grammar.Pattern)
+patternNil = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.grammar.Pattern"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "nil"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-patternNonterminal :: (Grammar.Symbol -> Grammar.Pattern)
-patternNonterminal x = (Grammar.PatternNonterminal x)
+patternNonterminal :: (Phantoms.TTerm Grammar.Symbol -> Phantoms.TTerm Grammar.Pattern)
+patternNonterminal x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.grammar.Pattern"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "nonterminal"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
 
-patternOption :: (Grammar.Pattern -> Grammar.Pattern)
-patternOption x = (Grammar.PatternOption x)
+patternOption :: (Phantoms.TTerm Grammar.Pattern -> Phantoms.TTerm Grammar.Pattern)
+patternOption x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.grammar.Pattern"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "option"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
 
-patternPlus :: (Grammar.Pattern -> Grammar.Pattern)
-patternPlus x = (Grammar.PatternPlus x)
+patternPlus :: (Phantoms.TTerm Grammar.Pattern -> Phantoms.TTerm Grammar.Pattern)
+patternPlus x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.grammar.Pattern"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "plus"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
 
-patternRegex :: (Grammar.Regex -> Grammar.Pattern)
-patternRegex x = (Grammar.PatternRegex x)
+patternRegex :: (Phantoms.TTerm Grammar.Regex -> Phantoms.TTerm Grammar.Pattern)
+patternRegex x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.grammar.Pattern"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "regex"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
 
-patternSequence :: ([Grammar.Pattern] -> Grammar.Pattern)
-patternSequence x = (Grammar.PatternSequence x)
+patternSequence :: (Phantoms.TTerm [Grammar.Pattern] -> Phantoms.TTerm Grammar.Pattern)
+patternSequence x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.grammar.Pattern"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "sequence"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
 
-patternStar :: (Grammar.Pattern -> Grammar.Pattern)
-patternStar x = (Grammar.PatternStar x)
+patternStar :: (Phantoms.TTerm Grammar.Pattern -> Phantoms.TTerm Grammar.Pattern)
+patternStar x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.grammar.Pattern"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "star"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
 
-production :: (Grammar.Symbol -> Grammar.Pattern -> Grammar.Production)
-production symbol pattern = Grammar.Production {
-  Grammar.productionSymbol = symbol,
-  Grammar.productionPattern = pattern}
+production :: (Phantoms.TTerm Grammar.Symbol -> Phantoms.TTerm Grammar.Pattern -> Phantoms.TTerm Grammar.Production)
+production symbol pattern = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.grammar.Production"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "symbol"),
+      Core.fieldTerm = (Phantoms.unTTerm symbol)},
+    Core.Field {
+      Core.fieldName = (Core.Name "pattern"),
+      Core.fieldTerm = (Phantoms.unTTerm pattern)}]})))
 
-productionSymbol :: (Grammar.Production -> Grammar.Symbol)
-productionSymbol = Grammar.productionSymbol
+productionSymbol :: (Phantoms.TTerm Grammar.Production -> Phantoms.TTerm Grammar.Symbol)
+productionSymbol x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.grammar.Production"),
+    Core.projectionField = (Core.Name "symbol")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-productionPattern :: (Grammar.Production -> Grammar.Pattern)
-productionPattern = Grammar.productionPattern
+productionPattern :: (Phantoms.TTerm Grammar.Production -> Phantoms.TTerm Grammar.Pattern)
+productionPattern x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.grammar.Production"),
+    Core.projectionField = (Core.Name "pattern")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-productionWithSymbol :: (Grammar.Production -> Grammar.Symbol -> Grammar.Production)
-productionWithSymbol original newVal = Grammar.Production {
-  Grammar.productionSymbol = newVal,
-  Grammar.productionPattern = (Grammar.productionPattern original)}
+productionWithSymbol :: (Phantoms.TTerm Grammar.Production -> Phantoms.TTerm Grammar.Symbol -> Phantoms.TTerm Grammar.Production)
+productionWithSymbol original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.grammar.Production"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "symbol"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "pattern"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.grammar.Production"),
+          Core.projectionField = (Core.Name "pattern")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-productionWithPattern :: (Grammar.Production -> Grammar.Pattern -> Grammar.Production)
-productionWithPattern original newVal = Grammar.Production {
-  Grammar.productionSymbol = (Grammar.productionSymbol original),
-  Grammar.productionPattern = newVal}
+productionWithPattern :: (Phantoms.TTerm Grammar.Production -> Phantoms.TTerm Grammar.Pattern -> Phantoms.TTerm Grammar.Production)
+productionWithPattern original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.grammar.Production"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "symbol"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.grammar.Production"),
+          Core.projectionField = (Core.Name "symbol")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "pattern"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
 
-regex :: (String -> Grammar.Regex)
-regex x = (Grammar.Regex x)
+regex :: (Phantoms.TTerm String -> Phantoms.TTerm Grammar.Regex)
+regex x = (Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+  Core.wrappedTermTypeName = (Core.Name "hydra.grammar.Regex"),
+  Core.wrappedTermBody = (Phantoms.unTTerm x)})))
 
-unRegex :: (Grammar.Regex -> String)
-unRegex = Grammar.unRegex
+unRegex :: (Phantoms.TTerm Grammar.Regex -> Phantoms.TTerm String)
+unRegex x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.grammar.Regex")))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-symbol :: (String -> Grammar.Symbol)
-symbol x = (Grammar.Symbol x)
+symbol :: (Phantoms.TTerm String -> Phantoms.TTerm Grammar.Symbol)
+symbol x = (Phantoms.TTerm (Core.TermWrap (Core.WrappedTerm {
+  Core.wrappedTermTypeName = (Core.Name "hydra.grammar.Symbol"),
+  Core.wrappedTermBody = (Phantoms.unTTerm x)})))
 
-unSymbol :: (Grammar.Symbol -> String)
-unSymbol = Grammar.unSymbol
+unSymbol :: (Phantoms.TTerm Grammar.Symbol -> Phantoms.TTerm String)
+unSymbol x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.grammar.Symbol")))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))

@@ -4,6 +4,8 @@
 
 module Hydra.Dsl.Variants where
 
+import qualified Hydra.Core as Core
+import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Variants as Variants
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -12,137 +14,317 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-eliminationVariantRecord :: Variants.EliminationVariant
-eliminationVariantRecord = Variants.EliminationVariantRecord
+eliminationVariantRecord :: (Phantoms.TTerm Variants.EliminationVariant)
+eliminationVariantRecord = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.EliminationVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "record"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-eliminationVariantUnion :: Variants.EliminationVariant
-eliminationVariantUnion = Variants.EliminationVariantUnion
+eliminationVariantUnion :: (Phantoms.TTerm Variants.EliminationVariant)
+eliminationVariantUnion = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.EliminationVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "union"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-eliminationVariantWrap :: Variants.EliminationVariant
-eliminationVariantWrap = Variants.EliminationVariantWrap
+eliminationVariantWrap :: (Phantoms.TTerm Variants.EliminationVariant)
+eliminationVariantWrap = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.EliminationVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "wrap"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-functionVariantElimination :: Variants.FunctionVariant
-functionVariantElimination = Variants.FunctionVariantElimination
+functionVariantElimination :: (Phantoms.TTerm Variants.FunctionVariant)
+functionVariantElimination = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.FunctionVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "elimination"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-functionVariantLambda :: Variants.FunctionVariant
-functionVariantLambda = Variants.FunctionVariantLambda
+functionVariantLambda :: (Phantoms.TTerm Variants.FunctionVariant)
+functionVariantLambda = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.FunctionVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "lambda"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-functionVariantPrimitive :: Variants.FunctionVariant
-functionVariantPrimitive = Variants.FunctionVariantPrimitive
+functionVariantPrimitive :: (Phantoms.TTerm Variants.FunctionVariant)
+functionVariantPrimitive = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.FunctionVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "primitive"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-literalVariantBinary :: Variants.LiteralVariant
-literalVariantBinary = Variants.LiteralVariantBinary
+literalVariantBinary :: (Phantoms.TTerm Variants.LiteralVariant)
+literalVariantBinary = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.LiteralVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "binary"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-literalVariantBoolean :: Variants.LiteralVariant
-literalVariantBoolean = Variants.LiteralVariantBoolean
+literalVariantBoolean :: (Phantoms.TTerm Variants.LiteralVariant)
+literalVariantBoolean = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.LiteralVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "boolean"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-literalVariantFloat :: Variants.LiteralVariant
-literalVariantFloat = Variants.LiteralVariantFloat
+literalVariantFloat :: (Phantoms.TTerm Variants.LiteralVariant)
+literalVariantFloat = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.LiteralVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "float"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-literalVariantInteger :: Variants.LiteralVariant
-literalVariantInteger = Variants.LiteralVariantInteger
+literalVariantInteger :: (Phantoms.TTerm Variants.LiteralVariant)
+literalVariantInteger = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.LiteralVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "integer"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-literalVariantString :: Variants.LiteralVariant
-literalVariantString = Variants.LiteralVariantString
+literalVariantString :: (Phantoms.TTerm Variants.LiteralVariant)
+literalVariantString = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.LiteralVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "string"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-termVariantAnnotated :: Variants.TermVariant
-termVariantAnnotated = Variants.TermVariantAnnotated
+termVariantAnnotated :: (Phantoms.TTerm Variants.TermVariant)
+termVariantAnnotated = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "annotated"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-termVariantApplication :: Variants.TermVariant
-termVariantApplication = Variants.TermVariantApplication
+termVariantApplication :: (Phantoms.TTerm Variants.TermVariant)
+termVariantApplication = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "application"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-termVariantEither :: Variants.TermVariant
-termVariantEither = Variants.TermVariantEither
+termVariantEither :: (Phantoms.TTerm Variants.TermVariant)
+termVariantEither = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "either"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-termVariantFunction :: Variants.TermVariant
-termVariantFunction = Variants.TermVariantFunction
+termVariantFunction :: (Phantoms.TTerm Variants.TermVariant)
+termVariantFunction = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "function"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-termVariantLet :: Variants.TermVariant
-termVariantLet = Variants.TermVariantLet
+termVariantLet :: (Phantoms.TTerm Variants.TermVariant)
+termVariantLet = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "let"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-termVariantList :: Variants.TermVariant
-termVariantList = Variants.TermVariantList
+termVariantList :: (Phantoms.TTerm Variants.TermVariant)
+termVariantList = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "list"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-termVariantLiteral :: Variants.TermVariant
-termVariantLiteral = Variants.TermVariantLiteral
+termVariantLiteral :: (Phantoms.TTerm Variants.TermVariant)
+termVariantLiteral = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "literal"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-termVariantMap :: Variants.TermVariant
-termVariantMap = Variants.TermVariantMap
+termVariantMap :: (Phantoms.TTerm Variants.TermVariant)
+termVariantMap = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "map"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-termVariantMaybe :: Variants.TermVariant
-termVariantMaybe = Variants.TermVariantMaybe
+termVariantMaybe :: (Phantoms.TTerm Variants.TermVariant)
+termVariantMaybe = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "maybe"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-termVariantPair :: Variants.TermVariant
-termVariantPair = Variants.TermVariantPair
+termVariantPair :: (Phantoms.TTerm Variants.TermVariant)
+termVariantPair = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "pair"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-termVariantRecord :: Variants.TermVariant
-termVariantRecord = Variants.TermVariantRecord
+termVariantRecord :: (Phantoms.TTerm Variants.TermVariant)
+termVariantRecord = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "record"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-termVariantSet :: Variants.TermVariant
-termVariantSet = Variants.TermVariantSet
+termVariantSet :: (Phantoms.TTerm Variants.TermVariant)
+termVariantSet = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "set"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-termVariantTypeApplication :: Variants.TermVariant
-termVariantTypeApplication = Variants.TermVariantTypeApplication
+termVariantTypeApplication :: (Phantoms.TTerm Variants.TermVariant)
+termVariantTypeApplication = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "typeApplication"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-termVariantTypeLambda :: Variants.TermVariant
-termVariantTypeLambda = Variants.TermVariantTypeLambda
+termVariantTypeLambda :: (Phantoms.TTerm Variants.TermVariant)
+termVariantTypeLambda = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "typeLambda"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-termVariantUnion :: Variants.TermVariant
-termVariantUnion = Variants.TermVariantUnion
+termVariantUnion :: (Phantoms.TTerm Variants.TermVariant)
+termVariantUnion = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "union"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-termVariantUnit :: Variants.TermVariant
-termVariantUnit = Variants.TermVariantUnit
+termVariantUnit :: (Phantoms.TTerm Variants.TermVariant)
+termVariantUnit = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "unit"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-termVariantVariable :: Variants.TermVariant
-termVariantVariable = Variants.TermVariantVariable
+termVariantVariable :: (Phantoms.TTerm Variants.TermVariant)
+termVariantVariable = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "variable"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-termVariantWrap :: Variants.TermVariant
-termVariantWrap = Variants.TermVariantWrap
+termVariantWrap :: (Phantoms.TTerm Variants.TermVariant)
+termVariantWrap = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TermVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "wrap"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-typeVariantAnnotated :: Variants.TypeVariant
-typeVariantAnnotated = Variants.TypeVariantAnnotated
+typeVariantAnnotated :: (Phantoms.TTerm Variants.TypeVariant)
+typeVariantAnnotated = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "annotated"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-typeVariantApplication :: Variants.TypeVariant
-typeVariantApplication = Variants.TypeVariantApplication
+typeVariantApplication :: (Phantoms.TTerm Variants.TypeVariant)
+typeVariantApplication = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "application"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-typeVariantEither :: Variants.TypeVariant
-typeVariantEither = Variants.TypeVariantEither
+typeVariantEither :: (Phantoms.TTerm Variants.TypeVariant)
+typeVariantEither = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "either"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-typeVariantForall :: Variants.TypeVariant
-typeVariantForall = Variants.TypeVariantForall
+typeVariantForall :: (Phantoms.TTerm Variants.TypeVariant)
+typeVariantForall = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "forall"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-typeVariantFunction :: Variants.TypeVariant
-typeVariantFunction = Variants.TypeVariantFunction
+typeVariantFunction :: (Phantoms.TTerm Variants.TypeVariant)
+typeVariantFunction = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "function"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-typeVariantList :: Variants.TypeVariant
-typeVariantList = Variants.TypeVariantList
+typeVariantList :: (Phantoms.TTerm Variants.TypeVariant)
+typeVariantList = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "list"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-typeVariantLiteral :: Variants.TypeVariant
-typeVariantLiteral = Variants.TypeVariantLiteral
+typeVariantLiteral :: (Phantoms.TTerm Variants.TypeVariant)
+typeVariantLiteral = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "literal"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-typeVariantMap :: Variants.TypeVariant
-typeVariantMap = Variants.TypeVariantMap
+typeVariantMap :: (Phantoms.TTerm Variants.TypeVariant)
+typeVariantMap = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "map"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-typeVariantMaybe :: Variants.TypeVariant
-typeVariantMaybe = Variants.TypeVariantMaybe
+typeVariantMaybe :: (Phantoms.TTerm Variants.TypeVariant)
+typeVariantMaybe = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "maybe"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-typeVariantPair :: Variants.TypeVariant
-typeVariantPair = Variants.TypeVariantPair
+typeVariantPair :: (Phantoms.TTerm Variants.TypeVariant)
+typeVariantPair = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "pair"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-typeVariantRecord :: Variants.TypeVariant
-typeVariantRecord = Variants.TypeVariantRecord
+typeVariantRecord :: (Phantoms.TTerm Variants.TypeVariant)
+typeVariantRecord = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "record"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-typeVariantSet :: Variants.TypeVariant
-typeVariantSet = Variants.TypeVariantSet
+typeVariantSet :: (Phantoms.TTerm Variants.TypeVariant)
+typeVariantSet = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "set"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-typeVariantUnion :: Variants.TypeVariant
-typeVariantUnion = Variants.TypeVariantUnion
+typeVariantUnion :: (Phantoms.TTerm Variants.TypeVariant)
+typeVariantUnion = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "union"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-typeVariantUnit :: Variants.TypeVariant
-typeVariantUnit = Variants.TypeVariantUnit
+typeVariantUnit :: (Phantoms.TTerm Variants.TypeVariant)
+typeVariantUnit = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "unit"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-typeVariantVariable :: Variants.TypeVariant
-typeVariantVariable = Variants.TypeVariantVariable
+typeVariantVariable :: (Phantoms.TTerm Variants.TypeVariant)
+typeVariantVariable = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "variable"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-typeVariantWrap :: Variants.TypeVariant
-typeVariantWrap = Variants.TypeVariantWrap
+typeVariantWrap :: (Phantoms.TTerm Variants.TypeVariant)
+typeVariantWrap = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.variants.TypeVariant"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "wrap"),
+    Core.fieldTerm = Core.TermUnit}})))

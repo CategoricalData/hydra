@@ -5,7 +5,9 @@
 module Hydra.Dsl.Util where
 
 import qualified Hydra.Context as Context
+import qualified Hydra.Core as Core
 import qualified Hydra.Error as Error
+import qualified Hydra.Phantoms as Phantoms
 import qualified Hydra.Util as Util
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
@@ -14,118 +16,336 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-adapter :: (Bool -> t0 -> t1 -> Util.Coder t2 t3 -> Util.Adapter t0 t1 t2 t3)
-adapter isLossy source target coder = Util.Adapter {
-  Util.adapterIsLossy = isLossy,
-  Util.adapterSource = source,
-  Util.adapterTarget = target,
-  Util.adapterCoder = coder}
+adapter :: (Phantoms.TTerm Bool -> Phantoms.TTerm t1 -> Phantoms.TTerm t2 -> Phantoms.TTerm (Util.Coder v1 v2) -> Phantoms.TTerm (Util.Adapter t1 t2 v1 v2))
+adapter isLossy source target coder = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.util.Adapter"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "isLossy"),
+      Core.fieldTerm = (Phantoms.unTTerm isLossy)},
+    Core.Field {
+      Core.fieldName = (Core.Name "source"),
+      Core.fieldTerm = (Phantoms.unTTerm source)},
+    Core.Field {
+      Core.fieldName = (Core.Name "target"),
+      Core.fieldTerm = (Phantoms.unTTerm target)},
+    Core.Field {
+      Core.fieldName = (Core.Name "coder"),
+      Core.fieldTerm = (Phantoms.unTTerm coder)}]})))
 
-adapterIsLossy :: (Util.Adapter t0 t1 t2 t3 -> Bool)
-adapterIsLossy = Util.adapterIsLossy
+adapterIsLossy :: (Phantoms.TTerm (Util.Adapter t1 t2 v1 v2) -> Phantoms.TTerm Bool)
+adapterIsLossy x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.util.Adapter"),
+    Core.projectionField = (Core.Name "isLossy")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-adapterSource :: (Util.Adapter t0 t1 t2 t3 -> t0)
-adapterSource = Util.adapterSource
+adapterSource :: (Phantoms.TTerm (Util.Adapter t1 t2 v1 v2) -> Phantoms.TTerm t1)
+adapterSource x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.util.Adapter"),
+    Core.projectionField = (Core.Name "source")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-adapterTarget :: (Util.Adapter t0 t1 t2 t3 -> t1)
-adapterTarget = Util.adapterTarget
+adapterTarget :: (Phantoms.TTerm (Util.Adapter t1 t2 v1 v2) -> Phantoms.TTerm t2)
+adapterTarget x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.util.Adapter"),
+    Core.projectionField = (Core.Name "target")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-adapterCoder :: (Util.Adapter t0 t1 t2 t3 -> Util.Coder t2 t3)
-adapterCoder = Util.adapterCoder
+adapterCoder :: (Phantoms.TTerm (Util.Adapter t1 t2 v1 v2) -> Phantoms.TTerm (Util.Coder v1 v2))
+adapterCoder x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.util.Adapter"),
+    Core.projectionField = (Core.Name "coder")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-adapterWithIsLossy :: (Util.Adapter t0 t1 t2 t3 -> Bool -> Util.Adapter t0 t1 t2 t3)
-adapterWithIsLossy original newVal = Util.Adapter {
-  Util.adapterIsLossy = newVal,
-  Util.adapterSource = (Util.adapterSource original),
-  Util.adapterTarget = (Util.adapterTarget original),
-  Util.adapterCoder = (Util.adapterCoder original)}
+adapterWithIsLossy :: (Phantoms.TTerm (Util.Adapter t1 t2 v1 v2) -> Phantoms.TTerm Bool -> Phantoms.TTerm (Util.Adapter t1 t2 v1 v2))
+adapterWithIsLossy original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.util.Adapter"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "isLossy"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "source"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.util.Adapter"),
+          Core.projectionField = (Core.Name "source")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "target"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.util.Adapter"),
+          Core.projectionField = (Core.Name "target")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "coder"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.util.Adapter"),
+          Core.projectionField = (Core.Name "coder")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-adapterWithSource :: (Util.Adapter t0 t1 t2 t3 -> t4 -> Util.Adapter t4 t1 t2 t3)
-adapterWithSource original newVal = Util.Adapter {
-  Util.adapterIsLossy = (Util.adapterIsLossy original),
-  Util.adapterSource = newVal,
-  Util.adapterTarget = (Util.adapterTarget original),
-  Util.adapterCoder = (Util.adapterCoder original)}
+adapterWithSource :: (Phantoms.TTerm (Util.Adapter t1 t2 v1 v2) -> Phantoms.TTerm t1 -> Phantoms.TTerm (Util.Adapter t1 t2 v1 v2))
+adapterWithSource original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.util.Adapter"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "isLossy"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.util.Adapter"),
+          Core.projectionField = (Core.Name "isLossy")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "source"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "target"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.util.Adapter"),
+          Core.projectionField = (Core.Name "target")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "coder"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.util.Adapter"),
+          Core.projectionField = (Core.Name "coder")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-adapterWithTarget :: (Util.Adapter t0 t1 t2 t3 -> t4 -> Util.Adapter t0 t4 t2 t3)
-adapterWithTarget original newVal = Util.Adapter {
-  Util.adapterIsLossy = (Util.adapterIsLossy original),
-  Util.adapterSource = (Util.adapterSource original),
-  Util.adapterTarget = newVal,
-  Util.adapterCoder = (Util.adapterCoder original)}
+adapterWithTarget :: (Phantoms.TTerm (Util.Adapter t1 t2 v1 v2) -> Phantoms.TTerm t2 -> Phantoms.TTerm (Util.Adapter t1 t2 v1 v2))
+adapterWithTarget original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.util.Adapter"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "isLossy"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.util.Adapter"),
+          Core.projectionField = (Core.Name "isLossy")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "source"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.util.Adapter"),
+          Core.projectionField = (Core.Name "source")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "target"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "coder"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.util.Adapter"),
+          Core.projectionField = (Core.Name "coder")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-adapterWithCoder :: (Util.Adapter t0 t1 t2 t3 -> Util.Coder t4 t5 -> Util.Adapter t0 t1 t4 t5)
-adapterWithCoder original newVal = Util.Adapter {
-  Util.adapterIsLossy = (Util.adapterIsLossy original),
-  Util.adapterSource = (Util.adapterSource original),
-  Util.adapterTarget = (Util.adapterTarget original),
-  Util.adapterCoder = newVal}
+adapterWithCoder :: (Phantoms.TTerm (Util.Adapter t1 t2 v1 v2) -> Phantoms.TTerm (Util.Coder v1 v2) -> Phantoms.TTerm (Util.Adapter t1 t2 v1 v2))
+adapterWithCoder original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.util.Adapter"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "isLossy"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.util.Adapter"),
+          Core.projectionField = (Core.Name "isLossy")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "source"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.util.Adapter"),
+          Core.projectionField = (Core.Name "source")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "target"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.util.Adapter"),
+          Core.projectionField = (Core.Name "target")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "coder"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
 
-bicoder :: ((t0 -> Util.Adapter t0 t1 t2 t3) -> (t1 -> Util.Adapter t1 t0 t3 t2) -> Util.Bicoder t0 t1 t2 t3)
-bicoder encode decode = Util.Bicoder {
-  Util.bicoderEncode = encode,
-  Util.bicoderDecode = decode}
+bicoder :: (Phantoms.TTerm (t1 -> Util.Adapter t1 t2 v1 v2) -> Phantoms.TTerm (t2 -> Util.Adapter t2 t1 v2 v1) -> Phantoms.TTerm (Util.Bicoder t1 t2 v1 v2))
+bicoder encode decode = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.util.Bicoder"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "encode"),
+      Core.fieldTerm = (Phantoms.unTTerm encode)},
+    Core.Field {
+      Core.fieldName = (Core.Name "decode"),
+      Core.fieldTerm = (Phantoms.unTTerm decode)}]})))
 
-bicoderEncode :: (Util.Bicoder t0 t1 t2 t3 -> t0 -> Util.Adapter t0 t1 t2 t3)
-bicoderEncode = Util.bicoderEncode
+bicoderEncode :: (Phantoms.TTerm (Util.Bicoder t1 t2 v1 v2) -> Phantoms.TTerm (t1 -> Util.Adapter t1 t2 v1 v2))
+bicoderEncode x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.util.Bicoder"),
+    Core.projectionField = (Core.Name "encode")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-bicoderDecode :: (Util.Bicoder t0 t1 t2 t3 -> t1 -> Util.Adapter t1 t0 t3 t2)
-bicoderDecode = Util.bicoderDecode
+bicoderDecode :: (Phantoms.TTerm (Util.Bicoder t1 t2 v1 v2) -> Phantoms.TTerm (t2 -> Util.Adapter t2 t1 v2 v1))
+bicoderDecode x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.util.Bicoder"),
+    Core.projectionField = (Core.Name "decode")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-bicoderWithEncode :: (Util.Bicoder t0 t1 t2 t3 -> (t0 -> Util.Adapter t0 t1 t2 t3) -> Util.Bicoder t0 t1 t2 t3)
-bicoderWithEncode original newVal = Util.Bicoder {
-  Util.bicoderEncode = newVal,
-  Util.bicoderDecode = (Util.bicoderDecode original)}
+bicoderWithEncode :: (Phantoms.TTerm (Util.Bicoder t1 t2 v1 v2) -> Phantoms.TTerm (t1 -> Util.Adapter t1 t2 v1 v2) -> Phantoms.TTerm (Util.Bicoder t1 t2 v1 v2))
+bicoderWithEncode original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.util.Bicoder"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "encode"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "decode"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.util.Bicoder"),
+          Core.projectionField = (Core.Name "decode")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-bicoderWithDecode :: (Util.Bicoder t0 t1 t2 t3 -> (t1 -> Util.Adapter t1 t0 t3 t2) -> Util.Bicoder t0 t1 t2 t3)
-bicoderWithDecode original newVal = Util.Bicoder {
-  Util.bicoderEncode = (Util.bicoderEncode original),
-  Util.bicoderDecode = newVal}
+bicoderWithDecode :: (Phantoms.TTerm (Util.Bicoder t1 t2 v1 v2) -> Phantoms.TTerm (t2 -> Util.Adapter t2 t1 v2 v1) -> Phantoms.TTerm (Util.Bicoder t1 t2 v1 v2))
+bicoderWithDecode original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.util.Bicoder"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "encode"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.util.Bicoder"),
+          Core.projectionField = (Core.Name "encode")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "decode"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
 
-caseConventionCamel :: Util.CaseConvention
-caseConventionCamel = Util.CaseConventionCamel
+caseConventionCamel :: (Phantoms.TTerm Util.CaseConvention)
+caseConventionCamel = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.util.CaseConvention"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "camel"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-caseConventionPascal :: Util.CaseConvention
-caseConventionPascal = Util.CaseConventionPascal
+caseConventionPascal :: (Phantoms.TTerm Util.CaseConvention)
+caseConventionPascal = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.util.CaseConvention"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "pascal"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-caseConventionLowerSnake :: Util.CaseConvention
-caseConventionLowerSnake = Util.CaseConventionLowerSnake
+caseConventionLowerSnake :: (Phantoms.TTerm Util.CaseConvention)
+caseConventionLowerSnake = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.util.CaseConvention"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "lowerSnake"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-caseConventionUpperSnake :: Util.CaseConvention
-caseConventionUpperSnake = Util.CaseConventionUpperSnake
+caseConventionUpperSnake :: (Phantoms.TTerm Util.CaseConvention)
+caseConventionUpperSnake = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.util.CaseConvention"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "upperSnake"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-coder :: ((Context.Context -> t0 -> Either (Context.InContext Error.Error) t1) -> (Context.Context -> t1 -> Either (Context.InContext Error.Error) t0) -> Util.Coder t0 t1)
-coder encode decode = Util.Coder {
-  Util.coderEncode = encode,
-  Util.coderDecode = decode}
+coder :: (Phantoms.TTerm (Context.Context -> v1 -> Either (Context.InContext Error.Error) v2) -> Phantoms.TTerm (Context.Context -> v2 -> Either (Context.InContext Error.Error) v1) -> Phantoms.TTerm (Util.Coder v1 v2))
+coder encode decode = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.util.Coder"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "encode"),
+      Core.fieldTerm = (Phantoms.unTTerm encode)},
+    Core.Field {
+      Core.fieldName = (Core.Name "decode"),
+      Core.fieldTerm = (Phantoms.unTTerm decode)}]})))
 
-coderEncode :: (Util.Coder t0 t1 -> Context.Context -> t0 -> Either (Context.InContext Error.Error) t1)
-coderEncode = Util.coderEncode
+coderEncode :: (Phantoms.TTerm (Util.Coder v1 v2) -> Phantoms.TTerm (Context.Context -> v1 -> Either (Context.InContext Error.Error) v2))
+coderEncode x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.util.Coder"),
+    Core.projectionField = (Core.Name "encode")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-coderDecode :: (Util.Coder t0 t1 -> Context.Context -> t1 -> Either (Context.InContext Error.Error) t0)
-coderDecode = Util.coderDecode
+coderDecode :: (Phantoms.TTerm (Util.Coder v1 v2) -> Phantoms.TTerm (Context.Context -> v2 -> Either (Context.InContext Error.Error) v1))
+coderDecode x = (Phantoms.TTerm (Core.TermApplication (Core.Application {
+  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+    Core.projectionTypeName = (Core.Name "hydra.util.Coder"),
+    Core.projectionField = (Core.Name "decode")})))),
+  Core.applicationArgument = (Phantoms.unTTerm x)})))
 
-coderWithEncode :: (Util.Coder t0 t1 -> (Context.Context -> t0 -> Either (Context.InContext Error.Error) t1) -> Util.Coder t0 t1)
-coderWithEncode original newVal = Util.Coder {
-  Util.coderEncode = newVal,
-  Util.coderDecode = (Util.coderDecode original)}
+coderWithEncode :: (Phantoms.TTerm (Util.Coder v1 v2) -> Phantoms.TTerm (Context.Context -> v1 -> Either (Context.InContext Error.Error) v2) -> Phantoms.TTerm (Util.Coder v1 v2))
+coderWithEncode original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.util.Coder"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "encode"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)},
+    Core.Field {
+      Core.fieldName = (Core.Name "decode"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.util.Coder"),
+          Core.projectionField = (Core.Name "decode")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))}]})))
 
-coderWithDecode :: (Util.Coder t0 t1 -> (Context.Context -> t1 -> Either (Context.InContext Error.Error) t0) -> Util.Coder t0 t1)
-coderWithDecode original newVal = Util.Coder {
-  Util.coderEncode = (Util.coderEncode original),
-  Util.coderDecode = newVal}
+coderWithDecode :: (Phantoms.TTerm (Util.Coder v1 v2) -> Phantoms.TTerm (Context.Context -> v2 -> Either (Context.InContext Error.Error) v1) -> Phantoms.TTerm (Util.Coder v1 v2))
+coderWithDecode original newVal = (Phantoms.TTerm (Core.TermRecord (Core.Record {
+  Core.recordTypeName = (Core.Name "hydra.util.Coder"),
+  Core.recordFields = [
+    Core.Field {
+      Core.fieldName = (Core.Name "encode"),
+      Core.fieldTerm = (Core.TermApplication (Core.Application {
+        Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
+          Core.projectionTypeName = (Core.Name "hydra.util.Coder"),
+          Core.projectionField = (Core.Name "encode")})))),
+        Core.applicationArgument = (Phantoms.unTTerm original)}))},
+    Core.Field {
+      Core.fieldName = (Core.Name "decode"),
+      Core.fieldTerm = (Phantoms.unTTerm newVal)}]})))
 
-comparisonLessThan :: Util.Comparison
-comparisonLessThan = Util.ComparisonLessThan
+comparisonLessThan :: (Phantoms.TTerm Util.Comparison)
+comparisonLessThan = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.util.Comparison"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "lessThan"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-comparisonEqualTo :: Util.Comparison
-comparisonEqualTo = Util.ComparisonEqualTo
+comparisonEqualTo :: (Phantoms.TTerm Util.Comparison)
+comparisonEqualTo = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.util.Comparison"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "equalTo"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-comparisonGreaterThan :: Util.Comparison
-comparisonGreaterThan = Util.ComparisonGreaterThan
+comparisonGreaterThan :: (Phantoms.TTerm Util.Comparison)
+comparisonGreaterThan = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.util.Comparison"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "greaterThan"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-precisionArbitrary :: Util.Precision
-precisionArbitrary = Util.PrecisionArbitrary
+precisionArbitrary :: (Phantoms.TTerm Util.Precision)
+precisionArbitrary = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.util.Precision"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "arbitrary"),
+    Core.fieldTerm = Core.TermUnit}})))
 
-precisionBits :: (Int -> Util.Precision)
-precisionBits x = (Util.PrecisionBits x)
+precisionBits :: (Phantoms.TTerm Int -> Phantoms.TTerm Util.Precision)
+precisionBits x = (Phantoms.TTerm (Core.TermUnion (Core.Injection {
+  Core.injectionTypeName = (Core.Name "hydra.util.Precision"),
+  Core.injectionField = Core.Field {
+    Core.fieldName = (Core.Name "bits"),
+    Core.fieldTerm = (Phantoms.unTTerm x)}})))
