@@ -60,10 +60,51 @@ module_ = Module ns elements
       toBinding generateUnionInjector,
       toBinding generateWrappedTypeAccessors,
       toBinding deduplicateBindings,
-      toBinding isDslEligibleBinding]
+      toBinding isDslEligibleBinding,
+      toBinding dslTypeScheme,
+      toBinding collectForallVars]
 
 define :: String -> TTerm x -> TBinding x
 define = definitionInModule module_
+
+-- | Wrap a type in TTerm: TypeApplication (TypeVariable "hydra.phantoms.TTerm") innerType
+wrapInTTerm :: TTerm Type -> TTerm Type
+wrapInTTerm t = Core.typeApplication $ Core.applicationType (Core.typeVariable (Core.nameLift _TTerm)) t
+
+-- | Build a TypeScheme from a list of parameter types and a result type.
+-- All types are wrapped in TTerm. Forall variables are collected from the original type.
+dslTypeScheme :: TBinding (Type -> [Type] -> Type -> TypeScheme)
+dslTypeScheme = define "dslTypeScheme" $
+  doc "Build a TypeScheme with TTerm-wrapped parameter and result types" $
+  "origType" ~> "paramTypes" ~> "resultType" ~>
+  "typeVars" <~ (collectForallVars @@ var "origType") $
+  "wrappedResult" <~ (wrapInTTerm (var "resultType")) $
+  "funType" <~ (Lists.foldr
+    ("paramType" ~> "acc" ~> Core.typeFunction $ Core.functionType (wrapInTTerm (var "paramType")) (var "acc"))
+    (var "wrappedResult")
+    (var "paramTypes")) $
+  Core.typeScheme (var "typeVars") (var "funType") nothing
+
+-- | Collect forall type variables from a type (stripping annotations)
+collectForallVars :: TBinding (Type -> [Name])
+collectForallVars = define "collectForallVars" $
+  doc "Collect forall type variable names from a type" $
+  "typ" ~> cases _Type (var "typ") (Just $ list ([] :: [TTerm Name])) [
+    _Type_annotated>>: "at" ~>
+      collectForallVars @@ Core.annotatedTypeBody (var "at"),
+    _Type_forall>>: "ft" ~>
+      Lists.cons (Core.forallTypeParameter (var "ft"))
+        (collectForallVars @@ Core.forallTypeBody (var "ft"))]
+
+-- | Unwrap a TTerm argument: apply (EliminationWrap _TTerm) to the variable
+unwrapTTerm :: TTerm Term -> TTerm Term
+unwrapTTerm v = Core.termApplication $ Core.application
+  (Core.termFunction $ Core.functionElimination $ Core.eliminationWrap (Core.nameLift _TTerm))
+  v
+
+-- | Wrap a term in TTerm: WrappedTerm _TTerm term
+wrapTermInTTerm :: TTerm Term -> TTerm Term
+wrapTermInTTerm t = Core.termWrap $ Core.wrappedTerm (Core.nameLift _TTerm) t
 
 
 
@@ -115,68 +156,96 @@ dslElementName = define "dslElementName" $
   Core.name (Strings.intercalate (string ".") (Lists.concat2 (var "dslNsParts") (list [var "localName"])))
 
 -- | Generate a record constructor function.
--- For a record type like {name: Name, term: Term, type: Maybe TypeScheme},
--- produces a function: Name -> Term -> Maybe TypeScheme -> Binding
--- The generated function builds a record using field projections.
-generateRecordConstructor :: TBinding (Name -> RowType -> [Binding])
+-- For a record type like {body: Term, annotation: Map(Name, Term)},
+-- produces a deep (meta) term:
+--   \body -> \annotation -> TermRecord (Record "hydra.core.AnnotatedTerm" [Field "body" body, ...])
+-- When code-generated into Haskell, this becomes:
+--   annotatedTerm body annotation = Core.TermRecord (Core.Record { ... })
+generateRecordConstructor :: TBinding (Type -> Name -> RowType -> [Binding])
 generateRecordConstructor = define "generateRecordConstructor" $
   doc "Generate a record constructor function" $
-  "typeName" ~> "rt" ~>
+  "origType" ~> "typeName" ~> "rt" ~>
   "fieldTypes" <~ (Core.rowTypeFields $ var "rt") $
-  -- Build a lambda that takes one parameter per field and constructs the record
-  -- Parameters are named after the field local names
-  "paramNames" <~ (Lists.map
-    ("ft" ~> Names.localNameOf @@ Core.fieldTypeName (var "ft"))
+  -- Build deep Field records: each field is Record{typeName=_Field, fields=[name, term]}
+  "deepFields" <~ (Lists.map
+    ("ft" ~>
+      Core.termRecord $ Core.record (Core.nameLift _Field) (list [
+        Core.field (Core.nameLift _Field_name)
+          (Core.termWrap $ Core.wrappedTerm (Core.nameLift _Name)
+            (Core.termLiteral $ Core.literalString (Core.unName (Core.fieldTypeName (var "ft"))))),
+        Core.field (Core.nameLift _Field_term)
+          (unwrapTTerm (Core.termVariable (Core.name (Names.localNameOf @@ Core.fieldTypeName (var "ft")))))]))
     (var "fieldTypes")) $
-  -- Build field list: [Field name (variable paramName) for each field]
-  "fieldTerms" <~ (Lists.map
-    ("ft" ~> Core.field
-      (Core.fieldTypeName (var "ft"))
-      (Core.termVariable (Core.name (Names.localNameOf @@ Core.fieldTypeName (var "ft")))))
+  -- Build deep Record: Record{typeName=_Record, fields=[typeName, fields]}
+  "deepRecord" <~ (Core.termRecord $ Core.record (Core.nameLift _Record) (list [
+    Core.field (Core.nameLift _Record_typeName)
+      (Core.termWrap $ Core.wrappedTerm (Core.nameLift _Name)
+        (Core.termLiteral $ Core.literalString (Core.unName (var "typeName")))),
+    Core.field (Core.nameLift _Record_fields)
+      (Core.termList (var "deepFields"))])) $
+  -- Wrap in TTerm
+  "recordTerm" <~ (wrapTermInTTerm (var "deepRecord")) $
+  -- Build (paramName, TTerm<fieldType>) pairs for lambda construction
+  "paramPairs" <~ (Lists.map
+    ("ft" ~> pair
+      (Names.localNameOf @@ Core.fieldTypeName (var "ft"))
+      (wrapInTTerm (Core.fieldTypeType (var "ft"))))
     (var "fieldTypes")) $
-  -- Build the record term
-  "recordTerm" <~ (Core.termRecord $ Core.record (var "typeName") (var "fieldTerms")) $
-  -- Wrap in lambdas for each parameter (right to left)
+  -- Wrap in typed lambdas for each parameter (right to left)
   "body" <~ (Lists.foldl
-    ("acc" ~> "pname" ~>
+    ("acc" ~> "pp" ~>
       Core.termFunction $ Core.functionLambda $
-        Core.lambda (Core.name (var "pname")) nothing (var "acc"))
+        Core.lambda (Core.name (Pairs.first (var "pp"))) (just (Pairs.second (var "pp"))) (var "acc"))
     (var "recordTerm")
-    (Lists.reverse (var "paramNames"))) $
+    (Lists.reverse (var "paramPairs"))) $
+  -- Type: TTerm<FieldType1> -> TTerm<FieldType2> -> ... -> TTerm<RecordType>
+  "paramTypes" <~ (Lists.map ("ft" ~> Core.fieldTypeType (var "ft")) (var "fieldTypes")) $
+  "resultType" <~ (Core.typeVariable (var "typeName")) $
+  "ts" <~ (dslTypeScheme @@ var "origType" @@ var "paramTypes" @@ var "resultType") $
   -- Return as a single-element list with the constructor binding
   list [Core.binding
     (dslBindingName @@ var "typeName")
     (var "body")
-    nothing]
+    (just (var "ts"))]
 
 -- | Generate a record field accessor function.
 -- For a field "name" in record type "Binding", produces:
 --   bindingName :: Binding -> Name
 --   bindingName x = x.name
-generateRecordAccessor :: TBinding (Name -> FieldType -> Binding)
+generateRecordAccessor :: TBinding (Type -> Name -> FieldType -> Binding)
 generateRecordAccessor = define "generateRecordAccessor" $
   doc "Generate a record field accessor function" $
-  "typeName" ~> "ft" ~>
+  "origType" ~> "typeName" ~> "ft" ~>
   "fieldName" <~ (Core.fieldTypeName (var "ft")) $
   "accessorLocalName" <~ (Strings.cat $ list [
     Formatting.decapitalize @@ (Names.localNameOf @@ var "typeName"),
     Formatting.capitalize @@ (Names.localNameOf @@ var "fieldName")]) $
   "accessorName" <~ (dslElementName @@ var "typeName" @@ var "accessorLocalName") $
+  -- Body: projection as a simple elimination
+  "paramDomain" <~ (wrapInTTerm (Core.typeVariable (var "typeName"))) $
+  "body" <~ (Core.termFunction $ Core.functionLambda $
+    Core.lambda (Core.name (string "x")) (just (var "paramDomain")) $
+      wrapTermInTTerm (Core.termApplication $ Core.application
+        (Core.termFunction $ Core.functionElimination $ Core.eliminationRecord $
+          Core.projection (var "typeName") (var "fieldName"))
+        (unwrapTTerm (Core.termVariable (Core.name (string "x")))))) $
+  "ts" <~ (dslTypeScheme @@ var "origType"
+    @@ list [Core.typeVariable (var "typeName")]
+    @@ Core.fieldTypeType (var "ft")) $
   Core.binding
     (var "accessorName")
-    (Core.termFunction $ Core.functionElimination $ Core.eliminationRecord $
-      Core.projection (var "typeName") (var "fieldName"))
-    nothing
+    (var "body")
+    (just (var "ts"))
 
 -- | Generate a "withXxx" record field updater function.
 -- For a field "name" in record type "Binding" (with fields name, term, type), produces:
 --   bindingWithName :: Binding -> Name -> Binding
 --   bindingWithName b newName = Binding newName (bindingTerm b) (bindingType b)
 -- This constructs a new record with the specified field replaced and all others projected.
-generateRecordWithUpdater :: TBinding (Name -> [FieldType] -> FieldType -> Binding)
+generateRecordWithUpdater :: TBinding (Type -> Name -> [FieldType] -> FieldType -> Binding)
 generateRecordWithUpdater = define "generateRecordWithUpdater" $
   doc "Generate a withXxx record field updater function" $
-  "typeName" ~> "allFields" ~> "targetField" ~>
+  "origType" ~> "typeName" ~> "allFields" ~> "targetField" ~>
   "targetFieldName" <~ (Core.fieldTypeName (var "targetField")) $
   -- Build the updater name: e.g., "bindingWithName"
   "updaterLocalName" <~ (Strings.cat $ list [
@@ -184,29 +253,33 @@ generateRecordWithUpdater = define "generateRecordWithUpdater" $
     string "With",
     Formatting.capitalize @@ (Names.localNameOf @@ var "targetFieldName")]) $
   "updaterName" <~ (dslElementName @@ var "typeName" @@ var "updaterLocalName") $
-  -- Build fields for the new record: project all fields except the target, use "newVal" for the target
+  -- Build fields: project from original, except target field uses newVal
   "newFields" <~ (Lists.map
     ("ft" ~> Core.field
       (Core.fieldTypeName (var "ft"))
       (Logic.ifElse (Equality.equal
         (Core.unName (Core.fieldTypeName (var "ft")))
         (Core.unName (var "targetFieldName")))
-        (Core.termVariable (Core.name (string "newVal")))
-        -- Project this field from the original record
+        (unwrapTTerm (Core.termVariable (Core.name (string "newVal"))))
         (Core.termApplication $ Core.application
           (Core.termFunction $ Core.functionElimination $ Core.eliminationRecord $
             Core.projection (var "typeName") (Core.fieldTypeName (var "ft")))
-          (Core.termVariable (Core.name (string "original"))))))
+          (unwrapTTerm (Core.termVariable (Core.name (string "original")))))))
     (var "allFields")) $
-  -- Build the body: \original -> \newVal -> TypeName { field1 = ..., field2 = ..., ... }
+  "recDomain" <~ (wrapInTTerm (Core.typeVariable (var "typeName"))) $
+  "fieldDomain" <~ (wrapInTTerm (Core.fieldTypeType (var "targetField"))) $
   "body" <~ (
-    Core.termFunction $ Core.functionLambda $ Core.lambda (Core.name (string "original")) nothing $
-    Core.termFunction $ Core.functionLambda $ Core.lambda (Core.name (string "newVal")) nothing $
-    Core.termRecord $ Core.record (var "typeName") (var "newFields")) $
+    Core.termFunction $ Core.functionLambda $ Core.lambda (Core.name (string "original")) (just (var "recDomain")) $
+    Core.termFunction $ Core.functionLambda $ Core.lambda (Core.name (string "newVal")) (just (var "fieldDomain")) $
+    wrapTermInTTerm (Core.termRecord $ Core.record (var "typeName") (var "newFields"))) $
+  "recType" <~ (Core.typeVariable (var "typeName")) $
+  "ts" <~ (dslTypeScheme @@ var "origType"
+    @@ list [var "recType", Core.fieldTypeType (var "targetField")]
+    @@ var "recType") $
   Core.binding
     (var "updaterName")
     (var "body")
-    nothing
+    (just (var "ts"))
 
 -- | Generate a union injection helper.
 -- For a variant "lambda" in union type "Function", produces:
@@ -215,10 +288,10 @@ generateRecordWithUpdater = define "generateRecordWithUpdater" $
 -- For unit variants (field type is unit), produces:
 --   comparisonLessThan :: Comparison
 --   comparisonLessThan = Comparison.lessThan ()
-generateUnionInjector :: TBinding (Name -> FieldType -> Binding)
+generateUnionInjector :: TBinding (Type -> Name -> FieldType -> Binding)
 generateUnionInjector = define "generateUnionInjector" $
   doc "Generate a union injection helper" $
-  "typeName" ~> "ft" ~>
+  "origType" ~> "typeName" ~> "ft" ~>
   "fieldName" <~ (Core.fieldTypeName (var "ft")) $
   "fieldType" <~ (Core.fieldTypeType (var "ft")) $
   -- Build the injector name: e.g., "functionLambda" or "comparisonLessThan"
@@ -228,21 +301,26 @@ generateUnionInjector = define "generateUnionInjector" $
   "injectorName" <~ (dslElementName @@ var "typeName" @@ var "injectorLocalName") $
   -- Check if field type is unit (for unit variants like enum members)
   "isUnit" <~ (isUnitType_ @@ var "fieldType") $
-  -- Build the injection term
+  -- Build simple injection
   "injectionField" <~ (Core.field (var "fieldName") (
     Logic.ifElse (var "isUnit")
       Core.termUnit
-      (Core.termVariable (Core.name (string "x"))))) $
-  "injectionTerm" <~ (Core.termUnion $ Core.injection (var "typeName") (var "injectionField")) $
-  -- For non-unit variants, wrap in a lambda
+      (unwrapTTerm (Core.termVariable (Core.name (string "x")))))) $
+  "injectionTerm" <~ (wrapTermInTTerm (Core.termUnion $ Core.injection (var "typeName") (var "injectionField"))) $
+  -- For non-unit variants, wrap in a typed lambda; for unit, it's a constant TTerm
+  "variantDomain" <~ (wrapInTTerm (Core.fieldTypeType (var "ft"))) $
   "body" <~ (Logic.ifElse (var "isUnit")
     (var "injectionTerm")
     (Core.termFunction $ Core.functionLambda $
-      Core.lambda (Core.name (string "x")) nothing (var "injectionTerm"))) $
+      Core.lambda (Core.name (string "x")) (just (var "variantDomain")) (var "injectionTerm"))) $
+  "unionType" <~ (Core.typeVariable (var "typeName")) $
+  "ts" <~ (Logic.ifElse (var "isUnit")
+    (dslTypeScheme @@ var "origType" @@ list ([] :: [TTerm Type]) @@ var "unionType")
+    (dslTypeScheme @@ var "origType" @@ list [Core.fieldTypeType (var "ft")] @@ var "unionType")) $
   Core.binding
     (var "injectorName")
     (var "body")
-    nothing
+    (just (var "ts"))
 
 -- | Check if a type is the unit type (stripping annotations first)
 -- Note: uses stripAnnotations to avoid recursive Haskell-level DSL terms,
@@ -255,27 +333,38 @@ isUnitType_ = "t" ~> cases _Type (Rewriting.deannotateType @@ var "t") (Just Pha
 -- For a wrapped type like "Name" wrapping String, produces:
 --   name :: String -> Name      (constructor/wrap)
 --   unName :: Name -> String    (unwrap)
-generateWrappedTypeAccessors :: TBinding (Name -> WrappedType -> [Binding])
+generateWrappedTypeAccessors :: TBinding (Type -> Name -> WrappedType -> [Binding])
 generateWrappedTypeAccessors = define "generateWrappedTypeAccessors" $
   doc "Generate wrap/unwrap accessors for a wrapped type" $
-  "typeName" ~> "wt" ~>
+  "origType" ~> "typeName" ~> "wt" ~>
   "localName" <~ (Names.localNameOf @@ var "typeName") $
   -- Wrap function: decapitalized type name
   "wrapName" <~ (dslElementName @@ var "typeName" @@ (Formatting.decapitalize @@ var "localName")) $
   -- Unwrap function: "un" + type local name
   "unwrapLocalName" <~ (Strings.cat $ list [string "un", var "localName"]) $
   "unwrapName" <~ (dslElementName @@ var "typeName" @@ var "unwrapLocalName") $
-  -- Wrap: \x -> TypeName x (i.e., TermWrap)
+  "innerType" <~ (Core.wrappedTypeBody (var "wt")) $
+  "wrapperType" <~ (Core.typeVariable (var "typeName")) $
+  -- Wrap: \(x :: TTerm<InnerType>) -> WrappedTerm typeName x
+  "wrapDomain" <~ (wrapInTTerm (var "innerType")) $
   "wrapBody" <~ (
     Core.termFunction $ Core.functionLambda $
-      Core.lambda (Core.name (string "x")) nothing $
-        Core.termWrap $ Core.wrappedTerm (var "typeName") (Core.termVariable (Core.name (string "x")))) $
-  -- Unwrap: elimination (wrap TypeName)
+      Core.lambda (Core.name (string "x")) (just (var "wrapDomain")) $
+        wrapTermInTTerm (Core.termWrap $ Core.wrappedTerm (var "typeName")
+          (unwrapTTerm (Core.termVariable (Core.name (string "x")))))) $
+  -- Unwrap: \(x :: TTerm<WrapperType>) -> TTerm(unwrap typeName (unTTerm x))
+  "unwrapDomain" <~ (wrapInTTerm (var "wrapperType")) $
   "unwrapBody" <~ (
-    Core.termFunction $ Core.functionElimination $ Core.eliminationWrap (var "typeName")) $
+    Core.termFunction $ Core.functionLambda $
+      Core.lambda (Core.name (string "x")) (just (var "unwrapDomain")) $
+        wrapTermInTTerm (Core.termApplication $ Core.application
+          (Core.termFunction $ Core.functionElimination $ Core.eliminationWrap (var "typeName"))
+          (unwrapTTerm (Core.termVariable (Core.name (string "x")))))) $
+  "wrapTs" <~ (dslTypeScheme @@ var "origType" @@ list [var "innerType"] @@ var "wrapperType") $
+  "unwrapTs" <~ (dslTypeScheme @@ var "origType" @@ list [var "wrapperType"] @@ var "innerType") $
   list [
-    Core.binding (var "wrapName") (var "wrapBody") nothing,
-    Core.binding (var "unwrapName") (var "unwrapBody") nothing]
+    Core.binding (var "wrapName") (var "wrapBody") (just (var "wrapTs")),
+    Core.binding (var "unwrapName") (var "unwrapBody") (just (var "unwrapTs"))]
 
 -- | Generate all DSL bindings for a single type binding.
 -- Inspects the type definition and generates appropriate helpers:
@@ -293,14 +382,14 @@ generateBindingsForType = define "generateBindingsForType" $
     right (cases _Type (var "typ") (Just $ list ([] :: [TTerm Binding])) [
       _Type_record>>: "rt" ~>
         Lists.concat $ list [
-          generateRecordConstructor @@ var "typeName" @@ var "rt",
-          Lists.map (generateRecordAccessor @@ var "typeName") (Core.rowTypeFields (var "rt")),
-          Lists.map (generateRecordWithUpdater @@ var "typeName" @@ Core.rowTypeFields (var "rt"))
+          generateRecordConstructor @@ var "rawType" @@ var "typeName" @@ var "rt",
+          Lists.map (generateRecordAccessor @@ var "rawType" @@ var "typeName") (Core.rowTypeFields (var "rt")),
+          Lists.map (generateRecordWithUpdater @@ var "rawType" @@ var "typeName" @@ Core.rowTypeFields (var "rt"))
             (Core.rowTypeFields (var "rt"))],
       _Type_union>>: "rt" ~>
-        Lists.map (generateUnionInjector @@ var "typeName") (Core.rowTypeFields (var "rt")),
+        Lists.map (generateUnionInjector @@ var "rawType" @@ var "typeName") (Core.rowTypeFields (var "rt")),
       _Type_wrap>>: "wt" ~>
-        generateWrappedTypeAccessors @@ var "typeName" @@ var "wt"]))
+        generateWrappedTypeAccessors @@ var "rawType" @@ var "typeName" @@ var "wt"]))
 
 -- | Deduplicate bindings by appending "_" to duplicate names.
 -- Later bindings (e.g., record accessors) get the suffix; earlier ones (e.g., wrapped type constructors) keep their name.
@@ -335,12 +424,16 @@ filterTypeBindings = define "filterTypeBindings" $
       Eithers.mapList (isDslEligibleBinding @@ var "cx" @@ var "graph") $
         primitive _lists_filter @@ Annotations.isNativeType @@ var "bindings"
 
--- | Check if a binding is eligible for DSL generation
+-- | Check if a binding is eligible for DSL generation.
+-- Excludes phantom types (TTerm, TBinding) since they are meta-infrastructure.
 isDslEligibleBinding :: TBinding (Context -> Graph -> Binding -> Either (InContext Error) (Maybe Binding))
 isDslEligibleBinding = define "isDslEligibleBinding" $
   doc "Check if a binding is eligible for DSL generation" $
   "cx" ~> "graph" ~> "b" ~>
-    right (just (var "b"))
+  "ns" <~ (Names.namespaceOf @@ Core.bindingName (var "b")) $
+  Logic.ifElse (Equality.equal (Maybes.maybe (string "") (unaryFunction Module.unNamespace) (var "ns")) (string "hydra.phantoms"))
+    (right nothing)
+    (right (just (var "b")))
 
 -- | Transform a type module into a DSL module.
 -- Returns Nothing if the module has no eligible type definitions.
@@ -361,8 +454,10 @@ dslModule = define "dslModule" $
           (deduplicateBindings @@ Lists.concat (var "dslBindings"))
           -- DSL modules depend on DSL modules for type dependencies (to reference other types' DSL functions)
           (Lists.nub (primitive _lists_map @@ dslNamespace @@ (Module.moduleTypeDependencies (var "mod"))))
-          -- Type dependencies: the original module's types
-          (list [Module.moduleNamespace (var "mod")])
+          -- Type dependencies: the original module + its type deps + hydra.phantoms (for TTerm)
+          (Lists.nub (Lists.concat2
+            (list [Module.moduleNamespace (var "mod"), Module.namespace (string "hydra.phantoms")])
+            (Module.moduleTypeDependencies (var "mod"))))
           (just (Strings.cat $ list [
             string "DSL functions for ",
             Module.unNamespace (Module.moduleNamespace (var "mod"))])))))
