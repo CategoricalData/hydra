@@ -237,6 +237,52 @@ stack build && stack test
 5. **Follow existing patterns** - Look at similar tests in the same module for guidance
 6. **Document complex cases** - Add comments for non-obvious type checking or inference scenarios
 
+## Floating-point test portability
+
+Transcendental math functions (`sin`, `cos`, `exp`, `atanh`, `sinh`, `log`, etc.) are implemented via the
+platform's C math library (`libm`). IEEE 754 only mandates bit-exact results for basic operations
+(`+`, `-`, `*`, `/`, `sqrt`); transcendental functions are allowed to differ by one unit in the last place
+(1 ULP) across platforms. Different `libm` implementations (glibc on Linux, Apple's libm on macOS,
+musl on Alpine) do produce such differences in practice.
+
+This affects Hydra because GHC delegates floating-point math to `libm`. When the test suite is compiled
+on one platform (e.g., macOS), GHC bakes expected values like `sinh 1.0` into the test data as exact
+`Double` bit patterns. When Java or Python runs the same test on a different platform (e.g., Linux CI),
+the computed result may differ by 1 ULP, causing the test to fail.
+
+See [GitHub issue #264](https://github.com/CategoricalData/hydra/issues/264) for the original report.
+
+### Guidelines for floating-point test cases
+
+When writing test cases for `hydra.lib.math` primitives that use transcendental functions:
+
+1. **Prefer inputs that produce exact results.** For example:
+   - `sin(0) = 0`, `cos(0) = 1`, `exp(0) = 1`, `log(1) = 0`, `sqrt(4) = 2`, `atanh(0) = 0`
+   - These are mathematically exact and every `libm` implementation agrees on them.
+
+2. **Use `roundFloat64` / `roundFloat32` / `roundBigfloat` for non-trivial inputs.** These primitives
+   round a floating-point value to N significant digits, eliminating platform-dependent differences in the
+   last few digits. Apply rounding to both the expected value (in the test definition) and wrap the test so
+   that the actual result is also rounded before comparison. For example:
+   ```haskell
+   -- In Hydra.Sources.Test.Lib.Math:
+   -- Instead of: test "sinh 1" 1.0 (sinh 1.0)
+   -- Use a rounded expected value and compare rounded results
+   ```
+
+3. **Understand which operations are safe.** IEEE 754 guarantees exact results for:
+   - Addition, subtraction, multiplication, division
+   - Square root
+   - Comparisons
+   - Conversions between integer and floating-point types
+
+   All other math functions (trig, hyperbolic, logarithmic, exponential) are potentially non-deterministic
+   across platforms.
+
+4. **Java's test runner has additional protection.** `TestSuiteRunner.java` includes a `termsEqual()` method
+   with 2-ULP tolerance for float comparisons, providing a safety net. Python and Haskell test runners use
+   exact equality, so they are more susceptible to this issue.
+
 ## See also
 
 - [Testing in Hydra](../../wiki/Testing.md) - Complete testing documentation

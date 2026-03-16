@@ -758,6 +758,18 @@ public interface Names {
     return new hydra.core.Name("hydra.lib.math.round");
   }
   
+  static hydra.core.Name mathRoundBigfloat() {
+    return new hydra.core.Name("hydra.lib.math.roundBigfloat");
+  }
+  
+  static hydra.core.Name mathRoundFloat32() {
+    return new hydra.core.Name("hydra.lib.math.roundFloat32");
+  }
+  
+  static hydra.core.Name mathRoundFloat64() {
+    return new hydra.core.Name("hydra.lib.math.roundFloat64");
+  }
+  
   static hydra.core.Name mathSignum() {
     return new hydra.core.Name("hydra.lib.math.signum");
   }

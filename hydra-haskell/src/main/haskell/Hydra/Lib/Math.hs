@@ -116,6 +116,26 @@ pi = Prelude.pi
 pow :: Double -> Double -> Double
 pow = (Prelude.**)
 
+-- | Round a bigfloat to n significant digits.
+roundBigfloat :: Int -> Double -> Double
+roundBigfloat = roundFloat64
+
+-- | Round a float32 to n significant digits.
+roundFloat32 :: Int -> Float -> Float
+roundFloat32 n x
+  | x Prelude.== 0 = 0
+  | Prelude.otherwise =
+      let factor = 10 Prelude.^^ (n - 1 - Prelude.floor (Prelude.logBase 10 (Prelude.abs x)))
+      in Prelude.fromIntegral (Prelude.round (x * factor) :: Integer) Prelude./ factor
+
+-- | Round a float64 to n significant digits.
+roundFloat64 :: Int -> Double -> Double
+roundFloat64 n x
+  | x Prelude.== 0 = 0
+  | Prelude.otherwise =
+      let factor = 10 Prelude.^^ (n - 1 - Prelude.floor (Prelude.logBase 10 (Prelude.abs x)))
+      in Prelude.fromIntegral (Prelude.round (x * factor) :: Integer) Prelude./ factor
+
 -- | Return the predecessor (x - 1).
 pred :: Enum a => a -> a
 pred = Prelude.pred

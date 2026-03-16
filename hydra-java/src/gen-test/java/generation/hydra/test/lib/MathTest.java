@@ -1004,6 +1004,38 @@ public class MathTest {
 
     }
 
+    @Test
+
+    public void testSinSin1() {
+
+        assertEquals(
+
+            0.841470984808,
+
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Sin.apply(1.0)),
+
+            1e-15);
+
+    }
+
+    @Test
+
+    public void testSinSin0dot5() {
+
+        assertEquals(
+
+            0.479425538604,
+
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Sin.apply(0.5)),
+
+            1e-15);
+
+    }
+
     // cos
 
     @Test
@@ -1048,6 +1080,38 @@ public class MathTest {
 
     }
 
+    @Test
+
+    public void testCosCos1() {
+
+        assertEquals(
+
+            0.540302305868,
+
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Cos.apply(1.0)),
+
+            1e-15);
+
+    }
+
+    @Test
+
+    public void testCosCos0dot5() {
+
+        assertEquals(
+
+            0.87758256189,
+
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Cos.apply(0.5)),
+
+            1e-15);
+
+    }
+
     // tan
 
     @Test
@@ -1073,6 +1137,38 @@ public class MathTest {
             0.9999999999999999,
 
             hydra.lib.math.Tan.apply(0.7853981633974483),
+
+            1e-15);
+
+    }
+
+    @Test
+
+    public void testTanTan1() {
+
+        assertEquals(
+
+            1.55740772465,
+
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Tan.apply(1.0)),
+
+            1e-15);
+
+    }
+
+    @Test
+
+    public void testTanTan0dot5() {
+
+        assertEquals(
+
+            0.546302489844,
+
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Tan.apply(0.5)),
 
             1e-15);
 
@@ -1122,6 +1218,22 @@ public class MathTest {
 
     }
 
+    @Test
+
+    public void testAsinAsin0dot5() {
+
+        assertEquals(
+
+            0.523598775598,
+
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Asin.apply(0.5)),
+
+            1e-15);
+
+    }
+
     // acos
 
     @Test
@@ -1166,6 +1278,22 @@ public class MathTest {
 
     }
 
+    @Test
+
+    public void testAcosAcos0dot5() {
+
+        assertEquals(
+
+            1.0471975512,
+
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Acos.apply(0.5)),
+
+            1e-15);
+
+    }
+
     // atan
 
     @Test
@@ -1191,6 +1319,22 @@ public class MathTest {
             0.7853981633974483,
 
             hydra.lib.math.Atan.apply(1.0),
+
+            1e-15);
+
+    }
+
+    @Test
+
+    public void testAtanAtan0dot5() {
+
+        assertEquals(
+
+            0.463647609001,
+
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Atan.apply(0.5)),
 
             1e-15);
 
@@ -1246,6 +1390,24 @@ public class MathTest {
 
     }
 
+    @Test
+
+    public void testAtan2Atan234() {
+
+        assertEquals(
+
+            0.643501108793,
+
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Atan2.apply(
+    3.0,
+    4.0)),
+
+            1e-15);
+
+    }
+
     // sinh
 
     @Test
@@ -1271,6 +1433,22 @@ public class MathTest {
             1.1752011936438014,
 
             hydra.lib.math.Sinh.apply(1.0),
+
+            1e-15);
+
+    }
+
+    @Test
+
+    public void testSinhSinh2() {
+
+        assertEquals(
+
+            3.62686040785,
+
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Sinh.apply(2.0)),
 
             1e-15);
 
@@ -1306,6 +1484,22 @@ public class MathTest {
 
     }
 
+    @Test
+
+    public void testCoshCosh2() {
+
+        assertEquals(
+
+            3.76219569108,
+
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Cosh.apply(2.0)),
+
+            1e-15);
+
+    }
+
     // tanh
 
     @Test
@@ -1331,6 +1525,22 @@ public class MathTest {
             0.7615941559557649,
 
             hydra.lib.math.Tanh.apply(1.0),
+
+            1e-15);
+
+    }
+
+    @Test
+
+    public void testTanhTanh0dot5() {
+
+        assertEquals(
+
+            0.46211715726,
+
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Tanh.apply(0.5)),
 
             1e-15);
 
@@ -1366,6 +1576,22 @@ public class MathTest {
 
     }
 
+    @Test
+
+    public void testAsinhAsinh0dot5() {
+
+        assertEquals(
+
+            0.48121182506,
+
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Asinh.apply(0.5)),
+
+            1e-15);
+
+    }
+
     // acosh
 
     @Test
@@ -1396,6 +1622,22 @@ public class MathTest {
 
     }
 
+    @Test
+
+    public void testAcoshAcosh3() {
+
+        assertEquals(
+
+            1.76274717404,
+
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Acosh.apply(3.0)),
+
+            1e-15);
+
+    }
+
     // atanh
 
     @Test
@@ -1407,6 +1649,38 @@ public class MathTest {
             0.0,
 
             hydra.lib.math.Atanh.apply(0.0),
+
+            1e-15);
+
+    }
+
+    @Test
+
+    public void testAtanhAtanh0dot5() {
+
+        assertEquals(
+
+            0.549306144334,
+
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Atanh.apply(0.5)),
+
+            1e-15);
+
+    }
+
+    @Test
+
+    public void testAtanhAtanh0dot1() {
+
+        assertEquals(
+
+            0.100335347731,
+
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Atanh.apply(0.1)),
 
             1e-15);
 
@@ -1456,6 +1730,38 @@ public class MathTest {
 
     }
 
+    @Test
+
+    public void testExpExp2() {
+
+        assertEquals(
+
+            7.38905609893,
+
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Exp.apply(2.0)),
+
+            1e-15);
+
+    }
+
+    @Test
+
+    public void testExpExp0dot5() {
+
+        assertEquals(
+
+            1.6487212707,
+
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Exp.apply(0.5)),
+
+            1e-15);
+
+    }
+
     // log
 
     @Test
@@ -1481,6 +1787,38 @@ public class MathTest {
             1.0,
 
             hydra.lib.math.Log.apply(2.718281828459045),
+
+            1e-15);
+
+    }
+
+    @Test
+
+    public void testLogLog2() {
+
+        assertEquals(
+
+            0.69314718056,
+
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Log.apply(2.0)),
+
+            1e-15);
+
+    }
+
+    @Test
+
+    public void testLogLog10() {
+
+        assertEquals(
+
+            2.30258509299,
+
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Log.apply(10.0)),
 
             1e-15);
 
@@ -1552,6 +1890,24 @@ public class MathTest {
 
     }
 
+    @Test
+
+    public void testLogbaseLog210() {
+
+        assertEquals(
+
+            3.32192809489,
+
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.LogBase.apply(
+    2.0,
+    10.0)),
+
+            1e-15);
+
+    }
+
     // pow
 
     @Test
@@ -1597,6 +1953,24 @@ public class MathTest {
             hydra.lib.math.Pow.apply(
   2.0,
   -1.0),
+
+            1e-15);
+
+    }
+
+    @Test
+
+    public void testPow20dot5() {
+
+        assertEquals(
+
+            1.41421356237,
+
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Pow.apply(
+    2.0,
+    0.5)),
 
             1e-15);
 
@@ -1655,6 +2029,22 @@ public class MathTest {
             0.0,
 
             hydra.lib.math.Sqrt.apply(0.0),
+
+            1e-15);
+
+    }
+
+    @Test
+
+    public void testSqrtSqrt3() {
+
+        assertEquals(
+
+            1.73205080757,
+
+            hydra.lib.math.RoundFloat64.apply(
+  12,
+  hydra.lib.math.Sqrt.apply(3.0)),
 
             1e-15);
 
@@ -1819,6 +2209,238 @@ public class MathTest {
             new java.math.BigInteger("-4"),
 
             hydra.lib.math.Round.apply(-3.5));
+
+    }
+
+    // roundBigfloat
+
+    @Test
+
+    public void testRoundbigfloatZero() {
+
+        assertEquals(0, (new java.math.BigDecimal("0.0")).compareTo(hydra.lib.math.RoundBigfloat.apply(
+  5,
+  new java.math.BigDecimal("0.0"))));
+
+    }
+
+    @Test
+
+    public void testRoundbigfloatRoundPiTo4Digits() {
+
+        assertEquals(0, (new java.math.BigDecimal("3.142")).compareTo(hydra.lib.math.RoundBigfloat.apply(
+  4,
+  new java.math.BigDecimal("3.141592653589793"))));
+
+    }
+
+    @Test
+
+    public void testRoundbigfloatRound1234dot5To3Digits() {
+
+        assertEquals(0, (new java.math.BigDecimal("1230.0")).compareTo(hydra.lib.math.RoundBigfloat.apply(
+  3,
+  new java.math.BigDecimal("1234.5"))));
+
+    }
+
+    @Test
+
+    public void testRoundbigfloatRound0dot001234To2Digits() {
+
+        assertEquals(0, (new java.math.BigDecimal("1.2e-3")).compareTo(hydra.lib.math.RoundBigfloat.apply(
+  2,
+  new java.math.BigDecimal("1.234e-3"))));
+
+    }
+
+    @Test
+
+    public void testRoundbigfloatNegative() {
+
+        assertEquals(0, (new java.math.BigDecimal("-1230.0")).compareTo(hydra.lib.math.RoundBigfloat.apply(
+  3,
+  new java.math.BigDecimal("-1234.5"))));
+
+    }
+
+    // roundFloat32
+
+    @Test
+
+    public void testRoundfloat32Zero() {
+
+        assertEquals(
+
+            (float) (0.0),
+
+            hydra.lib.math.RoundFloat32.apply(
+  5,
+  (float) (0.0)),
+
+            1e-15);
+
+    }
+
+    @Test
+
+    public void testRoundfloat32RoundPiTo4Digits() {
+
+        assertEquals(
+
+            (float) (3.1419999599456787),
+
+            hydra.lib.math.RoundFloat32.apply(
+  4,
+  (float) (3.1415927410125732)),
+
+            1e-15);
+
+    }
+
+    @Test
+
+    public void testRoundfloat32Round1234dot5To3Digits() {
+
+        assertEquals(
+
+            (float) (1230.0),
+
+            hydra.lib.math.RoundFloat32.apply(
+  3,
+  (float) (1234.5)),
+
+            1e-15);
+
+    }
+
+    @Test
+
+    public void testRoundfloat32Negative() {
+
+        assertEquals(
+
+            (float) (-1230.0),
+
+            hydra.lib.math.RoundFloat32.apply(
+  3,
+  (float) (-1234.5)),
+
+            1e-15);
+
+    }
+
+    // roundFloat64
+
+    @Test
+
+    public void testRoundfloat64Zero() {
+
+        assertEquals(
+
+            0.0,
+
+            hydra.lib.math.RoundFloat64.apply(
+  5,
+  0.0),
+
+            1e-15);
+
+    }
+
+    @Test
+
+    public void testRoundfloat64RoundPiTo4Digits() {
+
+        assertEquals(
+
+            3.142,
+
+            hydra.lib.math.RoundFloat64.apply(
+  4,
+  3.141592653589793),
+
+            1e-15);
+
+    }
+
+    @Test
+
+    public void testRoundfloat64RoundPiTo10Digits() {
+
+        assertEquals(
+
+            3.141592654,
+
+            hydra.lib.math.RoundFloat64.apply(
+  10,
+  3.141592653589793),
+
+            1e-15);
+
+    }
+
+    @Test
+
+    public void testRoundfloat64Round1234dot5To3Digits() {
+
+        assertEquals(
+
+            1230.0,
+
+            hydra.lib.math.RoundFloat64.apply(
+  3,
+  1234.5),
+
+            1e-15);
+
+    }
+
+    @Test
+
+    public void testRoundfloat64Round0dot001234To2Digits() {
+
+        assertEquals(
+
+            1.2e-3,
+
+            hydra.lib.math.RoundFloat64.apply(
+  2,
+  1.234e-3),
+
+            1e-15);
+
+    }
+
+    @Test
+
+    public void testRoundfloat64Negative() {
+
+        assertEquals(
+
+            -1230.0,
+
+            hydra.lib.math.RoundFloat64.apply(
+  3,
+  -1234.5),
+
+            1e-15);
+
+    }
+
+    @Test
+
+    public void testRoundfloat64Round1Digit() {
+
+        assertEquals(
+
+            10.0,
+
+            hydra.lib.math.RoundFloat64.apply(
+  1,
+  9.876),
+
+            1e-15);
 
     }
 

@@ -2070,6 +2070,39 @@
           "type": {"variable": "hydra.core.Name"},
           "variables": []}]},
     {
+      "name": "hydra.lib.names.mathRoundBigfloat",
+      "term": {
+        "wrap": {
+          "body": {"literal": {"string": "hydra.lib.math.roundBigfloat"}},
+          "typeName": "hydra.core.Name"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.core.Name"},
+          "variables": []}]},
+    {
+      "name": "hydra.lib.names.mathRoundFloat32",
+      "term": {
+        "wrap": {
+          "body": {"literal": {"string": "hydra.lib.math.roundFloat32"}},
+          "typeName": "hydra.core.Name"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.core.Name"},
+          "variables": []}]},
+    {
+      "name": "hydra.lib.names.mathRoundFloat64",
+      "term": {
+        "wrap": {
+          "body": {"literal": {"string": "hydra.lib.math.roundFloat64"}},
+          "typeName": "hydra.core.Name"}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {"variable": "hydra.core.Name"},
+          "variables": []}]},
+    {
       "name": "hydra.lib.names.mathSignum",
       "term": {
         "wrap": {

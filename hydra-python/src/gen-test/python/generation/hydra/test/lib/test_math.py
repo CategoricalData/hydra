@@ -374,6 +374,14 @@ def test_sin__sin_pi():
 
     assert (hydra.lib.math.sin(3.141592653589793)) == (1.2246467991473532e-16)
 
+def test_sin__sin_1():
+
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.sin(1.0))) == (0.841470984808)
+
+def test_sin__sin_0_5():
+
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.sin(0.5))) == (0.479425538604)
+
 # cos
 
 def test_cos__cos_0():
@@ -388,6 +396,14 @@ def test_cos__cos_pi():
 
     assert (hydra.lib.math.cos(3.141592653589793)) == (-1.0)
 
+def test_cos__cos_1():
+
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.cos(1.0))) == (0.540302305868)
+
+def test_cos__cos_0_5():
+
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.cos(0.5))) == (0.87758256189)
+
 # tan
 
 def test_tan__tan_0():
@@ -397,6 +413,14 @@ def test_tan__tan_0():
 def test_tan__tan_pi_4():
 
     assert (hydra.lib.math.tan(0.7853981633974483)) == (0.9999999999999999)
+
+def test_tan__tan_1():
+
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.tan(1.0))) == (1.55740772465)
+
+def test_tan__tan_0_5():
+
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.tan(0.5))) == (0.546302489844)
 
 # asin
 
@@ -412,6 +436,10 @@ def test_asin__asin__1():
 
     assert (hydra.lib.math.asin(-1.0)) == (-1.5707963267948966)
 
+def test_asin__asin_0_5():
+
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.asin(0.5))) == (0.523598775598)
+
 # acos
 
 def test_acos__acos_1():
@@ -426,6 +454,10 @@ def test_acos__acos__1():
 
     assert (hydra.lib.math.acos(-1.0)) == (3.141592653589793)
 
+def test_acos__acos_0_5():
+
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.acos(0.5))) == (1.0471975512)
+
 # atan
 
 def test_atan__atan_0():
@@ -435,6 +467,10 @@ def test_atan__atan_0():
 def test_atan__atan_1():
 
     assert (hydra.lib.math.atan(1.0)) == (0.7853981633974483)
+
+def test_atan__atan_0_5():
+
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.atan(0.5))) == (0.463647609001)
 
 # atan2
 
@@ -450,6 +486,10 @@ def test_atan2__atan2_0_1():
 
     assert (hydra.lib.math.atan2(0.0, 1.0)) == (0.0)
 
+def test_atan2__atan2_3_4():
+
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.atan2(3.0, 4.0))) == (0.643501108793)
+
 # sinh
 
 def test_sinh__sinh_0():
@@ -459,6 +499,10 @@ def test_sinh__sinh_0():
 def test_sinh__sinh_1():
 
     assert (hydra.lib.math.sinh(1.0)) == (1.1752011936438014)
+
+def test_sinh__sinh_2():
+
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.sinh(2.0))) == (3.62686040785)
 
 # cosh
 
@@ -470,6 +514,10 @@ def test_cosh__cosh_1():
 
     assert (hydra.lib.math.cosh(1.0)) == (1.5430806348152437)
 
+def test_cosh__cosh_2():
+
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.cosh(2.0))) == (3.76219569108)
+
 # tanh
 
 def test_tanh__tanh_0():
@@ -479,6 +527,10 @@ def test_tanh__tanh_0():
 def test_tanh__tanh_1():
 
     assert (hydra.lib.math.tanh(1.0)) == (0.7615941559557649)
+
+def test_tanh__tanh_0_5():
+
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.tanh(0.5))) == (0.46211715726)
 
 # asinh
 
@@ -490,6 +542,10 @@ def test_asinh__asinh_1():
 
     assert (hydra.lib.math.asinh(1.0)) == (0.881373587019543)
 
+def test_asinh__asinh_0_5():
+
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.asinh(0.5))) == (0.48121182506)
+
 # acosh
 
 def test_acosh__acosh_1():
@@ -500,11 +556,23 @@ def test_acosh__acosh_2():
 
     assert (hydra.lib.math.acosh(2.0)) == (1.3169578969248166)
 
+def test_acosh__acosh_3():
+
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.acosh(3.0))) == (1.76274717404)
+
 # atanh
 
 def test_atanh__atanh_0():
 
     assert (hydra.lib.math.atanh(0.0)) == (0.0)
+
+def test_atanh__atanh_0_5():
+
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.atanh(0.5))) == (0.549306144334)
+
+def test_atanh__atanh_0_1():
+
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.atanh(0.1))) == (0.100335347731)
 
 # exp
 
@@ -520,6 +588,14 @@ def test_exp__exp__1():
 
     assert (hydra.lib.math.exp(-1.0)) == (0.36787944117144233)
 
+def test_exp__exp_2():
+
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.exp(2.0))) == (7.38905609893)
+
+def test_exp__exp_0_5():
+
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.exp(0.5))) == (1.6487212707)
+
 # log
 
 def test_log__log_1():
@@ -529,6 +605,14 @@ def test_log__log_1():
 def test_log__log_e():
 
     assert (hydra.lib.math.log(2.718281828459045)) == (1.0)
+
+def test_log__log_2():
+
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.log(2.0))) == (0.69314718056)
+
+def test_log__log_10():
+
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.log(10.0))) == (2.30258509299)
 
 # logBase
 
@@ -548,6 +632,10 @@ def test_logbase__log2_8():
 
     assert (hydra.lib.math.log_base(2.0, 8.0)) == (3.0)
 
+def test_logbase__log2_10():
+
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.log_base(2.0, 10.0))) == (3.32192809489)
+
 # pow
 
 def test_pow__2_3():
@@ -561,6 +649,10 @@ def test_pow__10_0():
 def test_pow__2__1():
 
     assert (hydra.lib.math.pow(2.0, -1.0)) == (0.5)
+
+def test_pow__2_0_5():
+
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.pow(2.0, 0.5))) == (1.41421356237)
 
 # sqrt
 
@@ -579,6 +671,10 @@ def test_sqrt__sqrt_2():
 def test_sqrt__sqrt_0():
 
     assert (hydra.lib.math.sqrt(0.0)) == (0.0)
+
+def test_sqrt__sqrt_3():
+
+    assert (hydra.lib.math.round_float64(12, hydra.lib.math.sqrt(3.0))) == (1.73205080757)
 
 # ceiling
 
@@ -637,6 +733,76 @@ def test_round__round__3_4():
 def test_round__round__3_5():
 
     assert (hydra.lib.math.round(-3.5)) == (-4)
+
+# roundBigfloat
+
+def test_roundbigfloat__zero():
+
+    assert (hydra.lib.math.round_bigfloat(5, Decimal('0.0'))) == (Decimal('0.0'))
+
+def test_roundbigfloat__round_pi_to_4_digits():
+
+    assert (hydra.lib.math.round_bigfloat(4, Decimal('3.141592653589793'))) == (Decimal('3.142'))
+
+def test_roundbigfloat__round_1234_5_to_3_digits():
+
+    assert (hydra.lib.math.round_bigfloat(3, Decimal('1234.5'))) == (Decimal('1230.0'))
+
+def test_roundbigfloat__round_0_001234_to_2_digits():
+
+    assert (hydra.lib.math.round_bigfloat(2, Decimal('1.234e-3'))) == (Decimal('1.2e-3'))
+
+def test_roundbigfloat__negative():
+
+    assert (hydra.lib.math.round_bigfloat(3, Decimal('-1234.5'))) == (Decimal('-1230.0'))
+
+# roundFloat32
+
+def test_roundfloat32__zero():
+
+    assert (hydra.lib.math.round_float32(5, 0.0)) == (0.0)
+
+def test_roundfloat32__round_pi_to_4_digits():
+
+    assert (hydra.lib.math.round_float32(4, 3.1415927410125732)) == (3.1419999599456787)
+
+def test_roundfloat32__round_1234_5_to_3_digits():
+
+    assert (hydra.lib.math.round_float32(3, 1234.5)) == (1230.0)
+
+def test_roundfloat32__negative():
+
+    assert (hydra.lib.math.round_float32(3, -1234.5)) == (-1230.0)
+
+# roundFloat64
+
+def test_roundfloat64__zero():
+
+    assert (hydra.lib.math.round_float64(5, 0.0)) == (0.0)
+
+def test_roundfloat64__round_pi_to_4_digits():
+
+    assert (hydra.lib.math.round_float64(4, 3.141592653589793)) == (3.142)
+
+def test_roundfloat64__round_pi_to_10_digits():
+
+    assert (hydra.lib.math.round_float64(10, 3.141592653589793)) == (3.141592654)
+
+def test_roundfloat64__round_1234_5_to_3_digits():
+
+    assert (hydra.lib.math.round_float64(3, 1234.5)) == (1230.0)
+
+def test_roundfloat64__round_0_001234_to_2_digits():
+
+    assert (hydra.lib.math.round_float64(2, 1.234e-3)) == (1.2e-3)
+
+def test_roundfloat64__negative():
+
+    assert (hydra.lib.math.round_float64(3, -1234.5)) == (-1230.0)
+
+def test_roundfloat64__round_1_digit():
+
+    assert (hydra.lib.math.round_float64(1, 9.876)) == (10.0)
 
 # truncate
 

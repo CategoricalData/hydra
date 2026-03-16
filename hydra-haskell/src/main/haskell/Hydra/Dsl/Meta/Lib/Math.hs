@@ -101,6 +101,15 @@ rem = primitive2 _math_rem
 round :: TTerm Double -> TTerm Integer
 round = primitive1 _math_round
 
+roundBigfloat :: TTerm Int -> TTerm Double -> TTerm Double
+roundBigfloat = primitive2 _math_roundBigfloat
+
+roundFloat32 :: TTerm Int -> TTerm Float -> TTerm Float
+roundFloat32 = primitive2 _math_roundFloat32
+
+roundFloat64 :: TTerm Int -> TTerm Double -> TTerm Double
+roundFloat64 = primitive2 _math_roundFloat64
+
 signum :: Num a => TTerm a -> TTerm a
 signum = primitive1 _math_signum
 

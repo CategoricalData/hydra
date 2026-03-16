@@ -17,6 +17,7 @@ import qualified Data.Map                     as M
 -- Additional imports specific to this file
 import Hydra.Testing
 import Hydra.Sources.Libraries
+import qualified Hydra.Lib.Math as Math
 
 
 ns :: Namespace
@@ -177,6 +178,40 @@ mathSucc = subgroup "succ" [
     test name x result = primCase name _math_succ [int32 x] (int32 result)
 
 -- Float64 tests
+--
+-- Note on floating-point portability (see also docs/recipes/extending-tests.md):
+-- Transcendental functions (sin, cos, exp, atanh, etc.) are implemented via the platform's
+-- C math library (libm), which is NOT required by IEEE 754 to produce bit-identical results
+-- across platforms. Even GHC delegates to libm, so Haskell-computed expected values like
+-- (sinh 1.0) can differ by 1 ULP between macOS and Linux.
+--
+-- When adding float64 test cases for transcendental functions:
+--   * Prefer inputs that produce exact results: sin(0)=0, exp(0)=1, sqrt(4)=2
+--   * If a non-trivial input is needed, use roundFloat64 (or roundFloat32/roundBigfloat)
+--     on both the expected value and the test input's expected result to eliminate
+--     platform-dependent rounding in the last digit.
+
+-- | Number of significant digits to use when rounding transcendental results
+-- for platform-independent comparison. 12 digits is well within float64 precision
+-- (which has ~15.9 significant digits) while safely absorbing 1-ULP differences.
+roundDigits :: Int
+roundDigits = 12
+
+-- | Build a test case that rounds both the computed and expected results to
+-- a fixed number of significant digits using roundFloat64. This makes
+-- transcendental function tests portable across platforms with different libm
+-- implementations.
+roundedPrimCase1 :: String -> Name -> Double -> Double -> TTerm TestCaseWithMetadata
+roundedPrimCase1 cname primName x result = evalCase cname input output
+  where
+    input = Terms.primitive _math_roundFloat64 @@ int32 roundDigits @@ (Terms.primitive primName @@ float64 x)
+    output = float64 (Math.roundFloat64 roundDigits result)
+
+roundedPrimCase2 :: String -> Name -> Double -> Double -> Double -> TTerm TestCaseWithMetadata
+roundedPrimCase2 cname primName x y result = evalCase cname input output
+  where
+    input = Terms.primitive _math_roundFloat64 @@ int32 roundDigits @@ (Terms.primitive primName @@ float64 x @@ float64 y)
+    output = float64 (Math.roundFloat64 roundDigits result)
 
 mathE :: TTerm TestGroup
 mathE = subgroup "e" [
@@ -194,22 +229,28 @@ mathSin :: TTerm TestGroup
 mathSin = subgroup "sin" [
   test "sin 0" 0.0 0.0,
   test "sin pi/2" (pi / 2) 1.0,
-  test "sin pi" pi (sin pi)]  -- Use actual computed value for precision
+  test "sin pi" pi (sin pi),
+  roundedPrimCase1 "sin 1" _math_sin 1.0 (sin 1.0),
+  roundedPrimCase1 "sin 0.5" _math_sin 0.5 (sin 0.5)]
   where
     test name x result = primCase name _math_sin [float64 x] (float64 result)
 
 mathCos :: TTerm TestGroup
 mathCos = subgroup "cos" [
   test "cos 0" 0.0 1.0,
-  test "cos pi/2" (pi / 2) (cos (pi / 2)),  -- Use actual computed value for precision
-  test "cos pi" pi (-1.0)]
+  test "cos pi/2" (pi / 2) (cos (pi / 2)),
+  test "cos pi" pi (-1.0),
+  roundedPrimCase1 "cos 1" _math_cos 1.0 (cos 1.0),
+  roundedPrimCase1 "cos 0.5" _math_cos 0.5 (cos 0.5)]
   where
     test name x result = primCase name _math_cos [float64 x] (float64 result)
 
 mathTan :: TTerm TestGroup
 mathTan = subgroup "tan" [
   test "tan 0" 0.0 0.0,
-  test "tan pi/4" (pi / 4) (tan (pi / 4))]  -- Use actual computed value for precision
+  test "tan pi/4" (pi / 4) (tan (pi / 4)),
+  roundedPrimCase1 "tan 1" _math_tan 1.0 (tan 1.0),
+  roundedPrimCase1 "tan 0.5" _math_tan 0.5 (tan 0.5)]
   where
     test name x result = primCase name _math_tan [float64 x] (float64 result)
 
@@ -217,7 +258,8 @@ mathAsin :: TTerm TestGroup
 mathAsin = subgroup "asin" [
   test "asin 0" 0.0 0.0,
   test "asin 1" 1.0 (pi / 2),
-  test "asin -1" (-1.0) (-(pi / 2))]
+  test "asin -1" (-1.0) (-(pi / 2)),
+  roundedPrimCase1 "asin 0.5" _math_asin 0.5 (asin 0.5)]
   where
     test name x result = primCase name _math_asin [float64 x] (float64 result)
 
@@ -225,14 +267,16 @@ mathAcos :: TTerm TestGroup
 mathAcos = subgroup "acos" [
   test "acos 1" 1.0 0.0,
   test "acos 0" 0.0 (pi / 2),
-  test "acos -1" (-1.0) pi]
+  test "acos -1" (-1.0) pi,
+  roundedPrimCase1 "acos 0.5" _math_acos 0.5 (acos 0.5)]
   where
     test name x result = primCase name _math_acos [float64 x] (float64 result)
 
 mathAtan :: TTerm TestGroup
 mathAtan = subgroup "atan" [
   test "atan 0" 0.0 0.0,
-  test "atan 1" 1.0 (pi / 4)]
+  test "atan 1" 1.0 (pi / 4),
+  roundedPrimCase1 "atan 0.5" _math_atan 0.5 (atan 0.5)]
   where
     test name x result = primCase name _math_atan [float64 x] (float64 result)
 
@@ -240,48 +284,56 @@ mathAtan2 :: TTerm TestGroup
 mathAtan2 = subgroup "atan2" [
   test "atan2 1 1" 1.0 1.0 (pi / 4),
   test "atan2 1 0" 1.0 0.0 (pi / 2),
-  test "atan2 0 1" 0.0 1.0 0.0]
+  test "atan2 0 1" 0.0 1.0 0.0,
+  roundedPrimCase2 "atan2 3 4" _math_atan2 3.0 4.0 (atan2 3.0 4.0)]
   where
     test name y x result = primCase name _math_atan2 [float64 y, float64 x] (float64 result)
 
 mathSinh :: TTerm TestGroup
 mathSinh = subgroup "sinh" [
   test "sinh 0" 0.0 0.0,
-  test "sinh 1" 1.0 (sinh 1.0)]
+  test "sinh 1" 1.0 (sinh 1.0),
+  roundedPrimCase1 "sinh 2" _math_sinh 2.0 (sinh 2.0)]
   where
     test name x result = primCase name _math_sinh [float64 x] (float64 result)
 
 mathCosh :: TTerm TestGroup
 mathCosh = subgroup "cosh" [
   test "cosh 0" 0.0 1.0,
-  test "cosh 1" 1.0 (cosh 1.0)]
+  test "cosh 1" 1.0 (cosh 1.0),
+  roundedPrimCase1 "cosh 2" _math_cosh 2.0 (cosh 2.0)]
   where
     test name x result = primCase name _math_cosh [float64 x] (float64 result)
 
 mathTanh :: TTerm TestGroup
 mathTanh = subgroup "tanh" [
   test "tanh 0" 0.0 0.0,
-  test "tanh 1" 1.0 (tanh 1.0)]
+  test "tanh 1" 1.0 (tanh 1.0),
+  roundedPrimCase1 "tanh 0.5" _math_tanh 0.5 (tanh 0.5)]
   where
     test name x result = primCase name _math_tanh [float64 x] (float64 result)
 
 mathAsinh :: TTerm TestGroup
 mathAsinh = subgroup "asinh" [
   test "asinh 0" 0.0 0.0,
-  test "asinh 1" 1.0 (asinh 1.0)]
+  test "asinh 1" 1.0 (asinh 1.0),
+  roundedPrimCase1 "asinh 0.5" _math_asinh 0.5 (asinh 0.5)]
   where
     test name x result = primCase name _math_asinh [float64 x] (float64 result)
 
 mathAcosh :: TTerm TestGroup
 mathAcosh = subgroup "acosh" [
   test "acosh 1" 1.0 0.0,
-  test "acosh 2" 2.0 (acosh 2.0)]
+  test "acosh 2" 2.0 (acosh 2.0),
+  roundedPrimCase1 "acosh 3" _math_acosh 3.0 (acosh 3.0)]
   where
     test name x result = primCase name _math_acosh [float64 x] (float64 result)
 
 mathAtanh :: TTerm TestGroup
 mathAtanh = subgroup "atanh" [
-  test "atanh 0" 0.0 0.0]
+  test "atanh 0" 0.0 0.0,
+  roundedPrimCase1 "atanh 0.5" _math_atanh 0.5 (atanh 0.5),
+  roundedPrimCase1 "atanh 0.1" _math_atanh 0.1 (atanh 0.1)]
   where
     test name x result = primCase name _math_atanh [float64 x] (float64 result)
 
@@ -289,14 +341,18 @@ mathExp :: TTerm TestGroup
 mathExp = subgroup "exp" [
   test "exp 0" 0.0 1.0,
   test "exp 1" 1.0 (exp 1.0),
-  test "exp -1" (-1.0) (exp (-1.0))]
+  test "exp -1" (-1.0) (exp (-1.0)),
+  roundedPrimCase1 "exp 2" _math_exp 2.0 (exp 2.0),
+  roundedPrimCase1 "exp 0.5" _math_exp 0.5 (exp 0.5)]
   where
     test name x result = primCase name _math_exp [float64 x] (float64 result)
 
 mathLog :: TTerm TestGroup
 mathLog = subgroup "log" [
   test "log 1" 1.0 0.0,
-  test "log e" (exp 1.0) 1.0]
+  test "log e" (exp 1.0) 1.0,
+  roundedPrimCase1 "log 2" _math_log 2.0 (log 2.0),
+  roundedPrimCase1 "log 10" _math_log 10.0 (log 10.0)]
   where
     test name x result = primCase name _math_log [float64 x] (float64 result)
 
@@ -305,7 +361,8 @@ mathLogBase = subgroup "logBase" [
   test "log10 1" 10.0 1.0 0.0,
   test "log10 10" 10.0 10.0 1.0,
   test "log10 100" 10.0 100.0 2.0,
-  test "log2 8" 2.0 8.0 3.0]
+  test "log2 8" 2.0 8.0 3.0,
+  roundedPrimCase2 "log2 10" _math_logBase 2.0 10.0 (logBase 2.0 10.0)]
   where
     test name base x result = primCase name _math_logBase [float64 base, float64 x] (float64 result)
 
@@ -313,7 +370,8 @@ mathPow :: TTerm TestGroup
 mathPow = subgroup "pow" [
   test "2^3" 2.0 3.0 8.0,
   test "10^0" 10.0 0.0 1.0,
-  test "2^-1" 2.0 (-1.0) 0.5]
+  test "2^-1" 2.0 (-1.0) 0.5,
+  roundedPrimCase2 "2^0.5" _math_pow 2.0 0.5 (2.0 ** 0.5)]
   where
     test name base exp result = primCase name _math_pow [float64 base, float64 exp] (float64 result)
 
@@ -322,7 +380,8 @@ mathSqrt = subgroup "sqrt" [
   test "sqrt 4" 4.0 2.0,
   test "sqrt 9" 9.0 3.0,
   test "sqrt 2" 2.0 (sqrt 2.0),
-  test "sqrt 0" 0.0 0.0]
+  test "sqrt 0" 0.0 0.0,
+  roundedPrimCase1 "sqrt 3" _math_sqrt 3.0 (sqrt 3.0)]
   where
     test name x result = primCase name _math_sqrt [float64 x] (float64 result)
 
@@ -353,6 +412,37 @@ mathRound = subgroup "round" [
   test "round -3.5" (-3.5) (-4)]
   where
     test name x result = primCase name _math_round [float64 x] (bigint result)
+
+mathRoundBigfloat :: TTerm TestGroup
+mathRoundBigfloat = subgroup "roundBigfloat" [
+  test "zero" 5 0.0 0.0,
+  test "round pi to 4 digits" 4 3.141592653589793 3.142,
+  test "round 1234.5 to 3 digits" 3 1234.5 1230.0,
+  test "round 0.001234 to 2 digits" 2 0.001234 0.0012,
+  test "negative" 3 (-1234.5) (-1230.0)]
+  where
+    test name n x result = primCase name _math_roundBigfloat [int32 n, bigfloat x] (bigfloat result)
+
+mathRoundFloat32 :: TTerm TestGroup
+mathRoundFloat32 = subgroup "roundFloat32" [
+  test "zero" 5 0.0 0.0,
+  test "round pi to 4 digits" 4 3.1415927 3.142,
+  test "round 1234.5 to 3 digits" 3 1234.5 1230.0,
+  test "negative" 3 (-1234.5) (-1230.0)]
+  where
+    test name n x result = primCase name _math_roundFloat32 [int32 n, float32 x] (float32 result)
+
+mathRoundFloat64 :: TTerm TestGroup
+mathRoundFloat64 = subgroup "roundFloat64" [
+  test "zero" 5 0.0 0.0,
+  test "round pi to 4 digits" 4 3.141592653589793 3.142,
+  test "round pi to 10 digits" 10 3.141592653589793 3.141592654,
+  test "round 1234.5 to 3 digits" 3 1234.5 1230.0,
+  test "round 0.001234 to 2 digits" 2 0.001234 0.0012,
+  test "negative" 3 (-1234.5) (-1230.0),
+  test "round 1 digit" 1 9.876 10.0]
+  where
+    test name n x result = primCase name _math_roundFloat64 [int32 n, float64 x] (float64 result)
 
 mathTruncate :: TTerm TestGroup
 mathTruncate = subgroup "truncate" [
@@ -408,4 +498,7 @@ allTests = definitionInModule module_ "allTests" $
       mathCeiling,
       mathFloor,
       mathRound,
+      mathRoundBigfloat,
+      mathRoundFloat32,
+      mathRoundFloat64,
       mathTruncate]
