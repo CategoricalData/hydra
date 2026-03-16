@@ -85,6 +85,22 @@ exprOp op = inject _Expr _Expr_op op
 exprBrackets :: TTerm BracketExpr -> TTerm Expr
 exprBrackets be = inject _Expr _Expr_brackets be
 
+exprSeq :: TTerm SeqExpr -> TTerm Expr
+exprSeq se = inject _Expr _Expr_seq se
+
+-- SeqExpr
+
+seqExpr :: TTerm Op -> TTerm [Expr] -> TTerm SeqExpr
+seqExpr op elements = record _SeqExpr [
+    _SeqExpr_op >>: op,
+    _SeqExpr_elements >>: elements]
+
+seqExprOp :: TTerm SeqExpr -> TTerm Op
+seqExprOp se = project _SeqExpr _SeqExpr_op @@ se
+
+seqExprElements :: TTerm SeqExpr -> TTerm [Expr]
+seqExprElements se = project _SeqExpr _SeqExpr_elements @@ se
+
 -- IndentedExpression
 
 indentedExpression :: TTerm IndentStyle -> TTerm Expr -> TTerm IndentedExpression

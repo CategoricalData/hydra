@@ -10,6 +10,7 @@ import Hydra.Kernel hiding (
   indentLines, indentSubsequentLines, infixWs, infixWsList, inlineStyle, newline, newlineSep, noSep,
   noPad, noPadding, num, op, orOp, orSep, parenList, parens, parensList, parentheses, parenthesize,
   prefix, printExpr, printGraph, semicolonSep, sep, singleQuoted, space, spaceSep, squareBrackets,
+  structuralSep, structuralSpaceSep,
   suffix, sym, symbolSep, tabIndent, tabIndentDoubleSpace, tabIndentSingleSpace, unsupportedType,
   unsupportedVariant, withComma, withSemi)
 import Hydra.Sources.Libraries
@@ -117,6 +118,8 @@ module_ = Module ns elements
      toBinding semicolonSep,
      toBinding sep,
      toBinding spaceSep,
+     toBinding structuralSep,
+     toBinding structuralSpaceSep,
      toBinding squareBrackets,
      toBinding suffix,
      toBinding sym,
@@ -245,9 +248,9 @@ expressionLength = define "expressionLength" $
   "wsLength" <~ ("ws" ~> cases _Ws (var "ws") Nothing [
     _Ws_none>>: constant $ int32 0,
     _Ws_space>>: constant $ int32 1,
-    _Ws_break>>: constant $ int32 1,
-    _Ws_breakAndIndent>>: "s" ~> Math.add (int32 1) (Strings.length $ var "s"),
-    _Ws_doubleBreak>>: constant $ int32 2]) $
+    _Ws_break>>: constant $ int32 10000,
+    _Ws_breakAndIndent>>: "s" ~> int32 10000,
+    _Ws_doubleBreak>>: constant $ int32 10000]) $
   "blockStyleLength" <~ ("style" ~>
     "mindentLen" <~ Maybes.maybe (int32 0) (unaryFunction Strings.length) (Ast.blockStyleIndent $ var "style") $
     "nlBeforeLen" <~ Logic.ifElse (Ast.blockStyleNewlineBeforeContent $ var "style") (int32 1) (int32 0) $
@@ -280,11 +283,18 @@ expressionLength = define "expressionLength" $
     "leftLen" <~ expressionLength @@ (Ast.opExprLhs $ var "oe") $
     "rightLen" <~ expressionLength @@ (Ast.opExprRhs $ var "oe") $
     Math.add (var "opLen") $ Math.add (var "leftLen") (var "rightLen")) $
+  "seqExprLength" <~ ("se" ~>
+    "sopLen" <~ var "opLength" @@ (Ast.seqExprOp $ var "se") $
+    "elementLens" <~ Lists.map (expressionLength) (Ast.seqExprElements $ var "se") $
+    "totalElLen" <~ Lists.foldl (binaryFunction Math.add) (int32 0) (var "elementLens") $
+    "numSeps" <~ Math.sub (Lists.length $ Ast.seqExprElements $ var "se") (int32 1) $
+    Math.add (var "totalElLen") (Math.mul (var "sopLen") (Logic.ifElse (Equality.gt (var "numSeps") (int32 0)) (var "numSeps") (int32 0)))) $
   cases _Expr (var "e") Nothing [
     _Expr_const>>: "s" ~> var "symbolLength" @@ var "s",
     _Expr_indent>>: "ie" ~> var "indentedExpressionLength" @@ var "ie",
     _Expr_op>>: "oe" ~> var "opExprLength" @@ var "oe",
-    _Expr_brackets>>: "be" ~> var "bracketExprLength" @@ var "be"]
+    _Expr_brackets>>: "be" ~> var "bracketExprLength" @@ var "be",
+    _Expr_seq>>: "se" ~> var "seqExprLength" @@ var "se"]
 
 fullBlockStyle :: TBinding BlockStyle
 fullBlockStyle = define "fullBlockStyle" $
@@ -418,6 +428,10 @@ parenthesize = define "parenthesize" $
         Ast.exprIndent $ Ast.indentedExpression
           (Ast.indentedExpressionStyle $ var "indentExpr")
           (parenthesize @@ (Ast.indentedExpressionExpr $ var "indentExpr")),
+      _Expr_seq>>: "seqExpr" ~>
+        Ast.exprSeq $ Ast.seqExpr
+          (Ast.seqExprOp $ var "seqExpr")
+          (Lists.map (parenthesize) (Ast.seqExprElements $ var "seqExpr")),
       _Expr_op>>: "opExpr" ~>
         "op" <~ Ast.opExprOp (var "opExpr") $
         "prec" <~ Ast.unPrecedence (Ast.opPrecedence $ var "op") $
@@ -489,6 +503,16 @@ printExpr = define "printExpr" $
             (var "lns")
             (Lists.cons (Lists.head $ var "lns") $ Lists.map ("line" ~> var "idt" ++ var "line") $ Lists.tail $ var "lns")] $
       Strings.intercalate (string "\n") (var "ilns"),
+    _Expr_seq>>: "seqExpr" ~>
+      "sop" <~ Ast.seqExprOp (var "seqExpr") $
+      "ssym" <~ Ast.unSymbol (Ast.opSymbol $ var "sop") $
+      "spadding" <~ Ast.opPadding (var "sop") $
+      "spadl" <~ Ast.paddingLeft (var "spadding") $
+      "spadr" <~ Ast.paddingRight (var "spadding") $
+      "selements" <~ Ast.seqExprElements (var "seqExpr") $
+      "separator" <~ (var "pad" @@ var "spadl") ++ var "ssym" ++ (var "pad" @@ var "spadr") $
+      "printedElements" <~ Lists.map ("el" ~> var "idt" @@ var "spadr" @@ (printExpr @@ var "el")) (var "selements") $
+      Strings.intercalate (var "separator") (var "printedElements"),
     _Expr_op>>: "opExpr" ~>
       "op" <~ Ast.opExprOp (var "opExpr") $
       "sym" <~ Ast.unSymbol (Ast.opSymbol $ var "op") $
@@ -529,6 +553,25 @@ sep = define "sep" $
 spaceSep :: TBinding ([Expr] -> Expr)
 spaceSep = define "spaceSep" $
   sep @@ (Ast.op
+    (sym @@ string "")
+    (Ast.padding Ast.wsSpace Ast.wsNone)
+    (Ast.precedence $ int32 0)
+    Ast.associativityNone)
+
+structuralSep :: TBinding (Op -> [Expr] -> Expr)
+structuralSep = define "structuralSep" $
+  doc "Like sep, but produces a SeqExpr instead of an OpExpr chain. SeqExpr is treated as structural layout and is not subject to parenthesization." $
+  "op" ~> "els" ~>
+    Logic.ifElse (Lists.null $ var "els")
+      (cst @@ string "")
+      (Logic.ifElse (Equality.equal (Lists.length $ var "els") (int32 1))
+        (Lists.head $ var "els")
+        (Ast.exprSeq $ Ast.seqExpr (var "op") (var "els")))
+
+structuralSpaceSep :: TBinding ([Expr] -> Expr)
+structuralSpaceSep = define "structuralSpaceSep" $
+  doc "Like spaceSep, but produces a SeqExpr. Use for structural layout that should not trigger parenthesization of children." $
+  structuralSep @@ (Ast.op
     (sym @@ string "")
     (Ast.padding Ast.wsSpace Ast.wsNone)
     (Ast.precedence $ int32 0)
