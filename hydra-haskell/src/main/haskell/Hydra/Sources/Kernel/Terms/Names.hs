@@ -111,7 +111,7 @@ namespaceToFilePath = define "namespaceToFilePath" $
   lambda "caseConv" $ lambda "ext" $ lambda "ns" $ lets [
     "parts">: Lists.map
       (Formatting.convertCase @@ Util.caseConventionCamel @@ var "caseConv")
-      (Strings.splitOn (string ".") (Core.unNamespace $ var "ns"))]
+      (Strings.splitOn (string ".") (Module.unNamespace $ var "ns"))]
     $ (Strings.intercalate (string "/") $ var "parts") ++ string "." ++ (Module.unFileExtension $ var "ext")
 
 qname :: TBinding (Namespace -> String -> Name)

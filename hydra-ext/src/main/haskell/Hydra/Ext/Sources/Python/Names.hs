@@ -179,7 +179,7 @@ encodeName = def "encodeName" $
     -- Convert namespace to Python dotted path
     "pyNs">: lambda "nsVal" $ Strings.intercalate (string ".") $
       Lists.map (Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake)
-        (Strings.splitOn (string ".") (Core.unNamespace $ var "nsVal"))] $
+        (Strings.splitOn (string ".") (Module.unNamespace $ var "nsVal"))] $
     -- If qualified, check bound vars first, then namespace
     Logic.ifElse (var "isQualified")
       -- Check if name is a bound type variable
@@ -237,7 +237,7 @@ encodeNamespace = def "encodeNamespace" $
   lambda "nsVal" $ wrap Py._DottedName $
     Lists.map
       (lambda "part" $ wrap Py._Name $ Formatting.convertCase @@ Util.caseConventionCamel @@ Util.caseConventionLowerSnake @@ var "part")
-      (Strings.splitOn (string ".") (Core.unNamespace $ var "nsVal"))
+      (Strings.splitOn (string ".") (Module.unNamespace $ var "nsVal"))
 
 -- | Encode a type variable name (capitalized).
 encodeTypeVariable :: TBinding (Name -> Py.Name)

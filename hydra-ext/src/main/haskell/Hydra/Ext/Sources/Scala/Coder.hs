@@ -126,7 +126,7 @@ constructModule = def "constructModule" $
     "partitioned">: Schemas.partitionDefinitions @@ var "defs",
     "typeDefs">: Pairs.first (var "partitioned"),
     "termDefs">: Pairs.second (var "partitioned"),
-    "nsName">: Core.unNamespace (Module.moduleNamespace (var "mod")),
+    "nsName">: Module.unNamespace (Module.moduleNamespace (var "mod")),
     "pname">: toScalaName (var "nsName"),
     "pref">: inject _Data_Ref _Data_Ref_name (var "pname")] $
     Eithers.bind
@@ -172,7 +172,7 @@ toElImport = def "toElImport" $
               _Importer_ref>>: inject _Data_Ref _Data_Ref_name (
                 record _Data_Name [
                   _Data_Name_value>>: wrap _PredefString (
-                    Strings.intercalate (string ".") (Strings.splitOn (string ".") (Core.unNamespace (var "ns"))))]),
+                    Strings.intercalate (string ".") (Strings.splitOn (string ".") (Module.unNamespace (var "ns"))))]),
               _Importer_importees>>: list [inject _Importee _Importee_wildcard unit]]]]))
 
 toPrimImport :: TBinding (Namespace -> Scala.Stat)
@@ -187,7 +187,7 @@ toPrimImport = def "toPrimImport" $
               _Importer_ref>>: inject _Data_Ref _Data_Ref_name (
                 record _Data_Name [
                   _Data_Name_value>>: wrap _PredefString (
-                    Strings.intercalate (string ".") (Strings.splitOn (string ".") (Core.unNamespace (var "ns"))))]),
+                    Strings.intercalate (string ".") (Strings.splitOn (string ".") (Module.unNamespace (var "ns"))))]),
               _Importer_importees>>: emptyList]]]))
 
 encodeTypeDefinition :: TBinding (Context -> Graph -> TypeDefinition -> Either (InContext Error) Scala.Stat)

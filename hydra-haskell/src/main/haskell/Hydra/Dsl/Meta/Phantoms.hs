@@ -429,3 +429,7 @@ var v = TTerm $ Terms.var v
 -- Note: the phantom types provide no guarantee of type safety in this case
 wrap :: Name -> TTerm a -> TTerm b
 wrap name (TTerm term) = TTerm $ Terms.wrap name term
+
+-- | Lift a Haskell Name value to a phantom-typed TTerm Name
+nameLift :: Name -> TTerm Name
+nameLift (Name n) = wrap _Name $ string n
