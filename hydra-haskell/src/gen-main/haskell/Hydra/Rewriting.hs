@@ -1299,24 +1299,16 @@ rewriteTypeM f typ0 =
             Core.mapTypeValues = vt})))))
           Core.TypeMaybe v0 -> (Eithers.bind (recurse v0) (\rt -> Right (Core.TypeMaybe rt)))
           Core.TypeRecord v0 ->  
-            let name = (Core.Name "unknown")
-            in  
-              let fields = v0
-              in  
-                let forField = (\f -> Eithers.bind (recurse (Core.fieldTypeType f)) (\t -> Right (Core.FieldType {
-                        Core.fieldTypeName = (Core.fieldTypeName f),
-                        Core.fieldTypeType = t})))
-                in (Eithers.bind (Eithers.mapList forField fields) (\rfields -> Right (Core.TypeRecord rfields)))
+            let forField = (\f -> Eithers.bind (recurse (Core.fieldTypeType f)) (\t -> Right (Core.FieldType {
+                    Core.fieldTypeName = (Core.fieldTypeName f),
+                    Core.fieldTypeType = t})))
+            in (Eithers.bind (Eithers.mapList forField v0) (\rfields -> Right (Core.TypeRecord rfields)))
           Core.TypeSet v0 -> (Eithers.bind (recurse v0) (\rt -> Right (Core.TypeSet rt)))
           Core.TypeUnion v0 ->  
-            let name = (Core.Name "unknown")
-            in  
-              let fields = v0
-              in  
-                let forField = (\f -> Eithers.bind (recurse (Core.fieldTypeType f)) (\t -> Right (Core.FieldType {
-                        Core.fieldTypeName = (Core.fieldTypeName f),
-                        Core.fieldTypeType = t})))
-                in (Eithers.bind (Eithers.mapList forField fields) (\rfields -> Right (Core.TypeUnion rfields)))
+            let forField = (\f -> Eithers.bind (recurse (Core.fieldTypeType f)) (\t -> Right (Core.FieldType {
+                    Core.fieldTypeName = (Core.fieldTypeName f),
+                    Core.fieldTypeType = t})))
+            in (Eithers.bind (Eithers.mapList forField v0) (\rfields -> Right (Core.TypeUnion rfields)))
           Core.TypeUnit -> (Right Core.TypeUnit)
           Core.TypeVariable v0 -> (Right (Core.TypeVariable v0))
           Core.TypeWrap v0 -> (Eithers.bind (recurse v0) (\t -> Right (Core.TypeWrap t)))) typ)
@@ -1594,19 +1586,9 @@ topologicalSortBindings els =
 typeDependencyNames :: (Bool -> Core.Type -> S.Set Core.Name)
 typeDependencyNames withSchema typ = (Logic.ifElse withSchema (Sets.union (freeVariablesInType typ) (typeNamesInType typ)) (freeVariablesInType typ))
 
-typeNamesInType :: (Core.Type -> S.Set Core.Name)
+typeNamesInType :: Ord t0 => (Core.Type -> S.Set t0)
 typeNamesInType typ0 =  
-  let addNames = (\names -> \typ -> (\x -> case x of
-          Core.TypeRecord v0 ->  
-            let tname = (Core.Name "unknown")
-            in (Sets.insert tname names)
-          Core.TypeUnion v0 ->  
-            let tname = (Core.Name "unknown")
-            in (Sets.insert tname names)
-          Core.TypeWrap v0 ->  
-            let tname = (Core.Name "unknown")
-            in (Sets.insert tname names)
-          _ -> names) typ)
+  let addNames = (\names -> \typ -> names)
   in (foldOverType Coders.TraversalOrderPre addNames Sets.empty typ0)
 
 -- | Convert a type scheme to a forall type

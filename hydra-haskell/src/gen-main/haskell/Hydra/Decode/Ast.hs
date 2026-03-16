@@ -24,8 +24,7 @@ import qualified Data.Set as S
 associativity :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Ast.Associativity)
 associativity cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -36,9 +35,8 @@ associativity cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) 
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.ast.Associativity"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 blockStyle :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Ast.BlockStyle)
 blockStyle cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -60,7 +58,7 @@ blockStyle cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\s
       Ast.blockStyleIndent = field_indent,
       Ast.blockStyleNewlineBeforeContent = field_newlineBeforeContent,
       Ast.blockStyleNewlineAfterContent = field_newlineAfterContent})))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.ast.BlockStyle"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 bracketExpr :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Ast.BracketExpr)
 bracketExpr cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -70,7 +68,7 @@ bracketExpr cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\
       Ast.bracketExprBrackets = field_brackets,
       Ast.bracketExprEnclosed = field_enclosed,
       Ast.bracketExprStyle = field_style})))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.ast.BracketExpr"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 brackets :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Ast.Brackets)
 brackets cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -79,13 +77,12 @@ brackets cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\str
     in (Eithers.bind (Helpers.requireField "open" symbol fieldMap cx) (\field_open -> Eithers.bind (Helpers.requireField "close" symbol fieldMap cx) (\field_close -> Right (Ast.Brackets {
       Ast.bracketsOpen = field_open,
       Ast.bracketsClose = field_close}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.ast.Brackets"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 expr :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Ast.Expr)
 expr cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -96,9 +93,8 @@ expr cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\strippe
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.ast.Expr"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 indentedExpression :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Ast.IndentedExpression)
 indentedExpression cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -107,13 +103,12 @@ indentedExpression cx raw = (Eithers.either (\err -> Left (Error.DecodingError e
     in (Eithers.bind (Helpers.requireField "style" indentStyle fieldMap cx) (\field_style -> Eithers.bind (Helpers.requireField "expr" expr fieldMap cx) (\field_expr -> Right (Ast.IndentedExpression {
       Ast.indentedExpressionStyle = field_style,
       Ast.indentedExpressionExpr = field_expr}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.ast.IndentedExpression"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 indentStyle :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Ast.IndentStyle)
 indentStyle cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -130,9 +125,8 @@ indentStyle cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.ast.IndentStyle"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 op :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Ast.Op)
 op cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -143,7 +137,7 @@ op cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped 
       Ast.opPadding = field_padding,
       Ast.opPrecedence = field_precedence,
       Ast.opAssociativity = field_associativity}))))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.ast.Op"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 opExpr :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Ast.OpExpr)
 opExpr cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -153,7 +147,7 @@ opExpr cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\strip
       Ast.opExprOp = field_op,
       Ast.opExprLhs = field_lhs,
       Ast.opExprRhs = field_rhs})))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.ast.OpExpr"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 padding :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Ast.Padding)
 padding cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -162,7 +156,7 @@ padding cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stri
     in (Eithers.bind (Helpers.requireField "left" ws fieldMap cx) (\field_left -> Eithers.bind (Helpers.requireField "right" ws fieldMap cx) (\field_right -> Right (Ast.Padding {
       Ast.paddingLeft = field_left,
       Ast.paddingRight = field_right}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.ast.Padding"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 precedence :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Ast.Precedence)
 precedence cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -173,7 +167,7 @@ precedence cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\s
         _ -> (Left (Error.DecodingError "expected int32 value"))) v2)
       _ -> (Left (Error.DecodingError "expected int32 literal"))) v1)
     _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0)))
-  _ -> (Left (Error.DecodingError "expected wrapped type hydra.ast.Precedence"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected wrapped type"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 symbol :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Ast.Symbol)
 symbol cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -182,13 +176,12 @@ symbol cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\strip
       Core.LiteralString v2 -> (Right v2)
       _ -> (Left (Error.DecodingError "expected string literal"))) v1)
     _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0)))
-  _ -> (Left (Error.DecodingError "expected wrapped type hydra.ast.Symbol"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected wrapped type"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 ws :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Ast.Ws)
 ws cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -204,6 +197,5 @@ ws cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped 
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.ast.Ws"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))

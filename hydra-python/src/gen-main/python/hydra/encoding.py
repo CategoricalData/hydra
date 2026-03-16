@@ -146,10 +146,15 @@ def encode_pair_type(pt: hydra.core.PairType) -> hydra.core.Term:
     
     return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("p"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("pair"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionPrimitive(hydra.core.Name("hydra.lib.pairs.bimap"))))), encode_type(pt.first)))), encode_type(pt.second)))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("p")))))))))))))))
 
-def encode_record_type(rt: hydra.core.RowType) -> hydra.core.Term:
-    r"""Generate an encoder for a record type."""
+def encode_record_type(rt: frozenlist[hydra.core.FieldType]) -> hydra.core.Term:
+    r"""Generate an encoder for a record type (unnamed — should not be called directly)."""
     
-    return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("record"), cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Record"), (hydra.core.Field(hydra.core.Name("typeName"), encode_name(rt.type_name)), hydra.core.Field(hydra.core.Name("fields"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda ft: cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Field"), (hydra.core.Field(hydra.core.Name("name"), encode_name(ft.name)), hydra.core.Field(hydra.core.Name("term"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(encode_type(ft.type), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(rt.type_name, ft.name))))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))))))))))))))), rt.fields)))))))))))))))))
+    return encode_record_type_named(hydra.core.Name("unknown"), rt)
+
+def encode_record_type_named(ename: hydra.core.Name, rt: frozenlist[hydra.core.FieldType]) -> hydra.core.Term:
+    r"""Generate an encoder for a record type with the given element name."""
+    
+    return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("record"), cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Record"), (hydra.core.Field(hydra.core.Name("typeName"), encode_name(ename)), hydra.core.Field(hydra.core.Name("fields"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda ft: cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.Field"), (hydra.core.Field(hydra.core.Name("name"), encode_name(ft.name)), hydra.core.Field(hydra.core.Name("term"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(encode_type(ft.type), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationRecord(hydra.core.Projection(ename, ft.name))))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))))))))))))))), rt)))))))))))))))))
 
 def encode_set_type(elem_type: hydra.core.Type) -> hydra.core.Term:
     r"""Generate an encoder for a set type."""
@@ -211,15 +216,80 @@ def encode_type(v1: hydra.core.Type) -> hydra.core.Term:
         case _:
             return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))))))))
 
-def encode_union_type(rt: hydra.core.RowType) -> hydra.core.Term:
-    r"""Generate an encoder for a union type."""
+def encode_union_type(rt: frozenlist[hydra.core.FieldType]) -> hydra.core.Term:
+    r"""Generate an encoder for a union type (placeholder name)."""
     
-    return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(rt.type_name, Nothing(), hydra.lib.lists.map((lambda ft: hydra.core.Field(ft.name, encode_field_value(rt.type_name, ft.name, ft.type))), rt.fields))))))))
+    return encode_union_type_named(hydra.core.Name("unknown"), rt)
 
-def encode_wrapped_type(wt: hydra.core.WrappedType) -> hydra.core.Term:
-    r"""Generate an encoder for a wrapped type."""
+def encode_union_type_named(ename: hydra.core.Name, rt: frozenlist[hydra.core.FieldType]) -> hydra.core.Term:
+    r"""Generate an encoder for a union type with the given element name."""
     
-    return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("wrap"), cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.WrappedTerm"), (hydra.core.Field(hydra.core.Name("typeName"), encode_name(wt.type_name)), hydra.core.Field(hydra.core.Name("body"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(encode_type(wt.body), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationWrap(wt.type_name)))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x")))))))))))))))))))))))
+    return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationUnion(hydra.core.CaseStatement(ename, Nothing(), hydra.lib.lists.map((lambda ft: hydra.core.Field(ft.name, encode_field_value(ename, ft.name, ft.type))), rt))))))))
+
+def encode_wrapped_type(wt: hydra.core.Type) -> hydra.core.Term:
+    r"""Generate an encoder for a wrapped type (placeholder name)."""
+    
+    return encode_wrapped_type_named(hydra.core.Name("unknown"), wt)
+
+def encode_wrapped_type_named(ename: hydra.core.Name, wt: hydra.core.Type) -> hydra.core.Term:
+    r"""Generate an encoder for a wrapped type with the given element name."""
+    
+    return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("wrap"), cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.core.WrappedTerm"), (hydra.core.Field(hydra.core.Name("typeName"), encode_name(ename)), hydra.core.Field(hydra.core.Name("body"), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(encode_type(wt), cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionElimination(cast(hydra.core.Elimination, hydra.core.EliminationWrap(ename)))))), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x")))))))))))))))))))))))
+
+def encode_type_named(ename: hydra.core.Name, typ: hydra.core.Type) -> hydra.core.Term:
+    r"""Generate an encoder term for a Type, with the element name for nominal types."""
+    
+    match typ:
+        case hydra.core.TypeAnnotated(value=at):
+            return encode_type_named(ename, at.body)
+        
+        case hydra.core.TypeApplication(value=app_type):
+            return cast(hydra.core.Term, hydra.core.TermApplication(hydra.core.Application(encode_type(app_type.function), encode_type(app_type.argument))))
+        
+        case hydra.core.TypeEither(value=et):
+            return encode_either_type(et)
+        
+        case hydra.core.TypeForall(value=ft):
+            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(encode_binding_name(ft.parameter), Nothing(), encode_type_named(ename, ft.body))))))
+        
+        case hydra.core.TypeFunction():
+            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))))))))
+        
+        case hydra.core.TypeList(value=elem_type):
+            return encode_list_type(elem_type)
+        
+        case hydra.core.TypeLiteral(value=lt):
+            return encode_literal_type(lt)
+        
+        case hydra.core.TypeMap(value=mt):
+            return encode_map_type(mt)
+        
+        case hydra.core.TypeMaybe(value=elem_type2):
+            return encode_optional_type(elem_type2)
+        
+        case hydra.core.TypePair(value=pt):
+            return encode_pair_type(pt)
+        
+        case hydra.core.TypeRecord(value=rt):
+            return encode_record_type_named(ename, rt)
+        
+        case hydra.core.TypeSet(value=elem_type3):
+            return encode_set_type(elem_type3)
+        
+        case hydra.core.TypeUnion(value=rt2):
+            return encode_union_type_named(ename, rt2)
+        
+        case hydra.core.TypeWrap(value=wt):
+            return encode_wrapped_type_named(ename, wt)
+        
+        case hydra.core.TypeUnit():
+            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("_"), Nothing(), cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.core.Term"), hydra.core.Field(hydra.core.Name("unit"), cast(hydra.core.Term, hydra.core.TermUnit()))))))))))
+        
+        case hydra.core.TypeVariable(value=type_name):
+            return cast(hydra.core.Term, hydra.core.TermVariable(encode_binding_name(type_name)))
+        
+        case _:
+            return cast(hydra.core.Term, hydra.core.TermFunction(cast(hydra.core.Function, hydra.core.FunctionLambda(hydra.core.Lambda(hydra.core.Name("x"), Nothing(), cast(hydra.core.Term, hydra.core.TermVariable(hydra.core.Name("x"))))))))
 
 def encoder_collect_forall_variables(typ: hydra.core.Type) -> frozenlist[hydra.core.Name]:
     r"""Collect forall type variable names from a type."""
@@ -260,19 +330,19 @@ def encoder_collect_type_vars_from_type(typ: hydra.core.Type) -> frozenlist[hydr
             return hydra.lib.lists.concat2(encoder_collect_type_vars_from_type(pt.first), encoder_collect_type_vars_from_type(pt.second))
         
         case hydra.core.TypeRecord(value=rt):
-            return hydra.lib.lists.concat(hydra.lib.lists.map((lambda ft: encoder_collect_type_vars_from_type(ft.type)), rt.fields))
+            return hydra.lib.lists.concat(hydra.lib.lists.map((lambda ft: encoder_collect_type_vars_from_type(ft.type)), rt))
         
         case hydra.core.TypeSet(value=elem_type3):
             return encoder_collect_type_vars_from_type(elem_type3)
         
         case hydra.core.TypeUnion(value=rt2):
-            return hydra.lib.lists.concat(hydra.lib.lists.map((lambda ft: encoder_collect_type_vars_from_type(ft.type)), rt2.fields))
+            return hydra.lib.lists.concat(hydra.lib.lists.map((lambda ft: encoder_collect_type_vars_from_type(ft.type)), rt2))
         
         case hydra.core.TypeVariable(value=name):
             return (name,)
         
         case hydra.core.TypeWrap(value=wt):
-            return encoder_collect_type_vars_from_type(wt.body)
+            return encoder_collect_type_vars_from_type(wt)
         
         case _:
             return ()
@@ -306,16 +376,16 @@ def encoder_collect_ord_vars(typ: hydra.core.Type) -> frozenlist[hydra.core.Name
             return hydra.lib.lists.concat2(encoder_collect_ord_vars(pt.first), encoder_collect_ord_vars(pt.second))
         
         case hydra.core.TypeRecord(value=rt):
-            return hydra.lib.lists.concat(hydra.lib.lists.map((lambda ft: encoder_collect_ord_vars(ft.type)), rt.fields))
+            return hydra.lib.lists.concat(hydra.lib.lists.map((lambda ft: encoder_collect_ord_vars(ft.type)), rt))
         
         case hydra.core.TypeSet(value=elem_type3):
             return hydra.lib.lists.concat2(encoder_collect_type_vars_from_type(elem_type3), encoder_collect_ord_vars(elem_type3))
         
         case hydra.core.TypeUnion(value=rt2):
-            return hydra.lib.lists.concat(hydra.lib.lists.map((lambda ft: encoder_collect_ord_vars(ft.type)), rt2.fields))
+            return hydra.lib.lists.concat(hydra.lib.lists.map((lambda ft: encoder_collect_ord_vars(ft.type)), rt2))
         
         case hydra.core.TypeWrap(value=wt):
-            return encoder_collect_ord_vars(wt.body)
+            return encoder_collect_ord_vars(wt)
         
         case _:
             return ()
@@ -351,14 +421,14 @@ def encoder_full_result_type(typ: hydra.core.Type) -> hydra.core.Type:
         case hydra.core.TypePair(value=pt):
             return cast(hydra.core.Type, hydra.core.TypePair(hydra.core.PairType(encoder_full_result_type(pt.first), encoder_full_result_type(pt.second))))
         
-        case hydra.core.TypeRecord(value=rt):
-            return cast(hydra.core.Type, hydra.core.TypeVariable(rt.type_name))
+        case hydra.core.TypeRecord():
+            return cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Term")))
         
         case hydra.core.TypeSet(value=elem_type3):
             return cast(hydra.core.Type, hydra.core.TypeSet(encoder_full_result_type(elem_type3)))
         
-        case hydra.core.TypeUnion(value=rt2):
-            return cast(hydra.core.Type, hydra.core.TypeVariable(rt2.type_name))
+        case hydra.core.TypeUnion():
+            return cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Term")))
         
         case hydra.core.TypeUnit():
             return cast(hydra.core.Type, hydra.core.TypeUnit())
@@ -366,8 +436,60 @@ def encoder_full_result_type(typ: hydra.core.Type) -> hydra.core.Type:
         case hydra.core.TypeVariable(value=name):
             return cast(hydra.core.Type, hydra.core.TypeVariable(name))
         
-        case hydra.core.TypeWrap(value=wt):
-            return cast(hydra.core.Type, hydra.core.TypeVariable(wt.type_name))
+        case hydra.core.TypeWrap():
+            return cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Term")))
+        
+        case _:
+            return cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Term")))
+
+def encoder_full_result_type_named(ename: hydra.core.Name, typ: hydra.core.Type) -> hydra.core.Type:
+    r"""Get full result type for encoder input, using element name for nominal types."""
+    
+    match typ:
+        case hydra.core.TypeAnnotated(value=at):
+            return encoder_full_result_type_named(ename, at.body)
+        
+        case hydra.core.TypeApplication(value=app_type):
+            return cast(hydra.core.Type, hydra.core.TypeApplication(hydra.core.ApplicationType(encoder_full_result_type(app_type.function), app_type.argument)))
+        
+        case hydra.core.TypeEither(value=et):
+            return cast(hydra.core.Type, hydra.core.TypeEither(hydra.core.EitherType(encoder_full_result_type(et.left), encoder_full_result_type(et.right))))
+        
+        case hydra.core.TypeForall(value=ft):
+            return cast(hydra.core.Type, hydra.core.TypeApplication(hydra.core.ApplicationType(encoder_full_result_type_named(ename, ft.body), cast(hydra.core.Type, hydra.core.TypeVariable(ft.parameter)))))
+        
+        case hydra.core.TypeList(value=elem_type):
+            return cast(hydra.core.Type, hydra.core.TypeList(encoder_full_result_type(elem_type)))
+        
+        case hydra.core.TypeLiteral():
+            return cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Literal")))
+        
+        case hydra.core.TypeMap(value=mt):
+            return cast(hydra.core.Type, hydra.core.TypeMap(hydra.core.MapType(encoder_full_result_type(mt.keys), encoder_full_result_type(mt.values))))
+        
+        case hydra.core.TypeMaybe(value=elem_type2):
+            return cast(hydra.core.Type, hydra.core.TypeMaybe(encoder_full_result_type(elem_type2)))
+        
+        case hydra.core.TypePair(value=pt):
+            return cast(hydra.core.Type, hydra.core.TypePair(hydra.core.PairType(encoder_full_result_type(pt.first), encoder_full_result_type(pt.second))))
+        
+        case hydra.core.TypeRecord():
+            return cast(hydra.core.Type, hydra.core.TypeVariable(ename))
+        
+        case hydra.core.TypeSet(value=elem_type3):
+            return cast(hydra.core.Type, hydra.core.TypeSet(encoder_full_result_type(elem_type3)))
+        
+        case hydra.core.TypeUnion():
+            return cast(hydra.core.Type, hydra.core.TypeVariable(ename))
+        
+        case hydra.core.TypeUnit():
+            return cast(hydra.core.Type, hydra.core.TypeUnit())
+        
+        case hydra.core.TypeVariable(value=name):
+            return cast(hydra.core.Type, hydra.core.TypeVariable(name))
+        
+        case hydra.core.TypeWrap():
+            return cast(hydra.core.Type, hydra.core.TypeVariable(ename))
         
         case _:
             return cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Term")))
@@ -384,6 +506,62 @@ def prepend_forall_encoders(base_type: hydra.core.Type, typ: hydra.core.Type) ->
         
         case _:
             return base_type
+
+def encoder_type_named(ename: hydra.core.Name, typ: hydra.core.Type) -> hydra.core.Type:
+    r"""Build encoder function type with element name for nominal types."""
+    
+    @lru_cache(1)
+    def result_type() -> hydra.core.Type:
+        return encoder_full_result_type_named(ename, typ)
+    @lru_cache(1)
+    def base_type() -> hydra.core.Type:
+        return cast(hydra.core.Type, hydra.core.TypeFunction(hydra.core.FunctionType(result_type(), cast(hydra.core.Type, hydra.core.TypeVariable(hydra.core.Name("hydra.core.Term"))))))
+    return prepend_forall_encoders(base_type(), typ)
+
+def encoder_type_scheme_named(ename: hydra.core.Name, typ: hydra.core.Type) -> hydra.core.TypeScheme:
+    r"""Construct a TypeScheme for an encoder function, with element name for nominal types."""
+    
+    @lru_cache(1)
+    def type_vars() -> frozenlist[hydra.core.Name]:
+        return encoder_collect_forall_variables(typ)
+    @lru_cache(1)
+    def encoder_fun_type() -> hydra.core.Type:
+        return encoder_type_named(ename, typ)
+    @lru_cache(1)
+    def all_ord_vars() -> frozenlist[hydra.core.Name]:
+        return encoder_collect_ord_vars(typ)
+    @lru_cache(1)
+    def ord_vars() -> frozenlist[hydra.core.Name]:
+        return hydra.lib.lists.filter((lambda v: hydra.lib.lists.elem(v, type_vars())), all_ord_vars())
+    @lru_cache(1)
+    def constraints() -> Maybe[FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]]:
+        return hydra.lib.logic.if_else(hydra.lib.lists.null(ord_vars()), (lambda : Nothing()), (lambda : Just(hydra.lib.maps.from_list(hydra.lib.lists.map((lambda v: (v, hydra.core.TypeVariableMetadata(hydra.lib.sets.singleton(hydra.core.Name("ordering"))))), ord_vars())))))
+    return hydra.core.TypeScheme(type_vars(), encoder_fun_type(), constraints())
+
+def encode_binding(cx: hydra.context.Context, graph: hydra.graph.Graph, b: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.error.DecodingError], hydra.core.Binding]:
+    r"""Transform a type binding into an encoder binding."""
+    
+    return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda _wc_e: hydra.context.InContext(_wc_e, cx)), (lambda _wc_a: _wc_a), hydra.decode.core.type(graph, b.term)), (lambda typ: Right(hydra.core.Binding(encode_binding_name(b.name), encode_type_named(b.name, typ), Just(encoder_type_scheme_named(b.name, typ))))))
+
+def encode_namespace(ns: hydra.module.Namespace) -> hydra.module.Namespace:
+    r"""Generate an encoder module namespace from a source module namespace."""
+    
+    return hydra.module.Namespace(hydra.lib.strings.cat(("hydra.encode.", hydra.lib.strings.intercalate(".", hydra.lib.lists.tail(hydra.lib.strings.split_on(".", ns.value))))))
+
+def is_encodable_binding(cx: hydra.context.Context, graph: hydra.graph.Graph, b: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.error.Error], Maybe[hydra.core.Binding]]:
+    r"""Check if a binding is encodable (serializable type)."""
+    
+    return hydra.lib.eithers.bind(hydra.schemas.is_serializable_by_name(cx, graph, b.name), (lambda serializable: Right(hydra.lib.logic.if_else(serializable, (lambda : Just(b)), (lambda : Nothing())))))
+
+def filter_type_bindings(cx: hydra.context.Context, graph: hydra.graph.Graph, bindings: frozenlist[hydra.core.Binding]) -> Either[hydra.context.InContext[hydra.error.Error], frozenlist[hydra.core.Binding]]:
+    r"""Filter bindings to only encodable type definitions."""
+    
+    return hydra.lib.eithers.map((lambda x1: hydra.lib.maybes.cat(x1)), hydra.lib.eithers.map_list((lambda v1: is_encodable_binding(cx, graph, v1)), hydra.lib.lists.filter((lambda x1: hydra.annotations.is_native_type(x1)), bindings)))
+
+def encode_module(cx: hydra.context.Context, graph: hydra.graph.Graph, mod: hydra.module.Module) -> Either[hydra.context.InContext[hydra.error.Error], Maybe[hydra.module.Module]]:
+    r"""Transform a type module into an encoder module."""
+    
+    return hydra.lib.eithers.bind(filter_type_bindings(cx, graph, mod.elements), (lambda type_bindings: hydra.lib.logic.if_else(hydra.lib.lists.null(type_bindings), (lambda : Right(Nothing())), (lambda : hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda b: hydra.lib.eithers.bimap((lambda ic: hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(ic.object.value))), ic.context)), (lambda x: x), encode_binding(cx, graph, b))), type_bindings), (lambda encoded_bindings: Right(Just(hydra.module.Module(encode_namespace(mod.namespace), encoded_bindings, hydra.lib.lists.nub(hydra.lib.lists.concat2(hydra.lib.lists.map((lambda x1: encode_namespace(x1)), mod.type_dependencies), hydra.lib.lists.map((lambda x1: encode_namespace(x1)), mod.term_dependencies))), (mod.namespace,), Just(hydra.lib.strings.cat(("Term encoders for ", mod.namespace.value))))))))))))
 
 def encoder_type(typ: hydra.core.Type) -> hydra.core.Type:
     r"""Build encoder function type."""
@@ -415,31 +593,6 @@ def encoder_type_scheme(typ: hydra.core.Type) -> hydra.core.TypeScheme:
     def constraints() -> Maybe[FrozenDict[hydra.core.Name, hydra.core.TypeVariableMetadata]]:
         return hydra.lib.logic.if_else(hydra.lib.lists.null(ord_vars()), (lambda : Nothing()), (lambda : Just(hydra.lib.maps.from_list(hydra.lib.lists.map((lambda v: (v, hydra.core.TypeVariableMetadata(hydra.lib.sets.singleton(hydra.core.Name("ordering"))))), ord_vars())))))
     return hydra.core.TypeScheme(type_vars(), encoder_fun_type(), constraints())
-
-def encode_binding(cx: hydra.context.Context, graph: hydra.graph.Graph, b: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.error.DecodingError], hydra.core.Binding]:
-    r"""Transform a type binding into an encoder binding."""
-    
-    return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda _wc_e: hydra.context.InContext(_wc_e, cx)), (lambda _wc_a: _wc_a), hydra.decode.core.type(graph, b.term)), (lambda typ: Right(hydra.core.Binding(encode_binding_name(b.name), encode_type(typ), Just(encoder_type_scheme(typ))))))
-
-def encode_namespace(ns: hydra.module.Namespace) -> hydra.module.Namespace:
-    r"""Generate an encoder module namespace from a source module namespace."""
-    
-    return hydra.module.Namespace(hydra.lib.strings.cat(("hydra.encode.", hydra.lib.strings.intercalate(".", hydra.lib.lists.tail(hydra.lib.strings.split_on(".", ns.value))))))
-
-def is_encodable_binding(cx: hydra.context.Context, graph: hydra.graph.Graph, b: hydra.core.Binding) -> Either[hydra.context.InContext[hydra.error.Error], Maybe[hydra.core.Binding]]:
-    r"""Check if a binding is encodable (serializable type)."""
-    
-    return hydra.lib.eithers.bind(hydra.schemas.is_serializable_by_name(cx, graph, b.name), (lambda serializable: Right(hydra.lib.logic.if_else(serializable, (lambda : Just(b)), (lambda : Nothing())))))
-
-def filter_type_bindings(cx: hydra.context.Context, graph: hydra.graph.Graph, bindings: frozenlist[hydra.core.Binding]) -> Either[hydra.context.InContext[hydra.error.Error], frozenlist[hydra.core.Binding]]:
-    r"""Filter bindings to only encodable type definitions."""
-    
-    return hydra.lib.eithers.map((lambda x1: hydra.lib.maybes.cat(x1)), hydra.lib.eithers.map_list((lambda v1: is_encodable_binding(cx, graph, v1)), hydra.lib.lists.filter((lambda x1: hydra.annotations.is_native_type(x1)), bindings)))
-
-def encode_module(cx: hydra.context.Context, graph: hydra.graph.Graph, mod: hydra.module.Module) -> Either[hydra.context.InContext[hydra.error.Error], Maybe[hydra.module.Module]]:
-    r"""Transform a type module into an encoder module."""
-    
-    return hydra.lib.eithers.bind(filter_type_bindings(cx, graph, mod.elements), (lambda type_bindings: hydra.lib.logic.if_else(hydra.lib.lists.null(type_bindings), (lambda : Right(Nothing())), (lambda : hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda b: hydra.lib.eithers.bimap((lambda ic: hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(ic.object.value))), ic.context)), (lambda x: x), encode_binding(cx, graph, b))), type_bindings), (lambda encoded_bindings: Right(Just(hydra.module.Module(encode_namespace(mod.namespace), encoded_bindings, hydra.lib.lists.nub(hydra.lib.lists.concat2(hydra.lib.lists.map((lambda x1: encode_namespace(x1)), mod.type_dependencies), hydra.lib.lists.map((lambda x1: encode_namespace(x1)), mod.term_dependencies))), (mod.namespace,), Just(hydra.lib.strings.cat(("Term encoders for ", mod.namespace.value))))))))))))
 
 def is_unit_type(v1: hydra.core.Type) -> bool:
     r"""Check whether a type is the unit type."""

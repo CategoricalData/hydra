@@ -107,45 +107,39 @@ encodeTypeDefinition cx g td =
                 Meta.type_ParamVbounds = [],
                 Meta.type_ParamCbounds = []}) freeVars)
   in ((\x -> case x of
-    Core.TypeRecord v0 ->  
-      let fields = (Core.rowTypeFields v0)
-      in (Eithers.bind (Eithers.mapList (\f -> fieldToParam cx g f) fields) (\params -> Right (Meta.StatDefn (Meta.DefnClass (Meta.Defn_Class {
-        Meta.defn_ClassMods = [
-          Meta.ModCase],
-        Meta.defn_ClassName = tname,
-        Meta.defn_ClassTparams = tparams,
-        Meta.defn_ClassCtor = Meta.Ctor_Primary {
-          Meta.ctor_PrimaryMods = [],
-          Meta.ctor_PrimaryName = (Meta.NameValue ""),
-          Meta.ctor_PrimaryParamss = [
-            params]},
-        Meta.defn_ClassTemplate = Meta.Template {
-          Meta.templateEarly = [],
-          Meta.templateInits = [],
-          Meta.templateSelf = (Meta.Self ()),
-          Meta.templateStats = []}})))))
-    Core.TypeUnion v0 ->  
-      let fields = (Core.rowTypeFields v0)
-      in (Eithers.bind (Eithers.mapList (\f -> fieldToEnumCase cx g lname tparams f) fields) (\cases -> Right (Meta.StatDefn (Meta.DefnEnum (Meta.Defn_Enum {
-        Meta.defn_EnumMods = [],
-        Meta.defn_EnumName = tname,
-        Meta.defn_EnumTparams = tparams,
-        Meta.defn_EnumCtor = Meta.Ctor_Primary {
-          Meta.ctor_PrimaryMods = [],
-          Meta.ctor_PrimaryName = (Meta.NameValue ""),
-          Meta.ctor_PrimaryParamss = []},
-        Meta.defn_EnumTemplate = Meta.Template {
-          Meta.templateEarly = [],
-          Meta.templateInits = [],
-          Meta.templateSelf = (Meta.Self ()),
-          Meta.templateStats = cases}})))))
-    Core.TypeWrap v0 ->  
-      let inner = (Core.wrappedTypeBody v0)
-      in (Eithers.bind (encodeType cx g inner) (\styp -> Right (Meta.StatDefn (Meta.DefnType (Meta.Defn_Type {
-        Meta.defn_TypeMods = [],
-        Meta.defn_TypeName = tname,
-        Meta.defn_TypeTparams = tparams,
-        Meta.defn_TypeBody = styp})))))
+    Core.TypeRecord v0 -> (Eithers.bind (Eithers.mapList (\f -> fieldToParam cx g f) v0) (\params -> Right (Meta.StatDefn (Meta.DefnClass (Meta.Defn_Class {
+      Meta.defn_ClassMods = [
+        Meta.ModCase],
+      Meta.defn_ClassName = tname,
+      Meta.defn_ClassTparams = tparams,
+      Meta.defn_ClassCtor = Meta.Ctor_Primary {
+        Meta.ctor_PrimaryMods = [],
+        Meta.ctor_PrimaryName = (Meta.NameValue ""),
+        Meta.ctor_PrimaryParamss = [
+          params]},
+      Meta.defn_ClassTemplate = Meta.Template {
+        Meta.templateEarly = [],
+        Meta.templateInits = [],
+        Meta.templateSelf = (Meta.Self ()),
+        Meta.templateStats = []}})))))
+    Core.TypeUnion v0 -> (Eithers.bind (Eithers.mapList (\f -> fieldToEnumCase cx g lname tparams f) v0) (\cases -> Right (Meta.StatDefn (Meta.DefnEnum (Meta.Defn_Enum {
+      Meta.defn_EnumMods = [],
+      Meta.defn_EnumName = tname,
+      Meta.defn_EnumTparams = tparams,
+      Meta.defn_EnumCtor = Meta.Ctor_Primary {
+        Meta.ctor_PrimaryMods = [],
+        Meta.ctor_PrimaryName = (Meta.NameValue ""),
+        Meta.ctor_PrimaryParamss = []},
+      Meta.defn_EnumTemplate = Meta.Template {
+        Meta.templateEarly = [],
+        Meta.templateInits = [],
+        Meta.templateSelf = (Meta.Self ()),
+        Meta.templateStats = cases}})))))
+    Core.TypeWrap v0 -> (Eithers.bind (encodeType cx g v0) (\styp -> Right (Meta.StatDefn (Meta.DefnType (Meta.Defn_Type {
+      Meta.defn_TypeMods = [],
+      Meta.defn_TypeName = tname,
+      Meta.defn_TypeTparams = tparams,
+      Meta.defn_TypeBody = styp})))))
     _ -> (Eithers.bind (encodeType cx g typ) (\styp -> Right (Meta.StatDefn (Meta.DefnType (Meta.Defn_Type {
       Meta.defn_TypeMods = [],
       Meta.defn_TypeName = Meta.Type_Name {
@@ -331,14 +325,17 @@ encodeType cx g t = ((\x -> case x of
         st = (Core.pairTypeSecond v0)
     in (Eithers.bind (encodeType cx g ft) (\sft -> Eithers.bind (encodeType cx g st) (\sst -> Right (Utils.stapply2 (Meta.TypeRef (Meta.Type_RefName (Meta.Type_Name {
       Meta.type_NameValue = "Tuple2"}))) sft sst))))
-  Core.TypeRecord v0 -> (Right (Meta.TypeRef (Meta.Type_RefName (Meta.Type_Name {
-    Meta.type_NameValue = (Utils.scalaTypeName True (Core.rowTypeTypeName v0))}))))
+  Core.TypeRecord _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected anonymous record type")),
+    Context.inContextContext = cx}))
   Core.TypeSet v0 -> (Eithers.bind (encodeType cx g v0) (\sst -> Right (Utils.stapply1 (Meta.TypeRef (Meta.Type_RefName (Meta.Type_Name {
     Meta.type_NameValue = "Set"}))) sst)))
-  Core.TypeUnion v0 -> (Right (Meta.TypeRef (Meta.Type_RefName (Meta.Type_Name {
-    Meta.type_NameValue = (Utils.scalaTypeName True (Core.rowTypeTypeName v0))}))))
-  Core.TypeWrap v0 -> (Right (Meta.TypeRef (Meta.Type_RefName (Meta.Type_Name {
-    Meta.type_NameValue = (Utils.scalaTypeName True (Core.wrappedTypeTypeName v0))}))))
+  Core.TypeUnion _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected anonymous union type")),
+    Context.inContextContext = cx}))
+  Core.TypeWrap _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected anonymous wrap type")),
+    Context.inContextContext = cx}))
   Core.TypeForall v0 ->  
     let v = (Core.forallTypeParameter v0) 
         body = (Core.forallTypeBody v0)
@@ -377,7 +374,7 @@ fieldToEnumCase cx g parentName tparams ft =
               Meta.data_NameValue = (Meta.PredefString fname)}
       isUnit = ((\x -> case x of
               Core.TypeUnit -> True
-              Core.TypeRecord v0 -> (Equality.equal (Lists.length (Core.rowTypeFields v0)) 0)
+              Core.TypeRecord v0 -> (Equality.equal (Lists.length v0) 0)
               _ -> False) (Rewriting.deannotateType ftyp))
       parentType = (Logic.ifElse (Lists.null tparams) (Meta.TypeRef (Meta.Type_RefName (Meta.Type_Name {
               Meta.type_NameValue = parentName}))) (Meta.TypeApply (Meta.Type_Apply {

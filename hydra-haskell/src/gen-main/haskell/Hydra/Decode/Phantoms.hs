@@ -26,9 +26,9 @@ tBinding a cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\s
     in (Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "term" (tTerm a) fieldMap cx) (\field_term -> Right (Phantoms.TBinding {
       Phantoms.tBindingName = field_name,
       Phantoms.tBindingTerm = field_term}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.phantoms.TBinding"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 tTerm :: (t0 -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Phantoms.TTerm t1))
 tTerm a cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermWrap v0 -> (Eithers.map (\b -> Phantoms.TTerm b) (Core_.term cx (Core.wrappedTermBody v0)))
-  _ -> (Left (Error.DecodingError "expected wrapped type hydra.phantoms.TTerm"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected wrapped type"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))

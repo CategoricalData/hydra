@@ -12,7 +12,7 @@ public interface Context {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.context.Context>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.context.Context> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.context.Context>left(new hydra.error.DecodingError("expected record of type hydra.context.Context"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.context.Context>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override
@@ -114,7 +114,7 @@ public interface Context {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.context.InContext<T0>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.context.InContext<T0>> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.context.InContext<T0>>left(new hydra.error.DecodingError("expected record of type hydra.context.InContext"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.context.InContext<T0>>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override

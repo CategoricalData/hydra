@@ -113,7 +113,7 @@ main = do
 
             -- Decode JSON to Term using type-directed decoder with Module type
             -- The schemaMap is used to resolve type variables
-            case JsonDecode.fromJson schemaMap modType jsonVal of
+            case JsonDecode.fromJson schemaMap (Name "hydra.module.Module") modType jsonVal of
               Left err -> do
                 flushPut $ "  ✗ " ++ nsStr ++ " (JSON decode error)"
                 flushPut $ "    " ++ err

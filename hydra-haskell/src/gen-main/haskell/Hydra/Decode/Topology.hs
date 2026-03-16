@@ -50,7 +50,7 @@ tarjanState cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\
       Topology.tarjanStateStack = field_stack,
       Topology.tarjanStateOnStack = field_onStack,
       Topology.tarjanStateSccs = field_sccs}))))))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.topology.TarjanState"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 vertex :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Int)
 vertex cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of

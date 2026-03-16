@@ -8,7 +8,6 @@ from functools import lru_cache
 from hydra.dsl.python import FrozenDict, Just, Maybe, frozenlist
 from typing import TypeVar, cast
 import hydra.annotations
-import hydra.constants
 import hydra.core
 import hydra.formatting
 import hydra.grammar
@@ -23,9 +22,9 @@ import hydra.lib.pairs
 import hydra.lib.strings
 import hydra.module
 import hydra.names
-import hydra.rewriting
 
 T0 = TypeVar("T0")
+T1 = TypeVar("T1")
 
 def child_name(lname: str, n: str) -> str:
     r"""Generate child name."""
@@ -164,7 +163,7 @@ def make_elements(omit_trivial: bool, ns: hydra.module.Namespace, lname: str, pa
         while True:
             match pat2:
                 case hydra.grammar.PatternAlternatives(value=pats):
-                    return for_record_or_union(False, (lambda fields: cast(hydra.core.Type, hydra.core.TypeUnion(hydra.core.RowType(hydra.constants.placeholder_name, fields)))), pats)
+                    return for_record_or_union(False, (lambda fields: cast(hydra.core.Type, hydra.core.TypeUnion(fields))), pats)
                 
                 case hydra.grammar.PatternConstant():
                     return trivial()
@@ -192,7 +191,7 @@ def make_elements(omit_trivial: bool, ns: hydra.module.Namespace, lname: str, pa
                     return ((lname, cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeString())))),)
                 
                 case hydra.grammar.PatternSequence(value=pats2):
-                    return for_record_or_union(True, (lambda fields: cast(hydra.core.Type, hydra.core.TypeRecord(hydra.core.RowType(hydra.constants.placeholder_name, fields)))), pats2)
+                    return for_record_or_union(True, (lambda fields: cast(hydra.core.Type, hydra.core.TypeRecord(fields))), pats2)
                 
                 case hydra.grammar.PatternStar(value=p3):
                     return mod("Elmt", (lambda x: cast(hydra.core.Type, hydra.core.TypeList(x))), p3)
@@ -220,21 +219,10 @@ def make_elements(omit_trivial: bool, ns: hydra.module.Namespace, lname: str, pa
         return hydra.lib.logic.if_else(is_nontrivial(is_record, pats), (lambda : hydra.lib.lists.cons((lname, construct(fields())), els())), (lambda : for_pat(hydra.lib.lists.head(min_pats()))))
     return for_pat(pat)
 
-def replace_placeholders(el_name: hydra.core.Name, typ: hydra.core.Type):
-    def _hoist_hydra_grammars_replace_placeholders_1(el_name, t, v1):
-        match v1:
-            case hydra.core.TypeRecord(value=rt):
-                return hydra.lib.logic.if_else(hydra.lib.equality.equal(rt.type_name, hydra.constants.placeholder_name), (lambda : cast(hydra.core.Type, hydra.core.TypeRecord(hydra.core.RowType(el_name, rt.fields)))), (lambda : t))
-            
-            case hydra.core.TypeUnion(value=ut):
-                return hydra.lib.logic.if_else(hydra.lib.equality.equal(ut.type_name, hydra.constants.placeholder_name), (lambda : cast(hydra.core.Type, hydra.core.TypeUnion(hydra.core.RowType(el_name, ut.fields)))), (lambda : t))
-            
-            case hydra.core.TypeWrap(value=wt):
-                return hydra.lib.logic.if_else(hydra.lib.equality.equal(wt.type_name, hydra.constants.placeholder_name), (lambda : cast(hydra.core.Type, hydra.core.TypeWrap(hydra.core.WrappedType(el_name, wt.body)))), (lambda : t))
-            
-            case _:
-                return t
-    return hydra.rewriting.rewrite_type((lambda recurse, t: _hoist_hydra_grammars_replace_placeholders_1(el_name, t, t)), typ)
+def replace_placeholders(el_name: T0, typ: T1) -> T1:
+    r"""Replace Placeholder names in a type with the actual element name (no-op since types no longer carry names)."""
+    
+    return typ
 
 def wrap_type(t: hydra.core.Type) -> hydra.core.Type:
     r"""Wrap a type in a placeholder name, unless it is already a wrapper, record, or union type."""
@@ -250,7 +238,7 @@ def wrap_type(t: hydra.core.Type) -> hydra.core.Type:
             return t
         
         case _:
-            return cast(hydra.core.Type, hydra.core.TypeWrap(hydra.core.WrappedType(hydra.core.Name("Placeholder"), t)))
+            return cast(hydra.core.Type, hydra.core.TypeWrap(t))
 
 def grammar_to_module(ns: hydra.module.Namespace, grammar: hydra.grammar.Grammar, desc: Maybe[str]) -> hydra.module.Module:
     r"""Convert a BNF grammar to a Hydra module."""

@@ -32,7 +32,7 @@ functionStructure env cx raw = (Eithers.either (\err -> Left (Error.DecodingErro
       Typing.functionStructureDomains = field_domains,
       Typing.functionStructureCodomain = field_codomain,
       Typing.functionStructureEnvironment = field_environment})))))))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.typing.FunctionStructure"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 inferenceResult :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Typing.InferenceResult)
 inferenceResult cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -44,12 +44,12 @@ inferenceResult cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)
       Typing.inferenceResultSubst = field_subst,
       Typing.inferenceResultClassConstraints = field_classConstraints,
       Typing.inferenceResultContext = field_context})))))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.typing.InferenceResult"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 termSubst :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Typing.TermSubst)
 termSubst cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermWrap v0 -> (Eithers.map (\b -> Typing.TermSubst b) (Helpers.decodeMap Core_.name Core_.term cx (Core.wrappedTermBody v0)))
-  _ -> (Left (Error.DecodingError "expected wrapped type hydra.typing.TermSubst"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected wrapped type"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 typeConstraint :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Typing.TypeConstraint)
 typeConstraint cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -63,9 +63,9 @@ typeConstraint cx raw = (Eithers.either (\err -> Left (Error.DecodingError err))
       Typing.typeConstraintLeft = field_left,
       Typing.typeConstraintRight = field_right,
       Typing.typeConstraintComment = field_comment})))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.typing.TypeConstraint"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 typeSubst :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Typing.TypeSubst)
 typeSubst cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermWrap v0 -> (Eithers.map (\b -> Typing.TypeSubst b) (Helpers.decodeMap Core_.name Core_.type_ cx (Core.wrappedTermBody v0)))
-  _ -> (Left (Error.DecodingError "expected wrapped type hydra.typing.TypeSubst"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected wrapped type"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))

@@ -549,17 +549,13 @@ typeAlternatives type_ = ((\x -> case x of
   Core.TypeMaybe v0 -> [
     Core.TypeList v0]
   Core.TypeUnion v0 ->  
-    let tname = (Core.Name "unknown")
+    let toOptField = (\f -> Core.FieldType {
+            Core.fieldTypeName = (Core.fieldTypeName f),
+            Core.fieldTypeType = (Core.TypeMaybe (Core.fieldTypeType f))})
     in  
-      let fields = v0
-      in  
-        let toOptField = (\f -> Core.FieldType {
-                Core.fieldTypeName = (Core.fieldTypeName f),
-                Core.fieldTypeType = (Core.TypeMaybe (Core.fieldTypeType f))})
-        in  
-          let optFields = (Lists.map toOptField fields)
-          in [
-            Core.TypeRecord optFields]
+      let optFields = (Lists.map toOptField v0)
+      in [
+        Core.TypeRecord optFields]
   Core.TypeUnit -> [
     Core.TypeLiteral Core.LiteralTypeBoolean]
   _ -> []) type_)

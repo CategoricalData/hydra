@@ -533,16 +533,22 @@ encodeType aliases boundVars t cx g =
         jfirst,
         jsecond] Names.hydraUtilPackageName "Pair"))))
       Core.TypeUnit -> (Right (Utils.javaRefType [] Names.javaLangPackageName "Void"))
-      Core.TypeRecord v0 -> (Logic.ifElse (Logic.and (Equality.equal (Core.rowTypeTypeName v0) (Core.Name "hydra.core.Unit")) (Lists.null (Core.rowTypeFields v0))) (Right (Utils.javaRefType [] Names.javaLangPackageName "Void")) (Right (Syntax.TypeReference (Utils.nameToJavaReferenceType aliases True (javaTypeArgumentsForType t) (Core.rowTypeTypeName v0) Nothing))))
+      Core.TypeRecord v0 -> (Logic.ifElse (Lists.null v0) (Right (Utils.javaRefType [] Names.javaLangPackageName "Void")) (Left (Context.InContext {
+        Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected anonymous record type")),
+        Context.inContextContext = cx})))
       Core.TypeMaybe v0 -> (Eithers.bind (Eithers.bind (encodeType aliases boundVars v0 cx g) (\jt_ -> Utils.javaTypeToJavaReferenceType jt_ cx)) (\jot -> Right (Utils.javaRefType [
         jot] Names.hydraUtilPackageName "Maybe")))
       Core.TypeSet v0 -> (Eithers.bind (Eithers.bind (encodeType aliases boundVars v0 cx g) (\jt_ -> Utils.javaTypeToJavaReferenceType jt_ cx)) (\jst -> Right (Utils.javaRefType [
         jst] Names.hydraUtilPackageName "PersistentSet")))
-      Core.TypeUnion v0 -> (Right (Syntax.TypeReference (Utils.nameToJavaReferenceType aliases True (javaTypeArgumentsForType t) (Core.rowTypeTypeName v0) Nothing)))
+      Core.TypeUnion _ -> (Left (Context.InContext {
+        Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected anonymous union type")),
+        Context.inContextContext = cx}))
       Core.TypeVariable v0 ->  
         let name = (Maybes.fromMaybe v0 (Maps.lookup v0 typeVarSubst))
         in (Eithers.bind (encodeType_resolveIfTypedef aliases boundVars inScopeTypeParams name cx g) (\resolved -> Maybes.cases resolved (Right (Logic.ifElse (Logic.or (Sets.member name boundVars) (Sets.member name inScopeTypeParams)) (Syntax.TypeReference (Utils.javaTypeVariable (Core.unName name))) (Logic.ifElse (isLambdaBoundVariable name) (Syntax.TypeReference (Utils.javaTypeVariable (Core.unName name))) (Logic.ifElse (isUnresolvedInferenceVar name) (Syntax.TypeReference (Syntax.ReferenceTypeClassOrInterface (Syntax.ClassOrInterfaceTypeClass (Utils.javaClassType [] Names.javaLangPackageName "Object")))) (Syntax.TypeReference (Utils.nameToJavaReferenceType aliases True [] name Nothing)))))) (\resolvedType -> encodeType aliases boundVars resolvedType cx g)))
-      Core.TypeWrap v0 -> (Right (Syntax.TypeReference (Utils.nameToJavaReferenceType aliases True [] (Core.wrappedTypeTypeName v0) Nothing)))
+      Core.TypeWrap _ -> (Left (Context.InContext {
+        Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected anonymous wrap type")),
+        Context.inContextContext = cx}))
       _ -> (Left (Context.InContext {
         Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "can't encode unsupported type in Java: " (Core___.type_ t)))),
         Context.inContextContext = cx}))) (Rewriting.deannotateType t))
@@ -1088,7 +1094,7 @@ typesMatch a b = ((\x -> case x of
     Core.TypeVariable v1 -> (Equality.equal v0 v1)
     _ -> True) b)
   Core.TypeWrap v0 -> ((\x -> case x of
-    Core.TypeWrap v1 -> (Equality.equal (Core.wrappedTypeTypeName v0) (Core.wrappedTypeTypeName v1))
+    Core.TypeWrap v1 -> (Equality.equal v0 v1)
     _ -> True) b)
   _ -> True) a)
 
@@ -1688,7 +1694,7 @@ isFieldUnitType :: (Core.Name -> Core.Name -> t0 -> Graph.Graph -> Either t1 Boo
 isFieldUnitType typeName fieldName cx g =  
   let schemaTypes = (Graph.graphSchemaTypes g)
   in (Maybes.cases (Maps.lookup typeName schemaTypes) (Right False) (\ts -> (\x -> case x of
-    Core.TypeUnion v0 -> (Right (Maybes.cases (Lists.find (\ft -> Equality.equal (Core.fieldTypeName ft) fieldName) (Core.rowTypeFields v0)) False (\ft -> Schemas.isUnitType (Rewriting.deannotateType (Core.fieldTypeType ft)))))
+    Core.TypeUnion v0 -> (Right (Maybes.cases (Lists.find (\ft -> Equality.equal (Core.fieldTypeName ft) fieldName) v0) False (\ft -> Schemas.isUnitType (Rewriting.deannotateType (Core.fieldTypeType ft)))))
     _ -> (Right False)) (Rewriting.deannotateType (Core.typeSchemeType ts))))
 
 encodeTerm :: (Helpers.JavaEnvironment -> Core.Term -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.Expression)
@@ -1775,7 +1781,7 @@ encodeTermInternal env anns tyapps term cx g0 =
           let strippedRecTyp = (Maybes.map (\recTyp -> stripForalls (Rewriting.deannotateType recTyp)) mRecordType)
           in  
             let mFieldTypeMap = (Maybes.bind strippedRecTyp (\bodyTyp -> (\x -> case x of
-                    Core.TypeRecord v1 -> (Just (Maps.fromList (Lists.map (\ft -> (Core.fieldTypeName ft, (Core.fieldTypeType ft))) (Core.rowTypeFields v1))))
+                    Core.TypeRecord v1 -> (Just (Maps.fromList (Lists.map (\ft -> (Core.fieldTypeName ft, (Core.fieldTypeType ft))) v1)))
                     _ -> Nothing) bodyTyp))
             in  
               let combinedAnnsRec = (Lists.foldl (\acc -> \m -> Maps.union acc m) Maps.empty anns)
@@ -2383,8 +2389,8 @@ toClassDecl isInner isSer aliases tparams elName t cx g =
             Core.fieldTypeName = (Core.Name "value"),
             Core.fieldTypeType = (Rewriting.deannotateType t_)}] cx g)
   in ((\x -> case x of
-    Core.TypeRecord v0 -> (declarationForRecordType isInner isSer aliases tparams elName (Core.rowTypeFields v0) cx g)
-    Core.TypeUnion v0 -> (declarationForUnionType isSer aliases tparams elName (Core.rowTypeFields v0) cx g)
+    Core.TypeRecord v0 -> (declarationForRecordType isInner isSer aliases tparams elName v0 cx g)
+    Core.TypeUnion v0 -> (declarationForUnionType isSer aliases tparams elName v0 cx g)
     Core.TypeForall v0 ->  
       let v = (Core.forallTypeParameter v0)
       in  
@@ -2393,12 +2399,10 @@ toClassDecl isInner isSer aliases tparams elName t cx g =
           let param = (Utils.javaTypeParameter (Formatting.capitalize (Core.unName v)))
           in (toClassDecl False isSer aliases (Lists.concat2 tparams [
             param]) elName body cx g)
-    Core.TypeWrap v0 ->  
-      let wtype = (Core.wrappedTypeBody v0)
-      in (declarationForRecordType isInner isSer aliases tparams elName [
-        Core.FieldType {
-          Core.fieldTypeName = (Core.Name "value"),
-          Core.fieldTypeType = wtype}] cx g)
+    Core.TypeWrap v0 -> (declarationForRecordType isInner isSer aliases tparams elName [
+      Core.FieldType {
+        Core.fieldTypeName = (Core.Name "value"),
+        Core.fieldTypeType = v0}] cx g)
     _ -> (wrap t)) (Rewriting.deannotateType t))
 
 declarationForUnionType :: (Bool -> Helpers.Aliases -> [Syntax.TypeParameter] -> Core.Name -> [Core.FieldType] -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) Syntax.ClassDeclaration)

@@ -20,51 +20,39 @@
                             "field": {
                               "name": "union",
                               "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "hydra.classes.TypeClass"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "fields",
-                                      "term": {
-                                        "list": [
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "equality"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}},
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "ordering"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {"name": "unit", "term": {"unit": {}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}}]}}],
-                                  "typeName": "hydra.core.RowType"}}},
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "equality"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {"name": "unit", "term": {"unit": {}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "ordering"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {"name": "unit", "term": {"unit": {}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}}]}},
                             "typeName": "hydra.core.Type"}}},
                       {
                         "name": "annotation",

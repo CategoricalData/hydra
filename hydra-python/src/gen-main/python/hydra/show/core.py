@@ -101,8 +101,7 @@ def field_type(ft: hydra.core.FieldType) -> str:
 def type(typ: hydra.core.Type) -> str:
     r"""Show a type as a string."""
     
-    def show_row_type(rt: hydra.core.RowType) -> str:
-        flds = rt.fields
+    def show_row_type(flds: frozenlist[hydra.core.FieldType]) -> str:
         @lru_cache(1)
         def field_strs() -> frozenlist[str]:
             return hydra.lib.lists.map((lambda x1: field_type(x1)), flds)
@@ -194,9 +193,7 @@ def type(typ: hydra.core.Type) -> str:
             return name.value
         
         case hydra.core.TypeWrap(value=wt):
-            tname = wt.type_name.value
-            typ1 = wt.body
-            return hydra.lib.strings.cat(("wrap[", tname, "](", type(typ1), ")"))
+            return hydra.lib.strings.cat(("wrap(", type(wt), ")"))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")

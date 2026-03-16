@@ -458,15 +458,15 @@ def record(cx: hydra.context.Context, expected: hydra.core.Name, graph: hydra.gr
     
     return hydra.lib.eithers.bind(term_record(cx, graph, term0), (lambda record: hydra.lib.logic.if_else(hydra.lib.equality.equal(record.type_name, expected), (lambda : Right(record.fields)), (lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", hydra.lib.strings.cat2("record of type ", expected.value)), " but found "), record.type_name.value)))), cx))))))
 
-def record_type(cx: hydra.context.Context, ename: hydra.core.Name, typ: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.Error], frozenlist[hydra.core.FieldType]]:
+def record_type(cx: hydra.context.Context, ename: T0, typ: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.Error], frozenlist[hydra.core.FieldType]]:
     r"""Extract the field types from a record type."""
     
     @lru_cache(1)
     def stripped() -> hydra.core.Type:
         return hydra.rewriting.deannotate_type(typ)
     match stripped():
-        case hydra.core.TypeRecord(value=row_type):
-            return hydra.lib.logic.if_else(hydra.lib.equality.equal(row_type.type_name.value, ename.value), (lambda : Right(row_type.fields)), (lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", hydra.lib.strings.cat2("record of type ", ename.value)), " but found "), hydra.lib.strings.cat2("record of type ", row_type.type_name.value))))), cx))))
+        case hydra.core.TypeRecord(value=fields):
+            return Right(fields)
         
         case _:
             return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "record type"), " but found "), hydra.show.core.type(typ))))), cx))
@@ -574,15 +574,15 @@ def uint8(cx: hydra.context.Context, graph: hydra.graph.Graph, t: hydra.core.Ter
     
     return hydra.lib.eithers.bind(literal(cx, graph, t), (lambda l: hydra.lib.eithers.bind(integer_literal(cx, l), (lambda i: uint8_value(cx, i)))))
 
-def union_type(cx: hydra.context.Context, ename: hydra.core.Name, typ: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.Error], frozenlist[hydra.core.FieldType]]:
+def union_type(cx: hydra.context.Context, ename: T0, typ: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.Error], frozenlist[hydra.core.FieldType]]:
     r"""Extract the field types from a union type."""
     
     @lru_cache(1)
     def stripped() -> hydra.core.Type:
         return hydra.rewriting.deannotate_type(typ)
     match stripped():
-        case hydra.core.TypeUnion(value=row_type):
-            return hydra.lib.logic.if_else(hydra.lib.equality.equal(row_type.type_name, ename), (lambda : Right(row_type.fields)), (lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", hydra.lib.strings.cat2("union of type ", ename.value)), " but found "), hydra.lib.strings.cat2("union of type ", row_type.type_name.value))))), cx))))
+        case hydra.core.TypeUnion(value=fields):
+            return Right(fields)
         
         case _:
             return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "union type"), " but found "), hydra.show.core.type(typ))))), cx))
@@ -612,15 +612,15 @@ def wrap(cx: hydra.context.Context, expected: hydra.core.Name, graph: hydra.grap
                 return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", hydra.lib.strings.cat2(hydra.lib.strings.cat2("wrap(", expected.value), ")")), " but found "), hydra.show.core.term(term))))), cx))
     return hydra.lib.eithers.bind(hydra.lexical.strip_and_dereference_term(cx, graph, term0), (lambda term: _hoist_hydra_extract_core_wrap_1(cx, expected, term, term)))
 
-def wrapped_type(cx: hydra.context.Context, ename: hydra.core.Name, typ: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Type]:
+def wrapped_type(cx: hydra.context.Context, ename: T0, typ: hydra.core.Type) -> Either[hydra.context.InContext[hydra.error.Error], hydra.core.Type]:
     r"""Extract the wrapped type from a wrapper type."""
     
     @lru_cache(1)
     def stripped() -> hydra.core.Type:
         return hydra.rewriting.deannotate_type(typ)
     match stripped():
-        case hydra.core.TypeWrap(value=wrapped_type):
-            return hydra.lib.logic.if_else(hydra.lib.equality.equal(wrapped_type.type_name.value, ename.value), (lambda : Right(wrapped_type.body)), (lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", hydra.lib.strings.cat2("wrapped type ", ename.value)), " but found "), hydra.lib.strings.cat2("wrapped type ", wrapped_type.type_name.value))))), cx))))
+        case hydra.core.TypeWrap(value=inner_type):
+            return Right(inner_type)
         
         case _:
             return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2(hydra.lib.strings.cat2(hydra.lib.strings.cat2("expected ", "wrapped type"), " but found "), hydra.show.core.type(typ))))), cx))

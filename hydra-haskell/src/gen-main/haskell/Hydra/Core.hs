@@ -509,10 +509,6 @@ _Record_typeName = (Name "typeName")
 
 _Record_fields = (Name "fields")
 
-
-
-
-
 -- | A data term
 data Term = 
   -- | A term annotated with metadata
@@ -735,7 +731,3 @@ _WrappedTerm = (Name "hydra.core.WrappedTerm")
 _WrappedTerm_typeName = (Name "typeName")
 
 _WrappedTerm_body = (Name "body")
-
-
-
-

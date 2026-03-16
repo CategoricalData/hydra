@@ -455,17 +455,6 @@ class Record:
     TYPE_NAME = Name("typeName")
     FIELDS = Name("fields")
 
-@dataclass(frozen=True)
-class RowType:
-    r"""A labeled record or union type."""
-    
-    type_name: Annotated[Name, "The name of the row type, which must correspond to the name of a Type element"]
-    fields: Annotated[frozenlist[FieldType], "The fields of this row type, excluding any inherited fields"]
-    
-    TYPE_ = Name("hydra.core.RowType")
-    TYPE_NAME = Name("typeName")
-    FIELDS = Name("fields")
-
 class TermAnnotated(Node["AnnotatedTerm"]):
     r"""A term annotated with metadata"""
 
@@ -584,13 +573,13 @@ class TypeMaybe(Node["Type"]):
 class TypePair(Node["PairType"]):
     r"""A pair (2-tuple) type"""
 
-class TypeRecord(Node["RowType"]):
+class TypeRecord(Node["frozenlist[FieldType]"]):
     r"""A record type"""
 
 class TypeSet(Node["Type"]):
     r"""A set type"""
 
-class TypeUnion(Node["RowType"]):
+class TypeUnion(Node["frozenlist[FieldType]"]):
     r"""A union type with field names"""
 
 class TypeUnit:
@@ -605,7 +594,7 @@ class TypeUnit:
 class TypeVariable(Node["Name"]):
     r"""A type variable"""
 
-class TypeWrap(Node["WrappedType"]):
+class TypeWrap(Node["Type"]):
     r"""A wrapped type (newtype)"""
 
 class _TypeMeta(type):
@@ -686,16 +675,5 @@ class WrappedTerm:
     body: Annotated[Term, "The wrapped term"]
     
     TYPE_ = Name("hydra.core.WrappedTerm")
-    TYPE_NAME = Name("typeName")
-    BODY = Name("body")
-
-@dataclass(frozen=True)
-class WrappedType:
-    r"""A type wrapped in a type name; a newtype."""
-    
-    type_name: Annotated[Name, "The name of the wrapper (newtype)"]
-    body: Annotated[Type, "The wrapped type"]
-    
-    TYPE_ = Name("hydra.core.WrappedType")
     TYPE_NAME = Name("typeName")
     BODY = Name("body")

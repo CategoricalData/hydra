@@ -25,8 +25,7 @@ import qualified Data.Set as S
 comparisonConstraint :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Query.ComparisonConstraint)
 comparisonConstraint cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -39,9 +38,8 @@ comparisonConstraint cx raw = (Eithers.either (\err -> Left (Error.DecodingError
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.query.ComparisonConstraint"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 edge :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Query.Edge)
 edge cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -51,7 +49,7 @@ edge cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\strippe
       Query.edgeType = field_type,
       Query.edgeOut = field_out,
       Query.edgeIn = field_in})))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.query.Edge"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 graphPattern :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Query.GraphPattern)
 graphPattern cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -60,13 +58,12 @@ graphPattern cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (
     in (Eithers.bind (Helpers.requireField "graph" Core_.name fieldMap cx) (\field_graph -> Eithers.bind (Helpers.requireField "patterns" (Helpers.decodeList pattern) fieldMap cx) (\field_patterns -> Right (Query.GraphPattern {
       Query.graphPatternGraph = field_graph,
       Query.graphPatternPatterns = field_patterns}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.query.GraphPattern"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 node :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Query.Node)
 node cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -76,15 +73,13 @@ node cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\strippe
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.query.Node"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 path :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Query.Path)
 path cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -94,9 +89,8 @@ path cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\strippe
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.query.Path"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 pathEquation :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Query.PathEquation)
 pathEquation cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -105,13 +99,12 @@ pathEquation cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (
     in (Eithers.bind (Helpers.requireField "left" path fieldMap cx) (\field_left -> Eithers.bind (Helpers.requireField "right" path fieldMap cx) (\field_right -> Right (Query.PathEquation {
       Query.pathEquationLeft = field_left,
       Query.pathEquationRight = field_right}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.query.PathEquation"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 pattern :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Query.Pattern)
 pattern cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -123,9 +116,8 @@ pattern cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stri
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.query.Pattern"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 patternImplication :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Query.PatternImplication)
 patternImplication cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -134,7 +126,7 @@ patternImplication cx raw = (Eithers.either (\err -> Left (Error.DecodingError e
     in (Eithers.bind (Helpers.requireField "antecedent" pattern fieldMap cx) (\field_antecedent -> Eithers.bind (Helpers.requireField "consequent" pattern fieldMap cx) (\field_consequent -> Right (Query.PatternImplication {
       Query.patternImplicationAntecedent = field_antecedent,
       Query.patternImplicationConsequent = field_consequent}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.query.PatternImplication"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 query :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Query.Query)
 query cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -143,7 +135,7 @@ query cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripp
     in (Eithers.bind (Helpers.requireField "variables" (Helpers.decodeList variable) fieldMap cx) (\field_variables -> Eithers.bind (Helpers.requireField "patterns" (Helpers.decodeList pattern) fieldMap cx) (\field_patterns -> Right (Query.Query {
       Query.queryVariables = field_variables,
       Query.queryPatterns = field_patterns}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.query.Query"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 range :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Query.Range)
 range cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -164,13 +156,12 @@ range cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripp
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_max -> Right (Query.Range {
       Query.rangeMin = field_min,
       Query.rangeMax = field_max}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.query.Range"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 regexQuantifier :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Query.RegexQuantifier)
 regexQuantifier cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -196,9 +187,8 @@ regexQuantifier cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.query.RegexQuantifier"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 regexSequence :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Query.RegexSequence)
 regexSequence cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -207,13 +197,12 @@ regexSequence cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) 
     in (Eithers.bind (Helpers.requireField "path" path fieldMap cx) (\field_path -> Eithers.bind (Helpers.requireField "quantifier" regexQuantifier fieldMap cx) (\field_quantifier -> Right (Query.RegexSequence {
       Query.regexSequencePath = field_path,
       Query.regexSequenceQuantifier = field_quantifier}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.query.RegexSequence"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 step :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Query.Step)
 step cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -223,9 +212,8 @@ step cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\strippe
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.query.Step"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 triplePattern :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Query.TriplePattern)
 triplePattern cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -235,7 +223,7 @@ triplePattern cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) 
       Query.triplePatternSubject = field_subject,
       Query.triplePatternPredicate = field_predicate,
       Query.triplePatternObject = field_object})))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.query.TriplePattern"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 variable :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Query.Variable)
 variable cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -244,4 +232,4 @@ variable cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\str
       Core.LiteralString v2 -> (Right v2)
       _ -> (Left (Error.DecodingError "expected string literal"))) v1)
     _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0)))
-  _ -> (Left (Error.DecodingError "expected wrapped type hydra.query.Variable"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected wrapped type"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))

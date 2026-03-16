@@ -1022,8 +1022,8 @@ inferTypeOfRecord fcx cx record =
                           let recElemConstraints = (Pairs.second (Pairs.second (Pairs.second results)))
                           in  
                             let ityp = (Core.TypeRecord (Lists.zipWith (\n -> \t -> Core.FieldType {
-                                      Core.fieldTypeName = n,
-                                      Core.fieldTypeType = t}) fnames itypes))
+                                    Core.fieldTypeName = n,
+                                    Core.fieldTypeType = t}) fnames itypes))
                             in (Eithers.bind (mapConstraints fcx3 cx (\subst -> yieldWithConstraints fcx3 (buildTypeApplicationTerm svars (Core.TermRecord (Core.Record {
                               Core.recordTypeName = tname,
                               Core.recordFields = (Lists.zipWith (\n -> \t -> Core.Field {

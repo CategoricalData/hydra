@@ -138,13 +138,13 @@ def rewrite_type(f: Callable[[Callable[[hydra.core.Type], hydra.core.Type], hydr
                 return cast(hydra.core.Type, hydra.core.TypeMaybe(recurse(t2)))
             
             case hydra.core.TypeRecord(value=rt):
-                return cast(hydra.core.Type, hydra.core.TypeRecord(hydra.core.RowType(rt.type_name, hydra.lib.lists.map((lambda x1: for_field(x1)), rt.fields))))
+                return cast(hydra.core.Type, hydra.core.TypeRecord(hydra.lib.lists.map((lambda x1: for_field(x1)), rt)))
             
             case hydra.core.TypeSet(value=t3):
                 return cast(hydra.core.Type, hydra.core.TypeSet(recurse(t3)))
             
             case hydra.core.TypeUnion(value=rt2):
-                return cast(hydra.core.Type, hydra.core.TypeUnion(hydra.core.RowType(rt2.type_name, hydra.lib.lists.map((lambda x1: for_field(x1)), rt2.fields))))
+                return cast(hydra.core.Type, hydra.core.TypeUnion(hydra.lib.lists.map((lambda x1: for_field(x1)), rt2)))
             
             case hydra.core.TypeUnit():
                 return cast(hydra.core.Type, hydra.core.TypeUnit())
@@ -153,7 +153,7 @@ def rewrite_type(f: Callable[[Callable[[hydra.core.Type], hydra.core.Type], hydr
                 return cast(hydra.core.Type, hydra.core.TypeVariable(v))
             
             case hydra.core.TypeWrap(value=wt):
-                return cast(hydra.core.Type, hydra.core.TypeWrap(hydra.core.WrappedType(wt.type_name, recurse(wt.body))))
+                return cast(hydra.core.Type, hydra.core.TypeWrap(recurse(wt)))
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
@@ -545,13 +545,13 @@ def subtypes(v1: hydra.core.Type) -> frozenlist[hydra.core.Type]:
             return (ot,)
         
         case hydra.core.TypeRecord(value=rt):
-            return hydra.lib.lists.map((lambda v1: v1.type), rt.fields)
+            return hydra.lib.lists.map((lambda v1: v1.type), rt)
         
         case hydra.core.TypeSet(value=st):
             return (st,)
         
         case hydra.core.TypeUnion(value=rt2):
-            return hydra.lib.lists.map((lambda v1: v1.type), rt2.fields)
+            return hydra.lib.lists.map((lambda v1: v1.type), rt2)
         
         case hydra.core.TypeUnit():
             return ()
@@ -560,7 +560,7 @@ def subtypes(v1: hydra.core.Type) -> frozenlist[hydra.core.Type]:
             return ()
         
         case hydra.core.TypeWrap(value=nt):
-            return (nt.body,)
+            return (nt,)
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -747,21 +747,17 @@ def rewrite_type_m(f: Callable[[
                 return hydra.lib.eithers.bind(recurse(t2), (lambda rt: Right(cast(hydra.core.Type, hydra.core.TypeMaybe(rt)))))
             
             case hydra.core.TypeRecord(value=rt):
-                name = rt.type_name
-                fields = rt.fields
                 def for_field(f2: hydra.core.FieldType) -> Either[hydra.core.Type, hydra.core.FieldType]:
                     return hydra.lib.eithers.bind(recurse(f2.type), (lambda t: Right(hydra.core.FieldType(f2.name, t))))
-                return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda x1: for_field(x1)), fields), (lambda rfields: Right(cast(hydra.core.Type, hydra.core.TypeRecord(hydra.core.RowType(name, rfields))))))
+                return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda x1: for_field(x1)), rt), (lambda rfields: Right(cast(hydra.core.Type, hydra.core.TypeRecord(rfields)))))
             
             case hydra.core.TypeSet(value=t3):
                 return hydra.lib.eithers.bind(recurse(t3), (lambda rt: Right(cast(hydra.core.Type, hydra.core.TypeSet(rt)))))
             
             case hydra.core.TypeUnion(value=rt2):
-                name = rt2.type_name
-                fields = rt2.fields
                 def for_field(f2: hydra.core.FieldType) -> Either[hydra.core.Type, hydra.core.FieldType]:
                     return hydra.lib.eithers.bind(recurse(f2.type), (lambda t: Right(hydra.core.FieldType(f2.name, t))))
-                return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda x1: for_field(x1)), fields), (lambda rfields: Right(cast(hydra.core.Type, hydra.core.TypeUnion(hydra.core.RowType(name, rfields))))))
+                return hydra.lib.eithers.bind(hydra.lib.eithers.map_list((lambda x1: for_field(x1)), rt2), (lambda rfields: Right(cast(hydra.core.Type, hydra.core.TypeUnion(rfields)))))
             
             case hydra.core.TypeUnit():
                 return Right(cast(hydra.core.Type, hydra.core.TypeUnit()))
@@ -770,7 +766,7 @@ def rewrite_type_m(f: Callable[[
                 return Right(cast(hydra.core.Type, hydra.core.TypeVariable(v)))
             
             case hydra.core.TypeWrap(value=wt):
-                return hydra.lib.eithers.bind(recurse(wt.body), (lambda t: Right(cast(hydra.core.Type, hydra.core.TypeWrap(hydra.core.WrappedType(wt.type_name, t))))))
+                return hydra.lib.eithers.bind(recurse(wt), (lambda t: Right(cast(hydra.core.Type, hydra.core.TypeWrap(t)))))
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
@@ -2135,23 +2131,9 @@ def topological_sort_bindings(els: frozenlist[hydra.core.Binding]) -> Either[fro
         return (e.name, hydra.lib.sets.to_list(term_dependency_names(False, True, True, e.term)))
     return hydra.sorting.topological_sort(hydra.lib.lists.map((lambda x1: adjlist(x1)), els))
 
-def type_names_in_type(typ0: hydra.core.Type) -> frozenset[hydra.core.Name]:
-    def add_names(names: frozenset[hydra.core.Name], typ: hydra.core.Type) -> frozenset[hydra.core.Name]:
-        match typ:
-            case hydra.core.TypeRecord(value=row_type):
-                tname = row_type.type_name
-                return hydra.lib.sets.insert(tname, names)
-            
-            case hydra.core.TypeUnion(value=row_type2):
-                tname = row_type2.type_name
-                return hydra.lib.sets.insert(tname, names)
-            
-            case hydra.core.TypeWrap(value=wrapped_type):
-                tname = wrapped_type.type_name
-                return hydra.lib.sets.insert(tname, names)
-            
-            case _:
-                return names
+def type_names_in_type(typ0: hydra.core.Type) -> frozenset[T0]:
+    def add_names(names: T1, typ: T2) -> T1:
+        return names
     return fold_over_type(hydra.coders.TraversalOrder.PRE, (lambda x1, x2: add_names(x1, x2)), hydra.lib.sets.empty(), typ0)
 
 def type_dependency_names(with_schema: bool, typ: hydra.core.Type) -> frozenset[hydra.core.Name]:

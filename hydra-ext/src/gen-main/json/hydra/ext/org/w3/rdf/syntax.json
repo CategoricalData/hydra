@@ -11,26 +11,14 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.BlankNode"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "literal",
-                              "term": {
-                                "union": {
-                                  "field": {"name": "string", "term": {"unit": {}}},
-                                  "typeName": "hydra.core.LiteralType"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "literal",
+                      "term": {
+                        "union": {
+                          "field": {"name": "string", "term": {"unit": {}}},
+                          "typeName": "hydra.core.LiteralType"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -56,21 +44,9 @@
                             "field": {
                               "name": "wrap",
                               "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.RdfsClass"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "body",
-                                      "term": {
-                                        "union": {
-                                          "field": {"name": "unit", "term": {"unit": {}}},
-                                          "typeName": "hydra.core.Type"}}}],
-                                  "typeName": "hydra.core.WrappedType"}}},
+                                "union": {
+                                  "field": {"name": "unit", "term": {"unit": {}}},
+                                  "typeName": "hydra.core.Type"}}},
                             "typeName": "hydra.core.Type"}}},
                       {
                         "name": "annotation",
@@ -109,31 +85,19 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Dataset"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "set",
-                              "term": {
-                                "union": {
-                                  "field": {
-                                    "name": "variable",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Quad"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  "typeName": "hydra.core.Type"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "set",
+                      "term": {
+                        "union": {
+                          "field": {
+                            "name": "variable",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Quad"}},
+                                "typeName": "hydra.core.Name"}}},
+                          "typeName": "hydra.core.Type"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -159,61 +123,49 @@
                             "field": {
                               "name": "record",
                               "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Description"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "fields",
-                                      "term": {
-                                        "list": [
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "subject"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "variable",
-                                                        "term": {
-                                                          "wrap": {
-                                                            "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Node"}},
-                                                            "typeName": "hydra.core.Name"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}},
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "graph"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "variable",
-                                                        "term": {
-                                                          "wrap": {
-                                                            "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Graph"}},
-                                                            "typeName": "hydra.core.Name"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}}]}}],
-                                  "typeName": "hydra.core.RowType"}}},
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "subject"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "variable",
+                                                "term": {
+                                                  "wrap": {
+                                                    "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Node"}},
+                                                    "typeName": "hydra.core.Name"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "graph"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "variable",
+                                                "term": {
+                                                  "wrap": {
+                                                    "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Graph"}},
+                                                    "typeName": "hydra.core.Name"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}}]}},
                             "typeName": "hydra.core.Type"}}},
                       {
                         "name": "annotation",
@@ -254,31 +206,19 @@
               "field": {
                 "name": "wrap",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Graph"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "body",
-                        "term": {
-                          "union": {
-                            "field": {
-                              "name": "set",
-                              "term": {
-                                "union": {
-                                  "field": {
-                                    "name": "variable",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Triple"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  "typeName": "hydra.core.Type"}}},
-                            "typeName": "hydra.core.Type"}}}],
-                    "typeName": "hydra.core.WrappedType"}}},
+                  "union": {
+                    "field": {
+                      "name": "set",
+                      "term": {
+                        "union": {
+                          "field": {
+                            "name": "variable",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Triple"}},
+                                "typeName": "hydra.core.Name"}}},
+                          "typeName": "hydra.core.Type"}}},
+                    "typeName": "hydra.core.Type"}}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -304,26 +244,14 @@
                             "field": {
                               "name": "wrap",
                               "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Iri"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "body",
-                                      "term": {
-                                        "union": {
-                                          "field": {
-                                            "name": "literal",
-                                            "term": {
-                                              "union": {
-                                                "field": {"name": "string", "term": {"unit": {}}},
-                                                "typeName": "hydra.core.LiteralType"}}},
-                                          "typeName": "hydra.core.Type"}}}],
-                                  "typeName": "hydra.core.WrappedType"}}},
+                                "union": {
+                                  "field": {
+                                    "name": "literal",
+                                    "term": {
+                                      "union": {
+                                        "field": {"name": "string", "term": {"unit": {}}},
+                                        "typeName": "hydra.core.LiteralType"}}},
+                                  "typeName": "hydra.core.Type"}}},
                             "typeName": "hydra.core.Type"}}},
                       {
                         "name": "annotation",
@@ -371,61 +299,49 @@
                             "field": {
                               "name": "union",
                               "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.IriOrLiteral"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "fields",
-                                      "term": {
-                                        "list": [
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "iri"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "variable",
-                                                        "term": {
-                                                          "wrap": {
-                                                            "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Iri"}},
-                                                            "typeName": "hydra.core.Name"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}},
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "literal"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "variable",
-                                                        "term": {
-                                                          "wrap": {
-                                                            "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Literal"}},
-                                                            "typeName": "hydra.core.Name"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}}]}}],
-                                  "typeName": "hydra.core.RowType"}}},
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "iri"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "variable",
+                                                "term": {
+                                                  "wrap": {
+                                                    "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Iri"}},
+                                                    "typeName": "hydra.core.Name"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "literal"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "variable",
+                                                "term": {
+                                                  "wrap": {
+                                                    "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Literal"}},
+                                                    "typeName": "hydra.core.Name"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}}]}},
                             "typeName": "hydra.core.Type"}}},
                       {
                         "name": "annotation",
@@ -475,53 +391,41 @@
                             "field": {
                               "name": "wrap",
                               "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.LangStrings"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "body",
-                                      "term": {
-                                        "union": {
-                                          "field": {
-                                            "name": "map",
+                                "union": {
+                                  "field": {
+                                    "name": "map",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {
+                                            "name": "keys",
                                             "term": {
-                                              "record": {
-                                                "fields": [
-                                                  {
-                                                    "name": "keys",
-                                                    "term": {
-                                                      "union": {
-                                                        "field": {
-                                                          "name": "maybe",
-                                                          "term": {
-                                                            "union": {
-                                                              "field": {
-                                                                "name": "variable",
-                                                                "term": {
-                                                                  "wrap": {
-                                                                    "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.LanguageTag"}},
-                                                                    "typeName": "hydra.core.Name"}}},
-                                                              "typeName": "hydra.core.Type"}}},
-                                                        "typeName": "hydra.core.Type"}}},
-                                                  {
-                                                    "name": "values",
-                                                    "term": {
-                                                      "union": {
-                                                        "field": {
-                                                          "name": "literal",
-                                                          "term": {
-                                                            "union": {
-                                                              "field": {"name": "string", "term": {"unit": {}}},
-                                                              "typeName": "hydra.core.LiteralType"}}},
-                                                        "typeName": "hydra.core.Type"}}}],
-                                                "typeName": "hydra.core.MapType"}}},
-                                          "typeName": "hydra.core.Type"}}}],
-                                  "typeName": "hydra.core.WrappedType"}}},
+                                              "union": {
+                                                "field": {
+                                                  "name": "maybe",
+                                                  "term": {
+                                                    "union": {
+                                                      "field": {
+                                                        "name": "variable",
+                                                        "term": {
+                                                          "wrap": {
+                                                            "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.LanguageTag"}},
+                                                            "typeName": "hydra.core.Name"}}},
+                                                      "typeName": "hydra.core.Type"}}},
+                                                "typeName": "hydra.core.Type"}}},
+                                          {
+                                            "name": "values",
+                                            "term": {
+                                              "union": {
+                                                "field": {
+                                                  "name": "literal",
+                                                  "term": {
+                                                    "union": {
+                                                      "field": {"name": "string", "term": {"unit": {}}},
+                                                      "typeName": "hydra.core.LiteralType"}}},
+                                                "typeName": "hydra.core.Type"}}}],
+                                        "typeName": "hydra.core.MapType"}}},
+                                  "typeName": "hydra.core.Type"}}},
                             "typeName": "hydra.core.Type"}}},
                       {
                         "name": "annotation",
@@ -571,26 +475,14 @@
                             "field": {
                               "name": "wrap",
                               "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.LanguageTag"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "body",
-                                      "term": {
-                                        "union": {
-                                          "field": {
-                                            "name": "literal",
-                                            "term": {
-                                              "union": {
-                                                "field": {"name": "string", "term": {"unit": {}}},
-                                                "typeName": "hydra.core.LiteralType"}}},
-                                          "typeName": "hydra.core.Type"}}}],
-                                  "typeName": "hydra.core.WrappedType"}}},
+                                "union": {
+                                  "field": {
+                                    "name": "literal",
+                                    "term": {
+                                      "union": {
+                                        "field": {"name": "string", "term": {"unit": {}}},
+                                        "typeName": "hydra.core.LiteralType"}}},
+                                  "typeName": "hydra.core.Type"}}},
                             "typeName": "hydra.core.Type"}}},
                       {
                         "name": "annotation",
@@ -638,185 +530,173 @@
                             "field": {
                               "name": "record",
                               "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Literal"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "fields",
-                                      "term": {
-                                        "list": [
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "lexicalForm"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "annotated",
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "lexicalForm"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "annotated",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "body",
                                                         "term": {
-                                                          "record": {
-                                                            "fields": [
-                                                              {
-                                                                "name": "body",
-                                                                "term": {
-                                                                  "union": {
-                                                                    "field": {
-                                                                      "name": "literal",
-                                                                      "term": {
-                                                                        "union": {
-                                                                          "field": {"name": "string", "term": {"unit": {}}},
-                                                                          "typeName": "hydra.core.LiteralType"}}},
-                                                                    "typeName": "hydra.core.Type"}}},
-                                                              {
-                                                                "name": "annotation",
-                                                                "term": {
-                                                                  "map": [
-                                                                    {
-                                                                      "@key": {
-                                                                        "wrap": {
-                                                                          "body": {"literal": {"string": "description"}},
-                                                                          "typeName": "hydra.core.Name"}},
-                                                                      "@value": {
-                                                                        "union": {
-                                                                          "field": {
-                                                                            "name": "literal",
-                                                                            "term": {
-                                                                              "union": {
-                                                                                "field": {
-                                                                                  "name": "string",
-                                                                                  "term": {
-                                                                                    "literal": {"string": "a Unicode string, which should be in Normal Form C"}}},
-                                                                                "typeName": "hydra.core.Literal"}}},
-                                                                          "typeName": "hydra.core.Term"}}}]}}],
-                                                            "typeName": "hydra.core.AnnotatedType"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}},
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "datatypeIri"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "annotated",
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "literal",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {"name": "string", "term": {"unit": {}}},
+                                                                  "typeName": "hydra.core.LiteralType"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "annotation",
                                                         "term": {
-                                                          "record": {
-                                                            "fields": [
-                                                              {
-                                                                "name": "body",
-                                                                "term": {
-                                                                  "union": {
-                                                                    "field": {
-                                                                      "name": "variable",
-                                                                      "term": {
-                                                                        "wrap": {
-                                                                          "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Iri"}},
-                                                                          "typeName": "hydra.core.Name"}}},
-                                                                    "typeName": "hydra.core.Type"}}},
-                                                              {
-                                                                "name": "annotation",
-                                                                "term": {
-                                                                  "map": [
-                                                                    {
-                                                                      "@key": {
-                                                                        "wrap": {
-                                                                          "body": {"literal": {"string": "description"}},
-                                                                          "typeName": "hydra.core.Name"}},
-                                                                      "@value": {
-                                                                        "union": {
-                                                                          "field": {
-                                                                            "name": "literal",
-                                                                            "term": {
-                                                                              "union": {
-                                                                                "field": {
-                                                                                  "name": "string",
-                                                                                  "term": {
-                                                                                    "literal": {
-                                                                                      "string": "an IRI identifying a datatype that determines how the lexical form maps to a literal value"}}},
-                                                                                "typeName": "hydra.core.Literal"}}},
-                                                                          "typeName": "hydra.core.Term"}}}]}}],
-                                                            "typeName": "hydra.core.AnnotatedType"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}},
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "languageTag"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "annotated",
+                                                          "map": [
+                                                            {
+                                                              "@key": {
+                                                                "wrap": {
+                                                                  "body": {"literal": {"string": "description"}},
+                                                                  "typeName": "hydra.core.Name"}},
+                                                              "@value": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "literal",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "string",
+                                                                          "term": {
+                                                                            "literal": {"string": "a Unicode string, which should be in Normal Form C"}}},
+                                                                        "typeName": "hydra.core.Literal"}}},
+                                                                  "typeName": "hydra.core.Term"}}}]}}],
+                                                    "typeName": "hydra.core.AnnotatedType"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "datatypeIri"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "annotated",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "body",
                                                         "term": {
-                                                          "record": {
-                                                            "fields": [
-                                                              {
-                                                                "name": "body",
-                                                                "term": {
-                                                                  "union": {
-                                                                    "field": {
-                                                                      "name": "maybe",
-                                                                      "term": {
-                                                                        "union": {
-                                                                          "field": {
-                                                                            "name": "variable",
-                                                                            "term": {
-                                                                              "wrap": {
-                                                                                "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.LanguageTag"}},
-                                                                                "typeName": "hydra.core.Name"}}},
-                                                                          "typeName": "hydra.core.Type"}}},
-                                                                    "typeName": "hydra.core.Type"}}},
-                                                              {
-                                                                "name": "annotation",
-                                                                "term": {
-                                                                  "map": [
-                                                                    {
-                                                                      "@key": {
-                                                                        "wrap": {
-                                                                          "body": {"literal": {"string": "description"}},
-                                                                          "typeName": "hydra.core.Name"}},
-                                                                      "@value": {
-                                                                        "union": {
-                                                                          "field": {
-                                                                            "name": "literal",
-                                                                            "term": {
-                                                                              "union": {
-                                                                                "field": {
-                                                                                  "name": "string",
-                                                                                  "term": {
-                                                                                    "literal": {
-                                                                                      "string": "An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"}}},
-                                                                                "typeName": "hydra.core.Literal"}}},
-                                                                          "typeName": "hydra.core.Term"}}}]}}],
-                                                            "typeName": "hydra.core.AnnotatedType"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}}]}}],
-                                  "typeName": "hydra.core.RowType"}}},
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "variable",
+                                                              "term": {
+                                                                "wrap": {
+                                                                  "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Iri"}},
+                                                                  "typeName": "hydra.core.Name"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "annotation",
+                                                        "term": {
+                                                          "map": [
+                                                            {
+                                                              "@key": {
+                                                                "wrap": {
+                                                                  "body": {"literal": {"string": "description"}},
+                                                                  "typeName": "hydra.core.Name"}},
+                                                              "@value": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "literal",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "string",
+                                                                          "term": {
+                                                                            "literal": {
+                                                                              "string": "an IRI identifying a datatype that determines how the lexical form maps to a literal value"}}},
+                                                                        "typeName": "hydra.core.Literal"}}},
+                                                                  "typeName": "hydra.core.Term"}}}]}}],
+                                                    "typeName": "hydra.core.AnnotatedType"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "languageTag"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "annotated",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "body",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "maybe",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "variable",
+                                                                    "term": {
+                                                                      "wrap": {
+                                                                        "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.LanguageTag"}},
+                                                                        "typeName": "hydra.core.Name"}}},
+                                                                  "typeName": "hydra.core.Type"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "annotation",
+                                                        "term": {
+                                                          "map": [
+                                                            {
+                                                              "@key": {
+                                                                "wrap": {
+                                                                  "body": {"literal": {"string": "description"}},
+                                                                  "typeName": "hydra.core.Name"}},
+                                                              "@value": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "literal",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "string",
+                                                                          "term": {
+                                                                            "literal": {
+                                                                              "string": "An optional language tag, present if and only if the datatype IRI is http://www.w3.org/1999/02/22-rdf-syntax-ns#langString"}}},
+                                                                        "typeName": "hydra.core.Literal"}}},
+                                                                  "typeName": "hydra.core.Term"}}}]}}],
+                                                    "typeName": "hydra.core.AnnotatedType"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}}]}},
                             "typeName": "hydra.core.Type"}}},
                       {
                         "name": "annotation",
@@ -855,82 +735,70 @@
               "field": {
                 "name": "union",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Node"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "fields",
-                        "term": {
-                          "list": [
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "iri"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "variable",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Iri"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "bnode"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "variable",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.BlankNode"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "literal"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "variable",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Literal"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}}]}}],
-                    "typeName": "hydra.core.RowType"}}},
+                  "list": [
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "iri"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "variable",
+                                  "term": {
+                                    "wrap": {
+                                      "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Iri"}},
+                                      "typeName": "hydra.core.Name"}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "bnode"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "variable",
+                                  "term": {
+                                    "wrap": {
+                                      "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.BlankNode"}},
+                                      "typeName": "hydra.core.Name"}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "literal"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "variable",
+                                  "term": {
+                                    "wrap": {
+                                      "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Literal"}},
+                                      "typeName": "hydra.core.Name"}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}}]}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -956,163 +824,151 @@
                             "field": {
                               "name": "record",
                               "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Property"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "fields",
-                                      "term": {
-                                        "list": [
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "domain"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "annotated",
-                                                        "term": {
-                                                          "record": {
-                                                            "fields": [
-                                                              {
-                                                                "name": "body",
-                                                                "term": {
-                                                                  "union": {
-                                                                    "field": {
-                                                                      "name": "set",
-                                                                      "term": {
-                                                                        "union": {
-                                                                          "field": {
-                                                                            "name": "variable",
-                                                                            "term": {
-                                                                              "wrap": {
-                                                                                "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.RdfsClass"}},
-                                                                                "typeName": "hydra.core.Name"}}},
-                                                                          "typeName": "hydra.core.Type"}}},
-                                                                    "typeName": "hydra.core.Type"}}},
-                                                              {
-                                                                "name": "annotation",
-                                                                "term": {
-                                                                  "map": [
-                                                                    {
-                                                                      "@key": {
-                                                                        "wrap": {
-                                                                          "body": {"literal": {"string": "description"}},
-                                                                          "typeName": "hydra.core.Name"}},
-                                                                      "@value": {
-                                                                        "union": {
-                                                                          "field": {
-                                                                            "name": "literal",
-                                                                            "term": {
-                                                                              "union": {
-                                                                                "field": {
-                                                                                  "name": "string",
-                                                                                  "term": {
-                                                                                    "literal": {
-                                                                                      "string": "State that any resource that has a given property is an instance of one or more classes"}}},
-                                                                                "typeName": "hydra.core.Literal"}}},
-                                                                          "typeName": "hydra.core.Term"}}}]}}],
-                                                            "typeName": "hydra.core.AnnotatedType"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}},
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "range"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "annotated",
-                                                        "term": {
-                                                          "record": {
-                                                            "fields": [
-                                                              {
-                                                                "name": "body",
-                                                                "term": {
-                                                                  "union": {
-                                                                    "field": {
-                                                                      "name": "set",
-                                                                      "term": {
-                                                                        "union": {
-                                                                          "field": {
-                                                                            "name": "variable",
-                                                                            "term": {
-                                                                              "wrap": {
-                                                                                "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.RdfsClass"}},
-                                                                                "typeName": "hydra.core.Name"}}},
-                                                                          "typeName": "hydra.core.Type"}}},
-                                                                    "typeName": "hydra.core.Type"}}},
-                                                              {
-                                                                "name": "annotation",
-                                                                "term": {
-                                                                  "map": [
-                                                                    {
-                                                                      "@key": {
-                                                                        "wrap": {
-                                                                          "body": {"literal": {"string": "description"}},
-                                                                          "typeName": "hydra.core.Name"}},
-                                                                      "@value": {
-                                                                        "union": {
-                                                                          "field": {
-                                                                            "name": "literal",
-                                                                            "term": {
-                                                                              "union": {
-                                                                                "field": {
-                                                                                  "name": "string",
-                                                                                  "term": {
-                                                                                    "literal": {
-                                                                                      "string": "States that the values of a property are instances of one or more classes"}}},
-                                                                                "typeName": "hydra.core.Literal"}}},
-                                                                          "typeName": "hydra.core.Term"}}}]}}],
-                                                            "typeName": "hydra.core.AnnotatedType"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}},
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "subPropertyOf"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "set",
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "domain"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "annotated",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "body",
                                                         "term": {
                                                           "union": {
                                                             "field": {
-                                                              "name": "variable",
+                                                              "name": "set",
                                                               "term": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Property"}},
-                                                                  "typeName": "hydra.core.Name"}}},
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "variable",
+                                                                    "term": {
+                                                                      "wrap": {
+                                                                        "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.RdfsClass"}},
+                                                                        "typeName": "hydra.core.Name"}}},
+                                                                  "typeName": "hydra.core.Type"}}},
                                                             "typeName": "hydra.core.Type"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}}]}}],
-                                  "typeName": "hydra.core.RowType"}}},
+                                                      {
+                                                        "name": "annotation",
+                                                        "term": {
+                                                          "map": [
+                                                            {
+                                                              "@key": {
+                                                                "wrap": {
+                                                                  "body": {"literal": {"string": "description"}},
+                                                                  "typeName": "hydra.core.Name"}},
+                                                              "@value": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "literal",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "string",
+                                                                          "term": {
+                                                                            "literal": {
+                                                                              "string": "State that any resource that has a given property is an instance of one or more classes"}}},
+                                                                        "typeName": "hydra.core.Literal"}}},
+                                                                  "typeName": "hydra.core.Term"}}}]}}],
+                                                    "typeName": "hydra.core.AnnotatedType"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "range"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "annotated",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "body",
+                                                        "term": {
+                                                          "union": {
+                                                            "field": {
+                                                              "name": "set",
+                                                              "term": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "variable",
+                                                                    "term": {
+                                                                      "wrap": {
+                                                                        "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.RdfsClass"}},
+                                                                        "typeName": "hydra.core.Name"}}},
+                                                                  "typeName": "hydra.core.Type"}}},
+                                                            "typeName": "hydra.core.Type"}}},
+                                                      {
+                                                        "name": "annotation",
+                                                        "term": {
+                                                          "map": [
+                                                            {
+                                                              "@key": {
+                                                                "wrap": {
+                                                                  "body": {"literal": {"string": "description"}},
+                                                                  "typeName": "hydra.core.Name"}},
+                                                              "@value": {
+                                                                "union": {
+                                                                  "field": {
+                                                                    "name": "literal",
+                                                                    "term": {
+                                                                      "union": {
+                                                                        "field": {
+                                                                          "name": "string",
+                                                                          "term": {
+                                                                            "literal": {
+                                                                              "string": "States that the values of a property are instances of one or more classes"}}},
+                                                                        "typeName": "hydra.core.Literal"}}},
+                                                                  "typeName": "hydra.core.Term"}}}]}}],
+                                                    "typeName": "hydra.core.AnnotatedType"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "subPropertyOf"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "set",
+                                                "term": {
+                                                  "union": {
+                                                    "field": {
+                                                      "name": "variable",
+                                                      "term": {
+                                                        "wrap": {
+                                                          "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Property"}},
+                                                          "typeName": "hydra.core.Name"}}},
+                                                    "typeName": "hydra.core.Type"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}}]}},
                             "typeName": "hydra.core.Type"}}},
                       {
                         "name": "annotation",
@@ -1162,108 +1018,96 @@
                             "field": {
                               "name": "record",
                               "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Quad"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "fields",
-                                      "term": {
-                                        "list": [
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "subject"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "variable",
-                                                        "term": {
-                                                          "wrap": {
-                                                            "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Resource"}},
-                                                            "typeName": "hydra.core.Name"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}},
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "predicate"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "variable",
-                                                        "term": {
-                                                          "wrap": {
-                                                            "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Iri"}},
-                                                            "typeName": "hydra.core.Name"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}},
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "object"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "variable",
-                                                        "term": {
-                                                          "wrap": {
-                                                            "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Node"}},
-                                                            "typeName": "hydra.core.Name"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}},
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "graph"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "maybe",
-                                                        "term": {
-                                                          "union": {
-                                                            "field": {
-                                                              "name": "variable",
-                                                              "term": {
-                                                                "wrap": {
-                                                                  "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Iri"}},
-                                                                  "typeName": "hydra.core.Name"}}},
-                                                            "typeName": "hydra.core.Type"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}}]}}],
-                                  "typeName": "hydra.core.RowType"}}},
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "subject"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "variable",
+                                                "term": {
+                                                  "wrap": {
+                                                    "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Resource"}},
+                                                    "typeName": "hydra.core.Name"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "predicate"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "variable",
+                                                "term": {
+                                                  "wrap": {
+                                                    "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Iri"}},
+                                                    "typeName": "hydra.core.Name"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "object"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "variable",
+                                                "term": {
+                                                  "wrap": {
+                                                    "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Node"}},
+                                                    "typeName": "hydra.core.Name"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "graph"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "maybe",
+                                                "term": {
+                                                  "union": {
+                                                    "field": {
+                                                      "name": "variable",
+                                                      "term": {
+                                                        "wrap": {
+                                                          "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Iri"}},
+                                                          "typeName": "hydra.core.Name"}}},
+                                                    "typeName": "hydra.core.Type"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}}]}},
                             "typeName": "hydra.core.Type"}}},
                       {
                         "name": "annotation",
@@ -1303,61 +1147,49 @@
               "field": {
                 "name": "union",
                 "term": {
-                  "record": {
-                    "fields": [
-                      {
-                        "name": "typeName",
-                        "term": {
-                          "wrap": {
-                            "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Resource"}},
-                            "typeName": "hydra.core.Name"}}},
-                      {
-                        "name": "fields",
-                        "term": {
-                          "list": [
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "iri"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "variable",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Iri"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}},
-                            {
-                              "record": {
-                                "fields": [
-                                  {
-                                    "name": "name",
-                                    "term": {
-                                      "wrap": {
-                                        "body": {"literal": {"string": "bnode"}},
-                                        "typeName": "hydra.core.Name"}}},
-                                  {
-                                    "name": "type",
-                                    "term": {
-                                      "union": {
-                                        "field": {
-                                          "name": "variable",
-                                          "term": {
-                                            "wrap": {
-                                              "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.BlankNode"}},
-                                              "typeName": "hydra.core.Name"}}},
-                                        "typeName": "hydra.core.Type"}}}],
-                                "typeName": "hydra.core.FieldType"}}]}}],
-                    "typeName": "hydra.core.RowType"}}},
+                  "list": [
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "iri"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "variable",
+                                  "term": {
+                                    "wrap": {
+                                      "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Iri"}},
+                                      "typeName": "hydra.core.Name"}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}},
+                    {
+                      "record": {
+                        "fields": [
+                          {
+                            "name": "name",
+                            "term": {
+                              "wrap": {
+                                "body": {"literal": {"string": "bnode"}},
+                                "typeName": "hydra.core.Name"}}},
+                          {
+                            "name": "type",
+                            "term": {
+                              "union": {
+                                "field": {
+                                  "name": "variable",
+                                  "term": {
+                                    "wrap": {
+                                      "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.BlankNode"}},
+                                      "typeName": "hydra.core.Name"}}},
+                                "typeName": "hydra.core.Type"}}}],
+                        "typeName": "hydra.core.FieldType"}}]}},
               "typeName": "hydra.core.Type"}}}},
       "type": [
         {
@@ -1383,82 +1215,70 @@
                             "field": {
                               "name": "record",
                               "term": {
-                                "record": {
-                                  "fields": [
-                                    {
-                                      "name": "typeName",
-                                      "term": {
-                                        "wrap": {
-                                          "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Triple"}},
-                                          "typeName": "hydra.core.Name"}}},
-                                    {
-                                      "name": "fields",
-                                      "term": {
-                                        "list": [
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "subject"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "variable",
-                                                        "term": {
-                                                          "wrap": {
-                                                            "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Resource"}},
-                                                            "typeName": "hydra.core.Name"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}},
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "predicate"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "variable",
-                                                        "term": {
-                                                          "wrap": {
-                                                            "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Iri"}},
-                                                            "typeName": "hydra.core.Name"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}},
-                                          {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "wrap": {
-                                                      "body": {"literal": {"string": "object"}},
-                                                      "typeName": "hydra.core.Name"}}},
-                                                {
-                                                  "name": "type",
-                                                  "term": {
-                                                    "union": {
-                                                      "field": {
-                                                        "name": "variable",
-                                                        "term": {
-                                                          "wrap": {
-                                                            "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Node"}},
-                                                            "typeName": "hydra.core.Name"}}},
-                                                      "typeName": "hydra.core.Type"}}}],
-                                              "typeName": "hydra.core.FieldType"}}]}}],
-                                  "typeName": "hydra.core.RowType"}}},
+                                "list": [
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "subject"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "variable",
+                                                "term": {
+                                                  "wrap": {
+                                                    "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Resource"}},
+                                                    "typeName": "hydra.core.Name"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "predicate"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "variable",
+                                                "term": {
+                                                  "wrap": {
+                                                    "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Iri"}},
+                                                    "typeName": "hydra.core.Name"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}},
+                                  {
+                                    "record": {
+                                      "fields": [
+                                        {
+                                          "name": "name",
+                                          "term": {
+                                            "wrap": {
+                                              "body": {"literal": {"string": "object"}},
+                                              "typeName": "hydra.core.Name"}}},
+                                        {
+                                          "name": "type",
+                                          "term": {
+                                            "union": {
+                                              "field": {
+                                                "name": "variable",
+                                                "term": {
+                                                  "wrap": {
+                                                    "body": {"literal": {"string": "hydra.ext.org.w3.rdf.syntax.Node"}},
+                                                    "typeName": "hydra.core.Name"}}},
+                                              "typeName": "hydra.core.Type"}}}],
+                                      "typeName": "hydra.core.FieldType"}}]}},
                             "typeName": "hydra.core.Type"}}},
                       {
                         "name": "annotation",

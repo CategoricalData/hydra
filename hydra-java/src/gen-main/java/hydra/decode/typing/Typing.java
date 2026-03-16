@@ -12,7 +12,7 @@ public interface Typing {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.typing.FunctionStructure<T0>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.typing.FunctionStructure<T0>> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.typing.FunctionStructure<T0>>left(new hydra.error.DecodingError("expected record of type hydra.typing.FunctionStructure"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.typing.FunctionStructure<T0>>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override
@@ -101,7 +101,7 @@ public interface Typing {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.typing.InferenceResult>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.typing.InferenceResult> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.typing.InferenceResult>left(new hydra.error.DecodingError("expected record of type hydra.typing.InferenceResult"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.typing.InferenceResult>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override
@@ -167,7 +167,7 @@ public interface Typing {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.typing.TermSubst>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.typing.TermSubst> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.typing.TermSubst>left(new hydra.error.DecodingError("expected wrapped type hydra.typing.TermSubst"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.typing.TermSubst>left(new hydra.error.DecodingError("expected wrapped type"));
         }
         
         @Override
@@ -196,7 +196,7 @@ public interface Typing {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.typing.TypeConstraint>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.typing.TypeConstraint> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.typing.TypeConstraint>left(new hydra.error.DecodingError("expected record of type hydra.typing.TypeConstraint"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.typing.TypeConstraint>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override
@@ -263,7 +263,7 @@ public interface Typing {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.typing.TypeSubst>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.typing.TypeSubst> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.typing.TypeSubst>left(new hydra.error.DecodingError("expected wrapped type hydra.typing.TypeSubst"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.typing.TypeSubst>left(new hydra.error.DecodingError("expected wrapped type"));
         }
         
         @Override

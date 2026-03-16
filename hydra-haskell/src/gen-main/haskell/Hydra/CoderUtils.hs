@@ -243,7 +243,7 @@ nameToFilePath nsConv localConv ext name =
               ".",
               (Module.unFileExtension ext)])
 
--- | Convert a union row type to a record row type
+-- | Convert a union field type list to a record field type list with optional fields
 unionTypeToRecordType :: ([Core.FieldType] -> [Core.FieldType])
 unionTypeToRecordType rt =  
   let makeOptional = (\f ->  

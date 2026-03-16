@@ -392,33 +392,17 @@
                                                             "term": {
                                                               "function": {
                                                                 "lambda": {
-                                                                  "body": {
-                                                                    "application": {
-                                                                      "argument": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "rt"},
-                                                                          "function": {
-                                                                            "function": {
-                                                                              "elimination": {"record": {"field": "typeName", "typeName": "hydra.core.RowType"}}}}}},
-                                                                      "function": {"variable": "hydra.names.localNameOf"}}},
-                                                                  "domain": [{"variable": "hydra.core.RowType"}],
-                                                                  "parameter": "rt"}}}},
+                                                                  "body": {"literal": {"string": "record"}},
+                                                                  "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                                  "parameter": "_"}}}},
                                                           {
                                                             "name": "union",
                                                             "term": {
                                                               "function": {
                                                                 "lambda": {
-                                                                  "body": {
-                                                                    "application": {
-                                                                      "argument": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "rt"},
-                                                                          "function": {
-                                                                            "function": {
-                                                                              "elimination": {"record": {"field": "typeName", "typeName": "hydra.core.RowType"}}}}}},
-                                                                      "function": {"variable": "hydra.names.localNameOf"}}},
-                                                                  "domain": [{"variable": "hydra.core.RowType"}],
-                                                                  "parameter": "rt"}}}},
+                                                                  "body": {"literal": {"string": "union"}},
+                                                                  "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                                  "parameter": "_"}}}},
                                                           {
                                                             "name": "variable",
                                                             "term": {
@@ -1537,21 +1521,19 @@
                                                     "lambda": {
                                                       "body": {
                                                         "application": {
-                                                          "argument": {
-                                                            "application": {
-                                                              "argument": {"variable": "rt"},
-                                                              "function": {
-                                                                "function": {
-                                                                  "elimination": {"record": {"field": "typeName", "typeName": "hydra.core.RowType"}}}}}},
+                                                          "argument": {"literal": {"string": "anonymous record type"}},
                                                           "function": {
-                                                            "typeApplication": {
-                                                              "body": {"variable": "forNominal"},
-                                                              "type": {
+                                                            "application": {
+                                                              "argument": {"literal": {"string": "named type reference"}},
+                                                              "function": {
                                                                 "application": {
-                                                                  "argument": {"variable": "hydra.error.Error"},
-                                                                  "function": {"variable": "hydra.context.InContext"}}}}}}},
-                                                      "domain": [{"variable": "hydra.core.RowType"}],
-                                                      "parameter": "rt"}}}},
+                                                                  "argument": {"variable": "cx"},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {"variable": "hydra.ext.protobuf.coder.unexpectedE"},
+                                                                      "type": {"variable": "hydra.ext.protobuf.proto3.SimpleType"}}}}}}}}},
+                                                      "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                      "parameter": "_"}}}},
                                               {
                                                 "name": "union",
                                                 "term": {
@@ -1559,21 +1541,19 @@
                                                     "lambda": {
                                                       "body": {
                                                         "application": {
-                                                          "argument": {
-                                                            "application": {
-                                                              "argument": {"variable": "rt"},
-                                                              "function": {
-                                                                "function": {
-                                                                  "elimination": {"record": {"field": "typeName", "typeName": "hydra.core.RowType"}}}}}},
+                                                          "argument": {"literal": {"string": "anonymous union type"}},
                                                           "function": {
-                                                            "typeApplication": {
-                                                              "body": {"variable": "forNominal"},
-                                                              "type": {
+                                                            "application": {
+                                                              "argument": {"literal": {"string": "named type reference"}},
+                                                              "function": {
                                                                 "application": {
-                                                                  "argument": {"variable": "hydra.error.Error"},
-                                                                  "function": {"variable": "hydra.context.InContext"}}}}}}},
-                                                      "domain": [{"variable": "hydra.core.RowType"}],
-                                                      "parameter": "rt"}}}},
+                                                                  "argument": {"variable": "cx"},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {"variable": "hydra.ext.protobuf.coder.unexpectedE"},
+                                                                      "type": {"variable": "hydra.ext.protobuf.proto3.SimpleType"}}}}}}}}},
+                                                      "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                      "parameter": "_"}}}},
                                               {
                                                 "name": "unit",
                                                 "term": {
@@ -2652,12 +2632,7 @@
                                                                                                                                                         "lambda": {
                                                                                                                                                           "body": {
                                                                                                                                                             "application": {
-                                                                                                                                                              "argument": {
-                                                                                                                                                                "application": {
-                                                                                                                                                                  "argument": {"variable": "rt"},
-                                                                                                                                                                  "function": {
-                                                                                                                                                                    "function": {
-                                                                                                                                                                      "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
+                                                                                                                                                              "argument": {"variable": "fts"},
                                                                                                                                                               "function": {
                                                                                                                                                                 "application": {
                                                                                                                                                                   "argument": {"literal": {"boolean": false}},
@@ -2698,8 +2673,8 @@
                                                                                                                                                                               "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
                                                                                                                                                                               "type": {"literal": {"boolean": {}}}}},
                                                                                                                                                                           "type": {"variable": "hydra.core.FieldType"}}}}}}}}},
-                                                                                                                                                          "domain": [{"variable": "hydra.core.RowType"}],
-                                                                                                                                                          "parameter": "rt"}}}},
+                                                                                                                                                          "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                                                                                                                          "parameter": "fts"}}}},
                                                                                                                                                   {
                                                                                                                                                     "name": "union",
                                                                                                                                                     "term": {
@@ -2707,12 +2682,7 @@
                                                                                                                                                         "lambda": {
                                                                                                                                                           "body": {
                                                                                                                                                             "application": {
-                                                                                                                                                              "argument": {
-                                                                                                                                                                "application": {
-                                                                                                                                                                  "argument": {"variable": "rt"},
-                                                                                                                                                                  "function": {
-                                                                                                                                                                    "function": {
-                                                                                                                                                                      "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
+                                                                                                                                                              "argument": {"variable": "fts"},
                                                                                                                                                               "function": {
                                                                                                                                                                 "application": {
                                                                                                                                                                   "argument": {"literal": {"boolean": false}},
@@ -2753,8 +2723,8 @@
                                                                                                                                                                               "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
                                                                                                                                                                               "type": {"literal": {"boolean": {}}}}},
                                                                                                                                                                           "type": {"variable": "hydra.core.FieldType"}}}}}}}}},
-                                                                                                                                                          "domain": [{"variable": "hydra.core.RowType"}],
-                                                                                                                                                          "parameter": "rt"}}}}],
+                                                                                                                                                          "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                                                                                                                          "parameter": "fts"}}}}],
                                                                                                                                                 "default": [{"literal": {"boolean": false}}],
                                                                                                                                                 "typeName": "hydra.core.Type"}}}}}},
                                                                                                                                     "function": {
@@ -3578,25 +3548,18 @@
                                                           "field": {
                                                             "name": "record",
                                                             "term": {
-                                                              "record": {
-                                                                "fields": [
-                                                                  {"name": "typeName", "term": {"variable": "name"}},
-                                                                  {
-                                                                    "name": "fields",
-                                                                    "term": {
-                                                                      "list": [
-                                                                        {
-                                                                          "record": {
-                                                                            "fields": [
-                                                                              {
-                                                                                "name": "name",
-                                                                                "term": {
-                                                                                  "wrap": {
-                                                                                    "body": {"literal": {"string": "value"}},
-                                                                                    "typeName": "hydra.core.Name"}}},
-                                                                              {"name": "type", "term": {"variable": "t"}}],
-                                                                            "typeName": "hydra.core.FieldType"}}]}}],
-                                                                "typeName": "hydra.core.RowType"}}},
+                                                              "list": [
+                                                                {
+                                                                  "record": {
+                                                                    "fields": [
+                                                                      {
+                                                                        "name": "name",
+                                                                        "term": {
+                                                                          "wrap": {
+                                                                            "body": {"literal": {"string": "value"}},
+                                                                            "typeName": "hydra.core.Name"}}},
+                                                                      {"name": "type", "term": {"variable": "t"}}],
+                                                                    "typeName": "hydra.core.FieldType"}}]}},
                                                           "typeName": "hydra.core.Type"}},
                                                       "domain": [{"variable": "hydra.core.Type"}],
                                                       "parameter": "t"}}},
@@ -3723,20 +3686,23 @@
                                                                                               "application": {
                                                                                                 "argument": {
                                                                                                   "application": {
-                                                                                                    "argument": {"variable": "rt"},
+                                                                                                    "argument": {"variable": "fts"},
                                                                                                     "function": {
                                                                                                       "application": {
-                                                                                                        "argument": {"variable": "options"},
+                                                                                                        "argument": {"variable": "name"},
                                                                                                         "function": {
                                                                                                           "application": {
-                                                                                                            "argument": {"variable": "localNs"},
+                                                                                                            "argument": {"variable": "options"},
                                                                                                             "function": {
                                                                                                               "application": {
-                                                                                                                "argument": {"variable": "g"},
+                                                                                                                "argument": {"variable": "localNs"},
                                                                                                                 "function": {
                                                                                                                   "application": {
-                                                                                                                    "argument": {"variable": "cx0"},
-                                                                                                                    "function": {"variable": "hydra.ext.protobuf.coder.encodeRecordType"}}}}}}}}}}},
+                                                                                                                    "argument": {"variable": "g"},
+                                                                                                                    "function": {
+                                                                                                                      "application": {
+                                                                                                                        "argument": {"variable": "cx0"},
+                                                                                                                        "function": {"variable": "hydra.ext.protobuf.coder.encodeRecordType"}}}}}}}}}}}}},
                                                                                                 "function": {
                                                                                                   "typeApplication": {
                                                                                                     "body": {"variable": "toEitherString"},
@@ -3762,8 +3728,8 @@
                                                                                                             "type": {"variable": "hydra.ext.protobuf.proto3.MessageDefinition"}}},
                                                                                                         "type": {"variable": "hydra.ext.protobuf.proto3.Definition"}}},
                                                                                                     "type": {"literal": {"string": {}}}}}}}}},
-                                                                                        "domain": [{"variable": "hydra.core.RowType"}],
-                                                                                        "parameter": "rt"}}}},
+                                                                                        "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                                                        "parameter": "fts"}}}},
                                                                                 {
                                                                                   "name": "union",
                                                                                   "term": {
@@ -3777,7 +3743,7 @@
                                                                                                   "application": {
                                                                                                     "argument": {
                                                                                                       "union": {
-                                                                                                        "field": {"name": "union", "term": {"variable": "rt"}},
+                                                                                                        "field": {"name": "union", "term": {"variable": "fts"}},
                                                                                                         "typeName": "hydra.core.Type"}},
                                                                                                     "function": {"variable": "wrapAsRecordType"}}},
                                                                                                 "function": {
@@ -3793,17 +3759,20 @@
                                                                                                       "application": {
                                                                                                         "argument": {
                                                                                                           "application": {
-                                                                                                            "argument": {"variable": "rt"},
+                                                                                                            "argument": {"variable": "fts"},
                                                                                                             "function": {
                                                                                                               "application": {
-                                                                                                                "argument": {"variable": "options"},
+                                                                                                                "argument": {"variable": "name"},
                                                                                                                 "function": {
                                                                                                                   "application": {
-                                                                                                                    "argument": {"variable": "g"},
+                                                                                                                    "argument": {"variable": "options"},
                                                                                                                     "function": {
                                                                                                                       "application": {
-                                                                                                                        "argument": {"variable": "cx0"},
-                                                                                                                        "function": {"variable": "hydra.ext.protobuf.coder.encodeEnumDefinition"}}}}}}}}},
+                                                                                                                        "argument": {"variable": "g"},
+                                                                                                                        "function": {
+                                                                                                                          "application": {
+                                                                                                                            "argument": {"variable": "cx0"},
+                                                                                                                            "function": {"variable": "hydra.ext.protobuf.coder.encodeEnumDefinition"}}}}}}}}}}},
                                                                                                         "function": {
                                                                                                           "typeApplication": {
                                                                                                             "body": {"variable": "toEitherString"},
@@ -3842,8 +3811,8 @@
                                                                                                           "either": {
                                                                                                             "left": {"literal": {"string": {}}},
                                                                                                             "right": {"variable": "hydra.ext.protobuf.proto3.Definition"}}}}}}}}}}},
-                                                                                        "domain": [{"variable": "hydra.core.RowType"}],
-                                                                                        "parameter": "rt"}}}}],
+                                                                                        "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                                                        "parameter": "fts"}}}}],
                                                                               "default": [
                                                                                 {
                                                                                   "application": {
@@ -3978,325 +3947,304 @@
                               "function": {
                                 "lambda": {
                                   "body": {
-                                    "let": {
-                                      "bindings": [
-                                        {
-                                          "name": "tname",
-                                          "term": {
-                                            "application": {
-                                              "argument": {"variable": "rt"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {"record": {"field": "typeName", "typeName": "hydra.core.RowType"}}}}}},
-                                          "type": [
-                                            {
-                                              "constraints": null,
-                                              "type": {"variable": "hydra.core.Name"},
-                                              "variables": []}]},
-                                        {
-                                          "name": "fields",
-                                          "term": {
-                                            "application": {
-                                              "argument": {"variable": "rt"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
-                                          "type": [
-                                            {
-                                              "constraints": null,
-                                              "type": {"list": {"variable": "hydra.core.FieldType"}},
-                                              "variables": []}]},
-                                        {
-                                          "name": "unspecifiedField",
-                                          "term": {
-                                            "record": {
-                                              "fields": [
-                                                {
-                                                  "name": "name",
-                                                  "term": {
-                                                    "application": {
-                                                      "argument": {
-                                                        "wrap": {
-                                                          "body": {"literal": {"string": "unspecified"}},
-                                                          "typeName": "hydra.core.Name"}},
-                                                      "function": {
-                                                        "application": {
-                                                          "argument": {"variable": "tname"},
-                                                          "function": {"variable": "hydra.ext.protobuf.coder.encodeEnumValueName"}}}}}},
-                                                {"name": "number", "term": {"literal": {"integer": {"int32": 0}}}},
-                                                {
-                                                  "name": "options",
-                                                  "term": {
-                                                    "typeApplication": {
-                                                      "body": {"list": []},
-                                                      "type": {"variable": "hydra.ext.protobuf.proto3.Option"}}}}],
-                                              "typeName": "hydra.ext.protobuf.proto3.EnumValue"}},
-                                          "type": [
-                                            {
-                                              "constraints": null,
-                                              "type": {"variable": "hydra.ext.protobuf.proto3.EnumValue"},
-                                              "variables": []}]},
-                                        {
-                                          "name": "encodeEnumField",
-                                          "term": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
+                                    "function": {
+                                      "lambda": {
+                                        "body": {
+                                          "let": {
+                                            "bindings": [
+                                              {
+                                                "name": "unspecifiedField",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "name",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "wrap": {
+                                                                "body": {"literal": {"string": "unspecified"}},
+                                                                "typeName": "hydra.core.Name"}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"variable": "tname"},
+                                                                "function": {"variable": "hydra.ext.protobuf.coder.encodeEnumValueName"}}}}}},
+                                                      {"name": "number", "term": {"literal": {"integer": {"int32": 0}}}},
+                                                      {
+                                                        "name": "options",
+                                                        "term": {
+                                                          "typeApplication": {
+                                                            "body": {"list": []},
+                                                            "type": {"variable": "hydra.ext.protobuf.proto3.Option"}}}}],
+                                                    "typeName": "hydra.ext.protobuf.proto3.EnumValue"}},
+                                                "type": [
+                                                  {
+                                                    "constraints": null,
+                                                    "type": {"variable": "hydra.ext.protobuf.proto3.EnumValue"},
+                                                    "variables": []}]},
+                                              {
+                                                "name": "encodeEnumField",
+                                                "term": {
                                                   "function": {
                                                     "lambda": {
                                                       "body": {
-                                                        "let": {
-                                                          "bindings": [
-                                                            {
-                                                              "name": "fname",
-                                                              "term": {
-                                                                "application": {
-                                                                  "argument": {"variable": "field"},
-                                                                  "function": {
-                                                                    "function": {
-                                                                      "elimination": {"record": {"field": "name", "typeName": "hydra.core.FieldType"}}}}}},
-                                                              "type": [
-                                                                {
-                                                                  "constraints": null,
-                                                                  "type": {"variable": "hydra.core.Name"},
-                                                                  "variables": []}]},
-                                                            {
-                                                              "name": "ftype",
-                                                              "term": {
-                                                                "application": {
-                                                                  "argument": {"variable": "field"},
-                                                                  "function": {
-                                                                    "function": {
-                                                                      "elimination": {"record": {"field": "type", "typeName": "hydra.core.FieldType"}}}}}},
-                                                              "type": [
-                                                                {
-                                                                  "constraints": null,
-                                                                  "type": {"variable": "hydra.core.Type"},
-                                                                  "variables": []}]}],
-                                                          "body": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "function": {
-                                                                  "lambda": {
-                                                                    "body": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "typeApplication": {
-                                                                            "body": {
-                                                                              "either": {
-                                                                                "@right": {
-                                                                                  "record": {
-                                                                                    "fields": [
-                                                                                      {
-                                                                                        "name": "name",
-                                                                                        "term": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "fname"},
-                                                                                            "function": {
-                                                                                              "application": {
-                                                                                                "argument": {"variable": "tname"},
-                                                                                                "function": {"variable": "hydra.ext.protobuf.coder.encodeEnumValueName"}}}}}},
-                                                                                      {"name": "number", "term": {"variable": "idx"}},
-                                                                                      {"name": "options", "term": {"variable": "opts"}}],
-                                                                                    "typeName": "hydra.ext.protobuf.proto3.EnumValue"}}}},
-                                                                            "type": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "hydra.error.Error"},
-                                                                                "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                        "type": {"variable": "hydra.ext.protobuf.proto3.EnumValue"}}},
-                                                                    "domain": [{"list": {"variable": "hydra.ext.protobuf.proto3.Option"}}],
-                                                                    "parameter": "opts"}}},
-                                                              "function": {
-                                                                "application": {
-                                                                  "argument": {
-                                                                    "application": {
-                                                                      "argument": {"variable": "ftype"},
-                                                                      "function": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "g"},
-                                                                          "function": {
-                                                                            "application": {
-                                                                              "argument": {"variable": "cx"},
-                                                                              "function": {"variable": "hydra.ext.protobuf.coder.findOptions"}}}}}}},
-                                                                  "function": {
-                                                                    "typeApplication": {
-                                                                      "body": {
-                                                                        "typeApplication": {
-                                                                          "body": {
-                                                                            "typeApplication": {
-                                                                              "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
-                                                                              "type": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "hydra.error.Error"},
-                                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                          "type": {"list": {"variable": "hydra.ext.protobuf.proto3.Option"}}}},
-                                                                      "type": {"variable": "hydra.ext.protobuf.proto3.EnumValue"}}}}}}}}},
-                                                      "domain": [{"literal": {"integer": {"int32": {}}}}],
-                                                      "parameter": "idx"}}},
-                                                "domain": [{"variable": "hydra.core.FieldType"}],
-                                                "parameter": "field"}}},
-                                          "type": [
-                                            {
-                                              "constraints": null,
-                                              "type": {
-                                                "function": {
-                                                  "codomain": {
-                                                    "function": {
-                                                      "codomain": {
-                                                        "either": {
-                                                          "left": {
-                                                            "application": {
-                                                              "argument": {"variable": "hydra.error.Error"},
-                                                              "function": {"variable": "hydra.context.InContext"}}},
-                                                          "right": {"variable": "hydra.ext.protobuf.proto3.EnumValue"}}},
-                                                      "domain": {"literal": {"integer": {"int32": {}}}}}},
-                                                  "domain": {"variable": "hydra.core.FieldType"}}},
-                                              "variables": []}]},
-                                        {
-                                          "name": "indices",
-                                          "term": {
-                                            "application": {
-                                              "argument": {
-                                                "application": {
-                                                  "argument": {"variable": "fields"},
-                                                  "function": {
-                                                    "typeApplication": {
-                                                      "body": {"function": {"primitive": "hydra.lib.lists.length"}},
-                                                      "type": {"variable": "hydra.core.FieldType"}}}}},
-                                              "function": {
-                                                "application": {
-                                                  "argument": {"literal": {"integer": {"int32": 1}}},
-                                                  "function": {"function": {"primitive": "hydra.lib.math.range"}}}}}},
-                                          "type": [
-                                            {
-                                              "constraints": null,
-                                              "type": {"list": {"literal": {"integer": {"int32": {}}}}},
-                                              "variables": []}]}],
-                                      "body": {
-                                        "application": {
-                                          "argument": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "either": {
-                                                            "@right": {
-                                                              "record": {
-                                                                "fields": [
-                                                                  {
-                                                                    "name": "name",
-                                                                    "term": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "tname"},
-                                                                        "function": {"variable": "hydra.ext.protobuf.coder.encodeTypeName"}}}},
-                                                                  {
-                                                                    "name": "values",
-                                                                    "term": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "values"},
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "unspecifiedField"},
-                                                                            "function": {
-                                                                              "typeApplication": {
-                                                                                "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
-                                                                                "type": {"variable": "hydra.ext.protobuf.proto3.EnumValue"}}}}}}}},
-                                                                  {"name": "options", "term": {"variable": "options"}}],
-                                                                "typeName": "hydra.ext.protobuf.proto3.EnumDefinition"}}}},
-                                                        "type": {
-                                                          "application": {
-                                                            "argument": {"variable": "hydra.error.Error"},
-                                                            "function": {"variable": "hydra.context.InContext"}}}}},
-                                                    "type": {"variable": "hydra.ext.protobuf.proto3.EnumDefinition"}}},
-                                                "domain": [{"list": {"variable": "hydra.ext.protobuf.proto3.EnumValue"}}],
-                                                "parameter": "values"}}},
-                                          "function": {
-                                            "application": {
-                                              "argument": {
-                                                "application": {
-                                                  "argument": {
-                                                    "application": {
-                                                      "argument": {"variable": "indices"},
-                                                      "function": {
-                                                        "application": {
-                                                          "argument": {"variable": "fields"},
-                                                          "function": {
-                                                            "typeApplication": {
-                                                              "body": {
-                                                                "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.lists.zip"}},
-                                                                  "type": {"variable": "hydra.core.FieldType"}}},
-                                                              "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
-                                                  "function": {
-                                                    "application": {
-                                                      "argument": {
                                                         "function": {
                                                           "lambda": {
                                                             "body": {
-                                                              "application": {
-                                                                "argument": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "p"},
-                                                                    "function": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
-                                                                            "type": {"variable": "hydra.core.FieldType"}}},
-                                                                        "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                                "function": {
+                                                              "let": {
+                                                                "bindings": [
+                                                                  {
+                                                                    "name": "fname",
+                                                                    "term": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "field"},
+                                                                        "function": {
+                                                                          "function": {
+                                                                            "elimination": {"record": {"field": "name", "typeName": "hydra.core.FieldType"}}}}}},
+                                                                    "type": [
+                                                                      {
+                                                                        "constraints": null,
+                                                                        "type": {"variable": "hydra.core.Name"},
+                                                                        "variables": []}]},
+                                                                  {
+                                                                    "name": "ftype",
+                                                                    "term": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "field"},
+                                                                        "function": {
+                                                                          "function": {
+                                                                            "elimination": {"record": {"field": "type", "typeName": "hydra.core.FieldType"}}}}}},
+                                                                    "type": [
+                                                                      {
+                                                                        "constraints": null,
+                                                                        "type": {"variable": "hydra.core.Type"},
+                                                                        "variables": []}]}],
+                                                                "body": {
                                                                   "application": {
                                                                     "argument": {
+                                                                      "function": {
+                                                                        "lambda": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "either": {
+                                                                                      "@right": {
+                                                                                        "record": {
+                                                                                          "fields": [
+                                                                                            {
+                                                                                              "name": "name",
+                                                                                              "term": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "fname"},
+                                                                                                  "function": {
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "tname"},
+                                                                                                      "function": {"variable": "hydra.ext.protobuf.coder.encodeEnumValueName"}}}}}},
+                                                                                            {"name": "number", "term": {"variable": "idx"}},
+                                                                                            {"name": "options", "term": {"variable": "opts"}}],
+                                                                                          "typeName": "hydra.ext.protobuf.proto3.EnumValue"}}}},
+                                                                                  "type": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "hydra.error.Error"},
+                                                                                      "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                              "type": {"variable": "hydra.ext.protobuf.proto3.EnumValue"}}},
+                                                                          "domain": [{"list": {"variable": "hydra.ext.protobuf.proto3.Option"}}],
+                                                                          "parameter": "opts"}}},
+                                                                    "function": {
                                                                       "application": {
-                                                                        "argument": {"variable": "p"},
+                                                                        "argument": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "ftype"},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "g"},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "cx"},
+                                                                                    "function": {"variable": "hydra.ext.protobuf.coder.findOptions"}}}}}}},
                                                                         "function": {
                                                                           "typeApplication": {
                                                                             "body": {
                                                                               "typeApplication": {
-                                                                                "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
-                                                                                "type": {"variable": "hydra.core.FieldType"}}},
-                                                                            "type": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                                    "function": {"variable": "encodeEnumField"}}}}},
-                                                            "domain": [
-                                                              {
-                                                                "pair": {
-                                                                  "first": {"variable": "hydra.core.FieldType"},
-                                                                  "second": {"literal": {"integer": {"int32": {}}}}}}],
-                                                            "parameter": "p"}}},
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                    "type": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "hydra.error.Error"},
+                                                                                        "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                                "type": {"list": {"variable": "hydra.ext.protobuf.proto3.Option"}}}},
+                                                                            "type": {"variable": "hydra.ext.protobuf.proto3.EnumValue"}}}}}}}}},
+                                                            "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                            "parameter": "idx"}}},
+                                                      "domain": [{"variable": "hydra.core.FieldType"}],
+                                                      "parameter": "field"}}},
+                                                "type": [
+                                                  {
+                                                    "constraints": null,
+                                                    "type": {
                                                       "function": {
+                                                        "codomain": {
+                                                          "function": {
+                                                            "codomain": {
+                                                              "either": {
+                                                                "left": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "hydra.error.Error"},
+                                                                    "function": {"variable": "hydra.context.InContext"}}},
+                                                                "right": {"variable": "hydra.ext.protobuf.proto3.EnumValue"}}},
+                                                            "domain": {"literal": {"integer": {"int32": {}}}}}},
+                                                        "domain": {"variable": "hydra.core.FieldType"}}},
+                                                    "variables": []}]},
+                                              {
+                                                "name": "indices",
+                                                "term": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {"variable": "fts"},
+                                                        "function": {
+                                                          "typeApplication": {
+                                                            "body": {"function": {"primitive": "hydra.lib.lists.length"}},
+                                                            "type": {"variable": "hydra.core.FieldType"}}}}},
+                                                    "function": {
+                                                      "application": {
+                                                        "argument": {"literal": {"integer": {"int32": 1}}},
+                                                        "function": {"function": {"primitive": "hydra.lib.math.range"}}}}}},
+                                                "type": [
+                                                  {
+                                                    "constraints": null,
+                                                    "type": {"list": {"literal": {"integer": {"int32": {}}}}},
+                                                    "variables": []}]}],
+                                            "body": {
+                                              "application": {
+                                                "argument": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
                                                         "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
                                                               "body": {
-                                                                "typeApplication": {
-                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
-                                                                  "type": {
-                                                                    "pair": {
-                                                                      "first": {"variable": "hydra.core.FieldType"},
-                                                                      "second": {"literal": {"integer": {"int32": {}}}}}}}},
-                                                              "type": {"variable": "hydra.ext.protobuf.proto3.EnumValue"}}},
-                                                          "type": {
-                                                            "application": {
-                                                              "argument": {"variable": "hydra.error.Error"},
-                                                              "function": {"variable": "hydra.context.InContext"}}}}}}}}},
-                                              "function": {
-                                                "typeApplication": {
-                                                  "body": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "typeApplication": {
-                                                          "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
-                                                          "type": {
-                                                            "application": {
-                                                              "argument": {"variable": "hydra.error.Error"},
-                                                              "function": {"variable": "hydra.context.InContext"}}}}},
-                                                      "type": {"list": {"variable": "hydra.ext.protobuf.proto3.EnumValue"}}}},
-                                                  "type": {"variable": "hydra.ext.protobuf.proto3.EnumDefinition"}}}}}}}}},
-                                  "domain": [{"variable": "hydra.core.RowType"}],
-                                  "parameter": "rt"}}},
+                                                                "either": {
+                                                                  "@right": {
+                                                                    "record": {
+                                                                      "fields": [
+                                                                        {
+                                                                          "name": "name",
+                                                                          "term": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "tname"},
+                                                                              "function": {"variable": "hydra.ext.protobuf.coder.encodeTypeName"}}}},
+                                                                        {
+                                                                          "name": "values",
+                                                                          "term": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "values"},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "unspecifiedField"},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
+                                                                                      "type": {"variable": "hydra.ext.protobuf.proto3.EnumValue"}}}}}}}},
+                                                                        {"name": "options", "term": {"variable": "options"}}],
+                                                                      "typeName": "hydra.ext.protobuf.proto3.EnumDefinition"}}}},
+                                                              "type": {
+                                                                "application": {
+                                                                  "argument": {"variable": "hydra.error.Error"},
+                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                          "type": {"variable": "hydra.ext.protobuf.proto3.EnumDefinition"}}},
+                                                      "domain": [{"list": {"variable": "hydra.ext.protobuf.proto3.EnumValue"}}],
+                                                      "parameter": "values"}}},
+                                                "function": {
+                                                  "application": {
+                                                    "argument": {
+                                                      "application": {
+                                                        "argument": {
+                                                          "application": {
+                                                            "argument": {"variable": "indices"},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"variable": "fts"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"function": {"primitive": "hydra.lib.lists.zip"}},
+                                                                        "type": {"variable": "hydra.core.FieldType"}}},
+                                                                    "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                        "function": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "function": {
+                                                                "lambda": {
+                                                                  "body": {
+                                                                    "application": {
+                                                                      "argument": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "p"},
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                  "type": {"variable": "hydra.core.FieldType"}}},
+                                                                              "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "p"},
+                                                                              "function": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                      "type": {"variable": "hydra.core.FieldType"}}},
+                                                                                  "type": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                          "function": {"variable": "encodeEnumField"}}}}},
+                                                                  "domain": [
+                                                                    {
+                                                                      "pair": {
+                                                                        "first": {"variable": "hydra.core.FieldType"},
+                                                                        "second": {"literal": {"integer": {"int32": {}}}}}}],
+                                                                  "parameter": "p"}}},
+                                                            "function": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
+                                                                        "type": {
+                                                                          "pair": {
+                                                                            "first": {"variable": "hydra.core.FieldType"},
+                                                                            "second": {"literal": {"integer": {"int32": {}}}}}}}},
+                                                                    "type": {"variable": "hydra.ext.protobuf.proto3.EnumValue"}}},
+                                                                "type": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "hydra.error.Error"},
+                                                                    "function": {"variable": "hydra.context.InContext"}}}}}}}}},
+                                                    "function": {
+                                                      "typeApplication": {
+                                                        "body": {
+                                                          "typeApplication": {
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                "type": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "hydra.error.Error"},
+                                                                    "function": {"variable": "hydra.context.InContext"}}}}},
+                                                            "type": {"list": {"variable": "hydra.ext.protobuf.proto3.EnumValue"}}}},
+                                                        "type": {"variable": "hydra.ext.protobuf.proto3.EnumDefinition"}}}}}}}}},
+                                        "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                        "parameter": "fts"}}},
+                                  "domain": [{"variable": "hydra.core.Name"}],
+                                  "parameter": "tname"}}},
                             "domain": [{"list": {"variable": "hydra.ext.protobuf.proto3.Option"}}],
                             "parameter": "options"}}},
                       "domain": [{"variable": "hydra.graph.Graph"}],
@@ -4315,13 +4263,16 @@
                       "codomain": {
                         "function": {
                           "codomain": {
-                            "either": {
-                              "left": {
-                                "application": {
-                                  "argument": {"variable": "hydra.error.Error"},
-                                  "function": {"variable": "hydra.context.InContext"}}},
-                              "right": {"variable": "hydra.ext.protobuf.proto3.EnumDefinition"}}},
-                          "domain": {"variable": "hydra.core.RowType"}}},
+                            "function": {
+                              "codomain": {
+                                "either": {
+                                  "left": {
+                                    "application": {
+                                      "argument": {"variable": "hydra.error.Error"},
+                                      "function": {"variable": "hydra.context.InContext"}}},
+                                  "right": {"variable": "hydra.ext.protobuf.proto3.EnumDefinition"}}},
+                              "domain": {"list": {"variable": "hydra.core.FieldType"}}}},
+                          "domain": {"variable": "hydra.core.Name"}}},
                       "domain": {"list": {"variable": "hydra.ext.protobuf.proto3.Option"}}}},
                   "domain": {"variable": "hydra.graph.Graph"}}},
               "domain": {"variable": "hydra.context.Context"}}},
@@ -5022,12 +4973,7 @@
                                                                                               "application": {
                                                                                                 "argument": {
                                                                                                   "application": {
-                                                                                                    "argument": {
-                                                                                                      "application": {
-                                                                                                        "argument": {"variable": "rt"},
-                                                                                                        "function": {
-                                                                                                          "function": {
-                                                                                                            "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
+                                                                                                    "argument": {"variable": "fts"},
                                                                                                     "function": {
                                                                                                       "application": {
                                                                                                         "argument": {"variable": "cx0"},
@@ -5088,8 +5034,8 @@
                                                                                                             "first": {"list": {"variable": "hydra.ext.protobuf.proto3.Field"}},
                                                                                                             "second": {"variable": "hydra.context.Context"}}}}},
                                                                                                     "type": {"variable": "hydra.ext.protobuf.proto3.FieldType"}}}}}}},
-                                                                                        "domain": [{"variable": "hydra.core.RowType"}],
-                                                                                        "parameter": "rt"}}}}],
+                                                                                        "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                                                        "parameter": "fts"}}}}],
                                                                               "default": [
                                                                                 {
                                                                                   "application": {
@@ -5284,21 +5230,19 @@
                                                                                                 "lambda": {
                                                                                                   "body": {
                                                                                                     "application": {
-                                                                                                      "argument": {
-                                                                                                        "application": {
-                                                                                                          "argument": {"variable": "rt"},
-                                                                                                          "function": {
-                                                                                                            "function": {
-                                                                                                              "elimination": {"record": {"field": "typeName", "typeName": "hydra.core.RowType"}}}}}},
+                                                                                                      "argument": {"literal": {"string": "anonymous record type"}},
                                                                                                       "function": {
-                                                                                                        "typeApplication": {
-                                                                                                          "body": {"variable": "forNominal"},
-                                                                                                          "type": {
+                                                                                                        "application": {
+                                                                                                          "argument": {"literal": {"string": "named type reference"}},
+                                                                                                          "function": {
                                                                                                             "application": {
-                                                                                                              "argument": {"variable": "hydra.error.Error"},
-                                                                                                              "function": {"variable": "hydra.context.InContext"}}}}}}},
-                                                                                                  "domain": [{"variable": "hydra.core.RowType"}],
-                                                                                                  "parameter": "rt"}}}},
+                                                                                                              "argument": {"variable": "cx0"},
+                                                                                                              "function": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {"variable": "hydra.ext.protobuf.coder.unexpectedE"},
+                                                                                                                  "type": {"variable": "hydra.ext.protobuf.proto3.SimpleType"}}}}}}}}},
+                                                                                                  "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                                                                  "parameter": "_"}}}},
                                                                                           {
                                                                                             "name": "union",
                                                                                             "term": {
@@ -5306,21 +5250,19 @@
                                                                                                 "lambda": {
                                                                                                   "body": {
                                                                                                     "application": {
-                                                                                                      "argument": {
-                                                                                                        "application": {
-                                                                                                          "argument": {"variable": "rt"},
-                                                                                                          "function": {
-                                                                                                            "function": {
-                                                                                                              "elimination": {"record": {"field": "typeName", "typeName": "hydra.core.RowType"}}}}}},
+                                                                                                      "argument": {"literal": {"string": "anonymous union type"}},
                                                                                                       "function": {
-                                                                                                        "typeApplication": {
-                                                                                                          "body": {"variable": "forNominal"},
-                                                                                                          "type": {
+                                                                                                        "application": {
+                                                                                                          "argument": {"literal": {"string": "named type reference"}},
+                                                                                                          "function": {
                                                                                                             "application": {
-                                                                                                              "argument": {"variable": "hydra.error.Error"},
-                                                                                                              "function": {"variable": "hydra.context.InContext"}}}}}}},
-                                                                                                  "domain": [{"variable": "hydra.core.RowType"}],
-                                                                                                  "parameter": "rt"}}}},
+                                                                                                              "argument": {"variable": "cx0"},
+                                                                                                              "function": {
+                                                                                                                "typeApplication": {
+                                                                                                                  "body": {"variable": "hydra.ext.protobuf.coder.unexpectedE"},
+                                                                                                                  "type": {"variable": "hydra.ext.protobuf.proto3.SimpleType"}}}}}}}}},
+                                                                                                  "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                                                                  "parameter": "_"}}}},
                                                                                           {
                                                                                             "name": "unit",
                                                                                             "term": {
@@ -5855,155 +5797,131 @@
                                     "function": {
                                       "lambda": {
                                         "body": {
-                                          "let": {
-                                            "bindings": [
-                                              {
-                                                "name": "tname",
-                                                "term": {
-                                                  "application": {
-                                                    "argument": {"variable": "rt"},
+                                          "function": {
+                                            "lambda": {
+                                              "body": {
+                                                "application": {
+                                                  "argument": {
                                                     "function": {
-                                                      "function": {
-                                                        "elimination": {"record": {"field": "typeName", "typeName": "hydra.core.RowType"}}}}}},
-                                                "type": [
-                                                  {
-                                                    "constraints": null,
-                                                    "type": {"variable": "hydra.core.Name"},
-                                                    "variables": []}]},
-                                              {
-                                                "name": "fields",
-                                                "term": {
-                                                  "application": {
-                                                    "argument": {"variable": "rt"},
-                                                    "function": {
-                                                      "function": {
-                                                        "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
-                                                "type": [
-                                                  {
-                                                    "constraints": null,
-                                                    "type": {"list": {"variable": "hydra.core.FieldType"}},
-                                                    "variables": []}]}],
-                                            "body": {
-                                              "application": {
-                                                "argument": {
+                                                      "lambda": {
+                                                        "body": {
+                                                          "let": {
+                                                            "bindings": [
+                                                              {
+                                                                "name": "pfields",
+                                                                "term": {
+                                                                  "application": {
+                                                                    "argument": {"variable": "result"},
+                                                                    "function": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "typeApplication": {
+                                                                            "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                            "type": {"list": {"variable": "hydra.ext.protobuf.proto3.Field"}}}},
+                                                                        "type": {"variable": "hydra.context.Context"}}}}},
+                                                                "type": [
+                                                                  {
+                                                                    "constraints": null,
+                                                                    "type": {"list": {"variable": "hydra.ext.protobuf.proto3.Field"}},
+                                                                    "variables": []}]}],
+                                                            "body": {
+                                                              "typeApplication": {
+                                                                "body": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "either": {
+                                                                        "@right": {
+                                                                          "record": {
+                                                                            "fields": [
+                                                                              {
+                                                                                "name": "name",
+                                                                                "term": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "tname"},
+                                                                                    "function": {"variable": "hydra.ext.protobuf.coder.encodeTypeName"}}}},
+                                                                              {"name": "fields", "term": {"variable": "pfields"}},
+                                                                              {"name": "options", "term": {"variable": "options"}}],
+                                                                            "typeName": "hydra.ext.protobuf.proto3.MessageDefinition"}}}},
+                                                                    "type": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "hydra.error.Error"},
+                                                                        "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                "type": {"variable": "hydra.ext.protobuf.proto3.MessageDefinition"}}}}},
+                                                        "domain": [
+                                                          {
+                                                            "pair": {
+                                                              "first": {"list": {"variable": "hydra.ext.protobuf.proto3.Field"}},
+                                                              "second": {"variable": "hydra.context.Context"}}}],
+                                                        "parameter": "result"}}},
                                                   "function": {
-                                                    "lambda": {
-                                                      "body": {
-                                                        "let": {
-                                                          "bindings": [
-                                                            {
-                                                              "name": "pfields",
-                                                              "term": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "application": {
+                                                          "argument": {"variable": "fts"},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {"variable": "cx"},
+                                                              "function": {
                                                                 "application": {
-                                                                  "argument": {"variable": "result"},
+                                                                  "argument": {
+                                                                    "function": {
+                                                                      "lambda": {
+                                                                        "body": {
+                                                                          "function": {
+                                                                            "lambda": {
+                                                                              "body": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "f"},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "localNs"},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "g"},
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "argument": {"variable": "cx_"},
+                                                                                              "function": {"variable": "hydra.ext.protobuf.coder.encodeFieldType"}}}}}}}}},
+                                                                              "domain": [{"variable": "hydra.core.FieldType"}],
+                                                                              "parameter": "f"}}},
+                                                                        "domain": [{"variable": "hydra.context.Context"}],
+                                                                        "parameter": "cx_"}}},
                                                                   "function": {
                                                                     "typeApplication": {
                                                                       "body": {
                                                                         "typeApplication": {
-                                                                          "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
-                                                                          "type": {"list": {"variable": "hydra.ext.protobuf.proto3.Field"}}}},
-                                                                      "type": {"variable": "hydra.context.Context"}}}}},
-                                                              "type": [
-                                                                {
-                                                                  "constraints": null,
-                                                                  "type": {"list": {"variable": "hydra.ext.protobuf.proto3.Field"}},
-                                                                  "variables": []}]}],
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {"variable": "hydra.ext.protobuf.coder.mapAccumResult"},
+                                                                                  "type": {"variable": "hydra.context.Context"}}},
+                                                                              "type": {"variable": "hydra.core.FieldType"}}},
+                                                                          "type": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "hydra.error.Error"},
+                                                                              "function": {"variable": "hydra.context.InContext"}}}}},
+                                                                      "type": {"variable": "hydra.ext.protobuf.proto3.Field"}}}}}}}}},
+                                                      "function": {
+                                                        "typeApplication": {
                                                           "body": {
                                                             "typeApplication": {
                                                               "body": {
                                                                 "typeApplication": {
-                                                                  "body": {
-                                                                    "either": {
-                                                                      "@right": {
-                                                                        "record": {
-                                                                          "fields": [
-                                                                            {
-                                                                              "name": "name",
-                                                                              "term": {
-                                                                                "application": {
-                                                                                  "argument": {"variable": "tname"},
-                                                                                  "function": {"variable": "hydra.ext.protobuf.coder.encodeTypeName"}}}},
-                                                                            {"name": "fields", "term": {"variable": "pfields"}},
-                                                                            {"name": "options", "term": {"variable": "options"}}],
-                                                                          "typeName": "hydra.ext.protobuf.proto3.MessageDefinition"}}}},
+                                                                  "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
                                                                   "type": {
                                                                     "application": {
                                                                       "argument": {"variable": "hydra.error.Error"},
                                                                       "function": {"variable": "hydra.context.InContext"}}}}},
-                                                              "type": {"variable": "hydra.ext.protobuf.proto3.MessageDefinition"}}}}},
-                                                      "domain": [
-                                                        {
-                                                          "pair": {
-                                                            "first": {"list": {"variable": "hydra.ext.protobuf.proto3.Field"}},
-                                                            "second": {"variable": "hydra.context.Context"}}}],
-                                                      "parameter": "result"}}},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {
-                                                      "application": {
-                                                        "argument": {"variable": "fields"},
-                                                        "function": {
-                                                          "application": {
-                                                            "argument": {"variable": "cx"},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "body": {
-                                                                        "function": {
-                                                                          "lambda": {
-                                                                            "body": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "f"},
-                                                                                "function": {
-                                                                                  "application": {
-                                                                                    "argument": {"variable": "localNs"},
-                                                                                    "function": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "g"},
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "cx_"},
-                                                                                            "function": {"variable": "hydra.ext.protobuf.coder.encodeFieldType"}}}}}}}}},
-                                                                            "domain": [{"variable": "hydra.core.FieldType"}],
-                                                                            "parameter": "f"}}},
-                                                                      "domain": [{"variable": "hydra.context.Context"}],
-                                                                      "parameter": "cx_"}}},
-                                                                "function": {
-                                                                  "typeApplication": {
-                                                                    "body": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "typeApplication": {
-                                                                            "body": {
-                                                                              "typeApplication": {
-                                                                                "body": {"variable": "hydra.ext.protobuf.coder.mapAccumResult"},
-                                                                                "type": {"variable": "hydra.context.Context"}}},
-                                                                            "type": {"variable": "hydra.core.FieldType"}}},
-                                                                        "type": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.error.Error"},
-                                                                            "function": {"variable": "hydra.context.InContext"}}}}},
-                                                                    "type": {"variable": "hydra.ext.protobuf.proto3.Field"}}}}}}}}},
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "typeApplication": {
-                                                            "body": {
-                                                              "typeApplication": {
-                                                                "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
-                                                                "type": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "hydra.error.Error"},
-                                                                    "function": {"variable": "hydra.context.InContext"}}}}},
-                                                            "type": {
-                                                              "pair": {
-                                                                "first": {"list": {"variable": "hydra.ext.protobuf.proto3.Field"}},
-                                                                "second": {"variable": "hydra.context.Context"}}}}},
-                                                        "type": {"variable": "hydra.ext.protobuf.proto3.MessageDefinition"}}}}}}}}},
-                                        "domain": [{"variable": "hydra.core.RowType"}],
-                                        "parameter": "rt"}}},
+                                                              "type": {
+                                                                "pair": {
+                                                                  "first": {"list": {"variable": "hydra.ext.protobuf.proto3.Field"}},
+                                                                  "second": {"variable": "hydra.context.Context"}}}}},
+                                                          "type": {"variable": "hydra.ext.protobuf.proto3.MessageDefinition"}}}}}}},
+                                              "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                              "parameter": "fts"}}},
+                                        "domain": [{"variable": "hydra.core.Name"}],
+                                        "parameter": "tname"}}},
                                   "domain": [{"list": {"variable": "hydra.ext.protobuf.proto3.Option"}}],
                                   "parameter": "options"}}},
                             "domain": [{"variable": "hydra.module.Namespace"}],
@@ -6026,13 +5944,16 @@
                           "codomain": {
                             "function": {
                               "codomain": {
-                                "either": {
-                                  "left": {
-                                    "application": {
-                                      "argument": {"variable": "hydra.error.Error"},
-                                      "function": {"variable": "hydra.context.InContext"}}},
-                                  "right": {"variable": "hydra.ext.protobuf.proto3.MessageDefinition"}}},
-                              "domain": {"variable": "hydra.core.RowType"}}},
+                                "function": {
+                                  "codomain": {
+                                    "either": {
+                                      "left": {
+                                        "application": {
+                                          "argument": {"variable": "hydra.error.Error"},
+                                          "function": {"variable": "hydra.context.InContext"}}},
+                                      "right": {"variable": "hydra.ext.protobuf.proto3.MessageDefinition"}}},
+                                  "domain": {"list": {"variable": "hydra.core.FieldType"}}}},
+                              "domain": {"variable": "hydra.core.Name"}}},
                           "domain": {"list": {"variable": "hydra.ext.protobuf.proto3.Option"}}}},
                       "domain": {"variable": "hydra.module.Namespace"}}},
                   "domain": {"variable": "hydra.graph.Graph"}}},
@@ -7232,7 +7153,7 @@
               "lambda": {
                 "body": {
                   "application": {
-                    "argument": {"variable": "fields"},
+                    "argument": {"variable": "fts"},
                     "function": {
                       "application": {
                         "argument": {"literal": {"boolean": true}},
@@ -7274,7 +7195,7 @@
                                     "type": {"literal": {"boolean": {}}}}},
                                 "type": {"variable": "hydra.core.FieldType"}}}}}}}}},
                 "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
-                "parameter": "fields"}}}}},
+                "parameter": "fts"}}}}},
       "type": [
         {
           "constraints": null,
@@ -7312,15 +7233,10 @@
                                     "lambda": {
                                       "body": {
                                         "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "rt"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
+                                          "argument": {"variable": "fts"},
                                           "function": {"variable": "hydra.ext.protobuf.coder.isEnumFields"}}},
-                                      "domain": [{"variable": "hydra.core.RowType"}],
-                                      "parameter": "rt"}}}}],
+                                      "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                      "parameter": "fts"}}}}],
                             "default": [{"literal": {"boolean": false}}],
                             "typeName": "hydra.core.Type"}}}}}},
                 "domain": [{"variable": "hydra.core.Type"}],
@@ -7620,14 +7536,9 @@
                                     "lambda": {
                                       "body": {
                                         "application": {
-                                          "argument": {
-                                            "application": {
-                                              "argument": {"variable": "wt"},
-                                              "function": {
-                                                "function": {
-                                                  "elimination": {"record": {"field": "body", "typeName": "hydra.core.WrappedType"}}}}}},
+                                          "argument": {"variable": "wt"},
                                           "function": {"variable": "hydra.ext.protobuf.coder.simplifyType"}}},
-                                      "domain": [{"variable": "hydra.core.WrappedType"}],
+                                      "domain": [{"variable": "hydra.core.Type"}],
                                       "parameter": "wt"}}}}],
                             "default": [
                               {

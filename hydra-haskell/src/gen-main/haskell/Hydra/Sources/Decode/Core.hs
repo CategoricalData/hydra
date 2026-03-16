@@ -43,7 +43,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.core.AnnotatedTerm"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "record"),
@@ -143,7 +143,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.core.AnnotatedType"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "record"),
@@ -243,7 +243,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.core.Application"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "record"),
@@ -339,7 +339,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.core.ApplicationType"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "record"),
@@ -435,7 +435,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.core.Binding"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "record"),
@@ -551,7 +551,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.core.CaseStatement"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "record"),
@@ -669,7 +669,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.core.EitherType"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "record"),
@@ -765,7 +765,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.core.PairType"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "record"),
@@ -861,7 +861,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected union of type hydra.core.Elimination"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected union"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "union"),
@@ -870,14 +870,6 @@ module_ = Module.Module {
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermLet (Core.Let {
                             Core.letBindings = [
-                              Core.Binding {
-                                Core.bindingName = (Core.Name "tname"),
-                                Core.bindingTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-                                    Core.projectionTypeName = (Core.Name "hydra.core.Injection"),
-                                    Core.projectionField = (Core.Name "typeName")})))),
-                                  Core.applicationArgument = (Core.TermVariable (Core.Name "inj"))})),
-                                Core.bindingType = Nothing},
                               Core.Binding {
                                 Core.bindingName = (Core.Name "field"),
                                 Core.bindingTerm = (Core.TermApplication (Core.Application {
@@ -984,10 +976,7 @@ module_ = Module.Module {
                                         (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
-                                        (Core.TermLiteral (Core.LiteralString " in union type ")),
-                                        (Core.TermApplication (Core.Application {
-                                          Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "tname"))}))])}))}))))})),
+                                        (Core.TermLiteral (Core.LiteralString " in union"))])}))}))))})),
                                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.Name "f"),
                                   Core.lambdaDomain = Nothing,
@@ -1041,7 +1030,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.core.Field"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "record"),
@@ -1137,7 +1126,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.core.FieldType"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "record"),
@@ -1233,7 +1222,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected union of type hydra.core.FloatType"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected union"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "union"),
@@ -1242,14 +1231,6 @@ module_ = Module.Module {
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermLet (Core.Let {
                             Core.letBindings = [
-                              Core.Binding {
-                                Core.bindingName = (Core.Name "tname"),
-                                Core.bindingTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-                                    Core.projectionTypeName = (Core.Name "hydra.core.Injection"),
-                                    Core.projectionField = (Core.Name "typeName")})))),
-                                  Core.applicationArgument = (Core.TermVariable (Core.Name "inj"))})),
-                                Core.bindingType = Nothing},
                               Core.Binding {
                                 Core.bindingName = (Core.Name "field"),
                                 Core.bindingTerm = (Core.TermApplication (Core.Application {
@@ -1356,10 +1337,7 @@ module_ = Module.Module {
                                         (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
-                                        (Core.TermLiteral (Core.LiteralString " in union type ")),
-                                        (Core.TermApplication (Core.Application {
-                                          Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "tname"))}))])}))}))))})),
+                                        (Core.TermLiteral (Core.LiteralString " in union"))])}))}))))})),
                                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.Name "f"),
                                   Core.lambdaDomain = Nothing,
@@ -1413,7 +1391,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected union of type hydra.core.FloatValue"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected union"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "union"),
@@ -1422,14 +1400,6 @@ module_ = Module.Module {
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermLet (Core.Let {
                             Core.letBindings = [
-                              Core.Binding {
-                                Core.bindingName = (Core.Name "tname"),
-                                Core.bindingTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-                                    Core.projectionTypeName = (Core.Name "hydra.core.Injection"),
-                                    Core.projectionField = (Core.Name "typeName")})))),
-                                  Core.applicationArgument = (Core.TermVariable (Core.Name "inj"))})),
-                                Core.bindingType = Nothing},
                               Core.Binding {
                                 Core.bindingName = (Core.Name "field"),
                                 Core.bindingTerm = (Core.TermApplication (Core.Application {
@@ -1710,10 +1680,7 @@ module_ = Module.Module {
                                         (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
-                                        (Core.TermLiteral (Core.LiteralString " in union type ")),
-                                        (Core.TermApplication (Core.Application {
-                                          Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "tname"))}))])}))}))))})),
+                                        (Core.TermLiteral (Core.LiteralString " in union"))])}))}))))})),
                                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.Name "f"),
                                   Core.lambdaDomain = Nothing,
@@ -1767,7 +1734,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.core.ForallType"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "record"),
@@ -1863,7 +1830,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected union of type hydra.core.Function"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected union"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "union"),
@@ -1872,14 +1839,6 @@ module_ = Module.Module {
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermLet (Core.Let {
                             Core.letBindings = [
-                              Core.Binding {
-                                Core.bindingName = (Core.Name "tname"),
-                                Core.bindingTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-                                    Core.projectionTypeName = (Core.Name "hydra.core.Injection"),
-                                    Core.projectionField = (Core.Name "typeName")})))),
-                                  Core.applicationArgument = (Core.TermVariable (Core.Name "inj"))})),
-                                Core.bindingType = Nothing},
                               Core.Binding {
                                 Core.bindingName = (Core.Name "field"),
                                 Core.bindingTerm = (Core.TermApplication (Core.Application {
@@ -1986,10 +1945,7 @@ module_ = Module.Module {
                                         (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
-                                        (Core.TermLiteral (Core.LiteralString " in union type ")),
-                                        (Core.TermApplication (Core.Application {
-                                          Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "tname"))}))])}))}))))})),
+                                        (Core.TermLiteral (Core.LiteralString " in union"))])}))}))))})),
                                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.Name "f"),
                                   Core.lambdaDomain = Nothing,
@@ -2043,7 +1999,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.core.FunctionType"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "record"),
@@ -2139,7 +2095,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.core.Injection"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "record"),
@@ -2235,7 +2191,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected union of type hydra.core.IntegerType"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected union"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "union"),
@@ -2244,14 +2200,6 @@ module_ = Module.Module {
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermLet (Core.Let {
                             Core.letBindings = [
-                              Core.Binding {
-                                Core.bindingName = (Core.Name "tname"),
-                                Core.bindingTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-                                    Core.projectionTypeName = (Core.Name "hydra.core.Injection"),
-                                    Core.projectionField = (Core.Name "typeName")})))),
-                                  Core.applicationArgument = (Core.TermVariable (Core.Name "inj"))})),
-                                Core.bindingType = Nothing},
                               Core.Binding {
                                 Core.bindingName = (Core.Name "field"),
                                 Core.bindingTerm = (Core.TermApplication (Core.Application {
@@ -2484,10 +2432,7 @@ module_ = Module.Module {
                                         (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
-                                        (Core.TermLiteral (Core.LiteralString " in union type ")),
-                                        (Core.TermApplication (Core.Application {
-                                          Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "tname"))}))])}))}))))})),
+                                        (Core.TermLiteral (Core.LiteralString " in union"))])}))}))))})),
                                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.Name "f"),
                                   Core.lambdaDomain = Nothing,
@@ -2541,7 +2486,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected union of type hydra.core.IntegerValue"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected union"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "union"),
@@ -2550,14 +2495,6 @@ module_ = Module.Module {
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermLet (Core.Let {
                             Core.letBindings = [
-                              Core.Binding {
-                                Core.bindingName = (Core.Name "tname"),
-                                Core.bindingTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-                                    Core.projectionTypeName = (Core.Name "hydra.core.Injection"),
-                                    Core.projectionField = (Core.Name "typeName")})))),
-                                  Core.applicationArgument = (Core.TermVariable (Core.Name "inj"))})),
-                                Core.bindingType = Nothing},
                               Core.Binding {
                                 Core.bindingName = (Core.Name "field"),
                                 Core.bindingTerm = (Core.TermApplication (Core.Application {
@@ -3312,10 +3249,7 @@ module_ = Module.Module {
                                         (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
-                                        (Core.TermLiteral (Core.LiteralString " in union type ")),
-                                        (Core.TermApplication (Core.Application {
-                                          Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "tname"))}))])}))}))))})),
+                                        (Core.TermLiteral (Core.LiteralString " in union"))])}))}))))})),
                                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.Name "f"),
                                   Core.lambdaDomain = Nothing,
@@ -3369,7 +3303,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.core.Lambda"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "record"),
@@ -3485,7 +3419,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.core.Let"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "record"),
@@ -3583,7 +3517,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected union of type hydra.core.Literal"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected union"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "union"),
@@ -3592,14 +3526,6 @@ module_ = Module.Module {
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermLet (Core.Let {
                             Core.letBindings = [
-                              Core.Binding {
-                                Core.bindingName = (Core.Name "tname"),
-                                Core.bindingTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-                                    Core.projectionTypeName = (Core.Name "hydra.core.Injection"),
-                                    Core.projectionField = (Core.Name "typeName")})))),
-                                  Core.applicationArgument = (Core.TermVariable (Core.Name "inj"))})),
-                                Core.bindingType = Nothing},
                               Core.Binding {
                                 Core.bindingName = (Core.Name "field"),
                                 Core.bindingTerm = (Core.TermApplication (Core.Application {
@@ -3898,10 +3824,7 @@ module_ = Module.Module {
                                         (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
-                                        (Core.TermLiteral (Core.LiteralString " in union type ")),
-                                        (Core.TermApplication (Core.Application {
-                                          Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "tname"))}))])}))}))))})),
+                                        (Core.TermLiteral (Core.LiteralString " in union"))])}))}))))})),
                                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.Name "f"),
                                   Core.lambdaDomain = Nothing,
@@ -3955,7 +3878,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected union of type hydra.core.LiteralType"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected union"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "union"),
@@ -3964,14 +3887,6 @@ module_ = Module.Module {
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermLet (Core.Let {
                             Core.letBindings = [
-                              Core.Binding {
-                                Core.bindingName = (Core.Name "tname"),
-                                Core.bindingTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-                                    Core.projectionTypeName = (Core.Name "hydra.core.Injection"),
-                                    Core.projectionField = (Core.Name "typeName")})))),
-                                  Core.applicationArgument = (Core.TermVariable (Core.Name "inj"))})),
-                                Core.bindingType = Nothing},
                               Core.Binding {
                                 Core.bindingName = (Core.Name "field"),
                                 Core.bindingTerm = (Core.TermApplication (Core.Application {
@@ -4120,10 +4035,7 @@ module_ = Module.Module {
                                         (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
-                                        (Core.TermLiteral (Core.LiteralString " in union type ")),
-                                        (Core.TermApplication (Core.Application {
-                                          Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "tname"))}))])}))}))))})),
+                                        (Core.TermLiteral (Core.LiteralString " in union"))])}))}))))})),
                                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.Name "f"),
                                   Core.lambdaDomain = Nothing,
@@ -4177,7 +4089,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.core.MapType"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "record"),
@@ -4273,7 +4185,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected wrapped type hydra.core.Name"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected wrapped type"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "wrap"),
@@ -4390,7 +4302,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.core.Projection"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "record"),
@@ -4486,7 +4398,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.core.Record"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "record"),
@@ -4559,104 +4471,6 @@ module_ = Module.Module {
               Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.core.Record"))}))}))})),
         Core.typeSchemeConstraints = Nothing}))},
     Core.Binding {
-      Core.bindingName = (Core.Name "hydra.decode.core.rowType"),
-      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-        Core.lambdaParameter = (Core.Name "cx"),
-        Core.lambdaDomain = Nothing,
-        Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "raw"),
-          Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.either"))),
-                Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                  Core.lambdaParameter = (Core.Name "err"),
-                  Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                    Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                    Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
-              Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                Core.lambdaParameter = (Core.Name "stripped"),
-                Core.lambdaDomain = Nothing,
-                Core.lambdaBody = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
-                    Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
-                    Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.core.RowType"))}))))),
-                    Core.caseStatementCases = [
-                      Core.Field {
-                        Core.fieldName = (Core.Name "record"),
-                        Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                          Core.lambdaParameter = (Core.Name "record"),
-                          Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermLet (Core.Let {
-                            Core.letBindings = [
-                              Core.Binding {
-                                Core.bindingName = (Core.Name "fieldMap"),
-                                Core.bindingTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.toFieldMap")),
-                                  Core.applicationArgument = (Core.TermVariable (Core.Name "record"))})),
-                                Core.bindingType = Nothing}],
-                            Core.letBody = (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.bind"))),
-                                Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                    Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                      Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.requireField")),
-                                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "typeName"))})),
-                                      Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.core.name"))})),
-                                    Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
-                                  Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))}))})),
-                              Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                Core.lambdaParameter = (Core.Name "field_typeName"),
-                                Core.lambdaDomain = Nothing,
-                                Core.lambdaBody = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.bind"))),
-                                    Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                      Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                        Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                          Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.requireField")),
-                                            Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "fields"))})),
-                                          Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeList")),
-                                            Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.core.fieldType"))}))})),
-                                        Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
-                                      Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))}))})),
-                                  Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                    Core.lambdaParameter = (Core.Name "field_fields"),
-                                    Core.lambdaDomain = Nothing,
-                                    Core.lambdaBody = (Core.TermEither (Right (Core.TermRecord (Core.Record {
-                                      Core.recordTypeName = (Core.Name "hydra.core.RowType"),
-                                      Core.recordFields = [
-                                        Core.Field {
-                                          Core.fieldName = (Core.Name "typeName"),
-                                          Core.fieldTerm = (Core.TermVariable (Core.Name "field_typeName"))},
-                                        Core.Field {
-                                          Core.fieldName = (Core.Name "fields"),
-                                          Core.fieldTerm = (Core.TermVariable (Core.Name "field_fields"))}]}))))})))}))})))}))}))})))}]})))),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))})))})),
-            Core.applicationArgument = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
-                Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
-              Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))}))),
-      Core.bindingType = (Just (Core.TypeScheme {
-        Core.typeSchemeVariables = [],
-        Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-          Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
-          Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-            Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
-            Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-              Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.error.DecodingError")),
-              Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.core.RowType"))}))}))})),
-        Core.typeSchemeConstraints = Nothing}))},
-    Core.Binding {
       Core.bindingName = (Core.Name "hydra.decode.core.term"),
       Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
         Core.lambdaParameter = (Core.Name "cx"),
@@ -4682,7 +4496,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected union of type hydra.core.Term"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected union"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "union"),
@@ -4691,14 +4505,6 @@ module_ = Module.Module {
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermLet (Core.Let {
                             Core.letBindings = [
-                              Core.Binding {
-                                Core.bindingName = (Core.Name "tname"),
-                                Core.bindingTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-                                    Core.projectionTypeName = (Core.Name "hydra.core.Injection"),
-                                    Core.projectionField = (Core.Name "typeName")})))),
-                                  Core.applicationArgument = (Core.TermVariable (Core.Name "inj"))})),
-                                Core.bindingType = Nothing},
                               Core.Binding {
                                 Core.bindingName = (Core.Name "field"),
                                 Core.bindingTerm = (Core.TermApplication (Core.Application {
@@ -5138,10 +4944,7 @@ module_ = Module.Module {
                                         (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
-                                        (Core.TermLiteral (Core.LiteralString " in union type ")),
-                                        (Core.TermApplication (Core.Application {
-                                          Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "tname"))}))])}))}))))})),
+                                        (Core.TermLiteral (Core.LiteralString " in union"))])}))}))))})),
                                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.Name "f"),
                                   Core.lambdaDomain = Nothing,
@@ -5195,7 +4998,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected union of type hydra.core.Type"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected union"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "union"),
@@ -5204,14 +5007,6 @@ module_ = Module.Module {
                           Core.lambdaDomain = Nothing,
                           Core.lambdaBody = (Core.TermLet (Core.Let {
                             Core.letBindings = [
-                              Core.Binding {
-                                Core.bindingName = (Core.Name "tname"),
-                                Core.bindingTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationRecord (Core.Projection {
-                                    Core.projectionTypeName = (Core.Name "hydra.core.Injection"),
-                                    Core.projectionField = (Core.Name "typeName")})))),
-                                  Core.applicationArgument = (Core.TermVariable (Core.Name "inj"))})),
-                                Core.bindingType = Nothing},
                               Core.Binding {
                                 Core.bindingName = (Core.Name "field"),
                                 Core.bindingTerm = (Core.TermApplication (Core.Application {
@@ -5469,7 +5264,9 @@ module_ = Module.Module {
                                                 Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))})))})),
                                         Core.applicationArgument = (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.core.rowType")),
+                                            Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeList")),
+                                              Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.core.fieldType"))})),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))}))))),
                                     (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
@@ -5511,7 +5308,9 @@ module_ = Module.Module {
                                                 Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))})))})),
                                         Core.applicationArgument = (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.core.rowType")),
+                                            Core.applicationFunction = (Core.TermApplication (Core.Application {
+                                              Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.decodeList")),
+                                              Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.core.fieldType"))})),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))}))))),
                                     (Core.TermPair (Core.TermWrap (Core.WrappedTerm {
@@ -5574,7 +5373,7 @@ module_ = Module.Module {
                                                 Core.fieldTerm = (Core.TermVariable (Core.Name "t"))}}))})))})),
                                         Core.applicationArgument = (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.core.wrappedType")),
+                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.decode.core.type")),
                                             Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "input"))}))}))})))))])})),
                                 Core.bindingType = Nothing}],
@@ -5591,10 +5390,7 @@ module_ = Module.Module {
                                         (Core.TermApplication (Core.Application {
                                           Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
                                           Core.applicationArgument = (Core.TermVariable (Core.Name "fname"))})),
-                                        (Core.TermLiteral (Core.LiteralString " in union type ")),
-                                        (Core.TermApplication (Core.Application {
-                                          Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationWrap (Core.Name "hydra.core.Name")))),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "tname"))}))])}))}))))})),
+                                        (Core.TermLiteral (Core.LiteralString " in union"))])}))}))))})),
                                 Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
                                   Core.lambdaParameter = (Core.Name "f"),
                                   Core.lambdaDomain = Nothing,
@@ -5648,7 +5444,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.core.TypeApplicationTerm"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "record"),
@@ -5744,7 +5540,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.core.TypeLambda"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "record"),
@@ -5840,7 +5636,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.core.TypeScheme"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "record"),
@@ -5962,7 +5758,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.core.TypeVariableMetadata"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "record"),
@@ -6042,7 +5838,7 @@ module_ = Module.Module {
                     Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
                     Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
                       Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.core.WrappedTerm"))}))))),
+                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record"))}))))),
                     Core.caseStatementCases = [
                       Core.Field {
                         Core.fieldName = (Core.Name "record"),
@@ -6111,102 +5907,6 @@ module_ = Module.Module {
             Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
               Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.error.DecodingError")),
               Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.core.WrappedTerm"))}))}))})),
-        Core.typeSchemeConstraints = Nothing}))},
-    Core.Binding {
-      Core.bindingName = (Core.Name "hydra.decode.core.wrappedType"),
-      Core.bindingTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-        Core.lambdaParameter = (Core.Name "cx"),
-        Core.lambdaDomain = Nothing,
-        Core.lambdaBody = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-          Core.lambdaParameter = (Core.Name "raw"),
-          Core.lambdaDomain = Nothing,
-          Core.lambdaBody = (Core.TermApplication (Core.Application {
-            Core.applicationFunction = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.either"))),
-                Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                  Core.lambdaParameter = (Core.Name "err"),
-                  Core.lambdaDomain = Nothing,
-                  Core.lambdaBody = (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                    Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                    Core.wrappedTermBody = (Core.TermVariable (Core.Name "err"))}))))})))})),
-              Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                Core.lambdaParameter = (Core.Name "stripped"),
-                Core.lambdaDomain = Nothing,
-                Core.lambdaBody = (Core.TermApplication (Core.Application {
-                  Core.applicationFunction = (Core.TermFunction (Core.FunctionElimination (Core.EliminationUnion (Core.CaseStatement {
-                    Core.caseStatementTypeName = (Core.Name "hydra.core.Term"),
-                    Core.caseStatementDefault = (Just (Core.TermEither (Left (Core.TermWrap (Core.WrappedTerm {
-                      Core.wrappedTermTypeName = (Core.Name "hydra.error.DecodingError"),
-                      Core.wrappedTermBody = (Core.TermLiteral (Core.LiteralString "expected record of type hydra.core.WrappedType"))}))))),
-                    Core.caseStatementCases = [
-                      Core.Field {
-                        Core.fieldName = (Core.Name "record"),
-                        Core.fieldTerm = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                          Core.lambdaParameter = (Core.Name "record"),
-                          Core.lambdaDomain = Nothing,
-                          Core.lambdaBody = (Core.TermLet (Core.Let {
-                            Core.letBindings = [
-                              Core.Binding {
-                                Core.bindingName = (Core.Name "fieldMap"),
-                                Core.bindingTerm = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.toFieldMap")),
-                                  Core.applicationArgument = (Core.TermVariable (Core.Name "record"))})),
-                                Core.bindingType = Nothing}],
-                            Core.letBody = (Core.TermApplication (Core.Application {
-                              Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.bind"))),
-                                Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                    Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                      Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                        Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.requireField")),
-                                        Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "typeName"))})),
-                                      Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.core.name"))})),
-                                    Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
-                                  Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))}))})),
-                              Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                Core.lambdaParameter = (Core.Name "field_typeName"),
-                                Core.lambdaDomain = Nothing,
-                                Core.lambdaBody = (Core.TermApplication (Core.Application {
-                                  Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                    Core.applicationFunction = (Core.TermFunction (Core.FunctionPrimitive (Core.Name "hydra.lib.eithers.bind"))),
-                                    Core.applicationArgument = (Core.TermApplication (Core.Application {
-                                      Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                        Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                          Core.applicationFunction = (Core.TermApplication (Core.Application {
-                                            Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.extract.helpers.requireField")),
-                                            Core.applicationArgument = (Core.TermLiteral (Core.LiteralString "body"))})),
-                                          Core.applicationArgument = (Core.TermVariable (Core.Name "hydra.decode.core.type"))})),
-                                        Core.applicationArgument = (Core.TermVariable (Core.Name "fieldMap"))})),
-                                      Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))}))})),
-                                  Core.applicationArgument = (Core.TermFunction (Core.FunctionLambda (Core.Lambda {
-                                    Core.lambdaParameter = (Core.Name "field_body"),
-                                    Core.lambdaDomain = Nothing,
-                                    Core.lambdaBody = (Core.TermEither (Right (Core.TermRecord (Core.Record {
-                                      Core.recordTypeName = (Core.Name "hydra.core.WrappedType"),
-                                      Core.recordFields = [
-                                        Core.Field {
-                                          Core.fieldName = (Core.Name "typeName"),
-                                          Core.fieldTerm = (Core.TermVariable (Core.Name "field_typeName"))},
-                                        Core.Field {
-                                          Core.fieldName = (Core.Name "body"),
-                                          Core.fieldTerm = (Core.TermVariable (Core.Name "field_body"))}]}))))})))}))})))}))}))})))}]})))),
-                  Core.applicationArgument = (Core.TermVariable (Core.Name "stripped"))}))})))})),
-            Core.applicationArgument = (Core.TermApplication (Core.Application {
-              Core.applicationFunction = (Core.TermApplication (Core.Application {
-                Core.applicationFunction = (Core.TermVariable (Core.Name "hydra.lexical.stripAndDereferenceTermEither")),
-                Core.applicationArgument = (Core.TermVariable (Core.Name "cx"))})),
-              Core.applicationArgument = (Core.TermVariable (Core.Name "raw"))}))}))})))}))),
-      Core.bindingType = (Just (Core.TypeScheme {
-        Core.typeSchemeVariables = [],
-        Core.typeSchemeType = (Core.TypeFunction (Core.FunctionType {
-          Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.graph.Graph")),
-          Core.functionTypeCodomain = (Core.TypeFunction (Core.FunctionType {
-            Core.functionTypeDomain = (Core.TypeVariable (Core.Name "hydra.core.Term")),
-            Core.functionTypeCodomain = (Core.TypeEither (Core.EitherType {
-              Core.eitherTypeLeft = (Core.TypeVariable (Core.Name "hydra.error.DecodingError")),
-              Core.eitherTypeRight = (Core.TypeVariable (Core.Name "hydra.core.WrappedType"))}))}))})),
         Core.typeSchemeConstraints = Nothing}))}],
   Module.moduleTermDependencies = [
     Module.Namespace "hydra.extract.helpers",

@@ -12,7 +12,7 @@ public interface Parsing {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseError>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseError> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.parsing.ParseError>left(new hydra.error.DecodingError("expected record of type hydra.parsing.ParseError"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.parsing.ParseError>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override
@@ -94,7 +94,7 @@ public interface Parsing {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseResult<T0>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseResult<T0>> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.parsing.ParseResult<T0>>left(new hydra.error.DecodingError("expected union of type hydra.parsing.ParseResult"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.parsing.ParseResult<T0>>left(new hydra.error.DecodingError("expected union"));
         }
         
         @Override
@@ -102,13 +102,11 @@ public interface Parsing {
           hydra.core.Field field = ((inj).value).field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
-          hydra.core.Name tname = ((inj).value).typeName;
           return hydra.lib.maybes.Maybe.applyLazy(
             () -> hydra.util.Either.<hydra.error.DecodingError, hydra.parsing.ParseResult<T0>>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "no such field ",
               (fname).value,
-              " in union type ",
-              (tname).value)))),
+              " in union")))),
             (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseResult<T0>>>, hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseResult<T0>>>) (f -> (f).apply(fterm)),
             hydra.lib.maps.Lookup.apply(
               fname,
@@ -144,7 +142,7 @@ public interface Parsing {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseSuccess<T0>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseSuccess<T0>> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.parsing.ParseSuccess<T0>>left(new hydra.error.DecodingError("expected record of type hydra.parsing.ParseSuccess"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.parsing.ParseSuccess<T0>>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override

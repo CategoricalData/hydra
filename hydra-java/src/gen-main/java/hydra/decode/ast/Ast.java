@@ -12,7 +12,7 @@ public interface Ast {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Associativity>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.ast.Associativity> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.ast.Associativity>left(new hydra.error.DecodingError("expected union of type hydra.ast.Associativity"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.ast.Associativity>left(new hydra.error.DecodingError("expected union"));
         }
         
         @Override
@@ -20,7 +20,6 @@ public interface Ast {
           hydra.core.Field field = ((inj).value).field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
-          hydra.core.Name tname = ((inj).value).typeName;
           hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Associativity>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Associativity>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Associativity>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Associativity>>>(new hydra.core.Name("none"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Associativity>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<java.lang.Void, hydra.ast.Associativity>) (t -> new hydra.ast.Associativity.None()),
@@ -46,8 +45,7 @@ public interface Ast {
             () -> hydra.util.Either.<hydra.error.DecodingError, hydra.ast.Associativity>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "no such field ",
               (fname).value,
-              " in union type ",
-              (tname).value)))),
+              " in union")))),
             (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Associativity>>, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Associativity>>) (f -> (f).apply(fterm)),
             hydra.lib.maps.Lookup.apply(
               fname,
@@ -65,7 +63,7 @@ public interface Ast {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.BlockStyle>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.ast.BlockStyle> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.ast.BlockStyle>left(new hydra.error.DecodingError("expected record of type hydra.ast.BlockStyle"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.ast.BlockStyle>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override
@@ -181,7 +179,7 @@ public interface Ast {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.BracketExpr>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.ast.BracketExpr> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.ast.BracketExpr>left(new hydra.error.DecodingError("expected record of type hydra.ast.BracketExpr"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.ast.BracketExpr>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override
@@ -225,7 +223,7 @@ public interface Ast {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Brackets>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.ast.Brackets> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.ast.Brackets>left(new hydra.error.DecodingError("expected record of type hydra.ast.Brackets"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.ast.Brackets>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override
@@ -261,7 +259,7 @@ public interface Ast {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Expr>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.ast.Expr> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.ast.Expr>left(new hydra.error.DecodingError("expected union of type hydra.ast.Expr"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.ast.Expr>left(new hydra.error.DecodingError("expected union"));
         }
         
         @Override
@@ -269,7 +267,6 @@ public interface Ast {
           hydra.core.Field field = ((inj).value).field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
-          hydra.core.Name tname = ((inj).value).typeName;
           hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Expr>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Expr>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Expr>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Expr>>>(new hydra.core.Name("const"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Expr>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<hydra.ast.Symbol, hydra.ast.Expr>) (t -> new hydra.ast.Expr.Const(t)),
@@ -295,8 +292,7 @@ public interface Ast {
             () -> hydra.util.Either.<hydra.error.DecodingError, hydra.ast.Expr>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "no such field ",
               (fname).value,
-              " in union type ",
-              (tname).value)))),
+              " in union")))),
             (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Expr>>, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Expr>>) (f -> (f).apply(fterm)),
             hydra.lib.maps.Lookup.apply(
               fname,
@@ -314,7 +310,7 @@ public interface Ast {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.IndentedExpression>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.ast.IndentedExpression> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.ast.IndentedExpression>left(new hydra.error.DecodingError("expected record of type hydra.ast.IndentedExpression"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.ast.IndentedExpression>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override
@@ -350,7 +346,7 @@ public interface Ast {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.IndentStyle>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.ast.IndentStyle> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.ast.IndentStyle>left(new hydra.error.DecodingError("expected union of type hydra.ast.IndentStyle"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.ast.IndentStyle>left(new hydra.error.DecodingError("expected union"));
         }
         
         @Override
@@ -358,7 +354,6 @@ public interface Ast {
           hydra.core.Field field = ((inj).value).field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
-          hydra.core.Name tname = ((inj).value).typeName;
           hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.IndentStyle>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.IndentStyle>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.IndentStyle>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.IndentStyle>>>(new hydra.core.Name("allLines"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.IndentStyle>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<String, hydra.ast.IndentStyle>) (t -> new hydra.ast.IndentStyle.AllLines(t)),
@@ -420,8 +415,7 @@ public interface Ast {
             () -> hydra.util.Either.<hydra.error.DecodingError, hydra.ast.IndentStyle>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "no such field ",
               (fname).value,
-              " in union type ",
-              (tname).value)))),
+              " in union")))),
             (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.IndentStyle>>, hydra.util.Either<hydra.error.DecodingError, hydra.ast.IndentStyle>>) (f -> (f).apply(fterm)),
             hydra.lib.maps.Lookup.apply(
               fname,
@@ -439,7 +433,7 @@ public interface Ast {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Op>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.ast.Op> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.ast.Op>left(new hydra.error.DecodingError("expected record of type hydra.ast.Op"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.ast.Op>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override
@@ -491,7 +485,7 @@ public interface Ast {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.OpExpr>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.ast.OpExpr> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.ast.OpExpr>left(new hydra.error.DecodingError("expected record of type hydra.ast.OpExpr"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.ast.OpExpr>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override
@@ -535,7 +529,7 @@ public interface Ast {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Padding>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.ast.Padding> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.ast.Padding>left(new hydra.error.DecodingError("expected record of type hydra.ast.Padding"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.ast.Padding>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override
@@ -571,7 +565,7 @@ public interface Ast {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Precedence>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.ast.Precedence> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.ast.Precedence>left(new hydra.error.DecodingError("expected wrapped type hydra.ast.Precedence"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.ast.Precedence>left(new hydra.error.DecodingError("expected wrapped type"));
         }
         
         @Override
@@ -627,7 +621,7 @@ public interface Ast {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Symbol>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.ast.Symbol> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.ast.Symbol>left(new hydra.error.DecodingError("expected wrapped type hydra.ast.Symbol"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.ast.Symbol>left(new hydra.error.DecodingError("expected wrapped type"));
         }
         
         @Override
@@ -673,7 +667,7 @@ public interface Ast {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Ws>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.ast.Ws> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.ast.Ws>left(new hydra.error.DecodingError("expected union of type hydra.ast.Ws"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.ast.Ws>left(new hydra.error.DecodingError("expected union"));
         }
         
         @Override
@@ -681,7 +675,6 @@ public interface Ast {
           hydra.core.Field field = ((inj).value).field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
-          hydra.core.Name tname = ((inj).value).typeName;
           hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Ws>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Ws>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Ws>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Ws>>>(new hydra.core.Name("none"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Ws>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<java.lang.Void, hydra.ast.Ws>) (t -> new hydra.ast.Ws.None()),
@@ -735,8 +728,7 @@ public interface Ast {
             () -> hydra.util.Either.<hydra.error.DecodingError, hydra.ast.Ws>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "no such field ",
               (fname).value,
-              " in union type ",
-              (tname).value)))),
+              " in union")))),
             (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Ws>>, hydra.util.Either<hydra.error.DecodingError, hydra.ast.Ws>>) (f -> (f).apply(fterm)),
             hydra.lib.maps.Lookup.apply(
               fname,

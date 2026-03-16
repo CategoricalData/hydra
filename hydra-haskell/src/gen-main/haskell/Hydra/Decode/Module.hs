@@ -25,8 +25,7 @@ import qualified Data.Set as S
 definition :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Module.Definition)
 definition cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -35,9 +34,8 @@ definition cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\s
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.module.Definition"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 fileExtension :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Module.FileExtension)
 fileExtension cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -46,7 +44,7 @@ fileExtension cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) 
       Core.LiteralString v2 -> (Right v2)
       _ -> (Left (Error.DecodingError "expected string literal"))) v1)
     _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0)))
-  _ -> (Left (Error.DecodingError "expected wrapped type hydra.module.FileExtension"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected wrapped type"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 module_ :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Module.Module)
 module_ cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -62,7 +60,7 @@ module_ cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stri
       Module.moduleTermDependencies = field_termDependencies,
       Module.moduleTypeDependencies = field_typeDependencies,
       Module.moduleDescription = field_description})))))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.module.Module"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 namespace :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Module.Namespace)
 namespace cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -71,7 +69,7 @@ namespace cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\st
       Core.LiteralString v2 -> (Right v2)
       _ -> (Left (Error.DecodingError "expected string literal"))) v1)
     _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0)))
-  _ -> (Left (Error.DecodingError "expected wrapped type hydra.module.Namespace"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected wrapped type"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 namespaces :: ((Graph.Graph -> Core.Term -> Either Error.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Module.Namespaces t0))
 namespaces n cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -80,7 +78,7 @@ namespaces n cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (
     in (Eithers.bind (Helpers.requireField "focus" (Helpers.decodePair namespace n) fieldMap cx) (\field_focus -> Eithers.bind (Helpers.requireField "mapping" (Helpers.decodeMap namespace n) fieldMap cx) (\field_mapping -> Right (Module.Namespaces {
       Module.namespacesFocus = field_focus,
       Module.namespacesMapping = field_mapping}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.module.Namespaces"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 qualifiedName :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Module.QualifiedName)
 qualifiedName cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -93,7 +91,7 @@ qualifiedName cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) 
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_local -> Right (Module.QualifiedName {
       Module.qualifiedNameNamespace = field_namespace,
       Module.qualifiedNameLocal = field_local}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.module.QualifiedName"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 termDefinition :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Module.TermDefinition)
 termDefinition cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -103,7 +101,7 @@ termDefinition cx raw = (Eithers.either (\err -> Left (Error.DecodingError err))
       Module.termDefinitionName = field_name,
       Module.termDefinitionTerm = field_term,
       Module.termDefinitionType = field_type})))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.module.TermDefinition"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 typeDefinition :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Module.TypeDefinition)
 typeDefinition cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -112,4 +110,4 @@ typeDefinition cx raw = (Eithers.either (\err -> Left (Error.DecodingError err))
     in (Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "type" Core_.type_ fieldMap cx) (\field_type -> Right (Module.TypeDefinition {
       Module.typeDefinitionName = field_name,
       Module.typeDefinitionType = field_type}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.module.TypeDefinition"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))

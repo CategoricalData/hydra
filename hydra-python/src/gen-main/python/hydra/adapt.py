@@ -67,14 +67,12 @@ def type_alternatives(type: hydra.core.Type) -> frozenlist[hydra.core.Type]:
             return (cast(hydra.core.Type, hydra.core.TypeList(ot)),)
         
         case hydra.core.TypeUnion(value=rt):
-            tname = rt.type_name
-            fields = rt.fields
             def to_opt_field(f: hydra.core.FieldType) -> hydra.core.FieldType:
                 return hydra.core.FieldType(f.name, cast(hydra.core.Type, hydra.core.TypeMaybe(f.type)))
             @lru_cache(1)
             def opt_fields() -> frozenlist[hydra.core.FieldType]:
-                return hydra.lib.lists.map((lambda x1: to_opt_field(x1)), fields)
-            return (cast(hydra.core.Type, hydra.core.TypeRecord(hydra.core.RowType(tname, opt_fields()))),)
+                return hydra.lib.lists.map((lambda x1: to_opt_field(x1)), rt)
+            return (cast(hydra.core.Type, hydra.core.TypeRecord(opt_fields())),)
         
         case hydra.core.TypeUnit():
             return (cast(hydra.core.Type, hydra.core.TypeLiteral(cast(hydra.core.LiteralType, hydra.core.LiteralTypeBoolean()))),)
@@ -332,7 +330,7 @@ def term_alternatives(cx: hydra.context.Context, graph: hydra.graph.Graph, term:
             def for_field_type(ft: hydra.core.FieldType) -> hydra.core.Field:
                 ftname = ft.name
                 return hydra.core.Field(fname, cast(hydra.core.Term, hydra.core.TermMaybe(hydra.lib.logic.if_else(hydra.lib.equality.equal(ftname, fname), (lambda : Just(fterm)), (lambda : Nothing())))))
-            return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda ic: hydra.show.error.error(ic.object)), (lambda x: x), hydra.schemas.require_union_type(cx, graph, tname)), (lambda rt: Right((cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(tname, hydra.lib.lists.map((lambda x1: for_field_type(x1)), rt.fields)))),))))
+            return hydra.lib.eithers.bind(hydra.lib.eithers.bimap((lambda ic: hydra.show.error.error(ic.object)), (lambda x: x), hydra.schemas.require_union_type(cx, graph, tname)), (lambda rt: Right((cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(tname, hydra.lib.lists.map((lambda x1: for_field_type(x1)), rt)))),))))
         
         case hydra.core.TermUnit():
             return Right((cast(hydra.core.Term, hydra.core.TermLiteral(cast(hydra.core.Literal, hydra.core.LiteralBoolean(True)))),))

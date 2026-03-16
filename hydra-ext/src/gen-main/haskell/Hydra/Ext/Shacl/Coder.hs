@@ -56,7 +56,7 @@ shaclCoder mod cx g =
               Context.inContextContext = cx}) (\_t -> _t) (Core_.type_ g (Core.bindingTerm el))) (\_typ -> Eithers.map (\_cp -> Model.Definition {
               Model.definitionIri = (elementIri el),
               Model.definitionTarget = (Model.ShapeNode (Model.NodeShape {
-                Model.nodeShapeCommon = _cp}))}) (encodeType _typ cx)))
+                Model.nodeShapeCommon = _cp}))}) (encodeType (Core.bindingName el) _typ cx)))
   in (Eithers.map (\_shapes -> (Model.ShapesGraph (Sets.fromList _shapes), cx)) (Eithers.mapList toShape typeEls))
 
 -- | Construct CommonProperties from a list of constraints, using defaults for other fields
@@ -115,7 +115,7 @@ encodeFieldType rname order ft cx =
                   Model.propertyShapeDescription = (Syntax.LangStrings Maps.empty),
                   Model.propertyShapeName = (Syntax.LangStrings Maps.empty),
                   Model.propertyShapeOrder = order,
-                  Model.propertyShapePath = iri}}) (encodeType t cx))
+                  Model.propertyShapePath = iri}}) (encodeType rname t cx))
   in (forType (Just 1) (Just 1) ftype)
 
 -- | Encode a LiteralType as SHACL CommonProperties with an XSD datatype constraint
@@ -215,27 +215,21 @@ foldAccumResult :: ((t0 -> t1 -> Either t2 (t3, t0)) -> t0 -> [t1] -> Either t2 
 foldAccumResult f cx xs = (Logic.ifElse (Lists.null xs) (Right ([], cx)) (Eithers.bind (f cx (Lists.head xs)) (\_r -> Eithers.map (\_rest -> (Lists.cons (Pairs.first _r) (Pairs.first _rest), (Pairs.second _rest))) (foldAccumResult f (Pairs.second _r) (Lists.tail xs)))))
 
 -- | Encode a Hydra type as SHACL CommonProperties
-encodeType :: (Core.Type -> Context.Context -> Either (Context.InContext Error.Error) Model.CommonProperties)
-encodeType typ cx =  
+encodeType :: (Core.Name -> Core.Type -> Context.Context -> Either (Context.InContext Error.Error) Model.CommonProperties)
+encodeType tname typ cx =  
   let any = (Right (common []))
   in ((\x -> case x of
     Core.TypeList _ -> any
     Core.TypeLiteral v0 -> (Right (encodeLiteralType v0))
     Core.TypeMap _ -> any
     Core.TypeWrap _ -> any
-    Core.TypeRecord v0 ->  
-      let rname = (Core.rowTypeTypeName v0) 
-          fields = (Core.rowTypeFields v0)
-      in (Eithers.map (\_props -> common [
-        Model.CommonConstraintProperty (Sets.fromList (Lists.map (\_p -> Model.ReferenceDefinition _p) _props))]) (Eithers.mapList (\_pair -> encodeFieldType rname (Just (Pairs.first _pair)) (Pairs.second _pair) cx) (Lists.zip (Lists.map (\_i -> Literals.int32ToBigint _i) (Math.range 0 (Lists.length fields))) fields)))
+    Core.TypeRecord v0 -> (Eithers.map (\_props -> common [
+      Model.CommonConstraintProperty (Sets.fromList (Lists.map (\_p -> Model.ReferenceDefinition _p) _props))]) (Eithers.mapList (\_pair -> encodeFieldType tname (Just (Pairs.first _pair)) (Pairs.second _pair) cx) (Lists.zip (Lists.map (\_i -> Literals.int32ToBigint _i) (Math.range 0 (Lists.length v0))) v0)))
     Core.TypeSet _ -> any
-    Core.TypeUnion v0 ->  
-      let rname = (Core.rowTypeTypeName v0) 
-          fields = (Core.rowTypeFields v0)
-      in (Eithers.map (\_props -> common [
-        Model.CommonConstraintXone (Sets.fromList (Lists.map (\_p -> Model.ReferenceAnonymous (node [
-          Model.CommonConstraintProperty (Sets.fromList [
-            Model.ReferenceDefinition _p])])) _props))]) (Eithers.mapList (\_ft -> encodeFieldType rname Nothing _ft cx) fields))
+    Core.TypeUnion v0 -> (Eithers.map (\_props -> common [
+      Model.CommonConstraintXone (Sets.fromList (Lists.map (\_p -> Model.ReferenceAnonymous (node [
+        Model.CommonConstraintProperty (Sets.fromList [
+          Model.ReferenceDefinition _p])])) _props))]) (Eithers.mapList (\_ft -> encodeFieldType tname Nothing _ft cx) v0))
     _ -> (unexpectedE cx "type" "unsupported type variant")) (Rewriting.deannotateType typ))
 
 -- | Construct a SHACL node shape from a list of common constraints

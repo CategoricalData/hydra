@@ -27,7 +27,7 @@ public interface Topology {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.topology.TarjanState>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.topology.TarjanState> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.topology.TarjanState>left(new hydra.error.DecodingError("expected record of type hydra.topology.TarjanState"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.topology.TarjanState>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override

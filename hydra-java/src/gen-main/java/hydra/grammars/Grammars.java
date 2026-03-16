@@ -161,7 +161,7 @@ public interface Grammars {
     forPat.set((java.util.function.Function<hydra.grammar.Pattern, hydra.util.ConsList<hydra.util.Pair<String, hydra.core.Type>>>) (pat2 -> (pat2).accept(new hydra.grammar.Pattern.PartialVisitor<>() {
       @Override
       public hydra.util.ConsList<hydra.util.Pair<String, hydra.core.Type>> visit(hydra.grammar.Pattern.Alternatives pats) {
-        return (((forRecordOrUnion.get()).apply(false)).apply((java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.core.Type>) (fields -> new hydra.core.Type.Union(new hydra.core.RowType(hydra.constants.Constants.placeholderName(), fields))))).apply((pats).value);
+        return (((forRecordOrUnion.get()).apply(false)).apply((java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.core.Type>) (fields -> new hydra.core.Type.Union(fields)))).apply((pats).value);
       }
       
       @Override
@@ -208,7 +208,7 @@ public interface Grammars {
       
       @Override
       public hydra.util.ConsList<hydra.util.Pair<String, hydra.core.Type>> visit(hydra.grammar.Pattern.Sequence pats) {
-        return (((forRecordOrUnion.get()).apply(true)).apply((java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.core.Type>) (fields -> new hydra.core.Type.Record(new hydra.core.RowType(hydra.constants.Constants.placeholderName(), fields))))).apply((pats).value);
+        return (((forRecordOrUnion.get()).apply(true)).apply((java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.core.Type>) (fields -> new hydra.core.Type.Record(fields)))).apply((pats).value);
       }
       
       @Override
@@ -339,45 +339,8 @@ public interface Grammars {
     });
   }
   
-  static hydra.core.Type replacePlaceholders(hydra.core.Name elName, hydra.core.Type typ) {
-    return hydra.rewriting.Rewriting.rewriteType(
-      (java.util.function.Function<java.util.function.Function<hydra.core.Type, hydra.core.Type>, java.util.function.Function<hydra.core.Type, hydra.core.Type>>) (recurse -> (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (t -> (t).accept(new hydra.core.Type.PartialVisitor<>() {
-        @Override
-        public hydra.core.Type otherwise(hydra.core.Type instance) {
-          return t;
-        }
-        
-        @Override
-        public hydra.core.Type visit(hydra.core.Type.Record rt) {
-          return hydra.lib.logic.IfElse.lazy(
-            hydra.lib.equality.Equal.apply(
-              ((rt).value).typeName,
-              hydra.constants.Constants.placeholderName()),
-            () -> new hydra.core.Type.Record(new hydra.core.RowType(elName, ((rt).value).fields)),
-            () -> t);
-        }
-        
-        @Override
-        public hydra.core.Type visit(hydra.core.Type.Union ut) {
-          return hydra.lib.logic.IfElse.lazy(
-            hydra.lib.equality.Equal.apply(
-              ((ut).value).typeName,
-              hydra.constants.Constants.placeholderName()),
-            () -> new hydra.core.Type.Union(new hydra.core.RowType(elName, ((ut).value).fields)),
-            () -> t);
-        }
-        
-        @Override
-        public hydra.core.Type visit(hydra.core.Type.Wrap wt) {
-          return hydra.lib.logic.IfElse.lazy(
-            hydra.lib.equality.Equal.apply(
-              ((wt).value).typeName,
-              hydra.constants.Constants.placeholderName()),
-            () -> new hydra.core.Type.Wrap(new hydra.core.WrappedType(elName, ((wt).value).body)),
-            () -> t);
-        }
-      }))),
-      typ);
+  static <T0, T1> T1 replacePlaceholders(T0 elName, T1 typ) {
+    return typ;
   }
   
   static hydra.util.ConsList<hydra.grammar.Pattern> simplify(Boolean isRecord, hydra.util.ConsList<hydra.grammar.Pattern> pats) {
@@ -408,7 +371,7 @@ public interface Grammars {
     return (t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.core.Type otherwise(hydra.core.Type instance) {
-        return new hydra.core.Type.Wrap(new hydra.core.WrappedType(new hydra.core.Name("Placeholder"), t));
+        return new hydra.core.Type.Wrap(t);
       }
       
       @Override

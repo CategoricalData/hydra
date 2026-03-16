@@ -62,10 +62,6 @@ public interface Constants {
     return 2147483647;
   }
   
-  static hydra.core.Name placeholderName() {
-    return new hydra.core.Name("Placeholder");
-  }
-  
   static Integer maxTraceDepth() {
     return 5000;
   }

@@ -335,4 +335,4 @@ decodeModuleFromJson bsGraph universeModules doStripTypeSchemes jsonVal =
     let schemaMap = (buildSchemaMap graph)
     in  
       let modType = (Core.TypeVariable (Core.Name "hydra.module.Module"))
-      in (Eithers.either (\err -> Left err) (\term -> Eithers.either (\decErr -> Left (Error.unDecodingError decErr)) (\mod -> Right (Logic.ifElse doStripTypeSchemes (stripModuleTypeSchemes mod) mod)) (Module.module_ graph term)) (Decode.fromJson schemaMap modType jsonVal))
+      in (Eithers.either (\err -> Left err) (\term -> Eithers.either (\decErr -> Left (Error.unDecodingError decErr)) (\mod -> Right (Logic.ifElse doStripTypeSchemes (stripModuleTypeSchemes mod) mod)) (Module.module_ graph term)) (Decode.fromJson schemaMap (Core.Name "hydra.module.Module") modType jsonVal))

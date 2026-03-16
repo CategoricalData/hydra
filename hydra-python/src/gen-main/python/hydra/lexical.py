@@ -130,10 +130,10 @@ def fields_of(t: hydra.core.Type) -> frozenlist[hydra.core.FieldType]:
                 continue
             
             case hydra.core.TypeRecord(value=rt):
-                return rt.fields
+                return rt
             
             case hydra.core.TypeUnion(value=rt2):
-                return rt2.fields
+                return rt2
             
             case _:
                 return ()

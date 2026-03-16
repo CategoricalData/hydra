@@ -148,8 +148,8 @@ fieldsOf t =
   let stripped = (Rewriting.deannotateType t)
   in ((\x -> case x of
     Core.TypeForall v0 -> (fieldsOf (Core.forallTypeBody v0))
-    Core.TypeRecord v0 -> (id v0)
-    Core.TypeUnion v0 -> (id v0)
+    Core.TypeRecord v0 -> v0
+    Core.TypeUnion v0 -> v0
     _ -> []) stripped)
 
 getField :: (Context.Context -> M.Map Core.Name t0 -> Core.Name -> (t0 -> Either (Context.InContext Error.Error) t1) -> Either (Context.InContext Error.Error) t1)

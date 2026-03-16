@@ -167,12 +167,12 @@ public interface Lexical {
       
       @Override
       public hydra.util.ConsList<hydra.core.FieldType> visit(hydra.core.Type.Record rt) {
-        return ((rt).value).fields;
+        return (rt).value;
       }
       
       @Override
       public hydra.util.ConsList<hydra.core.FieldType> visit(hydra.core.Type.Union rt) {
-        return ((rt).value).fields;
+        return (rt).value;
       }
     });
   }

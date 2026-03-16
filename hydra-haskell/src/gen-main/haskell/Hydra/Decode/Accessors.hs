@@ -30,7 +30,7 @@ accessorEdge cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (
       Accessors.accessorEdgeSource = field_source,
       Accessors.accessorEdgePath = field_path,
       Accessors.accessorEdgeTarget = field_target})))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.accessors.AccessorEdge"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 accessorGraph :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Accessors.AccessorGraph)
 accessorGraph cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -39,7 +39,7 @@ accessorGraph cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) 
     in (Eithers.bind (Helpers.requireField "nodes" (Helpers.decodeList accessorNode) fieldMap cx) (\field_nodes -> Eithers.bind (Helpers.requireField "edges" (Helpers.decodeList accessorEdge) fieldMap cx) (\field_edges -> Right (Accessors.AccessorGraph {
       Accessors.accessorGraphNodes = field_nodes,
       Accessors.accessorGraphEdges = field_edges}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.accessors.AccessorGraph"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 accessorNode :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Accessors.AccessorNode)
 accessorNode cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -57,18 +57,17 @@ accessorNode cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (
       Accessors.accessorNodeName = field_name,
       Accessors.accessorNodeLabel = field_label,
       Accessors.accessorNodeId = field_id})))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.accessors.AccessorNode"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 accessorPath :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Accessors.AccessorPath)
 accessorPath cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermWrap v0 -> (Eithers.map (\b -> Accessors.AccessorPath b) (Helpers.decodeList termAccessor cx (Core.wrappedTermBody v0)))
-  _ -> (Left (Error.DecodingError "expected wrapped type hydra.accessors.AccessorPath"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected wrapped type"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 termAccessor :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Accessors.TermAccessor)
 termAccessor cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -125,6 +124,5 @@ termAccessor cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.accessors.TermAccessor"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))

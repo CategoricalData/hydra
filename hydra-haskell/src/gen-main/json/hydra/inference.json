@@ -6016,7 +6016,10 @@
                                                                                       "function": {
                                                                                         "application": {
                                                                                           "argument": {"variable": "fcx2"},
-                                                                                          "function": {"variable": "hydra.extract.core.unionType"}}}}}}},
+                                                                                          "function": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {"variable": "hydra.extract.core.unionType"},
+                                                                                              "type": {"variable": "hydra.core.Name"}}}}}}}}},
                                                                               "function": {
                                                                                 "typeApplication": {
                                                                                   "body": {
@@ -8177,7 +8180,10 @@
                                                                                                                 "function": {
                                                                                                                   "application": {
                                                                                                                     "argument": {"variable": "fcx3"},
-                                                                                                                    "function": {"variable": "hydra.extract.core.unionType"}}}}}}},
+                                                                                                                    "function": {
+                                                                                                                      "typeApplication": {
+                                                                                                                        "body": {"variable": "hydra.extract.core.unionType"},
+                                                                                                                        "type": {"variable": "hydra.core.Name"}}}}}}}}},
                                                                                                         "function": {
                                                                                                           "typeApplication": {
                                                                                                             "body": {
@@ -14268,7 +14274,10 @@
                                                                               "function": {
                                                                                 "application": {
                                                                                   "argument": {"variable": "fcx2"},
-                                                                                  "function": {"variable": "hydra.extract.core.recordType"}}}}}}},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {"variable": "hydra.extract.core.recordType"},
+                                                                                      "type": {"variable": "hydra.core.Name"}}}}}}}}},
                                                                       "function": {
                                                                         "typeApplication": {
                                                                           "body": {
@@ -14778,46 +14787,39 @@
                                                                                                                 "field": {
                                                                                                                   "name": "record",
                                                                                                                   "term": {
-                                                                                                                    "record": {
-                                                                                                                      "fields": [
-                                                                                                                        {"name": "typeName", "term": {"variable": "tname"}},
-                                                                                                                        {
-                                                                                                                          "name": "fields",
-                                                                                                                          "term": {
+                                                                                                                    "application": {
+                                                                                                                      "argument": {"variable": "itypes"},
+                                                                                                                      "function": {
+                                                                                                                        "application": {
+                                                                                                                          "argument": {"variable": "fnames"},
+                                                                                                                          "function": {
                                                                                                                             "application": {
-                                                                                                                              "argument": {"variable": "itypes"},
-                                                                                                                              "function": {
-                                                                                                                                "application": {
-                                                                                                                                  "argument": {"variable": "fnames"},
-                                                                                                                                  "function": {
-                                                                                                                                    "application": {
-                                                                                                                                      "argument": {
-                                                                                                                                        "function": {
-                                                                                                                                          "lambda": {
-                                                                                                                                            "body": {
-                                                                                                                                              "function": {
-                                                                                                                                                "lambda": {
-                                                                                                                                                  "body": {
-                                                                                                                                                    "record": {
-                                                                                                                                                      "fields": [
-                                                                                                                                                        {"name": "name", "term": {"variable": "n"}},
-                                                                                                                                                        {"name": "type", "term": {"variable": "t"}}],
-                                                                                                                                                      "typeName": "hydra.core.FieldType"}},
-                                                                                                                                                  "domain": [{"variable": "hydra.core.Type"}],
-                                                                                                                                                  "parameter": "t"}}},
-                                                                                                                                            "domain": [{"variable": "hydra.core.Name"}],
-                                                                                                                                            "parameter": "n"}}},
+                                                                                                                              "argument": {
+                                                                                                                                "function": {
+                                                                                                                                  "lambda": {
+                                                                                                                                    "body": {
                                                                                                                                       "function": {
-                                                                                                                                        "typeApplication": {
+                                                                                                                                        "lambda": {
                                                                                                                                           "body": {
-                                                                                                                                            "typeApplication": {
-                                                                                                                                              "body": {
-                                                                                                                                                "typeApplication": {
-                                                                                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.zipWith"}},
-                                                                                                                                                  "type": {"variable": "hydra.core.Name"}}},
-                                                                                                                                              "type": {"variable": "hydra.core.Type"}}},
-                                                                                                                                          "type": {"variable": "hydra.core.FieldType"}}}}}}}}}}],
-                                                                                                                      "typeName": "hydra.core.RowType"}}},
+                                                                                                                                            "record": {
+                                                                                                                                              "fields": [
+                                                                                                                                                {"name": "name", "term": {"variable": "n"}},
+                                                                                                                                                {"name": "type", "term": {"variable": "t"}}],
+                                                                                                                                              "typeName": "hydra.core.FieldType"}},
+                                                                                                                                          "domain": [{"variable": "hydra.core.Type"}],
+                                                                                                                                          "parameter": "t"}}},
+                                                                                                                                    "domain": [{"variable": "hydra.core.Name"}],
+                                                                                                                                    "parameter": "n"}}},
+                                                                                                                              "function": {
+                                                                                                                                "typeApplication": {
+                                                                                                                                  "body": {
+                                                                                                                                    "typeApplication": {
+                                                                                                                                      "body": {
+                                                                                                                                        "typeApplication": {
+                                                                                                                                          "body": {"function": {"primitive": "hydra.lib.lists.zipWith"}},
+                                                                                                                                          "type": {"variable": "hydra.core.Name"}}},
+                                                                                                                                      "type": {"variable": "hydra.core.Type"}}},
+                                                                                                                                  "type": {"variable": "hydra.core.FieldType"}}}}}}}}}},
                                                                                                                 "typeName": "hydra.core.Type"}},
                                                                                                             "type": [
                                                                                                               {
@@ -16077,7 +16079,10 @@
                                                                       "function": {
                                                                         "application": {
                                                                           "argument": {"variable": "fcx2"},
-                                                                          "function": {"variable": "hydra.extract.core.wrappedType"}}}}}}},
+                                                                          "function": {
+                                                                            "typeApplication": {
+                                                                              "body": {"variable": "hydra.extract.core.wrappedType"},
+                                                                              "type": {"variable": "hydra.core.Name"}}}}}}}}},
                                                               "function": {
                                                                 "typeApplication": {
                                                                   "body": {
@@ -16634,14 +16639,7 @@
                                                                                                 "name": "ityp",
                                                                                                 "term": {
                                                                                                   "union": {
-                                                                                                    "field": {
-                                                                                                      "name": "wrap",
-                                                                                                      "term": {
-                                                                                                        "record": {
-                                                                                                          "fields": [
-                                                                                                            {"name": "typeName", "term": {"variable": "tname"}},
-                                                                                                            {"name": "body", "term": {"variable": "itype"}}],
-                                                                                                          "typeName": "hydra.core.WrappedType"}}},
+                                                                                                    "field": {"name": "wrap", "term": {"variable": "itype"}},
                                                                                                     "typeName": "hydra.core.Type"}},
                                                                                                 "type": [
                                                                                                   {

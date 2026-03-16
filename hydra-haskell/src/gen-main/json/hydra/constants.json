@@ -239,25 +239,6 @@
           "type": {"literal": {"integer": {"int32": {}}}},
           "variables": []}]},
     {
-      "name": "hydra.constants.placeholderName",
-      "term": {
-        "annotated": {
-          "annotation": [
-            {
-              "@key": "description",
-              "@value": {
-                "literal": {
-                  "string": "A placeholder name for row types as they are being constructed"}}}],
-          "body": {
-            "wrap": {
-              "body": {"literal": {"string": "Placeholder"}},
-              "typeName": "hydra.core.Name"}}}},
-      "type": [
-        {
-          "constraints": null,
-          "type": {"variable": "hydra.core.Name"},
-          "variables": []}]},
-    {
       "name": "hydra.constants.maxTraceDepth",
       "term": {
         "annotated": {

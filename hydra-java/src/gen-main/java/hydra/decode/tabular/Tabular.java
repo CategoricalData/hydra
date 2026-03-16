@@ -12,7 +12,7 @@ public interface Tabular {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.tabular.ColumnType>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.tabular.ColumnType> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.tabular.ColumnType>left(new hydra.error.DecodingError("expected record of type hydra.tabular.ColumnType"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.tabular.ColumnType>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override
@@ -48,7 +48,7 @@ public interface Tabular {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.tabular.DataRow<T0>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.tabular.DataRow<T0>> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.tabular.DataRow<T0>>left(new hydra.error.DecodingError("expected wrapped type hydra.tabular.DataRow"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.tabular.DataRow<T0>>left(new hydra.error.DecodingError("expected wrapped type"));
         }
         
         @Override
@@ -75,7 +75,7 @@ public interface Tabular {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.tabular.HeaderRow>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.tabular.HeaderRow> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.tabular.HeaderRow>left(new hydra.error.DecodingError("expected wrapped type hydra.tabular.HeaderRow"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.tabular.HeaderRow>left(new hydra.error.DecodingError("expected wrapped type"));
         }
         
         @Override
@@ -124,7 +124,7 @@ public interface Tabular {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.tabular.Table<T0>>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.tabular.Table<T0>> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.tabular.Table<T0>>left(new hydra.error.DecodingError("expected record of type hydra.tabular.Table"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.tabular.Table<T0>>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override
@@ -167,7 +167,7 @@ public interface Tabular {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.tabular.TableType>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.tabular.TableType> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.tabular.TableType>left(new hydra.error.DecodingError("expected record of type hydra.tabular.TableType"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.tabular.TableType>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override

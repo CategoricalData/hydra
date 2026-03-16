@@ -35,7 +35,7 @@ context cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stri
       Context.contextTrace = field_trace,
       Context.contextMessages = field_messages,
       Context.contextOther = field_other})))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.context.Context"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 inContext :: ((Graph.Graph -> Core.Term -> Either Error.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Context.InContext t0))
 inContext e cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -44,4 +44,4 @@ inContext e cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\
     in (Eithers.bind (Helpers.requireField "object" e fieldMap cx) (\field_object -> Eithers.bind (Helpers.requireField "context" context fieldMap cx) (\field_context -> Right (Context.InContext {
       Context.inContextObject = field_object,
       Context.inContextContext = field_context}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.context.InContext"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))

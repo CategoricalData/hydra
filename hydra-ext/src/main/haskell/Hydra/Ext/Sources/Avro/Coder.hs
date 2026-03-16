@@ -321,8 +321,8 @@ avroHydraAdapter = define "avroHydraAdapter" $
               -- Enum
               Avro._NamedType_enum>>: lambda "e" $ lets [
                 "syms">: project Avro._Enum Avro._Enum_symbols @@ var "e",
-                "typ">: Core.typeUnion (Core.rowType (var "hydraName")
-                  (Lists.map (lambda "s" $ Core.fieldType (Core.name (var "s")) MetaTypes.unit) (var "syms")))] $
+                "typ">: Core.typeUnion
+                  (Lists.map (lambda "s" $ Core.fieldType (Core.name (var "s")) MetaTypes.unit) (var "syms"))] $
                 var "simpleAdapter" @@ var "env1" @@ var "typ"
                   @@ (lambda "_cx" $ lambda "jv" $
                     cases JM._Value (var "jv") Nothing [
@@ -381,7 +381,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
                       Core.fieldType (Core.name (project Avro._Field Avro._Field_name @@ Pairs.first (var "fad")))
                         (Compute.adapterTarget (Pairs.second (var "fad"))))
                       (Maps.elems (var "adaptersByFieldName")),
-                    "target">: Core.typeRecord (Core.rowType (var "hydraName") (var "hfields"))] $
+                    "target">: Core.typeRecord (var "hfields")] $
                     right (pair
                       (Compute.adapter (var "lossy") (var "schema") (var "target")
                         (Compute.coder

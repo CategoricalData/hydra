@@ -196,7 +196,15 @@
                                                             "function": {
                                                               "application": {
                                                                 "argument": {"variable": "__typ"},
-                                                                "function": {"variable": "hydra.ext.shacl.coder.encodeType"}}}}},
+                                                                "function": {
+                                                                  "application": {
+                                                                    "argument": {
+                                                                      "application": {
+                                                                        "argument": {"variable": "el"},
+                                                                        "function": {
+                                                                          "function": {
+                                                                            "elimination": {"record": {"field": "name", "typeName": "hydra.core.Binding"}}}}}},
+                                                                    "function": {"variable": "hydra.ext.shacl.coder.encodeType"}}}}}}},
                                                         "function": {
                                                           "application": {
                                                             "argument": {
@@ -1036,7 +1044,10 @@
                                                                     "function": {
                                                                       "application": {
                                                                         "argument": {"variable": "t"},
-                                                                        "function": {"variable": "hydra.ext.shacl.coder.encodeType"}}}}},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "rname"},
+                                                                            "function": {"variable": "hydra.ext.shacl.coder.encodeType"}}}}}}},
                                                                 "function": {
                                                                   "application": {
                                                                     "argument": {
@@ -3581,565 +3592,512 @@
                   "function": {
                     "lambda": {
                       "body": {
-                        "let": {
-                          "bindings": [
-                            {
-                              "name": "any",
-                              "term": {
-                                "typeLambda": {
-                                  "body": {
-                                    "typeApplication": {
-                                      "body": {
-                                        "typeApplication": {
-                                          "body": {
-                                            "either": {
-                                              "@right": {
-                                                "application": {
-                                                  "argument": {
-                                                    "typeApplication": {
-                                                      "body": {"list": []},
-                                                      "type": {"variable": "hydra.ext.org.w3.shacl.model.CommonConstraint"}}},
-                                                  "function": {"variable": "hydra.ext.shacl.coder.common"}}}}},
-                                          "type": {"variable": "t0"}}},
-                                      "type": {"variable": "hydra.ext.org.w3.shacl.model.CommonProperties"}}},
-                                  "parameter": "t0"}},
-                              "type": [
-                                {
-                                  "constraints": null,
-                                  "type": {
-                                    "either": {
-                                      "left": {"variable": "t0"},
-                                      "right": {"variable": "hydra.ext.org.w3.shacl.model.CommonProperties"}}},
-                                  "variables": ["t0"]}]}],
-                          "body": {
-                            "application": {
-                              "argument": {
-                                "application": {
-                                  "argument": {"variable": "typ"},
-                                  "function": {"variable": "hydra.rewriting.deannotateType"}}},
-                              "function": {
-                                "function": {
-                                  "elimination": {
-                                    "union": {
-                                      "cases": [
-                                        {
-                                          "name": "list",
-                                          "term": {
-                                            "function": {
-                                              "lambda": {
+                        "function": {
+                          "lambda": {
+                            "body": {
+                              "let": {
+                                "bindings": [
+                                  {
+                                    "name": "any",
+                                    "term": {
+                                      "typeLambda": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "typeApplication": {
                                                 "body": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "any"},
-                                                    "type": {
-                                                      "application": {
-                                                        "argument": {"variable": "hydra.error.Error"},
-                                                        "function": {"variable": "hydra.context.InContext"}}}}},
-                                                "domain": [{"variable": "hydra.core.Type"}],
-                                                "parameter": "_"}}}},
-                                        {
-                                          "name": "literal",
-                                          "term": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "typeApplication": {
-                                                    "body": {
-                                                      "typeApplication": {
-                                                        "body": {
-                                                          "either": {
-                                                            "@right": {
-                                                              "application": {
-                                                                "argument": {"variable": "lt"},
-                                                                "function": {"variable": "hydra.ext.shacl.coder.encodeLiteralType"}}}}},
-                                                        "type": {
-                                                          "application": {
-                                                            "argument": {"variable": "hydra.error.Error"},
-                                                            "function": {"variable": "hydra.context.InContext"}}}}},
-                                                    "type": {"variable": "hydra.ext.org.w3.shacl.model.CommonProperties"}}},
-                                                "domain": [{"variable": "hydra.core.LiteralType"}],
-                                                "parameter": "lt"}}}},
-                                        {
-                                          "name": "map",
-                                          "term": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "any"},
-                                                    "type": {
-                                                      "application": {
-                                                        "argument": {"variable": "hydra.error.Error"},
-                                                        "function": {"variable": "hydra.context.InContext"}}}}},
-                                                "domain": [{"variable": "hydra.core.MapType"}],
-                                                "parameter": "_"}}}},
-                                        {
-                                          "name": "wrap",
-                                          "term": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "any"},
-                                                    "type": {
-                                                      "application": {
-                                                        "argument": {"variable": "hydra.error.Error"},
-                                                        "function": {"variable": "hydra.context.InContext"}}}}},
-                                                "domain": [{"variable": "hydra.core.WrappedType"}],
-                                                "parameter": "_"}}}},
-                                        {
-                                          "name": "record",
-                                          "term": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "let": {
-                                                    "bindings": [
-                                                      {
-                                                        "name": "rname",
-                                                        "term": {
-                                                          "application": {
-                                                            "argument": {"variable": "rt"},
-                                                            "function": {
-                                                              "function": {
-                                                                "elimination": {"record": {"field": "typeName", "typeName": "hydra.core.RowType"}}}}}},
-                                                        "type": [
-                                                          {
-                                                            "constraints": null,
-                                                            "type": {"variable": "hydra.core.Name"},
-                                                            "variables": []}]},
-                                                      {
-                                                        "name": "fields",
-                                                        "term": {
-                                                          "application": {
-                                                            "argument": {"variable": "rt"},
-                                                            "function": {
-                                                              "function": {
-                                                                "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
-                                                        "type": [
-                                                          {
-                                                            "constraints": null,
-                                                            "type": {"list": {"variable": "hydra.core.FieldType"}},
-                                                            "variables": []}]}],
-                                                    "body": {
+                                                  "either": {
+                                                    "@right": {
                                                       "application": {
                                                         "argument": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "application": {
-                                                                "argument": {"variable": "fields"},
-                                                                "function": {
-                                                                  "application": {
-                                                                    "argument": {
-                                                                      "application": {
-                                                                        "argument": {
-                                                                          "application": {
-                                                                            "argument": {
-                                                                              "application": {
-                                                                                "argument": {"variable": "fields"},
-                                                                                "function": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {"function": {"primitive": "hydra.lib.lists.length"}},
-                                                                                    "type": {"variable": "hydra.core.FieldType"}}}}},
-                                                                            "function": {
-                                                                              "application": {
-                                                                                "argument": {"literal": {"integer": {"int32": 0}}},
-                                                                                "function": {"function": {"primitive": "hydra.lib.math.range"}}}}}},
-                                                                        "function": {
-                                                                          "application": {
-                                                                            "argument": {
-                                                                              "function": {
-                                                                                "lambda": {
-                                                                                  "body": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "__i"},
-                                                                                      "function": {"function": {"primitive": "hydra.lib.literals.int32ToBigint"}}}},
-                                                                                  "domain": [{"literal": {"integer": {"int32": {}}}}],
-                                                                                  "parameter": "__i"}}},
-                                                                            "function": {
-                                                                              "typeApplication": {
-                                                                                "body": {
-                                                                                  "typeApplication": {
-                                                                                    "body": {"function": {"primitive": "hydra.lib.lists.map"}},
-                                                                                    "type": {"literal": {"integer": {"int32": {}}}}}},
-                                                                                "type": {"literal": {"integer": {"bigint": {}}}}}}}}}},
-                                                                    "function": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.lists.zip"}},
-                                                                            "type": {"literal": {"integer": {"bigint": {}}}}}},
-                                                                        "type": {"variable": "hydra.core.FieldType"}}}}}}},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {
+                                                          "typeApplication": {
+                                                            "body": {"list": []},
+                                                            "type": {"variable": "hydra.ext.org.w3.shacl.model.CommonConstraint"}}},
+                                                        "function": {"variable": "hydra.ext.shacl.coder.common"}}}}},
+                                                "type": {"variable": "t0"}}},
+                                            "type": {"variable": "hydra.ext.org.w3.shacl.model.CommonProperties"}}},
+                                        "parameter": "t0"}},
+                                    "type": [
+                                      {
+                                        "constraints": null,
+                                        "type": {
+                                          "either": {
+                                            "left": {"variable": "t0"},
+                                            "right": {"variable": "hydra.ext.org.w3.shacl.model.CommonProperties"}}},
+                                        "variables": ["t0"]}]}],
+                                "body": {
+                                  "application": {
+                                    "argument": {
+                                      "application": {
+                                        "argument": {"variable": "typ"},
+                                        "function": {"variable": "hydra.rewriting.deannotateType"}}},
+                                    "function": {
+                                      "function": {
+                                        "elimination": {
+                                          "union": {
+                                            "cases": [
+                                              {
+                                                "name": "list",
+                                                "term": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {"variable": "any"},
+                                                          "type": {
+                                                            "application": {
+                                                              "argument": {"variable": "hydra.error.Error"},
+                                                              "function": {"variable": "hydra.context.InContext"}}}}},
+                                                      "domain": [{"variable": "hydra.core.Type"}],
+                                                      "parameter": "_"}}}},
+                                              {
+                                                "name": "literal",
+                                                "term": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {
+                                                            "typeApplication": {
+                                                              "body": {
+                                                                "either": {
+                                                                  "@right": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "lt"},
+                                                                      "function": {"variable": "hydra.ext.shacl.coder.encodeLiteralType"}}}}},
+                                                              "type": {
+                                                                "application": {
+                                                                  "argument": {"variable": "hydra.error.Error"},
+                                                                  "function": {"variable": "hydra.context.InContext"}}}}},
+                                                          "type": {"variable": "hydra.ext.org.w3.shacl.model.CommonProperties"}}},
+                                                      "domain": [{"variable": "hydra.core.LiteralType"}],
+                                                      "parameter": "lt"}}}},
+                                              {
+                                                "name": "map",
+                                                "term": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {"variable": "any"},
+                                                          "type": {
+                                                            "application": {
+                                                              "argument": {"variable": "hydra.error.Error"},
+                                                              "function": {"variable": "hydra.context.InContext"}}}}},
+                                                      "domain": [{"variable": "hydra.core.MapType"}],
+                                                      "parameter": "_"}}}},
+                                              {
+                                                "name": "wrap",
+                                                "term": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {"variable": "any"},
+                                                          "type": {
+                                                            "application": {
+                                                              "argument": {"variable": "hydra.error.Error"},
+                                                              "function": {"variable": "hydra.context.InContext"}}}}},
+                                                      "domain": [{"variable": "hydra.core.Type"}],
+                                                      "parameter": "_"}}}},
+                                              {
+                                                "name": "record",
+                                                "term": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "application": {
+                                                                  "argument": {"variable": "fts"},
                                                                   "function": {
-                                                                    "lambda": {
-                                                                      "body": {
+                                                                    "application": {
+                                                                      "argument": {
                                                                         "application": {
-                                                                          "argument": {"variable": "cx"},
-                                                                          "function": {
+                                                                          "argument": {
                                                                             "application": {
                                                                               "argument": {
                                                                                 "application": {
-                                                                                  "argument": {"variable": "__pair"},
+                                                                                  "argument": {"variable": "fts"},
                                                                                   "function": {
                                                                                     "typeApplication": {
-                                                                                      "body": {
-                                                                                        "typeApplication": {
-                                                                                          "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
-                                                                                          "type": {"literal": {"integer": {"bigint": {}}}}}},
+                                                                                      "body": {"function": {"primitive": "hydra.lib.lists.length"}},
                                                                                       "type": {"variable": "hydra.core.FieldType"}}}}},
                                                                               "function": {
                                                                                 "application": {
-                                                                                  "argument": {
-                                                                                    "maybe": [
-                                                                                      {
-                                                                                        "application": {
-                                                                                          "argument": {"variable": "__pair"},
-                                                                                          "function": {
-                                                                                            "typeApplication": {
-                                                                                              "body": {
-                                                                                                "typeApplication": {
-                                                                                                  "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
-                                                                                                  "type": {"literal": {"integer": {"bigint": {}}}}}},
-                                                                                              "type": {"variable": "hydra.core.FieldType"}}}}}]},
-                                                                                  "function": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "rname"},
-                                                                                      "function": {"variable": "hydra.ext.shacl.coder.encodeFieldType"}}}}}}}}},
-                                                                      "domain": [
-                                                                        {
-                                                                          "pair": {
-                                                                            "first": {"literal": {"integer": {"bigint": {}}}},
-                                                                            "second": {"variable": "hydra.core.FieldType"}}}],
-                                                                      "parameter": "__pair"}}},
-                                                                "function": {
-                                                                  "typeApplication": {
-                                                                    "body": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
-                                                                            "type": {
-                                                                              "pair": {
-                                                                                "first": {"literal": {"integer": {"bigint": {}}}},
-                                                                                "second": {"variable": "hydra.core.FieldType"}}}}},
-                                                                        "type": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
-                                                                            "function": {"variable": "hydra.ext.org.w3.shacl.model.Definition"}}}}},
-                                                                    "type": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "hydra.error.Error"},
-                                                                        "function": {"variable": "hydra.context.InContext"}}}}}}}}},
-                                                        "function": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "function": {
-                                                                "lambda": {
-                                                                  "body": {
-                                                                    "application": {
-                                                                      "argument": {
-                                                                        "list": [
-                                                                          {
-                                                                            "union": {
-                                                                              "field": {
-                                                                                "name": "property",
-                                                                                "term": {
-                                                                                  "application": {
-                                                                                    "argument": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "__props"},
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "argument": {
-                                                                                              "function": {
-                                                                                                "lambda": {
-                                                                                                  "body": {
-                                                                                                    "typeApplication": {
-                                                                                                      "body": {
-                                                                                                        "union": {
-                                                                                                          "field": {"name": "definition", "term": {"variable": "__p"}},
-                                                                                                          "typeName": "hydra.ext.org.w3.shacl.model.Reference"}},
-                                                                                                      "type": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"}}},
-                                                                                                  "domain": [
-                                                                                                    {
-                                                                                                      "application": {
-                                                                                                        "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
-                                                                                                        "function": {"variable": "hydra.ext.org.w3.shacl.model.Definition"}}}],
-                                                                                                  "parameter": "__p"}}},
-                                                                                            "function": {
-                                                                                              "typeApplication": {
-                                                                                                "body": {
-                                                                                                  "typeApplication": {
-                                                                                                    "body": {"function": {"primitive": "hydra.lib.lists.map"}},
-                                                                                                    "type": {
-                                                                                                      "application": {
-                                                                                                        "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
-                                                                                                        "function": {"variable": "hydra.ext.org.w3.shacl.model.Definition"}}}}},
-                                                                                                "type": {
-                                                                                                  "application": {
-                                                                                                    "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
-                                                                                                    "function": {"variable": "hydra.ext.org.w3.shacl.model.Reference"}}}}}}}}},
-                                                                                    "function": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
-                                                                                        "type": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
-                                                                                            "function": {"variable": "hydra.ext.org.w3.shacl.model.Reference"}}}}}}}},
-                                                                              "typeName": "hydra.ext.org.w3.shacl.model.CommonConstraint"}}]},
-                                                                      "function": {"variable": "hydra.ext.shacl.coder.common"}}},
-                                                                  "domain": [
-                                                                    {
-                                                                      "list": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
-                                                                          "function": {"variable": "hydra.ext.org.w3.shacl.model.Definition"}}}}],
-                                                                  "parameter": "__props"}}},
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {
-                                                                      "typeApplication": {
-                                                                        "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
-                                                                        "type": {
-                                                                          "list": {
-                                                                            "application": {
-                                                                              "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
-                                                                              "function": {"variable": "hydra.ext.org.w3.shacl.model.Definition"}}}}}},
-                                                                    "type": {"variable": "hydra.ext.org.w3.shacl.model.CommonProperties"}}},
-                                                                "type": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "hydra.error.Error"},
-                                                                    "function": {"variable": "hydra.context.InContext"}}}}}}}}}}},
-                                                "domain": [{"variable": "hydra.core.RowType"}],
-                                                "parameter": "rt"}}}},
-                                        {
-                                          "name": "set",
-                                          "term": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "typeApplication": {
-                                                    "body": {"variable": "any"},
-                                                    "type": {
-                                                      "application": {
-                                                        "argument": {"variable": "hydra.error.Error"},
-                                                        "function": {"variable": "hydra.context.InContext"}}}}},
-                                                "domain": [{"variable": "hydra.core.Type"}],
-                                                "parameter": "_"}}}},
-                                        {
-                                          "name": "union",
-                                          "term": {
-                                            "function": {
-                                              "lambda": {
-                                                "body": {
-                                                  "let": {
-                                                    "bindings": [
-                                                      {
-                                                        "name": "rname",
-                                                        "term": {
-                                                          "application": {
-                                                            "argument": {"variable": "rt"},
-                                                            "function": {
-                                                              "function": {
-                                                                "elimination": {"record": {"field": "typeName", "typeName": "hydra.core.RowType"}}}}}},
-                                                        "type": [
-                                                          {
-                                                            "constraints": null,
-                                                            "type": {"variable": "hydra.core.Name"},
-                                                            "variables": []}]},
-                                                      {
-                                                        "name": "fields",
-                                                        "term": {
-                                                          "application": {
-                                                            "argument": {"variable": "rt"},
-                                                            "function": {
-                                                              "function": {
-                                                                "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
-                                                        "type": [
-                                                          {
-                                                            "constraints": null,
-                                                            "type": {"list": {"variable": "hydra.core.FieldType"}},
-                                                            "variables": []}]}],
-                                                    "body": {
-                                                      "application": {
-                                                        "argument": {
-                                                          "application": {
-                                                            "argument": {"variable": "fields"},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "body": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "cx"},
+                                                                                  "argument": {"literal": {"integer": {"int32": 0}}},
+                                                                                  "function": {"function": {"primitive": "hydra.lib.math.range"}}}}}},
                                                                           "function": {
                                                                             "application": {
-                                                                              "argument": {"variable": "__ft"},
+                                                                              "argument": {
+                                                                                "function": {
+                                                                                  "lambda": {
+                                                                                    "body": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "__i"},
+                                                                                        "function": {"function": {"primitive": "hydra.lib.literals.int32ToBigint"}}}},
+                                                                                    "domain": [{"literal": {"integer": {"int32": {}}}}],
+                                                                                    "parameter": "__i"}}},
                                                                               "function": {
-                                                                                "application": {
-                                                                                  "argument": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
                                                                                     "typeApplication": {
-                                                                                      "body": {"maybe": null},
-                                                                                      "type": {"literal": {"integer": {"bigint": {}}}}}},
-                                                                                  "function": {
-                                                                                    "application": {
-                                                                                      "argument": {"variable": "rname"},
-                                                                                      "function": {"variable": "hydra.ext.shacl.coder.encodeFieldType"}}}}}}}}},
-                                                                      "domain": [{"variable": "hydra.core.FieldType"}],
-                                                                      "parameter": "__ft"}}},
-                                                                "function": {
-                                                                  "typeApplication": {
-                                                                    "body": {
-                                                                      "typeApplication": {
-                                                                        "body": {
-                                                                          "typeApplication": {
-                                                                            "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
-                                                                            "type": {"variable": "hydra.core.FieldType"}}},
-                                                                        "type": {
-                                                                          "application": {
-                                                                            "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
-                                                                            "function": {"variable": "hydra.ext.org.w3.shacl.model.Definition"}}}}},
-                                                                    "type": {
-                                                                      "application": {
-                                                                        "argument": {"variable": "hydra.error.Error"},
-                                                                        "function": {"variable": "hydra.context.InContext"}}}}}}}}},
-                                                        "function": {
-                                                          "application": {
-                                                            "argument": {
+                                                                                      "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                      "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                  "type": {"literal": {"integer": {"bigint": {}}}}}}}}}},
+                                                                      "function": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {"function": {"primitive": "hydra.lib.lists.zip"}},
+                                                                              "type": {"literal": {"integer": {"bigint": {}}}}}},
+                                                                          "type": {"variable": "hydra.core.FieldType"}}}}}}},
                                                               "function": {
-                                                                "lambda": {
-                                                                  "body": {
-                                                                    "application": {
-                                                                      "argument": {
-                                                                        "list": [
-                                                                          {
-                                                                            "union": {
-                                                                              "field": {
-                                                                                "name": "xone",
-                                                                                "term": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "function": {
+                                                                      "lambda": {
+                                                                        "body": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "cx"},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "__pair"},
+                                                                                    "function": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"function": {"primitive": "hydra.lib.pairs.second"}},
+                                                                                            "type": {"literal": {"integer": {"bigint": {}}}}}},
+                                                                                        "type": {"variable": "hydra.core.FieldType"}}}}},
+                                                                                "function": {
                                                                                   "application": {
                                                                                     "argument": {
-                                                                                      "application": {
-                                                                                        "argument": {"variable": "__props"},
-                                                                                        "function": {
+                                                                                      "maybe": [
+                                                                                        {
                                                                                           "application": {
-                                                                                            "argument": {
-                                                                                              "function": {
-                                                                                                "lambda": {
-                                                                                                  "body": {
-                                                                                                    "typeApplication": {
-                                                                                                      "body": {
-                                                                                                        "union": {
-                                                                                                          "field": {
-                                                                                                            "name": "anonymous",
-                                                                                                            "term": {
-                                                                                                              "application": {
-                                                                                                                "argument": {
-                                                                                                                  "list": [
-                                                                                                                    {
-                                                                                                                      "union": {
-                                                                                                                        "field": {
-                                                                                                                          "name": "property",
-                                                                                                                          "term": {
-                                                                                                                            "application": {
-                                                                                                                              "argument": {
-                                                                                                                                "list": [
-                                                                                                                                  {
-                                                                                                                                    "typeApplication": {
-                                                                                                                                      "body": {
-                                                                                                                                        "union": {
-                                                                                                                                          "field": {"name": "definition", "term": {"variable": "__p"}},
-                                                                                                                                          "typeName": "hydra.ext.org.w3.shacl.model.Reference"}},
-                                                                                                                                      "type": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"}}}]},
-                                                                                                                              "function": {
-                                                                                                                                "typeApplication": {
-                                                                                                                                  "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
-                                                                                                                                  "type": {
-                                                                                                                                    "application": {
-                                                                                                                                      "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
-                                                                                                                                      "function": {"variable": "hydra.ext.org.w3.shacl.model.Reference"}}}}}}}},
-                                                                                                                        "typeName": "hydra.ext.org.w3.shacl.model.CommonConstraint"}}]},
-                                                                                                                "function": {"variable": "hydra.ext.shacl.coder.node"}}}},
-                                                                                                          "typeName": "hydra.ext.org.w3.shacl.model.Reference"}},
-                                                                                                      "type": {"variable": "hydra.ext.org.w3.shacl.model.Shape"}}},
-                                                                                                  "domain": [
-                                                                                                    {
-                                                                                                      "application": {
-                                                                                                        "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
-                                                                                                        "function": {"variable": "hydra.ext.org.w3.shacl.model.Definition"}}}],
-                                                                                                  "parameter": "__p"}}},
+                                                                                            "argument": {"variable": "__pair"},
                                                                                             "function": {
                                                                                               "typeApplication": {
                                                                                                 "body": {
                                                                                                   "typeApplication": {
-                                                                                                    "body": {"function": {"primitive": "hydra.lib.lists.map"}},
-                                                                                                    "type": {
-                                                                                                      "application": {
-                                                                                                        "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
-                                                                                                        "function": {"variable": "hydra.ext.org.w3.shacl.model.Definition"}}}}},
-                                                                                                "type": {
-                                                                                                  "application": {
-                                                                                                    "argument": {"variable": "hydra.ext.org.w3.shacl.model.Shape"},
-                                                                                                    "function": {"variable": "hydra.ext.org.w3.shacl.model.Reference"}}}}}}}}},
+                                                                                                    "body": {"function": {"primitive": "hydra.lib.pairs.first"}},
+                                                                                                    "type": {"literal": {"integer": {"bigint": {}}}}}},
+                                                                                                "type": {"variable": "hydra.core.FieldType"}}}}}]},
                                                                                     "function": {
-                                                                                      "typeApplication": {
-                                                                                        "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
-                                                                                        "type": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "hydra.ext.org.w3.shacl.model.Shape"},
-                                                                                            "function": {"variable": "hydra.ext.org.w3.shacl.model.Reference"}}}}}}}},
-                                                                              "typeName": "hydra.ext.org.w3.shacl.model.CommonConstraint"}}]},
-                                                                      "function": {"variable": "hydra.ext.shacl.coder.common"}}},
-                                                                  "domain": [
-                                                                    {
-                                                                      "list": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
-                                                                          "function": {"variable": "hydra.ext.org.w3.shacl.model.Definition"}}}}],
-                                                                  "parameter": "__props"}}},
-                                                            "function": {
-                                                              "typeApplication": {
-                                                                "body": {
-                                                                  "typeApplication": {
-                                                                    "body": {
-                                                                      "typeApplication": {
-                                                                        "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
-                                                                        "type": {
-                                                                          "list": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "tname"},
+                                                                                        "function": {"variable": "hydra.ext.shacl.coder.encodeFieldType"}}}}}}}}},
+                                                                        "domain": [
+                                                                          {
+                                                                            "pair": {
+                                                                              "first": {"literal": {"integer": {"bigint": {}}}},
+                                                                              "second": {"variable": "hydra.core.FieldType"}}}],
+                                                                        "parameter": "__pair"}}},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
+                                                                              "type": {
+                                                                                "pair": {
+                                                                                  "first": {"literal": {"integer": {"bigint": {}}}},
+                                                                                  "second": {"variable": "hydra.core.FieldType"}}}}},
+                                                                          "type": {
                                                                             "application": {
                                                                               "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
-                                                                              "function": {"variable": "hydra.ext.org.w3.shacl.model.Definition"}}}}}},
-                                                                    "type": {"variable": "hydra.ext.org.w3.shacl.model.CommonProperties"}}},
-                                                                "type": {
-                                                                  "application": {
-                                                                    "argument": {"variable": "hydra.error.Error"},
-                                                                    "function": {"variable": "hydra.context.InContext"}}}}}}}}}}},
-                                                "domain": [{"variable": "hydra.core.RowType"}],
-                                                "parameter": "rt"}}}}],
-                                      "default": [
-                                        {
-                                          "application": {
-                                            "argument": {"literal": {"string": "unsupported type variant"}},
-                                            "function": {
-                                              "application": {
-                                                "argument": {"literal": {"string": "type"}},
-                                                "function": {
-                                                  "application": {
-                                                    "argument": {"variable": "cx"},
-                                                    "function": {
-                                                      "typeApplication": {
-                                                        "body": {"variable": "hydra.ext.shacl.coder.unexpectedE"},
-                                                        "type": {"variable": "hydra.ext.org.w3.shacl.model.CommonProperties"}}}}}}}}}],
-                                      "typeName": "hydra.core.Type"}}}}}}}},
-                      "domain": [{"variable": "hydra.context.Context"}],
-                      "parameter": "cx"}}},
-                "domain": [{"variable": "hydra.core.Type"}],
-                "parameter": "typ"}}}}},
+                                                                              "function": {"variable": "hydra.ext.org.w3.shacl.model.Definition"}}}}},
+                                                                      "type": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "hydra.error.Error"},
+                                                                          "function": {"variable": "hydra.context.InContext"}}}}}}}}},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "function": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "list": [
+                                                                            {
+                                                                              "union": {
+                                                                                "field": {
+                                                                                  "name": "property",
+                                                                                  "term": {
+                                                                                    "application": {
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "__props"},
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "argument": {
+                                                                                                "function": {
+                                                                                                  "lambda": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "union": {
+                                                                                                            "field": {"name": "definition", "term": {"variable": "__p"}},
+                                                                                                            "typeName": "hydra.ext.org.w3.shacl.model.Reference"}},
+                                                                                                        "type": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"}}},
+                                                                                                    "domain": [
+                                                                                                      {
+                                                                                                        "application": {
+                                                                                                          "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
+                                                                                                          "function": {"variable": "hydra.ext.org.w3.shacl.model.Definition"}}}],
+                                                                                                    "parameter": "__p"}}},
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                                      "type": {
+                                                                                                        "application": {
+                                                                                                          "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
+                                                                                                          "function": {"variable": "hydra.ext.org.w3.shacl.model.Definition"}}}}},
+                                                                                                  "type": {
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
+                                                                                                      "function": {"variable": "hydra.ext.org.w3.shacl.model.Reference"}}}}}}}}},
+                                                                                      "function": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                                                                                          "type": {
+                                                                                            "application": {
+                                                                                              "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
+                                                                                              "function": {"variable": "hydra.ext.org.w3.shacl.model.Reference"}}}}}}}},
+                                                                                "typeName": "hydra.ext.org.w3.shacl.model.CommonConstraint"}}]},
+                                                                        "function": {"variable": "hydra.ext.shacl.coder.common"}}},
+                                                                    "domain": [
+                                                                      {
+                                                                        "list": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
+                                                                            "function": {"variable": "hydra.ext.org.w3.shacl.model.Definition"}}}}],
+                                                                    "parameter": "__props"}}},
+                                                              "function": {
+                                                                "typeApplication": {
+                                                                  "body": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "typeApplication": {
+                                                                          "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
+                                                                          "type": {
+                                                                            "list": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
+                                                                                "function": {"variable": "hydra.ext.org.w3.shacl.model.Definition"}}}}}},
+                                                                      "type": {"variable": "hydra.ext.org.w3.shacl.model.CommonProperties"}}},
+                                                                  "type": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "hydra.error.Error"},
+                                                                      "function": {"variable": "hydra.context.InContext"}}}}}}}}},
+                                                      "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                      "parameter": "fts"}}}},
+                                              {
+                                                "name": "set",
+                                                "term": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "typeApplication": {
+                                                          "body": {"variable": "any"},
+                                                          "type": {
+                                                            "application": {
+                                                              "argument": {"variable": "hydra.error.Error"},
+                                                              "function": {"variable": "hydra.context.InContext"}}}}},
+                                                      "domain": [{"variable": "hydra.core.Type"}],
+                                                      "parameter": "_"}}}},
+                                              {
+                                                "name": "union",
+                                                "term": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "application": {
+                                                              "argument": {"variable": "fts"},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "function": {
+                                                                      "lambda": {
+                                                                        "body": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "cx"},
+                                                                            "function": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "__ft"},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"maybe": null},
+                                                                                        "type": {"literal": {"integer": {"bigint": {}}}}}},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {"variable": "tname"},
+                                                                                        "function": {"variable": "hydra.ext.shacl.coder.encodeFieldType"}}}}}}}}},
+                                                                        "domain": [{"variable": "hydra.core.FieldType"}],
+                                                                        "parameter": "__ft"}}},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {"function": {"primitive": "hydra.lib.eithers.mapList"}},
+                                                                              "type": {"variable": "hydra.core.FieldType"}}},
+                                                                          "type": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
+                                                                              "function": {"variable": "hydra.ext.org.w3.shacl.model.Definition"}}}}},
+                                                                      "type": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "hydra.error.Error"},
+                                                                          "function": {"variable": "hydra.context.InContext"}}}}}}}}},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "function": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "list": [
+                                                                            {
+                                                                              "union": {
+                                                                                "field": {
+                                                                                  "name": "xone",
+                                                                                  "term": {
+                                                                                    "application": {
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "__props"},
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "argument": {
+                                                                                                "function": {
+                                                                                                  "lambda": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "union": {
+                                                                                                            "field": {
+                                                                                                              "name": "anonymous",
+                                                                                                              "term": {
+                                                                                                                "application": {
+                                                                                                                  "argument": {
+                                                                                                                    "list": [
+                                                                                                                      {
+                                                                                                                        "union": {
+                                                                                                                          "field": {
+                                                                                                                            "name": "property",
+                                                                                                                            "term": {
+                                                                                                                              "application": {
+                                                                                                                                "argument": {
+                                                                                                                                  "list": [
+                                                                                                                                    {
+                                                                                                                                      "typeApplication": {
+                                                                                                                                        "body": {
+                                                                                                                                          "union": {
+                                                                                                                                            "field": {"name": "definition", "term": {"variable": "__p"}},
+                                                                                                                                            "typeName": "hydra.ext.org.w3.shacl.model.Reference"}},
+                                                                                                                                        "type": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"}}}]},
+                                                                                                                                "function": {
+                                                                                                                                  "typeApplication": {
+                                                                                                                                    "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                                                                                                                                    "type": {
+                                                                                                                                      "application": {
+                                                                                                                                        "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
+                                                                                                                                        "function": {"variable": "hydra.ext.org.w3.shacl.model.Reference"}}}}}}}},
+                                                                                                                          "typeName": "hydra.ext.org.w3.shacl.model.CommonConstraint"}}]},
+                                                                                                                  "function": {"variable": "hydra.ext.shacl.coder.node"}}}},
+                                                                                                            "typeName": "hydra.ext.org.w3.shacl.model.Reference"}},
+                                                                                                        "type": {"variable": "hydra.ext.org.w3.shacl.model.Shape"}}},
+                                                                                                    "domain": [
+                                                                                                      {
+                                                                                                        "application": {
+                                                                                                          "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
+                                                                                                          "function": {"variable": "hydra.ext.org.w3.shacl.model.Definition"}}}],
+                                                                                                    "parameter": "__p"}}},
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                                      "type": {
+                                                                                                        "application": {
+                                                                                                          "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
+                                                                                                          "function": {"variable": "hydra.ext.org.w3.shacl.model.Definition"}}}}},
+                                                                                                  "type": {
+                                                                                                    "application": {
+                                                                                                      "argument": {"variable": "hydra.ext.org.w3.shacl.model.Shape"},
+                                                                                                      "function": {"variable": "hydra.ext.org.w3.shacl.model.Reference"}}}}}}}}},
+                                                                                      "function": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"function": {"primitive": "hydra.lib.sets.fromList"}},
+                                                                                          "type": {
+                                                                                            "application": {
+                                                                                              "argument": {"variable": "hydra.ext.org.w3.shacl.model.Shape"},
+                                                                                              "function": {"variable": "hydra.ext.org.w3.shacl.model.Reference"}}}}}}}},
+                                                                                "typeName": "hydra.ext.org.w3.shacl.model.CommonConstraint"}}]},
+                                                                        "function": {"variable": "hydra.ext.shacl.coder.common"}}},
+                                                                    "domain": [
+                                                                      {
+                                                                        "list": {
+                                                                          "application": {
+                                                                            "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
+                                                                            "function": {"variable": "hydra.ext.org.w3.shacl.model.Definition"}}}}],
+                                                                    "parameter": "__props"}}},
+                                                              "function": {
+                                                                "typeApplication": {
+                                                                  "body": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "typeApplication": {
+                                                                          "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
+                                                                          "type": {
+                                                                            "list": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "hydra.ext.org.w3.shacl.model.PropertyShape"},
+                                                                                "function": {"variable": "hydra.ext.org.w3.shacl.model.Definition"}}}}}},
+                                                                      "type": {"variable": "hydra.ext.org.w3.shacl.model.CommonProperties"}}},
+                                                                  "type": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "hydra.error.Error"},
+                                                                      "function": {"variable": "hydra.context.InContext"}}}}}}}}},
+                                                      "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                      "parameter": "fts"}}}}],
+                                            "default": [
+                                              {
+                                                "application": {
+                                                  "argument": {"literal": {"string": "unsupported type variant"}},
+                                                  "function": {
+                                                    "application": {
+                                                      "argument": {"literal": {"string": "type"}},
+                                                      "function": {
+                                                        "application": {
+                                                          "argument": {"variable": "cx"},
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {"variable": "hydra.ext.shacl.coder.unexpectedE"},
+                                                              "type": {"variable": "hydra.ext.org.w3.shacl.model.CommonProperties"}}}}}}}}}],
+                                            "typeName": "hydra.core.Type"}}}}}}}},
+                            "domain": [{"variable": "hydra.context.Context"}],
+                            "parameter": "cx"}}},
+                      "domain": [{"variable": "hydra.core.Type"}],
+                      "parameter": "typ"}}},
+                "domain": [{"variable": "hydra.core.Name"}],
+                "parameter": "tname"}}}}},
       "type": [
         {
           "constraints": null,
@@ -4148,14 +4106,17 @@
               "codomain": {
                 "function": {
                   "codomain": {
-                    "either": {
-                      "left": {
-                        "application": {
-                          "argument": {"variable": "hydra.error.Error"},
-                          "function": {"variable": "hydra.context.InContext"}}},
-                      "right": {"variable": "hydra.ext.org.w3.shacl.model.CommonProperties"}}},
-                  "domain": {"variable": "hydra.context.Context"}}},
-              "domain": {"variable": "hydra.core.Type"}}},
+                    "function": {
+                      "codomain": {
+                        "either": {
+                          "left": {
+                            "application": {
+                              "argument": {"variable": "hydra.error.Error"},
+                              "function": {"variable": "hydra.context.InContext"}}},
+                          "right": {"variable": "hydra.ext.org.w3.shacl.model.CommonProperties"}}},
+                      "domain": {"variable": "hydra.context.Context"}}},
+                  "domain": {"variable": "hydra.core.Type"}}},
+              "domain": {"variable": "hydra.core.Name"}}},
           "variables": []}]},
     {
       "name": "hydra.ext.shacl.coder.node",

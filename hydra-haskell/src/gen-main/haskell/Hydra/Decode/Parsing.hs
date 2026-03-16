@@ -36,13 +36,12 @@ parseError cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\s
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_remainder -> Right (Parsing.ParseError {
       Parsing.parseErrorMessage = field_message,
       Parsing.parseErrorRemainder = field_remainder}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.parsing.ParseError"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 parseResult :: ((Graph.Graph -> Core.Term -> Either Error.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Parsing.ParseResult t0))
 parseResult a cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -51,9 +50,8 @@ parseResult a cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) 
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.parsing.ParseResult"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 parseSuccess :: ((Graph.Graph -> Core.Term -> Either Error.DecodingError t0) -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Parsing.ParseSuccess t0))
 parseSuccess a cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -66,4 +64,4 @@ parseSuccess a cx raw = (Eithers.either (\err -> Left (Error.DecodingError err))
       _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_remainder -> Right (Parsing.ParseSuccess {
       Parsing.parseSuccessValue = field_value,
       Parsing.parseSuccessRemainder = field_remainder}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.parsing.ParseSuccess"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))

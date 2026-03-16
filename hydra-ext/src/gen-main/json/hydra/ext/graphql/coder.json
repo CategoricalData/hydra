@@ -1340,12 +1340,7 @@
                                                                 "application": {
                                                                   "argument": {
                                                                     "application": {
-                                                                      "argument": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "rt"},
-                                                                          "function": {
-                                                                            "function": {
-                                                                              "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
+                                                                      "argument": {"variable": "rt"},
                                                                       "function": {
                                                                         "application": {
                                                                           "argument": {
@@ -1392,7 +1387,7 @@
                                                                                   "function": {"variable": "hydra.context.InContext"}}}}},
                                                                           "type": {"list": {"variable": "hydra.ext.org.graphql.syntax.FieldDefinition"}}}},
                                                                       "type": {"variable": "hydra.ext.org.graphql.syntax.TypeDefinition"}}}}}}},
-                                                          "domain": [{"variable": "hydra.core.RowType"}],
+                                                          "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                                           "parameter": "rt"}}}},
                                                   {
                                                     "name": "union",
@@ -1488,12 +1483,7 @@
                                                                 "application": {
                                                                   "argument": {
                                                                     "application": {
-                                                                      "argument": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "rt"},
-                                                                          "function": {
-                                                                            "function": {
-                                                                              "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
+                                                                      "argument": {"variable": "rt"},
                                                                       "function": {
                                                                         "application": {
                                                                           "argument": {
@@ -1538,7 +1528,7 @@
                                                                           "type": {
                                                                             "list": {"variable": "hydra.ext.org.graphql.syntax.EnumValueDefinition"}}}},
                                                                       "type": {"variable": "hydra.ext.org.graphql.syntax.TypeDefinition"}}}}}}},
-                                                          "domain": [{"variable": "hydra.core.RowType"}],
+                                                          "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                                           "parameter": "rt"}}}},
                                                   {
                                                     "name": "either",
@@ -1552,60 +1542,53 @@
                                                                   "field": {
                                                                     "name": "record",
                                                                     "term": {
-                                                                      "record": {
-                                                                        "fields": [
-                                                                          {"name": "typeName", "term": {"variable": "name"}},
-                                                                          {
-                                                                            "name": "fields",
-                                                                            "term": {
-                                                                              "list": [
-                                                                                {
-                                                                                  "record": {
-                                                                                    "fields": [
-                                                                                      {
-                                                                                        "name": "name",
-                                                                                        "term": {
-                                                                                          "wrap": {
-                                                                                            "body": {"literal": {"string": "left"}},
-                                                                                            "typeName": "hydra.core.Name"}}},
-                                                                                      {
-                                                                                        "name": "type",
-                                                                                        "term": {
-                                                                                          "union": {
-                                                                                            "field": {
-                                                                                              "name": "maybe",
-                                                                                              "term": {
-                                                                                                "application": {
-                                                                                                  "argument": {"variable": "et"},
-                                                                                                  "function": {
-                                                                                                    "function": {
-                                                                                                      "elimination": {"record": {"field": "left", "typeName": "hydra.core.EitherType"}}}}}}},
-                                                                                            "typeName": "hydra.core.Type"}}}],
-                                                                                    "typeName": "hydra.core.FieldType"}},
-                                                                                {
-                                                                                  "record": {
-                                                                                    "fields": [
-                                                                                      {
-                                                                                        "name": "name",
-                                                                                        "term": {
-                                                                                          "wrap": {
-                                                                                            "body": {"literal": {"string": "right"}},
-                                                                                            "typeName": "hydra.core.Name"}}},
-                                                                                      {
-                                                                                        "name": "type",
-                                                                                        "term": {
-                                                                                          "union": {
-                                                                                            "field": {
-                                                                                              "name": "maybe",
-                                                                                              "term": {
-                                                                                                "application": {
-                                                                                                  "argument": {"variable": "et"},
-                                                                                                  "function": {
-                                                                                                    "function": {
-                                                                                                      "elimination": {"record": {"field": "right", "typeName": "hydra.core.EitherType"}}}}}}},
-                                                                                            "typeName": "hydra.core.Type"}}}],
-                                                                                    "typeName": "hydra.core.FieldType"}}]}}],
-                                                                        "typeName": "hydra.core.RowType"}}},
+                                                                      "list": [
+                                                                        {
+                                                                          "record": {
+                                                                            "fields": [
+                                                                              {
+                                                                                "name": "name",
+                                                                                "term": {
+                                                                                  "wrap": {
+                                                                                    "body": {"literal": {"string": "left"}},
+                                                                                    "typeName": "hydra.core.Name"}}},
+                                                                              {
+                                                                                "name": "type",
+                                                                                "term": {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "maybe",
+                                                                                      "term": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "et"},
+                                                                                          "function": {
+                                                                                            "function": {
+                                                                                              "elimination": {"record": {"field": "left", "typeName": "hydra.core.EitherType"}}}}}}},
+                                                                                    "typeName": "hydra.core.Type"}}}],
+                                                                            "typeName": "hydra.core.FieldType"}},
+                                                                        {
+                                                                          "record": {
+                                                                            "fields": [
+                                                                              {
+                                                                                "name": "name",
+                                                                                "term": {
+                                                                                  "wrap": {
+                                                                                    "body": {"literal": {"string": "right"}},
+                                                                                    "typeName": "hydra.core.Name"}}},
+                                                                              {
+                                                                                "name": "type",
+                                                                                "term": {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "maybe",
+                                                                                      "term": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "et"},
+                                                                                          "function": {
+                                                                                            "function": {
+                                                                                              "elimination": {"record": {"field": "right", "typeName": "hydra.core.EitherType"}}}}}}},
+                                                                                    "typeName": "hydra.core.Type"}}}],
+                                                                            "typeName": "hydra.core.FieldType"}}]}},
                                                                   "typeName": "hydra.core.Type"}},
                                                               "function": {
                                                                 "application": {
@@ -1634,50 +1617,43 @@
                                                                   "field": {
                                                                     "name": "record",
                                                                     "term": {
-                                                                      "record": {
-                                                                        "fields": [
-                                                                          {"name": "typeName", "term": {"variable": "name"}},
-                                                                          {
-                                                                            "name": "fields",
-                                                                            "term": {
-                                                                              "list": [
-                                                                                {
-                                                                                  "record": {
-                                                                                    "fields": [
-                                                                                      {
-                                                                                        "name": "name",
-                                                                                        "term": {
-                                                                                          "wrap": {
-                                                                                            "body": {"literal": {"string": "first"}},
-                                                                                            "typeName": "hydra.core.Name"}}},
-                                                                                      {
-                                                                                        "name": "type",
-                                                                                        "term": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "pt"},
-                                                                                            "function": {
-                                                                                              "function": {
-                                                                                                "elimination": {"record": {"field": "first", "typeName": "hydra.core.PairType"}}}}}}}],
-                                                                                    "typeName": "hydra.core.FieldType"}},
-                                                                                {
-                                                                                  "record": {
-                                                                                    "fields": [
-                                                                                      {
-                                                                                        "name": "name",
-                                                                                        "term": {
-                                                                                          "wrap": {
-                                                                                            "body": {"literal": {"string": "second"}},
-                                                                                            "typeName": "hydra.core.Name"}}},
-                                                                                      {
-                                                                                        "name": "type",
-                                                                                        "term": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "pt"},
-                                                                                            "function": {
-                                                                                              "function": {
-                                                                                                "elimination": {"record": {"field": "second", "typeName": "hydra.core.PairType"}}}}}}}],
-                                                                                    "typeName": "hydra.core.FieldType"}}]}}],
-                                                                        "typeName": "hydra.core.RowType"}}},
+                                                                      "list": [
+                                                                        {
+                                                                          "record": {
+                                                                            "fields": [
+                                                                              {
+                                                                                "name": "name",
+                                                                                "term": {
+                                                                                  "wrap": {
+                                                                                    "body": {"literal": {"string": "first"}},
+                                                                                    "typeName": "hydra.core.Name"}}},
+                                                                              {
+                                                                                "name": "type",
+                                                                                "term": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "pt"},
+                                                                                    "function": {
+                                                                                      "function": {
+                                                                                        "elimination": {"record": {"field": "first", "typeName": "hydra.core.PairType"}}}}}}}],
+                                                                            "typeName": "hydra.core.FieldType"}},
+                                                                        {
+                                                                          "record": {
+                                                                            "fields": [
+                                                                              {
+                                                                                "name": "name",
+                                                                                "term": {
+                                                                                  "wrap": {
+                                                                                    "body": {"literal": {"string": "second"}},
+                                                                                    "typeName": "hydra.core.Name"}}},
+                                                                              {
+                                                                                "name": "type",
+                                                                                "term": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "pt"},
+                                                                                    "function": {
+                                                                                      "function": {
+                                                                                        "elimination": {"record": {"field": "second", "typeName": "hydra.core.PairType"}}}}}}}],
+                                                                            "typeName": "hydra.core.FieldType"}}]}},
                                                                   "typeName": "hydra.core.Type"}},
                                                               "function": {
                                                                 "application": {
@@ -1706,30 +1682,23 @@
                                                                   "field": {
                                                                     "name": "record",
                                                                     "term": {
-                                                                      "record": {
-                                                                        "fields": [
-                                                                          {"name": "typeName", "term": {"variable": "name"}},
-                                                                          {
-                                                                            "name": "fields",
-                                                                            "term": {
-                                                                              "list": [
-                                                                                {
-                                                                                  "record": {
-                                                                                    "fields": [
-                                                                                      {
-                                                                                        "name": "name",
-                                                                                        "term": {
-                                                                                          "wrap": {
-                                                                                            "body": {"literal": {"string": "value"}},
-                                                                                            "typeName": "hydra.core.Name"}}},
-                                                                                      {
-                                                                                        "name": "type",
-                                                                                        "term": {
-                                                                                          "union": {
-                                                                                            "field": {"name": "list", "term": {"variable": "lt_"}},
-                                                                                            "typeName": "hydra.core.Type"}}}],
-                                                                                    "typeName": "hydra.core.FieldType"}}]}}],
-                                                                        "typeName": "hydra.core.RowType"}}},
+                                                                      "list": [
+                                                                        {
+                                                                          "record": {
+                                                                            "fields": [
+                                                                              {
+                                                                                "name": "name",
+                                                                                "term": {
+                                                                                  "wrap": {
+                                                                                    "body": {"literal": {"string": "value"}},
+                                                                                    "typeName": "hydra.core.Name"}}},
+                                                                              {
+                                                                                "name": "type",
+                                                                                "term": {
+                                                                                  "union": {
+                                                                                    "field": {"name": "list", "term": {"variable": "lt_"}},
+                                                                                    "typeName": "hydra.core.Type"}}}],
+                                                                            "typeName": "hydra.core.FieldType"}}]}},
                                                                   "typeName": "hydra.core.Type"}},
                                                               "function": {
                                                                 "application": {
@@ -1758,30 +1727,23 @@
                                                                   "field": {
                                                                     "name": "record",
                                                                     "term": {
-                                                                      "record": {
-                                                                        "fields": [
-                                                                          {"name": "typeName", "term": {"variable": "name"}},
-                                                                          {
-                                                                            "name": "fields",
-                                                                            "term": {
-                                                                              "list": [
-                                                                                {
-                                                                                  "record": {
-                                                                                    "fields": [
-                                                                                      {
-                                                                                        "name": "name",
-                                                                                        "term": {
-                                                                                          "wrap": {
-                                                                                            "body": {"literal": {"string": "value"}},
-                                                                                            "typeName": "hydra.core.Name"}}},
-                                                                                      {
-                                                                                        "name": "type",
-                                                                                        "term": {
-                                                                                          "union": {
-                                                                                            "field": {"name": "list", "term": {"variable": "st"}},
-                                                                                            "typeName": "hydra.core.Type"}}}],
-                                                                                    "typeName": "hydra.core.FieldType"}}]}}],
-                                                                        "typeName": "hydra.core.RowType"}}},
+                                                                      "list": [
+                                                                        {
+                                                                          "record": {
+                                                                            "fields": [
+                                                                              {
+                                                                                "name": "name",
+                                                                                "term": {
+                                                                                  "wrap": {
+                                                                                    "body": {"literal": {"string": "value"}},
+                                                                                    "typeName": "hydra.core.Name"}}},
+                                                                              {
+                                                                                "name": "type",
+                                                                                "term": {
+                                                                                  "union": {
+                                                                                    "field": {"name": "list", "term": {"variable": "st"}},
+                                                                                    "typeName": "hydra.core.Type"}}}],
+                                                                            "typeName": "hydra.core.FieldType"}}]}},
                                                                   "typeName": "hydra.core.Type"}},
                                                               "function": {
                                                                 "application": {
@@ -1810,37 +1772,30 @@
                                                                   "field": {
                                                                     "name": "record",
                                                                     "term": {
-                                                                      "record": {
-                                                                        "fields": [
-                                                                          {"name": "typeName", "term": {"variable": "name"}},
-                                                                          {
-                                                                            "name": "fields",
-                                                                            "term": {
-                                                                              "list": [
-                                                                                {
-                                                                                  "record": {
-                                                                                    "fields": [
-                                                                                      {
-                                                                                        "name": "name",
-                                                                                        "term": {
-                                                                                          "wrap": {
-                                                                                            "body": {"literal": {"string": "value"}},
-                                                                                            "typeName": "hydra.core.Name"}}},
-                                                                                      {
-                                                                                        "name": "type",
-                                                                                        "term": {
-                                                                                          "union": {
-                                                                                            "field": {
-                                                                                              "name": "list",
-                                                                                              "term": {
-                                                                                                "application": {
-                                                                                                  "argument": {"variable": "mt"},
-                                                                                                  "function": {
-                                                                                                    "function": {
-                                                                                                      "elimination": {"record": {"field": "values", "typeName": "hydra.core.MapType"}}}}}}},
-                                                                                            "typeName": "hydra.core.Type"}}}],
-                                                                                    "typeName": "hydra.core.FieldType"}}]}}],
-                                                                        "typeName": "hydra.core.RowType"}}},
+                                                                      "list": [
+                                                                        {
+                                                                          "record": {
+                                                                            "fields": [
+                                                                              {
+                                                                                "name": "name",
+                                                                                "term": {
+                                                                                  "wrap": {
+                                                                                    "body": {"literal": {"string": "value"}},
+                                                                                    "typeName": "hydra.core.Name"}}},
+                                                                              {
+                                                                                "name": "type",
+                                                                                "term": {
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "list",
+                                                                                      "term": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "mt"},
+                                                                                          "function": {
+                                                                                            "function": {
+                                                                                              "elimination": {"record": {"field": "values", "typeName": "hydra.core.MapType"}}}}}}},
+                                                                                    "typeName": "hydra.core.Type"}}}],
+                                                                            "typeName": "hydra.core.FieldType"}}]}},
                                                                   "typeName": "hydra.core.Type"}},
                                                               "function": {
                                                                 "application": {
@@ -1869,30 +1824,23 @@
                                                                   "field": {
                                                                     "name": "record",
                                                                     "term": {
-                                                                      "record": {
-                                                                        "fields": [
-                                                                          {"name": "typeName", "term": {"variable": "name"}},
-                                                                          {
-                                                                            "name": "fields",
-                                                                            "term": {
-                                                                              "list": [
-                                                                                {
-                                                                                  "record": {
-                                                                                    "fields": [
-                                                                                      {
-                                                                                        "name": "name",
-                                                                                        "term": {
-                                                                                          "wrap": {
-                                                                                            "body": {"literal": {"string": "value"}},
-                                                                                            "typeName": "hydra.core.Name"}}},
-                                                                                      {
-                                                                                        "name": "type",
-                                                                                        "term": {
-                                                                                          "union": {
-                                                                                            "field": {"name": "literal", "term": {"variable": "lt_"}},
-                                                                                            "typeName": "hydra.core.Type"}}}],
-                                                                                    "typeName": "hydra.core.FieldType"}}]}}],
-                                                                        "typeName": "hydra.core.RowType"}}},
+                                                                      "list": [
+                                                                        {
+                                                                          "record": {
+                                                                            "fields": [
+                                                                              {
+                                                                                "name": "name",
+                                                                                "term": {
+                                                                                  "wrap": {
+                                                                                    "body": {"literal": {"string": "value"}},
+                                                                                    "typeName": "hydra.core.Name"}}},
+                                                                              {
+                                                                                "name": "type",
+                                                                                "term": {
+                                                                                  "union": {
+                                                                                    "field": {"name": "literal", "term": {"variable": "lt_"}},
+                                                                                    "typeName": "hydra.core.Type"}}}],
+                                                                            "typeName": "hydra.core.FieldType"}}]}},
                                                                   "typeName": "hydra.core.Type"}},
                                                               "function": {
                                                                 "application": {
@@ -1921,30 +1869,23 @@
                                                                   "field": {
                                                                     "name": "record",
                                                                     "term": {
-                                                                      "record": {
-                                                                        "fields": [
-                                                                          {"name": "typeName", "term": {"variable": "name"}},
-                                                                          {
-                                                                            "name": "fields",
-                                                                            "term": {
-                                                                              "list": [
-                                                                                {
-                                                                                  "record": {
-                                                                                    "fields": [
-                                                                                      {
-                                                                                        "name": "name",
-                                                                                        "term": {
-                                                                                          "wrap": {
-                                                                                            "body": {"literal": {"string": "value"}},
-                                                                                            "typeName": "hydra.core.Name"}}},
-                                                                                      {
-                                                                                        "name": "type",
-                                                                                        "term": {
-                                                                                          "union": {
-                                                                                            "field": {"name": "variable", "term": {"variable": "vn"}},
-                                                                                            "typeName": "hydra.core.Type"}}}],
-                                                                                    "typeName": "hydra.core.FieldType"}}]}}],
-                                                                        "typeName": "hydra.core.RowType"}}},
+                                                                      "list": [
+                                                                        {
+                                                                          "record": {
+                                                                            "fields": [
+                                                                              {
+                                                                                "name": "name",
+                                                                                "term": {
+                                                                                  "wrap": {
+                                                                                    "body": {"literal": {"string": "value"}},
+                                                                                    "typeName": "hydra.core.Name"}}},
+                                                                              {
+                                                                                "name": "type",
+                                                                                "term": {
+                                                                                  "union": {
+                                                                                    "field": {"name": "variable", "term": {"variable": "vn"}},
+                                                                                    "typeName": "hydra.core.Type"}}}],
+                                                                            "typeName": "hydra.core.FieldType"}}]}},
                                                                   "typeName": "hydra.core.Type"}},
                                                               "function": {
                                                                 "application": {
@@ -1973,32 +1914,18 @@
                                                                   "field": {
                                                                     "name": "record",
                                                                     "term": {
-                                                                      "record": {
-                                                                        "fields": [
-                                                                          {"name": "typeName", "term": {"variable": "name"}},
-                                                                          {
-                                                                            "name": "fields",
-                                                                            "term": {
-                                                                              "list": [
-                                                                                {
-                                                                                  "record": {
-                                                                                    "fields": [
-                                                                                      {
-                                                                                        "name": "name",
-                                                                                        "term": {
-                                                                                          "wrap": {
-                                                                                            "body": {"literal": {"string": "value"}},
-                                                                                            "typeName": "hydra.core.Name"}}},
-                                                                                      {
-                                                                                        "name": "type",
-                                                                                        "term": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "wt"},
-                                                                                            "function": {
-                                                                                              "function": {
-                                                                                                "elimination": {"record": {"field": "body", "typeName": "hydra.core.WrappedType"}}}}}}}],
-                                                                                    "typeName": "hydra.core.FieldType"}}]}}],
-                                                                        "typeName": "hydra.core.RowType"}}},
+                                                                      "list": [
+                                                                        {
+                                                                          "record": {
+                                                                            "fields": [
+                                                                              {
+                                                                                "name": "name",
+                                                                                "term": {
+                                                                                  "wrap": {
+                                                                                    "body": {"literal": {"string": "value"}},
+                                                                                    "typeName": "hydra.core.Name"}}},
+                                                                              {"name": "type", "term": {"variable": "wt"}}],
+                                                                            "typeName": "hydra.core.FieldType"}}]}},
                                                                   "typeName": "hydra.core.Type"}},
                                                               "function": {
                                                                 "application": {
@@ -2013,7 +1940,7 @@
                                                                             "application": {
                                                                               "argument": {"variable": "cx"},
                                                                               "function": {"variable": "hydra.ext.graphql.coder.encodeNamedType"}}}}}}}}}}},
-                                                          "domain": [{"variable": "hydra.core.WrappedType"}],
+                                                          "domain": [{"variable": "hydra.core.Type"}],
                                                           "parameter": "wt"}}}}],
                                                 "default": [
                                                   {
@@ -2360,33 +2287,32 @@
                                                                                     "typeApplication": {
                                                                                       "body": {
                                                                                         "either": {
-                                                                                          "@right": {
-                                                                                            "union": {
-                                                                                              "field": {
-                                                                                                "name": "named",
-                                                                                                "term": {
-                                                                                                  "wrap": {
-                                                                                                    "body": {
-                                                                                                      "application": {
-                                                                                                        "argument": {
-                                                                                                          "application": {
-                                                                                                            "argument": {"variable": "rt"},
-                                                                                                            "function": {
-                                                                                                              "function": {
-                                                                                                                "elimination": {"record": {"field": "typeName", "typeName": "hydra.core.RowType"}}}}}},
-                                                                                                        "function": {
-                                                                                                          "application": {
-                                                                                                            "argument": {"variable": "prefixes"},
-                                                                                                            "function": {"variable": "hydra.ext.graphql.coder.encodeTypeName"}}}}},
-                                                                                                    "typeName": "hydra.ext.org.graphql.syntax.NamedType"}}},
-                                                                                              "typeName": "hydra.ext.org.graphql.syntax.Type"}}}},
+                                                                                          "@left": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {
+                                                                                                "record": {
+                                                                                                  "fields": [
+                                                                                                    {
+                                                                                                      "name": "object",
+                                                                                                      "term": {
+                                                                                                        "union": {
+                                                                                                          "field": {
+                                                                                                            "name": "other",
+                                                                                                            "term": {
+                                                                                                              "wrap": {
+                                                                                                                "body": {"literal": {"string": "unexpected anonymous record type"}},
+                                                                                                                "typeName": "hydra.error.OtherError"}}},
+                                                                                                          "typeName": "hydra.error.Error"}}},
+                                                                                                    {"name": "context", "term": {"variable": "cx"}}],
+                                                                                                  "typeName": "hydra.context.InContext"}},
+                                                                                              "type": {"variable": "hydra.error.Error"}}}}},
                                                                                       "type": {
                                                                                         "application": {
                                                                                           "argument": {"variable": "hydra.error.Error"},
                                                                                           "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                   "type": {"variable": "hydra.ext.org.graphql.syntax.Type"}}},
-                                                                              "domain": [{"variable": "hydra.core.RowType"}],
-                                                                              "parameter": "rt"}}}},
+                                                                              "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                                              "parameter": "_"}}}},
                                                                       {
                                                                         "name": "union",
                                                                         "term": {
@@ -2398,33 +2324,32 @@
                                                                                     "typeApplication": {
                                                                                       "body": {
                                                                                         "either": {
-                                                                                          "@right": {
-                                                                                            "union": {
-                                                                                              "field": {
-                                                                                                "name": "named",
-                                                                                                "term": {
-                                                                                                  "wrap": {
-                                                                                                    "body": {
-                                                                                                      "application": {
-                                                                                                        "argument": {
-                                                                                                          "application": {
-                                                                                                            "argument": {"variable": "rt"},
-                                                                                                            "function": {
-                                                                                                              "function": {
-                                                                                                                "elimination": {"record": {"field": "typeName", "typeName": "hydra.core.RowType"}}}}}},
-                                                                                                        "function": {
-                                                                                                          "application": {
-                                                                                                            "argument": {"variable": "prefixes"},
-                                                                                                            "function": {"variable": "hydra.ext.graphql.coder.encodeTypeName"}}}}},
-                                                                                                    "typeName": "hydra.ext.org.graphql.syntax.NamedType"}}},
-                                                                                              "typeName": "hydra.ext.org.graphql.syntax.Type"}}}},
+                                                                                          "@left": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {
+                                                                                                "record": {
+                                                                                                  "fields": [
+                                                                                                    {
+                                                                                                      "name": "object",
+                                                                                                      "term": {
+                                                                                                        "union": {
+                                                                                                          "field": {
+                                                                                                            "name": "other",
+                                                                                                            "term": {
+                                                                                                              "wrap": {
+                                                                                                                "body": {"literal": {"string": "unexpected anonymous union type"}},
+                                                                                                                "typeName": "hydra.error.OtherError"}}},
+                                                                                                          "typeName": "hydra.error.Error"}}},
+                                                                                                    {"name": "context", "term": {"variable": "cx"}}],
+                                                                                                  "typeName": "hydra.context.InContext"}},
+                                                                                              "type": {"variable": "hydra.error.Error"}}}}},
                                                                                       "type": {
                                                                                         "application": {
                                                                                           "argument": {"variable": "hydra.error.Error"},
                                                                                           "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                   "type": {"variable": "hydra.ext.org.graphql.syntax.Type"}}},
-                                                                              "domain": [{"variable": "hydra.core.RowType"}],
-                                                                              "parameter": "rt"}}}},
+                                                                              "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                                              "parameter": "_"}}}},
                                                                       {
                                                                         "name": "wrap",
                                                                         "term": {
@@ -2436,34 +2361,32 @@
                                                                                     "typeApplication": {
                                                                                       "body": {
                                                                                         "either": {
-                                                                                          "@right": {
-                                                                                            "union": {
-                                                                                              "field": {
-                                                                                                "name": "named",
-                                                                                                "term": {
-                                                                                                  "wrap": {
-                                                                                                    "body": {
-                                                                                                      "application": {
-                                                                                                        "argument": {
-                                                                                                          "application": {
-                                                                                                            "argument": {"variable": "wt"},
-                                                                                                            "function": {
-                                                                                                              "function": {
-                                                                                                                "elimination": {
-                                                                                                                  "record": {"field": "typeName", "typeName": "hydra.core.WrappedType"}}}}}},
-                                                                                                        "function": {
-                                                                                                          "application": {
-                                                                                                            "argument": {"variable": "prefixes"},
-                                                                                                            "function": {"variable": "hydra.ext.graphql.coder.encodeTypeName"}}}}},
-                                                                                                    "typeName": "hydra.ext.org.graphql.syntax.NamedType"}}},
-                                                                                              "typeName": "hydra.ext.org.graphql.syntax.Type"}}}},
+                                                                                          "@left": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {
+                                                                                                "record": {
+                                                                                                  "fields": [
+                                                                                                    {
+                                                                                                      "name": "object",
+                                                                                                      "term": {
+                                                                                                        "union": {
+                                                                                                          "field": {
+                                                                                                            "name": "other",
+                                                                                                            "term": {
+                                                                                                              "wrap": {
+                                                                                                                "body": {"literal": {"string": "unexpected anonymous wrap type"}},
+                                                                                                                "typeName": "hydra.error.OtherError"}}},
+                                                                                                          "typeName": "hydra.error.Error"}}},
+                                                                                                    {"name": "context", "term": {"variable": "cx"}}],
+                                                                                                  "typeName": "hydra.context.InContext"}},
+                                                                                              "type": {"variable": "hydra.error.Error"}}}}},
                                                                                       "type": {
                                                                                         "application": {
                                                                                           "argument": {"variable": "hydra.error.Error"},
                                                                                           "function": {"variable": "hydra.context.InContext"}}}}},
                                                                                   "type": {"variable": "hydra.ext.org.graphql.syntax.Type"}}},
-                                                                              "domain": [{"variable": "hydra.core.WrappedType"}],
-                                                                              "parameter": "wt"}}}},
+                                                                              "domain": [{"variable": "hydra.core.Type"}],
+                                                                              "parameter": "_"}}}},
                                                                       {
                                                                         "name": "variable",
                                                                         "term": {
@@ -2778,38 +2701,32 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "either": {
-                                                                    "@right": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "nonNull",
-                                                                          "term": {
-                                                                            "union": {
-                                                                              "field": {
-                                                                                "name": "named",
+                                                                    "@left": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "record": {
+                                                                            "fields": [
+                                                                              {
+                                                                                "name": "object",
                                                                                 "term": {
-                                                                                  "wrap": {
-                                                                                    "body": {
-                                                                                      "application": {
-                                                                                        "argument": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "rt"},
-                                                                                            "function": {
-                                                                                              "function": {
-                                                                                                "elimination": {"record": {"field": "typeName", "typeName": "hydra.core.RowType"}}}}}},
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "prefixes"},
-                                                                                            "function": {"variable": "hydra.ext.graphql.coder.encodeTypeName"}}}}},
-                                                                                    "typeName": "hydra.ext.org.graphql.syntax.NamedType"}}},
-                                                                              "typeName": "hydra.ext.org.graphql.syntax.NonNullType"}}},
-                                                                        "typeName": "hydra.ext.org.graphql.syntax.Type"}}}},
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "other",
+                                                                                      "term": {
+                                                                                        "wrap": {
+                                                                                          "body": {"literal": {"string": "unexpected anonymous record type"}},
+                                                                                          "typeName": "hydra.error.OtherError"}}},
+                                                                                    "typeName": "hydra.error.Error"}}},
+                                                                              {"name": "context", "term": {"variable": "cx"}}],
+                                                                            "typeName": "hydra.context.InContext"}},
+                                                                        "type": {"variable": "hydra.error.Error"}}}}},
                                                                 "type": {
                                                                   "application": {
                                                                     "argument": {"variable": "hydra.error.Error"},
                                                                     "function": {"variable": "hydra.context.InContext"}}}}},
                                                             "type": {"variable": "hydra.ext.org.graphql.syntax.Type"}}},
-                                                        "domain": [{"variable": "hydra.core.RowType"}],
-                                                        "parameter": "rt"}}}},
+                                                        "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                        "parameter": "_"}}}},
                                                 {
                                                   "name": "union",
                                                   "term": {
@@ -2821,38 +2738,32 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "either": {
-                                                                    "@right": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "nonNull",
-                                                                          "term": {
-                                                                            "union": {
-                                                                              "field": {
-                                                                                "name": "named",
+                                                                    "@left": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "record": {
+                                                                            "fields": [
+                                                                              {
+                                                                                "name": "object",
                                                                                 "term": {
-                                                                                  "wrap": {
-                                                                                    "body": {
-                                                                                      "application": {
-                                                                                        "argument": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "rt"},
-                                                                                            "function": {
-                                                                                              "function": {
-                                                                                                "elimination": {"record": {"field": "typeName", "typeName": "hydra.core.RowType"}}}}}},
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "prefixes"},
-                                                                                            "function": {"variable": "hydra.ext.graphql.coder.encodeTypeName"}}}}},
-                                                                                    "typeName": "hydra.ext.org.graphql.syntax.NamedType"}}},
-                                                                              "typeName": "hydra.ext.org.graphql.syntax.NonNullType"}}},
-                                                                        "typeName": "hydra.ext.org.graphql.syntax.Type"}}}},
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "other",
+                                                                                      "term": {
+                                                                                        "wrap": {
+                                                                                          "body": {"literal": {"string": "unexpected anonymous union type"}},
+                                                                                          "typeName": "hydra.error.OtherError"}}},
+                                                                                    "typeName": "hydra.error.Error"}}},
+                                                                              {"name": "context", "term": {"variable": "cx"}}],
+                                                                            "typeName": "hydra.context.InContext"}},
+                                                                        "type": {"variable": "hydra.error.Error"}}}}},
                                                                 "type": {
                                                                   "application": {
                                                                     "argument": {"variable": "hydra.error.Error"},
                                                                     "function": {"variable": "hydra.context.InContext"}}}}},
                                                             "type": {"variable": "hydra.ext.org.graphql.syntax.Type"}}},
-                                                        "domain": [{"variable": "hydra.core.RowType"}],
-                                                        "parameter": "rt"}}}},
+                                                        "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                                                        "parameter": "_"}}}},
                                                 {
                                                   "name": "variable",
                                                   "term": {
@@ -2902,39 +2813,32 @@
                                                               "typeApplication": {
                                                                 "body": {
                                                                   "either": {
-                                                                    "@right": {
-                                                                      "union": {
-                                                                        "field": {
-                                                                          "name": "nonNull",
-                                                                          "term": {
-                                                                            "union": {
-                                                                              "field": {
-                                                                                "name": "named",
+                                                                    "@left": {
+                                                                      "typeApplication": {
+                                                                        "body": {
+                                                                          "record": {
+                                                                            "fields": [
+                                                                              {
+                                                                                "name": "object",
                                                                                 "term": {
-                                                                                  "wrap": {
-                                                                                    "body": {
-                                                                                      "application": {
-                                                                                        "argument": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "wt"},
-                                                                                            "function": {
-                                                                                              "function": {
-                                                                                                "elimination": {
-                                                                                                  "record": {"field": "typeName", "typeName": "hydra.core.WrappedType"}}}}}},
-                                                                                        "function": {
-                                                                                          "application": {
-                                                                                            "argument": {"variable": "prefixes"},
-                                                                                            "function": {"variable": "hydra.ext.graphql.coder.encodeTypeName"}}}}},
-                                                                                    "typeName": "hydra.ext.org.graphql.syntax.NamedType"}}},
-                                                                              "typeName": "hydra.ext.org.graphql.syntax.NonNullType"}}},
-                                                                        "typeName": "hydra.ext.org.graphql.syntax.Type"}}}},
+                                                                                  "union": {
+                                                                                    "field": {
+                                                                                      "name": "other",
+                                                                                      "term": {
+                                                                                        "wrap": {
+                                                                                          "body": {"literal": {"string": "unexpected anonymous wrap type"}},
+                                                                                          "typeName": "hydra.error.OtherError"}}},
+                                                                                    "typeName": "hydra.error.Error"}}},
+                                                                              {"name": "context", "term": {"variable": "cx"}}],
+                                                                            "typeName": "hydra.context.InContext"}},
+                                                                        "type": {"variable": "hydra.error.Error"}}}}},
                                                                 "type": {
                                                                   "application": {
                                                                     "argument": {"variable": "hydra.error.Error"},
                                                                     "function": {"variable": "hydra.context.InContext"}}}}},
                                                             "type": {"variable": "hydra.ext.org.graphql.syntax.Type"}}},
-                                                        "domain": [{"variable": "hydra.core.WrappedType"}],
-                                                        "parameter": "wt"}}}}],
+                                                        "domain": [{"variable": "hydra.core.Type"}],
+                                                        "parameter": "_"}}}}],
                                               "default": [
                                                 {
                                                   "typeApplication": {

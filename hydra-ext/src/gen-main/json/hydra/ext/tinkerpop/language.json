@@ -937,7 +937,7 @@
                                                                     "function": {
                                                                       "lambda": {
                                                                         "body": {"literal": {"boolean": true}},
-                                                                        "domain": [{"variable": "hydra.core.WrappedType"}],
+                                                                        "domain": [{"variable": "hydra.core.Type"}],
                                                                         "parameter": "_"}}}},
                                                                 {
                                                                   "name": "maybe",

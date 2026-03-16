@@ -1358,10 +1358,10 @@ public interface Inference {
             hydra.util.Lazy<hydra.typing.TypeSubst> isubst = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(hydra.lib.pairs.Second.apply(hydra.lib.pairs.Second.apply(results.get()))));
             hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> iterms = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(results.get()));
             hydra.util.Lazy<hydra.util.ConsList<hydra.core.Type>> itypes = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(hydra.lib.pairs.Second.apply(results.get())));
-            hydra.util.Lazy<hydra.core.Type> ityp = new hydra.util.Lazy<>(() -> new hydra.core.Type.Record(new hydra.core.RowType(tname, hydra.lib.lists.ZipWith.apply(
+            hydra.util.Lazy<hydra.core.Type> ityp = new hydra.util.Lazy<>(() -> new hydra.core.Type.Record(hydra.lib.lists.ZipWith.apply(
               (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Type, hydra.core.FieldType>>) (n -> (java.util.function.Function<hydra.core.Type, hydra.core.FieldType>) (t -> new hydra.core.FieldType(n, t))),
               fnames.get(),
-              itypes.get()))));
+              itypes.get())));
             hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>> recElemConstraints = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(hydra.lib.pairs.Second.apply(hydra.lib.pairs.Second.apply(results.get()))));
             hydra.core.Type stype = (schemaType.get()).type;
             hydra.util.ConsList<hydra.core.Name> svars = (schemaType.get()).variables;
@@ -1647,7 +1647,7 @@ public interface Inference {
             hydra.typing.TypeSubst isubst = (result).subst;
             hydra.core.Term iterm = (result).term;
             hydra.core.Type itype = (result).type;
-            hydra.core.Type ityp = new hydra.core.Type.Wrap(new hydra.core.WrappedType(tname, itype));
+            hydra.core.Type ityp = new hydra.core.Type.Wrap(itype);
             hydra.core.Type stype = (schemaType.get()).type;
             hydra.util.ConsList<hydra.core.Name> svars = (schemaType.get()).variables;
             return hydra.lib.eithers.Bind.apply(

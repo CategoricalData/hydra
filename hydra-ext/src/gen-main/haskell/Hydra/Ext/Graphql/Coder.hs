@@ -92,71 +92,55 @@ encodeLiteralType cx lt = ((\x -> case x of
 
 encodeNamedType :: (Context.Context -> Graph.Graph -> M.Map Module.Namespace String -> Core.Name -> Core.Type -> Either (Context.InContext Error.Error) Syntax.TypeDefinition)
 encodeNamedType cx g prefixes name typ = ((\x -> case x of
-  Core.TypeRecord v0 -> (Eithers.bind (Eithers.mapList (\f -> encodeFieldType cx g prefixes f) (Core.rowTypeFields v0)) (\gfields -> Eithers.bind (descriptionFromType cx g typ) (\desc -> Right (Syntax.TypeDefinitionObject (Syntax.ObjectTypeDefinition {
+  Core.TypeRecord v0 -> (Eithers.bind (Eithers.mapList (\f -> encodeFieldType cx g prefixes f) v0) (\gfields -> Eithers.bind (descriptionFromType cx g typ) (\desc -> Right (Syntax.TypeDefinitionObject (Syntax.ObjectTypeDefinition {
     Syntax.objectTypeDefinitionDescription = desc,
     Syntax.objectTypeDefinitionName = (encodeTypeName prefixes name),
     Syntax.objectTypeDefinitionImplementsInterfaces = Nothing,
     Syntax.objectTypeDefinitionDirectives = Nothing,
     Syntax.objectTypeDefinitionFieldsDefinition = (Just (Syntax.FieldsDefinition gfields))})))))
-  Core.TypeUnion v0 -> (Eithers.bind (Eithers.mapList (\f -> encodeEnumFieldType cx g f) (Core.rowTypeFields v0)) (\values -> Eithers.bind (descriptionFromType cx g typ) (\desc -> Right (Syntax.TypeDefinitionEnum (Syntax.EnumTypeDefinition {
+  Core.TypeUnion v0 -> (Eithers.bind (Eithers.mapList (\f -> encodeEnumFieldType cx g f) v0) (\values -> Eithers.bind (descriptionFromType cx g typ) (\desc -> Right (Syntax.TypeDefinitionEnum (Syntax.EnumTypeDefinition {
     Syntax.enumTypeDefinitionDescription = desc,
     Syntax.enumTypeDefinitionName = (encodeTypeName prefixes name),
     Syntax.enumTypeDefinitionDirectives = Nothing,
     Syntax.enumTypeDefinitionEnumValuesDefinition = (Just (Syntax.EnumValuesDefinition values))})))))
-  Core.TypeEither v0 -> (encodeNamedType cx g prefixes name (Core.TypeRecord (Core.RowType {
-    Core.rowTypeTypeName = name,
-    Core.rowTypeFields = [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "left"),
-        Core.fieldTypeType = (Core.TypeMaybe (Core.eitherTypeLeft v0))},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "right"),
-        Core.fieldTypeType = (Core.TypeMaybe (Core.eitherTypeRight v0))}]})))
-  Core.TypePair v0 -> (encodeNamedType cx g prefixes name (Core.TypeRecord (Core.RowType {
-    Core.rowTypeTypeName = name,
-    Core.rowTypeFields = [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "first"),
-        Core.fieldTypeType = (Core.pairTypeFirst v0)},
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "second"),
-        Core.fieldTypeType = (Core.pairTypeSecond v0)}]})))
-  Core.TypeList v0 -> (encodeNamedType cx g prefixes name (Core.TypeRecord (Core.RowType {
-    Core.rowTypeTypeName = name,
-    Core.rowTypeFields = [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "value"),
-        Core.fieldTypeType = (Core.TypeList v0)}]})))
-  Core.TypeSet v0 -> (encodeNamedType cx g prefixes name (Core.TypeRecord (Core.RowType {
-    Core.rowTypeTypeName = name,
-    Core.rowTypeFields = [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "value"),
-        Core.fieldTypeType = (Core.TypeList v0)}]})))
-  Core.TypeMap v0 -> (encodeNamedType cx g prefixes name (Core.TypeRecord (Core.RowType {
-    Core.rowTypeTypeName = name,
-    Core.rowTypeFields = [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "value"),
-        Core.fieldTypeType = (Core.TypeList (Core.mapTypeValues v0))}]})))
-  Core.TypeLiteral v0 -> (encodeNamedType cx g prefixes name (Core.TypeRecord (Core.RowType {
-    Core.rowTypeTypeName = name,
-    Core.rowTypeFields = [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "value"),
-        Core.fieldTypeType = (Core.TypeLiteral v0)}]})))
-  Core.TypeVariable v0 -> (encodeNamedType cx g prefixes name (Core.TypeRecord (Core.RowType {
-    Core.rowTypeTypeName = name,
-    Core.rowTypeFields = [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "value"),
-        Core.fieldTypeType = (Core.TypeVariable v0)}]})))
-  Core.TypeWrap v0 -> (encodeNamedType cx g prefixes name (Core.TypeRecord (Core.RowType {
-    Core.rowTypeTypeName = name,
-    Core.rowTypeFields = [
-      Core.FieldType {
-        Core.fieldTypeName = (Core.Name "value"),
-        Core.fieldTypeType = (Core.wrappedTypeBody v0)}]})))
+  Core.TypeEither v0 -> (encodeNamedType cx g prefixes name (Core.TypeRecord [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "left"),
+      Core.fieldTypeType = (Core.TypeMaybe (Core.eitherTypeLeft v0))},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "right"),
+      Core.fieldTypeType = (Core.TypeMaybe (Core.eitherTypeRight v0))}]))
+  Core.TypePair v0 -> (encodeNamedType cx g prefixes name (Core.TypeRecord [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "first"),
+      Core.fieldTypeType = (Core.pairTypeFirst v0)},
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "second"),
+      Core.fieldTypeType = (Core.pairTypeSecond v0)}]))
+  Core.TypeList v0 -> (encodeNamedType cx g prefixes name (Core.TypeRecord [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "value"),
+      Core.fieldTypeType = (Core.TypeList v0)}]))
+  Core.TypeSet v0 -> (encodeNamedType cx g prefixes name (Core.TypeRecord [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "value"),
+      Core.fieldTypeType = (Core.TypeList v0)}]))
+  Core.TypeMap v0 -> (encodeNamedType cx g prefixes name (Core.TypeRecord [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "value"),
+      Core.fieldTypeType = (Core.TypeList (Core.mapTypeValues v0))}]))
+  Core.TypeLiteral v0 -> (encodeNamedType cx g prefixes name (Core.TypeRecord [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "value"),
+      Core.fieldTypeType = (Core.TypeLiteral v0)}]))
+  Core.TypeVariable v0 -> (encodeNamedType cx g prefixes name (Core.TypeRecord [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "value"),
+      Core.fieldTypeType = (Core.TypeVariable v0)}]))
+  Core.TypeWrap v0 -> (encodeNamedType cx g prefixes name (Core.TypeRecord [
+    Core.FieldType {
+      Core.fieldTypeName = (Core.Name "value"),
+      Core.fieldTypeType = v0}]))
   _ -> (Left (Context.InContext {
     Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "Expected record or union type, found: " (Core_.type_ typ)))),
     Context.inContextContext = cx}))) (Rewriting.deannotateType typ))
@@ -168,9 +152,15 @@ encodeType cx g prefixes typ = ((\x -> case x of
     Core.TypeSet v1 -> (Eithers.map (\gt -> Syntax.TypeList (Syntax.ListType gt)) (encodeType cx g prefixes v1))
     Core.TypeMap v1 -> (Eithers.map (\gt -> Syntax.TypeList (Syntax.ListType gt)) (encodeType cx g prefixes (Core.mapTypeValues v1)))
     Core.TypeLiteral v1 -> (Eithers.map (\nt -> Syntax.TypeNamed nt) (encodeLiteralType cx v1))
-    Core.TypeRecord v1 -> (Right (Syntax.TypeNamed (Syntax.NamedType (encodeTypeName prefixes (Core.rowTypeTypeName v1)))))
-    Core.TypeUnion v1 -> (Right (Syntax.TypeNamed (Syntax.NamedType (encodeTypeName prefixes (Core.rowTypeTypeName v1)))))
-    Core.TypeWrap v1 -> (Right (Syntax.TypeNamed (Syntax.NamedType (encodeTypeName prefixes (Core.wrappedTypeTypeName v1)))))
+    Core.TypeRecord _ -> (Left (Context.InContext {
+      Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected anonymous record type")),
+      Context.inContextContext = cx}))
+    Core.TypeUnion _ -> (Left (Context.InContext {
+      Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected anonymous union type")),
+      Context.inContextContext = cx}))
+    Core.TypeWrap _ -> (Left (Context.InContext {
+      Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected anonymous wrap type")),
+      Context.inContextContext = cx}))
     Core.TypeVariable v1 -> (Right (Syntax.TypeNamed (Syntax.NamedType (encodeTypeName prefixes v1))))
     _ -> (Left (Context.InContext {
       Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "Expected GraphQL-compatible type, found: " (Core_.type_ v0)))),
@@ -179,10 +169,16 @@ encodeType cx g prefixes typ = ((\x -> case x of
   Core.TypeSet v0 -> (Eithers.map (\gt -> Syntax.TypeNonNull (Syntax.NonNullTypeList (Syntax.ListType gt))) (encodeType cx g prefixes v0))
   Core.TypeMap v0 -> (Eithers.map (\gt -> Syntax.TypeNonNull (Syntax.NonNullTypeList (Syntax.ListType gt))) (encodeType cx g prefixes (Core.mapTypeValues v0)))
   Core.TypeLiteral v0 -> (Eithers.map (\nt -> Syntax.TypeNonNull (Syntax.NonNullTypeNamed nt)) (encodeLiteralType cx v0))
-  Core.TypeRecord v0 -> (Right (Syntax.TypeNonNull (Syntax.NonNullTypeNamed (Syntax.NamedType (encodeTypeName prefixes (Core.rowTypeTypeName v0))))))
-  Core.TypeUnion v0 -> (Right (Syntax.TypeNonNull (Syntax.NonNullTypeNamed (Syntax.NamedType (encodeTypeName prefixes (Core.rowTypeTypeName v0))))))
+  Core.TypeRecord _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected anonymous record type")),
+    Context.inContextContext = cx}))
+  Core.TypeUnion _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected anonymous union type")),
+    Context.inContextContext = cx}))
   Core.TypeVariable v0 -> (Right (Syntax.TypeNonNull (Syntax.NonNullTypeNamed (Syntax.NamedType (encodeTypeName prefixes v0)))))
-  Core.TypeWrap v0 -> (Right (Syntax.TypeNonNull (Syntax.NonNullTypeNamed (Syntax.NamedType (encodeTypeName prefixes (Core.wrappedTypeTypeName v0))))))
+  Core.TypeWrap _ -> (Left (Context.InContext {
+    Context.inContextObject = (Error.ErrorOther (Error.OtherError "unexpected anonymous wrap type")),
+    Context.inContextContext = cx}))
   _ -> (Left (Context.InContext {
     Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "Expected GraphQL-compatible type, found: " (Core_.type_ typ)))),
     Context.inContextContext = cx}))) (Rewriting.deannotateType typ))

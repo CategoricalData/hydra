@@ -586,9 +586,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
    * A record type
    */
   public static final class Record extends hydra.core.Type implements Serializable {
-    public final hydra.core.RowType value;
+    public final hydra.util.ConsList<hydra.core.FieldType> value;
     
-    public Record (hydra.core.RowType value) {
+    public Record (hydra.util.ConsList<hydra.core.FieldType> value) {
       this.value = value;
     }
     
@@ -616,7 +616,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       Record o = (Record) other;
-      return ((Comparable) value).compareTo(o.value);
+      return Integer.compare(
+        value.hashCode(),
+        o.value.hashCode());
     }
     
     @Override
@@ -672,9 +674,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
    * A union type with field names
    */
   public static final class Union extends hydra.core.Type implements Serializable {
-    public final hydra.core.RowType value;
+    public final hydra.util.ConsList<hydra.core.FieldType> value;
     
-    public Union (hydra.core.RowType value) {
+    public Union (hydra.util.ConsList<hydra.core.FieldType> value) {
       this.value = value;
     }
     
@@ -702,7 +704,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       Union o = (Union) other;
-      return ((Comparable) value).compareTo(o.value);
+      return Integer.compare(
+        value.hashCode(),
+        o.value.hashCode());
     }
     
     @Override
@@ -796,9 +800,9 @@ public abstract class Type implements Serializable, Comparable<Type> {
    * A wrapped type (newtype)
    */
   public static final class Wrap extends hydra.core.Type implements Serializable {
-    public final hydra.core.WrappedType value;
+    public final hydra.core.Type value;
     
-    public Wrap (hydra.core.WrappedType value) {
+    public Wrap (hydra.core.Type value) {
       this.value = value;
     }
     

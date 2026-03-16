@@ -2415,64 +2415,48 @@
                                 "let": {
                                   "bindings": [
                                     {
-                                      "name": "flds",
+                                      "name": "fieldStrs",
                                       "term": {
                                         "application": {
-                                          "argument": {"variable": "rt"},
+                                          "argument": {"variable": "flds"},
                                           "function": {
-                                            "function": {
-                                              "elimination": {"record": {"field": "fields", "typeName": "hydra.core.RowType"}}}}}},
+                                            "application": {
+                                              "argument": {"variable": "hydra.show.core.fieldType"},
+                                              "function": {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "typeApplication": {
+                                                      "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                      "type": {"variable": "hydra.core.FieldType"}}},
+                                                  "type": {"literal": {"string": {}}}}}}}}},
                                       "type": [
                                         {
                                           "constraints": null,
-                                          "type": {"list": {"variable": "hydra.core.FieldType"}},
+                                          "type": {"list": {"literal": {"string": {}}}},
                                           "variables": []}]}],
                                   "body": {
-                                    "let": {
-                                      "bindings": [
-                                        {
-                                          "name": "fieldStrs",
-                                          "term": {
+                                    "application": {
+                                      "argument": {
+                                        "list": [
+                                          {"literal": {"string": "{"}},
+                                          {
                                             "application": {
-                                              "argument": {"variable": "flds"},
+                                              "argument": {"variable": "fieldStrs"},
                                               "function": {
                                                 "application": {
-                                                  "argument": {"variable": "hydra.show.core.fieldType"},
-                                                  "function": {
-                                                    "typeApplication": {
-                                                      "body": {
-                                                        "typeApplication": {
-                                                          "body": {"function": {"primitive": "hydra.lib.lists.map"}},
-                                                          "type": {"variable": "hydra.core.FieldType"}}},
-                                                      "type": {"literal": {"string": {}}}}}}}}},
-                                          "type": [
-                                            {
-                                              "constraints": null,
-                                              "type": {"list": {"literal": {"string": {}}}},
-                                              "variables": []}]}],
-                                      "body": {
-                                        "application": {
-                                          "argument": {
-                                            "list": [
-                                              {"literal": {"string": "{"}},
-                                              {
-                                                "application": {
-                                                  "argument": {"variable": "fieldStrs"},
-                                                  "function": {
-                                                    "application": {
-                                                      "argument": {"literal": {"string": ", "}},
-                                                      "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}},
-                                              {"literal": {"string": "}"}}]},
-                                          "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}}}}}},
-                              "domain": [{"variable": "hydra.core.RowType"}],
-                              "parameter": "rt"}}},
+                                                  "argument": {"literal": {"string": ", "}},
+                                                  "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}},
+                                          {"literal": {"string": "}"}}]},
+                                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}}}},
+                              "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
+                              "parameter": "flds"}}},
                         "type": [
                           {
                             "constraints": null,
                             "type": {
                               "function": {
                                 "codomain": {"literal": {"string": {}}},
-                                "domain": {"variable": "hydra.core.RowType"}}},
+                                "domain": {"list": {"variable": "hydra.core.FieldType"}}}},
                             "variables": []}]}],
                     "body": {
                       "let": {
@@ -3125,7 +3109,7 @@
                                                         "application": {
                                                           "argument": {"literal": {"string": "record"}},
                                                           "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                  "domain": [{"variable": "hydra.core.RowType"}],
+                                                  "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                                   "parameter": "rt"}}}},
                                           {
                                             "name": "set",
@@ -3160,7 +3144,7 @@
                                                         "application": {
                                                           "argument": {"literal": {"string": "union"}},
                                                           "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
-                                                  "domain": [{"variable": "hydra.core.RowType"}],
+                                                  "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                                   "parameter": "rt"}}}},
                                           {
                                             "name": "unit",
@@ -3187,55 +3171,17 @@
                                               "function": {
                                                 "lambda": {
                                                   "body": {
-                                                    "let": {
-                                                      "bindings": [
-                                                        {
-                                                          "name": "tname",
-                                                          "term": {
+                                                    "application": {
+                                                      "argument": {
+                                                        "list": [
+                                                          {"literal": {"string": "wrap("}},
+                                                          {
                                                             "application": {
-                                                              "argument": {
-                                                                "application": {
-                                                                  "argument": {"variable": "wt"},
-                                                                  "function": {
-                                                                    "function": {
-                                                                      "elimination": {
-                                                                        "record": {"field": "typeName", "typeName": "hydra.core.WrappedType"}}}}}},
-                                                              "function": {"function": {"elimination": {"wrap": "hydra.core.Name"}}}}},
-                                                          "type": [
-                                                            {
-                                                              "constraints": null,
-                                                              "type": {"literal": {"string": {}}},
-                                                              "variables": []}]}],
-                                                      "body": {
-                                                        "let": {
-                                                          "bindings": [
-                                                            {
-                                                              "name": "typ1",
-                                                              "term": {
-                                                                "application": {
-                                                                  "argument": {"variable": "wt"},
-                                                                  "function": {
-                                                                    "function": {
-                                                                      "elimination": {"record": {"field": "body", "typeName": "hydra.core.WrappedType"}}}}}},
-                                                              "type": [
-                                                                {
-                                                                  "constraints": null,
-                                                                  "type": {"variable": "hydra.core.Type"},
-                                                                  "variables": []}]}],
-                                                          "body": {
-                                                            "application": {
-                                                              "argument": {
-                                                                "list": [
-                                                                  {"literal": {"string": "wrap["}},
-                                                                  {"variable": "tname"},
-                                                                  {"literal": {"string": "]("}},
-                                                                  {
-                                                                    "application": {
-                                                                      "argument": {"variable": "typ1"},
-                                                                      "function": {"variable": "hydra.show.core.type"}}},
-                                                                  {"literal": {"string": ")"}}]},
-                                                              "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}}}}}},
-                                                  "domain": [{"variable": "hydra.core.WrappedType"}],
+                                                              "argument": {"variable": "wt"},
+                                                              "function": {"variable": "hydra.show.core.type"}}},
+                                                          {"literal": {"string": ")"}}]},
+                                                      "function": {"function": {"primitive": "hydra.lib.strings.cat"}}}},
+                                                  "domain": [{"variable": "hydra.core.Type"}],
                                                   "parameter": "wt"}}}}],
                                         "default": null,
                                         "typeName": "hydra.core.Type"}}}}}}}}}}}},

@@ -12,7 +12,7 @@ public interface Mapping {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.AnnotationSchema>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.AnnotationSchema> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.pg.mapping.AnnotationSchema>left(new hydra.error.DecodingError("expected record of type hydra.pg.mapping.AnnotationSchema"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.pg.mapping.AnnotationSchema>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override
@@ -497,7 +497,7 @@ public interface Mapping {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.EdgeSpec>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.EdgeSpec> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.pg.mapping.EdgeSpec>left(new hydra.error.DecodingError("expected record of type hydra.pg.mapping.EdgeSpec"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.pg.mapping.EdgeSpec>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override
@@ -560,7 +560,7 @@ public interface Mapping {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ElementSpec>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ElementSpec> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.pg.mapping.ElementSpec>left(new hydra.error.DecodingError("expected union of type hydra.pg.mapping.ElementSpec"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.pg.mapping.ElementSpec>left(new hydra.error.DecodingError("expected union"));
         }
         
         @Override
@@ -568,7 +568,6 @@ public interface Mapping {
           hydra.core.Field field = ((inj).value).field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
-          hydra.core.Name tname = ((inj).value).typeName;
           hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ElementSpec>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ElementSpec>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ElementSpec>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ElementSpec>>>(new hydra.core.Name("vertex"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ElementSpec>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<hydra.pg.mapping.VertexSpec, hydra.pg.mapping.ElementSpec>) (t -> new hydra.pg.mapping.ElementSpec.Vertex(t)),
@@ -584,8 +583,7 @@ public interface Mapping {
             () -> hydra.util.Either.<hydra.error.DecodingError, hydra.pg.mapping.ElementSpec>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "no such field ",
               (fname).value,
-              " in union type ",
-              (tname).value)))),
+              " in union")))),
             (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ElementSpec>>, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ElementSpec>>) (f -> (f).apply(fterm)),
             hydra.lib.maps.Lookup.apply(
               fname,
@@ -603,7 +601,7 @@ public interface Mapping {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.PropertySpec>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.PropertySpec> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.pg.mapping.PropertySpec>left(new hydra.error.DecodingError("expected record of type hydra.pg.mapping.PropertySpec"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.pg.mapping.PropertySpec>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override
@@ -639,7 +637,7 @@ public interface Mapping {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ValueSpec>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ValueSpec> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.pg.mapping.ValueSpec>left(new hydra.error.DecodingError("expected union of type hydra.pg.mapping.ValueSpec"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.pg.mapping.ValueSpec>left(new hydra.error.DecodingError("expected union"));
         }
         
         @Override
@@ -647,7 +645,6 @@ public interface Mapping {
           hydra.core.Field field = ((inj).value).field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
-          hydra.core.Name tname = ((inj).value).typeName;
           hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ValueSpec>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
             (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ValueSpec>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ValueSpec>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ValueSpec>>>(new hydra.core.Name("value"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ValueSpec>>) (input -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<java.lang.Void, hydra.pg.mapping.ValueSpec>) (t -> new hydra.pg.mapping.ValueSpec.Value()),
@@ -686,8 +683,7 @@ public interface Mapping {
             () -> hydra.util.Either.<hydra.error.DecodingError, hydra.pg.mapping.ValueSpec>left(new hydra.error.DecodingError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
               "no such field ",
               (fname).value,
-              " in union type ",
-              (tname).value)))),
+              " in union")))),
             (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ValueSpec>>, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.ValueSpec>>) (f -> (f).apply(fterm)),
             hydra.lib.maps.Lookup.apply(
               fname,
@@ -705,7 +701,7 @@ public interface Mapping {
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.VertexSpec>>) (stripped -> (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.pg.mapping.VertexSpec> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.error.DecodingError, hydra.pg.mapping.VertexSpec>left(new hydra.error.DecodingError("expected record of type hydra.pg.mapping.VertexSpec"));
+          return hydra.util.Either.<hydra.error.DecodingError, hydra.pg.mapping.VertexSpec>left(new hydra.error.DecodingError("expected record"));
         }
         
         @Override

@@ -615,7 +615,7 @@ public interface CoderUtils {
       (ext).value));
   }
   
-  static hydra.core.RowType unionTypeToRecordType(hydra.core.RowType rt) {
+  static hydra.util.ConsList<hydra.core.FieldType> unionTypeToRecordType(hydra.util.ConsList<hydra.core.FieldType> rt) {
     java.util.function.Function<hydra.core.FieldType, hydra.core.FieldType> makeOptional = (java.util.function.Function<hydra.core.FieldType, hydra.core.FieldType>) (f -> {
       hydra.core.Name fn = (f).name;
       hydra.core.Type ft = (f).type;
@@ -623,9 +623,9 @@ public interface CoderUtils {
         (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (x -> new hydra.core.Type.Maybe(x)),
         ft));
     });
-    return new hydra.core.RowType((rt).typeName, hydra.lib.lists.Map.apply(
+    return hydra.lib.lists.Map.apply(
       makeOptional,
-      (rt).fields));
+      rt);
   }
   
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<String>> commentsFromElement(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Binding b) {

@@ -68,10 +68,6 @@ key_freshTypeVariableCount = (Core.Name "freshTypeVariableCount")
 maxInt32 :: Int
 maxInt32 = 2147483647
 
--- | A placeholder name for row types as they are being constructed
-placeholderName :: Core.Name
-placeholderName = (Core.Name "Placeholder")
-
 -- | A maximum depth for nested computations. Currently, this is set very high because deep recursion is common in type inference over the Hydra kernel.
 maxTraceDepth :: Int
 maxTraceDepth = 5000

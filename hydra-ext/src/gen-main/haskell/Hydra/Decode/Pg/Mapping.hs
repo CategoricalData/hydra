@@ -102,7 +102,7 @@ annotationSchema cx raw = (Eithers.either (\err -> Left (Error.DecodingError err
       Mapping.annotationSchemaInEdge = field_inEdge,
       Mapping.annotationSchemaInEdgeLabel = field_inEdgeLabel,
       Mapping.annotationSchemaIgnore = field_ignore})))))))))))))))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.pg.mapping.AnnotationSchema"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 edgeSpec :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Mapping.EdgeSpec)
 edgeSpec cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -114,13 +114,12 @@ edgeSpec cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\str
       Mapping.edgeSpecOut = field_out,
       Mapping.edgeSpecIn = field_in,
       Mapping.edgeSpecProperties = field_properties})))))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.pg.mapping.EdgeSpec"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 elementSpec :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Mapping.ElementSpec)
 elementSpec cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -129,9 +128,8 @@ elementSpec cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.pg.mapping.ElementSpec"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 propertySpec :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Mapping.PropertySpec)
 propertySpec cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -140,13 +138,12 @@ propertySpec cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (
     in (Eithers.bind (Helpers.requireField "key" Model.propertyKey fieldMap cx) (\field_key -> Eithers.bind (Helpers.requireField "value" valueSpec fieldMap cx) (\field_value -> Right (Mapping.PropertySpec {
       Mapping.propertySpecKey = field_key,
       Mapping.propertySpecValue = field_value}))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.pg.mapping.PropertySpec"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 valueSpec :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Mapping.ValueSpec)
 valueSpec cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
   Core.TermUnion v0 ->  
-    let tname = (Core.injectionTypeName v0) 
-        field = (Core.injectionField v0)
+    let field = (Core.injectionField v0) 
         fname = (Core.fieldName field)
         fterm = (Core.fieldTerm field)
         variantMap = (Maps.fromList [
@@ -159,9 +156,8 @@ valueSpec cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\st
     in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
       "no such field ",
       (Core.unName fname),
-      " in union type ",
-      (Core.unName tname)]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union of type hydra.pg.mapping.ValueSpec"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
 
 vertexSpec :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Mapping.VertexSpec)
 vertexSpec cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
@@ -171,4 +167,4 @@ vertexSpec cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\s
       Mapping.vertexSpecLabel = field_label,
       Mapping.vertexSpecId = field_id,
       Mapping.vertexSpecProperties = field_properties})))))
-  _ -> (Left (Error.DecodingError "expected record of type hydra.pg.mapping.VertexSpec"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))

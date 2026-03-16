@@ -1453,21 +1453,12 @@ public interface Coder {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.core.Type.Record rt) {
         return hydra.lib.logic.IfElse.lazy(
-          hydra.lib.logic.And.apply(
-            hydra.lib.equality.Equal.apply(
-              ((rt).value).typeName,
-              new hydra.core.Name("hydra.core.Unit")),
-            hydra.lib.lists.Null.apply(((rt).value).fields)),
+          hydra.lib.lists.Null.apply((rt).value),
           () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type>right(hydra.ext.java.utils.Utils.javaRefType(
             (hydra.util.ConsList<hydra.ext.java.syntax.ReferenceType>) (hydra.util.ConsList.<hydra.ext.java.syntax.ReferenceType>empty()),
             hydra.ext.java.names.Names.javaLangPackageName(),
             "Void")),
-          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type>right(new hydra.ext.java.syntax.Type.Reference(hydra.ext.java.utils.Utils.nameToJavaReferenceType(
-            aliases,
-            true,
-            hydra.ext.java.coder.Coder.javaTypeArgumentsForType(t),
-            ((rt).value).typeName,
-            (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing())))));
+          () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("unexpected anonymous record type")), cx))));
       }
       
       @Override
@@ -1509,13 +1500,8 @@ public interface Coder {
       }
       
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.core.Type.Union rt) {
-        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type>right(new hydra.ext.java.syntax.Type.Reference(hydra.ext.java.utils.Utils.nameToJavaReferenceType(
-          aliases,
-          true,
-          hydra.ext.java.coder.Coder.javaTypeArgumentsForType(t),
-          ((rt).value).typeName,
-          (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()))));
+      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.core.Type.Union ignored) {
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("unexpected anonymous union type")), cx)));
       }
       
       @Override
@@ -1568,13 +1554,8 @@ public interface Coder {
       }
       
       @Override
-      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.core.Type.Wrap wt) {
-        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type>right(new hydra.ext.java.syntax.Type.Reference(hydra.ext.java.utils.Utils.nameToJavaReferenceType(
-          aliases,
-          true,
-          (hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>) (hydra.util.ConsList.<hydra.ext.java.syntax.TypeArgument>empty()),
-          ((wt).value).typeName,
-          (hydra.util.Maybe<String>) (hydra.util.Maybe.<String>nothing()))));
+      public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.core.Type.Wrap ignored) {
+        return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("unexpected anonymous wrap type")), cx)));
       }
     });
   }
@@ -3585,8 +3566,8 @@ public interface Coder {
           @Override
           public Boolean visit(hydra.core.Type.Wrap wb) {
             return hydra.lib.equality.Equal.apply(
-              ((wa).value).typeName,
-              ((wb).value).typeName);
+              (wa).value,
+              (wb).value);
           }
         });
       }
@@ -4958,7 +4939,7 @@ public interface Coder {
               (java.util.function.Function<hydra.core.FieldType, Boolean>) (ft -> hydra.lib.equality.Equal.apply(
                 (ft).name,
                 fieldName)),
-              ((rt).value).fields),
+              (rt).value),
             () -> false,
             (java.util.function.Function<hydra.core.FieldType, Boolean>) (ft -> hydra.schemas.Schemas.isUnitType(hydra.rewriting.Rewriting.deannotateType((ft).type)))));
         }
@@ -5381,7 +5362,7 @@ public interface Coder {
             public hydra.util.Maybe<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>> visit(hydra.core.Type.Record rt) {
               return hydra.util.Maybe.just(hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
                 (java.util.function.Function<hydra.core.FieldType, hydra.util.Pair<hydra.core.Name, hydra.core.Type>>) (ft -> (hydra.util.Pair<hydra.core.Name, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Type>((ft).name, (ft).type)))),
-                ((rt).value).fields)));
+                (rt).value)));
             }
           }))));
         return hydra.lib.eithers.Bind.apply(
@@ -7296,7 +7277,7 @@ public interface Coder {
           aliases,
           tparams,
           elName,
-          ((rt).value).fields,
+          (rt).value,
           cx,
           g);
       }
@@ -7308,7 +7289,7 @@ public interface Coder {
           aliases,
           tparams,
           elName,
-          ((rt).value).fields,
+          (rt).value,
           cx,
           g);
       }
@@ -7333,14 +7314,13 @@ public interface Coder {
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.ClassDeclaration> visit(hydra.core.Type.Wrap wt) {
-        hydra.core.Type wtype = ((wt).value).body;
         return hydra.ext.java.coder.Coder.declarationForRecordType(
           isInner,
           isSer,
           aliases,
           tparams,
           elName,
-          hydra.util.ConsList.of(new hydra.core.FieldType(new hydra.core.Name("value"), wtype)),
+          hydra.util.ConsList.of(new hydra.core.FieldType(new hydra.core.Name("value"), (wt).value)),
           cx,
           g);
       }

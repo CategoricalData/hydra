@@ -331,31 +331,6 @@ def is_unresolved_inference_var(name: hydra.core.Name) -> bool:
         return hydra.lib.strings.to_list(name.value)
     return hydra.lib.logic.if_else(hydra.lib.lists.null(chars()), (lambda : False), (lambda : hydra.lib.logic.if_else(hydra.lib.logic.not_(hydra.lib.equality.equal(hydra.lib.lists.head(chars()), 116)), (lambda : False), (lambda : (rest := hydra.lib.lists.tail(chars()), hydra.lib.logic.and_(hydra.lib.logic.not_(hydra.lib.lists.null(rest)), hydra.lib.lists.null(hydra.lib.lists.filter((lambda c: hydra.lib.logic.not_(is_unresolved_inference_var_is_digit(c))), rest))))[1]))))
 
-def java_type_parameters_for_type_bvars(t: hydra.core.Type) -> frozenlist[hydra.core.Name]:
-    match t:
-        case hydra.core.TypeForall(value=ft):
-            return hydra.lib.lists.cons(ft.parameter, java_type_parameters_for_type_bvars(ft.body))
-        
-        case _:
-            return ()
-
-def java_type_parameters_for_type(typ: hydra.core.Type) -> frozenlist[hydra.ext.java.syntax.TypeParameter]:
-    def to_param(name: hydra.core.Name) -> hydra.ext.java.syntax.TypeParameter:
-        return hydra.ext.java.utils.java_type_parameter(hydra.formatting.capitalize(name.value))
-    @lru_cache(1)
-    def bound_vars() -> frozenlist[hydra.core.Name]:
-        return java_type_parameters_for_type_bvars(typ)
-    @lru_cache(1)
-    def free_vars() -> frozenlist[hydra.core.Name]:
-        return hydra.lib.lists.filter((lambda v: is_lambda_bound_variable(v)), hydra.lib.sets.to_list(hydra.rewriting.free_variables_in_type(typ)))
-    @lru_cache(1)
-    def vars() -> frozenlist[hydra.core.Name]:
-        return hydra.lib.lists.nub(hydra.lib.lists.concat2(bound_vars(), free_vars()))
-    return hydra.lib.lists.map((lambda x1: to_param(x1)), vars())
-
-def java_type_arguments_for_type(typ: hydra.core.Type) -> frozenlist[hydra.ext.java.syntax.TypeArgument]:
-    return hydra.lib.lists.reverse(hydra.lib.lists.map((lambda x1: hydra.ext.java.utils.type_parameter_to_type_argument(x1)), java_type_parameters_for_type(typ)))
-
 def encode_type(aliases: hydra.ext.java.helpers.Aliases, bound_vars: frozenset[hydra.core.Name], t: hydra.core.Type, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.Error], hydra.ext.java.syntax.Type]:
     in_scope_type_params = aliases.in_scope_type_params
     type_var_subst = aliases.type_var_subst
@@ -388,7 +363,7 @@ def encode_type(aliases: hydra.ext.java.helpers.Aliases, bound_vars: frozenset[h
             return Right(hydra.ext.java.utils.java_ref_type((), hydra.ext.java.names.java_lang_package_name(), "Void"))
         
         case hydra.core.TypeRecord(value=rt):
-            return hydra.lib.logic.if_else(hydra.lib.logic.and_(hydra.lib.equality.equal(rt.type_name, hydra.core.Name("hydra.core.Unit")), hydra.lib.lists.null(rt.fields)), (lambda : Right(hydra.ext.java.utils.java_ref_type((), hydra.ext.java.names.java_lang_package_name(), "Void"))), (lambda : Right(cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(hydra.ext.java.utils.name_to_java_reference_type(aliases, True, java_type_arguments_for_type(t), rt.type_name, Nothing()))))))
+            return hydra.lib.logic.if_else(hydra.lib.lists.null(rt), (lambda : Right(hydra.ext.java.utils.java_ref_type((), hydra.ext.java.names.java_lang_package_name(), "Void"))), (lambda : Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("unexpected anonymous record type"))), cx))))
         
         case hydra.core.TypeMaybe(value=ot):
             return hydra.lib.eithers.bind(hydra.lib.eithers.bind(encode_type(aliases, bound_vars, ot, cx, g), (lambda jt_: hydra.ext.java.utils.java_type_to_java_reference_type(jt_, cx))), (lambda jot: Right(hydra.ext.java.utils.java_ref_type((jot,), hydra.ext.java.names.hydra_util_package_name(), "Maybe"))))
@@ -396,8 +371,8 @@ def encode_type(aliases: hydra.ext.java.helpers.Aliases, bound_vars: frozenset[h
         case hydra.core.TypeSet(value=st):
             return hydra.lib.eithers.bind(hydra.lib.eithers.bind(encode_type(aliases, bound_vars, st, cx, g), (lambda jt_: hydra.ext.java.utils.java_type_to_java_reference_type(jt_, cx))), (lambda jst: Right(hydra.ext.java.utils.java_ref_type((jst,), hydra.ext.java.names.hydra_util_package_name(), "PersistentSet"))))
         
-        case hydra.core.TypeUnion(value=rt2):
-            return Right(cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(hydra.ext.java.utils.name_to_java_reference_type(aliases, True, java_type_arguments_for_type(t), rt2.type_name, Nothing()))))
+        case hydra.core.TypeUnion():
+            return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("unexpected anonymous union type"))), cx))
         
         case hydra.core.TypeVariable(value=name0):
             @lru_cache(1)
@@ -405,8 +380,8 @@ def encode_type(aliases: hydra.ext.java.helpers.Aliases, bound_vars: frozenset[h
                 return hydra.lib.maybes.from_maybe((lambda : name0), hydra.lib.maps.lookup(name0, type_var_subst))
             return hydra.lib.eithers.bind(encode_type_resolve_if_typedef(aliases, bound_vars, in_scope_type_params, name(), cx, g), (lambda resolved: hydra.lib.maybes.cases(resolved, (lambda : Right(hydra.lib.logic.if_else(hydra.lib.logic.or_(hydra.lib.sets.member(name(), bound_vars), hydra.lib.sets.member(name(), in_scope_type_params)), (lambda : cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(hydra.ext.java.utils.java_type_variable(name().value)))), (lambda : hydra.lib.logic.if_else(is_lambda_bound_variable(name()), (lambda : cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(hydra.ext.java.utils.java_type_variable(name().value)))), (lambda : hydra.lib.logic.if_else(is_unresolved_inference_var(name()), (lambda : cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(cast(hydra.ext.java.syntax.ReferenceType, hydra.ext.java.syntax.ReferenceTypeClassOrInterface(cast(hydra.ext.java.syntax.ClassOrInterfaceType, hydra.ext.java.syntax.ClassOrInterfaceTypeClass(hydra.ext.java.utils.java_class_type((), hydra.ext.java.names.java_lang_package_name(), "Object")))))))), (lambda : cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(hydra.ext.java.utils.name_to_java_reference_type(aliases, True, (), name(), Nothing()))))))))))), (lambda resolved_type: encode_type(aliases, bound_vars, resolved_type, cx, g)))))
         
-        case hydra.core.TypeWrap(value=wt):
-            return Right(cast(hydra.ext.java.syntax.Type, hydra.ext.java.syntax.TypeReference(hydra.ext.java.utils.name_to_java_reference_type(aliases, True, (), wt.type_name, Nothing()))))
+        case hydra.core.TypeWrap():
+            return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError("unexpected anonymous wrap type"))), cx))
         
         case _:
             return Left(hydra.context.InContext(cast(hydra.error.Error, hydra.error.ErrorOther(hydra.error.OtherError(hydra.lib.strings.cat2("can't encode unsupported type in Java: ", hydra.show.core.type(t))))), cx))
@@ -781,7 +756,7 @@ def types_match(a: hydra.core.Type, b: hydra.core.Type):
     def _hoist_hydra_ext_java_coder_types_match_2(wa, v1):
         match v1:
             case hydra.core.TypeWrap(value=wb):
-                return hydra.lib.equality.equal(wa.type_name, wb.type_name)
+                return hydra.lib.equality.equal(wa, wb)
             
             case _:
                 return True
@@ -1032,6 +1007,31 @@ def extract_type_application_args_go(t: hydra.core.Type) -> frozenlist[hydra.cor
 def extract_type_application_args(typ: hydra.core.Type) -> frozenlist[hydra.core.Type]:
     return hydra.lib.lists.reverse(extract_type_application_args_go(typ))
 
+def java_type_parameters_for_type_bvars(t: hydra.core.Type) -> frozenlist[hydra.core.Name]:
+    match t:
+        case hydra.core.TypeForall(value=ft):
+            return hydra.lib.lists.cons(ft.parameter, java_type_parameters_for_type_bvars(ft.body))
+        
+        case _:
+            return ()
+
+def java_type_parameters_for_type(typ: hydra.core.Type) -> frozenlist[hydra.ext.java.syntax.TypeParameter]:
+    def to_param(name: hydra.core.Name) -> hydra.ext.java.syntax.TypeParameter:
+        return hydra.ext.java.utils.java_type_parameter(hydra.formatting.capitalize(name.value))
+    @lru_cache(1)
+    def bound_vars() -> frozenlist[hydra.core.Name]:
+        return java_type_parameters_for_type_bvars(typ)
+    @lru_cache(1)
+    def free_vars() -> frozenlist[hydra.core.Name]:
+        return hydra.lib.lists.filter((lambda v: is_lambda_bound_variable(v)), hydra.lib.sets.to_list(hydra.rewriting.free_variables_in_type(typ)))
+    @lru_cache(1)
+    def vars() -> frozenlist[hydra.core.Name]:
+        return hydra.lib.lists.nub(hydra.lib.lists.concat2(bound_vars(), free_vars()))
+    return hydra.lib.lists.map((lambda x1: to_param(x1)), vars())
+
+def java_type_arguments_for_type(typ: hydra.core.Type) -> frozenlist[hydra.ext.java.syntax.TypeArgument]:
+    return hydra.lib.lists.reverse(hydra.lib.lists.map((lambda x1: hydra.ext.java.utils.type_parameter_to_type_argument(x1)), java_type_parameters_for_type(typ)))
+
 def dom_type_args(aliases: hydra.ext.java.helpers.Aliases, d: hydra.core.Type, cx: hydra.context.Context, g: hydra.graph.Graph) -> Either[hydra.context.InContext[hydra.error.Error], frozenlist[hydra.ext.java.syntax.TypeArgument]]:
     @lru_cache(1)
     def args() -> frozenlist[hydra.core.Type]:
@@ -1256,7 +1256,7 @@ def is_field_unit_type(type_name: hydra.core.Name, field_name: hydra.core.Name, 
     def _hoist_body_1(v1):
         match v1:
             case hydra.core.TypeUnion(value=rt):
-                return Right(hydra.lib.maybes.cases(hydra.lib.lists.find((lambda ft: hydra.lib.equality.equal(ft.name, field_name)), rt.fields), (lambda : False), (lambda ft: hydra.schemas.is_unit_type(hydra.rewriting.deannotate_type(ft.type)))))
+                return Right(hydra.lib.maybes.cases(hydra.lib.lists.find((lambda ft: hydra.lib.equality.equal(ft.name, field_name)), rt), (lambda : False), (lambda ft: hydra.schemas.is_unit_type(hydra.rewriting.deannotate_type(ft.type)))))
             
             case _:
                 return Right(False)
@@ -1477,7 +1477,7 @@ def encode_term_internal(env: hydra.ext.java.helpers.JavaEnvironment, anns: froz
                 def _hoist_m_field_type_map_1(v1):
                     match v1:
                         case hydra.core.TypeRecord(value=rt):
-                            return Just(hydra.lib.maps.from_list(hydra.lib.lists.map((lambda ft: (ft.name, ft.type)), rt.fields)))
+                            return Just(hydra.lib.maps.from_list(hydra.lib.lists.map((lambda ft: (ft.name, ft.type)), rt)))
                         
                         case _:
                             return Nothing()
@@ -2518,16 +2518,16 @@ def to_class_decl(is_inner: bool, is_ser: bool, aliases: hydra.ext.java.helpers.
             return declaration_for_record_type(is_inner, is_ser, aliases, tparams, el_name, (hydra.core.FieldType(hydra.core.Name("value"), hydra.rewriting.deannotate_type(t_)),), cx, g)
         match hydra.rewriting.deannotate_type(t):
             case hydra.core.TypeRecord(value=rt):
-                return declaration_for_record_type(is_inner, is_ser, aliases, tparams, el_name, rt.fields, cx, g)
+                return declaration_for_record_type(is_inner, is_ser, aliases, tparams, el_name, rt, cx, g)
             
             case hydra.core.TypeUnion(value=rt2):
-                return declaration_for_union_type(is_ser, aliases, tparams, el_name, rt2.fields, cx, g)
+                return declaration_for_union_type(is_ser, aliases, tparams, el_name, rt2, cx, g)
             
             case hydra.core.TypeForall(value=fa):
                 return (v := fa.parameter, (body := fa.body, (param := hydra.ext.java.utils.java_type_parameter(hydra.formatting.capitalize(v.value)), to_class_decl(False, is_ser, aliases, hydra.lib.lists.concat2(tparams, (param,)), el_name, body, cx, g))[1])[1])[1]
             
             case hydra.core.TypeWrap(value=wt):
-                return (wtype := wt.body, declaration_for_record_type(is_inner, is_ser, aliases, tparams, el_name, (hydra.core.FieldType(hydra.core.Name("value"), wtype),), cx, g))[1]
+                return declaration_for_record_type(is_inner, is_ser, aliases, tparams, el_name, (hydra.core.FieldType(hydra.core.Name("value"), wt),), cx, g)
             
             case _:
                 return wrap(t)

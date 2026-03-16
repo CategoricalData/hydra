@@ -5,7 +5,6 @@
 module Hydra.Grammars where
 
 import qualified Hydra.Annotations as Annotations
-import qualified Hydra.Constants as Constants
 import qualified Hydra.Core as Core
 import qualified Hydra.Formatting as Formatting
 import qualified Hydra.Grammar as Grammar
@@ -20,7 +19,6 @@ import qualified Hydra.Lib.Pairs as Pairs
 import qualified Hydra.Lib.Strings as Strings
 import qualified Hydra.Module as Module
 import qualified Hydra.Names as Names
-import qualified Hydra.Rewriting as Rewriting
 import Prelude hiding  (Enum, Ordering, decodeFloat, encodeFloat, fail, map, pure, sum)
 import qualified Data.ByteString as B
 import qualified Data.Int as I
@@ -155,13 +153,9 @@ rawName pat = ((\x -> case x of
   Grammar.PatternSequence _ -> "sequence"
   Grammar.PatternStar v0 -> (Strings.cat2 "listOf" (Formatting.capitalize (rawName v0)))) pat)
 
--- | Replace Placeholder names in a type with the actual element name
-replacePlaceholders :: (Core.Name -> Core.Type -> Core.Type)
-replacePlaceholders elName typ = (Rewriting.rewriteType (\recurse -> \t -> (\x -> case x of
-  Core.TypeRecord v0 -> (Logic.ifElse (Equality.equal (Core.Name "unknown") Constants.placeholderName) (Core.TypeRecord v0) t)
-  Core.TypeUnion v0 -> (Logic.ifElse (Equality.equal (Core.Name "unknown") Constants.placeholderName) (Core.TypeUnion v0) t)
-  Core.TypeWrap v0 -> (Logic.ifElse (Equality.equal (Core.Name "unknown") Constants.placeholderName) (Core.TypeWrap v0) t)
-  _ -> t) t) typ)
+-- | Replace Placeholder names in a type with the actual element name (no-op since types no longer carry names)
+replacePlaceholders :: (t0 -> t1 -> t1)
+replacePlaceholders elName typ = typ
 
 -- | Remove trivial patterns from records
 simplify :: (Bool -> [Grammar.Pattern] -> [Grammar.Pattern])

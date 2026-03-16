@@ -371,14 +371,6 @@ public interface Core {
         (x).fields))))));
   }
   
-  static hydra.core.Term rowType(hydra.core.RowType x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.RowType"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("typeName"), hydra.encode.core.Core.name((x).typeName)),
-      new hydra.core.Field(new hydra.core.Name("fields"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
-        hydra.encode.core.Core::fieldType,
-        (x).fields))))));
-  }
-  
   static hydra.core.Term term(hydra.core.Term v1) {
     return (v1).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
@@ -542,7 +534,9 @@ public interface Core {
       
       @Override
       public hydra.core.Term visit(hydra.core.Type.Record y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("record"), hydra.encode.core.Core.rowType((y).value))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("record"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+          hydra.encode.core.Core::fieldType,
+          (y).value)))));
       }
       
       @Override
@@ -552,7 +546,9 @@ public interface Core {
       
       @Override
       public hydra.core.Term visit(hydra.core.Type.Union y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("union"), hydra.encode.core.Core.rowType((y).value))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("union"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+          hydra.encode.core.Core::fieldType,
+          (y).value)))));
       }
       
       @Override
@@ -567,7 +563,7 @@ public interface Core {
       
       @Override
       public hydra.core.Term visit(hydra.core.Type.Wrap y) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("wrap"), hydra.encode.core.Core.wrappedType((y).value))));
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.core.Type"), new hydra.core.Field(new hydra.core.Name("wrap"), hydra.encode.core.Core.type((y).value))));
       }
     });
   }
@@ -608,11 +604,5 @@ public interface Core {
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.WrappedTerm"), hydra.util.ConsList.of(
       new hydra.core.Field(new hydra.core.Name("typeName"), hydra.encode.core.Core.name((x).typeName)),
       new hydra.core.Field(new hydra.core.Name("body"), hydra.encode.core.Core.term((x).body)))));
-  }
-  
-  static hydra.core.Term wrappedType(hydra.core.WrappedType x) {
-    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.core.WrappedType"), hydra.util.ConsList.of(
-      new hydra.core.Field(new hydra.core.Name("typeName"), hydra.encode.core.Core.name((x).typeName)),
-      new hydra.core.Field(new hydra.core.Name("body"), hydra.encode.core.Core.type((x).body)))));
   }
 }

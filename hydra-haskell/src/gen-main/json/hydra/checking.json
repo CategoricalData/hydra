@@ -1966,7 +1966,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"boolean": true}},
-                                                                            "domain": [{"variable": "hydra.core.RowType"}],
+                                                                            "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                                                             "parameter": "_"}}}},
                                                                     {
                                                                       "name": "union",
@@ -1974,7 +1974,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"boolean": true}},
-                                                                            "domain": [{"variable": "hydra.core.RowType"}],
+                                                                            "domain": [{"list": {"variable": "hydra.core.FieldType"}}],
                                                                             "parameter": "_"}}}},
                                                                     {
                                                                       "name": "wrap",
@@ -1982,7 +1982,7 @@
                                                                         "function": {
                                                                           "lambda": {
                                                                             "body": {"literal": {"boolean": true}},
-                                                                            "domain": [{"variable": "hydra.core.WrappedType"}],
+                                                                            "domain": [{"variable": "hydra.core.Type"}],
                                                                             "parameter": "_"}}}}],
                                                                   "default": [{"literal": {"boolean": false}}],
                                                                   "typeName": "hydra.core.Type"}}}}}},
@@ -5756,7 +5756,10 @@
                                                                                             "function": {
                                                                                               "application": {
                                                                                                 "argument": {"variable": "cx2"},
-                                                                                                "function": {"variable": "hydra.extract.core.unionType"}}}}}}},
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {"variable": "hydra.extract.core.unionType"},
+                                                                                                    "type": {"variable": "hydra.core.Name"}}}}}}}}},
                                                                                     "function": {
                                                                                       "typeApplication": {
                                                                                         "body": {
@@ -10542,7 +10545,10 @@
                                                                                     "function": {
                                                                                       "application": {
                                                                                         "argument": {"variable": "cx2"},
-                                                                                        "function": {"variable": "hydra.extract.core.recordType"}}}}}}},
+                                                                                        "function": {
+                                                                                          "typeApplication": {
+                                                                                            "body": {"variable": "hydra.extract.core.recordType"},
+                                                                                            "type": {"variable": "hydra.core.Name"}}}}}}}}},
                                                                             "function": {
                                                                               "typeApplication": {
                                                                                 "body": {
@@ -12537,7 +12543,10 @@
                                                                             "function": {
                                                                               "application": {
                                                                                 "argument": {"variable": "cx2"},
-                                                                                "function": {"variable": "hydra.extract.core.wrappedType"}}}}}}},
+                                                                                "function": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {"variable": "hydra.extract.core.wrappedType"},
+                                                                                    "type": {"variable": "hydra.core.Name"}}}}}}}}},
                                                                     "function": {
                                                                       "typeApplication": {
                                                                         "body": {
