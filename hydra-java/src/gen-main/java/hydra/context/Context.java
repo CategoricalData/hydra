@@ -61,21 +61,15 @@ public class Context implements Serializable, Comparable<Context> {
   @SuppressWarnings("unchecked")
   public int compareTo(Context other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      trace.hashCode(),
-      other.trace.hashCode());
+    cmp = ((Comparable) trace).compareTo(other.trace);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      messages.hashCode(),
-      other.messages.hashCode());
+    cmp = ((Comparable) messages).compareTo(other.messages);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      other.hashCode(),
-      other.other.hashCode());
+    return ((Comparable) other).compareTo(other.other);
   }
   
   public Context withTrace(hydra.util.ConsList<String> trace) {

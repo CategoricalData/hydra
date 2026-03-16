@@ -49,9 +49,7 @@ public class ElementTree<V> implements Serializable, Comparable<ElementTree<V>> 
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      dependencies.hashCode(),
-      other.dependencies.hashCode());
+    return ((Comparable) dependencies).compareTo(other.dependencies);
   }
   
   public ElementTree withSelf(hydra.pg.model.Element<V> self) {

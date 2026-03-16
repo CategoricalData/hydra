@@ -42,9 +42,7 @@ public class ExceptBlock implements Serializable, Comparable<ExceptBlock> {
   @SuppressWarnings("unchecked")
   public int compareTo(ExceptBlock other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      expression.hashCode(),
-      other.expression.hashCode());
+    cmp = ((Comparable) expression).compareTo(other.expression);
     if (cmp != 0) {
       return cmp;
     }

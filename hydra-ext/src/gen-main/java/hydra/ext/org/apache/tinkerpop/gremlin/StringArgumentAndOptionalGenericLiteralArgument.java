@@ -46,9 +46,7 @@ public class StringArgumentAndOptionalGenericLiteralArgument implements Serializ
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      literal.hashCode(),
-      other.literal.hashCode());
+    return ((Comparable) literal).compareTo(other.literal);
   }
   
   public StringArgumentAndOptionalGenericLiteralArgument withString(hydra.ext.org.apache.tinkerpop.gremlin.StringArgument string) {

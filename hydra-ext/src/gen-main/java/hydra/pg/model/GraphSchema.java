@@ -51,15 +51,11 @@ public class GraphSchema<T> implements Serializable, Comparable<GraphSchema<T>> 
   @SuppressWarnings("unchecked")
   public int compareTo(GraphSchema other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      vertices.hashCode(),
-      other.vertices.hashCode());
+    cmp = ((Comparable) vertices).compareTo(other.vertices);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      edges.hashCode(),
-      other.edges.hashCode());
+    return ((Comparable) edges).compareTo(other.edges);
   }
   
   public GraphSchema withVertices(hydra.util.PersistentMap<hydra.pg.model.VertexLabel, hydra.pg.model.VertexType<T>> vertices) {

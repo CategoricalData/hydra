@@ -53,15 +53,11 @@ public class ArrayCreationExpression_ClassOrInterface implements Serializable, C
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      dimExprs.hashCode(),
-      other.dimExprs.hashCode());
+    cmp = ((Comparable) dimExprs).compareTo(other.dimExprs);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      dims.hashCode(),
-      other.dims.hashCode());
+    return ((Comparable) dims).compareTo(other.dims);
   }
   
   public ArrayCreationExpression_ClassOrInterface withType(hydra.ext.java.syntax.ClassOrInterfaceType type) {

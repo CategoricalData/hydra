@@ -111,45 +111,31 @@ public class LanguageConstraints implements Serializable, Comparable<LanguageCon
   @SuppressWarnings("unchecked")
   public int compareTo(LanguageConstraints other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      eliminationVariants.hashCode(),
-      other.eliminationVariants.hashCode());
+    cmp = ((Comparable) eliminationVariants).compareTo(other.eliminationVariants);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      literalVariants.hashCode(),
-      other.literalVariants.hashCode());
+    cmp = ((Comparable) literalVariants).compareTo(other.literalVariants);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      floatTypes.hashCode(),
-      other.floatTypes.hashCode());
+    cmp = ((Comparable) floatTypes).compareTo(other.floatTypes);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      functionVariants.hashCode(),
-      other.functionVariants.hashCode());
+    cmp = ((Comparable) functionVariants).compareTo(other.functionVariants);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      integerTypes.hashCode(),
-      other.integerTypes.hashCode());
+    cmp = ((Comparable) integerTypes).compareTo(other.integerTypes);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      termVariants.hashCode(),
-      other.termVariants.hashCode());
+    cmp = ((Comparable) termVariants).compareTo(other.termVariants);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      typeVariants.hashCode(),
-      other.typeVariants.hashCode());
+    cmp = ((Comparable) typeVariants).compareTo(other.typeVariants);
     if (cmp != 0) {
       return cmp;
     }

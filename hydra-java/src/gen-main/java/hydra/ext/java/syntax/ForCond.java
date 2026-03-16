@@ -49,21 +49,15 @@ public class ForCond implements Serializable, Comparable<ForCond> {
   @SuppressWarnings("unchecked")
   public int compareTo(ForCond other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      init.hashCode(),
-      other.init.hashCode());
+    cmp = ((Comparable) init).compareTo(other.init);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      cond.hashCode(),
-      other.cond.hashCode());
+    cmp = ((Comparable) cond).compareTo(other.cond);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      update.hashCode(),
-      other.update.hashCode());
+    return ((Comparable) update).compareTo(other.update);
   }
   
   public ForCond withInit(hydra.util.Maybe<hydra.ext.java.syntax.ForInit> init) {

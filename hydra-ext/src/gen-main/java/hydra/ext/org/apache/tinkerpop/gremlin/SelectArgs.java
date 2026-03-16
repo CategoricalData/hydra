@@ -212,9 +212,7 @@ public abstract class SelectArgs implements Serializable, Comparable<SelectArgs>
         return tagCmp;
       }
       Strings o = (Strings) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

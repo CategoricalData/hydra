@@ -55,9 +55,7 @@ public class UpdateRecordExpression implements Serializable, Comparable<UpdateRe
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      fields.hashCode(),
-      other.fields.hashCode());
+    return ((Comparable) fields).compareTo(other.fields);
   }
   
   public UpdateRecordExpression withInner(hydra.ext.haskell.ast.Expression inner) {

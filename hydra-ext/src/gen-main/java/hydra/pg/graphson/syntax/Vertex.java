@@ -67,27 +67,19 @@ public class Vertex implements Serializable, Comparable<Vertex> {
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      label.hashCode(),
-      other.label.hashCode());
+    cmp = ((Comparable) label).compareTo(other.label);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      inEdges.hashCode(),
-      other.inEdges.hashCode());
+    cmp = ((Comparable) inEdges).compareTo(other.inEdges);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      outEdges.hashCode(),
-      other.outEdges.hashCode());
+    cmp = ((Comparable) outEdges).compareTo(other.outEdges);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      properties.hashCode(),
-      other.properties.hashCode());
+    return ((Comparable) properties).compareTo(other.properties);
   }
   
   public Vertex withId(hydra.pg.graphson.syntax.Value id) {

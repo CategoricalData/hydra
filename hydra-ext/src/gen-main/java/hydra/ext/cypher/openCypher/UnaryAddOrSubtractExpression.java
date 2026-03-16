@@ -42,9 +42,7 @@ public class UnaryAddOrSubtractExpression implements Serializable, Comparable<Un
   @SuppressWarnings("unchecked")
   public int compareTo(UnaryAddOrSubtractExpression other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      operator.hashCode(),
-      other.operator.hashCode());
+    cmp = ((Comparable) operator).compareTo(other.operator);
     if (cmp != 0) {
       return cmp;
     }

@@ -17,7 +17,8 @@ import java.util.function.Supplier;
  *
  * @param <T> the element type
  */
-public class Maybe<T> implements Serializable {
+@SuppressWarnings("rawtypes")
+public class Maybe<T> implements Serializable, Comparable<Maybe> {
     private final T value;
     private final boolean present;
 
@@ -94,6 +95,18 @@ public class Maybe<T> implements Serializable {
     @Override
     public int hashCode() {
         return present ? Objects.hashCode(value) + 1 : 0;
+    }
+
+    /**
+     * Compares this Maybe to another. Nothing < Just, and Just values are compared by their content.
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Maybe other) {
+        if (!this.present && !other.present) return 0;
+        if (!this.present) return -1;
+        if (!other.present) return 1;
+        return ((Comparable) this.value).compareTo(other.value);
     }
 
     /**

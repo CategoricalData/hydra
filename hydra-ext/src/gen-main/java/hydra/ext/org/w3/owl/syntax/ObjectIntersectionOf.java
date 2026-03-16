@@ -34,8 +34,6 @@ public class ObjectIntersectionOf implements Serializable, Comparable<ObjectInte
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ObjectIntersectionOf other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

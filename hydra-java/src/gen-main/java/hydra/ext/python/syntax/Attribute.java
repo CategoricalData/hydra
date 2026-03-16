@@ -34,8 +34,6 @@ public class Attribute implements Serializable, Comparable<Attribute> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Attribute other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

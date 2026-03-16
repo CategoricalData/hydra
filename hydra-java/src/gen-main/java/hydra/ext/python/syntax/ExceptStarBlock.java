@@ -53,9 +53,7 @@ public class ExceptStarBlock implements Serializable, Comparable<ExceptStarBlock
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      as.hashCode(),
-      other.as.hashCode());
+    cmp = ((Comparable) as).compareTo(other.as);
     if (cmp != 0) {
       return cmp;
     }

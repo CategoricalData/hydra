@@ -97,9 +97,7 @@ public class EdgeSpec implements Serializable, Comparable<EdgeSpec> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      properties.hashCode(),
-      other.properties.hashCode());
+    return ((Comparable) properties).compareTo(other.properties);
   }
   
   public EdgeSpec withLabel(hydra.pg.model.EdgeLabel label) {

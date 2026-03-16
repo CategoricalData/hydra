@@ -53,15 +53,11 @@ public class NoDefaultStarAnnotationStarEtc implements Serializable, Comparable<
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      paramMaybeDefault.hashCode(),
-      other.paramMaybeDefault.hashCode());
+    cmp = ((Comparable) paramMaybeDefault).compareTo(other.paramMaybeDefault);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      keywords.hashCode(),
-      other.keywords.hashCode());
+    return ((Comparable) keywords).compareTo(other.keywords);
   }
   
   public NoDefaultStarAnnotationStarEtc withParamNoDefaultStarAnnotation(hydra.ext.python.syntax.ParamNoDefaultStarAnnotation paramNoDefaultStarAnnotation) {

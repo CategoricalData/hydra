@@ -75,21 +75,15 @@ public class RelationSchema<T> implements Serializable, Comparable<RelationSchem
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      columns.hashCode(),
-      other.columns.hashCode());
+    cmp = ((Comparable) columns).compareTo(other.columns);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      primaryKeys.hashCode(),
-      other.primaryKeys.hashCode());
+    cmp = ((Comparable) primaryKeys).compareTo(other.primaryKeys);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      foreignKeys.hashCode(),
-      other.foreignKeys.hashCode());
+    return ((Comparable) foreignKeys).compareTo(other.foreignKeys);
   }
   
   public RelationSchema withName(hydra.relational.RelationName name) {

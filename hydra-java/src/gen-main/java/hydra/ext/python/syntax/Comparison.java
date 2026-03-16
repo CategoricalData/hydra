@@ -46,9 +46,7 @@ public class Comparison implements Serializable, Comparable<Comparison> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      rhs.hashCode(),
-      other.rhs.hashCode());
+    return ((Comparable) rhs).compareTo(other.rhs);
   }
   
   public Comparison withLhs(hydra.ext.python.syntax.BitwiseOr lhs) {

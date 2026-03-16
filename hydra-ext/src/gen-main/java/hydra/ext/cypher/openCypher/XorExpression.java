@@ -34,8 +34,6 @@ public class XorExpression implements Serializable, Comparable<XorExpression> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(XorExpression other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

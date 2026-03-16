@@ -55,9 +55,7 @@ public class RecordConstructor implements Serializable, Comparable<RecordConstru
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      fields.hashCode(),
-      other.fields.hashCode());
+    return ((Comparable) fields).compareTo(other.fields);
   }
   
   public RecordConstructor withName(hydra.ext.haskell.ast.Name name) {

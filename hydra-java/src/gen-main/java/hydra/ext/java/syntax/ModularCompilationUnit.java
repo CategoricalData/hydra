@@ -42,9 +42,7 @@ public class ModularCompilationUnit implements Serializable, Comparable<ModularC
   @SuppressWarnings("unchecked")
   public int compareTo(ModularCompilationUnit other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      imports.hashCode(),
-      other.imports.hashCode());
+    cmp = ((Comparable) imports).compareTo(other.imports);
     if (cmp != 0) {
       return cmp;
     }

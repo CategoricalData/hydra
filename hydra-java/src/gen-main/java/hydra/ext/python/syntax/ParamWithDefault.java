@@ -57,9 +57,7 @@ public class ParamWithDefault implements Serializable, Comparable<ParamWithDefau
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      typeComment.hashCode(),
-      other.typeComment.hashCode());
+    return ((Comparable) typeComment).compareTo(other.typeComment);
   }
   
   public ParamWithDefault withParam(hydra.ext.python.syntax.Param param) {

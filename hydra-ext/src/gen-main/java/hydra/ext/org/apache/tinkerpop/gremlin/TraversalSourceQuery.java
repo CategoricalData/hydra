@@ -46,9 +46,7 @@ public class TraversalSourceQuery implements Serializable, Comparable<TraversalS
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      transactionPart.hashCode(),
-      other.transactionPart.hashCode());
+    return ((Comparable) transactionPart).compareTo(other.transactionPart);
   }
   
   public TraversalSourceQuery withSource(hydra.ext.org.apache.tinkerpop.gremlin.TraversalSource source) {

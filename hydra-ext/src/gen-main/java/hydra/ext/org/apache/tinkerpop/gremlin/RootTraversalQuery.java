@@ -46,9 +46,7 @@ public class RootTraversalQuery implements Serializable, Comparable<RootTraversa
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      terminalMethod.hashCode(),
-      other.terminalMethod.hashCode());
+    return ((Comparable) terminalMethod).compareTo(other.terminalMethod);
   }
   
   public RootTraversalQuery withRoot(hydra.ext.org.apache.tinkerpop.gremlin.RootTraversal root) {

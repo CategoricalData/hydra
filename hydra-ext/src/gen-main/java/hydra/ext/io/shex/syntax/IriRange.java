@@ -108,9 +108,7 @@ public abstract class IriRange implements Serializable, Comparable<IriRange> {
         return tagCmp;
       }
       Sequence2 o = (Sequence2) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

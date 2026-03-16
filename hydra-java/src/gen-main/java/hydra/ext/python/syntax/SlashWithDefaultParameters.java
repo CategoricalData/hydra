@@ -49,21 +49,15 @@ public class SlashWithDefaultParameters implements Serializable, Comparable<Slas
   @SuppressWarnings("unchecked")
   public int compareTo(SlashWithDefaultParameters other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      paramNoDefault.hashCode(),
-      other.paramNoDefault.hashCode());
+    cmp = ((Comparable) paramNoDefault).compareTo(other.paramNoDefault);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      paramWithDefault.hashCode(),
-      other.paramWithDefault.hashCode());
+    cmp = ((Comparable) paramWithDefault).compareTo(other.paramWithDefault);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      starEtc.hashCode(),
-      other.starEtc.hashCode());
+    return ((Comparable) starEtc).compareTo(other.starEtc);
   }
   
   public SlashWithDefaultParameters withParamNoDefault(hydra.util.ConsList<hydra.ext.python.syntax.ParamNoDefault> paramNoDefault) {

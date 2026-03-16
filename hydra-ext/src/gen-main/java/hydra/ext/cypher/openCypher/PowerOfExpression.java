@@ -34,8 +34,6 @@ public class PowerOfExpression implements Serializable, Comparable<PowerOfExpres
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(PowerOfExpression other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

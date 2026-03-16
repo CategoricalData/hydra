@@ -55,9 +55,7 @@ public class DataMinCardinality implements Serializable, Comparable<DataMinCardi
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      range.hashCode(),
-      other.range.hashCode());
+    return ((Comparable) range).compareTo(other.range);
   }
   
   public DataMinCardinality withBound(java.math.BigInteger bound) {

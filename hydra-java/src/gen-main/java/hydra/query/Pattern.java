@@ -184,9 +184,7 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         return tagCmp;
       }
       Conjunction o = (Conjunction) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -229,9 +227,7 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         return tagCmp;
       }
       Disjunction o = (Disjunction) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

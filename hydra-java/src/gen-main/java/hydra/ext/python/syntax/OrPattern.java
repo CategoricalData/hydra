@@ -34,8 +34,6 @@ public class OrPattern implements Serializable, Comparable<OrPattern> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(OrPattern other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

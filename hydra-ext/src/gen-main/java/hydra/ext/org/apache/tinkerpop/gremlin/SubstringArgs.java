@@ -49,9 +49,7 @@ public class SubstringArgs implements Serializable, Comparable<SubstringArgs> {
   @SuppressWarnings("unchecked")
   public int compareTo(SubstringArgs other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      scope.hashCode(),
-      other.scope.hashCode());
+    cmp = ((Comparable) scope).compareTo(other.scope);
     if (cmp != 0) {
       return cmp;
     }
@@ -59,9 +57,7 @@ public class SubstringArgs implements Serializable, Comparable<SubstringArgs> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      end.hashCode(),
-      other.end.hashCode());
+    return ((Comparable) end).compareTo(other.end);
   }
   
   public SubstringArgs withScope(hydra.util.Maybe<hydra.ext.org.apache.tinkerpop.gremlin.TraversalScopeArgument> scope) {

@@ -55,9 +55,7 @@ public class Namespaces<N> implements Serializable, Comparable<Namespaces<N>> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      mapping.hashCode(),
-      other.mapping.hashCode());
+    return ((Comparable) mapping).compareTo(other.mapping);
   }
   
   public Namespaces withFocus(hydra.util.Pair<hydra.module.Namespace, N> focus) {

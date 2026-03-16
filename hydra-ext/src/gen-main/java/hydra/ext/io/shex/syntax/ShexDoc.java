@@ -49,15 +49,11 @@ public class ShexDoc implements Serializable, Comparable<ShexDoc> {
   @SuppressWarnings("unchecked")
   public int compareTo(ShexDoc other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      listOfDirective.hashCode(),
-      other.listOfDirective.hashCode());
+    cmp = ((Comparable) listOfDirective).compareTo(other.listOfDirective);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      Sequence.hashCode(),
-      other.Sequence.hashCode());
+    cmp = ((Comparable) Sequence).compareTo(other.Sequence);
     if (cmp != 0) {
       return cmp;
     }

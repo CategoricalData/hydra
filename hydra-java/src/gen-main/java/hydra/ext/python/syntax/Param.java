@@ -46,9 +46,7 @@ public class Param implements Serializable, Comparable<Param> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      annotation.hashCode(),
-      other.annotation.hashCode());
+    return ((Comparable) annotation).compareTo(other.annotation);
   }
   
   public Param withName(hydra.ext.python.syntax.Name name) {

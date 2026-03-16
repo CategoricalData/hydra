@@ -46,9 +46,7 @@ public class SingleElementGroup implements Serializable, Comparable<SingleElemen
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      Semi.hashCode(),
-      other.Semi.hashCode());
+    return ((Comparable) Semi).compareTo(other.Semi);
   }
   
   public SingleElementGroup withUnaryTripleExpr(hydra.ext.io.shex.syntax.UnaryTripleExpr UnaryTripleExpr) {

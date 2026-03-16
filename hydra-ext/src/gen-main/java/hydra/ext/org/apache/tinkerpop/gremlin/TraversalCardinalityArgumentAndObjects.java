@@ -46,9 +46,7 @@ public class TraversalCardinalityArgumentAndObjects implements Serializable, Com
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      objects.hashCode(),
-      other.objects.hashCode());
+    return ((Comparable) objects).compareTo(other.objects);
   }
   
   public TraversalCardinalityArgumentAndObjects withCardinality(hydra.ext.org.apache.tinkerpop.gremlin.TraversalCardinalityArgument cardinality) {

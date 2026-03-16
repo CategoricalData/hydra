@@ -613,10 +613,6 @@ isNonComparableType :: TBinding (Type -> Bool)
 isNonComparableType = def "isNonComparableType" $
   lambda "typ" $ cases _Type (Rewriting.deannotateType @@ var "typ")
     (Just $ boolean False) [
-    _Type_list>>: constant $ boolean True,
-    _Type_set>>: constant $ boolean True,
-    _Type_map>>: constant $ boolean True,
-    _Type_maybe>>: constant $ boolean True,
     _Type_either>>: constant $ boolean True,
     _Type_function>>: constant $ boolean True,
     _Type_unit>>: constant $ boolean True,

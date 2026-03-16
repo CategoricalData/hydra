@@ -21,7 +21,8 @@ import java.util.function.Predicate;
  *
  * @param <T> the element type (must be Comparable)
  */
-public class PersistentSet<T> implements Set<T>, Serializable {
+@SuppressWarnings("rawtypes")
+public class PersistentSet<T> implements Set<T>, Serializable, Comparable<PersistentSet> {
 
     private static final Object PRESENT = new Object();
 
@@ -365,6 +366,21 @@ public class PersistentSet<T> implements Set<T>, Serializable {
             h += Objects.hashCode(elem);
         }
         return h;
+    }
+
+    /**
+     * Lexicographic comparison over sorted elements.
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(PersistentSet other) {
+        Iterator<T> it1 = this.iterator();
+        Iterator it2 = other.iterator();
+        while (it1.hasNext() && it2.hasNext()) {
+            int cmp = ((Comparable) it1.next()).compareTo(it2.next());
+            if (cmp != 0) return cmp;
+        }
+        return Integer.compare(this.size(), other.size());
     }
 
     @Override

@@ -85,9 +85,7 @@ public class DataDeclaration implements Serializable, Comparable<DataDeclaration
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      context.hashCode(),
-      other.context.hashCode());
+    cmp = ((Comparable) context).compareTo(other.context);
     if (cmp != 0) {
       return cmp;
     }
@@ -95,15 +93,11 @@ public class DataDeclaration implements Serializable, Comparable<DataDeclaration
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      constructors.hashCode(),
-      other.constructors.hashCode());
+    cmp = ((Comparable) constructors).compareTo(other.constructors);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      deriving.hashCode(),
-      other.deriving.hashCode());
+    return ((Comparable) deriving).compareTo(other.deriving);
   }
   
   public DataDeclaration withKeyword(hydra.ext.haskell.ast.DataOrNewtype keyword) {

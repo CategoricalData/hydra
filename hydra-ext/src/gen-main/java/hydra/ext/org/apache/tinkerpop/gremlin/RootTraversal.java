@@ -57,9 +57,7 @@ public class RootTraversal implements Serializable, Comparable<RootTraversal> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      chained.hashCode(),
-      other.chained.hashCode());
+    return ((Comparable) chained).compareTo(other.chained);
   }
   
   public RootTraversal withSource(hydra.ext.org.apache.tinkerpop.gremlin.TraversalSource source) {

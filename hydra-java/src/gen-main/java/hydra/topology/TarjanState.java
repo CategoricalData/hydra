@@ -92,33 +92,23 @@ public class TarjanState implements Serializable, Comparable<TarjanState> {
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      indices.hashCode(),
-      other.indices.hashCode());
+    cmp = ((Comparable) indices).compareTo(other.indices);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      lowLinks.hashCode(),
-      other.lowLinks.hashCode());
+    cmp = ((Comparable) lowLinks).compareTo(other.lowLinks);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      stack.hashCode(),
-      other.stack.hashCode());
+    cmp = ((Comparable) stack).compareTo(other.stack);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      onStack.hashCode(),
-      other.onStack.hashCode());
+    cmp = ((Comparable) onStack).compareTo(other.onStack);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      sccs.hashCode(),
-      other.sccs.hashCode());
+    return ((Comparable) sccs).compareTo(other.sccs);
   }
   
   public TarjanState withCounter(Integer counter) {

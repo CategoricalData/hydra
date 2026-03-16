@@ -45,15 +45,11 @@ public class Graph<V> implements Serializable, Comparable<Graph<V>> {
   @SuppressWarnings("unchecked")
   public int compareTo(Graph other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      vertices.hashCode(),
-      other.vertices.hashCode());
+    cmp = ((Comparable) vertices).compareTo(other.vertices);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      edges.hashCode(),
-      other.edges.hashCode());
+    return ((Comparable) edges).compareTo(other.edges);
   }
   
   public Graph withVertices(hydra.util.PersistentMap<V, hydra.pg.model.Vertex<V>> vertices) {

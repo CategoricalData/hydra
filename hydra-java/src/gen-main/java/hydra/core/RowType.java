@@ -55,9 +55,7 @@ public class RowType implements Serializable, Comparable<RowType> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      fields.hashCode(),
-      other.fields.hashCode());
+    return ((Comparable) fields).compareTo(other.fields);
   }
   
   public RowType withTypeName(hydra.core.Name typeName) {

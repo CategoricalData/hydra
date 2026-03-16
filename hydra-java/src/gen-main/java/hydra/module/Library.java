@@ -69,9 +69,7 @@ public class Library implements Serializable, Comparable<Library> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      primitives.hashCode(),
-      other.primitives.hashCode());
+    return ((Comparable) primitives).compareTo(other.primitives);
   }
   
   public Library withNamespace(hydra.module.Namespace namespace) {

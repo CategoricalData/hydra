@@ -97,9 +97,7 @@ public class Edge<V> implements Serializable, Comparable<Edge<V>> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      properties.hashCode(),
-      other.properties.hashCode());
+    return ((Comparable) properties).compareTo(other.properties);
   }
   
   public Edge withLabel(hydra.pg.model.EdgeLabel label) {

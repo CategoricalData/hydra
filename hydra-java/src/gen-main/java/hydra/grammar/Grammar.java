@@ -37,8 +37,6 @@ public class Grammar implements Serializable, Comparable<Grammar> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Grammar other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

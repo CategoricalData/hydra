@@ -68,9 +68,7 @@ public abstract class StringNullableArgument implements Serializable, Comparable
         return tagCmp;
       }
       Value o = (Value) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

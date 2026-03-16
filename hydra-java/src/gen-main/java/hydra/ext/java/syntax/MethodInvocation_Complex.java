@@ -53,9 +53,7 @@ public class MethodInvocation_Complex implements Serializable, Comparable<Method
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      typeArguments.hashCode(),
-      other.typeArguments.hashCode());
+    cmp = ((Comparable) typeArguments).compareTo(other.typeArguments);
     if (cmp != 0) {
       return cmp;
     }

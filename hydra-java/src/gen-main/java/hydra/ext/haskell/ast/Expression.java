@@ -331,9 +331,7 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Do o = (Do) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -634,9 +632,7 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       List o = (List) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -808,9 +804,7 @@ public abstract class Expression implements Serializable, Comparable<Expression>
         return tagCmp;
       }
       Tuple o = (Tuple) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

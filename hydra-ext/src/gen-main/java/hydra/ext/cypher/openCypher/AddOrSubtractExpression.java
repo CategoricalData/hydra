@@ -46,9 +46,7 @@ public class AddOrSubtractExpression implements Serializable, Comparable<AddOrSu
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      right.hashCode(),
-      other.right.hashCode());
+    return ((Comparable) right).compareTo(other.right);
   }
   
   public AddOrSubtractExpression withLeft(hydra.ext.cypher.openCypher.MultiplyDivideModuloExpression left) {

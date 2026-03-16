@@ -65,15 +65,11 @@ public class Edge implements Serializable, Comparable<Edge> {
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      out.hashCode(),
-      other.out.hashCode());
+    cmp = ((Comparable) out).compareTo(other.out);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      in.hashCode(),
-      other.in.hashCode());
+    return ((Comparable) in).compareTo(other.in);
   }
   
   public Edge withType(hydra.core.Name type) {

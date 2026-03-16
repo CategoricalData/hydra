@@ -34,8 +34,6 @@ public class Decorators implements Serializable, Comparable<Decorators> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Decorators other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

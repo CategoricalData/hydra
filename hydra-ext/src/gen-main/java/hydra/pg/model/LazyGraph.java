@@ -45,15 +45,11 @@ public class LazyGraph<V> implements Serializable, Comparable<LazyGraph<V>> {
   @SuppressWarnings("unchecked")
   public int compareTo(LazyGraph other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      vertices.hashCode(),
-      other.vertices.hashCode());
+    cmp = ((Comparable) vertices).compareTo(other.vertices);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      edges.hashCode(),
-      other.edges.hashCode());
+    return ((Comparable) edges).compareTo(other.edges);
   }
   
   public LazyGraph withVertices(hydra.util.ConsList<hydra.pg.model.Vertex<V>> vertices) {

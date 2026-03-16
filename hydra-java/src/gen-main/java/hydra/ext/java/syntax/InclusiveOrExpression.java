@@ -34,8 +34,6 @@ public class InclusiveOrExpression implements Serializable, Comparable<Inclusive
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(InclusiveOrExpression other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

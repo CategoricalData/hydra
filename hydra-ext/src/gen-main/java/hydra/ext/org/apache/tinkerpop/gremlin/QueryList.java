@@ -34,8 +34,6 @@ public class QueryList implements Serializable, Comparable<QueryList> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(QueryList other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

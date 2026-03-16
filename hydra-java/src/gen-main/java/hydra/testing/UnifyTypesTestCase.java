@@ -71,9 +71,7 @@ public class UnifyTypesTestCase implements Serializable, Comparable<UnifyTypesTe
   @SuppressWarnings("unchecked")
   public int compareTo(UnifyTypesTestCase other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      schemaTypes.hashCode(),
-      other.schemaTypes.hashCode());
+    cmp = ((Comparable) schemaTypes).compareTo(other.schemaTypes);
     if (cmp != 0) {
       return cmp;
     }

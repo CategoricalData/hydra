@@ -42,15 +42,11 @@ public class ConstructorBody implements Serializable, Comparable<ConstructorBody
   @SuppressWarnings("unchecked")
   public int compareTo(ConstructorBody other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      invocation.hashCode(),
-      other.invocation.hashCode());
+    cmp = ((Comparable) invocation).compareTo(other.invocation);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      statements.hashCode(),
-      other.statements.hashCode());
+    return ((Comparable) statements).compareTo(other.statements);
   }
   
   public ConstructorBody withInvocation(hydra.util.Maybe<hydra.ext.java.syntax.ExplicitConstructorInvocation> invocation) {

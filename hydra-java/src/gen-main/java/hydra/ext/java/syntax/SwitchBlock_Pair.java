@@ -42,15 +42,11 @@ public class SwitchBlock_Pair implements Serializable, Comparable<SwitchBlock_Pa
   @SuppressWarnings("unchecked")
   public int compareTo(SwitchBlock_Pair other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      statements.hashCode(),
-      other.statements.hashCode());
+    cmp = ((Comparable) statements).compareTo(other.statements);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      labels.hashCode(),
-      other.labels.hashCode());
+    return ((Comparable) labels).compareTo(other.labels);
   }
   
   public SwitchBlock_Pair withStatements(hydra.util.ConsList<hydra.ext.java.syntax.SwitchBlockStatementGroup> statements) {

@@ -46,9 +46,7 @@ public class OpenSequencePattern implements Serializable, Comparable<OpenSequenc
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      tail.hashCode(),
-      other.tail.hashCode());
+    return ((Comparable) tail).compareTo(other.tail);
   }
   
   public OpenSequencePattern withHead(hydra.ext.python.syntax.MaybeStarPattern head) {

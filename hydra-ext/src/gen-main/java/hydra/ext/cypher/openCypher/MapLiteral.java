@@ -34,8 +34,6 @@ public class MapLiteral implements Serializable, Comparable<MapLiteral> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(MapLiteral other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

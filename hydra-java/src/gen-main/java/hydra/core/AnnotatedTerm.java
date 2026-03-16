@@ -55,9 +55,7 @@ public class AnnotatedTerm implements Serializable, Comparable<AnnotatedTerm> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      annotation.hashCode(),
-      other.annotation.hashCode());
+    return ((Comparable) annotation).compareTo(other.annotation);
   }
   
   public AnnotatedTerm withBody(hydra.core.Term body) {

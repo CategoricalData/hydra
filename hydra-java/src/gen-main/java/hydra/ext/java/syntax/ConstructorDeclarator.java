@@ -56,9 +56,7 @@ public class ConstructorDeclarator implements Serializable, Comparable<Construct
   @SuppressWarnings("unchecked")
   public int compareTo(ConstructorDeclarator other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      parameters.hashCode(),
-      other.parameters.hashCode());
+    cmp = ((Comparable) parameters).compareTo(other.parameters);
     if (cmp != 0) {
       return cmp;
     }
@@ -66,15 +64,11 @@ public class ConstructorDeclarator implements Serializable, Comparable<Construct
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      receiverParameter.hashCode(),
-      other.receiverParameter.hashCode());
+    cmp = ((Comparable) receiverParameter).compareTo(other.receiverParameter);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      formalParameters.hashCode(),
-      other.formalParameters.hashCode());
+    return ((Comparable) formalParameters).compareTo(other.formalParameters);
   }
   
   public ConstructorDeclarator withParameters(hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> parameters) {

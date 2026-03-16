@@ -49,9 +49,7 @@ public class CatchFormalParameter implements Serializable, Comparable<CatchForma
   @SuppressWarnings("unchecked")
   public int compareTo(CatchFormalParameter other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      modifiers.hashCode(),
-      other.modifiers.hashCode());
+    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
     if (cmp != 0) {
       return cmp;
     }

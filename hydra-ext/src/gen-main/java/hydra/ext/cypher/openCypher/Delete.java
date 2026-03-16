@@ -46,9 +46,7 @@ public class Delete implements Serializable, Comparable<Delete> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      expressions.hashCode(),
-      other.expressions.hashCode());
+    return ((Comparable) expressions).compareTo(other.expressions);
   }
   
   public Delete withDetach(Boolean detach) {

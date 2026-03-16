@@ -68,9 +68,7 @@ public abstract class ConcatArgs implements Serializable, Comparable<ConcatArgs>
         return tagCmp;
       }
       Traversal o = (Traversal) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -110,9 +108,7 @@ public abstract class ConcatArgs implements Serializable, Comparable<ConcatArgs>
         return tagCmp;
       }
       String_ o = (String_) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

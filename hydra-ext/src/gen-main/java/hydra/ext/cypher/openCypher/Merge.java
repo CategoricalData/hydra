@@ -46,9 +46,7 @@ public class Merge implements Serializable, Comparable<Merge> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      actions.hashCode(),
-      other.actions.hashCode());
+    return ((Comparable) actions).compareTo(other.actions);
   }
   
   public Merge withPatternPart(hydra.ext.cypher.openCypher.PatternPart patternPart) {

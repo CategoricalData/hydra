@@ -34,8 +34,6 @@ public class ElementValueArrayInitializer implements Serializable, Comparable<El
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ElementValueArrayInitializer other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

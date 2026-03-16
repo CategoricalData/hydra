@@ -51,15 +51,11 @@ public class Query implements Serializable, Comparable<Query> {
   @SuppressWarnings("unchecked")
   public int compareTo(Query other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      variables.hashCode(),
-      other.variables.hashCode());
+    cmp = ((Comparable) variables).compareTo(other.variables);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      patterns.hashCode(),
-      other.patterns.hashCode());
+    return ((Comparable) patterns).compareTo(other.patterns);
   }
   
   public Query withVariables(hydra.util.ConsList<hydra.query.Variable> variables) {

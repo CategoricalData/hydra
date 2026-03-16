@@ -46,9 +46,7 @@ public class GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument implem
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      biFunction.hashCode(),
-      other.biFunction.hashCode());
+    return ((Comparable) biFunction).compareTo(other.biFunction);
   }
   
   public GenericLiteralArgumentAndOptionalTraversalBiFunctionArgument withLiteral(hydra.ext.org.apache.tinkerpop.gremlin.GenericLiteralArgument literal) {

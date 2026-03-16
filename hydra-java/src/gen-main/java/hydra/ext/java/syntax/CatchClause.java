@@ -42,9 +42,7 @@ public class CatchClause implements Serializable, Comparable<CatchClause> {
   @SuppressWarnings("unchecked")
   public int compareTo(CatchClause other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      parameter.hashCode(),
-      other.parameter.hashCode());
+    cmp = ((Comparable) parameter).compareTo(other.parameter);
     if (cmp != 0) {
       return cmp;
     }

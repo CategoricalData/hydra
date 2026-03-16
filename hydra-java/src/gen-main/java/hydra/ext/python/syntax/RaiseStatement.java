@@ -34,8 +34,6 @@ public class RaiseStatement implements Serializable, Comparable<RaiseStatement> 
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(RaiseStatement other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

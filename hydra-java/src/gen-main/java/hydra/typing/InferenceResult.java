@@ -93,9 +93,7 @@ public class InferenceResult implements Serializable, Comparable<InferenceResult
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      classConstraints.hashCode(),
-      other.classConstraints.hashCode());
+    cmp = ((Comparable) classConstraints).compareTo(other.classConstraints);
     if (cmp != 0) {
       return cmp;
     }

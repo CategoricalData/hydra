@@ -37,8 +37,6 @@ public class Deriving implements Serializable, Comparable<Deriving> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Deriving other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

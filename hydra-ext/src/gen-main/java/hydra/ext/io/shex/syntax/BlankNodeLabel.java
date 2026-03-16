@@ -53,9 +53,7 @@ public class BlankNodeLabel implements Serializable, Comparable<BlankNodeLabel> 
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      ListOfAlts.hashCode(),
-      other.ListOfAlts.hashCode());
+    cmp = ((Comparable) ListOfAlts).compareTo(other.ListOfAlts);
     if (cmp != 0) {
       return cmp;
     }

@@ -51,9 +51,7 @@ public class Let implements Serializable, Comparable<Let> {
   @SuppressWarnings("unchecked")
   public int compareTo(Let other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      bindings.hashCode(),
-      other.bindings.hashCode());
+    cmp = ((Comparable) bindings).compareTo(other.bindings);
     if (cmp != 0) {
       return cmp;
     }

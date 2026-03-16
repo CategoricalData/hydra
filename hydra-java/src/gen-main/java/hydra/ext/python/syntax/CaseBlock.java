@@ -53,9 +53,7 @@ public class CaseBlock implements Serializable, Comparable<CaseBlock> {
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      guard.hashCode(),
-      other.guard.hashCode());
+    cmp = ((Comparable) guard).compareTo(other.guard);
     if (cmp != 0) {
       return cmp;
     }

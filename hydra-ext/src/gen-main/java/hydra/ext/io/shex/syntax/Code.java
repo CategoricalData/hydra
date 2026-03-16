@@ -34,8 +34,6 @@ public class Code implements Serializable, Comparable<Code> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Code other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

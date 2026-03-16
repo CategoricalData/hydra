@@ -46,9 +46,7 @@ public class StandaloneCall implements Serializable, Comparable<StandaloneCall> 
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      yieldItems.hashCode(),
-      other.yieldItems.hashCode());
+    return ((Comparable) yieldItems).compareTo(other.yieldItems);
   }
   
   public StandaloneCall withCall(hydra.ext.cypher.openCypher.ProcedureInvocation call) {

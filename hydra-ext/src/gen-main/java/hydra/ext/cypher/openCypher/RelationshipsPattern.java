@@ -46,9 +46,7 @@ public class RelationshipsPattern implements Serializable, Comparable<Relationsh
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      chain.hashCode(),
-      other.chain.hashCode());
+    return ((Comparable) chain).compareTo(other.chain);
   }
   
   public RelationshipsPattern withNodePattern(hydra.ext.cypher.openCypher.NodePattern nodePattern) {

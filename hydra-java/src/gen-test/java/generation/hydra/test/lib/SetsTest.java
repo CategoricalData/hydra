@@ -18,7 +18,7 @@ public class SetsTest {
 
         assertEquals(
 
-            (hydra.util.PersistentSet<T0>) (hydra.util.PersistentSet.<T0>empty()),
+            (hydra.util.PersistentSet<T0>) (hydra.util.PersistentSet.<T0>of()),
 
             (hydra.util.PersistentSet<T0>) (hydra.lib.sets.Empty.<T0>apply()));
 
@@ -83,7 +83,7 @@ public class SetsTest {
 
         assertEquals(
 
-            (hydra.util.PersistentSet<T0>) (hydra.util.PersistentSet.<T0>empty()),
+            (hydra.util.PersistentSet<T0>) (hydra.util.PersistentSet.<T0>of()),
 
             hydra.lib.sets.FromList.apply((hydra.util.ConsList<T1>) (hydra.util.ConsList.<T1>empty())));
 
@@ -135,7 +135,7 @@ public class SetsTest {
 
             (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty()),
 
-            hydra.lib.sets.ToList.apply((hydra.util.PersistentSet<T1>) (hydra.util.PersistentSet.<T1>empty())));
+            hydra.lib.sets.ToList.apply((hydra.util.PersistentSet<T1>) (hydra.util.PersistentSet.<T1>of())));
 
     }
 
@@ -192,7 +192,7 @@ public class SetsTest {
 
             hydra.lib.sets.Insert.apply(
   1,
-  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>empty())));
+  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>of())));
 
     }
 
@@ -243,11 +243,11 @@ public class SetsTest {
 
         assertEquals(
 
-            (hydra.util.PersistentSet<T0>) (hydra.util.PersistentSet.<T0>empty()),
+            (hydra.util.PersistentSet<T0>) (hydra.util.PersistentSet.<T0>of()),
 
             hydra.lib.sets.Delete.apply(
   1,
-  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>empty())));
+  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>of())));
 
     }
 
@@ -297,7 +297,7 @@ public class SetsTest {
 
             hydra.lib.sets.Member.apply(
   1,
-  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>empty())));
+  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>of())));
 
     }
 
@@ -338,7 +338,7 @@ public class SetsTest {
 
             0,
 
-            hydra.lib.sets.Size.apply((hydra.util.PersistentSet<T1>) (hydra.util.PersistentSet.<T1>empty())));
+            hydra.lib.sets.Size.apply((hydra.util.PersistentSet<T1>) (hydra.util.PersistentSet.<T1>of())));
 
     }
 
@@ -352,7 +352,7 @@ public class SetsTest {
 
             true,
 
-            hydra.lib.sets.Null.apply((hydra.util.PersistentSet<T1>) (hydra.util.PersistentSet.<T1>empty())));
+            hydra.lib.sets.Null.apply((hydra.util.PersistentSet<T1>) (hydra.util.PersistentSet.<T1>of())));
 
     }
 
@@ -407,7 +407,7 @@ public class SetsTest {
   hydra.util.PersistentSet.of(
     1,
     2),
-  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>empty())));
+  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>of())));
 
     }
 
@@ -422,7 +422,7 @@ public class SetsTest {
   2),
 
             hydra.lib.sets.Union.apply(
-  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>empty()),
+  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>of()),
   hydra.util.PersistentSet.of(
     1,
     2)));
@@ -471,7 +471,7 @@ public class SetsTest {
   hydra.util.PersistentSet.of(
     1,
     2),
-  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>empty()),
+  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>of()),
   hydra.util.PersistentSet.of(3))));
 
     }
@@ -482,7 +482,7 @@ public class SetsTest {
 
         assertEquals(
 
-            (hydra.util.PersistentSet<T0>) (hydra.util.PersistentSet.<T0>empty()),
+            (hydra.util.PersistentSet<T0>) (hydra.util.PersistentSet.<T0>of()),
 
             hydra.lib.sets.Unions.apply((hydra.util.ConsList<hydra.util.PersistentSet<T0>>) (hydra.util.ConsList.<hydra.util.PersistentSet<T0>>empty())));
 
@@ -536,7 +536,7 @@ public class SetsTest {
 
         assertEquals(
 
-            (hydra.util.PersistentSet<T0>) (hydra.util.PersistentSet.<T0>empty()),
+            (hydra.util.PersistentSet<T0>) (hydra.util.PersistentSet.<T0>of()),
 
             hydra.lib.sets.Intersection.apply(
   hydra.util.PersistentSet.of(
@@ -554,13 +554,13 @@ public class SetsTest {
 
         assertEquals(
 
-            (hydra.util.PersistentSet<T0>) (hydra.util.PersistentSet.<T0>empty()),
+            (hydra.util.PersistentSet<T0>) (hydra.util.PersistentSet.<T0>of()),
 
             hydra.lib.sets.Intersection.apply(
   hydra.util.PersistentSet.of(
     1,
     2),
-  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>empty())));
+  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>of())));
 
     }
 
@@ -621,7 +621,7 @@ public class SetsTest {
   hydra.util.PersistentSet.of(
     1,
     2),
-  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>empty())));
+  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>of())));
 
     }
 
@@ -655,13 +655,13 @@ public class SetsTest {
 
         assertEquals(
 
-            (hydra.util.PersistentSet<T0>) (hydra.util.PersistentSet.<T0>empty()),
+            (hydra.util.PersistentSet<T0>) (hydra.util.PersistentSet.<T0>of()),
 
             hydra.lib.sets.Map.apply(
   (java.util.function.Function<Integer, Integer>) (x -> hydra.lib.math.Mul.apply(
     x,
     2)),
-  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>empty())));
+  (hydra.util.PersistentSet<Integer>) (hydra.util.PersistentSet.<Integer>of())));
 
     }
 }

@@ -69,9 +69,7 @@ public class VertexSpec implements Serializable, Comparable<VertexSpec> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      properties.hashCode(),
-      other.properties.hashCode());
+    return ((Comparable) properties).compareTo(other.properties);
   }
   
   public VertexSpec withLabel(hydra.pg.model.VertexLabel label) {

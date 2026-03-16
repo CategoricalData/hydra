@@ -263,9 +263,7 @@ public abstract class TraversalSourceSelfMethod implements Serializable, Compara
         return tagCmp;
       }
       WithStrategies o = (WithStrategies) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -305,9 +303,7 @@ public abstract class TraversalSourceSelfMethod implements Serializable, Compara
         return tagCmp;
       }
       WithoutStrategies o = (WithoutStrategies) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

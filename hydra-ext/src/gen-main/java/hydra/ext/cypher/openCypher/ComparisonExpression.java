@@ -46,9 +46,7 @@ public class ComparisonExpression implements Serializable, Comparable<Comparison
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      right.hashCode(),
-      other.right.hashCode());
+    return ((Comparable) right).compareTo(other.right);
   }
   
   public ComparisonExpression withLeft(hydra.ext.cypher.openCypher.StringListNullPredicateExpression left) {

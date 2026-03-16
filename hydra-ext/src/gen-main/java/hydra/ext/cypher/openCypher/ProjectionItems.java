@@ -46,9 +46,7 @@ public class ProjectionItems implements Serializable, Comparable<ProjectionItems
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      explicit.hashCode(),
-      other.explicit.hashCode());
+    return ((Comparable) explicit).compareTo(other.explicit);
   }
   
   public ProjectionItems withStar(Boolean star) {

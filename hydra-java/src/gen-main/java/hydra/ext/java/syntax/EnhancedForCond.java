@@ -56,9 +56,7 @@ public class EnhancedForCond implements Serializable, Comparable<EnhancedForCond
   @SuppressWarnings("unchecked")
   public int compareTo(EnhancedForCond other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      modifiers.hashCode(),
-      other.modifiers.hashCode());
+    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
     if (cmp != 0) {
       return cmp;
     }

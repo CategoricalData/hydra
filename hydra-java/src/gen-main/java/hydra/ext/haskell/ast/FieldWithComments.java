@@ -55,9 +55,7 @@ public class FieldWithComments implements Serializable, Comparable<FieldWithComm
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      comments.hashCode(),
-      other.comments.hashCode());
+    return ((Comparable) comments).compareTo(other.comments);
   }
   
   public FieldWithComments withField(hydra.ext.haskell.ast.Field field) {

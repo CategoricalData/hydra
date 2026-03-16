@@ -42,15 +42,11 @@ public class PackageDeclaration implements Serializable, Comparable<PackageDecla
   @SuppressWarnings("unchecked")
   public int compareTo(PackageDeclaration other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      modifiers.hashCode(),
-      other.modifiers.hashCode());
+    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      identifiers.hashCode(),
-      other.identifiers.hashCode());
+    return ((Comparable) identifiers).compareTo(other.identifiers);
   }
   
   public PackageDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.PackageModifier> modifiers) {

@@ -42,9 +42,7 @@ public class SymmetricObjectProperty implements Serializable, Comparable<Symmetr
   @SuppressWarnings("unchecked")
   public int compareTo(SymmetricObjectProperty other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      annotations.hashCode(),
-      other.annotations.hashCode());
+    cmp = ((Comparable) annotations).compareTo(other.annotations);
     if (cmp != 0) {
       return cmp;
     }

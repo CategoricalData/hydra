@@ -34,8 +34,6 @@ public class ConditionalAndExpression implements Serializable, Comparable<Condit
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ConditionalAndExpression other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

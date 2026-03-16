@@ -42,9 +42,7 @@ public class AnnotatedIdentifier implements Serializable, Comparable<AnnotatedId
   @SuppressWarnings("unchecked")
   public int compareTo(AnnotatedIdentifier other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      annotations.hashCode(),
-      other.annotations.hashCode());
+    cmp = ((Comparable) annotations).compareTo(other.annotations);
     if (cmp != 0) {
       return cmp;
     }

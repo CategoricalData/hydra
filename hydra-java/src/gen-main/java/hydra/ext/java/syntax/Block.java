@@ -34,8 +34,6 @@ public class Block implements Serializable, Comparable<Block> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Block other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

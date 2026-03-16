@@ -49,9 +49,7 @@ public class AnnotationPropertyRange implements Serializable, Comparable<Annotat
   @SuppressWarnings("unchecked")
   public int compareTo(AnnotationPropertyRange other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      annotations.hashCode(),
-      other.annotations.hashCode());
+    cmp = ((Comparable) annotations).compareTo(other.annotations);
     if (cmp != 0) {
       return cmp;
     }

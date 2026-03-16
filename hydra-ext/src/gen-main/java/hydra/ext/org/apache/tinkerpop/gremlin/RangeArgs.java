@@ -49,9 +49,7 @@ public class RangeArgs implements Serializable, Comparable<RangeArgs> {
   @SuppressWarnings("unchecked")
   public int compareTo(RangeArgs other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      scope.hashCode(),
-      other.scope.hashCode());
+    cmp = ((Comparable) scope).compareTo(other.scope);
     if (cmp != 0) {
       return cmp;
     }

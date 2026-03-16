@@ -46,9 +46,7 @@ public class DottedAsName implements Serializable, Comparable<DottedAsName> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      as.hashCode(),
-      other.as.hashCode());
+    return ((Comparable) as).compareTo(other.as);
   }
   
   public DottedAsName withName(hydra.ext.python.syntax.DottedName name) {

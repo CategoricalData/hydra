@@ -42,9 +42,7 @@ public class WhileStatementNoShortIf implements Serializable, Comparable<WhileSt
   @SuppressWarnings("unchecked")
   public int compareTo(WhileStatementNoShortIf other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      cond.hashCode(),
-      other.cond.hashCode());
+    cmp = ((Comparable) cond).compareTo(other.cond);
     if (cmp != 0) {
       return cmp;
     }

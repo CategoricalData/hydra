@@ -42,9 +42,7 @@ public class StringLiteralLong1_Elmt_Sequence implements Serializable, Comparabl
   @SuppressWarnings("unchecked")
   public int compareTo(StringLiteralLong1_Elmt_Sequence other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      Alts.hashCode(),
-      other.Alts.hashCode());
+    cmp = ((Comparable) Alts).compareTo(other.Alts);
     if (cmp != 0) {
       return cmp;
     }

@@ -69,9 +69,7 @@ public class Literal implements Serializable, Comparable<Literal> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      languageTag.hashCode(),
-      other.languageTag.hashCode());
+    return ((Comparable) languageTag).compareTo(other.languageTag);
   }
   
   public Literal withLexicalForm(String lexicalForm) {

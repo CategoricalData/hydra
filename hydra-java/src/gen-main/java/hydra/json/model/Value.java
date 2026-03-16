@@ -106,9 +106,7 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       Array o = (Array) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -273,9 +271,7 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       Object_ o = (Object_) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

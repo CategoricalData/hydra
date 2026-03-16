@@ -34,8 +34,6 @@ public class ItemsPattern implements Serializable, Comparable<ItemsPattern> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ItemsPattern other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

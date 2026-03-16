@@ -46,9 +46,7 @@ public class PopStringsArgument implements Serializable, Comparable<PopStringsAr
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      string.hashCode(),
-      other.string.hashCode());
+    return ((Comparable) string).compareTo(other.string);
   }
   
   public PopStringsArgument withPop(hydra.ext.org.apache.tinkerpop.gremlin.TraversalPopArgument pop) {

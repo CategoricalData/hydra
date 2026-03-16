@@ -37,8 +37,6 @@ public class DataUnionOf implements Serializable, Comparable<DataUnionOf> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DataUnionOf other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

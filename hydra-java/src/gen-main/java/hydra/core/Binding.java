@@ -69,9 +69,7 @@ public class Binding implements Serializable, Comparable<Binding> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      type.hashCode(),
-      other.type.hashCode());
+    return ((Comparable) type).compareTo(other.type);
   }
   
   public Binding withName(hydra.core.Name name) {

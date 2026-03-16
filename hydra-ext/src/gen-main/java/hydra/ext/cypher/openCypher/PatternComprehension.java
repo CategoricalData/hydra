@@ -56,9 +56,7 @@ public class PatternComprehension implements Serializable, Comparable<PatternCom
   @SuppressWarnings("unchecked")
   public int compareTo(PatternComprehension other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      variable.hashCode(),
-      other.variable.hashCode());
+    cmp = ((Comparable) variable).compareTo(other.variable);
     if (cmp != 0) {
       return cmp;
     }
@@ -66,9 +64,7 @@ public class PatternComprehension implements Serializable, Comparable<PatternCom
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      where.hashCode(),
-      other.where.hashCode());
+    cmp = ((Comparable) where).compareTo(other.where);
     if (cmp != 0) {
       return cmp;
     }

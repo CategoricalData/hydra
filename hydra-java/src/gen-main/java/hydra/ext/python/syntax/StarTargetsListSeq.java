@@ -34,8 +34,6 @@ public class StarTargetsListSeq implements Serializable, Comparable<StarTargetsL
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(StarTargetsListSeq other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

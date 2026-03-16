@@ -61,21 +61,15 @@ public class Module implements Serializable, Comparable<Module> {
   @SuppressWarnings("unchecked")
   public int compareTo(Module other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      head.hashCode(),
-      other.head.hashCode());
+    cmp = ((Comparable) head).compareTo(other.head);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      imports.hashCode(),
-      other.imports.hashCode());
+    cmp = ((Comparable) imports).compareTo(other.imports);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      declarations.hashCode(),
-      other.declarations.hashCode());
+    return ((Comparable) declarations).compareTo(other.declarations);
   }
   
   public Module withHead(hydra.util.Maybe<hydra.ext.haskell.ast.ModuleHead> head) {

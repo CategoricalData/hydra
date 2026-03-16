@@ -46,9 +46,7 @@ public class CatchType implements Serializable, Comparable<CatchType> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      types.hashCode(),
-      other.types.hashCode());
+    return ((Comparable) types).compareTo(other.types);
   }
   
   public CatchType withType(hydra.ext.java.syntax.UnannClassType type) {

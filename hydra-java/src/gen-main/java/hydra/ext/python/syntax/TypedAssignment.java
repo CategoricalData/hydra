@@ -57,9 +57,7 @@ public class TypedAssignment implements Serializable, Comparable<TypedAssignment
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      rhs.hashCode(),
-      other.rhs.hashCode());
+    return ((Comparable) rhs).compareTo(other.rhs);
   }
   
   public TypedAssignment withLhs(hydra.ext.python.syntax.SingleTarget lhs) {

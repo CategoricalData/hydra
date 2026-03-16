@@ -49,21 +49,15 @@ public class Args implements Serializable, Comparable<Args> {
   @SuppressWarnings("unchecked")
   public int compareTo(Args other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      positional.hashCode(),
-      other.positional.hashCode());
+    cmp = ((Comparable) positional).compareTo(other.positional);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      kwargOrStarred.hashCode(),
-      other.kwargOrStarred.hashCode());
+    cmp = ((Comparable) kwargOrStarred).compareTo(other.kwargOrStarred);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      kwargOrDoubleStarred.hashCode(),
-      other.kwargOrDoubleStarred.hashCode());
+    return ((Comparable) kwargOrDoubleStarred).compareTo(other.kwargOrDoubleStarred);
   }
   
   public Args withPositional(hydra.util.ConsList<hydra.ext.python.syntax.PosArg> positional) {

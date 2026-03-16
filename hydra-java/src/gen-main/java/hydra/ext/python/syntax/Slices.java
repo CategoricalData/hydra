@@ -46,9 +46,7 @@ public class Slices implements Serializable, Comparable<Slices> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      tail.hashCode(),
-      other.tail.hashCode());
+    return ((Comparable) tail).compareTo(other.tail);
   }
   
   public Slices withHead(hydra.ext.python.syntax.Slice head) {

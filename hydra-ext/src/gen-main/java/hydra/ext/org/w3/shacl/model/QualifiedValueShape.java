@@ -67,9 +67,7 @@ public class QualifiedValueShape implements Serializable, Comparable<QualifiedVa
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      qualifiedValueShapesDisjoint.hashCode(),
-      other.qualifiedValueShapesDisjoint.hashCode());
+    return ((Comparable) qualifiedValueShapesDisjoint).compareTo(other.qualifiedValueShapesDisjoint);
   }
   
   public QualifiedValueShape withQualifiedValueShape(hydra.ext.org.w3.shacl.model.Reference<hydra.ext.org.w3.shacl.model.Shape> qualifiedValueShape) {

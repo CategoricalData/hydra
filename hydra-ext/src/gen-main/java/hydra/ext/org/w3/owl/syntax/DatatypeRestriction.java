@@ -49,9 +49,7 @@ public class DatatypeRestriction implements Serializable, Comparable<DatatypeRes
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      constraints.hashCode(),
-      other.constraints.hashCode());
+    return ((Comparable) constraints).compareTo(other.constraints);
   }
   
   public DatatypeRestriction withDatatype(hydra.ext.org.w3.owl.syntax.Datatype datatype) {

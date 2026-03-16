@@ -42,15 +42,11 @@ public class Wildcard implements Serializable, Comparable<Wildcard> {
   @SuppressWarnings("unchecked")
   public int compareTo(Wildcard other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      annotations.hashCode(),
-      other.annotations.hashCode());
+    cmp = ((Comparable) annotations).compareTo(other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      wildcard.hashCode(),
-      other.wildcard.hashCode());
+    return ((Comparable) wildcard).compareTo(other.wildcard);
   }
   
   public Wildcard withAnnotations(hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {

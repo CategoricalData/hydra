@@ -34,8 +34,6 @@ public class SlashNoDefault implements Serializable, Comparable<SlashNoDefault> 
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(SlashNoDefault other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

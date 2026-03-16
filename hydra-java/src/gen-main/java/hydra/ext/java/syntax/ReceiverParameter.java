@@ -49,9 +49,7 @@ public class ReceiverParameter implements Serializable, Comparable<ReceiverParam
   @SuppressWarnings("unchecked")
   public int compareTo(ReceiverParameter other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      annotations.hashCode(),
-      other.annotations.hashCode());
+    cmp = ((Comparable) annotations).compareTo(other.annotations);
     if (cmp != 0) {
       return cmp;
     }
@@ -59,9 +57,7 @@ public class ReceiverParameter implements Serializable, Comparable<ReceiverParam
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      identifier.hashCode(),
-      other.identifier.hashCode());
+    return ((Comparable) identifier).compareTo(other.identifier);
   }
   
   public ReceiverParameter withAnnotations(hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {

@@ -116,9 +116,7 @@ public abstract class Statement implements Serializable, Comparable<Statement> {
         return tagCmp;
       }
       Simple o = (Simple) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

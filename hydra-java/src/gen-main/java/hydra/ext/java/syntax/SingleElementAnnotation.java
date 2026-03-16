@@ -46,9 +46,7 @@ public class SingleElementAnnotation implements Serializable, Comparable<SingleE
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
   
   public SingleElementAnnotation withName(hydra.ext.java.syntax.TypeName name) {

@@ -34,8 +34,6 @@ public class MaybeSequencePattern implements Serializable, Comparable<MaybeSeque
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(MaybeSequencePattern other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

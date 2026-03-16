@@ -46,9 +46,7 @@ public class WithArgs implements Serializable, Comparable<WithArgs> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      values.hashCode(),
-      other.values.hashCode());
+    return ((Comparable) values).compareTo(other.values);
   }
   
   public WithArgs withKeys(hydra.ext.org.apache.tinkerpop.gremlin.WithArgsKeys keys) {

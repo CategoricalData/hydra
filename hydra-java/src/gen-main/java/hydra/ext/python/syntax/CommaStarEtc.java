@@ -42,15 +42,11 @@ public class CommaStarEtc implements Serializable, Comparable<CommaStarEtc> {
   @SuppressWarnings("unchecked")
   public int compareTo(CommaStarEtc other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      paramMaybeDefault.hashCode(),
-      other.paramMaybeDefault.hashCode());
+    cmp = ((Comparable) paramMaybeDefault).compareTo(other.paramMaybeDefault);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      keywords.hashCode(),
-      other.keywords.hashCode());
+    return ((Comparable) keywords).compareTo(other.keywords);
   }
   
   public CommaStarEtc withParamMaybeDefault(hydra.util.ConsList<hydra.ext.python.syntax.ParamMaybeDefault> paramMaybeDefault) {

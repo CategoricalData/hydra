@@ -698,9 +698,7 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       List o = (List) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -895,9 +893,7 @@ public abstract class Value implements Serializable, Comparable<Value> {
         return tagCmp;
       }
       Set o = (Set) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

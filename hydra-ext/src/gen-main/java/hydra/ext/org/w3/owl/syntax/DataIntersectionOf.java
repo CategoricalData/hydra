@@ -37,8 +37,6 @@ public class DataIntersectionOf implements Serializable, Comparable<DataIntersec
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DataIntersectionOf other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

@@ -82,9 +82,7 @@ public abstract class Node implements Serializable, Comparable<Node> {
         return tagCmp;
       }
       Mapping o = (Mapping) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -170,9 +168,7 @@ public abstract class Node implements Serializable, Comparable<Node> {
         return tagCmp;
       }
       Sequence o = (Sequence) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

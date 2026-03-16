@@ -68,9 +68,7 @@ public abstract class ByOtherArgs implements Serializable, Comparable<ByOtherArg
         return tagCmp;
       }
       Comparator o = (Comparator) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -110,9 +108,7 @@ public abstract class ByOtherArgs implements Serializable, Comparable<ByOtherArg
         return tagCmp;
       }
       Other o = (Other) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

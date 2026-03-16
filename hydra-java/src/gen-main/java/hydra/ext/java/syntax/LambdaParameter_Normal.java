@@ -49,9 +49,7 @@ public class LambdaParameter_Normal implements Serializable, Comparable<LambdaPa
   @SuppressWarnings("unchecked")
   public int compareTo(LambdaParameter_Normal other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      modifiers.hashCode(),
-      other.modifiers.hashCode());
+    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
     if (cmp != 0) {
       return cmp;
     }

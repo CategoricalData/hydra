@@ -42,15 +42,11 @@ public class ParamWithDefaultParameters implements Serializable, Comparable<Para
   @SuppressWarnings("unchecked")
   public int compareTo(ParamWithDefaultParameters other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      paramWithDefault.hashCode(),
-      other.paramWithDefault.hashCode());
+    cmp = ((Comparable) paramWithDefault).compareTo(other.paramWithDefault);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      starEtc.hashCode(),
-      other.starEtc.hashCode());
+    return ((Comparable) starEtc).compareTo(other.starEtc);
   }
   
   public ParamWithDefaultParameters withParamWithDefault(hydra.util.ConsList<hydra.ext.python.syntax.ParamWithDefault> paramWithDefault) {

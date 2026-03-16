@@ -53,15 +53,11 @@ public class NestedTraversalArgument implements Serializable, Comparable<NestedT
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      traversal2.hashCode(),
-      other.traversal2.hashCode());
+    cmp = ((Comparable) traversal2).compareTo(other.traversal2);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      traversal3.hashCode(),
-      other.traversal3.hashCode());
+    return ((Comparable) traversal3).compareTo(other.traversal3);
   }
   
   public NestedTraversalArgument withTraversal1(hydra.ext.org.apache.tinkerpop.gremlin.NestedTraversal traversal1) {

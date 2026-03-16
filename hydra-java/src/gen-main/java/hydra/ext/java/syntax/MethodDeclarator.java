@@ -53,15 +53,11 @@ public class MethodDeclarator implements Serializable, Comparable<MethodDeclarat
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      receiverParameter.hashCode(),
-      other.receiverParameter.hashCode());
+    cmp = ((Comparable) receiverParameter).compareTo(other.receiverParameter);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      formalParameters.hashCode(),
-      other.formalParameters.hashCode());
+    return ((Comparable) formalParameters).compareTo(other.formalParameters);
   }
   
   public MethodDeclarator withIdentifier(hydra.ext.java.syntax.Identifier identifier) {

@@ -42,9 +42,7 @@ public class OptionalStringArgumentAndNestedTraversal implements Serializable, C
   @SuppressWarnings("unchecked")
   public int compareTo(OptionalStringArgumentAndNestedTraversal other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      string.hashCode(),
-      other.string.hashCode());
+    cmp = ((Comparable) string).compareTo(other.string);
     if (cmp != 0) {
       return cmp;
     }

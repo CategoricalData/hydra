@@ -34,8 +34,6 @@ public class NodeLabels implements Serializable, Comparable<NodeLabels> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(NodeLabels other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

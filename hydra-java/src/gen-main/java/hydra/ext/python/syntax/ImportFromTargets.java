@@ -76,9 +76,7 @@ public abstract class ImportFromTargets implements Serializable, Comparable<Impo
         return tagCmp;
       }
       Simple o = (Simple) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -118,9 +116,7 @@ public abstract class ImportFromTargets implements Serializable, Comparable<Impo
         return tagCmp;
       }
       Parens o = (Parens) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

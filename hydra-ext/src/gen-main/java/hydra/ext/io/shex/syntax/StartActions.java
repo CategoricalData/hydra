@@ -34,8 +34,6 @@ public class StartActions implements Serializable, Comparable<StartActions> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(StartActions other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

@@ -57,9 +57,7 @@ public class IfStatement implements Serializable, Comparable<IfStatement> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      continuation.hashCode(),
-      other.continuation.hashCode());
+    return ((Comparable) continuation).compareTo(other.continuation);
   }
   
   public IfStatement withCondition(hydra.ext.python.syntax.NamedExpression condition) {

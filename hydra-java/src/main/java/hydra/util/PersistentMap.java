@@ -32,7 +32,8 @@ import java.util.function.Predicate;
  * @param <K> the key type (must be Comparable)
  * @param <V> the value type
  */
-public abstract class PersistentMap<K, V> implements Map<K, V>, Iterable<Map.Entry<K, V>>, Serializable {
+@SuppressWarnings("rawtypes")
+public abstract class PersistentMap<K, V> implements Map<K, V>, Iterable<Map.Entry<K, V>>, Serializable, Comparable<PersistentMap> {
 
     private static final boolean RED = true;
     private static final boolean BLACK = false;
@@ -645,6 +646,25 @@ public abstract class PersistentMap<K, V> implements Map<K, V>, Iterable<Map.Ent
             h += Objects.hashCode(entry.getKey()) ^ Objects.hashCode(entry.getValue());
         }
         return h;
+    }
+
+    /**
+     * Lexicographic comparison over sorted entries.
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(PersistentMap other) {
+        Iterator<Map.Entry<K, V>> it1 = this.iterator();
+        Iterator it2 = other.iterator();
+        while (it1.hasNext() && it2.hasNext()) {
+            Map.Entry<K, V> e1 = it1.next();
+            Map.Entry e2 = (Map.Entry) it2.next();
+            int cmp = ((Comparable) e1.getKey()).compareTo(e2.getKey());
+            if (cmp != 0) return cmp;
+            cmp = ((Comparable) e1.getValue()).compareTo(e2.getValue());
+            if (cmp != 0) return cmp;
+        }
+        return Integer.compare(this.size(), other.size());
     }
 
     @Override

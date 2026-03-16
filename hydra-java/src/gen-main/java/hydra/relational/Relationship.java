@@ -37,8 +37,6 @@ public class Relationship<V> implements Serializable, Comparable<Relationship<V>
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Relationship other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

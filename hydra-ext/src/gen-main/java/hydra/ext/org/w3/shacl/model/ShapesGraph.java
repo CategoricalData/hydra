@@ -37,8 +37,6 @@ public class ShapesGraph implements Serializable, Comparable<ShapesGraph> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ShapesGraph other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

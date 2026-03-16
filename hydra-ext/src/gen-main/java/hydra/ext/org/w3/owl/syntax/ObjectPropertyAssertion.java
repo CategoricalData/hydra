@@ -56,9 +56,7 @@ public class ObjectPropertyAssertion implements Serializable, Comparable<ObjectP
   @SuppressWarnings("unchecked")
   public int compareTo(ObjectPropertyAssertion other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      annotations.hashCode(),
-      other.annotations.hashCode());
+    cmp = ((Comparable) annotations).compareTo(other.annotations);
     if (cmp != 0) {
       return cmp;
     }

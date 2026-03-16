@@ -46,9 +46,7 @@ public class ShexDoc_Sequence_Option implements Serializable, Comparable<ShexDoc
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      listOfStatement.hashCode(),
-      other.listOfStatement.hashCode());
+    return ((Comparable) listOfStatement).compareTo(other.listOfStatement);
   }
   
   public ShexDoc_Sequence_Option withAlts(hydra.ext.io.shex.syntax.ShexDoc_Sequence_Option_Alts alts) {

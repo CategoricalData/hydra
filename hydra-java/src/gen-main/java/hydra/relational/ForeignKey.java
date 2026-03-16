@@ -55,9 +55,7 @@ public class ForeignKey implements Serializable, Comparable<ForeignKey> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      keys.hashCode(),
-      other.keys.hashCode());
+    return ((Comparable) keys).compareTo(other.keys);
   }
   
   public ForeignKey withForeignRelation(hydra.relational.RelationName foreignRelation) {

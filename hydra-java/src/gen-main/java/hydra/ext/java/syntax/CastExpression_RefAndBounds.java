@@ -46,9 +46,7 @@ public class CastExpression_RefAndBounds implements Serializable, Comparable<Cas
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      bounds.hashCode(),
-      other.bounds.hashCode());
+    return ((Comparable) bounds).compareTo(other.bounds);
   }
   
   public CastExpression_RefAndBounds withType(hydra.ext.java.syntax.ReferenceType type) {

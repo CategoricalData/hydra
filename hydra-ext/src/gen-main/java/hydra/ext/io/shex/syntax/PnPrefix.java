@@ -46,9 +46,7 @@ public class PnPrefix implements Serializable, Comparable<PnPrefix> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      Sequence.hashCode(),
-      other.Sequence.hashCode());
+    return ((Comparable) Sequence).compareTo(other.Sequence);
   }
   
   public PnPrefix withPnCharsBase(hydra.ext.io.shex.syntax.PnCharsBase PnCharsBase) {

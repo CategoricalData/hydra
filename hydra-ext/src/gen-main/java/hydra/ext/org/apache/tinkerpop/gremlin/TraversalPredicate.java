@@ -596,9 +596,7 @@ public abstract class TraversalPredicate implements Serializable, Comparable<Tra
         return tagCmp;
       }
       Within o = (Within) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -638,9 +636,7 @@ public abstract class TraversalPredicate implements Serializable, Comparable<Tra
         return tagCmp;
       }
       Without o = (Without) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

@@ -79,15 +79,11 @@ public class Import implements Serializable, Comparable<Import> {
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      as.hashCode(),
-      other.as.hashCode());
+    cmp = ((Comparable) as).compareTo(other.as);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      spec.hashCode(),
-      other.spec.hashCode());
+    return ((Comparable) spec).compareTo(other.spec);
   }
   
   public Import withQualified(Boolean qualified) {

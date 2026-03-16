@@ -46,9 +46,7 @@ public class TPrimaryAndArguments implements Serializable, Comparable<TPrimaryAn
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      arguments.hashCode(),
-      other.arguments.hashCode());
+    return ((Comparable) arguments).compareTo(other.arguments);
   }
   
   public TPrimaryAndArguments withPrimary(hydra.ext.python.syntax.TPrimary primary) {

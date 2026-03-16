@@ -60,21 +60,15 @@ public class TryExceptStatement implements Serializable, Comparable<TryExceptSta
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      excepts.hashCode(),
-      other.excepts.hashCode());
+    cmp = ((Comparable) excepts).compareTo(other.excepts);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      else_.hashCode(),
-      other.else_.hashCode());
+    cmp = ((Comparable) else_).compareTo(other.else_);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      finally_.hashCode(),
-      other.finally_.hashCode());
+    return ((Comparable) finally_).compareTo(other.finally_);
   }
   
   public TryExceptStatement withBody(hydra.ext.python.syntax.Block body) {

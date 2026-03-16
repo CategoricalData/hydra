@@ -49,9 +49,7 @@ public class DataPropertyDomain implements Serializable, Comparable<DataProperty
   @SuppressWarnings("unchecked")
   public int compareTo(DataPropertyDomain other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      annotations.hashCode(),
-      other.annotations.hashCode());
+    cmp = ((Comparable) annotations).compareTo(other.annotations);
     if (cmp != 0) {
       return cmp;
     }

@@ -46,9 +46,7 @@ public class ScopeStringArgument implements Serializable, Comparable<ScopeString
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      strings.hashCode(),
-      other.strings.hashCode());
+    return ((Comparable) strings).compareTo(other.strings);
   }
   
   public ScopeStringArgument withScope(hydra.ext.org.apache.tinkerpop.gremlin.TraversalScopeArgument scope) {

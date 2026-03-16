@@ -37,8 +37,6 @@ public class TypeSubst implements Serializable, Comparable<TypeSubst> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TypeSubst other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

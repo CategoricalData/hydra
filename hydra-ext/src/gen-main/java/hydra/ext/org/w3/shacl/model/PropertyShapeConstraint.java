@@ -106,9 +106,7 @@ public abstract class PropertyShapeConstraint implements Serializable, Comparabl
         return tagCmp;
       }
       LessThan o = (LessThan) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -151,9 +149,7 @@ public abstract class PropertyShapeConstraint implements Serializable, Comparabl
         return tagCmp;
       }
       LessThanOrEquals o = (LessThanOrEquals) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

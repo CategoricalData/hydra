@@ -46,9 +46,7 @@ public class PatternWhere implements Serializable, Comparable<PatternWhere> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      where.hashCode(),
-      other.where.hashCode());
+    return ((Comparable) where).compareTo(other.where);
   }
   
   public PatternWhere withPattern(hydra.ext.cypher.openCypher.Pattern pattern) {

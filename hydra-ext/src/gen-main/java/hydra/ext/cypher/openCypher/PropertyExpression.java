@@ -46,9 +46,7 @@ public class PropertyExpression implements Serializable, Comparable<PropertyExpr
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      lookups.hashCode(),
-      other.lookups.hashCode());
+    return ((Comparable) lookups).compareTo(other.lookups);
   }
   
   public PropertyExpression withAtom(hydra.ext.cypher.openCypher.Atom atom) {

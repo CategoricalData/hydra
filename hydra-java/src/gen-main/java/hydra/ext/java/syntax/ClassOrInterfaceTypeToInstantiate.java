@@ -42,15 +42,11 @@ public class ClassOrInterfaceTypeToInstantiate implements Serializable, Comparab
   @SuppressWarnings("unchecked")
   public int compareTo(ClassOrInterfaceTypeToInstantiate other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      identifiers.hashCode(),
-      other.identifiers.hashCode());
+    cmp = ((Comparable) identifiers).compareTo(other.identifiers);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      typeArguments.hashCode(),
-      other.typeArguments.hashCode());
+    return ((Comparable) typeArguments).compareTo(other.typeArguments);
   }
   
   public ClassOrInterfaceTypeToInstantiate withIdentifiers(hydra.util.ConsList<hydra.ext.java.syntax.AnnotatedIdentifier> identifiers) {

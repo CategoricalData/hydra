@@ -42,15 +42,11 @@ public class DimExpr implements Serializable, Comparable<DimExpr> {
   @SuppressWarnings("unchecked")
   public int compareTo(DimExpr other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      annotations.hashCode(),
-      other.annotations.hashCode());
+    cmp = ((Comparable) annotations).compareTo(other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      expression.hashCode(),
-      other.expression.hashCode());
+    return ((Comparable) expression).compareTo(other.expression);
   }
   
   public DimExpr withAnnotations(hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {

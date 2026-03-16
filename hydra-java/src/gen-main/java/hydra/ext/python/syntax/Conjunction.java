@@ -34,8 +34,6 @@ public class Conjunction implements Serializable, Comparable<Conjunction> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Conjunction other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

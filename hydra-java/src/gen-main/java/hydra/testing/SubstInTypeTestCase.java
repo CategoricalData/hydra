@@ -61,9 +61,7 @@ public class SubstInTypeTestCase implements Serializable, Comparable<SubstInType
   @SuppressWarnings("unchecked")
   public int compareTo(SubstInTypeTestCase other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      substitution.hashCode(),
-      other.substitution.hashCode());
+    cmp = ((Comparable) substitution).compareTo(other.substitution);
     if (cmp != 0) {
       return cmp;
     }

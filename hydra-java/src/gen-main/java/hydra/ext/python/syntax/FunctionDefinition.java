@@ -42,9 +42,7 @@ public class FunctionDefinition implements Serializable, Comparable<FunctionDefi
   @SuppressWarnings("unchecked")
   public int compareTo(FunctionDefinition other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      decorators.hashCode(),
-      other.decorators.hashCode());
+    cmp = ((Comparable) decorators).compareTo(other.decorators);
     if (cmp != 0) {
       return cmp;
     }

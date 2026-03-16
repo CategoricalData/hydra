@@ -68,9 +68,7 @@ public abstract class ServiceArguments implements Serializable, Comparable<Servi
         return tagCmp;
       }
       Map o = (Map) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -110,9 +108,7 @@ public abstract class ServiceArguments implements Serializable, Comparable<Servi
         return tagCmp;
       }
       Traversal o = (Traversal) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

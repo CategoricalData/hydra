@@ -46,9 +46,7 @@ public class ExplicitProcedureInvocation implements Serializable, Comparable<Exp
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      arguments.hashCode(),
-      other.arguments.hashCode());
+    return ((Comparable) arguments).compareTo(other.arguments);
   }
   
   public ExplicitProcedureInvocation withName(hydra.ext.cypher.openCypher.QualifiedName name) {

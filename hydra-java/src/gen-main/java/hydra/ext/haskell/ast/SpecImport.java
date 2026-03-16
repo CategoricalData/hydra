@@ -74,9 +74,7 @@ public abstract class SpecImport implements Serializable, Comparable<SpecImport>
         return tagCmp;
       }
       List o = (List) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -119,9 +117,7 @@ public abstract class SpecImport implements Serializable, Comparable<SpecImport>
         return tagCmp;
       }
       Hiding o = (Hiding) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

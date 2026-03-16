@@ -56,27 +56,19 @@ public class VertexPattern implements Serializable, Comparable<VertexPattern> {
   @SuppressWarnings("unchecked")
   public int compareTo(VertexPattern other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      variable.hashCode(),
-      other.variable.hashCode());
+    cmp = ((Comparable) variable).compareTo(other.variable);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      label.hashCode(),
-      other.label.hashCode());
+    cmp = ((Comparable) label).compareTo(other.label);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      properties.hashCode(),
-      other.properties.hashCode());
+    cmp = ((Comparable) properties).compareTo(other.properties);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      edges.hashCode(),
-      other.edges.hashCode());
+    return ((Comparable) edges).compareTo(other.edges);
   }
   
   public VertexPattern withVariable(hydra.util.Maybe<hydra.pg.query.Variable> variable) {

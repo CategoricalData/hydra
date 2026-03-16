@@ -53,15 +53,11 @@ public class NonArithmeticOperatorExpression implements Serializable, Comparable
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      listsAndLookups.hashCode(),
-      other.listsAndLookups.hashCode());
+    cmp = ((Comparable) listsAndLookups).compareTo(other.listsAndLookups);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      labels.hashCode(),
-      other.labels.hashCode());
+    return ((Comparable) labels).compareTo(other.labels);
   }
   
   public NonArithmeticOperatorExpression withAtom(hydra.ext.cypher.openCypher.Atom atom) {

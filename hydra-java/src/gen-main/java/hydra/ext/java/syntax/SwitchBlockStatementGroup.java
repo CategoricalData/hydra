@@ -42,15 +42,11 @@ public class SwitchBlockStatementGroup implements Serializable, Comparable<Switc
   @SuppressWarnings("unchecked")
   public int compareTo(SwitchBlockStatementGroup other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      labels.hashCode(),
-      other.labels.hashCode());
+    cmp = ((Comparable) labels).compareTo(other.labels);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      statements.hashCode(),
-      other.statements.hashCode());
+    return ((Comparable) statements).compareTo(other.statements);
   }
   
   public SwitchBlockStatementGroup withLabels(hydra.util.ConsList<hydra.ext.java.syntax.SwitchLabel> labels) {

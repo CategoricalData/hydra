@@ -69,9 +69,7 @@ public class SimpleValueBinding implements Serializable, Comparable<SimpleValueB
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      localBindings.hashCode(),
-      other.localBindings.hashCode());
+    return ((Comparable) localBindings).compareTo(other.localBindings);
   }
   
   public SimpleValueBinding withPattern(hydra.ext.haskell.ast.Pattern pattern) {

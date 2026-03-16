@@ -49,9 +49,7 @@ public class TypeParameter implements Serializable, Comparable<TypeParameter> {
   @SuppressWarnings("unchecked")
   public int compareTo(TypeParameter other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      modifiers.hashCode(),
-      other.modifiers.hashCode());
+    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
     if (cmp != 0) {
       return cmp;
     }
@@ -59,9 +57,7 @@ public class TypeParameter implements Serializable, Comparable<TypeParameter> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      bound.hashCode(),
-      other.bound.hashCode());
+    return ((Comparable) bound).compareTo(other.bound);
   }
   
   public TypeParameter withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.TypeParameterModifier> modifiers) {

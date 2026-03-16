@@ -42,9 +42,7 @@ public class ExpressionName implements Serializable, Comparable<ExpressionName> 
   @SuppressWarnings("unchecked")
   public int compareTo(ExpressionName other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      qualifier.hashCode(),
-      other.qualifier.hashCode());
+    cmp = ((Comparable) qualifier).compareTo(other.qualifier);
     if (cmp != 0) {
       return cmp;
     }

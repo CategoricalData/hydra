@@ -42,15 +42,11 @@ public class LambdaSlashWithDefault implements Serializable, Comparable<LambdaSl
   @SuppressWarnings("unchecked")
   public int compareTo(LambdaSlashWithDefault other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      paramNoDefault.hashCode(),
-      other.paramNoDefault.hashCode());
+    cmp = ((Comparable) paramNoDefault).compareTo(other.paramNoDefault);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      paramWithDefault.hashCode(),
-      other.paramWithDefault.hashCode());
+    return ((Comparable) paramWithDefault).compareTo(other.paramWithDefault);
   }
   
   public LambdaSlashWithDefault withParamNoDefault(hydra.util.ConsList<hydra.ext.python.syntax.LambdaParamNoDefault> paramNoDefault) {

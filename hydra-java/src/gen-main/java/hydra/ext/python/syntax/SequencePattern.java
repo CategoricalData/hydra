@@ -68,9 +68,7 @@ public abstract class SequencePattern implements Serializable, Comparable<Sequen
         return tagCmp;
       }
       List o = (List) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -110,9 +108,7 @@ public abstract class SequencePattern implements Serializable, Comparable<Sequen
         return tagCmp;
       }
       Tuple o = (Tuple) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

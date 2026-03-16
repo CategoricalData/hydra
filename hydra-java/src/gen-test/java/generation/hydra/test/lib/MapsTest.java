@@ -129,14 +129,14 @@ public class MapsTest {
 
         assertEquals(
 
-            (hydra.util.PersistentMap<T0, T1>) ((hydra.util.PersistentMap<T0, T1>) (hydra.util.PersistentMap.<T0, T1>empty())),
+            (hydra.util.PersistentMap<T0, T1>) ((hydra.util.PersistentMap<T0, T1>) (hydra.util.PersistentMap.<T0, T1>ofEntries())),
 
             hydra.lib.maps.Bimap.apply(
   (java.util.function.Function<Integer, Integer>) (k -> hydra.lib.math.Mul.apply(
     k,
     2)),
   (java.util.function.Function<String, String>) (v -> hydra.lib.strings.ToUpper.apply(v)),
-  (hydra.util.PersistentMap<Integer, String>) ((hydra.util.PersistentMap<Integer, String>) (hydra.util.PersistentMap.<Integer, String>empty()))));
+  (hydra.util.PersistentMap<Integer, String>) ((hydra.util.PersistentMap<Integer, String>) (hydra.util.PersistentMap.<Integer, String>ofEntries()))));
 
     }
 
@@ -194,7 +194,7 @@ public class MapsTest {
 
             (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty()),
 
-            hydra.lib.maps.Elems.apply((hydra.util.PersistentMap<T2, T3>) ((hydra.util.PersistentMap<T2, T3>) (hydra.util.PersistentMap.<T2, T3>empty()))));
+            hydra.lib.maps.Elems.apply((hydra.util.PersistentMap<T2, T3>) ((hydra.util.PersistentMap<T2, T3>) (hydra.util.PersistentMap.<T2, T3>ofEntries()))));
 
     }
 
@@ -206,7 +206,7 @@ public class MapsTest {
 
         assertEquals(
 
-            (hydra.util.PersistentMap<T0, T1>) ((hydra.util.PersistentMap<T0, T1>) (hydra.util.PersistentMap.<T0, T1>empty())),
+            (hydra.util.PersistentMap<T0, T1>) ((hydra.util.PersistentMap<T0, T1>) (hydra.util.PersistentMap.<T0, T1>ofEntries())),
 
             (hydra.util.PersistentMap<T0, T1>) ((hydra.util.PersistentMap<T0, T1>) (hydra.lib.maps.Empty.<T0, T1>apply())));
 
@@ -253,7 +253,7 @@ public class MapsTest {
 
         assertEquals(
 
-            (hydra.util.PersistentMap<T0, T1>) ((hydra.util.PersistentMap<T0, T1>) (hydra.util.PersistentMap.<T0, T1>empty())),
+            (hydra.util.PersistentMap<T0, T1>) ((hydra.util.PersistentMap<T0, T1>) (hydra.util.PersistentMap.<T0, T1>ofEntries())),
 
             hydra.lib.maps.Filter.apply(
   (java.util.function.Function<String, Boolean>) (v -> hydra.lib.equality.Equal.apply(
@@ -277,7 +277,7 @@ public class MapsTest {
 
         assertEquals(
 
-            (hydra.util.PersistentMap<T0, T1>) ((hydra.util.PersistentMap<T0, T1>) (hydra.util.PersistentMap.<T0, T1>empty())),
+            (hydra.util.PersistentMap<T0, T1>) ((hydra.util.PersistentMap<T0, T1>) (hydra.util.PersistentMap.<T0, T1>ofEntries())),
 
             hydra.lib.maps.Filter.apply(
   (java.util.function.Function<String, Boolean>) (v -> hydra.lib.equality.Equal.apply(
@@ -285,7 +285,7 @@ public class MapsTest {
       0,
       v),
     97)),
-  (hydra.util.PersistentMap<T9, String>) ((hydra.util.PersistentMap<T9, String>) (hydra.util.PersistentMap.<T9, String>empty()))));
+  (hydra.util.PersistentMap<T9, String>) ((hydra.util.PersistentMap<T9, String>) (hydra.util.PersistentMap.<T9, String>ofEntries()))));
 
     }
 
@@ -328,7 +328,7 @@ public class MapsTest {
 
         assertEquals(
 
-            (hydra.util.PersistentMap<T0, T1>) ((hydra.util.PersistentMap<T0, T1>) (hydra.util.PersistentMap.<T0, T1>empty())),
+            (hydra.util.PersistentMap<T0, T1>) ((hydra.util.PersistentMap<T0, T1>) (hydra.util.PersistentMap.<T0, T1>ofEntries())),
 
             hydra.lib.maps.FilterWithKey.apply(
   (java.util.function.Function<Integer, java.util.function.Function<String, Boolean>>) (k -> (java.util.function.Function<String, Boolean>) (v -> hydra.lib.equality.Gt.apply(
@@ -346,13 +346,13 @@ public class MapsTest {
 
         assertEquals(
 
-            (hydra.util.PersistentMap<T0, T1>) ((hydra.util.PersistentMap<T0, T1>) (hydra.util.PersistentMap.<T0, T1>empty())),
+            (hydra.util.PersistentMap<T0, T1>) ((hydra.util.PersistentMap<T0, T1>) (hydra.util.PersistentMap.<T0, T1>ofEntries())),
 
             hydra.lib.maps.FilterWithKey.apply(
   (java.util.function.Function<Integer, java.util.function.Function<T9, Boolean>>) (k -> (java.util.function.Function<T9, Boolean>) (v -> hydra.lib.equality.Gt.apply(
     k,
     1))),
-  (hydra.util.PersistentMap<Integer, T9>) ((hydra.util.PersistentMap<Integer, T9>) (hydra.util.PersistentMap.<Integer, T9>empty()))));
+  (hydra.util.PersistentMap<Integer, T9>) ((hydra.util.PersistentMap<Integer, T9>) (hydra.util.PersistentMap.<Integer, T9>ofEntries()))));
 
     }
 
@@ -444,7 +444,7 @@ public class MapsTest {
 
         assertEquals(
 
-            (hydra.util.PersistentMap<T0, T1>) ((hydra.util.PersistentMap<T0, T1>) (hydra.util.PersistentMap.<T0, T1>empty())),
+            (hydra.util.PersistentMap<T0, T1>) ((hydra.util.PersistentMap<T0, T1>) (hydra.util.PersistentMap.<T0, T1>ofEntries())),
 
             hydra.lib.maps.FromList.apply((hydra.util.ConsList<hydra.util.Pair<T0, T1>>) (hydra.util.ConsList.<hydra.util.Pair<T0, T1>>empty())));
 
@@ -522,7 +522,7 @@ public class MapsTest {
             hydra.lib.maps.Insert.apply(
   1,
   "x",
-  (hydra.util.PersistentMap<Integer, String>) ((hydra.util.PersistentMap<Integer, String>) (hydra.util.PersistentMap.<Integer, String>empty()))));
+  (hydra.util.PersistentMap<Integer, String>) ((hydra.util.PersistentMap<Integer, String>) (hydra.util.PersistentMap.<Integer, String>ofEntries()))));
 
     }
 
@@ -584,7 +584,7 @@ public class MapsTest {
 
             (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty()),
 
-            hydra.lib.maps.Keys.apply((hydra.util.PersistentMap<T2, T3>) ((hydra.util.PersistentMap<T2, T3>) (hydra.util.PersistentMap.<T2, T3>empty()))));
+            hydra.lib.maps.Keys.apply((hydra.util.PersistentMap<T2, T3>) ((hydra.util.PersistentMap<T2, T3>) (hydra.util.PersistentMap.<T2, T3>ofEntries()))));
 
     }
 
@@ -640,7 +640,7 @@ public class MapsTest {
 
             hydra.lib.maps.Lookup.apply(
   1,
-  (hydra.util.PersistentMap<Integer, T4>) ((hydra.util.PersistentMap<Integer, T4>) (hydra.util.PersistentMap.<Integer, T4>empty()))));
+  (hydra.util.PersistentMap<Integer, T4>) ((hydra.util.PersistentMap<Integer, T4>) (hydra.util.PersistentMap.<Integer, T4>ofEntries()))));
 
     }
 
@@ -678,11 +678,11 @@ public class MapsTest {
 
         assertEquals(
 
-            (hydra.util.PersistentMap<T0, T1>) ((hydra.util.PersistentMap<T0, T1>) (hydra.util.PersistentMap.<T0, T1>empty())),
+            (hydra.util.PersistentMap<T0, T1>) ((hydra.util.PersistentMap<T0, T1>) (hydra.util.PersistentMap.<T0, T1>ofEntries())),
 
             hydra.lib.maps.Map.apply(
   (java.util.function.Function<String, String>) (s -> hydra.lib.strings.ToUpper.apply(s)),
-  (hydra.util.PersistentMap<T6, String>) ((hydra.util.PersistentMap<T6, String>) (hydra.util.PersistentMap.<T6, String>empty()))));
+  (hydra.util.PersistentMap<T6, String>) ((hydra.util.PersistentMap<T6, String>) (hydra.util.PersistentMap.<T6, String>ofEntries()))));
 
     }
 
@@ -722,13 +722,13 @@ public class MapsTest {
 
         assertEquals(
 
-            (hydra.util.PersistentMap<T0, T1>) ((hydra.util.PersistentMap<T0, T1>) (hydra.util.PersistentMap.<T0, T1>empty())),
+            (hydra.util.PersistentMap<T0, T1>) ((hydra.util.PersistentMap<T0, T1>) (hydra.util.PersistentMap.<T0, T1>ofEntries())),
 
             hydra.lib.maps.MapKeys.apply(
   (java.util.function.Function<Integer, Integer>) (k -> hydra.lib.math.Mul.apply(
     k,
     2)),
-  (hydra.util.PersistentMap<Integer, T8>) ((hydra.util.PersistentMap<Integer, T8>) (hydra.util.PersistentMap.<Integer, T8>empty()))));
+  (hydra.util.PersistentMap<Integer, T8>) ((hydra.util.PersistentMap<Integer, T8>) (hydra.util.PersistentMap.<Integer, T8>ofEntries()))));
 
     }
 
@@ -784,7 +784,7 @@ public class MapsTest {
 
             hydra.lib.maps.Member.apply(
   1,
-  (hydra.util.PersistentMap<Integer, T4>) ((hydra.util.PersistentMap<Integer, T4>) (hydra.util.PersistentMap.<Integer, T4>empty()))));
+  (hydra.util.PersistentMap<Integer, T4>) ((hydra.util.PersistentMap<Integer, T4>) (hydra.util.PersistentMap.<Integer, T4>ofEntries()))));
 
     }
 
@@ -798,7 +798,7 @@ public class MapsTest {
 
             true,
 
-            hydra.lib.maps.Null.apply((hydra.util.PersistentMap<T2, T3>) ((hydra.util.PersistentMap<T2, T3>) (hydra.util.PersistentMap.<T2, T3>empty()))));
+            hydra.lib.maps.Null.apply((hydra.util.PersistentMap<T2, T3>) ((hydra.util.PersistentMap<T2, T3>) (hydra.util.PersistentMap.<T2, T3>ofEntries()))));
 
     }
 
@@ -879,11 +879,11 @@ public class MapsTest {
 
         assertEquals(
 
-            (hydra.util.PersistentMap<T0, T1>) ((hydra.util.PersistentMap<T0, T1>) (hydra.util.PersistentMap.<T0, T1>empty())),
+            (hydra.util.PersistentMap<T0, T1>) ((hydra.util.PersistentMap<T0, T1>) (hydra.util.PersistentMap.<T0, T1>ofEntries())),
 
             hydra.lib.maps.Delete.apply(
   1,
-  (hydra.util.PersistentMap<Integer, T4>) ((hydra.util.PersistentMap<Integer, T4>) (hydra.util.PersistentMap.<Integer, T4>empty()))));
+  (hydra.util.PersistentMap<Integer, T4>) ((hydra.util.PersistentMap<Integer, T4>) (hydra.util.PersistentMap.<Integer, T4>ofEntries()))));
 
     }
 
@@ -950,7 +950,7 @@ public class MapsTest {
 
             0,
 
-            hydra.lib.maps.Size.apply((hydra.util.PersistentMap<T2, T3>) ((hydra.util.PersistentMap<T2, T3>) (hydra.util.PersistentMap.<T2, T3>empty()))));
+            hydra.lib.maps.Size.apply((hydra.util.PersistentMap<T2, T3>) ((hydra.util.PersistentMap<T2, T3>) (hydra.util.PersistentMap.<T2, T3>ofEntries()))));
 
     }
 
@@ -1008,7 +1008,7 @@ public class MapsTest {
 
             (hydra.util.ConsList<T0>) (hydra.util.ConsList.<T0>empty()),
 
-            hydra.lib.maps.ToList.apply((hydra.util.PersistentMap<T2, T3>) ((hydra.util.PersistentMap<T2, T3>) (hydra.util.PersistentMap.<T2, T3>empty()))));
+            hydra.lib.maps.ToList.apply((hydra.util.PersistentMap<T2, T3>) ((hydra.util.PersistentMap<T2, T3>) (hydra.util.PersistentMap.<T2, T3>ofEntries()))));
 
     }
 
@@ -1063,7 +1063,7 @@ public class MapsTest {
   hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
     1,
     "a")),
-  (hydra.util.PersistentMap<Integer, String>) ((hydra.util.PersistentMap<Integer, String>) (hydra.util.PersistentMap.<Integer, String>empty()))));
+  (hydra.util.PersistentMap<Integer, String>) ((hydra.util.PersistentMap<Integer, String>) (hydra.util.PersistentMap.<Integer, String>ofEntries()))));
 
     }
 
@@ -1078,7 +1078,7 @@ public class MapsTest {
   "a")),
 
             hydra.lib.maps.Union.apply(
-  (hydra.util.PersistentMap<Integer, String>) ((hydra.util.PersistentMap<Integer, String>) (hydra.util.PersistentMap.<Integer, String>empty())),
+  (hydra.util.PersistentMap<Integer, String>) ((hydra.util.PersistentMap<Integer, String>) (hydra.util.PersistentMap.<Integer, String>ofEntries())),
   hydra.util.PersistentMap.ofEntries(hydra.util.PersistentMap.entry(
     1,
     "a"))));

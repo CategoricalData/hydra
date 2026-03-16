@@ -49,9 +49,7 @@ public class FieldDeclaration implements Serializable, Comparable<FieldDeclarati
   @SuppressWarnings("unchecked")
   public int compareTo(FieldDeclaration other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      modifiers.hashCode(),
-      other.modifiers.hashCode());
+    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
     if (cmp != 0) {
       return cmp;
     }
@@ -59,9 +57,7 @@ public class FieldDeclaration implements Serializable, Comparable<FieldDeclarati
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      variableDeclarators.hashCode(),
-      other.variableDeclarators.hashCode());
+    return ((Comparable) variableDeclarators).compareTo(other.variableDeclarators);
   }
   
   public FieldDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.FieldModifier> modifiers) {

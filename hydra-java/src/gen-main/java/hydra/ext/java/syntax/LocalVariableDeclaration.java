@@ -49,9 +49,7 @@ public class LocalVariableDeclaration implements Serializable, Comparable<LocalV
   @SuppressWarnings("unchecked")
   public int compareTo(LocalVariableDeclaration other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      modifiers.hashCode(),
-      other.modifiers.hashCode());
+    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
     if (cmp != 0) {
       return cmp;
     }
@@ -59,9 +57,7 @@ public class LocalVariableDeclaration implements Serializable, Comparable<LocalV
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      declarators.hashCode(),
-      other.declarators.hashCode());
+    return ((Comparable) declarators).compareTo(other.declarators);
   }
   
   public LocalVariableDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.VariableModifier> modifiers) {

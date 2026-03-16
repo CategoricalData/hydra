@@ -46,9 +46,7 @@ public class With implements Serializable, Comparable<With> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      where.hashCode(),
-      other.where.hashCode());
+    return ((Comparable) where).compareTo(other.where);
   }
   
   public With withProjection(hydra.ext.cypher.openCypher.ProjectionBody projection) {

@@ -68,9 +68,7 @@ public abstract class TypeArgumentsOrDiamond implements Serializable, Comparable
         return tagCmp;
       }
       Arguments o = (Arguments) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

@@ -51,15 +51,11 @@ public class TopologicalSortBindingsTestCase implements Serializable, Comparable
   @SuppressWarnings("unchecked")
   public int compareTo(TopologicalSortBindingsTestCase other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      bindings.hashCode(),
-      other.bindings.hashCode());
+    cmp = ((Comparable) bindings).compareTo(other.bindings);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      expected.hashCode(),
-      other.expected.hashCode());
+    return ((Comparable) expected).compareTo(other.expected);
   }
   
   public TopologicalSortBindingsTestCase withBindings(hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Term>> bindings) {

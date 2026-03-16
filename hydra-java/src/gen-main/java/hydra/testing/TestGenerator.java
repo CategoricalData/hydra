@@ -89,9 +89,7 @@ public class TestGenerator<A> implements Serializable, Comparable<TestGenerator<
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      aggregatorFile.hashCode(),
-      other.aggregatorFile.hashCode());
+    return ((Comparable) aggregatorFile).compareTo(other.aggregatorFile);
   }
   
   public TestGenerator withNamespacesForModule(java.util.function.Function<hydra.module.Module, java.util.function.Function<hydra.graph.Graph, hydra.util.Either<String, hydra.module.Namespaces<A>>>> namespacesForModule) {

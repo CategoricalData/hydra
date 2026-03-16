@@ -55,9 +55,7 @@ public class ClassAssertion implements Serializable, Comparable<ClassAssertion> 
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      types.hashCode(),
-      other.types.hashCode());
+    return ((Comparable) types).compareTo(other.types);
   }
   
   public ClassAssertion withName(hydra.ext.haskell.ast.Name name) {

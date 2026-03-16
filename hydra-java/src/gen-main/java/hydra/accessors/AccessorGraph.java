@@ -51,15 +51,11 @@ public class AccessorGraph implements Serializable, Comparable<AccessorGraph> {
   @SuppressWarnings("unchecked")
   public int compareTo(AccessorGraph other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      nodes.hashCode(),
-      other.nodes.hashCode());
+    cmp = ((Comparable) nodes).compareTo(other.nodes);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      edges.hashCode(),
-      other.edges.hashCode());
+    return ((Comparable) edges).compareTo(other.edges);
   }
   
   public AccessorGraph withNodes(hydra.util.ConsList<hydra.accessors.AccessorNode> nodes) {

@@ -99,15 +99,11 @@ public class PropertyShape implements Serializable, Comparable<PropertyShape> {
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      constraints.hashCode(),
-      other.constraints.hashCode());
+    cmp = ((Comparable) constraints).compareTo(other.constraints);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      defaultValue.hashCode(),
-      other.defaultValue.hashCode());
+    cmp = ((Comparable) defaultValue).compareTo(other.defaultValue);
     if (cmp != 0) {
       return cmp;
     }
@@ -119,9 +115,7 @@ public class PropertyShape implements Serializable, Comparable<PropertyShape> {
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      order.hashCode(),
-      other.order.hashCode());
+    cmp = ((Comparable) order).compareTo(other.order);
     if (cmp != 0) {
       return cmp;
     }

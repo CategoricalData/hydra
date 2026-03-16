@@ -49,21 +49,15 @@ public class Ontology implements Serializable, Comparable<Ontology> {
   @SuppressWarnings("unchecked")
   public int compareTo(Ontology other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      directImports.hashCode(),
-      other.directImports.hashCode());
+    cmp = ((Comparable) directImports).compareTo(other.directImports);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      annotations.hashCode(),
-      other.annotations.hashCode());
+    cmp = ((Comparable) annotations).compareTo(other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      axioms.hashCode(),
-      other.axioms.hashCode());
+    return ((Comparable) axioms).compareTo(other.axioms);
   }
   
   public Ontology withDirectImports(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Ontology> directImports) {

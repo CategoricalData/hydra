@@ -46,9 +46,7 @@ public class StringArgumentAndOptionalStringLiteralVarargs implements Serializab
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      rest.hashCode(),
-      other.rest.hashCode());
+    return ((Comparable) rest).compareTo(other.rest);
   }
   
   public StringArgumentAndOptionalStringLiteralVarargs withFirst(hydra.ext.org.apache.tinkerpop.gremlin.StringArgument first) {

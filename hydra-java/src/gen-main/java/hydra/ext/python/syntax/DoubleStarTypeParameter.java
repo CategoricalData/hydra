@@ -46,9 +46,7 @@ public class DoubleStarTypeParameter implements Serializable, Comparable<DoubleS
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      default_.hashCode(),
-      other.default_.hashCode());
+    return ((Comparable) default_).compareTo(other.default_);
   }
   
   public DoubleStarTypeParameter withName(hydra.ext.python.syntax.Name name) {

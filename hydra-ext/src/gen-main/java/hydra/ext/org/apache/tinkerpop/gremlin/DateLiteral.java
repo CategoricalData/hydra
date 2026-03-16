@@ -34,8 +34,6 @@ public class DateLiteral implements Serializable, Comparable<DateLiteral> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DateLiteral other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

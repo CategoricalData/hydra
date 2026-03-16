@@ -53,9 +53,7 @@ public class TypeAlias implements Serializable, Comparable<TypeAlias> {
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      typeParams.hashCode(),
-      other.typeParams.hashCode());
+    cmp = ((Comparable) typeParams).compareTo(other.typeParams);
     if (cmp != 0) {
       return cmp;
     }

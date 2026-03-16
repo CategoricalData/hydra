@@ -46,9 +46,7 @@ public class ExceptExpression implements Serializable, Comparable<ExceptExpressi
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      as.hashCode(),
-      other.as.hashCode());
+    return ((Comparable) as).compareTo(other.as);
   }
   
   public ExceptExpression withExpression(hydra.ext.python.syntax.Expression expression) {

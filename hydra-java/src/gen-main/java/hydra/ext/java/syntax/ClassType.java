@@ -56,9 +56,7 @@ public class ClassType implements Serializable, Comparable<ClassType> {
   @SuppressWarnings("unchecked")
   public int compareTo(ClassType other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      annotations.hashCode(),
-      other.annotations.hashCode());
+    cmp = ((Comparable) annotations).compareTo(other.annotations);
     if (cmp != 0) {
       return cmp;
     }
@@ -70,9 +68,7 @@ public class ClassType implements Serializable, Comparable<ClassType> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      arguments.hashCode(),
-      other.arguments.hashCode());
+    return ((Comparable) arguments).compareTo(other.arguments);
   }
   
   public ClassType withAnnotations(hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {

@@ -83,9 +83,7 @@ public class TypeArityMismatchError implements Serializable, Comparable<TypeArit
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      typeArguments.hashCode(),
-      other.typeArguments.hashCode());
+    return ((Comparable) typeArguments).compareTo(other.typeArguments);
   }
   
   public TypeArityMismatchError withType(hydra.core.Type type) {

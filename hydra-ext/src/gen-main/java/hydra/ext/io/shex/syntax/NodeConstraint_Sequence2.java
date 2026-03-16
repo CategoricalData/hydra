@@ -46,9 +46,7 @@ public class NodeConstraint_Sequence2 implements Serializable, Comparable<NodeCo
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      listOfStringFacet.hashCode(),
-      other.listOfStringFacet.hashCode());
+    return ((Comparable) listOfStringFacet).compareTo(other.listOfStringFacet);
   }
   
   public NodeConstraint_Sequence2 withNonLiteralKind(hydra.ext.io.shex.syntax.NonLiteralKind NonLiteralKind) {

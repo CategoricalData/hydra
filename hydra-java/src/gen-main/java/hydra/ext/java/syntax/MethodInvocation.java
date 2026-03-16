@@ -46,9 +46,7 @@ public class MethodInvocation implements Serializable, Comparable<MethodInvocati
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      arguments.hashCode(),
-      other.arguments.hashCode());
+    return ((Comparable) arguments).compareTo(other.arguments);
   }
   
   public MethodInvocation withHeader(hydra.ext.java.syntax.MethodInvocation_Header header) {

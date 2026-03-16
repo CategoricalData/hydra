@@ -46,9 +46,7 @@ public class ShapeAtom_Sequence implements Serializable, Comparable<ShapeAtom_Se
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      ShapeOrRef.hashCode(),
-      other.ShapeOrRef.hashCode());
+    return ((Comparable) ShapeOrRef).compareTo(other.ShapeOrRef);
   }
   
   public ShapeAtom_Sequence withNodeConstraint(hydra.ext.io.shex.syntax.NodeConstraint NodeConstraint) {

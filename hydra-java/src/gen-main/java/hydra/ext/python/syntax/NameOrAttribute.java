@@ -34,8 +34,6 @@ public class NameOrAttribute implements Serializable, Comparable<NameOrAttribute
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(NameOrAttribute other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

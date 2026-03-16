@@ -244,9 +244,7 @@ public abstract class SimpleStatement implements Serializable, Comparable<Simple
         return tagCmp;
       }
       StarExpressions o = (StarExpressions) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -631,9 +629,7 @@ public abstract class SimpleStatement implements Serializable, Comparable<Simple
         return tagCmp;
       }
       Global o = (Global) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -673,9 +669,7 @@ public abstract class SimpleStatement implements Serializable, Comparable<Simple
         return tagCmp;
       }
       Nonlocal o = (Nonlocal) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

@@ -34,8 +34,6 @@ public class OrExpression implements Serializable, Comparable<OrExpression> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(OrExpression other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

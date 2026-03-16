@@ -224,9 +224,7 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         return tagCmp;
       }
       List o = (List) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -441,9 +439,7 @@ public abstract class Pattern implements Serializable, Comparable<Pattern> {
         return tagCmp;
       }
       Tuple o = (Tuple) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

@@ -34,8 +34,6 @@ public class StringLiteral1 implements Serializable, Comparable<StringLiteral1> 
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(StringLiteral1 other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

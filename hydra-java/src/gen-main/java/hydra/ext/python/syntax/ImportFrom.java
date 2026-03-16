@@ -49,15 +49,11 @@ public class ImportFrom implements Serializable, Comparable<ImportFrom> {
   @SuppressWarnings("unchecked")
   public int compareTo(ImportFrom other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      prefixes.hashCode(),
-      other.prefixes.hashCode());
+    cmp = ((Comparable) prefixes).compareTo(other.prefixes);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      dottedName.hashCode(),
-      other.dottedName.hashCode());
+    cmp = ((Comparable) dottedName).compareTo(other.dottedName);
     if (cmp != 0) {
       return cmp;
     }

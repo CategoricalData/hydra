@@ -37,8 +37,6 @@ public class AccessorPath implements Serializable, Comparable<AccessorPath> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(AccessorPath other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

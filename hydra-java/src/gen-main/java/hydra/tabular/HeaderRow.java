@@ -37,8 +37,6 @@ public class HeaderRow implements Serializable, Comparable<HeaderRow> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(HeaderRow other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }
