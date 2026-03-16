@@ -19,7 +19,7 @@ import Hydra.Json.Model (Value)
 import Hydra.Testing
 import Hydra.Sources.Libraries
 import qualified Hydra.Dsl.Json.Model as Json
-import qualified Hydra.Dsl.Meta.Parsing as Parsing
+import qualified Hydra.Dsl.Parsing as Parsing
 
 
 ns :: Namespace

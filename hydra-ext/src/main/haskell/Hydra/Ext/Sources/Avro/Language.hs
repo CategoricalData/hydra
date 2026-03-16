@@ -10,10 +10,10 @@ import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
 import qualified Hydra.Dsl.Grammars                        as Grammars
 import qualified Hydra.Dsl.LiteralTypes                    as LiteralTypes
 import qualified Hydra.Dsl.Literals                        as Literals
-import qualified Hydra.Dsl.Meta.Accessors                  as Accessors
+import qualified Hydra.Dsl.Accessors                  as Accessors
 import qualified Hydra.Dsl.Ast                        as Ast
 import qualified Hydra.Dsl.Meta.Base                       as MetaBase
-import qualified Hydra.Dsl.Meta.Coders                     as Coders
+import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Grammar                    as Grammar
@@ -131,8 +131,8 @@ avroLanguage = avroLanguageDefinition "avroLanguage" $
       (Just true) [
       _Type_maybe>>: constant false]]] $
   Coders.language
-    (Coders.languageName $ string "hydra.ext.avro")
-    (Coders.languageConstraints
+    (Coders.languageName_ $ string "hydra.ext.avro")
+    (Coders.languageConstraints_
       (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")

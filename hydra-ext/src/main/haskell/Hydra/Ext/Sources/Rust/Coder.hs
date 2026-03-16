@@ -17,10 +17,10 @@ import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Literals               as Literals
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
-import qualified Hydra.Dsl.Meta.Coders                     as Coders
+import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
-import qualified Hydra.Dsl.Meta.Error                      as Error
+import qualified Hydra.Dsl.Error                      as Error
 import qualified Hydra.Dsl.Module                     as Module
 import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting

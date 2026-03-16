@@ -3,11 +3,11 @@ module Hydra.Sources.Kernel.Terms.Extract.Core where
 -- Standard imports for kernel terms modules (slightly modified for conflict avoidance)
 import Hydra.Kernel hiding (lambdaBody, map, setType)
 import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Meta.Accessors    as Accessors
+import qualified Hydra.Dsl.Accessors    as Accessors
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Meta.Coders       as Coders
+import qualified Hydra.Dsl.Coders       as Coders
 import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Grammar      as Grammar
@@ -32,7 +32,7 @@ import qualified Hydra.Dsl.Meta.Base         as MetaBase
 import qualified Hydra.Dsl.Meta.Terms        as MetaTerms
 import qualified Hydra.Dsl.Meta.Types        as MetaTypes
 import qualified Hydra.Dsl.Module       as Module
-import qualified Hydra.Dsl.Meta.Parsing      as Parsing
+import qualified Hydra.Dsl.Parsing      as Parsing
 import           Hydra.Dsl.Meta.Phantoms hiding (
   bigfloat, bigint, binary, boolean, cases, field, float32, float64, floatValue, injection, int8, int16, int32, int64,
   integerValue, lambda, list, literal, map, pair, set, record, string, unit, wrap, uint8, uint16, uint32, uint64)
@@ -56,7 +56,7 @@ import qualified Data.Set                    as S
 import qualified Data.Maybe                  as Y
 
 import qualified Hydra.Dsl.Meta.Context      as Ctx
-import qualified Hydra.Dsl.Meta.Error        as Error
+import qualified Hydra.Dsl.Error        as Error
 import qualified Hydra.Sources.Kernel.Terms.Lexical as Lexical
 
 import qualified Hydra.Sources.Kernel.Terms.Rewriting as Rewriting

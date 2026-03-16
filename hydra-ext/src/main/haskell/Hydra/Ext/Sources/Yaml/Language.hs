@@ -6,7 +6,7 @@ import Hydra.Kernel
 import Hydra.Sources.Libraries
 import           Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Meta.Coders                     as Coders
+import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Lib.Logic                  as Logic
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
@@ -67,8 +67,8 @@ yamlLanguage = define "yamlLanguage" $
         (Just true) [
         _Type_maybe>>: constant false]]] $
   Coders.language
-    (Coders.languageName (string "hydra.ext.yaml"))
-    (Coders.languageConstraints
+    (Coders.languageName_ (string "hydra.ext.yaml"))
+    (Coders.languageConstraints_
       (var "eliminationVariants")
       (var "literalVariants")
       (var "floatTypes")

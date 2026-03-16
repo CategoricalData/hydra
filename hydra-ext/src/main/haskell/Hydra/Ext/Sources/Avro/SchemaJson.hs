@@ -10,10 +10,10 @@ import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
 import qualified Hydra.Dsl.Grammars                        as Grammars
 import qualified Hydra.Dsl.LiteralTypes                    as LiteralTypes
 import qualified Hydra.Dsl.Literals                        as Literals
-import qualified Hydra.Dsl.Meta.Accessors                  as Accessors
+import qualified Hydra.Dsl.Accessors                  as Accessors
 import qualified Hydra.Dsl.Ast                        as Ast
 import qualified Hydra.Dsl.Meta.Base                       as MetaBase
-import qualified Hydra.Dsl.Meta.Coders                     as Coders
+import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Grammar                    as Grammar
@@ -85,7 +85,7 @@ import qualified Data.Maybe                                as Y
 
 -- Additional imports
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
-import qualified Hydra.Dsl.Meta.Error                      as Error
+import qualified Hydra.Dsl.Error                      as Error
 import qualified Hydra.Ext.Org.Apache.Avro.Schema as Avro
 import qualified Hydra.Json.Model as JM
 import qualified Hydra.Ext.Sources.Avro.Schema as AvroSchema

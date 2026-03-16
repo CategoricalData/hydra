@@ -59,11 +59,11 @@ import Hydra.Kernel hiding (
   withLetContext,
   withTypeLambdaContext)
 import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Meta.Accessors    as Accessors
+import qualified Hydra.Dsl.Accessors    as Accessors
 import qualified Hydra.Dsl.Annotations       as Annotations
 import qualified Hydra.Dsl.Ast          as Ast
 import qualified Hydra.Dsl.Bootstrap         as Bootstrap
-import qualified Hydra.Dsl.Meta.Coders       as Coders
+import qualified Hydra.Dsl.Coders       as Coders
 import qualified Hydra.Dsl.Util      as Util
 import qualified Hydra.Dsl.Meta.Core         as Core
 import qualified Hydra.Dsl.Grammar      as Grammar
@@ -88,7 +88,7 @@ import qualified Hydra.Dsl.Meta.Base         as MetaBase
 import qualified Hydra.Dsl.Meta.Terms        as MetaTerms
 import qualified Hydra.Dsl.Meta.Types        as MetaTypes
 import qualified Hydra.Dsl.Module       as Module
-import qualified Hydra.Dsl.Meta.Parsing      as Parsing
+import qualified Hydra.Dsl.Parsing      as Parsing
 import           Hydra.Dsl.Meta.Phantoms     as Phantoms
 import qualified Hydra.Dsl.Prims             as Prims
 import qualified Hydra.Dsl.Meta.Tabular           as Tabular
@@ -99,7 +99,7 @@ import qualified Hydra.Dsl.Topology     as Topology
 import qualified Hydra.Dsl.Types             as Types
 import qualified Hydra.Dsl.Typing       as Typing
 import qualified Hydra.Dsl.Meta.Context      as Ctx
-import qualified Hydra.Dsl.Meta.Error        as Error
+import qualified Hydra.Dsl.Error        as Error
 import qualified Hydra.Dsl.Meta.Variants     as Variants
 import           Hydra.Sources.Kernel.Types.All
 import           Prelude hiding ((++))
@@ -242,7 +242,7 @@ dependencyNamespaces = define "dependencyNamespaces" $
           var "dataNames", var "schemaNames",
           Rewriting.typeDependencyNames @@ true @@ var "typ"]))
         (Ctx.withContext (Ctx.pushTrace (string "dependency namespace (type)") (var "cx"))
-          (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (Error.unDecodingError @@ var "_e")) ("_a" ~> var "_a")
+          (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")
             (decoderFor _Type @@ var "graph" @@ var "term"))))
       -- Handle encoded terms: decode as Term and extract term dependency names
       (Logic.ifElse (isEncodedTerm @@ var "deannotatedTerm")
@@ -250,7 +250,7 @@ dependencyNamespaces = define "dependencyNamespaces" $
             var "dataNames", var "schemaNames",
             Rewriting.termDependencyNames @@ var "binds" @@ var "withPrims" @@ var "withNoms" @@ var "decodedTerm"]))
           (Ctx.withContext (Ctx.pushTrace (string "dependency namespace (term)") (var "cx"))
-            (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (Error.unDecodingError @@ var "_e")) ("_a" ~> var "_a")
+            (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")
               (decoderFor _Term @@ var "graph" @@ var "term"))))
         (right (Sets.unions (list [var "dataNames", var "schemaNames"]))))) $
   Eithers.map ("namesList" ~> Sets.fromList (Maybes.cat (Lists.map (Names.namespaceOf) (
@@ -266,7 +266,7 @@ dereferenceType = define "dereferenceType" $
     (right nothing)
     ("el" ~> Eithers.map (unaryFunction just)
       (Ctx.withContext (var "cx")
-        (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (Error.unDecodingError @@ var "_e")) ("_a" ~> var "_a")
+        (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")
           (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el")))))
 
 elementAsTypeApplicationTerm :: TBinding (Context -> Binding -> Either (InContext Error) TypeApplicationTerm)
@@ -393,7 +393,7 @@ fieldTypes = define "fieldTypes" $
       Eithers.bind (Lexical.requireElement @@ var "cx" @@ var "graph" @@ var "name") (
         "el" ~>
         Eithers.bind (Ctx.withContext (var "cx")
-          (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (Error.unDecodingError @@ var "_e")) ("_a" ~> var "_a")
+          (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")
             (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el")))) (
           "decodedType" ~> fieldTypes @@ var "cx" @@ var "graph" @@ var "decodedType"))]
   @@ (Rewriting.deannotateType @@ var "t")
@@ -793,11 +793,11 @@ schemaGraphToTypingEnvironment = define "schemaGraphToTypingEnvironment" $
       @@ Core.forallTypeBody (var "ft")]) $
   "decodeType" <~ ("term" ~>
     Ctx.withContext (var "cx")
-      (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (Error.unDecodingError @@ var "_e")) ("_a" ~> var "_a")
+      (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")
         (decoderFor _Type @@ var "g" @@ var "term"))) $
   "decodeTypeScheme" <~ ("term" ~>
     Ctx.withContext (var "cx")
-      (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (Error.unDecodingError @@ var "_e")) ("_a" ~> var "_a")
+      (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")
         (decoderFor _TypeScheme @@ var "g" @@ var "term"))) $
   "toPair" <~ ("el" ~>
     "forTerm" <~ ("term" ~> cases _Term (var "term") (Just (right nothing)) [
@@ -855,7 +855,7 @@ typeDependencies = define "typeDependencies" $
     "cx1" <~ Ctx.pushTrace (Strings.cat2 (string "type dependencies of ") (Core.unName (var "name"))) (var "cx") $
     Eithers.bind (Lexical.requireElement @@ var "cx1" @@ var "graph" @@ var "name") (
       "el" ~> Ctx.withContext (var "cx1")
-        (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (Error.unDecodingError @@ var "_e")) ("_a" ~> var "_a")
+        (Eithers.bimap ("_e" ~> Error.errorOther $ Error.otherError (unwrap _DecodingError @@ var "_e")) ("_a" ~> var "_a")
           (decoderFor _Type @@ var "graph" @@ Core.bindingTerm (var "el"))))) $
   "toPair" <~ ("name" ~>
     Eithers.map ("typ" ~> pair (var "name") (var "transform" @@ var "typ"))

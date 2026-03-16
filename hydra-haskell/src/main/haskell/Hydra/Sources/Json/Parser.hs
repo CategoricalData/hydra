@@ -11,10 +11,10 @@ import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
 import qualified Hydra.Dsl.Grammars                        as Grammars
 import qualified Hydra.Dsl.LiteralTypes                    as LiteralTypes
 import qualified Hydra.Dsl.Literals                        as Literals
-import qualified Hydra.Dsl.Meta.Accessors                  as Accessors
+import qualified Hydra.Dsl.Accessors                  as Accessors
 import qualified Hydra.Dsl.Ast                        as Ast
 import qualified Hydra.Dsl.Meta.Base                       as MetaBase
-import qualified Hydra.Dsl.Meta.Coders                     as Coders
+import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Grammar                    as Grammar
@@ -85,7 +85,7 @@ import qualified Data.Set                                  as S
 import qualified Data.Maybe                                as Y
 
 -- Additional imports
-import qualified Hydra.Dsl.Meta.Parsing                    as Parsing
+import qualified Hydra.Dsl.Parsing                    as Parsing
 import qualified Hydra.Sources.Kernel.Terms.Parsers        as Parsers
 import qualified Hydra.Json.Model as J
 
@@ -377,10 +377,10 @@ parseJson :: TBinding (String -> ParseResult J.Value)
 parseJson = define "parseJson" $
   doc "Parse a JSON document from a string" $
   "input" ~>
-    Parsing.runParser
+    unwrap _Parser @@
       (Parsers.bind @@ whitespace @@ (constant $
         Parsers.bind @@ jsonValue @@ ("v" ~>
           Parsers.bind @@ whitespace @@ (constant $
             Parsers.bind @@ Parsers.eof @@ (constant $
-              Parsers.pure @@ var "v")))))
+              Parsers.pure @@ var "v"))))) @@
       (var "input")

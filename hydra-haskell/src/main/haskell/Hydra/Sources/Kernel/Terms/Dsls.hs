@@ -23,7 +23,7 @@ import           Hydra.Dsl.Meta.Phantoms     as Phantoms hiding (
   literalType, record, term, type_, typeScheme, wrap)
 import qualified Hydra.Dsl.Terms             as Terms
 import qualified Hydra.Dsl.Meta.Context      as Ctx
-import qualified Hydra.Dsl.Meta.Error        as Error
+import qualified Hydra.Dsl.Error        as Error
 import           Hydra.Sources.Kernel.Types.All
 import qualified Hydra.Sources.Kernel.Terms.Annotations as Annotations
 import qualified Hydra.Sources.Kernel.Terms.Formatting as Formatting
@@ -534,7 +534,7 @@ dslModule = define "dslModule" $
       (right nothing)
       ("dslBindings" <<~ Eithers.mapList ("b" ~>
         Eithers.bimap
-          ("ic" ~> Ctx.inContext (Error.errorOther $ Error.otherError (Error.unDecodingError @@ Ctx.inContextObject (var "ic"))) (Ctx.inContextContext (var "ic")))
+          ("ic" ~> Ctx.inContext (Error.errorOther $ Error.otherError (unwrap _DecodingError @@ Ctx.inContextObject (var "ic"))) (Ctx.inContextContext (var "ic")))
           ("x" ~> var "x")
           (generateBindingsForType @@ var "cx" @@ var "graph" @@ var "b")) (var "typeBindings") $
         right (just (Module.module_

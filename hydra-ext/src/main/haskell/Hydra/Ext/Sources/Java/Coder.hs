@@ -19,9 +19,9 @@ import qualified Hydra.Dsl.Meta.Lib.Pairs                  as Pairs
 import qualified Hydra.Dsl.Meta.Lib.Maybes                 as Maybes
 import qualified Hydra.Dsl.Meta.Lib.Sets                   as Sets
 import qualified Hydra.Dsl.Meta.Core                       as Core
-import qualified Hydra.Dsl.Meta.Coders                     as Coders
+import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
-import qualified Hydra.Dsl.Meta.Error                      as Error
+import qualified Hydra.Dsl.Error                      as Error
 import qualified Hydra.Dsl.Module                     as Module
 import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
@@ -67,7 +67,7 @@ def = definitionInModule module_
 -- | Get a type annotation, converting DecodingError to InContext Error.
 getTypeE :: TTerm Context -> TTerm Graph -> TTerm (M.Map Name Term) -> TTerm (Either (InContext Error) (Maybe Type))
 getTypeE cx g ann = Eithers.bimap
-  ("__de" ~> Ctx.inContext (Error.errorOther $ Error.otherError (Error.unDecodingError @@ var "__de")) cx)
+  ("__de" ~> Ctx.inContext (Error.errorOther $ Error.otherError ((unwrap _DecodingError) @@ var "__de")) cx)
   ("__a" ~> var "__a")
   (Annotations.getType @@ g @@ ann)
 

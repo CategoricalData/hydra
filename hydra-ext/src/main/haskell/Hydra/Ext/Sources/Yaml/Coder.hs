@@ -6,11 +6,11 @@ import Hydra.Kernel
 import Hydra.Sources.Libraries
 import           Hydra.Dsl.Meta.Lib.Strings                as Strings
 import           Hydra.Dsl.Meta.Phantoms                   as Phantoms
-import qualified Hydra.Dsl.Meta.Coders                     as Coders
+import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
-import qualified Hydra.Dsl.Meta.Error                      as Error
+import qualified Hydra.Dsl.Error                      as Error
 import qualified Hydra.Dsl.Meta.Lib.Eithers                as Eithers
 import qualified Hydra.Dsl.Meta.Lib.Equality               as Equality
 import qualified Hydra.Dsl.Meta.Lib.Lists                  as Lists

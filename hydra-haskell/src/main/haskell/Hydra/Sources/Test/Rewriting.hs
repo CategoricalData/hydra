@@ -18,7 +18,7 @@ import qualified Data.Map                     as M
 
 import Hydra.Testing
 import Hydra.Sources.Libraries
-import qualified Hydra.Dsl.Meta.Coders        as Coders
+import qualified Hydra.Dsl.Coders        as Coders
 import qualified Data.Set                     as S
 
 -- NOTE: This file previously used T for Terms and Ty for Types.

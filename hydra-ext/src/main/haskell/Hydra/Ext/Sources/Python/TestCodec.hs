@@ -13,14 +13,14 @@ import qualified Hydra.Dsl.Bootstrap                       as Bootstrap
 import qualified Hydra.Dsl.Grammars                        as Grammars
 import qualified Hydra.Dsl.LiteralTypes                    as LiteralTypes
 import qualified Hydra.Dsl.Literals                        as Literals
-import qualified Hydra.Dsl.Meta.Accessors                  as Accessors
+import qualified Hydra.Dsl.Accessors                  as Accessors
 import qualified Hydra.Dsl.Ast                        as Ast
 import qualified Hydra.Dsl.Meta.Base                       as MetaBase
-import qualified Hydra.Dsl.Meta.Coders                     as Coders
+import qualified Hydra.Dsl.Coders                     as Coders
 import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
-import qualified Hydra.Dsl.Meta.Error                      as Error
+import qualified Hydra.Dsl.Error                      as Error
 import qualified Hydra.Dsl.Grammar                    as Grammar
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
 import qualified Hydra.Dsl.Json.Model                       as Json
@@ -240,7 +240,7 @@ pythonTestCodec = define "pythonTestCodec" $
   doc "Create a Python TestCodec for pytest-based test generation" $
   lambda "namespaces_" $
     record _TestCodec [
-      _TestCodec_language>>: Coders.languageName (string "python"),
+      _TestCodec_language>>: Coders.languageName_ (string "python"),
       _TestCodec_fileExtension>>: wrap _FileExtension (string "py"),
       _TestCodec_encodeTerm>>: termToPython @@ var "namespaces_",
       _TestCodec_encodeType>>: typeToPython @@ var "namespaces_",
@@ -259,7 +259,7 @@ pythonTestCodecWithContext = define "pythonTestCodecWithContext" $
   doc "Create an efficient Python TestCodec with a pre-built Graph, skipping casts for performance" $
   lambda "namespaces_" $ lambda "tcontext" $
     record _TestCodec [
-      _TestCodec_language>>: Coders.languageName (string "python"),
+      _TestCodec_language>>: Coders.languageName_ (string "python"),
       _TestCodec_fileExtension>>: wrap _FileExtension (string "py"),
       _TestCodec_encodeTerm>>: termToPythonWithContext @@ var "namespaces_" @@ var "tcontext" @@ boolean True,
       _TestCodec_encodeType>>: typeToPython @@ var "namespaces_",
