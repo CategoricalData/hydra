@@ -21,7 +21,7 @@ import qualified Hydra.Dsl.Meta.Accessors                  as Accessors
 import qualified Hydra.Dsl.Ast                        as Ast
 import qualified Hydra.Dsl.Meta.Base                       as MetaBase
 import qualified Hydra.Dsl.Meta.Coders                     as Coders
-import qualified Hydra.Dsl.Meta.Compute                    as Compute
+import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Error                      as Error
 import qualified Hydra.Dsl.Meta.Core                       as Core
@@ -265,7 +265,7 @@ parseEdgeIdPattern = define "parseEdgeIdPattern" $
       ("fun" ~> right
         ("cx'" ~> "term" ~>
           Eithers.bind (var "fun" @@ var "cx'" @@ var "term")
-            ("terms" ~> Eithers.mapList (Compute.coderEncode (project PGM._Schema PGM._Schema_edgeIds @@ var "schema") @@ var "cx'") (var "terms"))))
+            ("terms" ~> Eithers.mapList (Util.coderEncode (project PGM._Schema PGM._Schema_edgeIds @@ var "schema") @@ var "cx'") (var "terms"))))
 
 -- | Parse an edge specification into a label and encoder function
 parseEdgeSpec :: TBinding (Context -> Graph -> PGM.Schema s t v -> PGM.EdgeSpec
@@ -430,7 +430,7 @@ parsePropertySpec = define "parsePropertySpec" $
       ("fun" ~> right
         ("cx'" ~> "term" ~>
           Eithers.bind (var "fun" @@ var "cx'" @@ var "term")
-            ("results" ~> Eithers.bind (Eithers.mapList (Compute.coderEncode (project PGM._Schema PGM._Schema_propertyValues @@ var "schema") @@ var "cx'") (var "results"))
+            ("results" ~> Eithers.bind (Eithers.mapList (Util.coderEncode (project PGM._Schema PGM._Schema_propertyValues @@ var "schema") @@ var "cx'") (var "results"))
               ("values" ~> right (Lists.map ("v" ~> pair (var "key") (var "v")) (var "values"))))))
 
 -- | Parse a value specification into a function that processes terms
@@ -452,7 +452,7 @@ parseVertexIdPattern = define "parseVertexIdPattern" $
       ("fun" ~> right
         ("cx'" ~> "term" ~>
           Eithers.bind (var "fun" @@ var "cx'" @@ var "term")
-            ("terms" ~> Eithers.mapList (Compute.coderEncode (project PGM._Schema PGM._Schema_vertexIds @@ var "schema") @@ var "cx'") (var "terms"))))
+            ("terms" ~> Eithers.mapList (Util.coderEncode (project PGM._Schema PGM._Schema_vertexIds @@ var "schema") @@ var "cx'") (var "terms"))))
 
 -- | Parse a vertex specification into a label and encoder function
 parseVertexSpec :: TBinding (Context -> Graph -> PGM.Schema s t v -> PGM.VertexSpec
@@ -534,8 +534,8 @@ termToElementsAdapter = define "termToElementsAdapter" $
   "cx" ~> "g" ~> "schema" ~> "typ" ~> lets [
     "key_elements">: Core.name (string "elements")] $
     Maybes.maybe
-      (right $ Compute.adapter false (var "typ") (list ([] :: [TTerm PG.Label]))
-        (Compute.coder
+      (right $ Util.adapter false (var "typ") (list ([] :: [TTerm PG.Label]))
+        (Util.coder
           ("_cx" ~> "_t" ~> right (list ([] :: [TTerm (PG.Element ())])))
           ("cx'" ~> "_els" ~> left (Ctx.inContext (Error.errorOther $ Error.otherError $ string "no corresponding element type") (var "cx'")))))
       ("term" ~>
@@ -544,8 +544,8 @@ termToElementsAdapter = define "termToElementsAdapter" $
             ("specs" ~> lets [
               "labels">: (Lists.nub :: TTerm [PG.Label] -> TTerm [PG.Label]) (Lists.map ("_p" ~> Pairs.first (var "_p")) (var "specs")),
               "encoders">: Lists.map ("_p" ~> Pairs.second (var "_p")) (var "specs")] $
-              right (Compute.adapter false (var "typ") (var "labels")
-                (Compute.coder
+              right (Util.adapter false (var "typ") (var "labels")
+                (Util.coder
                   ("cx'" ~> "t" ~>
                     Eithers.map ("_xs" ~> Lists.concat (var "_xs")) (Eithers.mapList ("e" ~> var "e" @@ var "cx'" @@ var "t") (var "encoders")))
                   ("cx'" ~> "_els" ~> left (Ctx.inContext (Error.errorOther $ Error.otherError $ string "element decoding is not yet supported") (var "cx'"))))))))

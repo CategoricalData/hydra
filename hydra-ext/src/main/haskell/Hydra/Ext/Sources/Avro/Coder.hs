@@ -14,7 +14,7 @@ import qualified Hydra.Dsl.Meta.Accessors                  as Accessors
 import qualified Hydra.Dsl.Ast                        as Ast
 import qualified Hydra.Dsl.Meta.Base                       as MetaBase
 import qualified Hydra.Dsl.Meta.Coders                     as Coders
-import qualified Hydra.Dsl.Meta.Compute                    as Compute
+import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Error                      as Error
@@ -241,7 +241,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
     -- simpleAdapter: create a non-lossy adapter with given type, encode, and decode functions
     "simpleAdapter">: lambda "env" $ lambda "typ" $ lambda "encode" $ lambda "decode" $
       right (pair
-        (Compute.adapter (boolean False) (var "schema") (var "typ") (Compute.coder (var "encode") (var "decode")))
+        (Util.adapter (boolean False) (var "schema") (var "typ") (Util.coder (var "encode") (var "decode")))
         (var "env")),
     -- doubleToInt: truncate a JSON number (bigfloat) to int32 (toward zero)
     "doubleToInt">: lambda "d" $ Literals.bigintToInt32 (Math.truncate (Literals.bigfloatToFloat64 (var "d"))),
@@ -254,19 +254,19 @@ avroHydraAdapter = define "avroHydraAdapter" $
           "ad">: Pairs.first (var "adEnv"),
           "env1">: Pairs.second (var "adEnv")] $
           right (pair
-            (Compute.adapter (Compute.adapterIsLossy (var "ad")) (var "schema")
-              (MetaTypes.list (Compute.adapterTarget (var "ad")))
-              (Compute.coder
+            (Util.adapter (Util.adapterIsLossy (var "ad")) (var "schema")
+              (MetaTypes.list (Util.adapterTarget (var "ad")))
+              (Util.coder
                 (lambda "cx1" $ lambda "v" $
                   cases JM._Value (var "v") Nothing [
                     JM._Value_array>>: lambda "vals" $
                       Eithers.map (lambda "ts" $ Core.termList (var "ts"))
-                        (Eithers.mapList (lambda "jv" $ Compute.coderEncode (Compute.adapterCoder (var "ad")) @@ var "cx1" @@ var "jv") (var "vals"))])
+                        (Eithers.mapList (lambda "jv" $ Util.coderEncode (Util.adapterCoder (var "ad")) @@ var "cx1" @@ var "jv") (var "vals"))])
                 (lambda "cx1" $ lambda "t" $
                   cases _Term (var "t") Nothing [
                     _Term_list>>: lambda "vals" $
                       Eithers.map (lambda "jvs" $ inject JM._Value JM._Value_array (var "jvs"))
-                        (Eithers.mapList (lambda "tv" $ Compute.coderDecode (Compute.adapterCoder (var "ad")) @@ var "cx1" @@ var "tv") (var "vals"))])))
+                        (Eithers.mapList (lambda "tv" $ Util.coderDecode (Util.adapterCoder (var "ad")) @@ var "cx1" @@ var "tv") (var "vals"))])))
             (var "env1"))),
 
       -- SchemaMap
@@ -279,11 +279,11 @@ avroHydraAdapter = define "avroHydraAdapter" $
             "v">: Pairs.second (var "entry")] $
             Eithers.map
               (lambda "v'" $ pair (MetaTerms.stringLift (var "k")) (var "v'"))
-              (Compute.coderEncode (Compute.adapterCoder (var "ad")) @@ var "cx1" @@ var "v")] $
+              (Util.coderEncode (Util.adapterCoder (var "ad")) @@ var "cx1" @@ var "v")] $
           right (pair
-            (Compute.adapter (Compute.adapterIsLossy (var "ad")) (var "schema")
-              (MetaTypes.map MetaTypes.string (Compute.adapterTarget (var "ad")))
-              (Compute.coder
+            (Util.adapter (Util.adapterIsLossy (var "ad")) (var "schema")
+              (MetaTypes.map MetaTypes.string (Util.adapterTarget (var "ad")))
+              (Util.coder
                 (lambda "cx1" $ lambda "v" $
                   cases JM._Value (var "v") Nothing [
                     JM._Value_object>>: lambda "m" $
@@ -292,7 +292,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
                 (lambda "cx1" $ lambda "m" $
                   Eithers.map (lambda "mp'" $ inject JM._Value JM._Value_object (var "mp'"))
                     (ExtractCore.map @@ var "cx" @@ (lambda "t" $ ExtractCore.string @@ var "cx" @@ Graph.emptyGraph @@ var "t")
-                      @@ (lambda "t" $ Compute.coderDecode (Compute.adapterCoder (var "ad")) @@ var "cx1" @@ var "t")
+                      @@ (lambda "t" $ Util.coderDecode (Util.adapterCoder (var "ad")) @@ var "cx1" @@ var "t")
                       @@ Graph.emptyGraph @@ var "m"))))
             (var "env1"))),
 
@@ -361,7 +361,7 @@ avroHydraAdapter = define "avroHydraAdapter" $
                         (err @@ var "cx1" @@ Strings.cat (list [string "unrecognized field for ", showQname @@ var "qname", string ": ", var "k"]))
                         (lambda "fad" $ Eithers.map
                           (lambda "v'" $ Core.field (Core.name (var "k")) (var "v'"))
-                          (Compute.coderEncode (Compute.adapterCoder (Pairs.second (var "fad"))) @@ var "cx1" @@ var "v"))
+                          (Util.coderEncode (Util.adapterCoder (Pairs.second (var "fad"))) @@ var "cx1" @@ var "v"))
                         (Maps.lookup (var "k") (var "adaptersByFieldName")),
                     -- decodeField: decode a Hydra field back to a key-value pair
                     "decodeField">: lambda "cx1" $ lambda "fld" $ lets [
@@ -371,20 +371,20 @@ avroHydraAdapter = define "avroHydraAdapter" $
                         (err @@ var "cx1" @@ Strings.cat (list [string "unrecognized field for ", showQname @@ var "qname", string ": ", var "k"]))
                         (lambda "fad" $ Eithers.map
                           (lambda "v'" $ pair (var "k") (var "v'"))
-                          (Compute.coderDecode (Compute.adapterCoder (Pairs.second (var "fad"))) @@ var "cx1" @@ var "v"))
+                          (Util.coderDecode (Util.adapterCoder (Pairs.second (var "fad"))) @@ var "cx1" @@ var "v"))
                         (Maps.lookup (var "k") (var "adaptersByFieldName")),
                     -- lossy: any adapter is lossy?
-                    "lossy">: Lists.foldl (lambda "b" $ lambda "fad" $ Logic.or (var "b") (Compute.adapterIsLossy (Pairs.second (var "fad"))))
+                    "lossy">: Lists.foldl (lambda "b" $ lambda "fad" $ Logic.or (var "b") (Util.adapterIsLossy (Pairs.second (var "fad"))))
                       (boolean False) (Maps.elems (var "adaptersByFieldName")),
                     -- hfields: Hydra field types
                     "hfields">: Lists.map (lambda "fad" $
                       Core.fieldType (Core.name (project Avro._Field Avro._Field_name @@ Pairs.first (var "fad")))
-                        (Compute.adapterTarget (Pairs.second (var "fad"))))
+                        (Util.adapterTarget (Pairs.second (var "fad"))))
                       (Maps.elems (var "adaptersByFieldName")),
                     "target">: Core.typeRecord (var "hfields")] $
                     right (pair
-                      (Compute.adapter (var "lossy") (var "schema") (var "target")
-                        (Compute.coder
+                      (Util.adapter (var "lossy") (var "schema") (var "target")
+                        (Util.coder
                           (lambda "cx1" $ lambda "jv" $
                             cases JM._Value (var "jv") Nothing [
                               JM._Value_object>>: lambda "m" $
@@ -513,20 +513,20 @@ avroHydraAdapter = define "avroHydraAdapter" $
             "ad">: Pairs.first (var "adEnv"),
             "env1">: Pairs.second (var "adEnv")] $
             right (pair
-              (Compute.adapter (Compute.adapterIsLossy (var "ad")) (var "schema")
-                (MetaTypes.optional (Compute.adapterTarget (var "ad")))
-                (Compute.coder
+              (Util.adapter (Util.adapterIsLossy (var "ad")) (var "schema")
+                (MetaTypes.optional (Util.adapterTarget (var "ad")))
+                (Util.coder
                   (lambda "cx1" $ lambda "v" $
                     cases JM._Value (var "v") (Just (
                       Eithers.map (lambda "t" $ Core.termMaybe (just (var "t")))
-                        (Compute.coderEncode (Compute.adapterCoder (var "ad")) @@ var "cx1" @@ var "v"))) [
+                        (Util.coderEncode (Util.adapterCoder (var "ad")) @@ var "cx1" @@ var "v"))) [
                       JM._Value_null>>: constant (right (Core.termMaybe nothing))])
                   (lambda "cx1" $ lambda "t" $
                     cases _Term (var "t") Nothing [
                       _Term_maybe>>: lambda "ot" $
                         Maybes.maybe
                           (right (injectUnit JM._Value JM._Value_null))
-                          (lambda "term'" $ Compute.coderDecode (Compute.adapterCoder (var "ad")) @@ var "cx1" @@ var "term'")
+                          (lambda "term'" $ Util.coderDecode (Util.adapterCoder (var "ad")) @@ var "cx1" @@ var "term'")
                           (var "ot")])))
               (var "env1")))] $
         Logic.ifElse (Equality.gt (Lists.length (var "nonNulls")) (int32 1))
@@ -539,8 +539,8 @@ avroHydraAdapter = define "avroHydraAdapter" $
                 "ad">: Pairs.first (var "adEnv"),
                 "env1">: Pairs.second (var "adEnv")] $
                 right (pair
-                  (Compute.adapter (Compute.adapterIsLossy (var "ad")) (var "schema")
-                    (Compute.adapterTarget (var "ad")) (Compute.adapterCoder (var "ad")))
+                  (Util.adapter (Util.adapterIsLossy (var "ad")) (var "schema")
+                    (Util.adapterTarget (var "ad")) (Util.adapterCoder (var "ad")))
                   (var "env1"))))))
       ]
 
@@ -583,29 +583,29 @@ prepareField = define "prepareField" $
             "elTyp">: Core.typeVariable (var "fkName"),
             -- encodeValue: encode a JSON value to a TermVariable via the adapter
             "encodeValue">: lambda "cx1" $ lambda "v" $
-              Eithers.bind (Compute.coderEncode (Compute.adapterCoder (var "ad0")) @@ var "cx1" @@ var "v") (lambda "encoded" $
+              Eithers.bind (Util.coderEncode (Util.adapterCoder (var "ad0")) @@ var "cx1" @@ var "v") (lambda "encoded" $
               Eithers.bind (termToStringE @@ var "cx1" @@ var "encoded") (lambda "s" $
                 right (Core.termVariable (var "fkConstr" @@ var "s")))),
             -- decodeTerm: decode a TermVariable back via the adapter
             "decodeTerm">: lambda "cx1" $ lambda "t" $
               cases _Term (var "t") (Just (err @@ var "cx1" @@ string "expected variable")) [
                 _Term_variable>>: lambda "name_" $
-                  Eithers.bind (stringToTermE @@ var "cx1" @@ Compute.adapterTarget (var "ad0") @@ (unwrap _Name @@ var "name_")) (lambda "term_" $
-                  Compute.coderDecode (Compute.adapterCoder (var "ad0")) @@ var "cx1" @@ var "term_")],
+                  Eithers.bind (stringToTermE @@ var "cx1" @@ Util.adapterTarget (var "ad0") @@ (unwrap _Name @@ var "name_")) (lambda "term_" $
+                  Util.coderDecode (Util.adapterCoder (var "ad0")) @@ var "cx1" @@ var "term_")],
             -- forTypeAndCoder: build an adapter with a given type and coder
             "forTypeAndCoder">: lambda "env2" $ lambda "ad1" $ lambda "typ" $ lambda "cdr" $
               right (pair
-                (Compute.adapter (Compute.adapterIsLossy (var "ad1")) (project Avro._Field Avro._Field_type @@ var "f") (var "typ") (var "cdr"))
+                (Util.adapter (Util.adapterIsLossy (var "ad1")) (project Avro._Field Avro._Field_type @@ var "f") (var "typ") (var "cdr"))
                 (var "env2"))] $
             -- Match on the deannotated target type for foreign key handling
-            cases _Type (Rewriting.deannotateType @@ Compute.adapterTarget (var "ad0"))
+            cases _Type (Rewriting.deannotateType @@ Util.adapterTarget (var "ad0"))
               (Just (err @@ var "cx" @@ Strings.cat2 (string "unsupported type annotated as foreign key: ") (string "unknown"))) [
               _Type_maybe>>: lambda "innerTyp" $
                 cases _Type (var "innerTyp") (Just (err @@ var "cx" @@ string "expected literal type inside optional foreign key")) [
                   _Type_literal>>: lambda "_" $
                     var "forTypeAndCoder" @@ var "env1" @@ var "ad0"
                       @@ (MetaTypes.optional (var "elTyp"))
-                      @@ (Compute.coder
+                      @@ (Util.coder
                         (lambda "cx2" $ lambda "json" $
                           Eithers.map (lambda "v'" $ Core.termMaybe (just (var "v'"))) (var "encodeValue" @@ var "cx2" @@ var "json"))
                         (var "decodeTerm"))],
@@ -614,7 +614,7 @@ prepareField = define "prepareField" $
                   _Type_literal>>: lambda "_" $
                     var "forTypeAndCoder" @@ var "env1" @@ var "ad0"
                       @@ (MetaTypes.list (var "elTyp"))
-                      @@ (Compute.coder
+                      @@ (Util.coder
                         (lambda "cx2" $ lambda "json" $
                           cases JM._Value (var "json") (Just (err @@ var "cx2" @@ string "Expected JSON array")) [
                             JM._Value_array>>: lambda "vals" $
@@ -624,7 +624,7 @@ prepareField = define "prepareField" $
               _Type_literal>>: lambda "_" $
                 var "forTypeAndCoder" @@ var "env1" @@ var "ad0"
                   @@ var "elTyp"
-                  @@ (Compute.coder (var "encodeValue") (var "decodeTerm"))]))
+                  @@ (Util.coder (var "encodeValue") (var "decodeTerm"))]))
         (var "fk"))
       (lambda "adEnv" $ lets [
         "ad">: Pairs.first (var "adEnv"),
@@ -639,7 +639,7 @@ annotateAdapter = define "annotateAdapter" $
   lambda "ann" $ lambda "ad" $
     Maybes.maybe
       (var "ad")
-      (lambda "n" $ Compute.adapterWithTarget (var "ad") (MetaTypes.annot (var "n") (Compute.adapterTarget (var "ad"))))
+      (lambda "n" $ Util.adapterWithTarget (var "ad") (MetaTypes.annot (var "n") (Util.adapterTarget (var "ad"))))
       (var "ann")
 
 findAvroPrimaryKeyField :: TBinding (Context -> AvroEnv.AvroQualifiedName -> [Avro.Field] -> Result (Maybe AvroEnv.AvroPrimaryKey))

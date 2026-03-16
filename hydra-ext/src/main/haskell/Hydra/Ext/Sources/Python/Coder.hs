@@ -18,7 +18,7 @@ import qualified Hydra.Dsl.Meta.Accessors                  as Accessors
 import qualified Hydra.Dsl.Ast                        as Ast
 import qualified Hydra.Dsl.Meta.Base                       as MetaBase
 import qualified Hydra.Dsl.Meta.Coders                     as Coders
-import qualified Hydra.Dsl.Meta.Compute                    as Compute
+import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Error                      as Error

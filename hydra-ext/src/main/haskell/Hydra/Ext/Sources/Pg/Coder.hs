@@ -22,7 +22,7 @@ import qualified Hydra.Dsl.Meta.Accessors                  as Accessors
 import qualified Hydra.Dsl.Ast                        as Ast
 import qualified Hydra.Dsl.Meta.Base                       as MetaBase
 import qualified Hydra.Dsl.Meta.Coders                     as Coders
-import qualified Hydra.Dsl.Meta.Compute                    as Compute
+import qualified Hydra.Dsl.Util                    as Util
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Error                      as Error
 import qualified Hydra.Dsl.Meta.Core                       as Core
@@ -258,9 +258,9 @@ edgeCoder = define "edgeCoder" $
       PG._EdgeType_out>>: var "outLabel",
       PG._EdgeType_in>>: var "inLabel",
       PG._EdgeType_properties>>: propertyTypes @@ var "propAdapters"]] $
-    Compute.adapter true (var "source")
+    Util.adapter true (var "source")
       (elementTypeTreeEdge @@ var "et" @@ TTerm (Terms.list []))
-      (Compute.coder
+      (Util.coder
         ("cx" ~> "term" ~>
           lets ["deannot">: Rewriting.deannotateTerm @@ var "term",
                 "unwrapped">: cases _Term (var "deannot") (Just $ var "deannot") [
@@ -295,7 +295,7 @@ edgeCoder = define "edgeCoder" $
                                 Maybes.maybe
                                   (right nothing)
                                   ("fterm" ~> Eithers.map (lambda "x" $ just (var "x"))
-                                    (Compute.coderEncode (Compute.adapterCoder $ var "ad") @@ var "cx" @@ var "fterm"))
+                                    (Util.coderEncode (Util.adapterCoder $ var "ad") @@ var "cx" @@ var "fterm"))
                                   (Maps.lookup (var "fname") (var "fieldsm")))
                               (var "vertexAdapters")))
                             ("deps" ~>
@@ -409,12 +409,12 @@ encodeProperty :: TBinding (Context -> M.Map Name Term -> Adapter FieldType (PG.
 encodeProperty = define "encodeProperty" $
   doc "Encode a single property from a field map using a property adapter" $
   "cx" ~> "fields" ~> "adapter" ~> lets [
-    "fname">: Core.fieldTypeName $ (Compute.adapterSource $ var "adapter"),
-    "ftyp">: Rewriting.deannotateType @@ (Core.fieldTypeType $ Compute.adapterSource $ var "adapter"),
+    "fname">: Core.fieldTypeName $ (Util.adapterSource $ var "adapter"),
+    "ftyp">: Rewriting.deannotateType @@ (Core.fieldTypeType $ Util.adapterSource $ var "adapter"),
     "isMaybe">: cases _Type (var "ftyp") (Just false) [
       _Type_maybe>>: constant true],
     "encodeValue">: "v" ~> Eithers.map (lambda "x" $ just (var "x"))
-      (Compute.coderEncode (Compute.adapterCoder $ var "adapter") @@ var "cx" @@ (Core.field (var "fname") (var "v")))] $
+      (Util.coderEncode (Util.adapterCoder $ var "adapter") @@ var "cx" @@ (Core.field (var "fname") (var "v")))] $
     Maybes.maybe
       -- Field not found in record
       (Logic.ifElse (var "isMaybe")
@@ -591,11 +591,11 @@ projectionAdapter = define "projectionAdapter" $
     Eithers.bind (TermsToElements.parseValueSpec @@ var "cx" @@ var "g" @@ var "values")
       ("traversal" ~> right (pair
         (Core.fieldTypeName $ var "field")
-        (Compute.adapter true (Core.fieldTypeType $ var "field") (var "idtype")
-          (Compute.coder
+        (Util.adapter true (Core.fieldTypeType $ var "field") (var "idtype")
+          (Util.coder
             ("cx'" ~> "typ" ~>
               Eithers.bind (traverseToSingleTerm @@ var "cx'" @@ (var "key" ++ string "-projection") @@ (var "traversal" @@ var "cx'") @@ var "typ")
-                ("t" ~> Compute.coderEncode (var "coder") @@ var "cx'" @@ var "t"))
+                ("t" ~> Util.coderEncode (var "coder") @@ var "cx'" @@ var "t"))
             ("cx'" ~> "_" ~> left (Ctx.inContext (Error.errorOther $ Error.otherError $ string "edge '" ++ var "key" ++ string "' decoding is not yet supported") (var "cx'")))))))
 
 -- | Create a property adapter from a property spec
@@ -608,18 +608,18 @@ propertyAdapter = define "propertyAdapter" $
     "values">: Pairs.first $ Pairs.second $ var "spec",
     "alias">: Pairs.second $ Pairs.second $ var "spec",
     "key">: wrap PG._PropertyKey $ (Maybes.fromMaybe (Core.unName $ (Core.fieldTypeName $ var "tfield")) (var "alias"))] $
-    Eithers.bind (Compute.coderEncode (project PGM._Schema PGM._Schema_propertyTypes @@ var "schema") @@ var "cx" @@ (Core.fieldTypeType $ var "tfield"))
+    Eithers.bind (Util.coderEncode (project PGM._Schema PGM._Schema_propertyTypes @@ var "schema") @@ var "cx" @@ (Core.fieldTypeType $ var "tfield"))
       ("pt" ~> Eithers.bind (TermsToElements.parseValueSpec @@ var "cx" @@ var "g" @@ var "values")
         ("traversal" ~> right
-          (Compute.adapter true (var "tfield")
+          (Util.adapter true (var "tfield")
             (record PG._PropertyType [
               PG._PropertyType_key>>: var "key",
               PG._PropertyType_value>>: var "pt",
               PG._PropertyType_required>>: true])
-            (Compute.coder
+            (Util.coder
               ("cx'" ~> "dfield" ~>
                 Eithers.bind (traverseToSingleTerm @@ var "cx'" @@ string "property traversal" @@ (var "traversal" @@ var "cx'") @@ (Core.fieldTerm $ var "dfield"))
-                  ("result" ~> Eithers.bind (Compute.coderEncode (project PGM._Schema PGM._Schema_propertyValues @@ var "schema") @@ var "cx'" @@ var "result")
+                  ("result" ~> Eithers.bind (Util.coderEncode (project PGM._Schema PGM._Schema_propertyValues @@ var "schema") @@ var "cx'" @@ var "result")
                     ("value" ~> right (record PG._Property [
                       PG._Property_key>>: var "key",
                       PG._Property_value>>: var "value"]))))
@@ -632,8 +632,8 @@ propertyTypes = define "propertyTypes" $
   "propAdapters" ~>
     Lists.map
       ("a" ~> record PG._PropertyType [
-        PG._PropertyType_key>>: project PG._PropertyType PG._PropertyType_key @@ (Compute.adapterTarget $ var "a"),
-        PG._PropertyType_value>>: project PG._PropertyType PG._PropertyType_value @@ (Compute.adapterTarget $ var "a"),
+        PG._PropertyType_key>>: project PG._PropertyType PG._PropertyType_key @@ (Util.adapterTarget $ var "a"),
+        PG._PropertyType_value>>: project PG._PropertyType PG._PropertyType_value @@ (Util.adapterTarget $ var "a"),
         PG._PropertyType_required>>: true])
       (var "propAdapters")
 
@@ -646,7 +646,7 @@ selectEdgeId = define "selectEdgeId" $
     "adapter">: Pairs.second $ var "ad"] $
     Maybes.maybe
       (err (var "cx") (string "no " ++ (Core.unName $ var "fname") ++ string " in record"))
-      ("t" ~> Compute.coderEncode (Compute.adapterCoder $ var "adapter") @@ var "cx" @@ var "t")
+      ("t" ~> Util.coderEncode (Util.adapterCoder $ var "adapter") @@ var "cx" @@ var "t")
       (Maps.lookup (var "fname") (var "fields"))
 
 -- | Select a vertex id from record fields using an id adapter
@@ -658,7 +658,7 @@ selectVertexId = define "selectVertexId" $
     "adapter">: Pairs.second $ var "ad"] $
     Maybes.maybe
       (err (var "cx") (string "no " ++ (Core.unName $ var "fname") ++ string " in record"))
-      ("t" ~> Compute.coderEncode (Compute.adapterCoder $ var "adapter") @@ var "cx" @@ var "t")
+      ("t" ~> Util.coderEncode (Util.adapterCoder $ var "adapter") @@ var "cx" @@ var "t")
       (Maps.lookup (var "fname") (var "fields"))
 
 -- | Traverse to a single term, failing if zero or multiple terms are found
@@ -689,11 +689,11 @@ vertexCoder = define "vertexCoder" $
       PG._VertexType_id>>: var "vidType",
       PG._VertexType_properties>>: propertyTypes @@ var "propAdapters"],
     "depTypes">: Lists.map
-      ("ea" ~> Compute.adapterTarget $ (Pairs.second $ Pairs.second $ Pairs.second $ var "ea"))
+      ("ea" ~> Util.adapterTarget $ (Pairs.second $ Pairs.second $ Pairs.second $ var "ea"))
       (var "edgeAdapters"),
     "target">: elementTypeTreeVertex @@ var "vtype" @@ var "depTypes"] $
-    Compute.adapter true (var "source") (var "target")
-      (Compute.coder
+    Util.adapter true (var "source") (var "target")
+      (Util.coder
         ("cx" ~> "term" ~>
           lets ["deannot">: Rewriting.deannotateTerm @@ var "term",
                 -- Unwrap TermMaybe if present
@@ -760,7 +760,7 @@ vertexCoder = define "vertexCoder" $
                                   PG._ElementTree_self>>: inject PG._Element PG._Element_edge (var "fixedEdge"),
                                   PG._ElementTree_dependencies>>: project PG._ElementTree PG._ElementTree_dependencies @@ var "tree"]]]
                             @@ (project PG._ElementTree PG._ElementTree_self @@ var "tree"))
-                          (Compute.coderEncode (Compute.adapterCoder $ var "eaAdapter") @@ var "cx" @@ var "fterm"))
+                          (Util.coderEncode (Util.adapterCoder $ var "eaAdapter") @@ var "cx" @@ var "fterm"))
                         (Maps.lookup (Core.fieldTypeName $ var "eaField") (var "fmap")))
                     (var "edgeAdapters")))
                   ("deps" ~>
