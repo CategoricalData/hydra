@@ -172,9 +172,7 @@ public abstract class TraversalSourceSpawnMethod implements Serializable, Compar
         return tagCmp;
       }
       AddV o = (AddV) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -214,9 +212,7 @@ public abstract class TraversalSourceSpawnMethod implements Serializable, Compar
         return tagCmp;
       }
       E o = (E) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -256,9 +252,7 @@ public abstract class TraversalSourceSpawnMethod implements Serializable, Compar
         return tagCmp;
       }
       V o = (V) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -378,9 +372,7 @@ public abstract class TraversalSourceSpawnMethod implements Serializable, Compar
         return tagCmp;
       }
       Inject o = (Inject) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -460,9 +452,7 @@ public abstract class TraversalSourceSpawnMethod implements Serializable, Compar
         return tagCmp;
       }
       Call o = (Call) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -502,9 +492,7 @@ public abstract class TraversalSourceSpawnMethod implements Serializable, Compar
         return tagCmp;
       }
       Union o = (Union) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

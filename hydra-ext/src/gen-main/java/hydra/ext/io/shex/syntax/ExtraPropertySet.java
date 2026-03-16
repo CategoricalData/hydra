@@ -34,8 +34,6 @@ public class ExtraPropertySet implements Serializable, Comparable<ExtraPropertyS
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ExtraPropertySet other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

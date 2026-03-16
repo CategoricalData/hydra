@@ -42,15 +42,11 @@ public class YieldItems implements Serializable, Comparable<YieldItems> {
   @SuppressWarnings("unchecked")
   public int compareTo(YieldItems other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      items.hashCode(),
-      other.items.hashCode());
+    cmp = ((Comparable) items).compareTo(other.items);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      where.hashCode(),
-      other.where.hashCode());
+    return ((Comparable) where).compareTo(other.where);
   }
   
   public YieldItems withItems(hydra.util.ConsList<hydra.ext.cypher.openCypher.YieldItem> items) {

@@ -49,9 +49,7 @@ public class ConstantDeclaration implements Serializable, Comparable<ConstantDec
   @SuppressWarnings("unchecked")
   public int compareTo(ConstantDeclaration other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      modifiers.hashCode(),
-      other.modifiers.hashCode());
+    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
     if (cmp != 0) {
       return cmp;
     }
@@ -59,9 +57,7 @@ public class ConstantDeclaration implements Serializable, Comparable<ConstantDec
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      variables.hashCode(),
-      other.variables.hashCode());
+    return ((Comparable) variables).compareTo(other.variables);
   }
   
   public ConstantDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.ConstantModifier> modifiers) {

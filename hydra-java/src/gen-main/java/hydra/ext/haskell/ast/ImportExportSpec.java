@@ -61,9 +61,7 @@ public class ImportExportSpec implements Serializable, Comparable<ImportExportSp
   @SuppressWarnings("unchecked")
   public int compareTo(ImportExportSpec other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      modifier.hashCode(),
-      other.modifier.hashCode());
+    cmp = ((Comparable) modifier).compareTo(other.modifier);
     if (cmp != 0) {
       return cmp;
     }
@@ -71,9 +69,7 @@ public class ImportExportSpec implements Serializable, Comparable<ImportExportSp
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      subspec.hashCode(),
-      other.subspec.hashCode());
+    return ((Comparable) subspec).compareTo(other.subspec);
   }
   
   public ImportExportSpec withModifier(hydra.util.Maybe<hydra.ext.haskell.ast.ImportModifier> modifier) {

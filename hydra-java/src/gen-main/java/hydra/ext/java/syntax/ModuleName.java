@@ -46,9 +46,7 @@ public class ModuleName implements Serializable, Comparable<ModuleName> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      name.hashCode(),
-      other.name.hashCode());
+    return ((Comparable) name).compareTo(other.name);
   }
   
   public ModuleName withIdentifier(hydra.ext.java.syntax.Identifier identifier) {

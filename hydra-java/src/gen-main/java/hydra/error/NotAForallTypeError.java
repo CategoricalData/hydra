@@ -55,9 +55,7 @@ public class NotAForallTypeError implements Serializable, Comparable<NotAForallT
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      typeArguments.hashCode(),
-      other.typeArguments.hashCode());
+    return ((Comparable) typeArguments).compareTo(other.typeArguments);
   }
   
   public NotAForallTypeError withType(hydra.core.Type type) {

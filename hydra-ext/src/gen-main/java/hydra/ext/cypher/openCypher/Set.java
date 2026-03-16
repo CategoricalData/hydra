@@ -34,8 +34,6 @@ public class Set implements Serializable, Comparable<Set> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Set other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

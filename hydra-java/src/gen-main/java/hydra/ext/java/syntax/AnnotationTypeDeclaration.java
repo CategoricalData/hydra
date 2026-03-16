@@ -49,9 +49,7 @@ public class AnnotationTypeDeclaration implements Serializable, Comparable<Annot
   @SuppressWarnings("unchecked")
   public int compareTo(AnnotationTypeDeclaration other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      modifiers.hashCode(),
-      other.modifiers.hashCode());
+    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
     if (cmp != 0) {
       return cmp;
     }

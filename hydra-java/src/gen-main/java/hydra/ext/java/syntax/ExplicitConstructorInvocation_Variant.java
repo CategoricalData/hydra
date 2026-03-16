@@ -111,9 +111,7 @@ public abstract class ExplicitConstructorInvocation_Variant implements Serializa
         return tagCmp;
       }
       Super o = (Super) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

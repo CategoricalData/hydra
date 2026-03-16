@@ -49,21 +49,15 @@ public class OrdinaryCompilationUnit implements Serializable, Comparable<Ordinar
   @SuppressWarnings("unchecked")
   public int compareTo(OrdinaryCompilationUnit other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      package_.hashCode(),
-      other.package_.hashCode());
+    cmp = ((Comparable) package_).compareTo(other.package_);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      imports.hashCode(),
-      other.imports.hashCode());
+    cmp = ((Comparable) imports).compareTo(other.imports);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      types.hashCode(),
-      other.types.hashCode());
+    return ((Comparable) types).compareTo(other.types);
   }
   
   public OrdinaryCompilationUnit withPackage(hydra.util.Maybe<hydra.ext.java.syntax.PackageDeclaration> package_) {

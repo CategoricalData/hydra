@@ -46,9 +46,7 @@ public class TypeBound_ClassOrInterface implements Serializable, Comparable<Type
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      additional.hashCode(),
-      other.additional.hashCode());
+    return ((Comparable) additional).compareTo(other.additional);
   }
   
   public TypeBound_ClassOrInterface withType(hydra.ext.java.syntax.ClassOrInterfaceType type) {

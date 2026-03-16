@@ -34,8 +34,6 @@ public class SwitchBlock implements Serializable, Comparable<SwitchBlock> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(SwitchBlock other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

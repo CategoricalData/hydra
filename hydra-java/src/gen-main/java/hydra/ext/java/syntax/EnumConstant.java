@@ -56,9 +56,7 @@ public class EnumConstant implements Serializable, Comparable<EnumConstant> {
   @SuppressWarnings("unchecked")
   public int compareTo(EnumConstant other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      modifiers.hashCode(),
-      other.modifiers.hashCode());
+    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
     if (cmp != 0) {
       return cmp;
     }
@@ -66,15 +64,11 @@ public class EnumConstant implements Serializable, Comparable<EnumConstant> {
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      arguments.hashCode(),
-      other.arguments.hashCode());
+    cmp = ((Comparable) arguments).compareTo(other.arguments);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      body.hashCode(),
-      other.body.hashCode());
+    return ((Comparable) body).compareTo(other.body);
   }
   
   public EnumConstant withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.EnumConstantModifier> modifiers) {

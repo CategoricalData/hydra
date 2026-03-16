@@ -70,9 +70,7 @@ public class TripleConstraint implements Serializable, Comparable<TripleConstrai
   @SuppressWarnings("unchecked")
   public int compareTo(TripleConstraint other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      SenseFlags.hashCode(),
-      other.SenseFlags.hashCode());
+    cmp = ((Comparable) SenseFlags).compareTo(other.SenseFlags);
     if (cmp != 0) {
       return cmp;
     }
@@ -84,15 +82,11 @@ public class TripleConstraint implements Serializable, Comparable<TripleConstrai
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      Cardinality.hashCode(),
-      other.Cardinality.hashCode());
+    cmp = ((Comparable) Cardinality).compareTo(other.Cardinality);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      listOfAnnotation.hashCode(),
-      other.listOfAnnotation.hashCode());
+    cmp = ((Comparable) listOfAnnotation).compareTo(other.listOfAnnotation);
     if (cmp != 0) {
       return cmp;
     }

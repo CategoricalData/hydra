@@ -37,8 +37,6 @@ public class LocalBindings implements Serializable, Comparable<LocalBindings> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(LocalBindings other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

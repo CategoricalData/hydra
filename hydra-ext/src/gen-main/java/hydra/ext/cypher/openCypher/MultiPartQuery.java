@@ -42,9 +42,7 @@ public class MultiPartQuery implements Serializable, Comparable<MultiPartQuery> 
   @SuppressWarnings("unchecked")
   public int compareTo(MultiPartQuery other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      with.hashCode(),
-      other.with.hashCode());
+    cmp = ((Comparable) with).compareTo(other.with);
     if (cmp != 0) {
       return cmp;
     }

@@ -42,9 +42,7 @@ public class LetQuery implements Serializable, Comparable<LetQuery> {
   @SuppressWarnings("unchecked")
   public int compareTo(LetQuery other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      bindings.hashCode(),
-      other.bindings.hashCode());
+    cmp = ((Comparable) bindings).compareTo(other.bindings);
     if (cmp != 0) {
       return cmp;
     }

@@ -42,15 +42,11 @@ public class RangeLiteral implements Serializable, Comparable<RangeLiteral> {
   @SuppressWarnings("unchecked")
   public int compareTo(RangeLiteral other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      start.hashCode(),
-      other.start.hashCode());
+    cmp = ((Comparable) start).compareTo(other.start);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      end.hashCode(),
-      other.end.hashCode());
+    return ((Comparable) end).compareTo(other.end);
   }
   
   public RangeLiteral withStart(hydra.util.Maybe<java.math.BigInteger> start) {

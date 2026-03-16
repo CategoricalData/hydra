@@ -85,27 +85,19 @@ public class FunctionDefRaw implements Serializable, Comparable<FunctionDefRaw> 
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      typeParams.hashCode(),
-      other.typeParams.hashCode());
+    cmp = ((Comparable) typeParams).compareTo(other.typeParams);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      params.hashCode(),
-      other.params.hashCode());
+    cmp = ((Comparable) params).compareTo(other.params);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      returnType.hashCode(),
-      other.returnType.hashCode());
+    cmp = ((Comparable) returnType).compareTo(other.returnType);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      funcTypeComment.hashCode(),
-      other.funcTypeComment.hashCode());
+    cmp = ((Comparable) funcTypeComment).compareTo(other.funcTypeComment);
     if (cmp != 0) {
       return cmp;
     }

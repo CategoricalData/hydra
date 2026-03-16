@@ -46,9 +46,7 @@ public class ListComprehension implements Serializable, Comparable<ListComprehen
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      right.hashCode(),
-      other.right.hashCode());
+    return ((Comparable) right).compareTo(other.right);
   }
   
   public ListComprehension withLeft(hydra.ext.cypher.openCypher.FilterExpression left) {

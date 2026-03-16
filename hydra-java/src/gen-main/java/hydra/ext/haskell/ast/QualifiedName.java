@@ -51,9 +51,7 @@ public class QualifiedName implements Serializable, Comparable<QualifiedName> {
   @SuppressWarnings("unchecked")
   public int compareTo(QualifiedName other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      qualifiers.hashCode(),
-      other.qualifiers.hashCode());
+    cmp = ((Comparable) qualifiers).compareTo(other.qualifiers);
     if (cmp != 0) {
       return cmp;
     }

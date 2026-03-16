@@ -42,15 +42,11 @@ public class InlineShapeDefinition implements Serializable, Comparable<InlineSha
   @SuppressWarnings("unchecked")
   public int compareTo(InlineShapeDefinition other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      listOfAlts.hashCode(),
-      other.listOfAlts.hashCode());
+    cmp = ((Comparable) listOfAlts).compareTo(other.listOfAlts);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      TripleExpression.hashCode(),
-      other.TripleExpression.hashCode());
+    return ((Comparable) TripleExpression).compareTo(other.TripleExpression);
   }
   
   public InlineShapeDefinition withListOfAlts(hydra.util.ConsList<hydra.ext.io.shex.syntax.InlineShapeDefinition_ListOfAlts_Elmt> listOfAlts) {

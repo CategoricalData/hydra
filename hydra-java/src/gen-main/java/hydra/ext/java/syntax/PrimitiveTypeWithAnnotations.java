@@ -46,9 +46,7 @@ public class PrimitiveTypeWithAnnotations implements Serializable, Comparable<Pr
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      annotations.hashCode(),
-      other.annotations.hashCode());
+    return ((Comparable) annotations).compareTo(other.annotations);
   }
   
   public PrimitiveTypeWithAnnotations withType(hydra.ext.java.syntax.PrimitiveType type) {

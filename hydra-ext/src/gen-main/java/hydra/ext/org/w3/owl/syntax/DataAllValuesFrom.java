@@ -42,9 +42,7 @@ public class DataAllValuesFrom implements Serializable, Comparable<DataAllValues
   @SuppressWarnings("unchecked")
   public int compareTo(DataAllValuesFrom other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      property.hashCode(),
-      other.property.hashCode());
+    cmp = ((Comparable) property).compareTo(other.property);
     if (cmp != 0) {
       return cmp;
     }

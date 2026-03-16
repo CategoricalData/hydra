@@ -57,9 +57,7 @@ public class TraversalMergeArgumentAndGenericLiteralMapNullableArgument implemen
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      cardinality.hashCode(),
-      other.cardinality.hashCode());
+    return ((Comparable) cardinality).compareTo(other.cardinality);
   }
   
   public TraversalMergeArgumentAndGenericLiteralMapNullableArgument withMerge(hydra.ext.org.apache.tinkerpop.gremlin.TraversalMergeArgument merge) {

@@ -55,9 +55,7 @@ public class ApplicationPattern implements Serializable, Comparable<ApplicationP
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      args.hashCode(),
-      other.args.hashCode());
+    return ((Comparable) args).compareTo(other.args);
   }
   
   public ApplicationPattern withName(hydra.ext.haskell.ast.Name name) {

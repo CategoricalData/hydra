@@ -55,9 +55,7 @@ public class RecordPattern implements Serializable, Comparable<RecordPattern> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      fields.hashCode(),
-      other.fields.hashCode());
+    return ((Comparable) fields).compareTo(other.fields);
   }
   
   public RecordPattern withName(hydra.ext.haskell.ast.Name name) {

@@ -46,9 +46,7 @@ public class TypeDeclarationWithComments implements Serializable, Comparable<Typ
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      comments.hashCode(),
-      other.comments.hashCode());
+    return ((Comparable) comments).compareTo(other.comments);
   }
   
   public TypeDeclarationWithComments withValue(hydra.ext.java.syntax.TypeDeclaration value) {

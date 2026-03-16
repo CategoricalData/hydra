@@ -34,8 +34,6 @@ public class ImportName implements Serializable, Comparable<ImportName> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ImportName other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

@@ -56,27 +56,19 @@ public class RelationshipDetail implements Serializable, Comparable<Relationship
   @SuppressWarnings("unchecked")
   public int compareTo(RelationshipDetail other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      variable.hashCode(),
-      other.variable.hashCode());
+    cmp = ((Comparable) variable).compareTo(other.variable);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      types.hashCode(),
-      other.types.hashCode());
+    cmp = ((Comparable) types).compareTo(other.types);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      range.hashCode(),
-      other.range.hashCode());
+    cmp = ((Comparable) range).compareTo(other.range);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      properties.hashCode(),
-      other.properties.hashCode());
+    return ((Comparable) properties).compareTo(other.properties);
   }
   
   public RelationshipDetail withVariable(hydra.util.Maybe<hydra.ext.cypher.openCypher.Variable> variable) {

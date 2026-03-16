@@ -42,9 +42,7 @@ public class InlineShapeNot implements Serializable, Comparable<InlineShapeNot> 
   @SuppressWarnings("unchecked")
   public int compareTo(InlineShapeNot other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      NOT.hashCode(),
-      other.NOT.hashCode());
+    cmp = ((Comparable) NOT).compareTo(other.NOT);
     if (cmp != 0) {
       return cmp;
     }

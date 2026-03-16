@@ -46,9 +46,7 @@ public class ParamNoDefault implements Serializable, Comparable<ParamNoDefault> 
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      typeComment.hashCode(),
-      other.typeComment.hashCode());
+    return ((Comparable) typeComment).compareTo(other.typeComment);
   }
   
   public ParamNoDefault withParam(hydra.ext.python.syntax.Param param) {

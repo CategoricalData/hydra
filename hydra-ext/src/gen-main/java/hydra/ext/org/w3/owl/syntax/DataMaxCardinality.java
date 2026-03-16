@@ -55,9 +55,7 @@ public class DataMaxCardinality implements Serializable, Comparable<DataMaxCardi
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      range.hashCode(),
-      other.range.hashCode());
+    return ((Comparable) range).compareTo(other.range);
   }
   
   public DataMaxCardinality withBound(java.math.BigInteger bound) {

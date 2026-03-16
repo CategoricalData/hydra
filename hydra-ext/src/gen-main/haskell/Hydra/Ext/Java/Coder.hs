@@ -197,10 +197,6 @@ interfaceTypes isSer aliases tparams elName =
 
 isNonComparableType :: (Core.Type -> Bool)
 isNonComparableType typ = ((\x -> case x of
-  Core.TypeList _ -> True
-  Core.TypeSet _ -> True
-  Core.TypeMap _ -> True
-  Core.TypeMaybe _ -> True
   Core.TypeEither _ -> True
   Core.TypeFunction _ -> True
   Core.TypeUnit -> True

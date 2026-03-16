@@ -53,15 +53,11 @@ public class ArrayCreationExpression_Primitive implements Serializable, Comparab
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      dimExprs.hashCode(),
-      other.dimExprs.hashCode());
+    cmp = ((Comparable) dimExprs).compareTo(other.dimExprs);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      dims.hashCode(),
-      other.dims.hashCode());
+    return ((Comparable) dims).compareTo(other.dims);
   }
   
   public ArrayCreationExpression_Primitive withType(hydra.ext.java.syntax.PrimitiveTypeWithAnnotations type) {

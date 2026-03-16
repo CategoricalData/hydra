@@ -34,8 +34,6 @@ public class AtpNameNs implements Serializable, Comparable<AtpNameNs> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(AtpNameNs other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

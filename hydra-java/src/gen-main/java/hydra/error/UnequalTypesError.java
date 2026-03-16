@@ -51,9 +51,7 @@ public class UnequalTypesError implements Serializable, Comparable<UnequalTypesE
   @SuppressWarnings("unchecked")
   public int compareTo(UnequalTypesError other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      types.hashCode(),
-      other.types.hashCode());
+    cmp = ((Comparable) types).compareTo(other.types);
     if (cmp != 0) {
       return cmp;
     }

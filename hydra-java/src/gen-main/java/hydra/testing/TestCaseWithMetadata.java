@@ -79,15 +79,11 @@ public class TestCaseWithMetadata implements Serializable, Comparable<TestCaseWi
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      description.hashCode(),
-      other.description.hashCode());
+    cmp = ((Comparable) description).compareTo(other.description);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      tags.hashCode(),
-      other.tags.hashCode());
+    return ((Comparable) tags).compareTo(other.tags);
   }
   
   public TestCaseWithMetadata withName(String name) {

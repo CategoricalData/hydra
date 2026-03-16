@@ -34,8 +34,6 @@ public class Catches implements Serializable, Comparable<Catches> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Catches other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

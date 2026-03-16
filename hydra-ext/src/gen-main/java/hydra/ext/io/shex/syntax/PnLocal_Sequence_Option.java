@@ -42,9 +42,7 @@ public class PnLocal_Sequence_Option implements Serializable, Comparable<PnLocal
   @SuppressWarnings("unchecked")
   public int compareTo(PnLocal_Sequence_Option other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      listOfAlts.hashCode(),
-      other.listOfAlts.hashCode());
+    cmp = ((Comparable) listOfAlts).compareTo(other.listOfAlts);
     if (cmp != 0) {
       return cmp;
     }

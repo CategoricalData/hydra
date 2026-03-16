@@ -53,9 +53,7 @@ public class RelationshipPattern implements Serializable, Comparable<Relationshi
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      detail.hashCode(),
-      other.detail.hashCode());
+    cmp = ((Comparable) detail).compareTo(other.detail);
     if (cmp != 0) {
       return cmp;
     }

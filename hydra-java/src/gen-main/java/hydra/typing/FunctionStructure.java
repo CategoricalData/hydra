@@ -101,21 +101,15 @@ public class FunctionStructure<Env> implements Serializable, Comparable<Function
   @SuppressWarnings("unchecked")
   public int compareTo(FunctionStructure other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      typeParams.hashCode(),
-      other.typeParams.hashCode());
+    cmp = ((Comparable) typeParams).compareTo(other.typeParams);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      params.hashCode(),
-      other.params.hashCode());
+    cmp = ((Comparable) params).compareTo(other.params);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      bindings.hashCode(),
-      other.bindings.hashCode());
+    cmp = ((Comparable) bindings).compareTo(other.bindings);
     if (cmp != 0) {
       return cmp;
     }
@@ -123,15 +117,11 @@ public class FunctionStructure<Env> implements Serializable, Comparable<Function
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      domains.hashCode(),
-      other.domains.hashCode());
+    cmp = ((Comparable) domains).compareTo(other.domains);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      codomain.hashCode(),
-      other.codomain.hashCode());
+    cmp = ((Comparable) codomain).compareTo(other.codomain);
     if (cmp != 0) {
       return cmp;
     }

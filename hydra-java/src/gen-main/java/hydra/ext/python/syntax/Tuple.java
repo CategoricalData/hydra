@@ -34,8 +34,6 @@ public class Tuple implements Serializable, Comparable<Tuple> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Tuple other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

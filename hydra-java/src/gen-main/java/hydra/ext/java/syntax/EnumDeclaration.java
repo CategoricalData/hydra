@@ -56,9 +56,7 @@ public class EnumDeclaration implements Serializable, Comparable<EnumDeclaration
   @SuppressWarnings("unchecked")
   public int compareTo(EnumDeclaration other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      modifiers.hashCode(),
-      other.modifiers.hashCode());
+    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
     if (cmp != 0) {
       return cmp;
     }
@@ -66,9 +64,7 @@ public class EnumDeclaration implements Serializable, Comparable<EnumDeclaration
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      implements_.hashCode(),
-      other.implements_.hashCode());
+    cmp = ((Comparable) implements_).compareTo(other.implements_);
     if (cmp != 0) {
       return cmp;
     }

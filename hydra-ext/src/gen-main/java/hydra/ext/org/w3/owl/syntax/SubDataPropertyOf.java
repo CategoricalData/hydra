@@ -49,9 +49,7 @@ public class SubDataPropertyOf implements Serializable, Comparable<SubDataProper
   @SuppressWarnings("unchecked")
   public int compareTo(SubDataPropertyOf other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      annotations.hashCode(),
-      other.annotations.hashCode());
+    cmp = ((Comparable) annotations).compareTo(other.annotations);
     if (cmp != 0) {
       return cmp;
     }

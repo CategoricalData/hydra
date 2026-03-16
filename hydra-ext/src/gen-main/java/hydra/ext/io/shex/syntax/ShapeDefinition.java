@@ -56,21 +56,15 @@ public class ShapeDefinition implements Serializable, Comparable<ShapeDefinition
   @SuppressWarnings("unchecked")
   public int compareTo(ShapeDefinition other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      listOfAlts.hashCode(),
-      other.listOfAlts.hashCode());
+    cmp = ((Comparable) listOfAlts).compareTo(other.listOfAlts);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      TripleExpression.hashCode(),
-      other.TripleExpression.hashCode());
+    cmp = ((Comparable) TripleExpression).compareTo(other.TripleExpression);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      listOfAnnotation.hashCode(),
-      other.listOfAnnotation.hashCode());
+    cmp = ((Comparable) listOfAnnotation).compareTo(other.listOfAnnotation);
     if (cmp != 0) {
       return cmp;
     }

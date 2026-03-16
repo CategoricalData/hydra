@@ -46,9 +46,7 @@ public class WithItem implements Serializable, Comparable<WithItem> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      as.hashCode(),
-      other.as.hashCode());
+    return ((Comparable) as).compareTo(other.as);
   }
   
   public WithItem withExpression(hydra.ext.python.syntax.Expression expression) {

@@ -56,9 +56,7 @@ public class ModuleDeclaration implements Serializable, Comparable<ModuleDeclara
   @SuppressWarnings("unchecked")
   public int compareTo(ModuleDeclaration other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      annotations.hashCode(),
-      other.annotations.hashCode());
+    cmp = ((Comparable) annotations).compareTo(other.annotations);
     if (cmp != 0) {
       return cmp;
     }
@@ -66,15 +64,11 @@ public class ModuleDeclaration implements Serializable, Comparable<ModuleDeclara
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      identifiers.hashCode(),
-      other.identifiers.hashCode());
+    cmp = ((Comparable) identifiers).compareTo(other.identifiers);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      directives.hashCode(),
-      other.directives.hashCode());
+    return ((Comparable) directives).compareTo(other.directives);
   }
   
   public ModuleDeclaration withAnnotations(hydra.util.ConsList<hydra.ext.java.syntax.Annotation> annotations) {

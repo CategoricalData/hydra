@@ -100,9 +100,7 @@ public abstract class NodeConstraint implements Serializable, Comparable<NodeCon
         return tagCmp;
       }
       Sequence o = (Sequence) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -302,9 +300,7 @@ public abstract class NodeConstraint implements Serializable, Comparable<NodeCon
         return tagCmp;
       }
       ListOfXsFacet o = (ListOfXsFacet) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

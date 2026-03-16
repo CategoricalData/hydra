@@ -49,9 +49,7 @@ public class Pattern implements Serializable, Comparable<Pattern> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      flags.hashCode(),
-      other.flags.hashCode());
+    return ((Comparable) flags).compareTo(other.flags);
   }
   
   public Pattern withRegex(String regex) {

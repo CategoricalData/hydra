@@ -46,9 +46,7 @@ public class ClassBodyDeclarationWithComments implements Serializable, Comparabl
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      comments.hashCode(),
-      other.comments.hashCode());
+    return ((Comparable) comments).compareTo(other.comments);
   }
   
   public ClassBodyDeclarationWithComments withValue(hydra.ext.java.syntax.ClassBodyDeclaration value) {

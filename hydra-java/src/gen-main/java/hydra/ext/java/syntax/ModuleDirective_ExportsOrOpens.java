@@ -49,9 +49,7 @@ public class ModuleDirective_ExportsOrOpens implements Serializable, Comparable<
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      modules.hashCode(),
-      other.modules.hashCode());
+    return ((Comparable) modules).compareTo(other.modules);
   }
   
   public ModuleDirective_ExportsOrOpens withPackage(hydra.ext.java.syntax.PackageName package_) {

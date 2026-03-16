@@ -108,9 +108,7 @@ public abstract class TraversalPredicateOrGenericLiteralArgument implements Seri
         return tagCmp;
       }
       Literal o = (Literal) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

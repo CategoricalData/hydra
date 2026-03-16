@@ -68,9 +68,7 @@ public abstract class ValueMapArgs implements Serializable, Comparable<ValueMapA
         return tagCmp;
       }
       String_ o = (String_) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

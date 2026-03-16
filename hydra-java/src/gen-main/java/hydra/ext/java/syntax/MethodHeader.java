@@ -56,9 +56,7 @@ public class MethodHeader implements Serializable, Comparable<MethodHeader> {
   @SuppressWarnings("unchecked")
   public int compareTo(MethodHeader other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      parameters.hashCode(),
-      other.parameters.hashCode());
+    cmp = ((Comparable) parameters).compareTo(other.parameters);
     if (cmp != 0) {
       return cmp;
     }
@@ -70,9 +68,7 @@ public class MethodHeader implements Serializable, Comparable<MethodHeader> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      throws_.hashCode(),
-      other.throws_.hashCode());
+    return ((Comparable) throws_).compareTo(other.throws_);
   }
   
   public MethodHeader withParameters(hydra.util.ConsList<hydra.ext.java.syntax.TypeParameter> parameters) {

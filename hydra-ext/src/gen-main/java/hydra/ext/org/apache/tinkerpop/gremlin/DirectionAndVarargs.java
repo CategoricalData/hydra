@@ -46,9 +46,7 @@ public class DirectionAndVarargs implements Serializable, Comparable<DirectionAn
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      varargs.hashCode(),
-      other.varargs.hashCode());
+    return ((Comparable) varargs).compareTo(other.varargs);
   }
   
   public DirectionAndVarargs withDirection(hydra.ext.org.apache.tinkerpop.gremlin.TraversalDirectionArgument direction) {

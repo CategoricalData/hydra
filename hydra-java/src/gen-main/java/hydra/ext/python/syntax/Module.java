@@ -34,8 +34,6 @@ public class Module implements Serializable, Comparable<Module> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Module other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

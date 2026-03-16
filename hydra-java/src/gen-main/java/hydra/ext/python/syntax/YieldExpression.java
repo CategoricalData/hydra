@@ -108,9 +108,7 @@ public abstract class YieldExpression implements Serializable, Comparable<YieldE
         return tagCmp;
       }
       Simple o = (Simple) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

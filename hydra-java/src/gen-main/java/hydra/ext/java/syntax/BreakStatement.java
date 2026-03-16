@@ -34,8 +34,6 @@ public class BreakStatement implements Serializable, Comparable<BreakStatement> 
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(BreakStatement other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

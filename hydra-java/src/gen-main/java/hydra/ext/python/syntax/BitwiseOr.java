@@ -42,9 +42,7 @@ public class BitwiseOr implements Serializable, Comparable<BitwiseOr> {
   @SuppressWarnings("unchecked")
   public int compareTo(BitwiseOr other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      lhs.hashCode(),
-      other.lhs.hashCode());
+    cmp = ((Comparable) lhs).compareTo(other.lhs);
     if (cmp != 0) {
       return cmp;
     }

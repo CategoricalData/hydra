@@ -34,8 +34,6 @@ public class Dict implements Serializable, Comparable<Dict> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Dict other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

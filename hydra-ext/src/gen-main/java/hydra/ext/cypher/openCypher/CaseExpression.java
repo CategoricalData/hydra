@@ -49,21 +49,15 @@ public class CaseExpression implements Serializable, Comparable<CaseExpression> 
   @SuppressWarnings("unchecked")
   public int compareTo(CaseExpression other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      expression.hashCode(),
-      other.expression.hashCode());
+    cmp = ((Comparable) expression).compareTo(other.expression);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      alternatives.hashCode(),
-      other.alternatives.hashCode());
+    cmp = ((Comparable) alternatives).compareTo(other.alternatives);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      else_.hashCode(),
-      other.else_.hashCode());
+    return ((Comparable) else_).compareTo(other.else_);
   }
   
   public CaseExpression withExpression(hydra.util.Maybe<hydra.ext.cypher.openCypher.Expression> expression) {

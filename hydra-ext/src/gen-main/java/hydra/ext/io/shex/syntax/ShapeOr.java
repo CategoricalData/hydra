@@ -46,9 +46,7 @@ public class ShapeOr implements Serializable, Comparable<ShapeOr> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      listOfSequence.hashCode(),
-      other.listOfSequence.hashCode());
+    return ((Comparable) listOfSequence).compareTo(other.listOfSequence);
   }
   
   public ShapeOr withShapeAnd(hydra.ext.io.shex.syntax.ShapeAnd ShapeAnd) {

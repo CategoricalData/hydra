@@ -49,9 +49,7 @@ public class Annotation implements Serializable, Comparable<Annotation> {
   @SuppressWarnings("unchecked")
   public int compareTo(Annotation other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      annotations.hashCode(),
-      other.annotations.hashCode());
+    cmp = ((Comparable) annotations).compareTo(other.annotations);
     if (cmp != 0) {
       return cmp;
     }

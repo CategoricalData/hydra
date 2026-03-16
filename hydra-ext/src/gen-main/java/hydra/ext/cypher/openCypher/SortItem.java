@@ -46,9 +46,7 @@ public class SortItem implements Serializable, Comparable<SortItem> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      order.hashCode(),
-      other.order.hashCode());
+    return ((Comparable) order).compareTo(other.order);
   }
   
   public SortItem withExpression(hydra.ext.cypher.openCypher.Expression expression) {

@@ -34,8 +34,6 @@ public class EnumBody implements Serializable, Comparable<EnumBody> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(EnumBody other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

@@ -46,9 +46,7 @@ public class InlineShapeAtom_Sequence implements Serializable, Comparable<Inline
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      InlineShapeOrRef.hashCode(),
-      other.InlineShapeOrRef.hashCode());
+    return ((Comparable) InlineShapeOrRef).compareTo(other.InlineShapeOrRef);
   }
   
   public InlineShapeAtom_Sequence withNodeConstraint(hydra.ext.io.shex.syntax.NodeConstraint NodeConstraint) {

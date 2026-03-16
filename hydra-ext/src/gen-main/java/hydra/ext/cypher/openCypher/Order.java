@@ -34,8 +34,6 @@ public class Order implements Serializable, Comparable<Order> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Order other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

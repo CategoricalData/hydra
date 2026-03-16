@@ -34,8 +34,6 @@ public class AmbiguousName implements Serializable, Comparable<AmbiguousName> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(AmbiguousName other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

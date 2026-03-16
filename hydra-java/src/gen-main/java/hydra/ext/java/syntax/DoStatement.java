@@ -46,9 +46,7 @@ public class DoStatement implements Serializable, Comparable<DoStatement> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      conde.hashCode(),
-      other.conde.hashCode());
+    return ((Comparable) conde).compareTo(other.conde);
   }
   
   public DoStatement withBody(hydra.ext.java.syntax.Statement body) {

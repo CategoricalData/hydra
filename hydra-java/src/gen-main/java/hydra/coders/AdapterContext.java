@@ -69,9 +69,7 @@ public class AdapterContext implements Serializable, Comparable<AdapterContext> 
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      adapters.hashCode(),
-      other.adapters.hashCode());
+    return ((Comparable) adapters).compareTo(other.adapters);
   }
   
   public AdapterContext withGraph(hydra.graph.Graph graph) {

@@ -68,9 +68,7 @@ public abstract class SubjectExpression implements Serializable, Comparable<Subj
         return tagCmp;
       }
       Tuple o = (Tuple) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

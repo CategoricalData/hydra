@@ -49,9 +49,7 @@ public class UntypedAssignment implements Serializable, Comparable<UntypedAssign
   @SuppressWarnings("unchecked")
   public int compareTo(UntypedAssignment other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      targets.hashCode(),
-      other.targets.hashCode());
+    cmp = ((Comparable) targets).compareTo(other.targets);
     if (cmp != 0) {
       return cmp;
     }
@@ -59,9 +57,7 @@ public class UntypedAssignment implements Serializable, Comparable<UntypedAssign
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      typeComment.hashCode(),
-      other.typeComment.hashCode());
+    return ((Comparable) typeComment).compareTo(other.typeComment);
   }
   
   public UntypedAssignment withTargets(hydra.util.ConsList<hydra.ext.python.syntax.StarTarget> targets) {

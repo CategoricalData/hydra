@@ -165,75 +165,51 @@ public class Aliases implements Serializable, Comparable<Aliases> {
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      packages.hashCode(),
-      other.packages.hashCode());
+    cmp = ((Comparable) packages).compareTo(other.packages);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      branchVars.hashCode(),
-      other.branchVars.hashCode());
+    cmp = ((Comparable) branchVars).compareTo(other.branchVars);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      recursiveVars.hashCode(),
-      other.recursiveVars.hashCode());
+    cmp = ((Comparable) recursiveVars).compareTo(other.recursiveVars);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      inScopeTypeParams.hashCode(),
-      other.inScopeTypeParams.hashCode());
+    cmp = ((Comparable) inScopeTypeParams).compareTo(other.inScopeTypeParams);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      polymorphicLocals.hashCode(),
-      other.polymorphicLocals.hashCode());
+    cmp = ((Comparable) polymorphicLocals).compareTo(other.polymorphicLocals);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      inScopeJavaVars.hashCode(),
-      other.inScopeJavaVars.hashCode());
+    cmp = ((Comparable) inScopeJavaVars).compareTo(other.inScopeJavaVars);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      varRenames.hashCode(),
-      other.varRenames.hashCode());
+    cmp = ((Comparable) varRenames).compareTo(other.varRenames);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      lambdaVars.hashCode(),
-      other.lambdaVars.hashCode());
+    cmp = ((Comparable) lambdaVars).compareTo(other.lambdaVars);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      typeVarSubst.hashCode(),
-      other.typeVarSubst.hashCode());
+    cmp = ((Comparable) typeVarSubst).compareTo(other.typeVarSubst);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      trustedTypeVars.hashCode(),
-      other.trustedTypeVars.hashCode());
+    cmp = ((Comparable) trustedTypeVars).compareTo(other.trustedTypeVars);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      methodCodomain.hashCode(),
-      other.methodCodomain.hashCode());
+    cmp = ((Comparable) methodCodomain).compareTo(other.methodCodomain);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      thunkedVars.hashCode(),
-      other.thunkedVars.hashCode());
+    return ((Comparable) thunkedVars).compareTo(other.thunkedVars);
   }
   
   public Aliases withCurrentNamespace(hydra.module.Namespace currentNamespace) {

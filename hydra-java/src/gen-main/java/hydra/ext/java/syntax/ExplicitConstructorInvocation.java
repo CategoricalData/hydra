@@ -49,15 +49,11 @@ public class ExplicitConstructorInvocation implements Serializable, Comparable<E
   @SuppressWarnings("unchecked")
   public int compareTo(ExplicitConstructorInvocation other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      typeArguments.hashCode(),
-      other.typeArguments.hashCode());
+    cmp = ((Comparable) typeArguments).compareTo(other.typeArguments);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      arguments.hashCode(),
-      other.arguments.hashCode());
+    cmp = ((Comparable) arguments).compareTo(other.arguments);
     if (cmp != 0) {
       return cmp;
     }

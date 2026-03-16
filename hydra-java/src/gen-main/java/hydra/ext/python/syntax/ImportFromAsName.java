@@ -46,9 +46,7 @@ public class ImportFromAsName implements Serializable, Comparable<ImportFromAsNa
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      as.hashCode(),
-      other.as.hashCode());
+    return ((Comparable) as).compareTo(other.as);
   }
   
   public ImportFromAsName withName(hydra.ext.python.syntax.Name name) {

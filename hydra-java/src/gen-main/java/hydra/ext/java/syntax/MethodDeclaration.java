@@ -59,15 +59,11 @@ public class MethodDeclaration implements Serializable, Comparable<MethodDeclara
   @SuppressWarnings("unchecked")
   public int compareTo(MethodDeclaration other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      annotations.hashCode(),
-      other.annotations.hashCode());
+    cmp = ((Comparable) annotations).compareTo(other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      modifiers.hashCode(),
-      other.modifiers.hashCode());
+    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
     if (cmp != 0) {
       return cmp;
     }

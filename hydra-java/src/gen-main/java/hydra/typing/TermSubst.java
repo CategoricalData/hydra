@@ -37,8 +37,6 @@ public class TermSubst implements Serializable, Comparable<TermSubst> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TermSubst other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

@@ -164,9 +164,7 @@ public abstract class LambdaStarEtc implements Serializable, Comparable<LambdaSt
         return tagCmp;
       }
       ParamMaybeDefault o = (ParamMaybeDefault) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

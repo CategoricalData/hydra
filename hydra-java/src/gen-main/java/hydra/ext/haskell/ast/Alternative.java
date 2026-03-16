@@ -69,9 +69,7 @@ public class Alternative implements Serializable, Comparable<Alternative> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      binds.hashCode(),
-      other.binds.hashCode());
+    return ((Comparable) binds).compareTo(other.binds);
   }
   
   public Alternative withPattern(hydra.ext.haskell.ast.Pattern pattern) {

@@ -46,9 +46,7 @@ public class MultiElementOneOf implements Serializable, Comparable<MultiElementO
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      listOfSequence.hashCode(),
-      other.listOfSequence.hashCode());
+    return ((Comparable) listOfSequence).compareTo(other.listOfSequence);
   }
   
   public MultiElementOneOf withGroupTripleExpr(hydra.ext.io.shex.syntax.GroupTripleExpr GroupTripleExpr) {

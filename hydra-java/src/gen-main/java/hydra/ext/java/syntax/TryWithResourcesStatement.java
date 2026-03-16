@@ -64,15 +64,11 @@ public class TryWithResourcesStatement implements Serializable, Comparable<TryWi
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      catches.hashCode(),
-      other.catches.hashCode());
+    cmp = ((Comparable) catches).compareTo(other.catches);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      finally_.hashCode(),
-      other.finally_.hashCode());
+    return ((Comparable) finally_).compareTo(other.finally_);
   }
   
   public TryWithResourcesStatement withResourceSpecification(hydra.ext.java.syntax.ResourceSpecification resourceSpecification) {

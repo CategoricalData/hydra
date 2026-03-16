@@ -55,9 +55,7 @@ public class ConstructRecordExpression implements Serializable, Comparable<Const
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      fields.hashCode(),
-      other.fields.hashCode());
+    return ((Comparable) fields).compareTo(other.fields);
   }
   
   public ConstructRecordExpression withName(hydra.ext.haskell.ast.Name name) {

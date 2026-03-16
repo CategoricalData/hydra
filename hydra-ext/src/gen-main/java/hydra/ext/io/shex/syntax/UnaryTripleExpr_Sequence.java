@@ -42,9 +42,7 @@ public class UnaryTripleExpr_Sequence implements Serializable, Comparable<UnaryT
   @SuppressWarnings("unchecked")
   public int compareTo(UnaryTripleExpr_Sequence other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      Sequence.hashCode(),
-      other.Sequence.hashCode());
+    cmp = ((Comparable) Sequence).compareTo(other.Sequence);
     if (cmp != 0) {
       return cmp;
     }

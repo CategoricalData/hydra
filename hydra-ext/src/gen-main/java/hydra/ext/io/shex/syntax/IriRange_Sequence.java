@@ -46,9 +46,7 @@ public class IriRange_Sequence implements Serializable, Comparable<IriRange_Sequ
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      Sequence.hashCode(),
-      other.Sequence.hashCode());
+    return ((Comparable) Sequence).compareTo(other.Sequence);
   }
   
   public IriRange_Sequence withIri(hydra.ext.io.shex.syntax.Iri Iri) {

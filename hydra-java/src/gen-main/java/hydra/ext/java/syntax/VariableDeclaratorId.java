@@ -46,9 +46,7 @@ public class VariableDeclaratorId implements Serializable, Comparable<VariableDe
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      dims.hashCode(),
-      other.dims.hashCode());
+    return ((Comparable) dims).compareTo(other.dims);
   }
   
   public VariableDeclaratorId withIdentifier(hydra.ext.java.syntax.Identifier identifier) {

@@ -55,9 +55,7 @@ public class AnnotatedType implements Serializable, Comparable<AnnotatedType> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      annotation.hashCode(),
-      other.annotation.hashCode());
+    return ((Comparable) annotation).compareTo(other.annotation);
   }
   
   public AnnotatedType withBody(hydra.core.Type body) {

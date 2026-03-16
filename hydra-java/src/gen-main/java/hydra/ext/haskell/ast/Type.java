@@ -380,9 +380,7 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       Tuple o = (Tuple) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

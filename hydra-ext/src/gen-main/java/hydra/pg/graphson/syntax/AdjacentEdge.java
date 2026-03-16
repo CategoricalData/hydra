@@ -57,9 +57,7 @@ public class AdjacentEdge implements Serializable, Comparable<AdjacentEdge> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      properties.hashCode(),
-      other.properties.hashCode());
+    return ((Comparable) properties).compareTo(other.properties);
   }
   
   public AdjacentEdge withId(hydra.pg.graphson.syntax.Value id) {

@@ -42,9 +42,7 @@ public class YieldItem implements Serializable, Comparable<YieldItem> {
   @SuppressWarnings("unchecked")
   public int compareTo(YieldItem other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      field.hashCode(),
-      other.field.hashCode());
+    cmp = ((Comparable) field).compareTo(other.field);
     if (cmp != 0) {
       return cmp;
     }

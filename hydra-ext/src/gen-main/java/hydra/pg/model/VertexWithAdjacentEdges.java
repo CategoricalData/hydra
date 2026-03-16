@@ -65,15 +65,11 @@ public class VertexWithAdjacentEdges<V> implements Serializable, Comparable<Vert
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      ins.hashCode(),
-      other.ins.hashCode());
+    cmp = ((Comparable) ins).compareTo(other.ins);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      outs.hashCode(),
-      other.outs.hashCode());
+    return ((Comparable) outs).compareTo(other.outs);
   }
   
   public VertexWithAdjacentEdges withVertex(hydra.pg.model.Vertex<V> vertex) {

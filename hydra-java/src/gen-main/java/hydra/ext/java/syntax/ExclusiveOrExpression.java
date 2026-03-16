@@ -34,8 +34,6 @@ public class ExclusiveOrExpression implements Serializable, Comparable<Exclusive
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ExclusiveOrExpression other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

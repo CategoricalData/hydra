@@ -234,9 +234,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       And o = (And) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -322,9 +320,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       Class_ o = (Class_) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -410,9 +406,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       Disjoint o = (Disjoint) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -455,9 +449,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       Equals o = (Equals) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -500,9 +492,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       HasValue o = (HasValue) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -545,9 +535,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       In o = (In) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -590,9 +578,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       LanguageIn o = (LanguageIn) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -678,9 +664,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       Node o = (Node) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -723,9 +707,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       Not o = (Not) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1065,9 +1047,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       Property o = (Property) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1110,9 +1090,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       Or o = (Or) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1155,9 +1133,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
         return tagCmp;
       }
       Xone o = (Xone) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

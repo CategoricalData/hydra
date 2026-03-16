@@ -60,15 +60,11 @@ public class BracketedTripleExpr implements Serializable, Comparable<BracketedTr
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      Cardinality.hashCode(),
-      other.Cardinality.hashCode());
+    cmp = ((Comparable) Cardinality).compareTo(other.Cardinality);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      listOfAnnotation.hashCode(),
-      other.listOfAnnotation.hashCode());
+    cmp = ((Comparable) listOfAnnotation).compareTo(other.listOfAnnotation);
     if (cmp != 0) {
       return cmp;
     }

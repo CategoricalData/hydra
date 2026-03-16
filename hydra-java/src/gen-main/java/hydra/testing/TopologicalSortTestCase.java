@@ -51,9 +51,7 @@ public class TopologicalSortTestCase implements Serializable, Comparable<Topolog
   @SuppressWarnings("unchecked")
   public int compareTo(TopologicalSortTestCase other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      adjacencyList.hashCode(),
-      other.adjacencyList.hashCode());
+    cmp = ((Comparable) adjacencyList).compareTo(other.adjacencyList);
     if (cmp != 0) {
       return cmp;
     }

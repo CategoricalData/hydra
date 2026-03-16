@@ -71,9 +71,7 @@ public class Quad implements Serializable, Comparable<Quad> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      graph.hashCode(),
-      other.graph.hashCode());
+    return ((Comparable) graph).compareTo(other.graph);
   }
   
   public Quad withSubject(hydra.ext.org.w3.rdf.syntax.Resource subject) {

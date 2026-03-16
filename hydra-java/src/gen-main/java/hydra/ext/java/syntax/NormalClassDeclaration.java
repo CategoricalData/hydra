@@ -70,9 +70,7 @@ public class NormalClassDeclaration implements Serializable, Comparable<NormalCl
   @SuppressWarnings("unchecked")
   public int compareTo(NormalClassDeclaration other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      modifiers.hashCode(),
-      other.modifiers.hashCode());
+    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
     if (cmp != 0) {
       return cmp;
     }
@@ -80,21 +78,15 @@ public class NormalClassDeclaration implements Serializable, Comparable<NormalCl
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      parameters.hashCode(),
-      other.parameters.hashCode());
+    cmp = ((Comparable) parameters).compareTo(other.parameters);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      extends_.hashCode(),
-      other.extends_.hashCode());
+    cmp = ((Comparable) extends_).compareTo(other.extends_);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      implements_.hashCode(),
-      other.implements_.hashCode());
+    cmp = ((Comparable) implements_).compareTo(other.implements_);
     if (cmp != 0) {
       return cmp;
     }

@@ -46,9 +46,7 @@ public class ParamNoDefaultStarAnnotation implements Serializable, Comparable<Pa
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      typeComment.hashCode(),
-      other.typeComment.hashCode());
+    return ((Comparable) typeComment).compareTo(other.typeComment);
   }
   
   public ParamNoDefaultStarAnnotation withParamStarAnnotation(hydra.ext.python.syntax.ParamStarAnnotation paramStarAnnotation) {

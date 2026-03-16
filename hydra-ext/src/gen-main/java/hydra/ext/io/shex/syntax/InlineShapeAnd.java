@@ -46,9 +46,7 @@ public class InlineShapeAnd implements Serializable, Comparable<InlineShapeAnd> 
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      listOfSequence.hashCode(),
-      other.listOfSequence.hashCode());
+    return ((Comparable) listOfSequence).compareTo(other.listOfSequence);
   }
   
   public InlineShapeAnd withInlineShapeNot(hydra.ext.io.shex.syntax.InlineShapeNot InlineShapeNot) {

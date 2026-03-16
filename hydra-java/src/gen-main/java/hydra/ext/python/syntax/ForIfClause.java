@@ -60,9 +60,7 @@ public class ForIfClause implements Serializable, Comparable<ForIfClause> {
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      targets.hashCode(),
-      other.targets.hashCode());
+    cmp = ((Comparable) targets).compareTo(other.targets);
     if (cmp != 0) {
       return cmp;
     }
@@ -70,9 +68,7 @@ public class ForIfClause implements Serializable, Comparable<ForIfClause> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      ifs.hashCode(),
-      other.ifs.hashCode());
+    return ((Comparable) ifs).compareTo(other.ifs);
   }
   
   public ForIfClause withAsync(Boolean async) {

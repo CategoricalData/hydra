@@ -56,9 +56,7 @@ public class UnqualifiedClassInstanceCreationExpression implements Serializable,
   @SuppressWarnings("unchecked")
   public int compareTo(UnqualifiedClassInstanceCreationExpression other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      typeArguments.hashCode(),
-      other.typeArguments.hashCode());
+    cmp = ((Comparable) typeArguments).compareTo(other.typeArguments);
     if (cmp != 0) {
       return cmp;
     }
@@ -66,15 +64,11 @@ public class UnqualifiedClassInstanceCreationExpression implements Serializable,
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      arguments.hashCode(),
-      other.arguments.hashCode());
+    cmp = ((Comparable) arguments).compareTo(other.arguments);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      body.hashCode(),
-      other.body.hashCode());
+    return ((Comparable) body).compareTo(other.body);
   }
   
   public UnqualifiedClassInstanceCreationExpression withTypeArguments(hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> typeArguments) {

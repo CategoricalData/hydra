@@ -34,8 +34,6 @@ public class GenericLiteralSet implements Serializable, Comparable<GenericLitera
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(GenericLiteralSet other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

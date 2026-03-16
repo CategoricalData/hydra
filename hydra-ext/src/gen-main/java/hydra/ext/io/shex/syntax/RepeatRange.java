@@ -46,9 +46,7 @@ public class RepeatRange implements Serializable, Comparable<RepeatRange> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      Sequence.hashCode(),
-      other.Sequence.hashCode());
+    return ((Comparable) Sequence).compareTo(other.Sequence);
   }
   
   public RepeatRange withInteger(hydra.ext.io.shex.syntax.Integer_ Integer_) {

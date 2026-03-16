@@ -34,8 +34,6 @@ public class DottedName implements Serializable, Comparable<DottedName> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DottedName other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

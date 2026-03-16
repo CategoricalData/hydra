@@ -49,9 +49,7 @@ public class Closed implements Serializable, Comparable<Closed> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      ignoredProperties.hashCode(),
-      other.ignoredProperties.hashCode());
+    return ((Comparable) ignoredProperties).compareTo(other.ignoredProperties);
   }
   
   public Closed withIsClosed(Boolean isClosed) {

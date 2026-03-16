@@ -164,9 +164,7 @@ public abstract class StarAtom implements Serializable, Comparable<StarAtom> {
         return tagCmp;
       }
       StarTargetsTupleSeq o = (StarTargetsTupleSeq) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -206,9 +204,7 @@ public abstract class StarAtom implements Serializable, Comparable<StarAtom> {
         return tagCmp;
       }
       StarTargetsListSeq o = (StarTargetsListSeq) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

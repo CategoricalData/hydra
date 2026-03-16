@@ -42,15 +42,11 @@ public class EquivalentObjectProperties implements Serializable, Comparable<Equi
   @SuppressWarnings("unchecked")
   public int compareTo(EquivalentObjectProperties other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      annotations.hashCode(),
-      other.annotations.hashCode());
+    cmp = ((Comparable) annotations).compareTo(other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      properties.hashCode(),
-      other.properties.hashCode());
+    return ((Comparable) properties).compareTo(other.properties);
   }
   
   public EquivalentObjectProperties withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {

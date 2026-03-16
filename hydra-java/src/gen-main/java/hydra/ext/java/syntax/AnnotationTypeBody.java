@@ -34,8 +34,6 @@ public class AnnotationTypeBody implements Serializable, Comparable<AnnotationTy
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(AnnotationTypeBody other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

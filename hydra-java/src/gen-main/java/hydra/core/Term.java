@@ -419,9 +419,7 @@ public abstract class Term implements Serializable, Comparable<Term> {
         return tagCmp;
       }
       List o = (List) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -507,9 +505,7 @@ public abstract class Term implements Serializable, Comparable<Term> {
         return tagCmp;
       }
       Map o = (Map) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -552,9 +548,7 @@ public abstract class Term implements Serializable, Comparable<Term> {
         return tagCmp;
       }
       Maybe o = (Maybe) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -683,9 +677,7 @@ public abstract class Term implements Serializable, Comparable<Term> {
         return tagCmp;
       }
       Set o = (Set) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

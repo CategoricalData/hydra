@@ -56,9 +56,7 @@ public class Resource_Local implements Serializable, Comparable<Resource_Local> 
   @SuppressWarnings("unchecked")
   public int compareTo(Resource_Local other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      modifiers.hashCode(),
-      other.modifiers.hashCode());
+    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
     if (cmp != 0) {
       return cmp;
     }

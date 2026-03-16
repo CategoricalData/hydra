@@ -46,9 +46,7 @@ public class ValueMapBooleanArgs implements Serializable, Comparable<ValueMapBoo
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      keys.hashCode(),
-      other.keys.hashCode());
+    return ((Comparable) keys).compareTo(other.keys);
   }
   
   public ValueMapBooleanArgs withValue(hydra.ext.org.apache.tinkerpop.gremlin.BooleanArgument value) {

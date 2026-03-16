@@ -46,9 +46,7 @@ public class Power implements Serializable, Comparable<Power> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      rhs.hashCode(),
-      other.rhs.hashCode());
+    return ((Comparable) rhs).compareTo(other.rhs);
   }
   
   public Power withLhs(hydra.ext.python.syntax.AwaitPrimary lhs) {

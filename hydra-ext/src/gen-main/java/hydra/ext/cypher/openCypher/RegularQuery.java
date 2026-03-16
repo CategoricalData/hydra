@@ -46,9 +46,7 @@ public class RegularQuery implements Serializable, Comparable<RegularQuery> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      rest.hashCode(),
-      other.rest.hashCode());
+    return ((Comparable) rest).compareTo(other.rest);
   }
   
   public RegularQuery withHead(hydra.ext.cypher.openCypher.SingleQuery head) {

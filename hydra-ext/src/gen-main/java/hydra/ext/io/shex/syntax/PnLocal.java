@@ -46,9 +46,7 @@ public class PnLocal implements Serializable, Comparable<PnLocal> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      Sequence.hashCode(),
-      other.Sequence.hashCode());
+    return ((Comparable) Sequence).compareTo(other.Sequence);
   }
   
   public PnLocal withAlts(hydra.ext.io.shex.syntax.PnLocal_Alts alts) {

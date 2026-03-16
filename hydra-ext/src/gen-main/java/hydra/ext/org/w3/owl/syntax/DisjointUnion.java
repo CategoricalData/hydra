@@ -52,9 +52,7 @@ public class DisjointUnion implements Serializable, Comparable<DisjointUnion> {
   @SuppressWarnings("unchecked")
   public int compareTo(DisjointUnion other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      annotations.hashCode(),
-      other.annotations.hashCode());
+    cmp = ((Comparable) annotations).compareTo(other.annotations);
     if (cmp != 0) {
       return cmp;
     }
@@ -62,9 +60,7 @@ public class DisjointUnion implements Serializable, Comparable<DisjointUnion> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      classes.hashCode(),
-      other.classes.hashCode());
+    return ((Comparable) classes).compareTo(other.classes);
   }
   
   public DisjointUnion withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {

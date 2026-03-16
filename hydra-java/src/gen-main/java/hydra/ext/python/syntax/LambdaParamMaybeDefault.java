@@ -46,9 +46,7 @@ public class LambdaParamMaybeDefault implements Serializable, Comparable<LambdaP
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      default_.hashCode(),
-      other.default_.hashCode());
+    return ((Comparable) default_).compareTo(other.default_);
   }
   
   public LambdaParamMaybeDefault withParam(hydra.ext.python.syntax.Name param) {

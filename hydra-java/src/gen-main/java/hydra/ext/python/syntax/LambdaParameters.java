@@ -56,27 +56,19 @@ public class LambdaParameters implements Serializable, Comparable<LambdaParamete
   @SuppressWarnings("unchecked")
   public int compareTo(LambdaParameters other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      slashNoDefault.hashCode(),
-      other.slashNoDefault.hashCode());
+    cmp = ((Comparable) slashNoDefault).compareTo(other.slashNoDefault);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      paramNoDefault.hashCode(),
-      other.paramNoDefault.hashCode());
+    cmp = ((Comparable) paramNoDefault).compareTo(other.paramNoDefault);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      paramWithDefault.hashCode(),
-      other.paramWithDefault.hashCode());
+    cmp = ((Comparable) paramWithDefault).compareTo(other.paramWithDefault);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      starEtc.hashCode(),
-      other.starEtc.hashCode());
+    return ((Comparable) starEtc).compareTo(other.starEtc);
   }
   
   public LambdaParameters withSlashNoDefault(hydra.util.Maybe<hydra.ext.python.syntax.LambdaSlashNoDefault> slashNoDefault) {

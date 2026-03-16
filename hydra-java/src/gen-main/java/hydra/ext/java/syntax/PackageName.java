@@ -34,8 +34,6 @@ public class PackageName implements Serializable, Comparable<PackageName> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(PackageName other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

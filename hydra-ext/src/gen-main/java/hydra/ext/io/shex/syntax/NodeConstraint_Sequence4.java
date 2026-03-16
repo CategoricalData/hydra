@@ -46,9 +46,7 @@ public class NodeConstraint_Sequence4 implements Serializable, Comparable<NodeCo
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      listOfXsFacet.hashCode(),
-      other.listOfXsFacet.hashCode());
+    return ((Comparable) listOfXsFacet).compareTo(other.listOfXsFacet);
   }
   
   public NodeConstraint_Sequence4 withValueSet(hydra.ext.io.shex.syntax.ValueSet ValueSet) {

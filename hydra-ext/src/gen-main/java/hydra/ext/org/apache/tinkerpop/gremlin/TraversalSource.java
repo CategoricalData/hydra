@@ -34,8 +34,6 @@ public class TraversalSource implements Serializable, Comparable<TraversalSource
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TraversalSource other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

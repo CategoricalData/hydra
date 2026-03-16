@@ -74,21 +74,15 @@ public class ForStatement implements Serializable, Comparable<ForStatement> {
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      targets.hashCode(),
-      other.targets.hashCode());
+    cmp = ((Comparable) targets).compareTo(other.targets);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      expressions.hashCode(),
-      other.expressions.hashCode());
+    cmp = ((Comparable) expressions).compareTo(other.expressions);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      typeComment.hashCode(),
-      other.typeComment.hashCode());
+    cmp = ((Comparable) typeComment).compareTo(other.typeComment);
     if (cmp != 0) {
       return cmp;
     }
@@ -96,9 +90,7 @@ public class ForStatement implements Serializable, Comparable<ForStatement> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      else_.hashCode(),
-      other.else_.hashCode());
+    return ((Comparable) else_).compareTo(other.else_);
   }
   
   public ForStatement withAsync(Boolean async) {

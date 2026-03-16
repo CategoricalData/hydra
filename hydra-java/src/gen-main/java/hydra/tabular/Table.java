@@ -51,15 +51,11 @@ public class Table<V> implements Serializable, Comparable<Table<V>> {
   @SuppressWarnings("unchecked")
   public int compareTo(Table other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      header.hashCode(),
-      other.header.hashCode());
+    cmp = ((Comparable) header).compareTo(other.header);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      data.hashCode(),
-      other.data.hashCode());
+    return ((Comparable) data).compareTo(other.data);
   }
   
   public Table withHeader(hydra.util.Maybe<hydra.tabular.HeaderRow> header) {

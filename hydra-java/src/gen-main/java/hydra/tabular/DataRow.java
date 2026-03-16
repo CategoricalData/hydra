@@ -37,8 +37,6 @@ public class DataRow<V> implements Serializable, Comparable<DataRow<V>> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DataRow other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

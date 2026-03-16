@@ -75,21 +75,15 @@ public class TestGroup implements Serializable, Comparable<TestGroup> {
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      description.hashCode(),
-      other.description.hashCode());
+    cmp = ((Comparable) description).compareTo(other.description);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      subgroups.hashCode(),
-      other.subgroups.hashCode());
+    cmp = ((Comparable) subgroups).compareTo(other.subgroups);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      cases.hashCode(),
-      other.cases.hashCode());
+    return ((Comparable) cases).compareTo(other.cases);
   }
   
   public TestGroup withName(String name) {

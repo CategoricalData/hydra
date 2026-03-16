@@ -256,9 +256,7 @@ public abstract class TraversalTerminalMethod implements Serializable, Comparabl
         return tagCmp;
       }
       Next o = (Next) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

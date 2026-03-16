@@ -57,9 +57,7 @@ public class FunctionInvocation implements Serializable, Comparable<FunctionInvo
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      arguments.hashCode(),
-      other.arguments.hashCode());
+    return ((Comparable) arguments).compareTo(other.arguments);
   }
   
   public FunctionInvocation withName(hydra.ext.cypher.openCypher.QualifiedName name) {

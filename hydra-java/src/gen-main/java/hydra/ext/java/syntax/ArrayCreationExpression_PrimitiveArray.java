@@ -53,9 +53,7 @@ public class ArrayCreationExpression_PrimitiveArray implements Serializable, Com
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      dims.hashCode(),
-      other.dims.hashCode());
+    cmp = ((Comparable) dims).compareTo(other.dims);
     if (cmp != 0) {
       return cmp;
     }

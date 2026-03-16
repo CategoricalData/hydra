@@ -49,9 +49,7 @@ public class ReplaceArgs implements Serializable, Comparable<ReplaceArgs> {
   @SuppressWarnings("unchecked")
   public int compareTo(ReplaceArgs other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      scope.hashCode(),
-      other.scope.hashCode());
+    cmp = ((Comparable) scope).compareTo(other.scope);
     if (cmp != 0) {
       return cmp;
     }

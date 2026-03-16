@@ -34,8 +34,6 @@ public class File implements Serializable, Comparable<File> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(File other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

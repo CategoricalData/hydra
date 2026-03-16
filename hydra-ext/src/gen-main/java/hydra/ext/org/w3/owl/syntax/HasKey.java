@@ -59,9 +59,7 @@ public class HasKey implements Serializable, Comparable<HasKey> {
   @SuppressWarnings("unchecked")
   public int compareTo(HasKey other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      annotations.hashCode(),
-      other.annotations.hashCode());
+    cmp = ((Comparable) annotations).compareTo(other.annotations);
     if (cmp != 0) {
       return cmp;
     }
@@ -69,15 +67,11 @@ public class HasKey implements Serializable, Comparable<HasKey> {
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      objectProperties.hashCode(),
-      other.objectProperties.hashCode());
+    cmp = ((Comparable) objectProperties).compareTo(other.objectProperties);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      dataProperties.hashCode(),
-      other.dataProperties.hashCode());
+    return ((Comparable) dataProperties).compareTo(other.dataProperties);
   }
   
   public HasKey withAnnotations(hydra.util.ConsList<hydra.ext.org.w3.owl.syntax.Annotation> annotations) {

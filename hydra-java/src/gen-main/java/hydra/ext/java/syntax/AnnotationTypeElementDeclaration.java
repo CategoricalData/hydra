@@ -63,9 +63,7 @@ public class AnnotationTypeElementDeclaration implements Serializable, Comparabl
   @SuppressWarnings("unchecked")
   public int compareTo(AnnotationTypeElementDeclaration other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      modifiers.hashCode(),
-      other.modifiers.hashCode());
+    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
     if (cmp != 0) {
       return cmp;
     }
@@ -77,15 +75,11 @@ public class AnnotationTypeElementDeclaration implements Serializable, Comparabl
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      dims.hashCode(),
-      other.dims.hashCode());
+    cmp = ((Comparable) dims).compareTo(other.dims);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      default_.hashCode(),
-      other.default_.hashCode());
+    return ((Comparable) default_).compareTo(other.default_);
   }
   
   public AnnotationTypeElementDeclaration withModifiers(hydra.util.ConsList<hydra.ext.java.syntax.AnnotationTypeElementModifier> modifiers) {

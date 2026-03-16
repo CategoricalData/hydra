@@ -46,9 +46,7 @@ public class AssertStatement implements Serializable, Comparable<AssertStatement
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      expression2.hashCode(),
-      other.expression2.hashCode());
+    return ((Comparable) expression2).compareTo(other.expression2);
   }
   
   public AssertStatement withExpression1(hydra.ext.python.syntax.Expression expression1) {

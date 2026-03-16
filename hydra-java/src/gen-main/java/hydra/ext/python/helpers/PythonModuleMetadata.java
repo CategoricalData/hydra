@@ -195,9 +195,7 @@ public class PythonModuleMetadata implements Serializable, Comparable<PythonModu
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      typeVariables.hashCode(),
-      other.typeVariables.hashCode());
+    cmp = ((Comparable) typeVariables).compareTo(other.typeVariables);
     if (cmp != 0) {
       return cmp;
     }

@@ -37,8 +37,6 @@ public class LangStrings implements Serializable, Comparable<LangStrings> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(LangStrings other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

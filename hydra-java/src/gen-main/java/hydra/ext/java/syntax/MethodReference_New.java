@@ -46,9 +46,7 @@ public class MethodReference_New implements Serializable, Comparable<MethodRefer
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      typeArguments.hashCode(),
-      other.typeArguments.hashCode());
+    return ((Comparable) typeArguments).compareTo(other.typeArguments);
   }
   
   public MethodReference_New withClassType(hydra.ext.java.syntax.ClassType classType) {

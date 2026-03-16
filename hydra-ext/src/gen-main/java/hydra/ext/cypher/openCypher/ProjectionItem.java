@@ -46,9 +46,7 @@ public class ProjectionItem implements Serializable, Comparable<ProjectionItem> 
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      variable.hashCode(),
-      other.variable.hashCode());
+    return ((Comparable) variable).compareTo(other.variable);
   }
   
   public ProjectionItem withExpression(hydra.ext.cypher.openCypher.Expression expression) {

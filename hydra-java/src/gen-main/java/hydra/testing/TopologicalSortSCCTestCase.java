@@ -51,15 +51,11 @@ public class TopologicalSortSCCTestCase implements Serializable, Comparable<Topo
   @SuppressWarnings("unchecked")
   public int compareTo(TopologicalSortSCCTestCase other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      adjacencyList.hashCode(),
-      other.adjacencyList.hashCode());
+    cmp = ((Comparable) adjacencyList).compareTo(other.adjacencyList);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      expected.hashCode(),
-      other.expected.hashCode());
+    return ((Comparable) expected).compareTo(other.expected);
   }
   
   public TopologicalSortSCCTestCase withAdjacencyList(hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>> adjacencyList) {

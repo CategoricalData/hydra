@@ -53,15 +53,11 @@ public class ParamMaybeDefault implements Serializable, Comparable<ParamMaybeDef
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      default_.hashCode(),
-      other.default_.hashCode());
+    cmp = ((Comparable) default_).compareTo(other.default_);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      typeComment.hashCode(),
-      other.typeComment.hashCode());
+    return ((Comparable) typeComment).compareTo(other.typeComment);
   }
   
   public ParamMaybeDefault withParam(hydra.ext.python.syntax.Param param) {

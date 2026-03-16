@@ -60,15 +60,11 @@ public class WithStatement implements Serializable, Comparable<WithStatement> {
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      items.hashCode(),
-      other.items.hashCode());
+    cmp = ((Comparable) items).compareTo(other.items);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      typeComment.hashCode(),
-      other.typeComment.hashCode());
+    cmp = ((Comparable) typeComment).compareTo(other.typeComment);
     if (cmp != 0) {
       return cmp;
     }

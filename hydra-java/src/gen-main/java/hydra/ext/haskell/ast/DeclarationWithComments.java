@@ -55,9 +55,7 @@ public class DeclarationWithComments implements Serializable, Comparable<Declara
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      comments.hashCode(),
-      other.comments.hashCode());
+    return ((Comparable) comments).compareTo(other.comments);
   }
   
   public DeclarationWithComments withBody(hydra.ext.haskell.ast.Declaration body) {

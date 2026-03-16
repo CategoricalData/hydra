@@ -65,9 +65,7 @@ public class Lambda implements Serializable, Comparable<Lambda> {
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      domain.hashCode(),
-      other.domain.hashCode());
+    cmp = ((Comparable) domain).compareTo(other.domain);
     if (cmp != 0) {
       return cmp;
     }

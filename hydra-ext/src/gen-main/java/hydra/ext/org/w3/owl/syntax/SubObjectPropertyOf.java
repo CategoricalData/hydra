@@ -49,15 +49,11 @@ public class SubObjectPropertyOf implements Serializable, Comparable<SubObjectPr
   @SuppressWarnings("unchecked")
   public int compareTo(SubObjectPropertyOf other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      annotations.hashCode(),
-      other.annotations.hashCode());
+    cmp = ((Comparable) annotations).compareTo(other.annotations);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      subProperty.hashCode(),
-      other.subProperty.hashCode());
+    cmp = ((Comparable) subProperty).compareTo(other.subProperty);
     if (cmp != 0) {
       return cmp;
     }

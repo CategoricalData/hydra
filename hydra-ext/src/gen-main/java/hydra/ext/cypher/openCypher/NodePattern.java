@@ -49,21 +49,15 @@ public class NodePattern implements Serializable, Comparable<NodePattern> {
   @SuppressWarnings("unchecked")
   public int compareTo(NodePattern other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      variable.hashCode(),
-      other.variable.hashCode());
+    cmp = ((Comparable) variable).compareTo(other.variable);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      labels.hashCode(),
-      other.labels.hashCode());
+    cmp = ((Comparable) labels).compareTo(other.labels);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      properties.hashCode(),
-      other.properties.hashCode());
+    return ((Comparable) properties).compareTo(other.properties);
   }
   
   public NodePattern withVariable(hydra.util.Maybe<hydra.ext.cypher.openCypher.Variable> variable) {

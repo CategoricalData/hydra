@@ -55,9 +55,7 @@ public class GraphPattern implements Serializable, Comparable<GraphPattern> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      patterns.hashCode(),
-      other.patterns.hashCode());
+    return ((Comparable) patterns).compareTo(other.patterns);
   }
   
   public GraphPattern withGraph(hydra.core.Name graph) {

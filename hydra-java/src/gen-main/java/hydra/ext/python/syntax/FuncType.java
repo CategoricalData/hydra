@@ -42,9 +42,7 @@ public class FuncType implements Serializable, Comparable<FuncType> {
   @SuppressWarnings("unchecked")
   public int compareTo(FuncType other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      type.hashCode(),
-      other.type.hashCode());
+    cmp = ((Comparable) type).compareTo(other.type);
     if (cmp != 0) {
       return cmp;
     }

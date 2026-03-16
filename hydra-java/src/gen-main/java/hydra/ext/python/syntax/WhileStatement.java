@@ -57,9 +57,7 @@ public class WhileStatement implements Serializable, Comparable<WhileStatement> 
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      else_.hashCode(),
-      other.else_.hashCode());
+    return ((Comparable) else_).compareTo(other.else_);
   }
   
   public WhileStatement withCondition(hydra.ext.python.syntax.NamedExpression condition) {

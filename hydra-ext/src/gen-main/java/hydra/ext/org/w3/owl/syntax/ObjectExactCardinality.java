@@ -58,9 +58,7 @@ public class ObjectExactCardinality implements Serializable, Comparable<ObjectEx
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      class_.hashCode(),
-      other.class_.hashCode());
+    return ((Comparable) class_).compareTo(other.class_);
   }
   
   public ObjectExactCardinality withBound(java.math.BigInteger bound) {

@@ -34,8 +34,6 @@ public class Throws implements Serializable, Comparable<Throws> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Throws other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

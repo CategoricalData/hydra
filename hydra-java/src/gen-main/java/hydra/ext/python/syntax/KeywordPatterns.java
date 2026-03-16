@@ -34,8 +34,6 @@ public class KeywordPatterns implements Serializable, Comparable<KeywordPatterns
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(KeywordPatterns other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

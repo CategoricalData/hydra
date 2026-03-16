@@ -42,9 +42,7 @@ public class PatternPart implements Serializable, Comparable<PatternPart> {
   @SuppressWarnings("unchecked")
   public int compareTo(PatternPart other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      variable.hashCode(),
-      other.variable.hashCode());
+    cmp = ((Comparable) variable).compareTo(other.variable);
     if (cmp != 0) {
       return cmp;
     }

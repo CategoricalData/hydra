@@ -42,9 +42,7 @@ public class WhereWithPredicateArgs implements Serializable, Comparable<WhereWit
   @SuppressWarnings("unchecked")
   public int compareTo(WhereWithPredicateArgs other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      leftArg.hashCode(),
-      other.leftArg.hashCode());
+    cmp = ((Comparable) leftArg).compareTo(other.leftArg);
     if (cmp != 0) {
       return cmp;
     }

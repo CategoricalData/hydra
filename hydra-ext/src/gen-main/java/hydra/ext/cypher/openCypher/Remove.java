@@ -34,8 +34,6 @@ public class Remove implements Serializable, Comparable<Remove> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Remove other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

@@ -57,9 +57,7 @@ public class TraversalStrategy implements Serializable, Comparable<TraversalStra
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      configurations.hashCode(),
-      other.configurations.hashCode());
+    return ((Comparable) configurations).compareTo(other.configurations);
   }
   
   public TraversalStrategy withNew(Boolean new_) {

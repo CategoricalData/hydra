@@ -56,9 +56,7 @@ public class ConstructorDeclaration implements Serializable, Comparable<Construc
   @SuppressWarnings("unchecked")
   public int compareTo(ConstructorDeclaration other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      modifiers.hashCode(),
-      other.modifiers.hashCode());
+    cmp = ((Comparable) modifiers).compareTo(other.modifiers);
     if (cmp != 0) {
       return cmp;
     }
@@ -66,9 +64,7 @@ public class ConstructorDeclaration implements Serializable, Comparable<Construc
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      throws_.hashCode(),
-      other.throws_.hashCode());
+    cmp = ((Comparable) throws_).compareTo(other.throws_);
     if (cmp != 0) {
       return cmp;
     }

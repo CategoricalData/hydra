@@ -34,8 +34,6 @@ public class ForUpdate implements Serializable, Comparable<ForUpdate> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ForUpdate other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

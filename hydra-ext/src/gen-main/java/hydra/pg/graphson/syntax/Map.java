@@ -34,8 +34,6 @@ public class Map implements Serializable, Comparable<Map> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Map other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

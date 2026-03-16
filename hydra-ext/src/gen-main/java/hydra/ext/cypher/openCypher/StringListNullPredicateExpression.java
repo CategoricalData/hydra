@@ -46,9 +46,7 @@ public class StringListNullPredicateExpression implements Serializable, Comparab
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      right.hashCode(),
-      other.right.hashCode());
+    return ((Comparable) right).compareTo(other.right);
   }
   
   public StringListNullPredicateExpression withLeft(hydra.ext.cypher.openCypher.AddOrSubtractExpression left) {

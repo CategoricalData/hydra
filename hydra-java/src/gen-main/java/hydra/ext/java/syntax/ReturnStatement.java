@@ -34,8 +34,6 @@ public class ReturnStatement implements Serializable, Comparable<ReturnStatement
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ReturnStatement other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

@@ -65,15 +65,11 @@ public class CaseStatement implements Serializable, Comparable<CaseStatement> {
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      default_.hashCode(),
-      other.default_.hashCode());
+    cmp = ((Comparable) default_).compareTo(other.default_);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      cases.hashCode(),
-      other.cases.hashCode());
+    return ((Comparable) cases).compareTo(other.cases);
   }
   
   public CaseStatement withTypeName(hydra.core.Name typeName) {

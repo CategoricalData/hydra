@@ -46,9 +46,7 @@ public class AssociativeExpression implements Serializable, Comparable<Associati
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      operands.hashCode(),
-      other.operands.hashCode());
+    return ((Comparable) operands).compareTo(other.operands);
   }
   
   public AssociativeExpression withOperator(hydra.pg.query.BinaryOperator operator) {

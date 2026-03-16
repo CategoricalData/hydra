@@ -85,27 +85,19 @@ public class Module implements Serializable, Comparable<Module> {
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      elements.hashCode(),
-      other.elements.hashCode());
+    cmp = ((Comparable) elements).compareTo(other.elements);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      termDependencies.hashCode(),
-      other.termDependencies.hashCode());
+    cmp = ((Comparable) termDependencies).compareTo(other.termDependencies);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      typeDependencies.hashCode(),
-      other.typeDependencies.hashCode());
+    cmp = ((Comparable) typeDependencies).compareTo(other.typeDependencies);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      description.hashCode(),
-      other.description.hashCode());
+    return ((Comparable) description).compareTo(other.description);
   }
   
   public Module withNamespace(hydra.module.Namespace namespace) {

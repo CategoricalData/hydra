@@ -55,9 +55,7 @@ public class DataExactCardinality implements Serializable, Comparable<DataExactC
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      range.hashCode(),
-      other.range.hashCode());
+    return ((Comparable) range).compareTo(other.range);
   }
   
   public DataExactCardinality withBound(java.math.BigInteger bound) {

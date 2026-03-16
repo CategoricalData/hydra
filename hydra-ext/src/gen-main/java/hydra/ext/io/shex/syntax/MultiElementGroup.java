@@ -53,15 +53,11 @@ public class MultiElementGroup implements Serializable, Comparable<MultiElementG
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      listOfSequence.hashCode(),
-      other.listOfSequence.hashCode());
+    cmp = ((Comparable) listOfSequence).compareTo(other.listOfSequence);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      Semi.hashCode(),
-      other.Semi.hashCode());
+    return ((Comparable) Semi).compareTo(other.Semi);
   }
   
   public MultiElementGroup withUnaryTripleExpr(hydra.ext.io.shex.syntax.UnaryTripleExpr UnaryTripleExpr) {

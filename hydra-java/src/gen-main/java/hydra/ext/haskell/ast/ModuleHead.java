@@ -61,9 +61,7 @@ public class ModuleHead implements Serializable, Comparable<ModuleHead> {
   @SuppressWarnings("unchecked")
   public int compareTo(ModuleHead other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      comments.hashCode(),
-      other.comments.hashCode());
+    cmp = ((Comparable) comments).compareTo(other.comments);
     if (cmp != 0) {
       return cmp;
     }
@@ -71,9 +69,7 @@ public class ModuleHead implements Serializable, Comparable<ModuleHead> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      exports.hashCode(),
-      other.exports.hashCode());
+    return ((Comparable) exports).compareTo(other.exports);
   }
   
   public ModuleHead withComments(hydra.util.Maybe<String> comments) {

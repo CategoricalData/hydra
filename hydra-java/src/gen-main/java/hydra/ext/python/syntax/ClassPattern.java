@@ -53,15 +53,11 @@ public class ClassPattern implements Serializable, Comparable<ClassPattern> {
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      positionalPatterns.hashCode(),
-      other.positionalPatterns.hashCode());
+    cmp = ((Comparable) positionalPatterns).compareTo(other.positionalPatterns);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      keywordPatterns.hashCode(),
-      other.keywordPatterns.hashCode());
+    return ((Comparable) keywordPatterns).compareTo(other.keywordPatterns);
   }
   
   public ClassPattern withNameOrAttribute(hydra.ext.python.syntax.NameOrAttribute nameOrAttribute) {

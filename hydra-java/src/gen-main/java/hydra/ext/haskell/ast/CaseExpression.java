@@ -55,9 +55,7 @@ public class CaseExpression implements Serializable, Comparable<CaseExpression> 
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      alternatives.hashCode(),
-      other.alternatives.hashCode());
+    return ((Comparable) alternatives).compareTo(other.alternatives);
   }
   
   public CaseExpression withCase(hydra.ext.haskell.ast.Expression case_) {

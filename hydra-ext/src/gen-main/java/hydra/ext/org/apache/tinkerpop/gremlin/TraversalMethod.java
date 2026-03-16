@@ -1108,9 +1108,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       V o = (V) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1150,9 +1148,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       E o = (E) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1232,9 +1228,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       AddV o = (AddV) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1274,9 +1268,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       MergeE o = (MergeE) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1316,9 +1308,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       MergeV o = (MergeV) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1438,9 +1428,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       And o = (And) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1560,9 +1548,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Barrier o = (Barrier) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1602,9 +1588,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Both o = (Both) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1644,9 +1628,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       BothE o = (BothE) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -1881,9 +1863,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Coalesce o = (Coalesce) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -2078,9 +2058,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Count o = (Count) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -2310,9 +2288,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       ElementMap o = (ElementMap) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -2352,9 +2328,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Emit o = (Emit) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -2474,9 +2448,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Fold o = (Fold) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -2556,9 +2528,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Group o = (Group) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -2598,9 +2568,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       GroupCount o = (GroupCount) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -2950,9 +2918,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       In o = (In) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -2992,9 +2958,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       InE o = (InE) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -3144,9 +3108,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Inject o = (Inject) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -3376,9 +3338,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Loops o = (Loops) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -3458,9 +3418,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Match o = (Match) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -3540,9 +3498,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Max o = (Max) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -3582,9 +3538,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Mean o = (Mean) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -3624,9 +3578,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Min o = (Min) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -3826,9 +3778,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Or o = (Or) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -3868,9 +3818,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Order o = (Order) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -3945,9 +3893,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Out o = (Out) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -3987,9 +3933,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       OutE o = (OutE) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -4064,9 +4008,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       PageRank o = (PageRank) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -4176,9 +4118,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Profile o = (Profile) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -4258,9 +4198,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Properties o = (Properties) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -4340,9 +4278,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       PropertyMap o = (PropertyMap) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -4497,9 +4433,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Sack o = (Sack) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -4969,9 +4903,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Sum o = (Sum) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -5011,9 +4943,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Tail o = (Tail) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -5053,9 +4983,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Fail o = (Fail) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -5255,9 +5183,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Tree o = (Tree) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -5332,9 +5258,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Union o = (Union) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -5489,9 +5413,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Values o = (Values) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -5646,9 +5568,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Element o = (Element) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -5768,9 +5688,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       AsString o = (AsString) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -5850,9 +5768,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       ToUpper o = (ToUpper) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -5892,9 +5808,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       ToLower o = (ToLower) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -5934,9 +5848,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Length o = (Length) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -5976,9 +5888,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       Trim o = (Trim) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -6018,9 +5928,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       LTrim o = (LTrim) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -6060,9 +5968,7 @@ public abstract class TraversalMethod implements Serializable, Comparable<Traver
         return tagCmp;
       }
       RTrim o = (RTrim) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

@@ -46,9 +46,7 @@ public class InQueryCall implements Serializable, Comparable<InQueryCall> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      yieldItems.hashCode(),
-      other.yieldItems.hashCode());
+    return ((Comparable) yieldItems).compareTo(other.yieldItems);
   }
   
   public InQueryCall withCall(hydra.ext.cypher.openCypher.ExplicitProcedureInvocation call) {

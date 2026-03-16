@@ -42,9 +42,7 @@ public class ArrayAccess implements Serializable, Comparable<ArrayAccess> {
   @SuppressWarnings("unchecked")
   public int compareTo(ArrayAccess other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      expression.hashCode(),
-      other.expression.hashCode());
+    cmp = ((Comparable) expression).compareTo(other.expression);
     if (cmp != 0) {
       return cmp;
     }

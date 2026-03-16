@@ -46,9 +46,7 @@ public class VariableDeclarator implements Serializable, Comparable<VariableDecl
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      initializer.hashCode(),
-      other.initializer.hashCode());
+    return ((Comparable) initializer).compareTo(other.initializer);
   }
   
   public VariableDeclarator withId(hydra.ext.java.syntax.VariableDeclaratorId id) {

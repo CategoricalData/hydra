@@ -42,9 +42,7 @@ public class VertexPropertyValue implements Serializable, Comparable<VertexPrope
   @SuppressWarnings("unchecked")
   public int compareTo(VertexPropertyValue other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      id.hashCode(),
-      other.id.hashCode());
+    cmp = ((Comparable) id).compareTo(other.id);
     if (cmp != 0) {
       return cmp;
     }

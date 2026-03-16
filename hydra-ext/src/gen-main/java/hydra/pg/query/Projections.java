@@ -46,9 +46,7 @@ public class Projections implements Serializable, Comparable<Projections> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      explicit.hashCode(),
-      other.explicit.hashCode());
+    return ((Comparable) explicit).compareTo(other.explicit);
   }
   
   public Projections withAll(Boolean all) {

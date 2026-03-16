@@ -46,9 +46,7 @@ public class TypeName implements Serializable, Comparable<TypeName> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      qualifier.hashCode(),
-      other.qualifier.hashCode());
+    return ((Comparable) qualifier).compareTo(other.qualifier);
   }
   
   public TypeName withIdentifier(hydra.ext.java.syntax.TypeIdentifier identifier) {

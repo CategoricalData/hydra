@@ -24,7 +24,8 @@ import java.util.stream.StreamSupport;
  *
  * @param <T> the element type
  */
-public abstract class ConsList<T> extends AbstractList<T> implements Serializable {
+@SuppressWarnings("rawtypes")
+public abstract class ConsList<T> extends AbstractList<T> implements Serializable, Comparable<ConsList> {
 
     @SuppressWarnings("rawtypes")
     private static final Nil NIL_INSTANCE = new Nil();
@@ -131,6 +132,25 @@ public abstract class ConsList<T> extends AbstractList<T> implements Serializabl
             cur = cur.tail();
         }
         return cur.head();
+    }
+
+    /**
+     * Lexicographic comparison. Elements must be Comparable.
+     */
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(ConsList other) {
+        ConsList<T> a = this;
+        ConsList<?> b = other;
+        while (!a.isEmpty() && !b.isEmpty()) {
+            int cmp = ((Comparable) a.head()).compareTo(b.head());
+            if (cmp != 0) {
+                return cmp;
+            }
+            a = a.tail();
+            b = b.tail();
+        }
+        return Integer.compare(a.size(), b.size());
     }
 
     /**

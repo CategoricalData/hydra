@@ -56,9 +56,7 @@ public class NegativeObjectPropertyAssertion implements Serializable, Comparable
   @SuppressWarnings("unchecked")
   public int compareTo(NegativeObjectPropertyAssertion other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      annotations.hashCode(),
-      other.annotations.hashCode());
+    cmp = ((Comparable) annotations).compareTo(other.annotations);
     if (cmp != 0) {
       return cmp;
     }

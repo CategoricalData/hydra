@@ -40,8 +40,6 @@ public class TypeVariableMetadata implements Serializable, Comparable<TypeVariab
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(TypeVariableMetadata other) {
-    return Integer.compare(
-      classes.hashCode(),
-      other.classes.hashCode());
+    return ((Comparable) classes).compareTo(other.classes);
   }
 }

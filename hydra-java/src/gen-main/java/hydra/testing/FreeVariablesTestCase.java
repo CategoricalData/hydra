@@ -55,9 +55,7 @@ public class FreeVariablesTestCase implements Serializable, Comparable<FreeVaria
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      output.hashCode(),
-      other.output.hashCode());
+    return ((Comparable) output).compareTo(other.output);
   }
   
   public FreeVariablesTestCase withInput(hydra.core.Term input) {

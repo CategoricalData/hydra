@@ -46,9 +46,7 @@ public class RaiseExpression implements Serializable, Comparable<RaiseExpression
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      from.hashCode(),
-      other.from.hashCode());
+    return ((Comparable) from).compareTo(other.from);
   }
   
   public RaiseExpression withExpression(hydra.ext.python.syntax.Expression expression) {

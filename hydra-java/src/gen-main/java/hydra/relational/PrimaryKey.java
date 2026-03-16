@@ -37,8 +37,6 @@ public class PrimaryKey implements Serializable, Comparable<PrimaryKey> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(PrimaryKey other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

@@ -108,9 +108,7 @@ public abstract class DedupArgs implements Serializable, Comparable<DedupArgs> {
         return tagCmp;
       }
       String_ o = (String_) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

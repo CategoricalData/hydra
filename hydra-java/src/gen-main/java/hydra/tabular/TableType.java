@@ -49,9 +49,7 @@ public class TableType implements Serializable, Comparable<TableType> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      columns.hashCode(),
-      other.columns.hashCode());
+    return ((Comparable) columns).compareTo(other.columns);
   }
   
   public TableType withName(hydra.relational.RelationName name) {

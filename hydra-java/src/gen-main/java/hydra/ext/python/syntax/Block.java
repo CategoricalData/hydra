@@ -68,9 +68,7 @@ public abstract class Block implements Serializable, Comparable<Block> {
         return tagCmp;
       }
       Indented o = (Indented) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -110,9 +108,7 @@ public abstract class Block implements Serializable, Comparable<Block> {
         return tagCmp;
       }
       Simple o = (Simple) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

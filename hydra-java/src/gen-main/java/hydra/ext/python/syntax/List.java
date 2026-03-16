@@ -34,8 +34,6 @@ public class List implements Serializable, Comparable<List> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(List other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

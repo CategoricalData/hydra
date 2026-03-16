@@ -34,8 +34,6 @@ public class DelTargets implements Serializable, Comparable<DelTargets> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DelTargets other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

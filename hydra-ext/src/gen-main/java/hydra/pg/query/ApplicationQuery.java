@@ -34,8 +34,6 @@ public class ApplicationQuery implements Serializable, Comparable<ApplicationQue
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ApplicationQuery other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

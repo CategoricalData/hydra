@@ -34,8 +34,6 @@ public class ObjectOneOf implements Serializable, Comparable<ObjectOneOf> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ObjectOneOf other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

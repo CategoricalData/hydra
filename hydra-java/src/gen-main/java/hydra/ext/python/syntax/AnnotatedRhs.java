@@ -108,9 +108,7 @@ public abstract class AnnotatedRhs implements Serializable, Comparable<Annotated
         return tagCmp;
       }
       Star o = (Star) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

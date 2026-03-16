@@ -37,8 +37,6 @@ public class DataOneOf implements Serializable, Comparable<DataOneOf> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(DataOneOf other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

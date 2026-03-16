@@ -49,9 +49,7 @@ public class ElementTypeTree<T> implements Serializable, Comparable<ElementTypeT
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      dependencies.hashCode(),
-      other.dependencies.hashCode());
+    return ((Comparable) dependencies).compareTo(other.dependencies);
   }
   
   public ElementTypeTree withSelf(hydra.pg.model.ElementType<T> self) {

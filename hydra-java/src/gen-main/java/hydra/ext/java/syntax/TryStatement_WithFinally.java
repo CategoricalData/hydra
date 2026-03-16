@@ -53,9 +53,7 @@ public class TryStatement_WithFinally implements Serializable, Comparable<TrySta
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      catches.hashCode(),
-      other.catches.hashCode());
+    cmp = ((Comparable) catches).compareTo(other.catches);
     if (cmp != 0) {
       return cmp;
     }

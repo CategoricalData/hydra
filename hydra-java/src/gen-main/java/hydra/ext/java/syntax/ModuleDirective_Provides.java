@@ -49,9 +49,7 @@ public class ModuleDirective_Provides implements Serializable, Comparable<Module
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      with.hashCode(),
-      other.with.hashCode());
+    return ((Comparable) with).compareTo(other.with);
   }
   
   public ModuleDirective_Provides withTo(hydra.ext.java.syntax.TypeName to) {

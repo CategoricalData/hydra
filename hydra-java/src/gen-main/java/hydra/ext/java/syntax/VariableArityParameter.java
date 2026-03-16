@@ -64,9 +64,7 @@ public class VariableArityParameter implements Serializable, Comparable<Variable
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      annotations.hashCode(),
-      other.annotations.hashCode());
+    cmp = ((Comparable) annotations).compareTo(other.annotations);
     if (cmp != 0) {
       return cmp;
     }

@@ -46,9 +46,7 @@ public class Projection implements Serializable, Comparable<Projection> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      as.hashCode(),
-      other.as.hashCode());
+    return ((Comparable) as).compareTo(other.as);
   }
   
   public Projection withValue(hydra.pg.query.Expression value) {

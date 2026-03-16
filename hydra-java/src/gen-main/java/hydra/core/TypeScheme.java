@@ -61,9 +61,7 @@ public class TypeScheme implements Serializable, Comparable<TypeScheme> {
   @SuppressWarnings("unchecked")
   public int compareTo(TypeScheme other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      variables.hashCode(),
-      other.variables.hashCode());
+    cmp = ((Comparable) variables).compareTo(other.variables);
     if (cmp != 0) {
       return cmp;
     }
@@ -71,9 +69,7 @@ public class TypeScheme implements Serializable, Comparable<TypeScheme> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      constraints.hashCode(),
-      other.constraints.hashCode());
+    return ((Comparable) constraints).compareTo(other.constraints);
   }
   
   public TypeScheme withVariables(hydra.util.ConsList<hydra.core.Name> variables) {

@@ -53,15 +53,11 @@ public class SimpleTypeParameter implements Serializable, Comparable<SimpleTypeP
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      bound.hashCode(),
-      other.bound.hashCode());
+    cmp = ((Comparable) bound).compareTo(other.bound);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      default_.hashCode(),
-      other.default_.hashCode());
+    return ((Comparable) default_).compareTo(other.default_);
   }
   
   public SimpleTypeParameter withName(hydra.ext.python.syntax.Name name) {

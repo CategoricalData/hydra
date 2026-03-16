@@ -34,8 +34,6 @@ public class Dims implements Serializable, Comparable<Dims> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Dims other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

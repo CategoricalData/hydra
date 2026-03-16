@@ -34,8 +34,6 @@ public class ValueSet implements Serializable, Comparable<ValueSet> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ValueSet other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

@@ -46,9 +46,7 @@ public class NormalAnnotation implements Serializable, Comparable<NormalAnnotati
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      pairs.hashCode(),
-      other.pairs.hashCode());
+    return ((Comparable) pairs).compareTo(other.pairs);
   }
   
   public NormalAnnotation withTypeName(hydra.ext.java.syntax.TypeName typeName) {

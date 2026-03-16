@@ -42,9 +42,7 @@ public class SplitArgs implements Serializable, Comparable<SplitArgs> {
   @SuppressWarnings("unchecked")
   public int compareTo(SplitArgs other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      scope.hashCode(),
-      other.scope.hashCode());
+    cmp = ((Comparable) scope).compareTo(other.scope);
     if (cmp != 0) {
       return cmp;
     }

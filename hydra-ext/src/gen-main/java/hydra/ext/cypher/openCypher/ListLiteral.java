@@ -34,8 +34,6 @@ public class ListLiteral implements Serializable, Comparable<ListLiteral> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ListLiteral other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

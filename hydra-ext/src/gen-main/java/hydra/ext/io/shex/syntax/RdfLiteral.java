@@ -46,9 +46,7 @@ public class RdfLiteral implements Serializable, Comparable<RdfLiteral> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      Alts.hashCode(),
-      other.Alts.hashCode());
+    return ((Comparable) Alts).compareTo(other.Alts);
   }
   
   public RdfLiteral withString(hydra.ext.io.shex.syntax.String_ String_) {

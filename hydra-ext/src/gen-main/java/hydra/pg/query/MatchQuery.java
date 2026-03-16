@@ -53,15 +53,11 @@ public class MatchQuery implements Serializable, Comparable<MatchQuery> {
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      pattern.hashCode(),
-      other.pattern.hashCode());
+    cmp = ((Comparable) pattern).compareTo(other.pattern);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      where.hashCode(),
-      other.where.hashCode());
+    return ((Comparable) where).compareTo(other.where);
   }
   
   public MatchQuery withOptional(Boolean optional) {

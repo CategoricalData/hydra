@@ -49,15 +49,11 @@ public class WithClause implements Serializable, Comparable<WithClause> {
   @SuppressWarnings("unchecked")
   public int compareTo(WithClause other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      reading.hashCode(),
-      other.reading.hashCode());
+    cmp = ((Comparable) reading).compareTo(other.reading);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      updating.hashCode(),
-      other.updating.hashCode());
+    cmp = ((Comparable) updating).compareTo(other.updating);
     if (cmp != 0) {
       return cmp;
     }

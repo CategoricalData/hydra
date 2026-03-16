@@ -34,8 +34,6 @@ public class IriRef implements Serializable, Comparable<IriRef> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(IriRef other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

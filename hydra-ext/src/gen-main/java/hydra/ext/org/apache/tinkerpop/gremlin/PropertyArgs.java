@@ -124,9 +124,7 @@ public abstract class PropertyArgs implements Serializable, Comparable<PropertyA
         return tagCmp;
       }
       Objects o = (Objects) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

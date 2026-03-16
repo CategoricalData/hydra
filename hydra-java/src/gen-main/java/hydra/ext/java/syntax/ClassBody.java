@@ -34,8 +34,6 @@ public class ClassBody implements Serializable, Comparable<ClassBody> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(ClassBody other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

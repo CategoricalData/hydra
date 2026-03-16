@@ -34,8 +34,6 @@ public class InterfaceBody implements Serializable, Comparable<InterfaceBody> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(InterfaceBody other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

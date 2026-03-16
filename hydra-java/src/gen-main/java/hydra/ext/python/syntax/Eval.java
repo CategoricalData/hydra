@@ -34,8 +34,6 @@ public class Eval implements Serializable, Comparable<Eval> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Eval other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

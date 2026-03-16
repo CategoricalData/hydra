@@ -58,9 +58,7 @@ public class ObjectMaxCardinality implements Serializable, Comparable<ObjectMaxC
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      class_.hashCode(),
-      other.class_.hashCode());
+    return ((Comparable) class_).compareTo(other.class_);
   }
   
   public ObjectMaxCardinality withBound(java.math.BigInteger bound) {

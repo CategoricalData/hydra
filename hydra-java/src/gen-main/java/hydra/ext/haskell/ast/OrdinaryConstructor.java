@@ -55,9 +55,7 @@ public class OrdinaryConstructor implements Serializable, Comparable<OrdinaryCon
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      fields.hashCode(),
-      other.fields.hashCode());
+    return ((Comparable) fields).compareTo(other.fields);
   }
   
   public OrdinaryConstructor withName(hydra.ext.haskell.ast.Name name) {

@@ -61,9 +61,7 @@ public class BlockStyle implements Serializable, Comparable<BlockStyle> {
   @SuppressWarnings("unchecked")
   public int compareTo(BlockStyle other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      indent.hashCode(),
-      other.indent.hashCode());
+    cmp = ((Comparable) indent).compareTo(other.indent);
     if (cmp != 0) {
       return cmp;
     }

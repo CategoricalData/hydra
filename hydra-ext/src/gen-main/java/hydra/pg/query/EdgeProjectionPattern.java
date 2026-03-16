@@ -60,21 +60,15 @@ public class EdgeProjectionPattern implements Serializable, Comparable<EdgeProje
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      label.hashCode(),
-      other.label.hashCode());
+    cmp = ((Comparable) label).compareTo(other.label);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      properties.hashCode(),
-      other.properties.hashCode());
+    cmp = ((Comparable) properties).compareTo(other.properties);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      vertex.hashCode(),
-      other.vertex.hashCode());
+    return ((Comparable) vertex).compareTo(other.vertex);
   }
   
   public EdgeProjectionPattern withDirection(hydra.pg.model.Direction direction) {

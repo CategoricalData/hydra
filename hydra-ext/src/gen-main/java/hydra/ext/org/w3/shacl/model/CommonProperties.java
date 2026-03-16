@@ -111,15 +111,11 @@ public class CommonProperties implements Serializable, Comparable<CommonProperti
   @SuppressWarnings("unchecked")
   public int compareTo(CommonProperties other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      constraints.hashCode(),
-      other.constraints.hashCode());
+    cmp = ((Comparable) constraints).compareTo(other.constraints);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      deactivated.hashCode(),
-      other.deactivated.hashCode());
+    cmp = ((Comparable) deactivated).compareTo(other.deactivated);
     if (cmp != 0) {
       return cmp;
     }
@@ -131,27 +127,19 @@ public class CommonProperties implements Serializable, Comparable<CommonProperti
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      targetClass.hashCode(),
-      other.targetClass.hashCode());
+    cmp = ((Comparable) targetClass).compareTo(other.targetClass);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      targetNode.hashCode(),
-      other.targetNode.hashCode());
+    cmp = ((Comparable) targetNode).compareTo(other.targetNode);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      targetObjectsOf.hashCode(),
-      other.targetObjectsOf.hashCode());
+    cmp = ((Comparable) targetObjectsOf).compareTo(other.targetObjectsOf);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      targetSubjectsOf.hashCode(),
-      other.targetSubjectsOf.hashCode());
+    return ((Comparable) targetSubjectsOf).compareTo(other.targetSubjectsOf);
   }
   
   public CommonProperties withConstraints(hydra.util.PersistentSet<hydra.ext.org.w3.shacl.model.CommonConstraint> constraints) {

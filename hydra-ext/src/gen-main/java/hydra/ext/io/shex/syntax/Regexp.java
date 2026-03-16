@@ -42,15 +42,11 @@ public class Regexp implements Serializable, Comparable<Regexp> {
   @SuppressWarnings("unchecked")
   public int compareTo(Regexp other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      listOfAlts.hashCode(),
-      other.listOfAlts.hashCode());
+    cmp = ((Comparable) listOfAlts).compareTo(other.listOfAlts);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      listOfRegex.hashCode(),
-      other.listOfRegex.hashCode());
+    return ((Comparable) listOfRegex).compareTo(other.listOfRegex);
   }
   
   public Regexp withListOfAlts(hydra.util.ConsList<hydra.ext.io.shex.syntax.Regexp_ListOfAlts_Elmt> listOfAlts) {

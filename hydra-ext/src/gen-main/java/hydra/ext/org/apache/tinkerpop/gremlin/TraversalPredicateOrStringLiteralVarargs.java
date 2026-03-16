@@ -108,9 +108,7 @@ public abstract class TraversalPredicateOrStringLiteralVarargs implements Serial
         return tagCmp;
       }
       String_ o = (String_) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

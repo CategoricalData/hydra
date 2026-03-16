@@ -68,9 +68,7 @@ public abstract class ForInit implements Serializable, Comparable<ForInit> {
         return tagCmp;
       }
       Statements o = (Statements) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override

@@ -34,8 +34,6 @@ public class IncludeSet implements Serializable, Comparable<IncludeSet> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(IncludeSet other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

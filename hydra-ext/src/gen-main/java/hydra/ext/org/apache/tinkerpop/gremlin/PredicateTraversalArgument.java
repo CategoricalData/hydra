@@ -57,9 +57,7 @@ public class PredicateTraversalArgument implements Serializable, Comparable<Pred
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      traversal2.hashCode(),
-      other.traversal2.hashCode());
+    return ((Comparable) traversal2).compareTo(other.traversal2);
   }
   
   public PredicateTraversalArgument withPredicate(hydra.ext.org.apache.tinkerpop.gremlin.TraversalPredicate predicate) {

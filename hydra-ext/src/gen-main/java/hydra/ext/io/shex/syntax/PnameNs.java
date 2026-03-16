@@ -34,8 +34,6 @@ public class PnameNs implements Serializable, Comparable<PnameNs> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(PnameNs other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

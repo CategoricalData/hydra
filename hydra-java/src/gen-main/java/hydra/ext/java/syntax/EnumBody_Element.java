@@ -42,15 +42,11 @@ public class EnumBody_Element implements Serializable, Comparable<EnumBody_Eleme
   @SuppressWarnings("unchecked")
   public int compareTo(EnumBody_Element other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      constants.hashCode(),
-      other.constants.hashCode());
+    cmp = ((Comparable) constants).compareTo(other.constants);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      bodyDeclarations.hashCode(),
-      other.bodyDeclarations.hashCode());
+    return ((Comparable) bodyDeclarations).compareTo(other.bodyDeclarations);
   }
   
   public EnumBody_Element withConstants(hydra.util.ConsList<hydra.ext.java.syntax.EnumConstant> constants) {

@@ -34,8 +34,6 @@ public class Pattern implements Serializable, Comparable<Pattern> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Pattern other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

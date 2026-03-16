@@ -69,9 +69,7 @@ public class VertexType<T> implements Serializable, Comparable<VertexType<T>> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      properties.hashCode(),
-      other.properties.hashCode());
+    return ((Comparable) properties).compareTo(other.properties);
   }
   
   public VertexType withLabel(hydra.pg.model.VertexLabel label) {

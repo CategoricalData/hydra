@@ -49,9 +49,7 @@ public class MethodReference_Super implements Serializable, Comparable<MethodRef
   @SuppressWarnings("unchecked")
   public int compareTo(MethodReference_Super other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      typeArguments.hashCode(),
-      other.typeArguments.hashCode());
+    cmp = ((Comparable) typeArguments).compareTo(other.typeArguments);
     if (cmp != 0) {
       return cmp;
     }

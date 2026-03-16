@@ -51,9 +51,7 @@ public class QualifiedName implements Serializable, Comparable<QualifiedName> {
   @SuppressWarnings("unchecked")
   public int compareTo(QualifiedName other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      namespace.hashCode(),
-      other.namespace.hashCode());
+    cmp = ((Comparable) namespace).compareTo(other.namespace);
     if (cmp != 0) {
       return cmp;
     }

@@ -63,9 +63,7 @@ public class ClassDefinition implements Serializable, Comparable<ClassDefinition
   @SuppressWarnings("unchecked")
   public int compareTo(ClassDefinition other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      decorators.hashCode(),
-      other.decorators.hashCode());
+    cmp = ((Comparable) decorators).compareTo(other.decorators);
     if (cmp != 0) {
       return cmp;
     }
@@ -73,15 +71,11 @@ public class ClassDefinition implements Serializable, Comparable<ClassDefinition
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      typeParams.hashCode(),
-      other.typeParams.hashCode());
+    cmp = ((Comparable) typeParams).compareTo(other.typeParams);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      arguments.hashCode(),
-      other.arguments.hashCode());
+    cmp = ((Comparable) arguments).compareTo(other.arguments);
     if (cmp != 0) {
       return cmp;
     }

@@ -46,9 +46,7 @@ public class InlineShapeOr implements Serializable, Comparable<InlineShapeOr> {
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      listOfSequence.hashCode(),
-      other.listOfSequence.hashCode());
+    return ((Comparable) listOfSequence).compareTo(other.listOfSequence);
   }
   
   public InlineShapeOr withShapeAnd(hydra.ext.io.shex.syntax.ShapeAnd ShapeAnd) {

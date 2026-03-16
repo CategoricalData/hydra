@@ -58,21 +58,15 @@ public class Property implements Serializable, Comparable<Property> {
   @SuppressWarnings("unchecked")
   public int compareTo(Property other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      domain.hashCode(),
-      other.domain.hashCode());
+    cmp = ((Comparable) domain).compareTo(other.domain);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      range.hashCode(),
-      other.range.hashCode());
+    cmp = ((Comparable) range).compareTo(other.range);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      subPropertyOf.hashCode(),
-      other.subPropertyOf.hashCode());
+    return ((Comparable) subPropertyOf).compareTo(other.subPropertyOf);
   }
   
   public Property withDomain(hydra.util.PersistentSet<hydra.ext.org.w3.rdf.syntax.RdfsClass> domain) {

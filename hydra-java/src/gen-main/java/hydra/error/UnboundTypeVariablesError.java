@@ -51,9 +51,7 @@ public class UnboundTypeVariablesError implements Serializable, Comparable<Unbou
   @SuppressWarnings("unchecked")
   public int compareTo(UnboundTypeVariablesError other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      variables.hashCode(),
-      other.variables.hashCode());
+    cmp = ((Comparable) variables).compareTo(other.variables);
     if (cmp != 0) {
       return cmp;
     }

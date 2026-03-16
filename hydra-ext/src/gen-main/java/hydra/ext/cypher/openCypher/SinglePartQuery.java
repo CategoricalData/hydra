@@ -49,21 +49,15 @@ public class SinglePartQuery implements Serializable, Comparable<SinglePartQuery
   @SuppressWarnings("unchecked")
   public int compareTo(SinglePartQuery other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      reading.hashCode(),
-      other.reading.hashCode());
+    cmp = ((Comparable) reading).compareTo(other.reading);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      updating.hashCode(),
-      other.updating.hashCode());
+    cmp = ((Comparable) updating).compareTo(other.updating);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      return_.hashCode(),
-      other.return_.hashCode());
+    return ((Comparable) return_).compareTo(other.return_);
   }
   
   public SinglePartQuery withReading(hydra.util.ConsList<hydra.ext.cypher.openCypher.ReadingClause> reading) {

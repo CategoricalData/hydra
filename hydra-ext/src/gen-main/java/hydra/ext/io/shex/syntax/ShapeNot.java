@@ -42,9 +42,7 @@ public class ShapeNot implements Serializable, Comparable<ShapeNot> {
   @SuppressWarnings("unchecked")
   public int compareTo(ShapeNot other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      NOT.hashCode(),
-      other.NOT.hashCode());
+    cmp = ((Comparable) NOT).compareTo(other.NOT);
     if (cmp != 0) {
       return cmp;
     }

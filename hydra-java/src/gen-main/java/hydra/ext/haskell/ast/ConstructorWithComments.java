@@ -55,9 +55,7 @@ public class ConstructorWithComments implements Serializable, Comparable<Constru
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      comments.hashCode(),
-      other.comments.hashCode());
+    return ((Comparable) comments).compareTo(other.comments);
   }
   
   public ConstructorWithComments withBody(hydra.ext.haskell.ast.Constructor body) {

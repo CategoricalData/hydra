@@ -34,8 +34,6 @@ public class SemanticActions implements Serializable, Comparable<SemanticActions
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(SemanticActions other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }

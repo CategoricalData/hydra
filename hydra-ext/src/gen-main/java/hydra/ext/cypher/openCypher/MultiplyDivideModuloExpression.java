@@ -46,9 +46,7 @@ public class MultiplyDivideModuloExpression implements Serializable, Comparable<
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      right.hashCode(),
-      other.right.hashCode());
+    return ((Comparable) right).compareTo(other.right);
   }
   
   public MultiplyDivideModuloExpression withLeft(hydra.ext.cypher.openCypher.PowerOfExpression left) {

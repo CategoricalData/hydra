@@ -113,9 +113,7 @@ public class PythonEnvironment implements Serializable, Comparable<PythonEnviron
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      nullaryBindings.hashCode(),
-      other.nullaryBindings.hashCode());
+    cmp = ((Comparable) nullaryBindings).compareTo(other.nullaryBindings);
     if (cmp != 0) {
       return cmp;
     }
@@ -127,9 +125,7 @@ public class PythonEnvironment implements Serializable, Comparable<PythonEnviron
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      inlineVariables.hashCode(),
-      other.inlineVariables.hashCode());
+    return ((Comparable) inlineVariables).compareTo(other.inlineVariables);
   }
   
   public PythonEnvironment withNamespaces(hydra.module.Namespaces<hydra.ext.python.syntax.DottedName> namespaces) {

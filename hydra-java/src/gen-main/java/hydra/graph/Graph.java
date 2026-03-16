@@ -111,51 +111,35 @@ public class Graph implements Serializable, Comparable<Graph> {
   @SuppressWarnings("unchecked")
   public int compareTo(Graph other) {
     int cmp = 0;
-    cmp = Integer.compare(
-      boundTerms.hashCode(),
-      other.boundTerms.hashCode());
+    cmp = ((Comparable) boundTerms).compareTo(other.boundTerms);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      boundTypes.hashCode(),
-      other.boundTypes.hashCode());
+    cmp = ((Comparable) boundTypes).compareTo(other.boundTypes);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      classConstraints.hashCode(),
-      other.classConstraints.hashCode());
+    cmp = ((Comparable) classConstraints).compareTo(other.classConstraints);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      lambdaVariables.hashCode(),
-      other.lambdaVariables.hashCode());
+    cmp = ((Comparable) lambdaVariables).compareTo(other.lambdaVariables);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      metadata.hashCode(),
-      other.metadata.hashCode());
+    cmp = ((Comparable) metadata).compareTo(other.metadata);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      primitives.hashCode(),
-      other.primitives.hashCode());
+    cmp = ((Comparable) primitives).compareTo(other.primitives);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      schemaTypes.hashCode(),
-      other.schemaTypes.hashCode());
+    cmp = ((Comparable) schemaTypes).compareTo(other.schemaTypes);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      typeVariables.hashCode(),
-      other.typeVariables.hashCode());
+    return ((Comparable) typeVariables).compareTo(other.typeVariables);
   }
   
   public Graph withBoundTerms(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> boundTerms) {

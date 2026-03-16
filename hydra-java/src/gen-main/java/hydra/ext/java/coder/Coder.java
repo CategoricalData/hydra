@@ -335,26 +335,6 @@ public interface Coder {
       }
       
       @Override
-      public Boolean visit(hydra.core.Type.List ignored) {
-        return true;
-      }
-      
-      @Override
-      public Boolean visit(hydra.core.Type.Set ignored) {
-        return true;
-      }
-      
-      @Override
-      public Boolean visit(hydra.core.Type.Map ignored) {
-        return true;
-      }
-      
-      @Override
-      public Boolean visit(hydra.core.Type.Maybe ignored) {
-        return true;
-      }
-      
-      @Override
       public Boolean visit(hydra.core.Type.Either ignored) {
         return true;
       }

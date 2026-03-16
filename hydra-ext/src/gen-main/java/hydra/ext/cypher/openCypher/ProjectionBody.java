@@ -71,21 +71,15 @@ public class ProjectionBody implements Serializable, Comparable<ProjectionBody> 
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      order.hashCode(),
-      other.order.hashCode());
+    cmp = ((Comparable) order).compareTo(other.order);
     if (cmp != 0) {
       return cmp;
     }
-    cmp = Integer.compare(
-      skip.hashCode(),
-      other.skip.hashCode());
+    cmp = ((Comparable) skip).compareTo(other.skip);
     if (cmp != 0) {
       return cmp;
     }
-    return Integer.compare(
-      limit.hashCode(),
-      other.limit.hashCode());
+    return ((Comparable) limit).compareTo(other.limit);
   }
   
   public ProjectionBody withDistinct(Boolean distinct) {

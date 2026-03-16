@@ -34,8 +34,6 @@ public class LambdaSlashNoDefault implements Serializable, Comparable<LambdaSlas
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(LambdaSlashNoDefault other) {
-    return Integer.compare(
-      parameters.hashCode(),
-      other.parameters.hashCode());
+    return ((Comparable) parameters).compareTo(other.parameters);
   }
 }

@@ -34,8 +34,6 @@ public class Graph implements Serializable, Comparable<Graph> {
   @Override
   @SuppressWarnings("unchecked")
   public int compareTo(Graph other) {
-    return Integer.compare(
-      value.hashCode(),
-      other.value.hashCode());
+    return ((Comparable) value).compareTo(other.value);
   }
 }
