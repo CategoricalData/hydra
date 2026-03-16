@@ -209,7 +209,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -247,7 +247,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -285,7 +285,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -323,7 +323,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -361,7 +361,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -403,7 +403,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -442,7 +442,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -484,7 +484,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -527,7 +527,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -570,7 +570,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -613,7 +613,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -652,7 +652,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -694,7 +694,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -737,7 +737,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -780,7 +780,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -819,7 +819,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -857,7 +857,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -895,7 +895,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -933,7 +933,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -971,7 +971,7 @@ public abstract class TermAccessor implements Serializable, Comparable<TermAcces
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TermAccessor other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

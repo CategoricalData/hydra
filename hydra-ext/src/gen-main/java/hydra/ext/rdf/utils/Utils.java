@@ -43,7 +43,7 @@ public interface Utils {
       
       @Override
       public hydra.ext.org.w3.rdf.syntax.Literal visit(hydra.core.Literal.Float_ f) {
-        return ((f).value).accept(new hydra.core.FloatValue.PartialVisitor<>() {
+        return (f).value.accept(new hydra.core.FloatValue.PartialVisitor<>() {
           @Override
           public hydra.ext.org.w3.rdf.syntax.Literal visit(hydra.core.FloatValue.Bigfloat v) {
             return new hydra.ext.org.w3.rdf.syntax.Literal(hydra.lib.literals.ShowBigfloat.apply((v).value), hydra.ext.rdf.utils.Utils.xmlSchemaDatatypeIri("decimal"), (hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.LanguageTag>) (hydra.util.Maybe.<hydra.ext.org.w3.rdf.syntax.LanguageTag>nothing()));
@@ -63,7 +63,7 @@ public interface Utils {
       
       @Override
       public hydra.ext.org.w3.rdf.syntax.Literal visit(hydra.core.Literal.Integer_ i) {
-        return ((i).value).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
+        return (i).value.accept(new hydra.core.IntegerValue.PartialVisitor<>() {
           @Override
           public hydra.ext.org.w3.rdf.syntax.Literal visit(hydra.core.IntegerValue.Bigint v) {
             return new hydra.ext.org.w3.rdf.syntax.Literal(hydra.lib.literals.ShowBigint.apply((v).value), hydra.ext.rdf.utils.Utils.xmlSchemaDatatypeIri("integer"), (hydra.util.Maybe<hydra.ext.org.w3.rdf.syntax.LanguageTag>) (hydra.util.Maybe.<hydra.ext.org.w3.rdf.syntax.LanguageTag>nothing()));
@@ -202,7 +202,7 @@ public interface Utils {
   
   static hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple> triplesOf(hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Description> descs) {
     return hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.ext.org.w3.rdf.syntax.Description, hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>>) (d -> hydra.lib.sets.ToList.apply(((d).graph).value)),
+      (java.util.function.Function<hydra.ext.org.w3.rdf.syntax.Description, hydra.util.ConsList<hydra.ext.org.w3.rdf.syntax.Triple>>) (d -> hydra.lib.sets.ToList.apply((d).graph.value)),
       descs));
   }
   

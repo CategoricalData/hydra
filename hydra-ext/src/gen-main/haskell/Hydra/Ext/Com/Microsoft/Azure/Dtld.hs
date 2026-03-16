@@ -40,25 +40,25 @@ data Command =
     commandResponse :: (Maybe CommandPayload)}
   deriving (Eq, Ord, Read, Show)
 
-_Command = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Command")
+_Command = Core.Name "hydra.ext.com.microsoft.azure.dtld.Command"
 
-_Command_type = (Core.Name "type")
+_Command_type = Core.Name "type"
 
-_Command_name = (Core.Name "name")
+_Command_name = Core.Name "name"
 
-_Command_id = (Core.Name "id")
+_Command_id = Core.Name "id"
 
-_Command_comment = (Core.Name "comment")
+_Command_comment = Core.Name "comment"
 
-_Command_description = (Core.Name "description")
+_Command_description = Core.Name "description"
 
-_Command_displayName = (Core.Name "displayName")
+_Command_displayName = Core.Name "displayName"
 
-_Command_commandType = (Core.Name "commandType")
+_Command_commandType = Core.Name "commandType"
 
-_Command_request = (Core.Name "request")
+_Command_request = Core.Name "request"
 
-_Command_response = (Core.Name "response")
+_Command_response = Core.Name "response"
 
 -- | A CommandPayload describes the inputs to or the outputs from a Command.
 data CommandPayload = 
@@ -77,19 +77,19 @@ data CommandPayload =
     commandPayloadDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_CommandPayload = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload")
+_CommandPayload = Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandPayload"
 
-_CommandPayload_name = (Core.Name "name")
+_CommandPayload_name = Core.Name "name"
 
-_CommandPayload_schema = (Core.Name "schema")
+_CommandPayload_schema = Core.Name "schema"
 
-_CommandPayload_id = (Core.Name "id")
+_CommandPayload_id = Core.Name "id"
 
-_CommandPayload_comment = (Core.Name "comment")
+_CommandPayload_comment = Core.Name "comment"
 
-_CommandPayload_description = (Core.Name "description")
+_CommandPayload_description = Core.Name "description"
 
-_CommandPayload_displayName = (Core.Name "displayName")
+_CommandPayload_displayName = Core.Name "displayName"
 
 -- | CommandType is deprecated. Either value, synchronous or asynchronous, has the same meaning: a command that starts execution within a configurable time and that completes execution within a configurable time.
 data CommandType = 
@@ -97,11 +97,11 @@ data CommandType =
   CommandTypeAsynchronous 
   deriving (Eq, Ord, Read, Show)
 
-_CommandType = (Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandType")
+_CommandType = Core.Name "hydra.ext.com.microsoft.azure.dtld.CommandType"
 
-_CommandType_synchronous = (Core.Name "synchronous")
+_CommandType_synchronous = Core.Name "synchronous"
 
-_CommandType_asynchronous = (Core.Name "asynchronous")
+_CommandType_asynchronous = Core.Name "asynchronous"
 
 -- | Components enable interfaces to be composed of other interfaces. Components are different from relationships because they describe contents that are directly part of the interface. (A relationship describes a link between two interfaces.)
 data Component = 
@@ -122,21 +122,21 @@ data Component =
     componentDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_Component = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Component")
+_Component = Core.Name "hydra.ext.com.microsoft.azure.dtld.Component"
 
-_Component_type = (Core.Name "type")
+_Component_type = Core.Name "type"
 
-_Component_name = (Core.Name "name")
+_Component_name = Core.Name "name"
 
-_Component_schema = (Core.Name "schema")
+_Component_schema = Core.Name "schema"
 
-_Component_id = (Core.Name "id")
+_Component_id = Core.Name "id"
 
-_Component_comment = (Core.Name "comment")
+_Component_comment = Core.Name "comment"
 
-_Component_description = (Core.Name "description")
+_Component_description = Core.Name "description"
 
-_Component_displayName = (Core.Name "displayName")
+_Component_displayName = Core.Name "displayName"
 
 -- | A digital twin model identifier
 newtype Dtmi = 
@@ -144,7 +144,7 @@ newtype Dtmi =
     unDtmi :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Dtmi = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Dtmi")
+_Dtmi = Core.Name "hydra.ext.com.microsoft.azure.dtld.Dtmi"
 
 -- | An EnumValue describes an element of an Enum.
 data EnumValue = 
@@ -163,19 +163,19 @@ data EnumValue =
     enumValueDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_EnumValue = (Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue")
+_EnumValue = Core.Name "hydra.ext.com.microsoft.azure.dtld.EnumValue"
 
-_EnumValue_name = (Core.Name "name")
+_EnumValue_name = Core.Name "name"
 
-_EnumValue_enumValue = (Core.Name "enumValue")
+_EnumValue_enumValue = Core.Name "enumValue"
 
-_EnumValue_id = (Core.Name "id")
+_EnumValue_id = Core.Name "id"
 
-_EnumValue_comment = (Core.Name "comment")
+_EnumValue_comment = Core.Name "comment"
 
-_EnumValue_description = (Core.Name "description")
+_EnumValue_description = Core.Name "description"
 
-_EnumValue_displayName = (Core.Name "displayName")
+_EnumValue_displayName = Core.Name "displayName"
 
 -- | A Field describes a field in an Object.
 data Field = 
@@ -194,30 +194,30 @@ data Field =
     fieldDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_Field = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Field")
+_Field = Core.Name "hydra.ext.com.microsoft.azure.dtld.Field"
 
-_Field_name = (Core.Name "name")
+_Field_name = Core.Name "name"
 
-_Field_schema = (Core.Name "schema")
+_Field_schema = Core.Name "schema"
 
-_Field_id = (Core.Name "id")
+_Field_id = Core.Name "id"
 
-_Field_comment = (Core.Name "comment")
+_Field_comment = Core.Name "comment"
 
-_Field_description = (Core.Name "description")
+_Field_description = Core.Name "description"
 
-_Field_displayName = (Core.Name "displayName")
+_Field_displayName = Core.Name "displayName"
 
 data IntegerOrString = 
   IntegerOrStringInteger Int |
   IntegerOrStringString String
   deriving (Eq, Ord, Read, Show)
 
-_IntegerOrString = (Core.Name "hydra.ext.com.microsoft.azure.dtld.IntegerOrString")
+_IntegerOrString = Core.Name "hydra.ext.com.microsoft.azure.dtld.IntegerOrString"
 
-_IntegerOrString_integer = (Core.Name "integer")
+_IntegerOrString_integer = Core.Name "integer"
 
-_IntegerOrString_string = (Core.Name "string")
+_IntegerOrString_string = Core.Name "string"
 
 data Interface = 
   Interface {
@@ -241,25 +241,25 @@ data Interface =
     interfaceSchemas :: (Maybe (S.Set Schema_Interface))}
   deriving (Eq, Ord, Read, Show)
 
-_Interface = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface")
+_Interface = Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface"
 
-_Interface_id = (Core.Name "id")
+_Interface_id = Core.Name "id"
 
-_Interface_type = (Core.Name "type")
+_Interface_type = Core.Name "type"
 
-_Interface_context = (Core.Name "context")
+_Interface_context = Core.Name "context"
 
-_Interface_comment = (Core.Name "comment")
+_Interface_comment = Core.Name "comment"
 
-_Interface_contents = (Core.Name "contents")
+_Interface_contents = Core.Name "contents"
 
-_Interface_description = (Core.Name "description")
+_Interface_description = Core.Name "description"
 
-_Interface_displayName = (Core.Name "displayName")
+_Interface_displayName = Core.Name "displayName"
 
-_Interface_extends = (Core.Name "extends")
+_Interface_extends = Core.Name "extends"
 
-_Interface_schemas = (Core.Name "schemas")
+_Interface_schemas = Core.Name "schemas"
 
 data Interface_Contents = 
   Interface_ContentsCommand Command |
@@ -269,24 +269,24 @@ data Interface_Contents =
   Interface_ContentsTelemetry Telemetry
   deriving (Eq, Ord, Read, Show)
 
-_Interface_Contents = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface_Contents")
+_Interface_Contents = Core.Name "hydra.ext.com.microsoft.azure.dtld.Interface_Contents"
 
-_Interface_Contents_command = (Core.Name "command")
+_Interface_Contents_command = Core.Name "command"
 
-_Interface_Contents_component = (Core.Name "component")
+_Interface_Contents_component = Core.Name "component"
 
-_Interface_Contents_property = (Core.Name "property")
+_Interface_Contents_property = Core.Name "property"
 
-_Interface_Contents_relationship = (Core.Name "relationship")
+_Interface_Contents_relationship = Core.Name "relationship"
 
-_Interface_Contents_telemetry = (Core.Name "telemetry")
+_Interface_Contents_telemetry = Core.Name "telemetry"
 
 newtype Iri = 
   Iri {
     unIri :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Iri = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Iri")
+_Iri = Core.Name "hydra.ext.com.microsoft.azure.dtld.Iri"
 
 -- | A MapKey describes the key in a Map. The schema of a MapKey must be string.
 data MapKey = 
@@ -305,19 +305,19 @@ data MapKey =
     mapKeyDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_MapKey = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey")
+_MapKey = Core.Name "hydra.ext.com.microsoft.azure.dtld.MapKey"
 
-_MapKey_name = (Core.Name "name")
+_MapKey_name = Core.Name "name"
 
-_MapKey_schema = (Core.Name "schema")
+_MapKey_schema = Core.Name "schema"
 
-_MapKey_id = (Core.Name "id")
+_MapKey_id = Core.Name "id"
 
-_MapKey_comment = (Core.Name "comment")
+_MapKey_comment = Core.Name "comment"
 
-_MapKey_description = (Core.Name "description")
+_MapKey_description = Core.Name "description"
 
-_MapKey_displayName = (Core.Name "displayName")
+_MapKey_displayName = Core.Name "displayName"
 
 -- | A MapValue describes the values in a Map.
 data MapValue = 
@@ -336,19 +336,19 @@ data MapValue =
     mapValueDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_MapValue = (Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue")
+_MapValue = Core.Name "hydra.ext.com.microsoft.azure.dtld.MapValue"
 
-_MapValue_name = (Core.Name "name")
+_MapValue_name = Core.Name "name"
 
-_MapValue_schema = (Core.Name "schema")
+_MapValue_schema = Core.Name "schema"
 
-_MapValue_id = (Core.Name "id")
+_MapValue_id = Core.Name "id"
 
-_MapValue_comment = (Core.Name "comment")
+_MapValue_comment = Core.Name "comment"
 
-_MapValue_description = (Core.Name "description")
+_MapValue_description = Core.Name "description"
 
-_MapValue_displayName = (Core.Name "displayName")
+_MapValue_displayName = Core.Name "displayName"
 
 -- | A Property describes the read-only and read/write state of any digital twin. For example, a device serial number may be a read-only property, the desired temperature on a thermostat may be a read-write property; and the name of a room may be a read-write property.
 data Property = 
@@ -373,25 +373,25 @@ data Property =
     propertyWritable :: (Maybe Bool)}
   deriving (Eq, Ord, Read, Show)
 
-_Property = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Property")
+_Property = Core.Name "hydra.ext.com.microsoft.azure.dtld.Property"
 
-_Property_type = (Core.Name "type")
+_Property_type = Core.Name "type"
 
-_Property_name = (Core.Name "name")
+_Property_name = Core.Name "name"
 
-_Property_schema = (Core.Name "schema")
+_Property_schema = Core.Name "schema"
 
-_Property_id = (Core.Name "id")
+_Property_id = Core.Name "id"
 
-_Property_comment = (Core.Name "comment")
+_Property_comment = Core.Name "comment"
 
-_Property_description = (Core.Name "description")
+_Property_description = Core.Name "description"
 
-_Property_displayName = (Core.Name "displayName")
+_Property_displayName = Core.Name "displayName"
 
-_Property_unit = (Core.Name "unit")
+_Property_unit = Core.Name "unit"
 
-_Property_writable = (Core.Name "writable")
+_Property_writable = Core.Name "writable"
 
 -- | A Relationship describes a link to another digital twin and enables graphs of digital twins to be created. Relationships are different from Components because they describe a link to a separate digital twin.
 data Relationship = 
@@ -420,29 +420,29 @@ data Relationship =
     relationshipWritable :: (Maybe Bool)}
   deriving (Eq, Ord, Read, Show)
 
-_Relationship = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship")
+_Relationship = Core.Name "hydra.ext.com.microsoft.azure.dtld.Relationship"
 
-_Relationship_type = (Core.Name "type")
+_Relationship_type = Core.Name "type"
 
-_Relationship_name = (Core.Name "name")
+_Relationship_name = Core.Name "name"
 
-_Relationship_id = (Core.Name "id")
+_Relationship_id = Core.Name "id"
 
-_Relationship_comment = (Core.Name "comment")
+_Relationship_comment = Core.Name "comment"
 
-_Relationship_description = (Core.Name "description")
+_Relationship_description = Core.Name "description"
 
-_Relationship_displayName = (Core.Name "displayName")
+_Relationship_displayName = Core.Name "displayName"
 
-_Relationship_maxMultiplicity = (Core.Name "maxMultiplicity")
+_Relationship_maxMultiplicity = Core.Name "maxMultiplicity"
 
-_Relationship_minMultiplicity = (Core.Name "minMultiplicity")
+_Relationship_minMultiplicity = Core.Name "minMultiplicity"
 
-_Relationship_properties = (Core.Name "properties")
+_Relationship_properties = Core.Name "properties"
 
-_Relationship_target = (Core.Name "target")
+_Relationship_target = Core.Name "target"
 
-_Relationship_writable = (Core.Name "writable")
+_Relationship_writable = Core.Name "writable"
 
 -- | Schemas are used to describe the on-the-wire or serialized format of the data in a digital twin interface. A full set of primitive data types are provided, along with support for a variety of complex schemas in the forms of Arrays, Enums, Maps, and Objects. Schemas described through digital twin's schema definition language are compatible with popular serialization formats, including JSON, Avro, and Protobuf.
 data Schema = 
@@ -450,11 +450,11 @@ data Schema =
   SchemaComplex Schema_Complex
   deriving (Eq, Ord, Read, Show)
 
-_Schema = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema")
+_Schema = Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema"
 
-_Schema_primitive = (Core.Name "primitive")
+_Schema_primitive = Core.Name "primitive"
 
-_Schema_complex = (Core.Name "complex")
+_Schema_complex = Core.Name "complex"
 
 -- | An Array describes an indexable data type where each element is of the same schema. An Array elements' schema can itself be a primitive or complex schema.
 data Schema_Array = 
@@ -473,19 +473,19 @@ data Schema_Array =
     schema_ArrayDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_Schema_Array = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array")
+_Schema_Array = Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Array"
 
-_Schema_Array_type = (Core.Name "type")
+_Schema_Array_type = Core.Name "type"
 
-_Schema_Array_elementSchema = (Core.Name "elementSchema")
+_Schema_Array_elementSchema = Core.Name "elementSchema"
 
-_Schema_Array_id = (Core.Name "id")
+_Schema_Array_id = Core.Name "id"
 
-_Schema_Array_comment = (Core.Name "comment")
+_Schema_Array_comment = Core.Name "comment"
 
-_Schema_Array_description = (Core.Name "description")
+_Schema_Array_description = Core.Name "description"
 
-_Schema_Array_displayName = (Core.Name "displayName")
+_Schema_Array_displayName = Core.Name "displayName"
 
 -- | Complex schemas are designed for supporting complex data types made up of primitive data types. Currently the following complex schemas are provided: Array, Enum, Map, and Object. A complex schema can be specified directly as the value in a schema statement or described in the interface schemas set and referenced in the schema statement.
 data Schema_Complex = 
@@ -495,15 +495,15 @@ data Schema_Complex =
   Schema_ComplexObject Schema_Object
   deriving (Eq, Ord, Read, Show)
 
-_Schema_Complex = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Complex")
+_Schema_Complex = Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Complex"
 
-_Schema_Complex_array = (Core.Name "array")
+_Schema_Complex_array = Core.Name "array"
 
-_Schema_Complex_enum = (Core.Name "enum")
+_Schema_Complex_enum = Core.Name "enum"
 
-_Schema_Complex_map = (Core.Name "map")
+_Schema_Complex_map = Core.Name "map"
 
-_Schema_Complex_object = (Core.Name "object")
+_Schema_Complex_object = Core.Name "object"
 
 -- | An Enum describes a data type with a set of named labels that map to values. The values in an Enum can be either integers or strings, but the labels are always strings.
 data Schema_Enum = 
@@ -524,21 +524,21 @@ data Schema_Enum =
     schema_EnumDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_Schema_Enum = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum")
+_Schema_Enum = Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Enum"
 
-_Schema_Enum_type = (Core.Name "type")
+_Schema_Enum_type = Core.Name "type"
 
-_Schema_Enum_enumValues = (Core.Name "enumValues")
+_Schema_Enum_enumValues = Core.Name "enumValues"
 
-_Schema_Enum_valueSchema = (Core.Name "valueSchema")
+_Schema_Enum_valueSchema = Core.Name "valueSchema"
 
-_Schema_Enum_id = (Core.Name "id")
+_Schema_Enum_id = Core.Name "id"
 
-_Schema_Enum_comment = (Core.Name "comment")
+_Schema_Enum_comment = Core.Name "comment"
 
-_Schema_Enum_description = (Core.Name "description")
+_Schema_Enum_description = Core.Name "description"
 
-_Schema_Enum_displayName = (Core.Name "displayName")
+_Schema_Enum_displayName = Core.Name "displayName"
 
 -- | Within an interface definition, complex schemas may be defined for reusability across Telemetry, Properties, and Commands. This is designed to promote readability and improved maintenance because schemas that are reused can be defined once (per interface). Interface schemas are defined in the schemas property of an interface.
 data Schema_Interface = 
@@ -555,17 +555,17 @@ data Schema_Interface =
     schema_InterfaceDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_Schema_Interface = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface")
+_Schema_Interface = Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface"
 
-_Schema_Interface_id = (Core.Name "id")
+_Schema_Interface_id = Core.Name "id"
 
-_Schema_Interface_type = (Core.Name "type")
+_Schema_Interface_type = Core.Name "type"
 
-_Schema_Interface_comment = (Core.Name "comment")
+_Schema_Interface_comment = Core.Name "comment"
 
-_Schema_Interface_description = (Core.Name "description")
+_Schema_Interface_description = Core.Name "description"
 
-_Schema_Interface_displayName = (Core.Name "displayName")
+_Schema_Interface_displayName = Core.Name "displayName"
 
 data Schema_Interface_Type = 
   Schema_Interface_TypeArray Schema_Array |
@@ -574,15 +574,15 @@ data Schema_Interface_Type =
   Schema_Interface_TypeObject Schema_Object
   deriving (Eq, Ord, Read, Show)
 
-_Schema_Interface_Type = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface_Type")
+_Schema_Interface_Type = Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Interface_Type"
 
-_Schema_Interface_Type_array = (Core.Name "array")
+_Schema_Interface_Type_array = Core.Name "array"
 
-_Schema_Interface_Type_enum = (Core.Name "enum")
+_Schema_Interface_Type_enum = Core.Name "enum"
 
-_Schema_Interface_Type_map = (Core.Name "map")
+_Schema_Interface_Type_map = Core.Name "map"
 
-_Schema_Interface_Type_object = (Core.Name "object")
+_Schema_Interface_Type_object = Core.Name "object"
 
 -- | A Map describes a data type of key-value pairs where the values share the same schema. The key in a Map must be a string. The values in a Map can be any schema.
 data Schema_Map = 
@@ -603,21 +603,21 @@ data Schema_Map =
     schema_MapDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_Schema_Map = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map")
+_Schema_Map = Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Map"
 
-_Schema_Map_type = (Core.Name "type")
+_Schema_Map_type = Core.Name "type"
 
-_Schema_Map_mapKey = (Core.Name "mapKey")
+_Schema_Map_mapKey = Core.Name "mapKey"
 
-_Schema_Map_mapValue = (Core.Name "mapValue")
+_Schema_Map_mapValue = Core.Name "mapValue"
 
-_Schema_Map_id = (Core.Name "id")
+_Schema_Map_id = Core.Name "id"
 
-_Schema_Map_comment = (Core.Name "comment")
+_Schema_Map_comment = Core.Name "comment"
 
-_Schema_Map_description = (Core.Name "description")
+_Schema_Map_description = Core.Name "description"
 
-_Schema_Map_displayName = (Core.Name "displayName")
+_Schema_Map_displayName = Core.Name "displayName"
 
 -- | An Object describes a data type made up of named fields (like a struct in C). The fields in an Object map can be primitive or complex schemas.
 data Schema_Object = 
@@ -636,19 +636,19 @@ data Schema_Object =
     schema_ObjectDisplayName :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_Schema_Object = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object")
+_Schema_Object = Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Object"
 
-_Schema_Object_type = (Core.Name "type")
+_Schema_Object_type = Core.Name "type"
 
-_Schema_Object_fields = (Core.Name "fields")
+_Schema_Object_fields = Core.Name "fields"
 
-_Schema_Object_id = (Core.Name "id")
+_Schema_Object_id = Core.Name "id"
 
-_Schema_Object_comment = (Core.Name "comment")
+_Schema_Object_comment = Core.Name "comment"
 
-_Schema_Object_description = (Core.Name "description")
+_Schema_Object_description = Core.Name "description"
 
-_Schema_Object_displayName = (Core.Name "displayName")
+_Schema_Object_displayName = Core.Name "displayName"
 
 -- | A full set of primitive data types are provided and can be specified directly as the value in a schema statement in a digital twin interface.
 data Schema_Primitive = 
@@ -674,27 +674,27 @@ data Schema_Primitive =
   Schema_PrimitiveTime 
   deriving (Eq, Ord, Read, Show)
 
-_Schema_Primitive = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Primitive")
+_Schema_Primitive = Core.Name "hydra.ext.com.microsoft.azure.dtld.Schema_Primitive"
 
-_Schema_Primitive_boolean = (Core.Name "boolean")
+_Schema_Primitive_boolean = Core.Name "boolean"
 
-_Schema_Primitive_date = (Core.Name "date")
+_Schema_Primitive_date = Core.Name "date"
 
-_Schema_Primitive_dateTime = (Core.Name "dateTime")
+_Schema_Primitive_dateTime = Core.Name "dateTime"
 
-_Schema_Primitive_double = (Core.Name "double")
+_Schema_Primitive_double = Core.Name "double"
 
-_Schema_Primitive_duration = (Core.Name "duration")
+_Schema_Primitive_duration = Core.Name "duration"
 
-_Schema_Primitive_float = (Core.Name "float")
+_Schema_Primitive_float = Core.Name "float"
 
-_Schema_Primitive_integer = (Core.Name "integer")
+_Schema_Primitive_integer = Core.Name "integer"
 
-_Schema_Primitive_long = (Core.Name "long")
+_Schema_Primitive_long = Core.Name "long"
 
-_Schema_Primitive_string = (Core.Name "string")
+_Schema_Primitive_string = Core.Name "string"
 
-_Schema_Primitive_time = (Core.Name "time")
+_Schema_Primitive_time = Core.Name "time"
 
 -- | Telemetry describes the data emitted by any digital twin, whether the data is a regular stream of sensor readings or a computed stream of data, such as occupancy, or an occasional error or information message.
 data Telemetry = 
@@ -717,27 +717,27 @@ data Telemetry =
     telemetryUnit :: (Maybe Unit)}
   deriving (Eq, Ord, Read, Show)
 
-_Telemetry = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry")
+_Telemetry = Core.Name "hydra.ext.com.microsoft.azure.dtld.Telemetry"
 
-_Telemetry_type = (Core.Name "type")
+_Telemetry_type = Core.Name "type"
 
-_Telemetry_name = (Core.Name "name")
+_Telemetry_name = Core.Name "name"
 
-_Telemetry_schema = (Core.Name "schema")
+_Telemetry_schema = Core.Name "schema"
 
-_Telemetry_id = (Core.Name "id")
+_Telemetry_id = Core.Name "id"
 
-_Telemetry_comment = (Core.Name "comment")
+_Telemetry_comment = Core.Name "comment"
 
-_Telemetry_description = (Core.Name "description")
+_Telemetry_description = Core.Name "description"
 
-_Telemetry_displayName = (Core.Name "displayName")
+_Telemetry_displayName = Core.Name "displayName"
 
-_Telemetry_unit = (Core.Name "unit")
+_Telemetry_unit = Core.Name "unit"
 
 newtype Unit = 
   Unit {
     unUnit :: ()}
   deriving (Eq, Ord, Read, Show)
 
-_Unit = (Core.Name "hydra.ext.com.microsoft.azure.dtld.Unit")
+_Unit = Core.Name "hydra.ext.com.microsoft.azure.dtld.Unit"

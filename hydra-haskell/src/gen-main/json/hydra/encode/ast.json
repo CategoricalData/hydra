@@ -707,6 +707,46 @@
                                   "typeName": "hydra.core.Injection"}}},
                             "typeName": "hydra.core.Term"}},
                         "domain": [{"variable": "hydra.ast.BracketExpr"}],
+                        "parameter": "y"}}}},
+                {
+                  "name": "seq",
+                  "term": {
+                    "function": {
+                      "lambda": {
+                        "body": {
+                          "union": {
+                            "field": {
+                              "name": "union",
+                              "term": {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "typeName",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "hydra.ast.Expr"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "field",
+                                      "term": {
+                                        "record": {
+                                          "fields": [
+                                            {
+                                              "name": "name",
+                                              "term": {
+                                                "wrap": {
+                                                  "body": {"literal": {"string": "seq"}},
+                                                  "typeName": "hydra.core.Name"}}},
+                                            {
+                                              "name": "term",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "y"},
+                                                  "function": {"variable": "hydra.encode.ast.seqExpr"}}}}],
+                                          "typeName": "hydra.core.Field"}}}],
+                                  "typeName": "hydra.core.Injection"}}},
+                            "typeName": "hydra.core.Term"}},
+                        "domain": [{"variable": "hydra.ast.SeqExpr"}],
                         "parameter": "y"}}}}],
               "default": null,
               "typeName": "hydra.ast.Expr"}}}},
@@ -1264,6 +1304,102 @@
             "function": {
               "codomain": {"variable": "hydra.core.Term"},
               "domain": {"variable": "hydra.ast.Precedence"}}},
+          "variables": []}]},
+    {
+      "name": "hydra.encode.ast.seqExpr",
+      "term": {
+        "function": {
+          "lambda": {
+            "body": {
+              "union": {
+                "field": {
+                  "name": "record",
+                  "term": {
+                    "record": {
+                      "fields": [
+                        {
+                          "name": "typeName",
+                          "term": {
+                            "wrap": {
+                              "body": {"literal": {"string": "hydra.ast.SeqExpr"}},
+                              "typeName": "hydra.core.Name"}}},
+                        {
+                          "name": "fields",
+                          "term": {
+                            "list": [
+                              {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {
+                                        "wrap": {"body": {"literal": {"string": "op"}}, "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "term",
+                                      "term": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "x"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {"record": {"field": "op", "typeName": "hydra.ast.SeqExpr"}}}}}},
+                                          "function": {"variable": "hydra.encode.ast.op"}}}}],
+                                  "typeName": "hydra.core.Field"}},
+                              {
+                                "record": {
+                                  "fields": [
+                                    {
+                                      "name": "name",
+                                      "term": {
+                                        "wrap": {
+                                          "body": {"literal": {"string": "elements"}},
+                                          "typeName": "hydra.core.Name"}}},
+                                    {
+                                      "name": "term",
+                                      "term": {
+                                        "application": {
+                                          "argument": {
+                                            "application": {
+                                              "argument": {"variable": "x"},
+                                              "function": {
+                                                "function": {
+                                                  "elimination": {"record": {"field": "elements", "typeName": "hydra.ast.SeqExpr"}}}}}},
+                                          "function": {
+                                            "function": {
+                                              "lambda": {
+                                                "body": {
+                                                  "union": {
+                                                    "field": {
+                                                      "name": "list",
+                                                      "term": {
+                                                        "application": {
+                                                          "argument": {"variable": "xs"},
+                                                          "function": {
+                                                            "application": {
+                                                              "argument": {"variable": "hydra.encode.ast.expr"},
+                                                              "function": {
+                                                                "typeApplication": {
+                                                                  "body": {
+                                                                    "typeApplication": {
+                                                                      "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                      "type": {"variable": "hydra.ast.Expr"}}},
+                                                                  "type": {"variable": "hydra.core.Term"}}}}}}}},
+                                                    "typeName": "hydra.core.Term"}},
+                                                "domain": [{"list": {"variable": "hydra.ast.Expr"}}],
+                                                "parameter": "xs"}}}}}}],
+                                  "typeName": "hydra.core.Field"}}]}}],
+                      "typeName": "hydra.core.Record"}}},
+                "typeName": "hydra.core.Term"}},
+            "domain": [{"variable": "hydra.ast.SeqExpr"}],
+            "parameter": "x"}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.core.Term"},
+              "domain": {"variable": "hydra.ast.SeqExpr"}}},
           "variables": []}]},
     {
       "name": "hydra.encode.ast.symbol",

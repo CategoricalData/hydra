@@ -25,10 +25,10 @@ public interface Helpers {
           return hydra.lib.eithers.Either.apply(
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Either<T0, T1>>>) (lv -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<T0, hydra.util.Either<T0, T1>>) (x -> hydra.util.Either.<T0, T1>left(x)),
-              ((leftDecoder).apply(g)).apply(lv))),
+              (leftDecoder).apply(g).apply(lv))),
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Either<T0, T1>>>) (rv -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<T1, hydra.util.Either<T0, T1>>) (x -> hydra.util.Either.<T0, T1>right(x)),
-              ((rightDecoder).apply(g)).apply(rv))),
+              (rightDecoder).apply(g).apply(rv))),
             (e).value);
         }
       })));
@@ -51,7 +51,7 @@ public interface Helpers {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.util.ConsList<T0>> visit(hydra.core.Term.List els) {
           return hydra.lib.eithers.MapList.apply(
-            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, T0>>) (v1 -> ((elemDecoder).apply(g)).apply(v1)),
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, T0>>) (v1 -> (elemDecoder).apply(g).apply(v1)),
             (els).value);
         }
       })));
@@ -77,10 +77,10 @@ public interface Helpers {
             (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<T0, T1>>, hydra.util.PersistentMap<T0, T1>>) ((java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<T0, T1>>, hydra.util.PersistentMap<T0, T1>>) (hydra.lib.maps.FromList::apply)),
             hydra.lib.eithers.MapList.apply(
               (java.util.function.Function<hydra.util.Pair<hydra.core.Term, hydra.core.Term>, hydra.util.Either<hydra.error.DecodingError, hydra.util.Pair<T0, T1>>>) (kv -> hydra.lib.eithers.Bind.apply(
-                ((keyDecoder).apply(g)).apply(hydra.lib.pairs.First.apply(kv)),
+                (keyDecoder).apply(g).apply(hydra.lib.pairs.First.apply(kv)),
                 (java.util.function.Function<T0, hydra.util.Either<hydra.error.DecodingError, hydra.util.Pair<T0, T1>>>) (k -> hydra.lib.eithers.Map.apply(
                   (java.util.function.Function<T1, hydra.util.Pair<T0, T1>>) (v -> (hydra.util.Pair<T0, T1>) ((hydra.util.Pair<T0, T1>) (new hydra.util.Pair<T0, T1>(k, v)))),
-                  ((valDecoder).apply(g)).apply(hydra.lib.pairs.Second.apply(kv)))))),
+                  (valDecoder).apply(g).apply(hydra.lib.pairs.Second.apply(kv)))))),
               hydra.lib.maps.ToList.apply((m).value)));
         }
       })));
@@ -103,7 +103,7 @@ public interface Helpers {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.util.Maybe<T0>> visit(hydra.core.Term.Maybe opt) {
           return hydra.lib.eithers.MapMaybe.apply(
-            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, T0>>) (v1 -> ((elemDecoder).apply(g)).apply(v1)),
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, T0>>) (v1 -> (elemDecoder).apply(g).apply(v1)),
             (opt).value);
         }
       })));
@@ -126,10 +126,10 @@ public interface Helpers {
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.util.Pair<T0, T1>> visit(hydra.core.Term.Pair p) {
           return hydra.lib.eithers.Bind.apply(
-            ((firstDecoder).apply(g)).apply(hydra.lib.pairs.First.apply((p).value)),
+            (firstDecoder).apply(g).apply(hydra.lib.pairs.First.apply((p).value)),
             (java.util.function.Function<T0, hydra.util.Either<hydra.error.DecodingError, hydra.util.Pair<T0, T1>>>) (f -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<T1, hydra.util.Pair<T0, T1>>) (s -> (hydra.util.Pair<T0, T1>) ((hydra.util.Pair<T0, T1>) (new hydra.util.Pair<T0, T1>(f, s)))),
-              ((secondDecoder).apply(g)).apply(hydra.lib.pairs.Second.apply((p).value)))));
+              (secondDecoder).apply(g).apply(hydra.lib.pairs.Second.apply((p).value)))));
         }
       })));
   }
@@ -153,7 +153,7 @@ public interface Helpers {
           return hydra.lib.eithers.Map.apply(
             (java.util.function.Function<hydra.util.ConsList<T0>, hydra.util.PersistentSet<T0>>) (hydra.lib.sets.FromList::apply),
             hydra.lib.eithers.MapList.apply(
-              (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, T0>>) (v1 -> ((elemDecoder).apply(g)).apply(v1)),
+              (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, T0>>) (v1 -> (elemDecoder).apply(g).apply(v1)),
               hydra.lib.sets.ToList.apply((s).value)));
         }
       })));
@@ -196,7 +196,7 @@ public interface Helpers {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, T0> visit(hydra.core.Term.Wrap wt) {
-          return ((bodyDecoder).apply(g)).apply(((wt).value).body);
+          return (bodyDecoder).apply(g).apply((wt).value.body);
         }
       })));
   }
@@ -207,7 +207,7 @@ public interface Helpers {
         "missing field ",
         fieldName,
         " in record")))),
-      (java.util.function.Function<T1, hydra.util.Either<hydra.error.DecodingError, T2>>) (fieldTerm -> ((decoder).apply(g)).apply(fieldTerm)),
+      (java.util.function.Function<T1, hydra.util.Either<hydra.error.DecodingError, T2>>) (fieldTerm -> (decoder).apply(g).apply(fieldTerm)),
       hydra.lib.maps.Lookup.apply(
         new hydra.core.Name(fieldName),
         fieldMap));

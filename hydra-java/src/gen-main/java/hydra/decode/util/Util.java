@@ -17,7 +17,7 @@ public interface Util {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.util.CaseConvention> visit(hydra.core.Term.Union inj) {
-          hydra.core.Field field = ((inj).value).field;
+          hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
           hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.CaseConvention>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
@@ -68,7 +68,7 @@ public interface Util {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.util.Comparison> visit(hydra.core.Term.Union inj) {
-          hydra.core.Field field = ((inj).value).field;
+          hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
           hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Comparison>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
@@ -114,7 +114,7 @@ public interface Util {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.util.Precision> visit(hydra.core.Term.Union inj) {
-          hydra.core.Field field = ((inj).value).field;
+          hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
           hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.util.Precision>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
@@ -135,7 +135,7 @@ public interface Util {
                   
                   @Override
                   public hydra.util.Either<hydra.error.DecodingError, Integer> visit(hydra.core.Term.Literal v) {
-                    return ((v).value).accept(new hydra.core.Literal.PartialVisitor<>() {
+                    return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
                       @Override
                       public hydra.util.Either<hydra.error.DecodingError, Integer> otherwise(hydra.core.Literal instance) {
                         return hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected int32 literal"));
@@ -143,7 +143,7 @@ public interface Util {
                       
                       @Override
                       public hydra.util.Either<hydra.error.DecodingError, Integer> visit(hydra.core.Literal.Integer_ v1) {
-                        return ((v1).value).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
+                        return (v1).value.accept(new hydra.core.IntegerValue.PartialVisitor<>() {
                           @Override
                           public hydra.util.Either<hydra.error.DecodingError, Integer> otherwise(hydra.core.IntegerValue instance) {
                             return hydra.util.Either.<hydra.error.DecodingError, Integer>left(new hydra.error.DecodingError("expected int32 value"));

@@ -21,8 +21,8 @@ data Any =
     anyValue :: B.ByteString}
   deriving (Eq, Ord, Read, Show)
 
-_Any = (Core.Name "hydra.ext.protobuf.any.Any")
+_Any = Core.Name "hydra.ext.protobuf.any.Any"
 
-_Any_typeUrl = (Core.Name "typeUrl")
+_Any_typeUrl = Core.Name "typeUrl"
 
-_Any_value = (Core.Name "value")
+_Any_value = Core.Name "value"

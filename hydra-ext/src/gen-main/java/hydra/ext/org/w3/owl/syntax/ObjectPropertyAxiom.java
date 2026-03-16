@@ -151,7 +151,7 @@ public abstract class ObjectPropertyAxiom implements Serializable, Comparable<Ob
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ObjectPropertyAxiom other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -191,7 +191,7 @@ public abstract class ObjectPropertyAxiom implements Serializable, Comparable<Ob
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ObjectPropertyAxiom other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -231,7 +231,7 @@ public abstract class ObjectPropertyAxiom implements Serializable, Comparable<Ob
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ObjectPropertyAxiom other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -271,7 +271,7 @@ public abstract class ObjectPropertyAxiom implements Serializable, Comparable<Ob
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ObjectPropertyAxiom other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -311,7 +311,7 @@ public abstract class ObjectPropertyAxiom implements Serializable, Comparable<Ob
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ObjectPropertyAxiom other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -351,7 +351,7 @@ public abstract class ObjectPropertyAxiom implements Serializable, Comparable<Ob
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ObjectPropertyAxiom other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -391,7 +391,7 @@ public abstract class ObjectPropertyAxiom implements Serializable, Comparable<Ob
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ObjectPropertyAxiom other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -431,7 +431,7 @@ public abstract class ObjectPropertyAxiom implements Serializable, Comparable<Ob
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ObjectPropertyAxiom other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -471,7 +471,7 @@ public abstract class ObjectPropertyAxiom implements Serializable, Comparable<Ob
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ObjectPropertyAxiom other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -511,7 +511,7 @@ public abstract class ObjectPropertyAxiom implements Serializable, Comparable<Ob
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ObjectPropertyAxiom other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -551,7 +551,7 @@ public abstract class ObjectPropertyAxiom implements Serializable, Comparable<Ob
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ObjectPropertyAxiom other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -591,7 +591,7 @@ public abstract class ObjectPropertyAxiom implements Serializable, Comparable<Ob
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ObjectPropertyAxiom other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -631,7 +631,7 @@ public abstract class ObjectPropertyAxiom implements Serializable, Comparable<Ob
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ObjectPropertyAxiom other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

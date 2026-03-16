@@ -19,16 +19,18 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-tBinding :: (t0 -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Phantoms.TBinding t1))
-tBinding a cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v0 ->  
-    let fieldMap = (Helpers.toFieldMap v0)
-    in (Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "term" (tTerm a) fieldMap cx) (\field_term -> Right (Phantoms.TBinding {
-      Phantoms.tBindingName = field_name,
-      Phantoms.tBindingTerm = field_term}))))
-  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+tBinding :: t0 -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Phantoms.TBinding t1)
+tBinding a cx raw =
+    Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+      Core.TermRecord v0 ->  
+        let fieldMap = Helpers.toFieldMap v0
+        in (Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "term" (tTerm a) fieldMap cx) (\field_term -> Right (Phantoms.TBinding {
+          Phantoms.tBindingName = field_name,
+          Phantoms.tBindingTerm = field_term}))))
+      _ -> Left (Error.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
 
-tTerm :: (t0 -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Phantoms.TTerm t1))
-tTerm a cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermWrap v0 -> (Eithers.map (\b -> Phantoms.TTerm b) (Core_.term cx (Core.wrappedTermBody v0)))
-  _ -> (Left (Error.DecodingError "expected wrapped type"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+tTerm :: t0 -> Graph.Graph -> Core.Term -> Either Error.DecodingError (Phantoms.TTerm t1)
+tTerm a cx raw =
+    Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+      Core.TermWrap v0 -> Eithers.map (\b -> Phantoms.TTerm b) (Core_.term cx (Core.wrappedTermBody v0))
+      _ -> Left (Error.DecodingError "expected wrapped type")) (Lexical.stripAndDereferenceTermEither cx raw)

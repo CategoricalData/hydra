@@ -12,7 +12,7 @@ public interface Decode {
       public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.ext.org.yaml.model.Node.Mapping m) {
         java.util.function.Function<hydra.util.Pair<hydra.ext.org.yaml.model.Node, hydra.ext.org.yaml.model.Node>, hydra.util.Either<String, hydra.util.Pair<String, hydra.json.model.Value>>> convertEntry = (java.util.function.Function<hydra.util.Pair<hydra.ext.org.yaml.model.Node, hydra.ext.org.yaml.model.Node>, hydra.util.Either<String, hydra.util.Pair<String, hydra.json.model.Value>>>) (kv -> {
           hydra.util.Lazy<hydra.ext.org.yaml.model.Node> keyNode = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(kv));
-          hydra.util.Lazy<hydra.util.Either<String, String>> keyResult = new hydra.util.Lazy<>(() -> (keyNode.get()).accept(new hydra.ext.org.yaml.model.Node.PartialVisitor<>() {
+          hydra.util.Lazy<hydra.util.Either<String, String>> keyResult = new hydra.util.Lazy<>(() -> keyNode.get().accept(new hydra.ext.org.yaml.model.Node.PartialVisitor<>() {
             @Override
             public hydra.util.Either<String, String> otherwise(hydra.ext.org.yaml.model.Node instance) {
               return hydra.util.Either.<String, String>left("non-scalar YAML mapping key");
@@ -20,7 +20,7 @@ public interface Decode {
             
             @Override
             public hydra.util.Either<String, String> visit(hydra.ext.org.yaml.model.Node.Scalar s) {
-              return ((s).value).accept(new hydra.ext.org.yaml.model.Scalar.PartialVisitor<>() {
+              return (s).value.accept(new hydra.ext.org.yaml.model.Scalar.PartialVisitor<>() {
                 @Override
                 public hydra.util.Either<String, String> otherwise(hydra.ext.org.yaml.model.Scalar instance) {
                   return hydra.util.Either.<String, String>left("non-string YAML mapping key");
@@ -54,7 +54,7 @@ public interface Decode {
       
       @Override
       public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.ext.org.yaml.model.Node.Scalar s) {
-        return ((s).value).accept(new hydra.ext.org.yaml.model.Scalar.PartialVisitor<>() {
+        return (s).value.accept(new hydra.ext.org.yaml.model.Scalar.PartialVisitor<>() {
           @Override
           public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.ext.org.yaml.model.Scalar.Bool b) {
             return hydra.util.Either.<String, hydra.json.model.Value>right(new hydra.json.model.Value.Boolean_((b).value));

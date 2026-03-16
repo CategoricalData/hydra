@@ -63,7 +63,7 @@ public abstract class TypeArgument implements Serializable, Comparable<TypeArgum
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TypeArgument other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -103,7 +103,7 @@ public abstract class TypeArgument implements Serializable, Comparable<TypeArgum
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TypeArgument other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

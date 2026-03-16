@@ -63,7 +63,7 @@ public abstract class Individual implements Serializable, Comparable<Individual>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Individual other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -103,7 +103,7 @@ public abstract class Individual implements Serializable, Comparable<Individual>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Individual other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

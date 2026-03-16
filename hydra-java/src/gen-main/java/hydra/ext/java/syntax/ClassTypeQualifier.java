@@ -67,7 +67,7 @@ public abstract class ClassTypeQualifier implements Serializable, Comparable<Cla
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ClassTypeQualifier other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -106,7 +106,7 @@ public abstract class ClassTypeQualifier implements Serializable, Comparable<Cla
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ClassTypeQualifier other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -146,7 +146,7 @@ public abstract class ClassTypeQualifier implements Serializable, Comparable<Cla
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ClassTypeQualifier other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

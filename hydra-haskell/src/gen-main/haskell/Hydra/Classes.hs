@@ -18,8 +18,8 @@ data TypeClass =
   TypeClassOrdering 
   deriving (Eq, Ord, Read, Show)
 
-_TypeClass = (Core.Name "hydra.classes.TypeClass")
+_TypeClass = Core.Name "hydra.classes.TypeClass"
 
-_TypeClass_equality = (Core.Name "equality")
+_TypeClass_equality = Core.Name "equality"
 
-_TypeClass_ordering = (Core.Name "ordering")
+_TypeClass_ordering = Core.Name "ordering"

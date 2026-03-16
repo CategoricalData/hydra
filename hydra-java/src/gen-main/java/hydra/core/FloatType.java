@@ -73,7 +73,7 @@ public abstract class FloatType implements Serializable, Comparable<FloatType> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(FloatType other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -111,7 +111,7 @@ public abstract class FloatType implements Serializable, Comparable<FloatType> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(FloatType other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -149,7 +149,7 @@ public abstract class FloatType implements Serializable, Comparable<FloatType> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(FloatType other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

@@ -62,7 +62,7 @@ public abstract class EvaluationStyle implements Serializable, Comparable<Evalua
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(EvaluationStyle other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -97,7 +97,7 @@ public abstract class EvaluationStyle implements Serializable, Comparable<Evalua
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(EvaluationStyle other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

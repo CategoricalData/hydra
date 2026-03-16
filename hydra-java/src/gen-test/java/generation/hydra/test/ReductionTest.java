@@ -44,7 +44,7 @@ public class ReductionTest {
 
             1,
 
-            (((java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (x -> (java.util.function.Function<Integer, Integer>) (y -> x))).apply(1)).apply(2));
+            ((java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (x -> (java.util.function.Function<Integer, Integer>) (y -> x))).apply(1).apply(2));
 
     }
 

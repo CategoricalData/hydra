@@ -24,11 +24,11 @@ data AvroQualifiedName =
     avroQualifiedNameName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_AvroQualifiedName = (Core.Name "hydra.ext.avro.environment.AvroQualifiedName")
+_AvroQualifiedName = Core.Name "hydra.ext.avro.environment.AvroQualifiedName"
 
-_AvroQualifiedName_namespace = (Core.Name "namespace")
+_AvroQualifiedName_namespace = Core.Name "namespace"
 
-_AvroQualifiedName_name = (Core.Name "name")
+_AvroQualifiedName_name = Core.Name "name"
 
 -- | An Avro foreign key annotation linking a field to another type
 data AvroForeignKey = 
@@ -38,11 +38,11 @@ data AvroForeignKey =
     -- | A function which constructs element names from string values
     avroForeignKeyConstructor :: (String -> Core.Name)}
 
-_AvroForeignKey = (Core.Name "hydra.ext.avro.environment.AvroForeignKey")
+_AvroForeignKey = Core.Name "hydra.ext.avro.environment.AvroForeignKey"
 
-_AvroForeignKey_typeName = (Core.Name "typeName")
+_AvroForeignKey_typeName = Core.Name "typeName"
 
-_AvroForeignKey_constructor = (Core.Name "constructor")
+_AvroForeignKey_constructor = Core.Name "constructor"
 
 -- | An Avro primary key annotation identifying the element name field
 data AvroPrimaryKey = 
@@ -52,11 +52,11 @@ data AvroPrimaryKey =
     -- | A function which constructs element names from string values
     avroPrimaryKeyConstructor :: (String -> Core.Name)}
 
-_AvroPrimaryKey = (Core.Name "hydra.ext.avro.environment.AvroPrimaryKey")
+_AvroPrimaryKey = Core.Name "hydra.ext.avro.environment.AvroPrimaryKey"
 
-_AvroPrimaryKey_fieldName = (Core.Name "fieldName")
+_AvroPrimaryKey_fieldName = Core.Name "fieldName"
 
-_AvroPrimaryKey_constructor = (Core.Name "constructor")
+_AvroPrimaryKey_constructor = Core.Name "constructor"
 
 -- | Environment for Avro-to-Hydra code generation
 data AvroEnvironment = 
@@ -68,10 +68,10 @@ data AvroEnvironment =
     -- | Generated Hydra elements
     avroEnvironmentElements :: (M.Map Core.Name Core.Binding)}
 
-_AvroEnvironment = (Core.Name "hydra.ext.avro.environment.AvroEnvironment")
+_AvroEnvironment = Core.Name "hydra.ext.avro.environment.AvroEnvironment"
 
-_AvroEnvironment_namedAdapters = (Core.Name "namedAdapters")
+_AvroEnvironment_namedAdapters = Core.Name "namedAdapters"
 
-_AvroEnvironment_namespace = (Core.Name "namespace")
+_AvroEnvironment_namespace = Core.Name "namespace"
 
-_AvroEnvironment_elements = (Core.Name "elements")
+_AvroEnvironment_elements = Core.Name "elements"

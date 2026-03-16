@@ -90,7 +90,7 @@ public interface Annotations {
         
         @Override
         public Integer visit(hydra.core.Term.Literal lit) {
-          return ((lit).value).accept(new hydra.core.Literal.PartialVisitor<>() {
+          return (lit).value.accept(new hydra.core.Literal.PartialVisitor<>() {
             @Override
             public Integer otherwise(hydra.core.Literal instance) {
               return 0;
@@ -98,7 +98,7 @@ public interface Annotations {
             
             @Override
             public Integer visit(hydra.core.Literal.Integer_ iv) {
-              return ((iv).value).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
+              return (iv).value.accept(new hydra.core.IntegerValue.PartialVisitor<>() {
                 @Override
                 public Integer otherwise(hydra.core.IntegerValue instance) {
                   return 0;
@@ -148,18 +148,18 @@ public interface Annotations {
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.TypeLambda tl) {
-        return (peel.get()).apply(((tl).value).body);
+        return peel.get().apply((tl).value.body);
       }
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.TypeApplication ta) {
-        return (peel.get()).apply(((ta).value).body);
+        return peel.get().apply((ta).value.body);
       }
     })));
     return hydra.annotations.Annotations.getDescription(
       cx,
       graph,
-      hydra.annotations.Annotations.termAnnotationInternal((peel.get()).apply(term)));
+      hydra.annotations.Annotations.termAnnotationInternal(peel.get().apply(term)));
   }
   
   static hydra.util.Either<hydra.error.DecodingError, hydra.util.Maybe<hydra.core.Type>> getType(hydra.graph.Graph graph, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> anns) {

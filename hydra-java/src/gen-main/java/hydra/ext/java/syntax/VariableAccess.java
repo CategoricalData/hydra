@@ -63,7 +63,7 @@ public abstract class VariableAccess implements Serializable, Comparable<Variabl
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(VariableAccess other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -103,7 +103,7 @@ public abstract class VariableAccess implements Serializable, Comparable<Variabl
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(VariableAccess other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

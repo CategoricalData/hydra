@@ -19,9 +19,9 @@ data Array =
     arrayItems :: Schema}
   deriving (Eq, Ord, Read, Show)
 
-_Array = (Core.Name "hydra.ext.org.apache.avro.schema.Array")
+_Array = Core.Name "hydra.ext.org.apache.avro.schema.Array"
 
-_Array_items = (Core.Name "items")
+_Array_items = Core.Name "items"
 
 data Enum = 
   Enum {
@@ -31,11 +31,11 @@ data Enum =
     enumDefault :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_Enum = (Core.Name "hydra.ext.org.apache.avro.schema.Enum")
+_Enum = Core.Name "hydra.ext.org.apache.avro.schema.Enum"
 
-_Enum_symbols = (Core.Name "symbols")
+_Enum_symbols = Core.Name "symbols"
 
-_Enum_default = (Core.Name "default")
+_Enum_default = Core.Name "default"
 
 data Field = 
   Field {
@@ -55,21 +55,21 @@ data Field =
     fieldAnnotations :: (M.Map String Model.Value)}
   deriving (Eq, Ord, Read, Show)
 
-_Field = (Core.Name "hydra.ext.org.apache.avro.schema.Field")
+_Field = Core.Name "hydra.ext.org.apache.avro.schema.Field"
 
-_Field_name = (Core.Name "name")
+_Field_name = Core.Name "name"
 
-_Field_doc = (Core.Name "doc")
+_Field_doc = Core.Name "doc"
 
-_Field_type = (Core.Name "type")
+_Field_type = Core.Name "type"
 
-_Field_default = (Core.Name "default")
+_Field_default = Core.Name "default"
 
-_Field_order = (Core.Name "order")
+_Field_order = Core.Name "order"
 
-_Field_aliases = (Core.Name "aliases")
+_Field_aliases = Core.Name "aliases"
 
-_Field_annotations = (Core.Name "annotations")
+_Field_annotations = Core.Name "annotations"
 
 data Fixed = 
   Fixed {
@@ -77,18 +77,18 @@ data Fixed =
     fixedSize :: Int}
   deriving (Eq, Ord, Read, Show)
 
-_Fixed = (Core.Name "hydra.ext.org.apache.avro.schema.Fixed")
+_Fixed = Core.Name "hydra.ext.org.apache.avro.schema.Fixed"
 
-_Fixed_size = (Core.Name "size")
+_Fixed_size = Core.Name "size"
 
 data Map = 
   Map {
     mapValues :: Schema}
   deriving (Eq, Ord, Read, Show)
 
-_Map = (Core.Name "hydra.ext.org.apache.avro.schema.Map")
+_Map = Core.Name "hydra.ext.org.apache.avro.schema.Map"
 
-_Map_values = (Core.Name "values")
+_Map_values = Core.Name "values"
 
 data Named = 
   Named {
@@ -105,19 +105,19 @@ data Named =
     namedAnnotations :: (M.Map String Model.Value)}
   deriving (Eq, Ord, Read, Show)
 
-_Named = (Core.Name "hydra.ext.org.apache.avro.schema.Named")
+_Named = Core.Name "hydra.ext.org.apache.avro.schema.Named"
 
-_Named_name = (Core.Name "name")
+_Named_name = Core.Name "name"
 
-_Named_namespace = (Core.Name "namespace")
+_Named_namespace = Core.Name "namespace"
 
-_Named_aliases = (Core.Name "aliases")
+_Named_aliases = Core.Name "aliases"
 
-_Named_doc = (Core.Name "doc")
+_Named_doc = Core.Name "doc"
 
-_Named_type = (Core.Name "type")
+_Named_type = Core.Name "type"
 
-_Named_annotations = (Core.Name "annotations")
+_Named_annotations = Core.Name "annotations"
 
 data NamedType = 
   NamedTypeEnum Enum |
@@ -125,13 +125,13 @@ data NamedType =
   NamedTypeRecord Record
   deriving (Eq, Ord, Read, Show)
 
-_NamedType = (Core.Name "hydra.ext.org.apache.avro.schema.NamedType")
+_NamedType = Core.Name "hydra.ext.org.apache.avro.schema.NamedType"
 
-_NamedType_enum = (Core.Name "enum")
+_NamedType_enum = Core.Name "enum"
 
-_NamedType_fixed = (Core.Name "fixed")
+_NamedType_fixed = Core.Name "fixed"
 
-_NamedType_record = (Core.Name "record")
+_NamedType_record = Core.Name "record"
 
 data Order = 
   OrderAscending  |
@@ -139,13 +139,13 @@ data Order =
   OrderIgnore 
   deriving (Eq, Ord, Read, Show)
 
-_Order = (Core.Name "hydra.ext.org.apache.avro.schema.Order")
+_Order = Core.Name "hydra.ext.org.apache.avro.schema.Order"
 
-_Order_ascending = (Core.Name "ascending")
+_Order_ascending = Core.Name "ascending"
 
-_Order_descending = (Core.Name "descending")
+_Order_descending = Core.Name "descending"
 
-_Order_ignore = (Core.Name "ignore")
+_Order_ignore = Core.Name "ignore"
 
 data Primitive = 
   -- | no value
@@ -166,23 +166,23 @@ data Primitive =
   PrimitiveString 
   deriving (Eq, Ord, Read, Show)
 
-_Primitive = (Core.Name "hydra.ext.org.apache.avro.schema.Primitive")
+_Primitive = Core.Name "hydra.ext.org.apache.avro.schema.Primitive"
 
-_Primitive_null = (Core.Name "null")
+_Primitive_null = Core.Name "null"
 
-_Primitive_boolean = (Core.Name "boolean")
+_Primitive_boolean = Core.Name "boolean"
 
-_Primitive_int = (Core.Name "int")
+_Primitive_int = Core.Name "int"
 
-_Primitive_long = (Core.Name "long")
+_Primitive_long = Core.Name "long"
 
-_Primitive_float = (Core.Name "float")
+_Primitive_float = Core.Name "float"
 
-_Primitive_double = (Core.Name "double")
+_Primitive_double = Core.Name "double"
 
-_Primitive_bytes = (Core.Name "bytes")
+_Primitive_bytes = Core.Name "bytes"
 
-_Primitive_string = (Core.Name "string")
+_Primitive_string = Core.Name "string"
 
 data Record = 
   Record {
@@ -190,9 +190,9 @@ data Record =
     recordFields :: [Field]}
   deriving (Eq, Ord, Read, Show)
 
-_Record = (Core.Name "hydra.ext.org.apache.avro.schema.Record")
+_Record = Core.Name "hydra.ext.org.apache.avro.schema.Record"
 
-_Record_fields = (Core.Name "fields")
+_Record_fields = Core.Name "fields"
 
 data Schema = 
   SchemaArray Array |
@@ -204,23 +204,23 @@ data Schema =
   SchemaUnion Union
   deriving (Eq, Ord, Read, Show)
 
-_Schema = (Core.Name "hydra.ext.org.apache.avro.schema.Schema")
+_Schema = Core.Name "hydra.ext.org.apache.avro.schema.Schema"
 
-_Schema_array = (Core.Name "array")
+_Schema_array = Core.Name "array"
 
-_Schema_map = (Core.Name "map")
+_Schema_map = Core.Name "map"
 
-_Schema_named = (Core.Name "named")
+_Schema_named = Core.Name "named"
 
-_Schema_primitive = (Core.Name "primitive")
+_Schema_primitive = Core.Name "primitive"
 
-_Schema_reference = (Core.Name "reference")
+_Schema_reference = Core.Name "reference"
 
-_Schema_union = (Core.Name "union")
+_Schema_union = Core.Name "union"
 
 newtype Union = 
   Union {
     unUnion :: [Schema]}
   deriving (Eq, Ord, Read, Show)
 
-_Union = (Core.Name "hydra.ext.org.apache.avro.schema.Union")
+_Union = Core.Name "hydra.ext.org.apache.avro.schema.Union"

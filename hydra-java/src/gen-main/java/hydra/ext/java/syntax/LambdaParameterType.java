@@ -63,7 +63,7 @@ public abstract class LambdaParameterType implements Serializable, Comparable<La
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(LambdaParameterType other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -99,7 +99,7 @@ public abstract class LambdaParameterType implements Serializable, Comparable<La
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(LambdaParameterType other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

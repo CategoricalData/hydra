@@ -73,6 +73,11 @@ public interface Ast {
       public hydra.core.Term visit(hydra.ast.Expr.Brackets y) {
         return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Expr"), new hydra.core.Field(new hydra.core.Name("brackets"), hydra.encode.ast.Ast.bracketExpr((y).value))));
       }
+      
+      @Override
+      public hydra.core.Term visit(hydra.ast.Expr.Seq y) {
+        return new hydra.core.Term.Union(new hydra.core.Injection(new hydra.core.Name("hydra.ast.Expr"), new hydra.core.Field(new hydra.core.Name("seq"), hydra.encode.ast.Ast.seqExpr((y).value))));
+      }
     });
   }
   
@@ -119,6 +124,14 @@ public interface Ast {
   
   static hydra.core.Term precedence(hydra.ast.Precedence x) {
     return new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(new hydra.core.Name("hydra.ast.Precedence"), new hydra.core.Term.Literal(new hydra.core.Literal.Integer_(new hydra.core.IntegerValue.Int32((x).value)))));
+  }
+  
+  static hydra.core.Term seqExpr(hydra.ast.SeqExpr x) {
+    return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name("hydra.ast.SeqExpr"), hydra.util.ConsList.of(
+      new hydra.core.Field(new hydra.core.Name("op"), hydra.encode.ast.Ast.op((x).op)),
+      new hydra.core.Field(new hydra.core.Name("elements"), new hydra.core.Term.List(hydra.lib.lists.Map.apply(
+        hydra.encode.ast.Ast::expr,
+        (x).elements))))));
   }
   
   static hydra.core.Term symbol(hydra.ast.Symbol x) {

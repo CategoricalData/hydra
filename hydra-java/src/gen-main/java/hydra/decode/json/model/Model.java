@@ -17,7 +17,7 @@ public interface Model {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.json.model.Value> visit(hydra.core.Term.Union inj) {
-          hydra.core.Field field = ((inj).value).field;
+          hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
           hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.json.model.Value>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
@@ -41,7 +41,7 @@ public interface Model {
                   
                   @Override
                   public hydra.util.Either<hydra.error.DecodingError, Boolean> visit(hydra.core.Term.Literal v) {
-                    return ((v).value).accept(new hydra.core.Literal.PartialVisitor<>() {
+                    return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
                       @Override
                       public hydra.util.Either<hydra.error.DecodingError, Boolean> otherwise(hydra.core.Literal instance) {
                         return hydra.util.Either.<hydra.error.DecodingError, Boolean>left(new hydra.error.DecodingError("expected boolean literal"));
@@ -74,7 +74,7 @@ public interface Model {
                   
                   @Override
                   public hydra.util.Either<hydra.error.DecodingError, java.math.BigDecimal> visit(hydra.core.Term.Literal v) {
-                    return ((v).value).accept(new hydra.core.Literal.PartialVisitor<>() {
+                    return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
                       @Override
                       public hydra.util.Either<hydra.error.DecodingError, java.math.BigDecimal> otherwise(hydra.core.Literal instance) {
                         return hydra.util.Either.<hydra.error.DecodingError, java.math.BigDecimal>left(new hydra.error.DecodingError("expected bigfloat literal"));
@@ -82,7 +82,7 @@ public interface Model {
                       
                       @Override
                       public hydra.util.Either<hydra.error.DecodingError, java.math.BigDecimal> visit(hydra.core.Literal.Float_ v1) {
-                        return ((v1).value).accept(new hydra.core.FloatValue.PartialVisitor<>() {
+                        return (v1).value.accept(new hydra.core.FloatValue.PartialVisitor<>() {
                           @Override
                           public hydra.util.Either<hydra.error.DecodingError, java.math.BigDecimal> otherwise(hydra.core.FloatValue instance) {
                             return hydra.util.Either.<hydra.error.DecodingError, java.math.BigDecimal>left(new hydra.error.DecodingError("expected bigfloat value"));
@@ -113,7 +113,7 @@ public interface Model {
                     
                     @Override
                     public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Term.Literal v) {
-                      return ((v).value).accept(new hydra.core.Literal.PartialVisitor<>() {
+                      return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
                         @Override
                         public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Literal instance) {
                           return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"));
@@ -146,7 +146,7 @@ public interface Model {
                   
                   @Override
                   public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Term.Literal v) {
-                    return ((v).value).accept(new hydra.core.Literal.PartialVisitor<>() {
+                    return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
                       @Override
                       public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Literal instance) {
                         return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"));

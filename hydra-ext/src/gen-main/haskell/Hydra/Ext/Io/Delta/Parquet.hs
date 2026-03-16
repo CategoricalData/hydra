@@ -19,11 +19,11 @@ data ArrayType =
     arrayTypeContainsNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_ArrayType = (Core.Name "hydra.ext.io.delta.parquet.ArrayType")
+_ArrayType = Core.Name "hydra.ext.io.delta.parquet.ArrayType"
 
-_ArrayType_elementType = (Core.Name "elementType")
+_ArrayType_elementType = Core.Name "elementType"
 
-_ArrayType_containsNull = (Core.Name "containsNull")
+_ArrayType_containsNull = Core.Name "containsNull"
 
 -- | Base class for all primitive types DataType.
 data BasePrimitiveType = 
@@ -51,29 +51,29 @@ data BasePrimitiveType =
   BasePrimitiveTypeTimestamp 
   deriving (Eq, Ord, Read, Show)
 
-_BasePrimitiveType = (Core.Name "hydra.ext.io.delta.parquet.BasePrimitiveType")
+_BasePrimitiveType = Core.Name "hydra.ext.io.delta.parquet.BasePrimitiveType"
 
-_BasePrimitiveType_binary = (Core.Name "binary")
+_BasePrimitiveType_binary = Core.Name "binary"
 
-_BasePrimitiveType_boolean = (Core.Name "boolean")
+_BasePrimitiveType_boolean = Core.Name "boolean"
 
-_BasePrimitiveType_byte = (Core.Name "byte")
+_BasePrimitiveType_byte = Core.Name "byte"
 
-_BasePrimitiveType_date = (Core.Name "date")
+_BasePrimitiveType_date = Core.Name "date"
 
-_BasePrimitiveType_double = (Core.Name "double")
+_BasePrimitiveType_double = Core.Name "double"
 
-_BasePrimitiveType_float = (Core.Name "float")
+_BasePrimitiveType_float = Core.Name "float"
 
-_BasePrimitiveType_integer = (Core.Name "integer")
+_BasePrimitiveType_integer = Core.Name "integer"
 
-_BasePrimitiveType_long = (Core.Name "long")
+_BasePrimitiveType_long = Core.Name "long"
 
-_BasePrimitiveType_short = (Core.Name "short")
+_BasePrimitiveType_short = Core.Name "short"
 
-_BasePrimitiveType_string = (Core.Name "string")
+_BasePrimitiveType_string = Core.Name "string"
 
-_BasePrimitiveType_timestamp = (Core.Name "timestamp")
+_BasePrimitiveType_timestamp = Core.Name "timestamp"
 
 data DataType = 
   -- | Represent array data type.
@@ -88,17 +88,17 @@ data DataType =
   DataTypeStruct StructType
   deriving (Eq, Ord, Read, Show)
 
-_DataType = (Core.Name "hydra.ext.io.delta.parquet.DataType")
+_DataType = Core.Name "hydra.ext.io.delta.parquet.DataType"
 
-_DataType_array = (Core.Name "array")
+_DataType_array = Core.Name "array"
 
-_DataType_base = (Core.Name "base")
+_DataType_base = Core.Name "base"
 
-_DataType_decimal = (Core.Name "decimal")
+_DataType_decimal = Core.Name "decimal"
 
-_DataType_map = (Core.Name "map")
+_DataType_map = Core.Name "map"
 
-_DataType_struct = (Core.Name "struct")
+_DataType_struct = Core.Name "struct"
 
 -- | A decimal data type with fixed precision (the maximum number of digits) and scale (the number of digits on right side of dot). The precision can be up to 38, scale can also be up to 38 (less or equal to precision).
 data DecimalType = 
@@ -107,11 +107,11 @@ data DecimalType =
     decimalTypeScale :: Int}
   deriving (Eq, Ord, Read, Show)
 
-_DecimalType = (Core.Name "hydra.ext.io.delta.parquet.DecimalType")
+_DecimalType = Core.Name "hydra.ext.io.delta.parquet.DecimalType"
 
-_DecimalType_precision = (Core.Name "precision")
+_DecimalType_precision = Core.Name "precision"
 
-_DecimalType_scale = (Core.Name "scale")
+_DecimalType_scale = Core.Name "scale"
 
 -- | Data type representing a map type.
 data MapType = 
@@ -121,13 +121,13 @@ data MapType =
     mapTypeValueContainsNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_MapType = (Core.Name "hydra.ext.io.delta.parquet.MapType")
+_MapType = Core.Name "hydra.ext.io.delta.parquet.MapType"
 
-_MapType_keyType = (Core.Name "keyType")
+_MapType_keyType = Core.Name "keyType"
 
-_MapType_valueType = (Core.Name "valueType")
+_MapType_valueType = Core.Name "valueType"
 
-_MapType_valueContainsNull = (Core.Name "valueContainsNull")
+_MapType_valueContainsNull = Core.Name "valueContainsNull"
 
 -- | Represents a subfield of StructType with additional properties and metadata.
 data StructField = 
@@ -137,13 +137,13 @@ data StructField =
     structFieldNullable :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_StructField = (Core.Name "hydra.ext.io.delta.parquet.StructField")
+_StructField = Core.Name "hydra.ext.io.delta.parquet.StructField"
 
-_StructField_name = (Core.Name "name")
+_StructField_name = Core.Name "name"
 
-_StructField_dataType = (Core.Name "dataType")
+_StructField_dataType = Core.Name "dataType"
 
-_StructField_nullable = (Core.Name "nullable")
+_StructField_nullable = Core.Name "nullable"
 
 -- | Struct type which contains one or more columns.
 data StructType = 
@@ -151,6 +151,6 @@ data StructType =
     structTypeFields :: [StructField]}
   deriving (Eq, Ord, Read, Show)
 
-_StructType = (Core.Name "hydra.ext.io.delta.parquet.StructType")
+_StructType = Core.Name "hydra.ext.io.delta.parquet.StructType"
 
-_StructType_fields = (Core.Name "fields")
+_StructType_fields = Core.Name "fields"

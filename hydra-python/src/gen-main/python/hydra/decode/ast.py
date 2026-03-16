@@ -5,7 +5,7 @@ r"""Term decoders for hydra.ast."""
 from __future__ import annotations
 from collections.abc import Callable
 from functools import lru_cache
-from hydra.dsl.python import Either, FrozenDict, Left, Maybe, Right
+from hydra.dsl.python import Either, FrozenDict, Left, Maybe, Right, frozenlist
 from typing import cast
 import hydra.ast
 import hydra.core
@@ -278,7 +278,7 @@ def expr(cx: hydra.graph.Graph, raw: hydra.core.Term):
                 fterm = field.term
                 @lru_cache(1)
                 def variant_map() -> FrozenDict[hydra.core.Name, Callable[[hydra.core.Term], Either[hydra.error.DecodingError, hydra.ast.Expr]]]:
-                    return hydra.lib.maps.from_list(((hydra.core.Name("const"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.ast.Expr, hydra.ast.ExprConst(t))), symbol(cx, input)))), (hydra.core.Name("indent"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.ast.Expr, hydra.ast.ExprIndent(t))), indented_expression(cx, input)))), (hydra.core.Name("op"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.ast.Expr, hydra.ast.ExprOp(t))), op_expr(cx, input)))), (hydra.core.Name("brackets"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.ast.Expr, hydra.ast.ExprBrackets(t))), bracket_expr(cx, input))))))
+                    return hydra.lib.maps.from_list(((hydra.core.Name("const"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.ast.Expr, hydra.ast.ExprConst(t))), symbol(cx, input)))), (hydra.core.Name("indent"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.ast.Expr, hydra.ast.ExprIndent(t))), indented_expression(cx, input)))), (hydra.core.Name("op"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.ast.Expr, hydra.ast.ExprOp(t))), op_expr(cx, input)))), (hydra.core.Name("brackets"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.ast.Expr, hydra.ast.ExprBrackets(t))), bracket_expr(cx, input)))), (hydra.core.Name("seq"), (lambda input: hydra.lib.eithers.map((lambda t: cast(hydra.ast.Expr, hydra.ast.ExprSeq(t))), seq_expr(cx, input))))))
                 return hydra.lib.maybes.maybe((lambda : Left(hydra.error.DecodingError(hydra.lib.strings.cat(("no such field ", fname.value, " in union"))))), (lambda f: f(fterm)), hydra.lib.maps.lookup(fname, variant_map()))
             
             case _:
@@ -310,3 +310,16 @@ def op_expr(cx: hydra.graph.Graph, raw: hydra.core.Term):
             case _:
                 return Left(hydra.error.DecodingError("expected record"))
     return hydra.lib.eithers.either((lambda err: Left(hydra.error.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_ast_op_expr_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))
+
+def seq_expr(cx: hydra.graph.Graph, raw: hydra.core.Term):
+    def _hoist_hydra_decode_ast_seq_expr_1(cx, v1):
+        match v1:
+            case hydra.core.TermRecord(value=record):
+                @lru_cache(1)
+                def field_map() -> FrozenDict[hydra.core.Name, hydra.core.Term]:
+                    return hydra.extract.helpers.to_field_map(record)
+                return hydra.lib.eithers.bind(hydra.extract.helpers.require_field("op", (lambda x1, x2: op(x1, x2)), field_map(), cx), (lambda field_op: hydra.lib.eithers.bind(hydra.extract.helpers.require_field("elements", (lambda v12, v2: hydra.extract.helpers.decode_list((lambda x1, x2: expr(x1, x2)), v12, v2)), field_map(), cx), (lambda field_elements: Right(hydra.ast.SeqExpr(field_op, field_elements))))))
+            
+            case _:
+                return Left(hydra.error.DecodingError("expected record"))
+    return hydra.lib.eithers.either((lambda err: Left(hydra.error.DecodingError(err))), (lambda stripped: _hoist_hydra_decode_ast_seq_expr_1(cx, stripped)), hydra.lexical.strip_and_dereference_term_either(cx, raw))

@@ -26,15 +26,15 @@ data Adapter t1 t2 v1 v2 =
     -- | The coder for transforming instances of the source type to instances of the target type
     adapterCoder :: (Coder v1 v2)}
 
-_Adapter = (Core.Name "hydra.util.Adapter")
+_Adapter = Core.Name "hydra.util.Adapter"
 
-_Adapter_isLossy = (Core.Name "isLossy")
+_Adapter_isLossy = Core.Name "isLossy"
 
-_Adapter_source = (Core.Name "source")
+_Adapter_source = Core.Name "source"
 
-_Adapter_target = (Core.Name "target")
+_Adapter_target = Core.Name "target"
 
-_Adapter_coder = (Core.Name "coder")
+_Adapter_coder = Core.Name "coder"
 
 -- | A two-level encoder and decoder, operating both at a type level and an instance (data) level
 data Bicoder t1 t2 v1 v2 = 
@@ -44,11 +44,11 @@ data Bicoder t1 t2 v1 v2 =
     -- | A function from target types to adapters
     bicoderDecode :: (t2 -> Adapter t2 t1 v2 v1)}
 
-_Bicoder = (Core.Name "hydra.util.Bicoder")
+_Bicoder = Core.Name "hydra.util.Bicoder"
 
-_Bicoder_encode = (Core.Name "encode")
+_Bicoder_encode = Core.Name "encode"
 
-_Bicoder_decode = (Core.Name "decode")
+_Bicoder_decode = Core.Name "decode"
 
 -- | A naming convention for symbols, such as camelCase or snake_case
 data CaseConvention = 
@@ -58,15 +58,15 @@ data CaseConvention =
   CaseConventionUpperSnake 
   deriving (Eq, Ord, Read, Show)
 
-_CaseConvention = (Core.Name "hydra.util.CaseConvention")
+_CaseConvention = Core.Name "hydra.util.CaseConvention"
 
-_CaseConvention_camel = (Core.Name "camel")
+_CaseConvention_camel = Core.Name "camel"
 
-_CaseConvention_pascal = (Core.Name "pascal")
+_CaseConvention_pascal = Core.Name "pascal"
 
-_CaseConvention_lowerSnake = (Core.Name "lowerSnake")
+_CaseConvention_lowerSnake = Core.Name "lowerSnake"
 
-_CaseConvention_upperSnake = (Core.Name "upperSnake")
+_CaseConvention_upperSnake = Core.Name "upperSnake"
 
 -- | An encoder and decoder; a bidirectional transformation between two types
 data Coder v1 v2 = 
@@ -76,11 +76,11 @@ data Coder v1 v2 =
     -- | A function which decodes target values as source values in a given context
     coderDecode :: (Context.Context -> v2 -> Either (Context.InContext Error.Error) v1)}
 
-_Coder = (Core.Name "hydra.util.Coder")
+_Coder = Core.Name "hydra.util.Coder"
 
-_Coder_encode = (Core.Name "encode")
+_Coder_encode = Core.Name "encode"
 
-_Coder_decode = (Core.Name "decode")
+_Coder_decode = Core.Name "decode"
 
 -- | An equality judgement: less than, equal to, or greater than
 data Comparison = 
@@ -89,13 +89,13 @@ data Comparison =
   ComparisonGreaterThan 
   deriving (Eq, Ord, Read, Show)
 
-_Comparison = (Core.Name "hydra.util.Comparison")
+_Comparison = Core.Name "hydra.util.Comparison"
 
-_Comparison_lessThan = (Core.Name "lessThan")
+_Comparison_lessThan = Core.Name "lessThan"
 
-_Comparison_equalTo = (Core.Name "equalTo")
+_Comparison_equalTo = Core.Name "equalTo"
 
-_Comparison_greaterThan = (Core.Name "greaterThan")
+_Comparison_greaterThan = Core.Name "greaterThan"
 
 -- | Numeric precision: arbitrary precision, or precision to a specified number of bits
 data Precision = 
@@ -105,8 +105,8 @@ data Precision =
   PrecisionBits Int
   deriving (Eq, Ord, Read, Show)
 
-_Precision = (Core.Name "hydra.util.Precision")
+_Precision = Core.Name "hydra.util.Precision"
 
-_Precision_arbitrary = (Core.Name "arbitrary")
+_Precision_arbitrary = Core.Name "arbitrary"
 
-_Precision_bits = (Core.Name "bits")
+_Precision_bits = Core.Name "bits"

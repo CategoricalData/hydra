@@ -63,7 +63,7 @@ public abstract class GenericLiteralArgumentAndTraversalPredicate implements Ser
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(GenericLiteralArgumentAndTraversalPredicate other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -103,7 +103,7 @@ public abstract class GenericLiteralArgumentAndTraversalPredicate implements Ser
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(GenericLiteralArgumentAndTraversalPredicate other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

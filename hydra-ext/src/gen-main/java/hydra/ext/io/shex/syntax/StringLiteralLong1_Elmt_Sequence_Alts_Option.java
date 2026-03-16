@@ -59,7 +59,7 @@ public abstract class StringLiteralLong1_Elmt_Sequence_Alts_Option implements Se
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(StringLiteralLong1_Elmt_Sequence_Alts_Option other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -98,7 +98,7 @@ public abstract class StringLiteralLong1_Elmt_Sequence_Alts_Option implements Se
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(StringLiteralLong1_Elmt_Sequence_Alts_Option other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

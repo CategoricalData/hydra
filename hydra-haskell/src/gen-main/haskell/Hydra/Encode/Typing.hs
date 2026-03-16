@@ -18,72 +18,77 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-functionStructure :: ((t0 -> Core.Term) -> Typing.FunctionStructure t0 -> Core.Term)
-functionStructure env x = (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.typing.FunctionStructure"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "typeParams"),
-      Core.fieldTerm = ((\xs -> Core.TermList (Lists.map Core_.name xs)) (Typing.functionStructureTypeParams x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "params"),
-      Core.fieldTerm = ((\xs -> Core.TermList (Lists.map Core_.name xs)) (Typing.functionStructureParams x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "bindings"),
-      Core.fieldTerm = ((\xs -> Core.TermList (Lists.map Core_.binding xs)) (Typing.functionStructureBindings x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "body"),
-      Core.fieldTerm = (Core_.term (Typing.functionStructureBody x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "domains"),
-      Core.fieldTerm = ((\xs -> Core.TermList (Lists.map Core_.type_ xs)) (Typing.functionStructureDomains x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "codomain"),
-      Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map Core_.type_ opt)) (Typing.functionStructureCodomain x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "environment"),
-      Core.fieldTerm = (env (Typing.functionStructureEnvironment x))}]}))
+functionStructure :: (t0 -> Core.Term) -> Typing.FunctionStructure t0 -> Core.Term
+functionStructure env x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.FunctionStructure"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "typeParams"),
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map Core_.name xs)) (Typing.functionStructureTypeParams x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "params"),
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map Core_.name xs)) (Typing.functionStructureParams x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "bindings"),
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map Core_.binding xs)) (Typing.functionStructureBindings x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "body"),
+          Core.fieldTerm = (Core_.term (Typing.functionStructureBody x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "domains"),
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map Core_.type_ xs)) (Typing.functionStructureDomains x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "codomain"),
+          Core.fieldTerm = ((\opt -> Core.TermMaybe (Maybes.map Core_.type_ opt)) (Typing.functionStructureCodomain x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "environment"),
+          Core.fieldTerm = (env (Typing.functionStructureEnvironment x))}]})
 
-inferenceResult :: (Typing.InferenceResult -> Core.Term)
-inferenceResult x = (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.typing.InferenceResult"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "term"),
-      Core.fieldTerm = (Core_.term (Typing.inferenceResultTerm x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "type"),
-      Core.fieldTerm = (Core_.type_ (Typing.inferenceResultType x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "subst"),
-      Core.fieldTerm = (typeSubst (Typing.inferenceResultSubst x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "classConstraints"),
-      Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap Core_.name Core_.typeVariableMetadata m)) (Typing.inferenceResultClassConstraints x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "context"),
-      Core.fieldTerm = (Context.context (Typing.inferenceResultContext x))}]}))
+inferenceResult :: Typing.InferenceResult -> Core.Term
+inferenceResult x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.InferenceResult"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "term"),
+          Core.fieldTerm = (Core_.term (Typing.inferenceResultTerm x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "type"),
+          Core.fieldTerm = (Core_.type_ (Typing.inferenceResultType x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "subst"),
+          Core.fieldTerm = (typeSubst (Typing.inferenceResultSubst x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "classConstraints"),
+          Core.fieldTerm = ((\m -> Core.TermMap (Maps.bimap Core_.name Core_.typeVariableMetadata m)) (Typing.inferenceResultClassConstraints x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "context"),
+          Core.fieldTerm = (Context.context (Typing.inferenceResultContext x))}]})
 
-termSubst :: (Typing.TermSubst -> Core.Term)
-termSubst x = (Core.TermWrap (Core.WrappedTerm {
-  Core.wrappedTermTypeName = (Core.Name "hydra.typing.TermSubst"),
-  Core.wrappedTermBody = ((\m -> Core.TermMap (Maps.bimap Core_.name Core_.term m)) (Typing.unTermSubst x))}))
+termSubst :: Typing.TermSubst -> Core.Term
+termSubst x =
+    Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.typing.TermSubst"),
+      Core.wrappedTermBody = ((\m -> Core.TermMap (Maps.bimap Core_.name Core_.term m)) (Typing.unTermSubst x))})
 
-typeConstraint :: (Typing.TypeConstraint -> Core.Term)
-typeConstraint x = (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.typing.TypeConstraint"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "left"),
-      Core.fieldTerm = (Core_.type_ (Typing.typeConstraintLeft x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "right"),
-      Core.fieldTerm = (Core_.type_ (Typing.typeConstraintRight x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "comment"),
-      Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Typing.typeConstraintComment x))}]}))
+typeConstraint :: Typing.TypeConstraint -> Core.Term
+typeConstraint x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.typing.TypeConstraint"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "left"),
+          Core.fieldTerm = (Core_.type_ (Typing.typeConstraintLeft x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "right"),
+          Core.fieldTerm = (Core_.type_ (Typing.typeConstraintRight x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "comment"),
+          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Typing.typeConstraintComment x))}]})
 
-typeSubst :: (Typing.TypeSubst -> Core.Term)
-typeSubst x = (Core.TermWrap (Core.WrappedTerm {
-  Core.wrappedTermTypeName = (Core.Name "hydra.typing.TypeSubst"),
-  Core.wrappedTermBody = ((\m -> Core.TermMap (Maps.bimap Core_.name Core_.type_ m)) (Typing.unTypeSubst x))}))
+typeSubst :: Typing.TypeSubst -> Core.Term
+typeSubst x =
+    Core.TermWrap (Core.WrappedTerm {
+      Core.wrappedTermTypeName = (Core.Name "hydra.typing.TypeSubst"),
+      Core.wrappedTermBody = ((\m -> Core.TermMap (Maps.bimap Core_.name Core_.type_ m)) (Typing.unTypeSubst x))})

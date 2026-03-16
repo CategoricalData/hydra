@@ -49,9 +49,9 @@ public interface Unification {
             hydra.lib.lists.Map.apply(
               projected -> projected.name,
               right2)))),
-      () -> ((joinList).apply(hydra.lib.lists.Map.apply(
+      () -> (joinList).apply(hydra.lib.lists.Map.apply(
         projected -> projected.type,
-        left2))).apply(hydra.lib.lists.Map.apply(
+        left2)).apply(hydra.lib.lists.Map.apply(
         projected -> projected.type,
         right2)),
       () -> hydra.unification.Unification.joinTypes_cannotUnify(
@@ -84,8 +84,8 @@ public interface Unification {
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Application r) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right(hydra.util.ConsList.of(
-              ((joinOne).apply(((l).value).function)).apply(((r).value).function),
-              ((joinOne).apply(((l).value).argument)).apply(((r).value).argument)));
+              (joinOne).apply((l).value.function).apply((r).value.function),
+              (joinOne).apply((l).value.argument).apply((r).value.argument)));
           }
         });
       }
@@ -105,8 +105,8 @@ public interface Unification {
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Either r) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right(hydra.util.ConsList.of(
-              ((joinOne).apply(((l).value).left)).apply(((r).value).left),
-              ((joinOne).apply(((l).value).right)).apply(((r).value).right)));
+              (joinOne).apply((l).value.left).apply((r).value.left),
+              (joinOne).apply((l).value.right).apply((r).value.right)));
           }
         });
       }
@@ -126,8 +126,8 @@ public interface Unification {
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Function r) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right(hydra.util.ConsList.of(
-              ((joinOne).apply(((l).value).domain)).apply(((r).value).domain),
-              ((joinOne).apply(((l).value).codomain)).apply(((r).value).codomain)));
+              (joinOne).apply((l).value.domain).apply((r).value.domain),
+              (joinOne).apply((l).value.codomain).apply((r).value.codomain)));
           }
         });
       }
@@ -146,7 +146,7 @@ public interface Unification {
           
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.List r) {
-            return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right(hydra.util.ConsList.of(((joinOne).apply((l).value)).apply((r).value)));
+            return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right(hydra.util.ConsList.of((joinOne).apply((l).value).apply((r).value)));
           }
         });
       }
@@ -175,8 +175,8 @@ public interface Unification {
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Map r) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right(hydra.util.ConsList.of(
-              ((joinOne).apply(((l).value).keys)).apply(((r).value).keys),
-              ((joinOne).apply(((l).value).values)).apply(((r).value).values)));
+              (joinOne).apply((l).value.keys).apply((r).value.keys),
+              (joinOne).apply((l).value.values).apply((r).value.values)));
           }
         });
       }
@@ -195,7 +195,7 @@ public interface Unification {
           
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Maybe r) {
-            return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right(hydra.util.ConsList.of(((joinOne).apply((l).value)).apply((r).value)));
+            return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right(hydra.util.ConsList.of((joinOne).apply((l).value).apply((r).value)));
           }
         });
       }
@@ -215,8 +215,8 @@ public interface Unification {
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Pair r) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right(hydra.util.ConsList.of(
-              ((joinOne).apply(((l).value).first)).apply(((r).value).first),
-              ((joinOne).apply(((l).value).second)).apply(((r).value).second)));
+              (joinOne).apply((l).value.first).apply((r).value.first),
+              (joinOne).apply((l).value.second).apply((r).value.second)));
           }
         });
       }
@@ -235,7 +235,7 @@ public interface Unification {
           
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Record r) {
-            return ((joinRowTypes).apply((l).value)).apply((r).value);
+            return (joinRowTypes).apply((l).value).apply((r).value);
           }
         });
       }
@@ -254,7 +254,7 @@ public interface Unification {
           
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Set r) {
-            return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right(hydra.util.ConsList.of(((joinOne).apply((l).value)).apply((r).value)));
+            return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right(hydra.util.ConsList.of((joinOne).apply((l).value).apply((r).value)));
           }
         });
       }
@@ -273,7 +273,7 @@ public interface Unification {
           
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Union r) {
-            return ((joinRowTypes).apply((l).value)).apply((r).value);
+            return (joinRowTypes).apply((l).value).apply((r).value);
           }
         });
       }
@@ -311,7 +311,7 @@ public interface Unification {
           
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>> visit(hydra.core.Type.Wrap r) {
-            return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right(hydra.util.ConsList.of(((joinOne).apply((l).value)).apply((r).value)));
+            return hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.util.ConsList<hydra.typing.TypeConstraint>>right(hydra.util.ConsList.of((joinOne).apply((l).value).apply((r).value)));
           }
         });
       }
@@ -392,7 +392,7 @@ public interface Unification {
               " ("),
             comment),
           ")")), cx))),
-        () -> ((bind).apply(v)).apply(t))));
+        () -> (bind).apply(v).apply(t))));
       hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.typing.TypeSubst> dflt = (sright).accept(new hydra.core.Type.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.typing.TypeSubst> otherwise(hydra.core.Type instance) {
@@ -401,7 +401,7 @@ public interface Unification {
         
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.typing.TypeSubst> visit(hydra.core.Type.Variable name) {
-          return ((tryBinding).apply((name).value)).apply(sleft);
+          return (tryBinding).apply((name).value).apply(sleft);
         }
       });
       return (sleft).accept(new hydra.core.Type.PartialVisitor<>() {
@@ -415,15 +415,15 @@ public interface Unification {
           return (sright).accept(new hydra.core.Type.PartialVisitor<>() {
             @Override
             public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.typing.TypeSubst> otherwise(hydra.core.Type instance) {
-              return ((tryBinding).apply((name).value)).apply(sright);
+              return (tryBinding).apply((name).value).apply(sright);
             }
             
             @Override
             public hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.typing.TypeSubst> visit(hydra.core.Type.Variable name2) {
               return hydra.lib.logic.IfElse.lazy(
                 hydra.lib.equality.Equal.apply(
-                  ((name).value).value,
-                  ((name2).value).value),
+                  (name).value.value,
+                  (name2).value.value),
                 () -> hydra.unification.Unification.<T0>unifyTypeConstraints(
                   cx,
                   schemaTypes,
@@ -443,14 +443,14 @@ public interface Unification {
                             hydra.lib.strings.Cat2.apply(
                               hydra.lib.strings.Cat2.apply(
                                 "Attempted to unify schema names ",
-                                ((name).value).value),
+                                (name).value.value),
                               " and "),
-                            ((name2).value).value),
+                            (name2).value.value),
                           " ("),
                         comment),
                       ")")), cx))),
-                    () -> ((bind).apply((name2).value)).apply(sleft)),
-                  () -> ((bind).apply((name).value)).apply(sright)));
+                    () -> (bind).apply((name2).value).apply(sleft)),
+                  () -> (bind).apply((name).value).apply(sright)));
             }
           });
         }
@@ -459,7 +459,7 @@ public interface Unification {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(constraints),
       () -> hydra.util.Either.<hydra.context.InContext<hydra.error.UnificationError>, hydra.typing.TypeSubst>right(hydra.substitution.Substitution.idTypeSubst()),
-      () -> ((withConstraint).apply(hydra.lib.lists.Head.apply(constraints))).apply(hydra.lib.lists.Tail.apply(constraints)));
+      () -> (withConstraint).apply(hydra.lib.lists.Head.apply(constraints)).apply(hydra.lib.lists.Tail.apply(constraints)));
   }
   
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.UnificationError>, hydra.typing.TypeSubst> unifyTypeLists(hydra.context.Context cx, hydra.util.PersistentMap<hydra.core.Name, T0> schemaTypes, hydra.util.ConsList<hydra.core.Type> l, hydra.util.ConsList<hydra.core.Type> r, String comment) {
@@ -492,7 +492,7 @@ public interface Unification {
         return hydra.lib.logic.Or.apply(
           b,
           hydra.lib.equality.Equal.apply(
-            ((v).value).value,
+            (v).value.value,
             (var).value));
       }
     })));

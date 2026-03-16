@@ -357,7 +357,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -400,7 +400,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -443,7 +443,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -486,7 +486,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -529,7 +529,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -572,7 +572,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -615,7 +615,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -658,7 +658,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -701,7 +701,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -744,7 +744,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -787,7 +787,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -830,7 +830,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -873,7 +873,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -916,7 +916,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -959,7 +959,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -1002,7 +1002,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -1045,7 +1045,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -1088,7 +1088,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -1131,7 +1131,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -1174,7 +1174,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -1217,7 +1217,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -1260,7 +1260,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -1303,7 +1303,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -1346,7 +1346,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -1389,7 +1389,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -1432,7 +1432,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -1475,7 +1475,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -1518,7 +1518,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -1561,7 +1561,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -1604,7 +1604,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -1647,7 +1647,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -1690,7 +1690,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -1733,7 +1733,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -1776,7 +1776,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -1819,7 +1819,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -1862,7 +1862,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -1905,7 +1905,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -1948,7 +1948,7 @@ public abstract class TestCase implements Serializable, Comparable<TestCase> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TestCase other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

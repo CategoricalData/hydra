@@ -67,7 +67,7 @@ public abstract class ExplicitConstructorInvocation_Variant implements Serializa
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ExplicitConstructorInvocation_Variant other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -106,7 +106,7 @@ public abstract class ExplicitConstructorInvocation_Variant implements Serializa
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ExplicitConstructorInvocation_Variant other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -146,7 +146,7 @@ public abstract class ExplicitConstructorInvocation_Variant implements Serializa
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ExplicitConstructorInvocation_Variant other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

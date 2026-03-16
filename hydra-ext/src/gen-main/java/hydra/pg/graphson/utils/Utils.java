@@ -127,7 +127,7 @@ public interface Utils {
   }
   
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> encodeTermValue(hydra.core.Term term) {
-    return (hydra.rewriting.Rewriting.deannotateTerm(term)).accept(new hydra.core.Term.PartialVisitor<>() {
+    return hydra.rewriting.Rewriting.deannotateTerm(term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> otherwise(hydra.core.Term instance) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("unsupported term variant for GraphSON encoding")), hydra.lexical.Lexical.emptyContext())));
@@ -135,7 +135,7 @@ public interface Utils {
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.Term.Literal lit) {
-        return ((lit).value).accept(new hydra.core.Literal.PartialVisitor<>() {
+        return (lit).value.accept(new hydra.core.Literal.PartialVisitor<>() {
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> otherwise(hydra.core.Literal instance) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("unsupported literal type for GraphSON encoding")), hydra.lexical.Lexical.emptyContext())));
@@ -153,7 +153,7 @@ public interface Utils {
           
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.Literal.Float_ fv) {
-            return ((fv).value).accept(new hydra.core.FloatValue.PartialVisitor<>() {
+            return (fv).value.accept(new hydra.core.FloatValue.PartialVisitor<>() {
               @Override
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> otherwise(hydra.core.FloatValue instance) {
                 return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("unsupported float type")), hydra.lexical.Lexical.emptyContext())));
@@ -178,7 +178,7 @@ public interface Utils {
           
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> visit(hydra.core.Literal.Integer_ iv) {
-            return ((iv).value).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
+            return (iv).value.accept(new hydra.core.IntegerValue.PartialVisitor<>() {
               @Override
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value> otherwise(hydra.core.IntegerValue instance) {
                 return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.pg.graphson.syntax.Value>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("unsupported integer type")), hydra.lexical.Lexical.emptyContext())));

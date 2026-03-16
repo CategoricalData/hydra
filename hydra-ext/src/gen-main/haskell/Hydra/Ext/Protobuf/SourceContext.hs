@@ -19,6 +19,6 @@ data SourceContext =
     sourceContextFileName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_SourceContext = (Core.Name "hydra.ext.protobuf.sourceContext.SourceContext")
+_SourceContext = Core.Name "hydra.ext.protobuf.sourceContext.SourceContext"
 
-_SourceContext_fileName = (Core.Name "fileName")
+_SourceContext_fileName = Core.Name "fileName"

@@ -149,7 +149,7 @@ public interface Core {
       (java.util.function.Function<hydra.core.CaseStatement, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>>) (cs -> {
         hydra.util.Lazy<hydra.util.ConsList<hydra.core.Field>> matching = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
           (java.util.function.Function<hydra.core.Field, Boolean>) (f -> hydra.lib.equality.Equal.apply(
-            ((f).name).value,
+            (f).name.value,
             (fieldName).value)),
           (cs).cases));
         return hydra.lib.logic.IfElse.lazy(
@@ -179,7 +179,7 @@ public interface Core {
         
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement> visit(hydra.core.Term.Function function) {
-          return ((function).value).accept(new hydra.core.Function.PartialVisitor<>() {
+          return (function).value.accept(new hydra.core.Function.PartialVisitor<>() {
             @Override
             public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement> otherwise(hydra.core.Function instance) {
               return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
@@ -193,7 +193,7 @@ public interface Core {
             
             @Override
             public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement> visit(hydra.core.Function.Elimination elimination) {
-              return ((elimination).value).accept(new hydra.core.Elimination.PartialVisitor<>() {
+              return (elimination).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
                 @Override
                 public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement> otherwise(hydra.core.Elimination instance) {
                   return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
@@ -209,7 +209,7 @@ public interface Core {
                 public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement> visit(hydra.core.Elimination.Union cs) {
                   return hydra.lib.logic.IfElse.lazy(
                     hydra.lib.equality.Equal.apply(
-                      (((cs).value).typeName).value,
+                      (cs).value.typeName.value,
                       (name).value),
                     () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement>right((cs).value),
                     () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.CaseStatement>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
@@ -232,7 +232,7 @@ public interface Core {
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0> field(hydra.context.Context cx, hydra.core.Name fname, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>> mapping, hydra.graph.Graph graph, hydra.util.ConsList<hydra.core.Field> fields) {
     hydra.util.Lazy<hydra.util.ConsList<hydra.core.Field>> matchingFields = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
       (java.util.function.Function<hydra.core.Field, Boolean>) (f -> hydra.lib.equality.Equal.apply(
-        ((f).name).value,
+        (f).name.value,
         (fname).value)),
       fields));
     return hydra.lib.logic.IfElse.lazy(
@@ -254,7 +254,7 @@ public interface Core {
           hydra.lexical.Lexical.stripAndDereferenceTerm(
             cx,
             graph,
-            (hydra.lib.lists.Head.apply(matchingFields.get())).term),
+            hydra.lib.lists.Head.apply(matchingFields.get()).term),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>>) (stripped -> (mapping).apply(stripped))),
         () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, T0>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
@@ -464,9 +464,9 @@ public interface Core {
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field> visit(hydra.core.Term.Union injection) {
           return hydra.lib.logic.IfElse.lazy(
             hydra.lib.equality.Equal.apply(
-              (((injection).value).typeName).value,
+              (injection).value.typeName.value,
               (expected).value),
-            () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>right(((injection).value).field),
+            () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>right((injection).value.field),
             () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
               hydra.lib.strings.Cat2.apply(
                 hydra.lib.strings.Cat2.apply(
@@ -475,7 +475,7 @@ public interface Core {
                     "injection of type ",
                     (expected).value)),
                 " but found "),
-              (((injection).value).typeName).value))), cx))));
+              (injection).value.typeName.value))), cx))));
         }
       })));
   }
@@ -680,7 +680,7 @@ public interface Core {
         
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Lambda> visit(hydra.core.Term.Function function) {
-          return ((function).value).accept(new hydra.core.Function.PartialVisitor<>() {
+          return (function).value.accept(new hydra.core.Function.PartialVisitor<>() {
             @Override
             public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Lambda> otherwise(hydra.core.Function instance) {
               return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Lambda>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
@@ -711,7 +711,7 @@ public interface Core {
       (java.util.function.Function<hydra.core.Let, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (letExpr -> {
         hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> matchingBindings = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
           (java.util.function.Function<hydra.core.Binding, Boolean>) (b -> hydra.lib.equality.Equal.apply(
-            ((b).name).value,
+            (b).name.value,
             (name).value)),
           (letExpr).bindings));
         return hydra.lib.logic.IfElse.lazy(
@@ -723,7 +723,7 @@ public interface Core {
             hydra.lib.equality.Equal.apply(
               hydra.lib.lists.Length.apply(matchingBindings.get()),
               1),
-            () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right((hydra.lib.lists.Head.apply(matchingBindings.get())).term),
+            () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(hydra.lib.lists.Head.apply(matchingBindings.get()).term),
             () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
               "multiple bindings named ",
               n))), cx)))));
@@ -1029,7 +1029,7 @@ public interface Core {
                 "record of type ",
                 (expected).value)),
             " but found "),
-          ((record).typeName).value))), cx))))));
+          (record).typeName.value))), cx))))));
   }
   
   static <T0> hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.FieldType>> recordType(hydra.context.Context cx, T0 ename, hydra.core.Type typ) {
@@ -1387,9 +1387,9 @@ public interface Core {
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Term.Wrap wrappedTerm) {
           return hydra.lib.logic.IfElse.lazy(
             hydra.lib.equality.Equal.apply(
-              (((wrappedTerm).value).typeName).value,
+              (wrappedTerm).value.typeName.value,
               (expected).value),
-            () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(((wrappedTerm).value).body),
+            () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right((wrappedTerm).value.body),
             () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
               hydra.lib.strings.Cat2.apply(
                 hydra.lib.strings.Cat2.apply(
@@ -1398,7 +1398,7 @@ public interface Core {
                     "wrapper of type ",
                     (expected).value)),
                 " but found "),
-              (((wrappedTerm).value).typeName).value))), cx))));
+              (wrappedTerm).value.typeName.value))), cx))));
         }
       })));
   }

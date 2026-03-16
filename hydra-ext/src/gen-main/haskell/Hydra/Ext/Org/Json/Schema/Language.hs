@@ -18,41 +18,44 @@ import qualified Data.Set as S
 
 -- | Language constraints for JSON Schema
 jsonSchemaLanguage :: Coders.Language
-jsonSchemaLanguage = Coders.Language {
-  Coders.languageName = (Coders.LanguageName "hydra.ext.org.json.schema"),
-  Coders.languageConstraints = Coders.LanguageConstraints {
-    Coders.languageConstraintsEliminationVariants = eliminationVariants,
-    Coders.languageConstraintsLiteralVariants = literalVariants,
-    Coders.languageConstraintsFloatTypes = floatTypes,
-    Coders.languageConstraintsFunctionVariants = functionVariants,
-    Coders.languageConstraintsIntegerTypes = integerTypes,
-    Coders.languageConstraintsTermVariants = termVariants,
-    Coders.languageConstraintsTypeVariants = typeVariants,
-    Coders.languageConstraintsTypes = typePredicate}} 
+jsonSchemaLanguage =
+    Coders.Language {
+      Coders.languageName = (Coders.LanguageName "hydra.ext.org.json.schema"),
+      Coders.languageConstraints = Coders.LanguageConstraints {
+        Coders.languageConstraintsEliminationVariants = eliminationVariants,
+        Coders.languageConstraintsLiteralVariants = literalVariants,
+        Coders.languageConstraintsFloatTypes = floatTypes,
+        Coders.languageConstraintsFunctionVariants = functionVariants,
+        Coders.languageConstraintsIntegerTypes = integerTypes,
+        Coders.languageConstraintsTermVariants = termVariants,
+        Coders.languageConstraintsTypeVariants = typeVariants,
+        Coders.languageConstraintsTypes = typePredicate}} 
   where 
     eliminationVariants = Sets.empty
-    literalVariants = (Sets.fromList [
-      Variants.LiteralVariantBoolean,
-      Variants.LiteralVariantFloat,
-      Variants.LiteralVariantInteger,
-      Variants.LiteralVariantString])
-    floatTypes = (Sets.fromList [
-      Core.FloatTypeBigfloat])
+    literalVariants =
+        Sets.fromList [
+          Variants.LiteralVariantBoolean,
+          Variants.LiteralVariantFloat,
+          Variants.LiteralVariantInteger,
+          Variants.LiteralVariantString]
+    floatTypes = Sets.fromList [
+      Core.FloatTypeBigfloat]
     functionVariants = Sets.empty
-    integerTypes = (Sets.fromList [
-      Core.IntegerTypeBigint])
-    termVariants = (Sets.fromList Reflect.termVariants)
-    typeVariants = (Sets.fromList [
-      Variants.TypeVariantAnnotated,
-      Variants.TypeVariantEither,
-      Variants.TypeVariantList,
-      Variants.TypeVariantLiteral,
-      Variants.TypeVariantMap,
-      Variants.TypeVariantMaybe,
-      Variants.TypeVariantPair,
-      Variants.TypeVariantRecord,
-      Variants.TypeVariantSet,
-      Variants.TypeVariantUnion,
-      Variants.TypeVariantVariable,
-      Variants.TypeVariantWrap])
-    typePredicate = (\_ -> True)
+    integerTypes = Sets.fromList [
+      Core.IntegerTypeBigint]
+    termVariants = Sets.fromList Reflect.termVariants
+    typeVariants =
+        Sets.fromList [
+          Variants.TypeVariantAnnotated,
+          Variants.TypeVariantEither,
+          Variants.TypeVariantList,
+          Variants.TypeVariantLiteral,
+          Variants.TypeVariantMap,
+          Variants.TypeVariantMaybe,
+          Variants.TypeVariantPair,
+          Variants.TypeVariantRecord,
+          Variants.TypeVariantSet,
+          Variants.TypeVariantUnion,
+          Variants.TypeVariantVariable,
+          Variants.TypeVariantWrap]
+    typePredicate = \_ -> True

@@ -69,13 +69,13 @@ public interface Error_ {
   static String duplicateBindingError(hydra.error.DuplicateBindingError e) {
     return hydra.lib.strings.Cat2.apply(
       "duplicate binding: ",
-      ((e).name).value);
+      (e).name.value);
   }
   
   static String duplicateFieldError(hydra.error.DuplicateFieldError e) {
     return hydra.lib.strings.Cat2.apply(
       "duplicate field: ",
-      ((e).name).value);
+      (e).name.value);
   }
   
   static String error(hydra.error.Error_ e) {
@@ -225,13 +225,13 @@ public interface Error_ {
   static String undefinedTermError(hydra.error.UndefinedTermError e) {
     return hydra.lib.strings.Cat2.apply(
       "undefined term: ",
-      ((e).name).value);
+      (e).name.value);
   }
   
   static String undefinedTypeError(hydra.error.UndefinedTypeError e) {
     return hydra.lib.strings.Cat2.apply(
       "undefined type: ",
-      ((e).name).value);
+      (e).name.value);
   }
   
   static String unequalTypesError(hydra.error.UnequalTypesError e) {

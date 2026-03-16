@@ -59,36 +59,41 @@ visitorReturnParameter :: String
 visitorReturnParameter = "R"
 
 -- | Construct a Java package name from a list of string parts
-javaPackageName :: ([String] -> Syntax.PackageName)
-javaPackageName parts = (Syntax.PackageName (Lists.map (\p -> Syntax.Identifier p) parts))
+javaPackageName :: [String] -> Syntax.PackageName
+javaPackageName parts = Syntax.PackageName (Lists.map (\p -> Syntax.Identifier p) parts)
 
 -- | The hydra.core package name
-hydraCorePackageName :: (Maybe Syntax.PackageName)
-hydraCorePackageName = (Just (javaPackageName [
-  "hydra",
-  "core"]))
+hydraCorePackageName :: Maybe Syntax.PackageName
+hydraCorePackageName =
+    Just (javaPackageName [
+      "hydra",
+      "core"])
 
 -- | The hydra.util package name
-hydraUtilPackageName :: (Maybe Syntax.PackageName)
-hydraUtilPackageName = (Just (javaPackageName [
-  "hydra",
-  "util"]))
+hydraUtilPackageName :: Maybe Syntax.PackageName
+hydraUtilPackageName =
+    Just (javaPackageName [
+      "hydra",
+      "util"])
 
 -- | The java.lang package name
-javaLangPackageName :: (Maybe Syntax.PackageName)
-javaLangPackageName = (Just (javaPackageName [
-  "java",
-  "lang"]))
+javaLangPackageName :: Maybe Syntax.PackageName
+javaLangPackageName =
+    Just (javaPackageName [
+      "java",
+      "lang"])
 
 -- | The java.util.function package name
-javaUtilFunctionPackageName :: (Maybe Syntax.PackageName)
-javaUtilFunctionPackageName = (Just (javaPackageName [
-  "java",
-  "util",
-  "function"]))
+javaUtilFunctionPackageName :: Maybe Syntax.PackageName
+javaUtilFunctionPackageName =
+    Just (javaPackageName [
+      "java",
+      "util",
+      "function"])
 
 -- | The java.util package name
-javaUtilPackageName :: (Maybe Syntax.PackageName)
-javaUtilPackageName = (Just (javaPackageName [
-  "java",
-  "util"]))
+javaUtilPackageName :: Maybe Syntax.PackageName
+javaUtilPackageName =
+    Just (javaPackageName [
+      "java",
+      "util"])

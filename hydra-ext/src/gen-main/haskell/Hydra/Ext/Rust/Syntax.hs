@@ -19,9 +19,9 @@ data Crate =
     crateItems :: [ItemWithComments]}
   deriving (Eq, Ord, Read, Show)
 
-_Crate = (Core.Name "hydra.ext.rust.syntax.Crate")
+_Crate = Core.Name "hydra.ext.rust.syntax.Crate"
 
-_Crate_items = (Core.Name "items")
+_Crate_items = Core.Name "items"
 
 -- | A top-level item in a Rust module or crate
 data Item = 
@@ -49,29 +49,29 @@ data Item =
   ItemMacro MacroInvocation
   deriving (Eq, Ord, Read, Show)
 
-_Item = (Core.Name "hydra.ext.rust.syntax.Item")
+_Item = Core.Name "hydra.ext.rust.syntax.Item"
 
-_Item_use = (Core.Name "use")
+_Item_use = Core.Name "use"
 
-_Item_struct = (Core.Name "struct")
+_Item_struct = Core.Name "struct"
 
-_Item_enum = (Core.Name "enum")
+_Item_enum = Core.Name "enum"
 
-_Item_fn = (Core.Name "fn")
+_Item_fn = Core.Name "fn"
 
-_Item_typeAlias = (Core.Name "typeAlias")
+_Item_typeAlias = Core.Name "typeAlias"
 
-_Item_impl = (Core.Name "impl")
+_Item_impl = Core.Name "impl"
 
-_Item_trait = (Core.Name "trait")
+_Item_trait = Core.Name "trait"
 
-_Item_mod = (Core.Name "mod")
+_Item_mod = Core.Name "mod"
 
-_Item_const = (Core.Name "const")
+_Item_const = Core.Name "const"
 
-_Item_static = (Core.Name "static")
+_Item_static = Core.Name "static"
 
-_Item_macro = (Core.Name "macro")
+_Item_macro = Core.Name "macro"
 
 -- | An item together with optional doc comments and visibility
 data ItemWithComments = 
@@ -84,13 +84,13 @@ data ItemWithComments =
     itemWithCommentsItem :: Item}
   deriving (Eq, Ord, Read, Show)
 
-_ItemWithComments = (Core.Name "hydra.ext.rust.syntax.ItemWithComments")
+_ItemWithComments = Core.Name "hydra.ext.rust.syntax.ItemWithComments"
 
-_ItemWithComments_doc = (Core.Name "doc")
+_ItemWithComments_doc = Core.Name "doc"
 
-_ItemWithComments_visibility = (Core.Name "visibility")
+_ItemWithComments_visibility = Core.Name "visibility"
 
-_ItemWithComments_item = (Core.Name "item")
+_ItemWithComments_item = Core.Name "item"
 
 -- | A use declaration (e.g., use std::collections::BTreeMap;)
 data UseDeclaration = 
@@ -101,11 +101,11 @@ data UseDeclaration =
     useDeclarationTree :: UseTree}
   deriving (Eq, Ord, Read, Show)
 
-_UseDeclaration = (Core.Name "hydra.ext.rust.syntax.UseDeclaration")
+_UseDeclaration = Core.Name "hydra.ext.rust.syntax.UseDeclaration"
 
-_UseDeclaration_public = (Core.Name "public")
+_UseDeclaration_public = Core.Name "public"
 
-_UseDeclaration_tree = (Core.Name "tree")
+_UseDeclaration_tree = Core.Name "tree"
 
 -- | A use tree, representing the structure of a use path
 data UseTree = 
@@ -119,15 +119,15 @@ data UseTree =
   UseTreeGroup UseGroup
   deriving (Eq, Ord, Read, Show)
 
-_UseTree = (Core.Name "hydra.ext.rust.syntax.UseTree")
+_UseTree = Core.Name "hydra.ext.rust.syntax.UseTree"
 
-_UseTree_path = (Core.Name "path")
+_UseTree_path = Core.Name "path"
 
-_UseTree_rename = (Core.Name "rename")
+_UseTree_rename = Core.Name "rename"
 
-_UseTree_glob = (Core.Name "glob")
+_UseTree_glob = Core.Name "glob"
 
-_UseTree_group = (Core.Name "group")
+_UseTree_group = Core.Name "group"
 
 -- | A simple path import within a use tree
 data UsePath = 
@@ -136,9 +136,9 @@ data UsePath =
     usePathSegments :: [String]}
   deriving (Eq, Ord, Read, Show)
 
-_UsePath = (Core.Name "hydra.ext.rust.syntax.UsePath")
+_UsePath = Core.Name "hydra.ext.rust.syntax.UsePath"
 
-_UsePath_segments = (Core.Name "segments")
+_UsePath_segments = Core.Name "segments"
 
 -- | A renamed import (e.g., BTreeMap as Map)
 data UseRename = 
@@ -149,11 +149,11 @@ data UseRename =
     useRenameAlias :: String}
   deriving (Eq, Ord, Read, Show)
 
-_UseRename = (Core.Name "hydra.ext.rust.syntax.UseRename")
+_UseRename = Core.Name "hydra.ext.rust.syntax.UseRename"
 
-_UseRename_path = (Core.Name "path")
+_UseRename_path = Core.Name "path"
 
-_UseRename_alias = (Core.Name "alias")
+_UseRename_alias = Core.Name "alias"
 
 -- | A grouped import (e.g., std::collections::{BTreeMap, BTreeSet})
 data UseGroup = 
@@ -164,11 +164,11 @@ data UseGroup =
     useGroupTrees :: [UseTree]}
   deriving (Eq, Ord, Read, Show)
 
-_UseGroup = (Core.Name "hydra.ext.rust.syntax.UseGroup")
+_UseGroup = Core.Name "hydra.ext.rust.syntax.UseGroup"
 
-_UseGroup_prefix = (Core.Name "prefix")
+_UseGroup_prefix = Core.Name "prefix"
 
-_UseGroup_trees = (Core.Name "trees")
+_UseGroup_trees = Core.Name "trees"
 
 -- | A struct definition (e.g., struct Foo<T> { bar: T })
 data StructDef = 
@@ -189,21 +189,21 @@ data StructDef =
     structDefDoc :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_StructDef = (Core.Name "hydra.ext.rust.syntax.StructDef")
+_StructDef = Core.Name "hydra.ext.rust.syntax.StructDef"
 
-_StructDef_name = (Core.Name "name")
+_StructDef_name = Core.Name "name"
 
-_StructDef_generics = (Core.Name "generics")
+_StructDef_generics = Core.Name "generics"
 
-_StructDef_whereClause = (Core.Name "whereClause")
+_StructDef_whereClause = Core.Name "whereClause"
 
-_StructDef_body = (Core.Name "body")
+_StructDef_body = Core.Name "body"
 
-_StructDef_derives = (Core.Name "derives")
+_StructDef_derives = Core.Name "derives"
 
-_StructDef_public = (Core.Name "public")
+_StructDef_public = Core.Name "public"
 
-_StructDef_doc = (Core.Name "doc")
+_StructDef_doc = Core.Name "doc"
 
 -- | The body of a struct definition
 data StructBody = 
@@ -215,13 +215,13 @@ data StructBody =
   StructBodyUnit 
   deriving (Eq, Ord, Read, Show)
 
-_StructBody = (Core.Name "hydra.ext.rust.syntax.StructBody")
+_StructBody = Core.Name "hydra.ext.rust.syntax.StructBody"
 
-_StructBody_named = (Core.Name "named")
+_StructBody_named = Core.Name "named"
 
-_StructBody_tuple = (Core.Name "tuple")
+_StructBody_tuple = Core.Name "tuple"
 
-_StructBody_unit = (Core.Name "unit")
+_StructBody_unit = Core.Name "unit"
 
 -- | A named field within a struct definition
 data StructField = 
@@ -236,15 +236,15 @@ data StructField =
     structFieldDoc :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_StructField = (Core.Name "hydra.ext.rust.syntax.StructField")
+_StructField = Core.Name "hydra.ext.rust.syntax.StructField"
 
-_StructField_name = (Core.Name "name")
+_StructField_name = Core.Name "name"
 
-_StructField_type = (Core.Name "type")
+_StructField_type = Core.Name "type"
 
-_StructField_public = (Core.Name "public")
+_StructField_public = Core.Name "public"
 
-_StructField_doc = (Core.Name "doc")
+_StructField_doc = Core.Name "doc"
 
 -- | A positional field within a tuple struct
 data TupleField = 
@@ -255,11 +255,11 @@ data TupleField =
     tupleFieldPublic :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_TupleField = (Core.Name "hydra.ext.rust.syntax.TupleField")
+_TupleField = Core.Name "hydra.ext.rust.syntax.TupleField"
 
-_TupleField_type = (Core.Name "type")
+_TupleField_type = Core.Name "type"
 
-_TupleField_public = (Core.Name "public")
+_TupleField_public = Core.Name "public"
 
 -- | An enum definition (e.g., enum Foo<T> { Bar(T), Baz { x: i32 } })
 data EnumDef = 
@@ -280,21 +280,21 @@ data EnumDef =
     enumDefDoc :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_EnumDef = (Core.Name "hydra.ext.rust.syntax.EnumDef")
+_EnumDef = Core.Name "hydra.ext.rust.syntax.EnumDef"
 
-_EnumDef_name = (Core.Name "name")
+_EnumDef_name = Core.Name "name"
 
-_EnumDef_generics = (Core.Name "generics")
+_EnumDef_generics = Core.Name "generics"
 
-_EnumDef_whereClause = (Core.Name "whereClause")
+_EnumDef_whereClause = Core.Name "whereClause"
 
-_EnumDef_variants = (Core.Name "variants")
+_EnumDef_variants = Core.Name "variants"
 
-_EnumDef_derives = (Core.Name "derives")
+_EnumDef_derives = Core.Name "derives"
 
-_EnumDef_public = (Core.Name "public")
+_EnumDef_public = Core.Name "public"
 
-_EnumDef_doc = (Core.Name "doc")
+_EnumDef_doc = Core.Name "doc"
 
 -- | A variant of an enum definition
 data EnumVariant = 
@@ -307,13 +307,13 @@ data EnumVariant =
     enumVariantDoc :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_EnumVariant = (Core.Name "hydra.ext.rust.syntax.EnumVariant")
+_EnumVariant = Core.Name "hydra.ext.rust.syntax.EnumVariant"
 
-_EnumVariant_name = (Core.Name "name")
+_EnumVariant_name = Core.Name "name"
 
-_EnumVariant_body = (Core.Name "body")
+_EnumVariant_body = Core.Name "body"
 
-_EnumVariant_doc = (Core.Name "doc")
+_EnumVariant_doc = Core.Name "doc"
 
 -- | The body of an enum variant
 data EnumVariantBody = 
@@ -325,13 +325,13 @@ data EnumVariantBody =
   EnumVariantBodyStruct [StructField]
   deriving (Eq, Ord, Read, Show)
 
-_EnumVariantBody = (Core.Name "hydra.ext.rust.syntax.EnumVariantBody")
+_EnumVariantBody = Core.Name "hydra.ext.rust.syntax.EnumVariantBody"
 
-_EnumVariantBody_unit = (Core.Name "unit")
+_EnumVariantBody_unit = Core.Name "unit"
 
-_EnumVariantBody_tuple = (Core.Name "tuple")
+_EnumVariantBody_tuple = Core.Name "tuple"
 
-_EnumVariantBody_struct = (Core.Name "struct")
+_EnumVariantBody_struct = Core.Name "struct"
 
 -- | A function definition (e.g., fn foo<T>(x: T) -> String { ... })
 data FnDef = 
@@ -360,29 +360,29 @@ data FnDef =
     fnDefDoc :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_FnDef = (Core.Name "hydra.ext.rust.syntax.FnDef")
+_FnDef = Core.Name "hydra.ext.rust.syntax.FnDef"
 
-_FnDef_name = (Core.Name "name")
+_FnDef_name = Core.Name "name"
 
-_FnDef_generics = (Core.Name "generics")
+_FnDef_generics = Core.Name "generics"
 
-_FnDef_whereClause = (Core.Name "whereClause")
+_FnDef_whereClause = Core.Name "whereClause"
 
-_FnDef_params = (Core.Name "params")
+_FnDef_params = Core.Name "params"
 
-_FnDef_returnType = (Core.Name "returnType")
+_FnDef_returnType = Core.Name "returnType"
 
-_FnDef_body = (Core.Name "body")
+_FnDef_body = Core.Name "body"
 
-_FnDef_public = (Core.Name "public")
+_FnDef_public = Core.Name "public"
 
-_FnDef_async = (Core.Name "async")
+_FnDef_async = Core.Name "async"
 
-_FnDef_const = (Core.Name "const")
+_FnDef_const = Core.Name "const"
 
-_FnDef_unsafe = (Core.Name "unsafe")
+_FnDef_unsafe = Core.Name "unsafe"
 
-_FnDef_doc = (Core.Name "doc")
+_FnDef_doc = Core.Name "doc"
 
 -- | A function parameter
 data FnParam = 
@@ -393,11 +393,11 @@ data FnParam =
     fnParamType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_FnParam = (Core.Name "hydra.ext.rust.syntax.FnParam")
+_FnParam = Core.Name "hydra.ext.rust.syntax.FnParam"
 
-_FnParam_pattern = (Core.Name "pattern")
+_FnParam_pattern = Core.Name "pattern"
 
-_FnParam_type = (Core.Name "type")
+_FnParam_type = Core.Name "type"
 
 -- | A self parameter in a method
 data SelfParam = 
@@ -406,13 +406,13 @@ data SelfParam =
   SelfParamRefMut 
   deriving (Eq, Ord, Read, Show)
 
-_SelfParam = (Core.Name "hydra.ext.rust.syntax.SelfParam")
+_SelfParam = Core.Name "hydra.ext.rust.syntax.SelfParam"
 
-_SelfParam_owned = (Core.Name "owned")
+_SelfParam_owned = Core.Name "owned"
 
-_SelfParam_ref = (Core.Name "ref")
+_SelfParam_ref = Core.Name "ref"
 
-_SelfParam_refMut = (Core.Name "refMut")
+_SelfParam_refMut = Core.Name "refMut"
 
 -- | A method parameter, which may be self or a regular parameter
 data MethodParam = 
@@ -422,11 +422,11 @@ data MethodParam =
   MethodParamRegular FnParam
   deriving (Eq, Ord, Read, Show)
 
-_MethodParam = (Core.Name "hydra.ext.rust.syntax.MethodParam")
+_MethodParam = Core.Name "hydra.ext.rust.syntax.MethodParam"
 
-_MethodParam_self = (Core.Name "self")
+_MethodParam_self = Core.Name "self"
 
-_MethodParam_regular = (Core.Name "regular")
+_MethodParam_regular = Core.Name "regular"
 
 -- | A type alias definition (e.g., type Foo<T> = Bar<T>;)
 data TypeAlias = 
@@ -443,17 +443,17 @@ data TypeAlias =
     typeAliasDoc :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_TypeAlias = (Core.Name "hydra.ext.rust.syntax.TypeAlias")
+_TypeAlias = Core.Name "hydra.ext.rust.syntax.TypeAlias"
 
-_TypeAlias_name = (Core.Name "name")
+_TypeAlias_name = Core.Name "name"
 
-_TypeAlias_generics = (Core.Name "generics")
+_TypeAlias_generics = Core.Name "generics"
 
-_TypeAlias_type = (Core.Name "type")
+_TypeAlias_type = Core.Name "type"
 
-_TypeAlias_public = (Core.Name "public")
+_TypeAlias_public = Core.Name "public"
 
-_TypeAlias_doc = (Core.Name "doc")
+_TypeAlias_doc = Core.Name "doc"
 
 -- | A constant item (e.g., const FOO: u32 = 42;)
 data ConstDef = 
@@ -470,17 +470,17 @@ data ConstDef =
     constDefDoc :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_ConstDef = (Core.Name "hydra.ext.rust.syntax.ConstDef")
+_ConstDef = Core.Name "hydra.ext.rust.syntax.ConstDef"
 
-_ConstDef_name = (Core.Name "name")
+_ConstDef_name = Core.Name "name"
 
-_ConstDef_type = (Core.Name "type")
+_ConstDef_type = Core.Name "type"
 
-_ConstDef_value = (Core.Name "value")
+_ConstDef_value = Core.Name "value"
 
-_ConstDef_public = (Core.Name "public")
+_ConstDef_public = Core.Name "public"
 
-_ConstDef_doc = (Core.Name "doc")
+_ConstDef_doc = Core.Name "doc"
 
 -- | A static item (e.g., static FOO: u32 = 42;)
 data StaticDef = 
@@ -499,19 +499,19 @@ data StaticDef =
     staticDefDoc :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_StaticDef = (Core.Name "hydra.ext.rust.syntax.StaticDef")
+_StaticDef = Core.Name "hydra.ext.rust.syntax.StaticDef"
 
-_StaticDef_name = (Core.Name "name")
+_StaticDef_name = Core.Name "name"
 
-_StaticDef_type = (Core.Name "type")
+_StaticDef_type = Core.Name "type"
 
-_StaticDef_value = (Core.Name "value")
+_StaticDef_value = Core.Name "value"
 
-_StaticDef_mutable = (Core.Name "mutable")
+_StaticDef_mutable = Core.Name "mutable"
 
-_StaticDef_public = (Core.Name "public")
+_StaticDef_public = Core.Name "public"
 
-_StaticDef_doc = (Core.Name "doc")
+_StaticDef_doc = Core.Name "doc"
 
 -- | A module definition (either inline or external)
 data ModDef = 
@@ -526,15 +526,15 @@ data ModDef =
     modDefDoc :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_ModDef = (Core.Name "hydra.ext.rust.syntax.ModDef")
+_ModDef = Core.Name "hydra.ext.rust.syntax.ModDef"
 
-_ModDef_name = (Core.Name "name")
+_ModDef_name = Core.Name "name"
 
-_ModDef_body = (Core.Name "body")
+_ModDef_body = Core.Name "body"
 
-_ModDef_public = (Core.Name "public")
+_ModDef_public = Core.Name "public"
 
-_ModDef_doc = (Core.Name "doc")
+_ModDef_doc = Core.Name "doc"
 
 -- | An impl block (e.g., impl<T> Trait for Foo<T> { ... })
 data ImplBlock = 
@@ -553,19 +553,19 @@ data ImplBlock =
     implBlockItems :: [ImplItem]}
   deriving (Eq, Ord, Read, Show)
 
-_ImplBlock = (Core.Name "hydra.ext.rust.syntax.ImplBlock")
+_ImplBlock = Core.Name "hydra.ext.rust.syntax.ImplBlock"
 
-_ImplBlock_generics = (Core.Name "generics")
+_ImplBlock_generics = Core.Name "generics"
 
-_ImplBlock_whereClause = (Core.Name "whereClause")
+_ImplBlock_whereClause = Core.Name "whereClause"
 
-_ImplBlock_trait = (Core.Name "trait")
+_ImplBlock_trait = Core.Name "trait"
 
-_ImplBlock_negative = (Core.Name "negative")
+_ImplBlock_negative = Core.Name "negative"
 
-_ImplBlock_selfType = (Core.Name "selfType")
+_ImplBlock_selfType = Core.Name "selfType"
 
-_ImplBlock_items = (Core.Name "items")
+_ImplBlock_items = Core.Name "items"
 
 -- | An item within an impl block
 data ImplItem = 
@@ -577,13 +577,13 @@ data ImplItem =
   ImplItemConst ConstDef
   deriving (Eq, Ord, Read, Show)
 
-_ImplItem = (Core.Name "hydra.ext.rust.syntax.ImplItem")
+_ImplItem = Core.Name "hydra.ext.rust.syntax.ImplItem"
 
-_ImplItem_method = (Core.Name "method")
+_ImplItem_method = Core.Name "method"
 
-_ImplItem_type = (Core.Name "type")
+_ImplItem_type = Core.Name "type"
 
-_ImplItem_const = (Core.Name "const")
+_ImplItem_const = Core.Name "const"
 
 -- | A method within an impl block
 data ImplMethod = 
@@ -608,25 +608,25 @@ data ImplMethod =
     implMethodDoc :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_ImplMethod = (Core.Name "hydra.ext.rust.syntax.ImplMethod")
+_ImplMethod = Core.Name "hydra.ext.rust.syntax.ImplMethod"
 
-_ImplMethod_name = (Core.Name "name")
+_ImplMethod_name = Core.Name "name"
 
-_ImplMethod_generics = (Core.Name "generics")
+_ImplMethod_generics = Core.Name "generics"
 
-_ImplMethod_whereClause = (Core.Name "whereClause")
+_ImplMethod_whereClause = Core.Name "whereClause"
 
-_ImplMethod_params = (Core.Name "params")
+_ImplMethod_params = Core.Name "params"
 
-_ImplMethod_returnType = (Core.Name "returnType")
+_ImplMethod_returnType = Core.Name "returnType"
 
-_ImplMethod_body = (Core.Name "body")
+_ImplMethod_body = Core.Name "body"
 
-_ImplMethod_public = (Core.Name "public")
+_ImplMethod_public = Core.Name "public"
 
-_ImplMethod_default = (Core.Name "default")
+_ImplMethod_default = Core.Name "default"
 
-_ImplMethod_doc = (Core.Name "doc")
+_ImplMethod_doc = Core.Name "doc"
 
 -- | A trait definition (e.g., trait Foo<T>: Bar + Baz { ... })
 data TraitDef = 
@@ -649,23 +649,23 @@ data TraitDef =
     traitDefDoc :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_TraitDef = (Core.Name "hydra.ext.rust.syntax.TraitDef")
+_TraitDef = Core.Name "hydra.ext.rust.syntax.TraitDef"
 
-_TraitDef_name = (Core.Name "name")
+_TraitDef_name = Core.Name "name"
 
-_TraitDef_generics = (Core.Name "generics")
+_TraitDef_generics = Core.Name "generics"
 
-_TraitDef_whereClause = (Core.Name "whereClause")
+_TraitDef_whereClause = Core.Name "whereClause"
 
-_TraitDef_superTraits = (Core.Name "superTraits")
+_TraitDef_superTraits = Core.Name "superTraits"
 
-_TraitDef_items = (Core.Name "items")
+_TraitDef_items = Core.Name "items"
 
-_TraitDef_public = (Core.Name "public")
+_TraitDef_public = Core.Name "public"
 
-_TraitDef_unsafe = (Core.Name "unsafe")
+_TraitDef_unsafe = Core.Name "unsafe"
 
-_TraitDef_doc = (Core.Name "doc")
+_TraitDef_doc = Core.Name "doc"
 
 -- | An item within a trait definition
 data TraitItem = 
@@ -677,13 +677,13 @@ data TraitItem =
   TraitItemConst TraitConst
   deriving (Eq, Ord, Read, Show)
 
-_TraitItem = (Core.Name "hydra.ext.rust.syntax.TraitItem")
+_TraitItem = Core.Name "hydra.ext.rust.syntax.TraitItem"
 
-_TraitItem_method = (Core.Name "method")
+_TraitItem_method = Core.Name "method"
 
-_TraitItem_type = (Core.Name "type")
+_TraitItem_type = Core.Name "type"
 
-_TraitItem_const = (Core.Name "const")
+_TraitItem_const = Core.Name "const"
 
 -- | A method signature or default method within a trait
 data TraitMethod = 
@@ -704,21 +704,21 @@ data TraitMethod =
     traitMethodDoc :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_TraitMethod = (Core.Name "hydra.ext.rust.syntax.TraitMethod")
+_TraitMethod = Core.Name "hydra.ext.rust.syntax.TraitMethod"
 
-_TraitMethod_name = (Core.Name "name")
+_TraitMethod_name = Core.Name "name"
 
-_TraitMethod_generics = (Core.Name "generics")
+_TraitMethod_generics = Core.Name "generics"
 
-_TraitMethod_whereClause = (Core.Name "whereClause")
+_TraitMethod_whereClause = Core.Name "whereClause"
 
-_TraitMethod_params = (Core.Name "params")
+_TraitMethod_params = Core.Name "params"
 
-_TraitMethod_returnType = (Core.Name "returnType")
+_TraitMethod_returnType = Core.Name "returnType"
 
-_TraitMethod_defaultBody = (Core.Name "defaultBody")
+_TraitMethod_defaultBody = Core.Name "defaultBody"
 
-_TraitMethod_doc = (Core.Name "doc")
+_TraitMethod_doc = Core.Name "doc"
 
 -- | An associated type within a trait
 data TraitType = 
@@ -733,15 +733,15 @@ data TraitType =
     traitTypeDoc :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_TraitType = (Core.Name "hydra.ext.rust.syntax.TraitType")
+_TraitType = Core.Name "hydra.ext.rust.syntax.TraitType"
 
-_TraitType_name = (Core.Name "name")
+_TraitType_name = Core.Name "name"
 
-_TraitType_bounds = (Core.Name "bounds")
+_TraitType_bounds = Core.Name "bounds"
 
-_TraitType_default = (Core.Name "default")
+_TraitType_default = Core.Name "default"
 
-_TraitType_doc = (Core.Name "doc")
+_TraitType_doc = Core.Name "doc"
 
 -- | An associated constant within a trait
 data TraitConst = 
@@ -756,15 +756,15 @@ data TraitConst =
     traitConstDoc :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_TraitConst = (Core.Name "hydra.ext.rust.syntax.TraitConst")
+_TraitConst = Core.Name "hydra.ext.rust.syntax.TraitConst"
 
-_TraitConst_name = (Core.Name "name")
+_TraitConst_name = Core.Name "name"
 
-_TraitConst_type = (Core.Name "type")
+_TraitConst_type = Core.Name "type"
 
-_TraitConst_default = (Core.Name "default")
+_TraitConst_default = Core.Name "default"
 
-_TraitConst_doc = (Core.Name "doc")
+_TraitConst_doc = Core.Name "doc"
 
 -- | A generic type parameter (e.g., T: Clone + Debug)
 data GenericParam = 
@@ -775,11 +775,11 @@ data GenericParam =
     genericParamBounds :: [TypeParamBound]}
   deriving (Eq, Ord, Read, Show)
 
-_GenericParam = (Core.Name "hydra.ext.rust.syntax.GenericParam")
+_GenericParam = Core.Name "hydra.ext.rust.syntax.GenericParam"
 
-_GenericParam_name = (Core.Name "name")
+_GenericParam_name = Core.Name "name"
 
-_GenericParam_bounds = (Core.Name "bounds")
+_GenericParam_bounds = Core.Name "bounds"
 
 -- | A bound on a type parameter
 data TypeParamBound = 
@@ -789,11 +789,11 @@ data TypeParamBound =
   TypeParamBoundLifetime Lifetime
   deriving (Eq, Ord, Read, Show)
 
-_TypeParamBound = (Core.Name "hydra.ext.rust.syntax.TypeParamBound")
+_TypeParamBound = Core.Name "hydra.ext.rust.syntax.TypeParamBound"
 
-_TypeParamBound_trait = (Core.Name "trait")
+_TypeParamBound_trait = Core.Name "trait"
 
-_TypeParamBound_lifetime = (Core.Name "lifetime")
+_TypeParamBound_lifetime = Core.Name "lifetime"
 
 -- | A lifetime (e.g., 'a, 'static)
 data Lifetime = 
@@ -802,9 +802,9 @@ data Lifetime =
     lifetimeName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Lifetime = (Core.Name "hydra.ext.rust.syntax.Lifetime")
+_Lifetime = Core.Name "hydra.ext.rust.syntax.Lifetime"
 
-_Lifetime_name = (Core.Name "name")
+_Lifetime_name = Core.Name "name"
 
 -- | A where clause (e.g., where T: Clone, U: Debug)
 data WhereClause = 
@@ -813,9 +813,9 @@ data WhereClause =
     whereClausePredicates :: [WherePredicate]}
   deriving (Eq, Ord, Read, Show)
 
-_WhereClause = (Core.Name "hydra.ext.rust.syntax.WhereClause")
+_WhereClause = Core.Name "hydra.ext.rust.syntax.WhereClause"
 
-_WhereClause_predicates = (Core.Name "predicates")
+_WhereClause_predicates = Core.Name "predicates"
 
 -- | A single predicate in a where clause
 data WherePredicate = 
@@ -826,11 +826,11 @@ data WherePredicate =
     wherePredicateBounds :: [TypeParamBound]}
   deriving (Eq, Ord, Read, Show)
 
-_WherePredicate = (Core.Name "hydra.ext.rust.syntax.WherePredicate")
+_WherePredicate = Core.Name "hydra.ext.rust.syntax.WherePredicate"
 
-_WherePredicate_type = (Core.Name "type")
+_WherePredicate_type = Core.Name "type"
 
-_WherePredicate_bounds = (Core.Name "bounds")
+_WherePredicate_bounds = Core.Name "bounds"
 
 -- | A Rust type expression
 data Type = 
@@ -862,33 +862,33 @@ data Type =
   TypeMacro MacroInvocation
   deriving (Eq, Ord, Read, Show)
 
-_Type = (Core.Name "hydra.ext.rust.syntax.Type")
+_Type = Core.Name "hydra.ext.rust.syntax.Type"
 
-_Type_path = (Core.Name "path")
+_Type_path = Core.Name "path"
 
-_Type_reference = (Core.Name "reference")
+_Type_reference = Core.Name "reference"
 
-_Type_slice = (Core.Name "slice")
+_Type_slice = Core.Name "slice"
 
-_Type_array = (Core.Name "array")
+_Type_array = Core.Name "array"
 
-_Type_tuple = (Core.Name "tuple")
+_Type_tuple = Core.Name "tuple"
 
-_Type_fnPointer = (Core.Name "fnPointer")
+_Type_fnPointer = Core.Name "fnPointer"
 
-_Type_implTrait = (Core.Name "implTrait")
+_Type_implTrait = Core.Name "implTrait"
 
-_Type_dynTrait = (Core.Name "dynTrait")
+_Type_dynTrait = Core.Name "dynTrait"
 
-_Type_inferred = (Core.Name "inferred")
+_Type_inferred = Core.Name "inferred"
 
-_Type_unit = (Core.Name "unit")
+_Type_unit = Core.Name "unit"
 
-_Type_never = (Core.Name "never")
+_Type_never = Core.Name "never"
 
-_Type_rawPointer = (Core.Name "rawPointer")
+_Type_rawPointer = Core.Name "rawPointer"
 
-_Type_macro = (Core.Name "macro")
+_Type_macro = Core.Name "macro"
 
 -- | A path-based type, possibly with generic arguments
 data TypePath = 
@@ -899,11 +899,11 @@ data TypePath =
     typePathSegments :: [PathSegment]}
   deriving (Eq, Ord, Read, Show)
 
-_TypePath = (Core.Name "hydra.ext.rust.syntax.TypePath")
+_TypePath = Core.Name "hydra.ext.rust.syntax.TypePath"
 
-_TypePath_global = (Core.Name "global")
+_TypePath_global = Core.Name "global"
 
-_TypePath_segments = (Core.Name "segments")
+_TypePath_segments = Core.Name "segments"
 
 -- | A segment within a type path
 data PathSegment = 
@@ -914,11 +914,11 @@ data PathSegment =
     pathSegmentArguments :: GenericArguments}
   deriving (Eq, Ord, Read, Show)
 
-_PathSegment = (Core.Name "hydra.ext.rust.syntax.PathSegment")
+_PathSegment = Core.Name "hydra.ext.rust.syntax.PathSegment"
 
-_PathSegment_name = (Core.Name "name")
+_PathSegment_name = Core.Name "name"
 
-_PathSegment_arguments = (Core.Name "arguments")
+_PathSegment_arguments = Core.Name "arguments"
 
 -- | Generic arguments to a path segment
 data GenericArguments = 
@@ -930,13 +930,13 @@ data GenericArguments =
   GenericArgumentsParenthesized ParenthesizedArgs
   deriving (Eq, Ord, Read, Show)
 
-_GenericArguments = (Core.Name "hydra.ext.rust.syntax.GenericArguments")
+_GenericArguments = Core.Name "hydra.ext.rust.syntax.GenericArguments"
 
-_GenericArguments_none = (Core.Name "none")
+_GenericArguments_none = Core.Name "none"
 
-_GenericArguments_angleBracketed = (Core.Name "angleBracketed")
+_GenericArguments_angleBracketed = Core.Name "angleBracketed"
 
-_GenericArguments_parenthesized = (Core.Name "parenthesized")
+_GenericArguments_parenthesized = Core.Name "parenthesized"
 
 -- | Angle-bracketed generic arguments
 data AngleBracketedArgs = 
@@ -945,9 +945,9 @@ data AngleBracketedArgs =
     angleBracketedArgsArgs :: [GenericArg]}
   deriving (Eq, Ord, Read, Show)
 
-_AngleBracketedArgs = (Core.Name "hydra.ext.rust.syntax.AngleBracketedArgs")
+_AngleBracketedArgs = Core.Name "hydra.ext.rust.syntax.AngleBracketedArgs"
 
-_AngleBracketedArgs_args = (Core.Name "args")
+_AngleBracketedArgs_args = Core.Name "args"
 
 -- | A single generic argument
 data GenericArg = 
@@ -961,15 +961,15 @@ data GenericArg =
   GenericArgBinding TypeBinding
   deriving (Eq, Ord, Read, Show)
 
-_GenericArg = (Core.Name "hydra.ext.rust.syntax.GenericArg")
+_GenericArg = Core.Name "hydra.ext.rust.syntax.GenericArg"
 
-_GenericArg_type = (Core.Name "type")
+_GenericArg_type = Core.Name "type"
 
-_GenericArg_lifetime = (Core.Name "lifetime")
+_GenericArg_lifetime = Core.Name "lifetime"
 
-_GenericArg_const = (Core.Name "const")
+_GenericArg_const = Core.Name "const"
 
-_GenericArg_binding = (Core.Name "binding")
+_GenericArg_binding = Core.Name "binding"
 
 -- | An associated type binding within generic arguments
 data TypeBinding = 
@@ -980,11 +980,11 @@ data TypeBinding =
     typeBindingType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_TypeBinding = (Core.Name "hydra.ext.rust.syntax.TypeBinding")
+_TypeBinding = Core.Name "hydra.ext.rust.syntax.TypeBinding"
 
-_TypeBinding_name = (Core.Name "name")
+_TypeBinding_name = Core.Name "name"
 
-_TypeBinding_type = (Core.Name "type")
+_TypeBinding_type = Core.Name "type"
 
 -- | Parenthesized generic arguments for Fn traits
 data ParenthesizedArgs = 
@@ -995,11 +995,11 @@ data ParenthesizedArgs =
     parenthesizedArgsOutput :: (Maybe Type)}
   deriving (Eq, Ord, Read, Show)
 
-_ParenthesizedArgs = (Core.Name "hydra.ext.rust.syntax.ParenthesizedArgs")
+_ParenthesizedArgs = Core.Name "hydra.ext.rust.syntax.ParenthesizedArgs"
 
-_ParenthesizedArgs_inputs = (Core.Name "inputs")
+_ParenthesizedArgs_inputs = Core.Name "inputs"
 
-_ParenthesizedArgs_output = (Core.Name "output")
+_ParenthesizedArgs_output = Core.Name "output"
 
 -- | A reference type (e.g., &T, &mut T, &'a T)
 data ReferenceType = 
@@ -1012,13 +1012,13 @@ data ReferenceType =
     referenceTypeType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_ReferenceType = (Core.Name "hydra.ext.rust.syntax.ReferenceType")
+_ReferenceType = Core.Name "hydra.ext.rust.syntax.ReferenceType"
 
-_ReferenceType_lifetime = (Core.Name "lifetime")
+_ReferenceType_lifetime = Core.Name "lifetime"
 
-_ReferenceType_mutable = (Core.Name "mutable")
+_ReferenceType_mutable = Core.Name "mutable"
 
-_ReferenceType_type = (Core.Name "type")
+_ReferenceType_type = Core.Name "type"
 
 -- | An array type with a fixed size (e.g., [T; 3])
 data ArrayType = 
@@ -1029,11 +1029,11 @@ data ArrayType =
     arrayTypeLength :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_ArrayType = (Core.Name "hydra.ext.rust.syntax.ArrayType")
+_ArrayType = Core.Name "hydra.ext.rust.syntax.ArrayType"
 
-_ArrayType_element = (Core.Name "element")
+_ArrayType_element = Core.Name "element"
 
-_ArrayType_length = (Core.Name "length")
+_ArrayType_length = Core.Name "length"
 
 -- | A function pointer type (e.g., fn(i32, i32) -> i32)
 data FnPointerType = 
@@ -1044,11 +1044,11 @@ data FnPointerType =
     fnPointerTypeReturnType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_FnPointerType = (Core.Name "hydra.ext.rust.syntax.FnPointerType")
+_FnPointerType = Core.Name "hydra.ext.rust.syntax.FnPointerType"
 
-_FnPointerType_params = (Core.Name "params")
+_FnPointerType_params = Core.Name "params"
 
-_FnPointerType_returnType = (Core.Name "returnType")
+_FnPointerType_returnType = Core.Name "returnType"
 
 -- | A raw pointer type (e.g., *const T, *mut T)
 data RawPointerType = 
@@ -1059,11 +1059,11 @@ data RawPointerType =
     rawPointerTypeType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_RawPointerType = (Core.Name "hydra.ext.rust.syntax.RawPointerType")
+_RawPointerType = Core.Name "hydra.ext.rust.syntax.RawPointerType"
 
-_RawPointerType_mutable = (Core.Name "mutable")
+_RawPointerType_mutable = Core.Name "mutable"
 
-_RawPointerType_type = (Core.Name "type")
+_RawPointerType_type = Core.Name "type"
 
 -- | A Rust expression
 data Expression = 
@@ -1135,73 +1135,73 @@ data Expression =
   ExpressionParen Expression
   deriving (Eq, Ord, Read, Show)
 
-_Expression = (Core.Name "hydra.ext.rust.syntax.Expression")
+_Expression = Core.Name "hydra.ext.rust.syntax.Expression"
 
-_Expression_literal = (Core.Name "literal")
+_Expression_literal = Core.Name "literal"
 
-_Expression_path = (Core.Name "path")
+_Expression_path = Core.Name "path"
 
-_Expression_block = (Core.Name "block")
+_Expression_block = Core.Name "block"
 
-_Expression_call = (Core.Name "call")
+_Expression_call = Core.Name "call"
 
-_Expression_methodCall = (Core.Name "methodCall")
+_Expression_methodCall = Core.Name "methodCall"
 
-_Expression_fieldAccess = (Core.Name "fieldAccess")
+_Expression_fieldAccess = Core.Name "fieldAccess"
 
-_Expression_tupleIndex = (Core.Name "tupleIndex")
+_Expression_tupleIndex = Core.Name "tupleIndex"
 
-_Expression_closure = (Core.Name "closure")
+_Expression_closure = Core.Name "closure"
 
-_Expression_if = (Core.Name "if")
+_Expression_if = Core.Name "if"
 
-_Expression_match = (Core.Name "match")
+_Expression_match = Core.Name "match"
 
-_Expression_loop = (Core.Name "loop")
+_Expression_loop = Core.Name "loop"
 
-_Expression_while = (Core.Name "while")
+_Expression_while = Core.Name "while"
 
-_Expression_for = (Core.Name "for")
+_Expression_for = Core.Name "for"
 
-_Expression_binary = (Core.Name "binary")
+_Expression_binary = Core.Name "binary"
 
-_Expression_unary = (Core.Name "unary")
+_Expression_unary = Core.Name "unary"
 
-_Expression_reference = (Core.Name "reference")
+_Expression_reference = Core.Name "reference"
 
-_Expression_dereference = (Core.Name "dereference")
+_Expression_dereference = Core.Name "dereference"
 
-_Expression_struct = (Core.Name "struct")
+_Expression_struct = Core.Name "struct"
 
-_Expression_tuple = (Core.Name "tuple")
+_Expression_tuple = Core.Name "tuple"
 
-_Expression_array = (Core.Name "array")
+_Expression_array = Core.Name "array"
 
-_Expression_index = (Core.Name "index")
+_Expression_index = Core.Name "index"
 
-_Expression_range = (Core.Name "range")
+_Expression_range = Core.Name "range"
 
-_Expression_return = (Core.Name "return")
+_Expression_return = Core.Name "return"
 
-_Expression_break = (Core.Name "break")
+_Expression_break = Core.Name "break"
 
-_Expression_continue = (Core.Name "continue")
+_Expression_continue = Core.Name "continue"
 
-_Expression_try = (Core.Name "try")
+_Expression_try = Core.Name "try"
 
-_Expression_cast = (Core.Name "cast")
+_Expression_cast = Core.Name "cast"
 
-_Expression_typeAscription = (Core.Name "typeAscription")
+_Expression_typeAscription = Core.Name "typeAscription"
 
-_Expression_await = (Core.Name "await")
+_Expression_await = Core.Name "await"
 
-_Expression_assign = (Core.Name "assign")
+_Expression_assign = Core.Name "assign"
 
-_Expression_compoundAssign = (Core.Name "compoundAssign")
+_Expression_compoundAssign = Core.Name "compoundAssign"
 
-_Expression_macro = (Core.Name "macro")
+_Expression_macro = Core.Name "macro"
 
-_Expression_paren = (Core.Name "paren")
+_Expression_paren = Core.Name "paren"
 
 -- | A path used as an expression
 data ExprPath = 
@@ -1212,11 +1212,11 @@ data ExprPath =
     exprPathSegments :: [PathSegment]}
   deriving (Eq, Ord, Read, Show)
 
-_ExprPath = (Core.Name "hydra.ext.rust.syntax.ExprPath")
+_ExprPath = Core.Name "hydra.ext.rust.syntax.ExprPath"
 
-_ExprPath_global = (Core.Name "global")
+_ExprPath_global = Core.Name "global"
 
-_ExprPath_segments = (Core.Name "segments")
+_ExprPath_segments = Core.Name "segments"
 
 -- | A function call expression
 data CallExpr = 
@@ -1227,11 +1227,11 @@ data CallExpr =
     callExprArgs :: [Expression]}
   deriving (Eq, Ord, Read, Show)
 
-_CallExpr = (Core.Name "hydra.ext.rust.syntax.CallExpr")
+_CallExpr = Core.Name "hydra.ext.rust.syntax.CallExpr"
 
-_CallExpr_function = (Core.Name "function")
+_CallExpr_function = Core.Name "function"
 
-_CallExpr_args = (Core.Name "args")
+_CallExpr_args = Core.Name "args"
 
 -- | A method call expression
 data MethodCallExpr = 
@@ -1246,15 +1246,15 @@ data MethodCallExpr =
     methodCallExprArgs :: [Expression]}
   deriving (Eq, Ord, Read, Show)
 
-_MethodCallExpr = (Core.Name "hydra.ext.rust.syntax.MethodCallExpr")
+_MethodCallExpr = Core.Name "hydra.ext.rust.syntax.MethodCallExpr"
 
-_MethodCallExpr_receiver = (Core.Name "receiver")
+_MethodCallExpr_receiver = Core.Name "receiver"
 
-_MethodCallExpr_method = (Core.Name "method")
+_MethodCallExpr_method = Core.Name "method"
 
-_MethodCallExpr_turbofish = (Core.Name "turbofish")
+_MethodCallExpr_turbofish = Core.Name "turbofish"
 
-_MethodCallExpr_args = (Core.Name "args")
+_MethodCallExpr_args = Core.Name "args"
 
 -- | A field access expression
 data FieldAccessExpr = 
@@ -1265,11 +1265,11 @@ data FieldAccessExpr =
     fieldAccessExprField :: String}
   deriving (Eq, Ord, Read, Show)
 
-_FieldAccessExpr = (Core.Name "hydra.ext.rust.syntax.FieldAccessExpr")
+_FieldAccessExpr = Core.Name "hydra.ext.rust.syntax.FieldAccessExpr"
 
-_FieldAccessExpr_object = (Core.Name "object")
+_FieldAccessExpr_object = Core.Name "object"
 
-_FieldAccessExpr_field = (Core.Name "field")
+_FieldAccessExpr_field = Core.Name "field"
 
 -- | A tuple index expression
 data TupleIndexExpr = 
@@ -1280,11 +1280,11 @@ data TupleIndexExpr =
     tupleIndexExprIndex :: Int}
   deriving (Eq, Ord, Read, Show)
 
-_TupleIndexExpr = (Core.Name "hydra.ext.rust.syntax.TupleIndexExpr")
+_TupleIndexExpr = Core.Name "hydra.ext.rust.syntax.TupleIndexExpr"
 
-_TupleIndexExpr_tuple = (Core.Name "tuple")
+_TupleIndexExpr_tuple = Core.Name "tuple"
 
-_TupleIndexExpr_index = (Core.Name "index")
+_TupleIndexExpr_index = Core.Name "index"
 
 -- | A closure expression
 data ClosureExpr = 
@@ -1299,15 +1299,15 @@ data ClosureExpr =
     closureExprBody :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_ClosureExpr = (Core.Name "hydra.ext.rust.syntax.ClosureExpr")
+_ClosureExpr = Core.Name "hydra.ext.rust.syntax.ClosureExpr"
 
-_ClosureExpr_move = (Core.Name "move")
+_ClosureExpr_move = Core.Name "move"
 
-_ClosureExpr_params = (Core.Name "params")
+_ClosureExpr_params = Core.Name "params"
 
-_ClosureExpr_returnType = (Core.Name "returnType")
+_ClosureExpr_returnType = Core.Name "returnType"
 
-_ClosureExpr_body = (Core.Name "body")
+_ClosureExpr_body = Core.Name "body"
 
 -- | A closure parameter
 data ClosureParam = 
@@ -1318,11 +1318,11 @@ data ClosureParam =
     closureParamType :: (Maybe Type)}
   deriving (Eq, Ord, Read, Show)
 
-_ClosureParam = (Core.Name "hydra.ext.rust.syntax.ClosureParam")
+_ClosureParam = Core.Name "hydra.ext.rust.syntax.ClosureParam"
 
-_ClosureParam_pattern = (Core.Name "pattern")
+_ClosureParam_pattern = Core.Name "pattern"
 
-_ClosureParam_type = (Core.Name "type")
+_ClosureParam_type = Core.Name "type"
 
 -- | An if expression, optionally with if let
 data IfExpr = 
@@ -1335,13 +1335,13 @@ data IfExpr =
     ifExprElseBranch :: (Maybe Expression)}
   deriving (Eq, Ord, Read, Show)
 
-_IfExpr = (Core.Name "hydra.ext.rust.syntax.IfExpr")
+_IfExpr = Core.Name "hydra.ext.rust.syntax.IfExpr"
 
-_IfExpr_condition = (Core.Name "condition")
+_IfExpr_condition = Core.Name "condition"
 
-_IfExpr_thenBlock = (Core.Name "thenBlock")
+_IfExpr_thenBlock = Core.Name "thenBlock"
 
-_IfExpr_elseBranch = (Core.Name "elseBranch")
+_IfExpr_elseBranch = Core.Name "elseBranch"
 
 -- | The condition of an if expression
 data IfCondition = 
@@ -1351,11 +1351,11 @@ data IfCondition =
   IfConditionLet LetCondition
   deriving (Eq, Ord, Read, Show)
 
-_IfCondition = (Core.Name "hydra.ext.rust.syntax.IfCondition")
+_IfCondition = Core.Name "hydra.ext.rust.syntax.IfCondition"
 
-_IfCondition_bool = (Core.Name "bool")
+_IfCondition_bool = Core.Name "bool"
 
-_IfCondition_let = (Core.Name "let")
+_IfCondition_let = Core.Name "let"
 
 -- | A match expression
 data MatchExpr = 
@@ -1366,11 +1366,11 @@ data MatchExpr =
     matchExprArms :: [MatchArm]}
   deriving (Eq, Ord, Read, Show)
 
-_MatchExpr = (Core.Name "hydra.ext.rust.syntax.MatchExpr")
+_MatchExpr = Core.Name "hydra.ext.rust.syntax.MatchExpr"
 
-_MatchExpr_scrutinee = (Core.Name "scrutinee")
+_MatchExpr_scrutinee = Core.Name "scrutinee"
 
-_MatchExpr_arms = (Core.Name "arms")
+_MatchExpr_arms = Core.Name "arms"
 
 -- | A single arm in a match expression
 data MatchArm = 
@@ -1383,13 +1383,13 @@ data MatchArm =
     matchArmBody :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_MatchArm = (Core.Name "hydra.ext.rust.syntax.MatchArm")
+_MatchArm = Core.Name "hydra.ext.rust.syntax.MatchArm"
 
-_MatchArm_pattern = (Core.Name "pattern")
+_MatchArm_pattern = Core.Name "pattern"
 
-_MatchArm_guard = (Core.Name "guard")
+_MatchArm_guard = Core.Name "guard"
 
-_MatchArm_body = (Core.Name "body")
+_MatchArm_body = Core.Name "body"
 
 -- | A loop expression
 data LoopExpr = 
@@ -1400,11 +1400,11 @@ data LoopExpr =
     loopExprBody :: Block}
   deriving (Eq, Ord, Read, Show)
 
-_LoopExpr = (Core.Name "hydra.ext.rust.syntax.LoopExpr")
+_LoopExpr = Core.Name "hydra.ext.rust.syntax.LoopExpr"
 
-_LoopExpr_label = (Core.Name "label")
+_LoopExpr_label = Core.Name "label"
 
-_LoopExpr_body = (Core.Name "body")
+_LoopExpr_body = Core.Name "body"
 
 -- | A while expression, optionally with while let
 data WhileExpr = 
@@ -1417,13 +1417,13 @@ data WhileExpr =
     whileExprBody :: Block}
   deriving (Eq, Ord, Read, Show)
 
-_WhileExpr = (Core.Name "hydra.ext.rust.syntax.WhileExpr")
+_WhileExpr = Core.Name "hydra.ext.rust.syntax.WhileExpr"
 
-_WhileExpr_label = (Core.Name "label")
+_WhileExpr_label = Core.Name "label"
 
-_WhileExpr_condition = (Core.Name "condition")
+_WhileExpr_condition = Core.Name "condition"
 
-_WhileExpr_body = (Core.Name "body")
+_WhileExpr_body = Core.Name "body"
 
 -- | A for expression
 data ForExpr = 
@@ -1438,15 +1438,15 @@ data ForExpr =
     forExprBody :: Block}
   deriving (Eq, Ord, Read, Show)
 
-_ForExpr = (Core.Name "hydra.ext.rust.syntax.ForExpr")
+_ForExpr = Core.Name "hydra.ext.rust.syntax.ForExpr"
 
-_ForExpr_label = (Core.Name "label")
+_ForExpr_label = Core.Name "label"
 
-_ForExpr_pattern = (Core.Name "pattern")
+_ForExpr_pattern = Core.Name "pattern"
 
-_ForExpr_iter = (Core.Name "iter")
+_ForExpr_iter = Core.Name "iter"
 
-_ForExpr_body = (Core.Name "body")
+_ForExpr_body = Core.Name "body"
 
 -- | A binary operation
 data BinaryExpr = 
@@ -1459,13 +1459,13 @@ data BinaryExpr =
     binaryExprRight :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_BinaryExpr = (Core.Name "hydra.ext.rust.syntax.BinaryExpr")
+_BinaryExpr = Core.Name "hydra.ext.rust.syntax.BinaryExpr"
 
-_BinaryExpr_left = (Core.Name "left")
+_BinaryExpr_left = Core.Name "left"
 
-_BinaryExpr_op = (Core.Name "op")
+_BinaryExpr_op = Core.Name "op"
 
-_BinaryExpr_right = (Core.Name "right")
+_BinaryExpr_right = Core.Name "right"
 
 -- | A binary operator
 data BinaryOp = 
@@ -1489,43 +1489,43 @@ data BinaryOp =
   BinaryOpGe 
   deriving (Eq, Ord, Read, Show)
 
-_BinaryOp = (Core.Name "hydra.ext.rust.syntax.BinaryOp")
+_BinaryOp = Core.Name "hydra.ext.rust.syntax.BinaryOp"
 
-_BinaryOp_add = (Core.Name "add")
+_BinaryOp_add = Core.Name "add"
 
-_BinaryOp_sub = (Core.Name "sub")
+_BinaryOp_sub = Core.Name "sub"
 
-_BinaryOp_mul = (Core.Name "mul")
+_BinaryOp_mul = Core.Name "mul"
 
-_BinaryOp_div = (Core.Name "div")
+_BinaryOp_div = Core.Name "div"
 
-_BinaryOp_rem = (Core.Name "rem")
+_BinaryOp_rem = Core.Name "rem"
 
-_BinaryOp_and = (Core.Name "and")
+_BinaryOp_and = Core.Name "and"
 
-_BinaryOp_or = (Core.Name "or")
+_BinaryOp_or = Core.Name "or"
 
-_BinaryOp_bitAnd = (Core.Name "bitAnd")
+_BinaryOp_bitAnd = Core.Name "bitAnd"
 
-_BinaryOp_bitOr = (Core.Name "bitOr")
+_BinaryOp_bitOr = Core.Name "bitOr"
 
-_BinaryOp_bitXor = (Core.Name "bitXor")
+_BinaryOp_bitXor = Core.Name "bitXor"
 
-_BinaryOp_shl = (Core.Name "shl")
+_BinaryOp_shl = Core.Name "shl"
 
-_BinaryOp_shr = (Core.Name "shr")
+_BinaryOp_shr = Core.Name "shr"
 
-_BinaryOp_eq = (Core.Name "eq")
+_BinaryOp_eq = Core.Name "eq"
 
-_BinaryOp_ne = (Core.Name "ne")
+_BinaryOp_ne = Core.Name "ne"
 
-_BinaryOp_lt = (Core.Name "lt")
+_BinaryOp_lt = Core.Name "lt"
 
-_BinaryOp_le = (Core.Name "le")
+_BinaryOp_le = Core.Name "le"
 
-_BinaryOp_gt = (Core.Name "gt")
+_BinaryOp_gt = Core.Name "gt"
 
-_BinaryOp_ge = (Core.Name "ge")
+_BinaryOp_ge = Core.Name "ge"
 
 -- | A unary operation
 data UnaryExpr = 
@@ -1536,11 +1536,11 @@ data UnaryExpr =
     unaryExprOperand :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_UnaryExpr = (Core.Name "hydra.ext.rust.syntax.UnaryExpr")
+_UnaryExpr = Core.Name "hydra.ext.rust.syntax.UnaryExpr"
 
-_UnaryExpr_op = (Core.Name "op")
+_UnaryExpr_op = Core.Name "op"
 
-_UnaryExpr_operand = (Core.Name "operand")
+_UnaryExpr_operand = Core.Name "operand"
 
 -- | A unary operator
 data UnaryOp = 
@@ -1548,11 +1548,11 @@ data UnaryOp =
   UnaryOpNot 
   deriving (Eq, Ord, Read, Show)
 
-_UnaryOp = (Core.Name "hydra.ext.rust.syntax.UnaryOp")
+_UnaryOp = Core.Name "hydra.ext.rust.syntax.UnaryOp"
 
-_UnaryOp_neg = (Core.Name "neg")
+_UnaryOp_neg = Core.Name "neg"
 
-_UnaryOp_not = (Core.Name "not")
+_UnaryOp_not = Core.Name "not"
 
 -- | A reference expression
 data RefExpr = 
@@ -1563,11 +1563,11 @@ data RefExpr =
     refExprExpr :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_RefExpr = (Core.Name "hydra.ext.rust.syntax.RefExpr")
+_RefExpr = Core.Name "hydra.ext.rust.syntax.RefExpr"
 
-_RefExpr_mutable = (Core.Name "mutable")
+_RefExpr_mutable = Core.Name "mutable"
 
-_RefExpr_expr = (Core.Name "expr")
+_RefExpr_expr = Core.Name "expr"
 
 -- | A struct literal expression
 data StructExpr = 
@@ -1580,13 +1580,13 @@ data StructExpr =
     structExprRest :: (Maybe Expression)}
   deriving (Eq, Ord, Read, Show)
 
-_StructExpr = (Core.Name "hydra.ext.rust.syntax.StructExpr")
+_StructExpr = Core.Name "hydra.ext.rust.syntax.StructExpr"
 
-_StructExpr_path = (Core.Name "path")
+_StructExpr_path = Core.Name "path"
 
-_StructExpr_fields = (Core.Name "fields")
+_StructExpr_fields = Core.Name "fields"
 
-_StructExpr_rest = (Core.Name "rest")
+_StructExpr_rest = Core.Name "rest"
 
 -- | A field-value pair in a struct literal
 data FieldValue = 
@@ -1597,11 +1597,11 @@ data FieldValue =
     fieldValueValue :: (Maybe Expression)}
   deriving (Eq, Ord, Read, Show)
 
-_FieldValue = (Core.Name "hydra.ext.rust.syntax.FieldValue")
+_FieldValue = Core.Name "hydra.ext.rust.syntax.FieldValue"
 
-_FieldValue_name = (Core.Name "name")
+_FieldValue_name = Core.Name "name"
 
-_FieldValue_value = (Core.Name "value")
+_FieldValue_value = Core.Name "value"
 
 -- | An array expression
 data ArrayExpr = 
@@ -1611,11 +1611,11 @@ data ArrayExpr =
   ArrayExprRepeat ArrayRepeat
   deriving (Eq, Ord, Read, Show)
 
-_ArrayExpr = (Core.Name "hydra.ext.rust.syntax.ArrayExpr")
+_ArrayExpr = Core.Name "hydra.ext.rust.syntax.ArrayExpr"
 
-_ArrayExpr_elements = (Core.Name "elements")
+_ArrayExpr_elements = Core.Name "elements"
 
-_ArrayExpr_repeat = (Core.Name "repeat")
+_ArrayExpr_repeat = Core.Name "repeat"
 
 -- | An index expression
 data IndexExpr = 
@@ -1626,11 +1626,11 @@ data IndexExpr =
     indexExprIndex :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_IndexExpr = (Core.Name "hydra.ext.rust.syntax.IndexExpr")
+_IndexExpr = Core.Name "hydra.ext.rust.syntax.IndexExpr"
 
-_IndexExpr_object = (Core.Name "object")
+_IndexExpr_object = Core.Name "object"
 
-_IndexExpr_index = (Core.Name "index")
+_IndexExpr_index = Core.Name "index"
 
 -- | A range expression
 data RangeExpr = 
@@ -1643,13 +1643,13 @@ data RangeExpr =
     rangeExprInclusive :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_RangeExpr = (Core.Name "hydra.ext.rust.syntax.RangeExpr")
+_RangeExpr = Core.Name "hydra.ext.rust.syntax.RangeExpr"
 
-_RangeExpr_from = (Core.Name "from")
+_RangeExpr_from = Core.Name "from"
 
-_RangeExpr_to = (Core.Name "to")
+_RangeExpr_to = Core.Name "to"
 
-_RangeExpr_inclusive = (Core.Name "inclusive")
+_RangeExpr_inclusive = Core.Name "inclusive"
 
 -- | A type cast expression
 data CastExpr = 
@@ -1660,11 +1660,11 @@ data CastExpr =
     castExprType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_CastExpr = (Core.Name "hydra.ext.rust.syntax.CastExpr")
+_CastExpr = Core.Name "hydra.ext.rust.syntax.CastExpr"
 
-_CastExpr_expr = (Core.Name "expr")
+_CastExpr_expr = Core.Name "expr"
 
-_CastExpr_type = (Core.Name "type")
+_CastExpr_type = Core.Name "type"
 
 -- | A type ascription expression
 data TypeAscriptionExpr = 
@@ -1675,11 +1675,11 @@ data TypeAscriptionExpr =
     typeAscriptionExprType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_TypeAscriptionExpr = (Core.Name "hydra.ext.rust.syntax.TypeAscriptionExpr")
+_TypeAscriptionExpr = Core.Name "hydra.ext.rust.syntax.TypeAscriptionExpr"
 
-_TypeAscriptionExpr_expr = (Core.Name "expr")
+_TypeAscriptionExpr_expr = Core.Name "expr"
 
-_TypeAscriptionExpr_type = (Core.Name "type")
+_TypeAscriptionExpr_type = Core.Name "type"
 
 -- | An assignment expression
 data AssignExpr = 
@@ -1690,11 +1690,11 @@ data AssignExpr =
     assignExprValue :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_AssignExpr = (Core.Name "hydra.ext.rust.syntax.AssignExpr")
+_AssignExpr = Core.Name "hydra.ext.rust.syntax.AssignExpr"
 
-_AssignExpr_target = (Core.Name "target")
+_AssignExpr_target = Core.Name "target"
 
-_AssignExpr_value = (Core.Name "value")
+_AssignExpr_value = Core.Name "value"
 
 -- | A compound assignment expression
 data CompoundAssignExpr = 
@@ -1707,13 +1707,13 @@ data CompoundAssignExpr =
     compoundAssignExprValue :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_CompoundAssignExpr = (Core.Name "hydra.ext.rust.syntax.CompoundAssignExpr")
+_CompoundAssignExpr = Core.Name "hydra.ext.rust.syntax.CompoundAssignExpr"
 
-_CompoundAssignExpr_target = (Core.Name "target")
+_CompoundAssignExpr_target = Core.Name "target"
 
-_CompoundAssignExpr_op = (Core.Name "op")
+_CompoundAssignExpr_op = Core.Name "op"
 
-_CompoundAssignExpr_value = (Core.Name "value")
+_CompoundAssignExpr_value = Core.Name "value"
 
 -- | A compound assignment operator
 data CompoundAssignOp = 
@@ -1729,27 +1729,27 @@ data CompoundAssignOp =
   CompoundAssignOpShrAssign 
   deriving (Eq, Ord, Read, Show)
 
-_CompoundAssignOp = (Core.Name "hydra.ext.rust.syntax.CompoundAssignOp")
+_CompoundAssignOp = Core.Name "hydra.ext.rust.syntax.CompoundAssignOp"
 
-_CompoundAssignOp_addAssign = (Core.Name "addAssign")
+_CompoundAssignOp_addAssign = Core.Name "addAssign"
 
-_CompoundAssignOp_subAssign = (Core.Name "subAssign")
+_CompoundAssignOp_subAssign = Core.Name "subAssign"
 
-_CompoundAssignOp_mulAssign = (Core.Name "mulAssign")
+_CompoundAssignOp_mulAssign = Core.Name "mulAssign"
 
-_CompoundAssignOp_divAssign = (Core.Name "divAssign")
+_CompoundAssignOp_divAssign = Core.Name "divAssign"
 
-_CompoundAssignOp_remAssign = (Core.Name "remAssign")
+_CompoundAssignOp_remAssign = Core.Name "remAssign"
 
-_CompoundAssignOp_bitAndAssign = (Core.Name "bitAndAssign")
+_CompoundAssignOp_bitAndAssign = Core.Name "bitAndAssign"
 
-_CompoundAssignOp_bitOrAssign = (Core.Name "bitOrAssign")
+_CompoundAssignOp_bitOrAssign = Core.Name "bitOrAssign"
 
-_CompoundAssignOp_bitXorAssign = (Core.Name "bitXorAssign")
+_CompoundAssignOp_bitXorAssign = Core.Name "bitXorAssign"
 
-_CompoundAssignOp_shlAssign = (Core.Name "shlAssign")
+_CompoundAssignOp_shlAssign = Core.Name "shlAssign"
 
-_CompoundAssignOp_shrAssign = (Core.Name "shrAssign")
+_CompoundAssignOp_shrAssign = Core.Name "shrAssign"
 
 -- | A macro invocation
 data MacroInvocation = 
@@ -1762,13 +1762,13 @@ data MacroInvocation =
     macroInvocationTokens :: String}
   deriving (Eq, Ord, Read, Show)
 
-_MacroInvocation = (Core.Name "hydra.ext.rust.syntax.MacroInvocation")
+_MacroInvocation = Core.Name "hydra.ext.rust.syntax.MacroInvocation"
 
-_MacroInvocation_path = (Core.Name "path")
+_MacroInvocation_path = Core.Name "path"
 
-_MacroInvocation_delimiter = (Core.Name "delimiter")
+_MacroInvocation_delimiter = Core.Name "delimiter"
 
-_MacroInvocation_tokens = (Core.Name "tokens")
+_MacroInvocation_tokens = Core.Name "tokens"
 
 -- | The delimiter style for a macro invocation
 data MacroDelimiter = 
@@ -1777,13 +1777,13 @@ data MacroDelimiter =
   MacroDelimiterBrace 
   deriving (Eq, Ord, Read, Show)
 
-_MacroDelimiter = (Core.Name "hydra.ext.rust.syntax.MacroDelimiter")
+_MacroDelimiter = Core.Name "hydra.ext.rust.syntax.MacroDelimiter"
 
-_MacroDelimiter_paren = (Core.Name "paren")
+_MacroDelimiter_paren = Core.Name "paren"
 
-_MacroDelimiter_bracket = (Core.Name "bracket")
+_MacroDelimiter_bracket = Core.Name "bracket"
 
-_MacroDelimiter_brace = (Core.Name "brace")
+_MacroDelimiter_brace = Core.Name "brace"
 
 -- | A statement within a block
 data Statement = 
@@ -1797,15 +1797,15 @@ data Statement =
   StatementEmpty 
   deriving (Eq, Ord, Read, Show)
 
-_Statement = (Core.Name "hydra.ext.rust.syntax.Statement")
+_Statement = Core.Name "hydra.ext.rust.syntax.Statement"
 
-_Statement_let = (Core.Name "let")
+_Statement_let = Core.Name "let"
 
-_Statement_expression = (Core.Name "expression")
+_Statement_expression = Core.Name "expression"
 
-_Statement_item = (Core.Name "item")
+_Statement_item = Core.Name "item"
 
-_Statement_empty = (Core.Name "empty")
+_Statement_empty = Core.Name "empty"
 
 -- | A let statement
 data LetStatement = 
@@ -1820,15 +1820,15 @@ data LetStatement =
     letStatementInit :: (Maybe Expression)}
   deriving (Eq, Ord, Read, Show)
 
-_LetStatement = (Core.Name "hydra.ext.rust.syntax.LetStatement")
+_LetStatement = Core.Name "hydra.ext.rust.syntax.LetStatement"
 
-_LetStatement_pattern = (Core.Name "pattern")
+_LetStatement_pattern = Core.Name "pattern"
 
-_LetStatement_mutable = (Core.Name "mutable")
+_LetStatement_mutable = Core.Name "mutable"
 
-_LetStatement_type = (Core.Name "type")
+_LetStatement_type = Core.Name "type"
 
-_LetStatement_init = (Core.Name "init")
+_LetStatement_init = Core.Name "init"
 
 -- | A block expression
 data Block = 
@@ -1839,11 +1839,11 @@ data Block =
     blockExpression :: (Maybe Expression)}
   deriving (Eq, Ord, Read, Show)
 
-_Block = (Core.Name "hydra.ext.rust.syntax.Block")
+_Block = Core.Name "hydra.ext.rust.syntax.Block"
 
-_Block_statements = (Core.Name "statements")
+_Block_statements = Core.Name "statements"
 
-_Block_expression = (Core.Name "expression")
+_Block_expression = Core.Name "expression"
 
 -- | A Rust pattern (used in let, match, function parameters, etc.)
 data Pattern = 
@@ -1875,33 +1875,33 @@ data Pattern =
   PatternParen Pattern
   deriving (Eq, Ord, Read, Show)
 
-_Pattern = (Core.Name "hydra.ext.rust.syntax.Pattern")
+_Pattern = Core.Name "hydra.ext.rust.syntax.Pattern"
 
-_Pattern_wildcard = (Core.Name "wildcard")
+_Pattern_wildcard = Core.Name "wildcard"
 
-_Pattern_identifier = (Core.Name "identifier")
+_Pattern_identifier = Core.Name "identifier"
 
-_Pattern_literal = (Core.Name "literal")
+_Pattern_literal = Core.Name "literal"
 
-_Pattern_reference = (Core.Name "reference")
+_Pattern_reference = Core.Name "reference"
 
-_Pattern_struct = (Core.Name "struct")
+_Pattern_struct = Core.Name "struct"
 
-_Pattern_tupleStruct = (Core.Name "tupleStruct")
+_Pattern_tupleStruct = Core.Name "tupleStruct"
 
-_Pattern_tuple = (Core.Name "tuple")
+_Pattern_tuple = Core.Name "tuple"
 
-_Pattern_slice = (Core.Name "slice")
+_Pattern_slice = Core.Name "slice"
 
-_Pattern_or = (Core.Name "or")
+_Pattern_or = Core.Name "or"
 
-_Pattern_path = (Core.Name "path")
+_Pattern_path = Core.Name "path"
 
-_Pattern_range = (Core.Name "range")
+_Pattern_range = Core.Name "range"
 
-_Pattern_rest = (Core.Name "rest")
+_Pattern_rest = Core.Name "rest"
 
-_Pattern_paren = (Core.Name "paren")
+_Pattern_paren = Core.Name "paren"
 
 -- | An identifier pattern
 data IdentifierPattern = 
@@ -1914,13 +1914,13 @@ data IdentifierPattern =
     identifierPatternAtPattern :: (Maybe Pattern)}
   deriving (Eq, Ord, Read, Show)
 
-_IdentifierPattern = (Core.Name "hydra.ext.rust.syntax.IdentifierPattern")
+_IdentifierPattern = Core.Name "hydra.ext.rust.syntax.IdentifierPattern"
 
-_IdentifierPattern_name = (Core.Name "name")
+_IdentifierPattern_name = Core.Name "name"
 
-_IdentifierPattern_mutable = (Core.Name "mutable")
+_IdentifierPattern_mutable = Core.Name "mutable"
 
-_IdentifierPattern_atPattern = (Core.Name "atPattern")
+_IdentifierPattern_atPattern = Core.Name "atPattern"
 
 -- | A reference pattern
 data RefPattern = 
@@ -1931,11 +1931,11 @@ data RefPattern =
     refPatternPattern :: Pattern}
   deriving (Eq, Ord, Read, Show)
 
-_RefPattern = (Core.Name "hydra.ext.rust.syntax.RefPattern")
+_RefPattern = Core.Name "hydra.ext.rust.syntax.RefPattern"
 
-_RefPattern_mutable = (Core.Name "mutable")
+_RefPattern_mutable = Core.Name "mutable"
 
-_RefPattern_pattern = (Core.Name "pattern")
+_RefPattern_pattern = Core.Name "pattern"
 
 -- | A struct pattern
 data StructPattern = 
@@ -1948,13 +1948,13 @@ data StructPattern =
     structPatternRest :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_StructPattern = (Core.Name "hydra.ext.rust.syntax.StructPattern")
+_StructPattern = Core.Name "hydra.ext.rust.syntax.StructPattern"
 
-_StructPattern_path = (Core.Name "path")
+_StructPattern_path = Core.Name "path"
 
-_StructPattern_fields = (Core.Name "fields")
+_StructPattern_fields = Core.Name "fields"
 
-_StructPattern_rest = (Core.Name "rest")
+_StructPattern_rest = Core.Name "rest"
 
 -- | A field pattern within a struct pattern
 data FieldPattern = 
@@ -1965,11 +1965,11 @@ data FieldPattern =
     fieldPatternPattern :: (Maybe Pattern)}
   deriving (Eq, Ord, Read, Show)
 
-_FieldPattern = (Core.Name "hydra.ext.rust.syntax.FieldPattern")
+_FieldPattern = Core.Name "hydra.ext.rust.syntax.FieldPattern"
 
-_FieldPattern_name = (Core.Name "name")
+_FieldPattern_name = Core.Name "name"
 
-_FieldPattern_pattern = (Core.Name "pattern")
+_FieldPattern_pattern = Core.Name "pattern"
 
 -- | A tuple struct pattern
 data TupleStructPattern = 
@@ -1980,11 +1980,11 @@ data TupleStructPattern =
     tupleStructPatternElements :: [Pattern]}
   deriving (Eq, Ord, Read, Show)
 
-_TupleStructPattern = (Core.Name "hydra.ext.rust.syntax.TupleStructPattern")
+_TupleStructPattern = Core.Name "hydra.ext.rust.syntax.TupleStructPattern"
 
-_TupleStructPattern_path = (Core.Name "path")
+_TupleStructPattern_path = Core.Name "path"
 
-_TupleStructPattern_elements = (Core.Name "elements")
+_TupleStructPattern_elements = Core.Name "elements"
 
 -- | A range pattern
 data RangePattern = 
@@ -1997,13 +1997,13 @@ data RangePattern =
     rangePatternInclusive :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_RangePattern = (Core.Name "hydra.ext.rust.syntax.RangePattern")
+_RangePattern = Core.Name "hydra.ext.rust.syntax.RangePattern"
 
-_RangePattern_from = (Core.Name "from")
+_RangePattern_from = Core.Name "from"
 
-_RangePattern_to = (Core.Name "to")
+_RangePattern_to = Core.Name "to"
 
-_RangePattern_inclusive = (Core.Name "inclusive")
+_RangePattern_inclusive = Core.Name "inclusive"
 
 -- | A literal value
 data Literal = 
@@ -2025,23 +2025,23 @@ data Literal =
   LiteralBool Bool
   deriving (Eq, Ord, Read, Show)
 
-_Literal = (Core.Name "hydra.ext.rust.syntax.Literal")
+_Literal = Core.Name "hydra.ext.rust.syntax.Literal"
 
-_Literal_integer = (Core.Name "integer")
+_Literal_integer = Core.Name "integer"
 
-_Literal_float = (Core.Name "float")
+_Literal_float = Core.Name "float"
 
-_Literal_string = (Core.Name "string")
+_Literal_string = Core.Name "string"
 
-_Literal_rawString = (Core.Name "rawString")
+_Literal_rawString = Core.Name "rawString"
 
-_Literal_byteString = (Core.Name "byteString")
+_Literal_byteString = Core.Name "byteString"
 
-_Literal_char = (Core.Name "char")
+_Literal_char = Core.Name "char"
 
-_Literal_byte = (Core.Name "byte")
+_Literal_byte = Core.Name "byte"
 
-_Literal_bool = (Core.Name "bool")
+_Literal_bool = Core.Name "bool"
 
 -- | An integer literal with optional suffix
 data IntegerLiteral = 
@@ -2052,11 +2052,11 @@ data IntegerLiteral =
     integerLiteralSuffix :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_IntegerLiteral = (Core.Name "hydra.ext.rust.syntax.IntegerLiteral")
+_IntegerLiteral = Core.Name "hydra.ext.rust.syntax.IntegerLiteral"
 
-_IntegerLiteral_value = (Core.Name "value")
+_IntegerLiteral_value = Core.Name "value"
 
-_IntegerLiteral_suffix = (Core.Name "suffix")
+_IntegerLiteral_suffix = Core.Name "suffix"
 
 -- | A floating-point literal with optional suffix
 data FloatLiteral = 
@@ -2067,11 +2067,11 @@ data FloatLiteral =
     floatLiteralSuffix :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_FloatLiteral = (Core.Name "hydra.ext.rust.syntax.FloatLiteral")
+_FloatLiteral = Core.Name "hydra.ext.rust.syntax.FloatLiteral"
 
-_FloatLiteral_value = (Core.Name "value")
+_FloatLiteral_value = Core.Name "value"
 
-_FloatLiteral_suffix = (Core.Name "suffix")
+_FloatLiteral_suffix = Core.Name "suffix"
 
 -- | An attribute (e.g., #[derive(Clone)], #[cfg(test)])
 data Attribute = 
@@ -2084,13 +2084,13 @@ data Attribute =
     attributeTokens :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_Attribute = (Core.Name "hydra.ext.rust.syntax.Attribute")
+_Attribute = Core.Name "hydra.ext.rust.syntax.Attribute"
 
-_Attribute_inner = (Core.Name "inner")
+_Attribute_inner = Core.Name "inner"
 
-_Attribute_path = (Core.Name "path")
+_Attribute_path = Core.Name "path"
 
-_Attribute_tokens = (Core.Name "tokens")
+_Attribute_tokens = Core.Name "tokens"
 
 -- | A visibility qualifier
 data Visibility = 
@@ -2104,15 +2104,15 @@ data Visibility =
   VisibilityPrivate 
   deriving (Eq, Ord, Read, Show)
 
-_Visibility = (Core.Name "hydra.ext.rust.syntax.Visibility")
+_Visibility = Core.Name "hydra.ext.rust.syntax.Visibility"
 
-_Visibility_public = (Core.Name "public")
+_Visibility_public = Core.Name "public"
 
-_Visibility_crate = (Core.Name "crate")
+_Visibility_crate = Core.Name "crate"
 
-_Visibility_restricted = (Core.Name "restricted")
+_Visibility_restricted = Core.Name "restricted"
 
-_Visibility_private = (Core.Name "private")
+_Visibility_private = Core.Name "private"
 
 -- | A let condition (e.g., let Some(x) = opt)
 data LetCondition = 
@@ -2123,11 +2123,11 @@ data LetCondition =
     letConditionExpr :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_LetCondition = (Core.Name "hydra.ext.rust.syntax.LetCondition")
+_LetCondition = Core.Name "hydra.ext.rust.syntax.LetCondition"
 
-_LetCondition_pattern = (Core.Name "pattern")
+_LetCondition_pattern = Core.Name "pattern"
 
-_LetCondition_expr = (Core.Name "expr")
+_LetCondition_expr = Core.Name "expr"
 
 -- | An array repeat expression (e.g., [0; 10])
 data ArrayRepeat = 
@@ -2138,8 +2138,8 @@ data ArrayRepeat =
     arrayRepeatLength :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_ArrayRepeat = (Core.Name "hydra.ext.rust.syntax.ArrayRepeat")
+_ArrayRepeat = Core.Name "hydra.ext.rust.syntax.ArrayRepeat"
 
-_ArrayRepeat_element = (Core.Name "element")
+_ArrayRepeat_element = Core.Name "element"
 
-_ArrayRepeat_length = (Core.Name "length")
+_ArrayRepeat_length = Core.Name "length"

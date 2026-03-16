@@ -36,62 +36,68 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Convert a Hydra term to a Java expression string
-termToJava :: (Core.Term -> Graph.Graph -> Either String String)
-termToJava term g = (Eithers.bimap (\ic -> Error.error (Context.inContextObject ic)) (\arg_ -> (\arg_ -> Serialization.printExpr (Serialization.parenthesize arg_)) (Serde.writeExpression arg_)) (Coder.encodeTerm (Helpers.JavaEnvironment {
-  Helpers.javaEnvironmentAliases = Helpers.Aliases {
-    Helpers.aliasesCurrentNamespace = (Module.Namespace "test"),
-    Helpers.aliasesPackages = Maps.empty,
-    Helpers.aliasesBranchVars = Sets.empty,
-    Helpers.aliasesRecursiveVars = Sets.empty,
-    Helpers.aliasesInScopeTypeParams = Sets.empty,
-    Helpers.aliasesPolymorphicLocals = Sets.empty,
-    Helpers.aliasesInScopeJavaVars = Sets.empty,
-    Helpers.aliasesVarRenames = Maps.empty,
-    Helpers.aliasesLambdaVars = Sets.empty,
-    Helpers.aliasesTypeVarSubst = Maps.empty,
-    Helpers.aliasesTrustedTypeVars = Sets.empty,
-    Helpers.aliasesMethodCodomain = Nothing,
-    Helpers.aliasesThunkedVars = Sets.empty},
-  Helpers.javaEnvironmentGraph = g}) term Lexical.emptyContext g))
+termToJava :: Core.Term -> Graph.Graph -> Either String String
+termToJava term g =
+    Eithers.bimap (\ic -> Error.error (Context.inContextObject ic)) (\arg_ -> (\arg_ -> Serialization.printExpr (Serialization.parenthesize arg_)) (Serde.writeExpression arg_)) (Coder.encodeTerm (Helpers.JavaEnvironment {
+      Helpers.javaEnvironmentAliases = Helpers.Aliases {
+        Helpers.aliasesCurrentNamespace = (Module.Namespace "test"),
+        Helpers.aliasesPackages = Maps.empty,
+        Helpers.aliasesBranchVars = Sets.empty,
+        Helpers.aliasesRecursiveVars = Sets.empty,
+        Helpers.aliasesInScopeTypeParams = Sets.empty,
+        Helpers.aliasesPolymorphicLocals = Sets.empty,
+        Helpers.aliasesInScopeJavaVars = Sets.empty,
+        Helpers.aliasesVarRenames = Maps.empty,
+        Helpers.aliasesLambdaVars = Sets.empty,
+        Helpers.aliasesTypeVarSubst = Maps.empty,
+        Helpers.aliasesTrustedTypeVars = Sets.empty,
+        Helpers.aliasesMethodCodomain = Nothing,
+        Helpers.aliasesThunkedVars = Sets.empty},
+      Helpers.javaEnvironmentGraph = g}) term Lexical.emptyContext g)
 
 -- | Convert a Hydra type to a Java type expression string (placeholder returning Object)
-typeToJava :: (t0 -> t1 -> Either t2 String)
-typeToJava _t _g = (Right "Object")
+typeToJava :: t0 -> t1 -> Either t2 String
+typeToJava _t _g = Right "Object"
 
 -- | Create a Java TestCodec for JUnit-based test generation
 javaTestCodec :: Testing.TestCodec
-javaTestCodec = Testing.TestCodec {
-  Testing.testCodecLanguage = (Coders.LanguageName "java"),
-  Testing.testCodecFileExtension = (Module.FileExtension "java"),
-  Testing.testCodecEncodeTerm = termToJava,
-  Testing.testCodecEncodeType = typeToJava,
-  Testing.testCodecFormatTestName = formatJavaTestName,
-  Testing.testCodecFormatModuleName = namespaceToJavaClassName,
-  Testing.testCodecTestCaseTemplate = javaTestCaseTemplate,
-  Testing.testCodecTestGroupTemplate = javaTestGroupTemplate,
-  Testing.testCodecModuleTemplate = javaModuleTemplate,
-  Testing.testCodecImportTemplate = javaImportTemplate,
-  Testing.testCodecFindImports = (\_names -> findJavaImports)}
+javaTestCodec =
+    Testing.TestCodec {
+      Testing.testCodecLanguage = (Coders.LanguageName "java"),
+      Testing.testCodecFileExtension = (Module.FileExtension "java"),
+      Testing.testCodecEncodeTerm = termToJava,
+      Testing.testCodecEncodeType = typeToJava,
+      Testing.testCodecFormatTestName = formatJavaTestName,
+      Testing.testCodecFormatModuleName = namespaceToJavaClassName,
+      Testing.testCodecTestCaseTemplate = javaTestCaseTemplate,
+      Testing.testCodecTestGroupTemplate = javaTestGroupTemplate,
+      Testing.testCodecModuleTemplate = javaModuleTemplate,
+      Testing.testCodecImportTemplate = javaImportTemplate,
+      Testing.testCodecFindImports = (\_names -> findJavaImports)}
 
 -- | Format a test name for Java (PascalCase method name with 'test' prefix)
-formatJavaTestName :: (String -> String)
-formatJavaTestName name =  
-  let replaced = (Strings.intercalate " Neg" (Strings.splitOn "-" (Strings.intercalate "Dot" (Strings.splitOn "." (Strings.intercalate " Plus" (Strings.splitOn "+" (Strings.intercalate " Div" (Strings.splitOn "/" (Strings.intercalate " Mul" (Strings.splitOn "*" (Strings.intercalate " Num" (Strings.splitOn "#" name)))))))))))) 
-      sanitized = (Formatting.nonAlnumToUnderscores replaced)
-      pascal_ = (Formatting.convertCase Util.CaseConventionLowerSnake Util.CaseConventionPascal sanitized)
-  in (Strings.cat2 "test" pascal_)
+formatJavaTestName :: String -> String
+formatJavaTestName name =
+     
+      let replaced =
+              Strings.intercalate " Neg" (Strings.splitOn "-" (Strings.intercalate "Dot" (Strings.splitOn "." (Strings.intercalate " Plus" (Strings.splitOn "+" (Strings.intercalate " Div" (Strings.splitOn "/" (Strings.intercalate " Mul" (Strings.splitOn "*" (Strings.intercalate " Num" (Strings.splitOn "#" name))))))))))) 
+          sanitized = Formatting.nonAlnumToUnderscores replaced
+          pascal_ = Formatting.convertCase Util.CaseConventionLowerSnake Util.CaseConventionPascal sanitized
+      in (Strings.cat2 "test" pascal_)
 
 -- | Convert namespace to Java class name
-namespaceToJavaClassName :: (Module.Namespace -> String)
-namespaceToJavaClassName ns_ = (Strings.intercalate "." (Lists.map Formatting.capitalize (Strings.splitOn "." (Module.unNamespace ns_))))
+namespaceToJavaClassName :: Module.Namespace -> String
+namespaceToJavaClassName ns_ =
+    Strings.intercalate "." (Lists.map Formatting.capitalize (Strings.splitOn "." (Module.unNamespace ns_)))
 
 -- | Template for JUnit test case assertions
 javaTestCaseTemplate :: String
-javaTestCaseTemplate = (Strings.intercalate "\n" [
-  "    @Test",
-  "    public void {name}() {",
-  "        assertEquals({output}, {input});",
-  "    }"])
+javaTestCaseTemplate =
+    Strings.intercalate "\n" [
+      "    @Test",
+      "    public void {name}() {",
+      "        assertEquals({output}, {input});",
+      "    }"]
 
 -- | Template for JUnit test group comments
 javaTestGroupTemplate :: String
@@ -99,16 +105,17 @@ javaTestGroupTemplate = "// {groupName}"
 
 -- | Template for JUnit test module structure
 javaModuleTemplate :: String
-javaModuleTemplate = (Strings.intercalate "\n" [
-  Strings.cat2 "// " Constants.warningAutoGeneratedFile,
-  "",
-  "package {package};",
-  "",
-  "{imports}",
-  "",
-  "public class {className} {",
-  "    {testCases}",
-  "}"])
+javaModuleTemplate =
+    Strings.intercalate "\n" [
+      Strings.cat2 "// " Constants.warningAutoGeneratedFile,
+      "",
+      "package {package};",
+      "",
+      "{imports}",
+      "",
+      "public class {className} {",
+      "    {testCases}",
+      "}"]
 
 -- | Template for Java import statements
 javaImportTemplate :: String
@@ -116,164 +123,177 @@ javaImportTemplate = "import {namespace};"
 
 -- | Standard imports for Java JUnit test files
 findJavaImports :: [String]
-findJavaImports = [
-  "import org.junit.jupiter.api.Test;",
-  "import static org.junit.jupiter.api.Assertions.*;",
-  "import java.util.*;"]
+findJavaImports =
+    [
+      "import org.junit.jupiter.api.Test;",
+      "import static org.junit.jupiter.api.Assertions.*;",
+      "import java.util.*;"]
 
 -- | Generate test hierarchy for Java with nested subgroups
-generateJavaTestGroupHierarchy :: (Graph.Graph -> Testing.TestCodec -> [String] -> Testing.TestGroup -> Either String String)
-generateJavaTestGroupHierarchy g codec groupPath testGroup =  
-  let cases_ = (Testing.testGroupCases testGroup) 
-      subgroups = (Testing.testGroupSubgroups testGroup)
-  in (Eithers.bind (Eithers.map (\lines_ -> Strings.intercalate "\n\n" (Lists.concat lines_)) (Eithers.mapList (\tc -> generateJavaTestCase g codec groupPath tc) cases_)) (\testCasesStr -> Eithers.map (\subgroupsStr -> Strings.cat [
-    testCasesStr,
-    (Logic.ifElse (Logic.or (Equality.equal testCasesStr "") (Equality.equal subgroupsStr "")) "" "\n\n"),
-    subgroupsStr]) (Eithers.map (\blocks -> Strings.intercalate "\n\n" blocks) (Eithers.mapList (\subgroup ->  
-    let groupName = (Testing.testGroupName subgroup) 
-        header = (Strings.cat2 "    // " groupName)
-    in (Eithers.map (\content -> Strings.cat [
-      header,
-      "\n\n",
-      content]) (generateJavaTestGroupHierarchy g codec (Lists.concat2 groupPath [
-      groupName]) subgroup))) subgroups))))
+generateJavaTestGroupHierarchy :: Graph.Graph -> Testing.TestCodec -> [String] -> Testing.TestGroup -> Either String String
+generateJavaTestGroupHierarchy g codec groupPath testGroup =
+     
+      let cases_ = Testing.testGroupCases testGroup 
+          subgroups = Testing.testGroupSubgroups testGroup
+      in (Eithers.bind (Eithers.map (\lines_ -> Strings.intercalate "\n\n" (Lists.concat lines_)) (Eithers.mapList (\tc -> generateJavaTestCase g codec groupPath tc) cases_)) (\testCasesStr -> Eithers.map (\subgroupsStr -> Strings.cat [
+        testCasesStr,
+        (Logic.ifElse (Logic.or (Equality.equal testCasesStr "") (Equality.equal subgroupsStr "")) "" "\n\n"),
+        subgroupsStr]) (Eithers.map (\blocks -> Strings.intercalate "\n\n" blocks) (Eithers.mapList (\subgroup ->  
+        let groupName = Testing.testGroupName subgroup 
+            header = Strings.cat2 "    // " groupName
+        in (Eithers.map (\content -> Strings.cat [
+          header,
+          "\n\n",
+          content]) (generateJavaTestGroupHierarchy g codec (Lists.concat2 groupPath [
+          groupName]) subgroup))) subgroups))))
 
 -- | Generate a single JUnit test case from a test case with metadata
-generateJavaTestCase :: (Graph.Graph -> Testing.TestCodec -> [String] -> Testing.TestCaseWithMetadata -> Either String [String])
-generateJavaTestCase g codec groupPath tcm =  
-  let name_ = (Testing.testCaseWithMetadataName tcm) 
-      tcase = (Testing.testCaseWithMetadataCase tcm)
-  in ((\x -> case x of
-    Testing.TestCaseDelegatedEvaluation v0 ->  
-      let input_ = (Testing.delegatedEvaluationTestCaseInput v0) 
-          output_ = (Testing.delegatedEvaluationTestCaseOutput v0)
-          fullName = (Logic.ifElse (Lists.null groupPath) name_ (Strings.intercalate "_" (Lists.concat2 groupPath [
-                  name_])))
-          formattedName = (Testing.testCodecFormatTestName codec fullName)
-          assertType = (getAssertionType output_)
-      in  
-        let typeVars = (Lists.sort (Lists.filter isInferenceVar (Sets.toList (Sets.union (Rewriting.freeTypeVariablesInTerm input_) (Rewriting.freeTypeVariablesInTerm output_))))) 
-            typeParamsStr = (Logic.ifElse (Lists.null typeVars) "" (Strings.cat [
-                    "<",
-                    (Strings.intercalate ", " (Lists.map (\n_ -> Formatting.capitalize (Core.unName n_)) typeVars)),
-                    "> "]))
-        in (Eithers.bind (Testing.testCodecEncodeTerm codec input_ g) (\inputCode -> Eithers.map (\outputCode ->  
-          let assertionLines = (generateAssertion assertType outputCode inputCode)
-          in (Lists.concat2 [
-            "    @Test",
-            (Strings.cat [
-              "    public ",
-              typeParamsStr,
-              "void ",
-              formattedName,
-              "() {"])] (Lists.concat2 assertionLines [
-            "    }"]))) (Testing.testCodecEncodeTerm codec output_ g)))
-    _ -> (Right [])) tcase)
+generateJavaTestCase :: Graph.Graph -> Testing.TestCodec -> [String] -> Testing.TestCaseWithMetadata -> Either String [String]
+generateJavaTestCase g codec groupPath tcm =
+     
+      let name_ = Testing.testCaseWithMetadataName tcm 
+          tcase = Testing.testCaseWithMetadataCase tcm
+      in case tcase of
+        Testing.TestCaseDelegatedEvaluation v0 ->  
+          let input_ = Testing.delegatedEvaluationTestCaseInput v0 
+              output_ = Testing.delegatedEvaluationTestCaseOutput v0
+              fullName = Logic.ifElse (Lists.null groupPath) name_ (Strings.intercalate "_" (Lists.concat2 groupPath [
+                    name_]))
+              formattedName = Testing.testCodecFormatTestName codec fullName
+              assertType = getAssertionType output_
+              typeVars =
+                      Lists.sort (Lists.filter isInferenceVar (Sets.toList (Sets.union (Rewriting.freeTypeVariablesInTerm input_) (Rewriting.freeTypeVariablesInTerm output_))))
+              typeParamsStr =
+                      Logic.ifElse (Lists.null typeVars) "" (Strings.cat [
+                        "<",
+                        (Strings.intercalate ", " (Lists.map (\n_ -> Formatting.capitalize (Core.unName n_)) typeVars)),
+                        "> "])
+          in (Eithers.bind (Testing.testCodecEncodeTerm codec input_ g) (\inputCode -> Eithers.map (\outputCode ->  
+            let assertionLines = generateAssertion assertType outputCode inputCode
+            in (Lists.concat2 [
+              "    @Test",
+              (Strings.cat [
+                "    public ",
+                typeParamsStr,
+                "void ",
+                formattedName,
+                "() {"])] (Lists.concat2 assertionLines [
+              "    }"]))) (Testing.testCodecEncodeTerm codec output_ g)))
+        _ -> Right []
 
 -- | Determine the assertion type based on the output term structure (returns a string tag)
-getAssertionType :: (Core.Term -> String)
-getAssertionType term = ((\x -> case x of
-  Core.TermLiteral v0 -> ((\x -> case x of
-    Core.LiteralBinary _ -> "assertArrayEquals"
-    Core.LiteralFloat v1 -> ((\x -> case x of
-      Core.FloatValueBigfloat _ -> "assertBigDecimalEquals"
-      _ -> "assertDoubleEquals") v1)
-    _ -> "assertEquals") v0)
-  _ -> "assertEquals") (Rewriting.deannotateTerm term))
+getAssertionType :: Core.Term -> String
+getAssertionType term =
+    case (Rewriting.deannotateTerm term) of
+      Core.TermLiteral v0 -> case v0 of
+        Core.LiteralBinary _ -> "assertArrayEquals"
+        Core.LiteralFloat v1 -> case v1 of
+          Core.FloatValueBigfloat _ -> "assertBigDecimalEquals"
+          _ -> "assertDoubleEquals"
+        _ -> "assertEquals"
+      _ -> "assertEquals"
 
 -- | Generate assertion code lines based on assertion type, output code, and input code
-generateAssertion :: (String -> String -> String -> [String])
-generateAssertion assertType outputCode inputCode = (Logic.ifElse (Equality.equal assertType "assertArrayEquals") [
-  "        assertArrayEquals(",
-  (Strings.cat [
-    "            ",
-    outputCode,
-    ","]),
-  (Strings.cat [
-    "            ",
-    inputCode,
-    ");"])] (Logic.ifElse (Equality.equal assertType "assertBigDecimalEquals") [
-  Strings.cat [
-    "        assertEquals(0, (",
-    outputCode,
-    ").compareTo(",
-    inputCode,
-    "));"]] (Logic.ifElse (Equality.equal assertType "assertDoubleEquals") [
-  "        assertEquals(",
-  (Strings.cat [
-    "            ",
-    outputCode,
-    ","]),
-  (Strings.cat [
-    "            ",
-    inputCode,
-    ","]),
-  "            1e-15);"] [
-  "        assertEquals(",
-  (Strings.cat [
-    "            ",
-    outputCode,
-    ","]),
-  (Strings.cat [
-    "            ",
-    inputCode,
-    ");"])])))
+generateAssertion :: String -> String -> String -> [String]
+generateAssertion assertType outputCode inputCode =
+    Logic.ifElse (Equality.equal assertType "assertArrayEquals") [
+      "        assertArrayEquals(",
+      (Strings.cat [
+        "            ",
+        outputCode,
+        ","]),
+      (Strings.cat [
+        "            ",
+        inputCode,
+        ");"])] (Logic.ifElse (Equality.equal assertType "assertBigDecimalEquals") [
+      Strings.cat [
+        "        assertEquals(0, (",
+        outputCode,
+        ").compareTo(",
+        inputCode,
+        "));"]] (Logic.ifElse (Equality.equal assertType "assertDoubleEquals") [
+      "        assertEquals(",
+      (Strings.cat [
+        "            ",
+        outputCode,
+        ","]),
+      (Strings.cat [
+        "            ",
+        inputCode,
+        ","]),
+      "            1e-15);"] [
+      "        assertEquals(",
+      (Strings.cat [
+        "            ",
+        outputCode,
+        ","]),
+      (Strings.cat [
+        "            ",
+        inputCode,
+        ");"])]))
 
 -- | Check if a Name is an unresolved inference variable (matches pattern t followed by digits)
-isInferenceVar :: (Core.Name -> Bool)
-isInferenceVar n =  
-  let s = (Core.unName n) 
-      chars = (Strings.toList s)
-  in (Logic.and (Equality.equal (Strings.charAt 0 s) 116) (Logic.and (Logic.not (Equality.equal (Strings.length s) 1)) (Lists.null (Lists.filter (\c -> Logic.not (Logic.and (Equality.gte c 48) (Equality.lte c 57))) (Lists.drop 1 chars)))))
+isInferenceVar :: Core.Name -> Bool
+isInferenceVar n =
+     
+      let s = Core.unName n 
+          chars = Strings.toList s
+      in (Logic.and (Equality.equal (Strings.charAt 0 s) 116) (Logic.and (Logic.not (Equality.equal (Strings.length s) 1)) (Lists.null (Lists.filter (\c -> Logic.not (Logic.and (Equality.gte c 48) (Equality.lte c 57))) (Lists.drop 1 chars)))))
 
 -- | Generate a complete test file using the Java codec
-generateTestFileWithJavaCodec :: (Testing.TestCodec -> Module.Module -> Testing.TestGroup -> Graph.Graph -> Either String (String, String))
-generateTestFileWithJavaCodec codec testModule testGroup g = (Eithers.map (\testBody ->  
-  let testModuleContent = (buildJavaTestModule codec testModule testGroup testBody) 
-      ns_ = (Module.moduleNamespace testModule)
-      parts = (Strings.splitOn "." (Module.unNamespace ns_))
-      dirParts = (Lists.drop 1 (Lists.init parts))
-      className_ = (Strings.cat2 (Formatting.capitalize (Lists.last parts)) "Test")
-      fileName = (Strings.cat2 className_ ".java")
-      filePath = (Strings.cat [
-              Strings.intercalate "/" dirParts,
-              "/",
-              fileName])
-  in (filePath, testModuleContent)) (generateJavaTestGroupHierarchy g codec [] testGroup))
+generateTestFileWithJavaCodec :: Testing.TestCodec -> Module.Module -> Testing.TestGroup -> Graph.Graph -> Either String (String, String)
+generateTestFileWithJavaCodec codec testModule testGroup g =
+    Eithers.map (\testBody ->  
+      let testModuleContent = buildJavaTestModule codec testModule testGroup testBody 
+          ns_ = Module.moduleNamespace testModule
+          parts = Strings.splitOn "." (Module.unNamespace ns_)
+          dirParts = Lists.drop 1 (Lists.init parts)
+          className_ = Strings.cat2 (Formatting.capitalize (Lists.last parts)) "Test"
+          fileName = Strings.cat2 className_ ".java"
+          filePath =
+                  Strings.cat [
+                    Strings.intercalate "/" dirParts,
+                    "/",
+                    fileName]
+      in (filePath, testModuleContent)) (generateJavaTestGroupHierarchy g codec [] testGroup)
 
 -- | Build the complete Java test module content
-buildJavaTestModule :: (t0 -> Module.Module -> Testing.TestGroup -> String -> String)
-buildJavaTestModule codec testModule testGroup testBody =  
-  let ns_ = (Module.moduleNamespace testModule) 
-      parts = (Strings.splitOn "." (Module.unNamespace ns_))
-      packageName = (Strings.intercalate "." (Lists.init parts))
-      className_ = (Strings.cat2 (Formatting.capitalize (Lists.last parts)) "Test")
-      groupName_ = (Testing.testGroupName testGroup)
-      standardImports = [
-              "import org.junit.jupiter.api.Test;",
-              "import static org.junit.jupiter.api.Assertions.*;",
-              "import java.util.*;",
-              "import hydra.util.*;"]
-      header = (Strings.cat [
-              Strings.cat2 "// " Constants.warningAutoGeneratedFile,
-              "\n",
-              (Strings.cat2 "// " groupName_),
-              "\n\n",
-              (Strings.cat [
-                "package ",
-                packageName,
-                ";\n\n"]),
-              (Strings.intercalate "\n" standardImports),
-              "\n\n",
-              (Strings.cat [
-                "public class ",
-                className_,
-                " {\n\n"])])
-  in (Strings.cat [
-    header,
-    testBody,
-    "\n}\n"])
+buildJavaTestModule :: t0 -> Module.Module -> Testing.TestGroup -> String -> String
+buildJavaTestModule codec testModule testGroup testBody =
+     
+      let ns_ = Module.moduleNamespace testModule 
+          parts = Strings.splitOn "." (Module.unNamespace ns_)
+          packageName = Strings.intercalate "." (Lists.init parts)
+          className_ = Strings.cat2 (Formatting.capitalize (Lists.last parts)) "Test"
+          groupName_ = Testing.testGroupName testGroup
+          standardImports =
+                  [
+                    "import org.junit.jupiter.api.Test;",
+                    "import static org.junit.jupiter.api.Assertions.*;",
+                    "import java.util.*;",
+                    "import hydra.util.*;"]
+          header =
+                  Strings.cat [
+                    Strings.cat2 "// " Constants.warningAutoGeneratedFile,
+                    "\n",
+                    (Strings.cat2 "// " groupName_),
+                    "\n\n",
+                    (Strings.cat [
+                      "package ",
+                      packageName,
+                      ";\n\n"]),
+                    (Strings.intercalate "\n" standardImports),
+                    "\n\n",
+                    (Strings.cat [
+                      "public class ",
+                      className_,
+                      " {\n\n"])]
+      in (Strings.cat [
+        header,
+        testBody,
+        "\n}\n"])
 
 -- | Generate a Java test file for a test group, with type inference
-generateJavaTestFile :: (Module.Module -> Testing.TestGroup -> Graph.Graph -> Either String (String, String))
-generateJavaTestFile testModule testGroup g = (Eithers.bind (Utils.inferTestGroupTerms g testGroup) (\inferredTestGroup -> generateTestFileWithJavaCodec javaTestCodec testModule inferredTestGroup g))
+generateJavaTestFile :: Module.Module -> Testing.TestGroup -> Graph.Graph -> Either String (String, String)
+generateJavaTestFile testModule testGroup g =
+    Eithers.bind (Utils.inferTestGroupTerms g testGroup) (\inferredTestGroup -> generateTestFileWithJavaCodec javaTestCodec testModule inferredTestGroup g)

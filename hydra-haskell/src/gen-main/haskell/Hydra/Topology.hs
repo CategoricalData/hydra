@@ -15,7 +15,7 @@ import qualified Data.Set as S
 -- | A directed graph represented as an adjacency list mapping vertices to their outgoing neighbors
 type Graph = (M.Map Vertex [Vertex])
 
-_Graph = (Core.Name "hydra.topology.Graph")
+_Graph = Core.Name "hydra.topology.Graph"
 
 data OrderingIsomorphism a = 
   OrderingIsomorphism {
@@ -24,11 +24,11 @@ data OrderingIsomorphism a =
     -- | Mapping from target ordering to source ordering
     orderingIsomorphismDecode :: ([a] -> [a])}
 
-_OrderingIsomorphism = (Core.Name "hydra.topology.OrderingIsomorphism")
+_OrderingIsomorphism = Core.Name "hydra.topology.OrderingIsomorphism"
 
-_OrderingIsomorphism_encode = (Core.Name "encode")
+_OrderingIsomorphism_encode = Core.Name "encode"
 
-_OrderingIsomorphism_decode = (Core.Name "decode")
+_OrderingIsomorphism_decode = Core.Name "decode"
 
 data TarjanState = 
   TarjanState {
@@ -46,21 +46,21 @@ data TarjanState =
     tarjanStateSccs :: [[Vertex]]}
   deriving (Eq, Ord, Read, Show)
 
-_TarjanState = (Core.Name "hydra.topology.TarjanState")
+_TarjanState = Core.Name "hydra.topology.TarjanState"
 
-_TarjanState_counter = (Core.Name "counter")
+_TarjanState_counter = Core.Name "counter"
 
-_TarjanState_indices = (Core.Name "indices")
+_TarjanState_indices = Core.Name "indices"
 
-_TarjanState_lowLinks = (Core.Name "lowLinks")
+_TarjanState_lowLinks = Core.Name "lowLinks"
 
-_TarjanState_stack = (Core.Name "stack")
+_TarjanState_stack = Core.Name "stack"
 
-_TarjanState_onStack = (Core.Name "onStack")
+_TarjanState_onStack = Core.Name "onStack"
 
-_TarjanState_sccs = (Core.Name "sccs")
+_TarjanState_sccs = Core.Name "sccs"
 
 -- | A graph vertex, represented as a 32-bit integer identifier
 type Vertex = Int
 
-_Vertex = (Core.Name "hydra.topology.Vertex")
+_Vertex = Core.Name "hydra.topology.Vertex"

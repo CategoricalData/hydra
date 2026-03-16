@@ -147,7 +147,7 @@ public abstract class AugAssign implements Serializable, Comparable<AugAssign> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AugAssign other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -182,7 +182,7 @@ public abstract class AugAssign implements Serializable, Comparable<AugAssign> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AugAssign other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -217,7 +217,7 @@ public abstract class AugAssign implements Serializable, Comparable<AugAssign> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AugAssign other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -252,7 +252,7 @@ public abstract class AugAssign implements Serializable, Comparable<AugAssign> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AugAssign other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -287,7 +287,7 @@ public abstract class AugAssign implements Serializable, Comparable<AugAssign> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AugAssign other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -322,7 +322,7 @@ public abstract class AugAssign implements Serializable, Comparable<AugAssign> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AugAssign other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -357,7 +357,7 @@ public abstract class AugAssign implements Serializable, Comparable<AugAssign> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AugAssign other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -392,7 +392,7 @@ public abstract class AugAssign implements Serializable, Comparable<AugAssign> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AugAssign other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -427,7 +427,7 @@ public abstract class AugAssign implements Serializable, Comparable<AugAssign> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AugAssign other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -462,7 +462,7 @@ public abstract class AugAssign implements Serializable, Comparable<AugAssign> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AugAssign other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -497,7 +497,7 @@ public abstract class AugAssign implements Serializable, Comparable<AugAssign> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AugAssign other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -532,7 +532,7 @@ public abstract class AugAssign implements Serializable, Comparable<AugAssign> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AugAssign other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -567,7 +567,7 @@ public abstract class AugAssign implements Serializable, Comparable<AugAssign> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AugAssign other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

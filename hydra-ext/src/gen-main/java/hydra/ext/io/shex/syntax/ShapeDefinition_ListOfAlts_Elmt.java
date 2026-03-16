@@ -71,7 +71,7 @@ public abstract class ShapeDefinition_ListOfAlts_Elmt implements Serializable, C
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ShapeDefinition_ListOfAlts_Elmt other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -111,7 +111,7 @@ public abstract class ShapeDefinition_ListOfAlts_Elmt implements Serializable, C
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ShapeDefinition_ListOfAlts_Elmt other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -147,7 +147,7 @@ public abstract class ShapeDefinition_ListOfAlts_Elmt implements Serializable, C
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ShapeDefinition_ListOfAlts_Elmt other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

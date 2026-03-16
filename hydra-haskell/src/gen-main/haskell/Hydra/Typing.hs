@@ -32,21 +32,21 @@ data FunctionStructure env =
     functionStructureEnvironment :: env}
   deriving (Eq, Ord, Read, Show)
 
-_FunctionStructure = (Core.Name "hydra.typing.FunctionStructure")
+_FunctionStructure = Core.Name "hydra.typing.FunctionStructure"
 
-_FunctionStructure_typeParams = (Core.Name "typeParams")
+_FunctionStructure_typeParams = Core.Name "typeParams"
 
-_FunctionStructure_params = (Core.Name "params")
+_FunctionStructure_params = Core.Name "params"
 
-_FunctionStructure_bindings = (Core.Name "bindings")
+_FunctionStructure_bindings = Core.Name "bindings"
 
-_FunctionStructure_body = (Core.Name "body")
+_FunctionStructure_body = Core.Name "body"
 
-_FunctionStructure_domains = (Core.Name "domains")
+_FunctionStructure_domains = Core.Name "domains"
 
-_FunctionStructure_codomain = (Core.Name "codomain")
+_FunctionStructure_codomain = Core.Name "codomain"
 
-_FunctionStructure_environment = (Core.Name "environment")
+_FunctionStructure_environment = Core.Name "environment"
 
 -- | The result of applying inference rules to a term.
 data InferenceResult = 
@@ -63,17 +63,17 @@ data InferenceResult =
     inferenceResultContext :: Context.Context}
   deriving (Eq, Ord, Read, Show)
 
-_InferenceResult = (Core.Name "hydra.typing.InferenceResult")
+_InferenceResult = Core.Name "hydra.typing.InferenceResult"
 
-_InferenceResult_term = (Core.Name "term")
+_InferenceResult_term = Core.Name "term"
 
-_InferenceResult_type = (Core.Name "type")
+_InferenceResult_type = Core.Name "type"
 
-_InferenceResult_subst = (Core.Name "subst")
+_InferenceResult_subst = Core.Name "subst"
 
-_InferenceResult_classConstraints = (Core.Name "classConstraints")
+_InferenceResult_classConstraints = Core.Name "classConstraints"
 
-_InferenceResult_context = (Core.Name "context")
+_InferenceResult_context = Core.Name "context"
 
 -- | A substitution of term variables for terms
 newtype TermSubst = 
@@ -81,7 +81,7 @@ newtype TermSubst =
     unTermSubst :: (M.Map Core.Name Core.Term)}
   deriving (Eq, Ord, Read, Show)
 
-_TermSubst = (Core.Name "hydra.typing.TermSubst")
+_TermSubst = Core.Name "hydra.typing.TermSubst"
 
 -- | An assertion that two types can be unified into a single type
 data TypeConstraint = 
@@ -94,13 +94,13 @@ data TypeConstraint =
     typeConstraintComment :: String}
   deriving (Eq, Ord, Read, Show)
 
-_TypeConstraint = (Core.Name "hydra.typing.TypeConstraint")
+_TypeConstraint = Core.Name "hydra.typing.TypeConstraint"
 
-_TypeConstraint_left = (Core.Name "left")
+_TypeConstraint_left = Core.Name "left"
 
-_TypeConstraint_right = (Core.Name "right")
+_TypeConstraint_right = Core.Name "right"
 
-_TypeConstraint_comment = (Core.Name "comment")
+_TypeConstraint_comment = Core.Name "comment"
 
 -- | A substitution of type variables for types
 newtype TypeSubst = 
@@ -108,4 +108,4 @@ newtype TypeSubst =
     unTypeSubst :: (M.Map Core.Name Core.Type)}
   deriving (Eq, Ord, Read, Show)
 
-_TypeSubst = (Core.Name "hydra.typing.TypeSubst")
+_TypeSubst = Core.Name "hydra.typing.TypeSubst"

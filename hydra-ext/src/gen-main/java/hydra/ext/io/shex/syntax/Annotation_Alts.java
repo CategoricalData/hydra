@@ -63,7 +63,7 @@ public abstract class Annotation_Alts implements Serializable, Comparable<Annota
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Annotation_Alts other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -103,7 +103,7 @@ public abstract class Annotation_Alts implements Serializable, Comparable<Annota
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Annotation_Alts other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

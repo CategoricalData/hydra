@@ -183,7 +183,7 @@ public interface TestCodec {
       
       @Override
       public hydra.util.Either<String, hydra.util.ConsList<String>> visit(hydra.testing.TestCase.DelegatedEvaluation delCase) {
-        hydra.core.Term output_ = ((delCase).value).output;
+        hydra.core.Term output_ = (delCase).value.output;
         String assertType = hydra.ext.java.testCodec.TestCodec.getAssertionType(output_);
         hydra.util.Lazy<String> fullName = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(groupPath),
@@ -193,8 +193,8 @@ public interface TestCodec {
             hydra.lib.lists.Concat2.apply(
               groupPath,
               hydra.util.ConsList.of(name_)))));
-        String formattedName = ((codec).formatTestName).apply(fullName.get());
-        hydra.core.Term input_ = ((delCase).value).input;
+        String formattedName = (codec).formatTestName.apply(fullName.get());
+        hydra.core.Term input_ = (delCase).value.input;
         hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> typeVars = new hydra.util.Lazy<>(() -> hydra.lib.lists.Sort.apply(hydra.lib.lists.Filter.apply(
           hydra.ext.java.testCodec.TestCodec::isInferenceVar,
           hydra.lib.sets.ToList.apply(hydra.lib.sets.Union.apply(
@@ -212,7 +212,7 @@ public interface TestCodec {
                 typeVars.get())),
             "> "))));
         return hydra.lib.eithers.Bind.apply(
-          (((codec).encodeTerm).apply(input_)).apply(g),
+          (codec).encodeTerm.apply(input_).apply(g),
           (java.util.function.Function<String, hydra.util.Either<String, hydra.util.ConsList<String>>>) (inputCode -> hydra.lib.eithers.Map.apply(
             (java.util.function.Function<String, hydra.util.ConsList<String>>) (outputCode -> {
               hydra.util.ConsList<String> assertionLines = hydra.ext.java.testCodec.TestCodec.generateAssertion(
@@ -232,13 +232,13 @@ public interface TestCodec {
                   assertionLines,
                   hydra.util.ConsList.of("    }")));
             }),
-            (((codec).encodeTerm).apply(output_)).apply(g))));
+            (codec).encodeTerm.apply(output_).apply(g))));
       }
     });
   }
   
   static String getAssertionType(hydra.core.Term term) {
-    return (hydra.rewriting.Rewriting.deannotateTerm(term)).accept(new hydra.core.Term.PartialVisitor<>() {
+    return hydra.rewriting.Rewriting.deannotateTerm(term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public String otherwise(hydra.core.Term instance) {
         return "assertEquals";
@@ -246,7 +246,7 @@ public interface TestCodec {
       
       @Override
       public String visit(hydra.core.Term.Literal lit) {
-        return ((lit).value).accept(new hydra.core.Literal.PartialVisitor<>() {
+        return (lit).value.accept(new hydra.core.Literal.PartialVisitor<>() {
           @Override
           public String otherwise(hydra.core.Literal instance) {
             return "assertEquals";
@@ -259,7 +259,7 @@ public interface TestCodec {
           
           @Override
           public String visit(hydra.core.Literal.Float_ fv) {
-            return ((fv).value).accept(new hydra.core.FloatValue.PartialVisitor<>() {
+            return (fv).value.accept(new hydra.core.FloatValue.PartialVisitor<>() {
               @Override
               public String otherwise(hydra.core.FloatValue instance) {
                 return "assertDoubleEquals";

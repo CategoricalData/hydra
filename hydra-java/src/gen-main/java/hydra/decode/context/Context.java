@@ -32,7 +32,7 @@ public interface Context {
                     
                     @Override
                     public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Term.Literal v) {
-                      return ((v).value).accept(new hydra.core.Literal.PartialVisitor<>() {
+                      return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
                         @Override
                         public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Literal instance) {
                           return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"));
@@ -66,7 +66,7 @@ public interface Context {
                       
                       @Override
                       public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Term.Literal v) {
-                        return ((v).value).accept(new hydra.core.Literal.PartialVisitor<>() {
+                        return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
                           @Override
                           public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Literal instance) {
                             return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"));

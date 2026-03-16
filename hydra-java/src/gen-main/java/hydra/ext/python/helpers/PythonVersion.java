@@ -62,7 +62,7 @@ public abstract class PythonVersion implements Serializable, Comparable<PythonVe
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PythonVersion other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -97,7 +97,7 @@ public abstract class PythonVersion implements Serializable, Comparable<PythonVe
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PythonVersion other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

@@ -53,7 +53,7 @@ public interface Construct {
               encodeValue,
               v1)),
             hydra.lib.maps.ToList.apply(hydra.pg.graphson.construct.Construct.<T0>adjacentEdgeToGraphson_props(edge))),
-          (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.Value>>, hydra.util.Either<T1, hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>>>) (propPairs -> hydra.util.Either.<T1, hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>>right((hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>) ((hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>) (new hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>(new hydra.pg.graphson.syntax.EdgeLabel((label.get()).value), new hydra.pg.graphson.syntax.AdjacentEdge(gid, gv, hydra.lib.maps.FromList.apply(propPairs))))))))))));
+          (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.Value>>, hydra.util.Either<T1, hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>>>) (propPairs -> hydra.util.Either.<T1, hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>>right((hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>) ((hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>) (new hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>(new hydra.pg.graphson.syntax.EdgeLabel(label.get().value), new hydra.pg.graphson.syntax.AdjacentEdge(gid, gv, hydra.lib.maps.FromList.apply(propPairs))))))))))));
   }
   
   static <T0> T0 adjacentEdgeToGraphson_edgeId(hydra.pg.model.AdjacentEdge<T0> edge) {
@@ -70,7 +70,7 @@ public interface Construct {
   
   static <T0, T1, T2> hydra.util.Either<T1, hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, T2>> edgePropertyToGraphson(java.util.function.Function<T0, hydra.util.Either<T1, T2>> encodeValue, hydra.util.Pair<hydra.pg.model.PropertyKey, T0> prop) {
     return hydra.lib.eithers.Map.apply(
-      (java.util.function.Function<T2, hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, T2>>) (gv -> (hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, T2>) ((hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, T2>) (new hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, T2>(new hydra.pg.graphson.syntax.PropertyKey((hydra.lib.pairs.First.apply(prop)).value), gv)))),
+      (java.util.function.Function<T2, hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, T2>>) (gv -> (hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, T2>) ((hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, T2>) (new hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, T2>(new hydra.pg.graphson.syntax.PropertyKey(hydra.lib.pairs.First.apply(prop).value), gv)))),
       (encodeValue).apply(hydra.lib.pairs.Second.apply(prop)));
   }
   
@@ -101,7 +101,7 @@ public interface Construct {
                 encodeValue,
                 v1)),
               hydra.pg.graphson.construct.Construct.<T0>pgVertexWithAdjacentEdgesToGraphsonVertex_outs(vae)),
-            (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>>, hydra.util.Either<T1, hydra.pg.graphson.syntax.Vertex>>) (outPairs -> hydra.util.Either.<T1, hydra.pg.graphson.syntax.Vertex>right(new hydra.pg.graphson.syntax.Vertex(gid, hydra.util.Maybe.just(new hydra.pg.graphson.syntax.VertexLabel((label.get()).value)), hydra.pg.graphson.construct.Construct.aggregateMap(inPairs), hydra.pg.graphson.construct.Construct.aggregateMap(outPairs), hydra.pg.graphson.construct.Construct.aggregateMap(propPairs)))))))))));
+            (java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<hydra.pg.graphson.syntax.EdgeLabel, hydra.pg.graphson.syntax.AdjacentEdge>>, hydra.util.Either<T1, hydra.pg.graphson.syntax.Vertex>>) (outPairs -> hydra.util.Either.<T1, hydra.pg.graphson.syntax.Vertex>right(new hydra.pg.graphson.syntax.Vertex(gid, hydra.util.Maybe.just(new hydra.pg.graphson.syntax.VertexLabel(label.get().value)), hydra.pg.graphson.construct.Construct.aggregateMap(inPairs), hydra.pg.graphson.construct.Construct.aggregateMap(outPairs), hydra.pg.graphson.construct.Construct.aggregateMap(propPairs)))))))))));
   }
   
   static <T0> hydra.pg.model.Vertex<T0> pgVertexWithAdjacentEdgesToGraphsonVertex_vertex(hydra.pg.model.VertexWithAdjacentEdges<T0> vae) {
@@ -134,7 +134,7 @@ public interface Construct {
   
   static <T0, T1> hydra.util.Either<T1, hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.VertexPropertyValue>> vertexPropertyToGraphson(java.util.function.Function<T0, hydra.util.Either<T1, hydra.pg.graphson.syntax.Value>> encodeValue, hydra.util.Pair<hydra.pg.model.PropertyKey, T0> prop) {
     return hydra.lib.eithers.Map.apply(
-      (java.util.function.Function<hydra.pg.graphson.syntax.Value, hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.VertexPropertyValue>>) (gv -> (hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.VertexPropertyValue>) ((hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.VertexPropertyValue>) (new hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.VertexPropertyValue>(new hydra.pg.graphson.syntax.PropertyKey((hydra.lib.pairs.First.apply(prop)).value), new hydra.pg.graphson.syntax.VertexPropertyValue((hydra.util.Maybe<hydra.pg.graphson.syntax.Value>) (hydra.util.Maybe.<hydra.pg.graphson.syntax.Value>nothing()), gv))))),
+      (java.util.function.Function<hydra.pg.graphson.syntax.Value, hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.VertexPropertyValue>>) (gv -> (hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.VertexPropertyValue>) ((hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.VertexPropertyValue>) (new hydra.util.Pair<hydra.pg.graphson.syntax.PropertyKey, hydra.pg.graphson.syntax.VertexPropertyValue>(new hydra.pg.graphson.syntax.PropertyKey(hydra.lib.pairs.First.apply(prop).value), new hydra.pg.graphson.syntax.VertexPropertyValue((hydra.util.Maybe<hydra.pg.graphson.syntax.Value>) (hydra.util.Maybe.<hydra.pg.graphson.syntax.Value>nothing()), gv))))),
       (encodeValue).apply(hydra.lib.pairs.Second.apply(prop)));
   }
 }

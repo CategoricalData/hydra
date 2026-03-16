@@ -95,7 +95,7 @@ public abstract class LiteralExpression implements Serializable, Comparable<Lite
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(LiteralExpression other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -135,7 +135,7 @@ public abstract class LiteralExpression implements Serializable, Comparable<Lite
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(LiteralExpression other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -175,7 +175,7 @@ public abstract class LiteralExpression implements Serializable, Comparable<Lite
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(LiteralExpression other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -211,7 +211,7 @@ public abstract class LiteralExpression implements Serializable, Comparable<Lite
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(LiteralExpression other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -246,7 +246,7 @@ public abstract class LiteralExpression implements Serializable, Comparable<Lite
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(LiteralExpression other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -281,7 +281,7 @@ public abstract class LiteralExpression implements Serializable, Comparable<Lite
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(LiteralExpression other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

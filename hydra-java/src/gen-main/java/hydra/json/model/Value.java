@@ -101,7 +101,7 @@ public abstract class Value implements Serializable, Comparable<Value> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Value other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -144,7 +144,7 @@ public abstract class Value implements Serializable, Comparable<Value> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Value other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -183,7 +183,7 @@ public abstract class Value implements Serializable, Comparable<Value> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Value other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -223,7 +223,7 @@ public abstract class Value implements Serializable, Comparable<Value> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Value other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -266,7 +266,7 @@ public abstract class Value implements Serializable, Comparable<Value> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Value other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -309,7 +309,7 @@ public abstract class Value implements Serializable, Comparable<Value> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Value other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

@@ -18,6 +18,8 @@ public abstract class Expr implements Serializable, Comparable<Expr> {
   
   public static final hydra.core.Name BRACKETS = new hydra.core.Name("brackets");
   
+  public static final hydra.core.Name SEQ = new hydra.core.Name("seq");
+  
   private Expr () {
   
   }
@@ -32,6 +34,8 @@ public abstract class Expr implements Serializable, Comparable<Expr> {
     R visit(Op instance) ;
     
     R visit(Brackets instance) ;
+    
+    R visit(Seq instance) ;
   }
   
   public interface PartialVisitor<R> extends Visitor<R> {
@@ -52,6 +56,10 @@ public abstract class Expr implements Serializable, Comparable<Expr> {
     }
     
     default R visit(Brackets instance) {
+      return otherwise(instance);
+    }
+    
+    default R visit(Seq instance) {
       return otherwise(instance);
     }
   }
@@ -85,7 +93,7 @@ public abstract class Expr implements Serializable, Comparable<Expr> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expr other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -128,7 +136,7 @@ public abstract class Expr implements Serializable, Comparable<Expr> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expr other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -171,7 +179,7 @@ public abstract class Expr implements Serializable, Comparable<Expr> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expr other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -214,11 +222,54 @@ public abstract class Expr implements Serializable, Comparable<Expr> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Expr other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
       Brackets o = (Brackets) other;
+      return ((Comparable) value).compareTo(o.value);
+    }
+    
+    @Override
+    public <R> R accept(Visitor<R> visitor) {
+      return visitor.visit(this);
+    }
+  }
+  
+  /**
+   * A sequence of expressions joined by a separator, treated as structural layout (not subject to parenthesization)
+   */
+  public static final class Seq extends hydra.ast.Expr implements Serializable {
+    public final hydra.ast.SeqExpr value;
+    
+    public Seq (hydra.ast.SeqExpr value) {
+      this.value = value;
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+      if (!(other instanceof Seq)) {
+        return false;
+      }
+      Seq o = (Seq) other;
+      return java.util.Objects.equals(
+        this.value,
+        o.value);
+    }
+    
+    @Override
+    public int hashCode() {
+      return 2 * java.util.Objects.hashCode(value);
+    }
+    
+    @Override
+    @SuppressWarnings("unchecked")
+    public int compareTo(Expr other) {
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
+      if (tagCmp != 0) {
+        return tagCmp;
+      }
+      Seq o = (Seq) other;
       return ((Comparable) value).compareTo(o.value);
     }
     

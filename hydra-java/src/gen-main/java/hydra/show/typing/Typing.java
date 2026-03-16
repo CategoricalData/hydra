@@ -19,7 +19,7 @@ public interface Typing {
     hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> subst = (ts).value;
     hydra.util.Lazy<hydra.util.ConsList<hydra.util.Pair<hydra.core.Name, hydra.core.Type>>> pairs = new hydra.util.Lazy<>(() -> hydra.lib.maps.ToList.apply(subst));
     java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Type>, String> showPair = (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Type>, String>) (pair -> {
-      hydra.util.Lazy<String> name = new hydra.util.Lazy<>(() -> (hydra.lib.pairs.First.apply(pair)).value);
+      hydra.util.Lazy<String> name = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(pair).value);
       hydra.util.Lazy<hydra.core.Type> typ = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(pair));
       return hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
         name.get(),

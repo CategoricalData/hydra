@@ -33,15 +33,15 @@ data AlphaConversionTestCase =
     alphaConversionTestCaseResult :: Core.Term}
   deriving (Eq, Ord, Read, Show)
 
-_AlphaConversionTestCase = (Core.Name "hydra.testing.AlphaConversionTestCase")
+_AlphaConversionTestCase = Core.Name "hydra.testing.AlphaConversionTestCase"
 
-_AlphaConversionTestCase_term = (Core.Name "term")
+_AlphaConversionTestCase_term = Core.Name "term"
 
-_AlphaConversionTestCase_oldVariable = (Core.Name "oldVariable")
+_AlphaConversionTestCase_oldVariable = Core.Name "oldVariable"
 
-_AlphaConversionTestCase_newVariable = (Core.Name "newVariable")
+_AlphaConversionTestCase_newVariable = Core.Name "newVariable"
 
-_AlphaConversionTestCase_result = (Core.Name "result")
+_AlphaConversionTestCase_result = Core.Name "result"
 
 -- | One of two evaluation styles: eager or lazy
 data EvaluationStyle = 
@@ -49,11 +49,11 @@ data EvaluationStyle =
   EvaluationStyleLazy 
   deriving (Eq, Ord, Read, Show)
 
-_EvaluationStyle = (Core.Name "hydra.testing.EvaluationStyle")
+_EvaluationStyle = Core.Name "hydra.testing.EvaluationStyle"
 
-_EvaluationStyle_eager = (Core.Name "eager")
+_EvaluationStyle_eager = Core.Name "eager"
 
-_EvaluationStyle_lazy = (Core.Name "lazy")
+_EvaluationStyle_lazy = Core.Name "lazy"
 
 -- | A test case which checks that strings are converted between different case conventions correctly
 data CaseConversionTestCase = 
@@ -68,15 +68,15 @@ data CaseConversionTestCase =
     caseConversionTestCaseToString :: String}
   deriving (Eq, Ord, Read, Show)
 
-_CaseConversionTestCase = (Core.Name "hydra.testing.CaseConversionTestCase")
+_CaseConversionTestCase = Core.Name "hydra.testing.CaseConversionTestCase"
 
-_CaseConversionTestCase_fromConvention = (Core.Name "fromConvention")
+_CaseConversionTestCase_fromConvention = Core.Name "fromConvention"
 
-_CaseConversionTestCase_toConvention = (Core.Name "toConvention")
+_CaseConversionTestCase_toConvention = Core.Name "toConvention"
 
-_CaseConversionTestCase_fromString = (Core.Name "fromString")
+_CaseConversionTestCase_fromString = Core.Name "fromString"
 
-_CaseConversionTestCase_toString = (Core.Name "toString")
+_CaseConversionTestCase_toString = Core.Name "toString"
 
 -- | A test case in which we delegate evaluation of an input term and an expected output term to a target programming language like Haskell, Java, or Python, checking whether the term evaluates as expected when translated into that language
 data DelegatedEvaluationTestCase = 
@@ -87,11 +87,11 @@ data DelegatedEvaluationTestCase =
     delegatedEvaluationTestCaseOutput :: Core.Term}
   deriving (Eq, Ord, Read, Show)
 
-_DelegatedEvaluationTestCase = (Core.Name "hydra.testing.DelegatedEvaluationTestCase")
+_DelegatedEvaluationTestCase = Core.Name "hydra.testing.DelegatedEvaluationTestCase"
 
-_DelegatedEvaluationTestCase_input = (Core.Name "input")
+_DelegatedEvaluationTestCase_input = Core.Name "input"
 
-_DelegatedEvaluationTestCase_output = (Core.Name "output")
+_DelegatedEvaluationTestCase_output = Core.Name "output"
 
 -- | A test case which performs eta expansion (adding missing lambda abstractions) on a given term and compares the result with the expected result
 data EtaExpansionTestCase = 
@@ -102,11 +102,11 @@ data EtaExpansionTestCase =
     etaExpansionTestCaseOutput :: Core.Term}
   deriving (Eq, Ord, Read, Show)
 
-_EtaExpansionTestCase = (Core.Name "hydra.testing.EtaExpansionTestCase")
+_EtaExpansionTestCase = Core.Name "hydra.testing.EtaExpansionTestCase"
 
-_EtaExpansionTestCase_input = (Core.Name "input")
+_EtaExpansionTestCase_input = Core.Name "input"
 
-_EtaExpansionTestCase_output = (Core.Name "output")
+_EtaExpansionTestCase_output = Core.Name "output"
 
 -- | A test case which strips all annotations from a term and compares the result with the expected term
 data DeannotateTermTestCase = 
@@ -117,11 +117,11 @@ data DeannotateTermTestCase =
     deannotateTermTestCaseOutput :: Core.Term}
   deriving (Eq, Ord, Read, Show)
 
-_DeannotateTermTestCase = (Core.Name "hydra.testing.DeannotateTermTestCase")
+_DeannotateTermTestCase = Core.Name "hydra.testing.DeannotateTermTestCase"
 
-_DeannotateTermTestCase_input = (Core.Name "input")
+_DeannotateTermTestCase_input = Core.Name "input"
 
-_DeannotateTermTestCase_output = (Core.Name "output")
+_DeannotateTermTestCase_output = Core.Name "output"
 
 -- | A test case which strips all annotations from a type and compares the result with the expected type
 data DeannotateTypeTestCase = 
@@ -132,11 +132,11 @@ data DeannotateTypeTestCase =
     deannotateTypeTestCaseOutput :: Core.Type}
   deriving (Eq, Ord, Read, Show)
 
-_DeannotateTypeTestCase = (Core.Name "hydra.testing.DeannotateTypeTestCase")
+_DeannotateTypeTestCase = Core.Name "hydra.testing.DeannotateTypeTestCase"
 
-_DeannotateTypeTestCase_input = (Core.Name "input")
+_DeannotateTypeTestCase_input = Core.Name "input"
 
-_DeannotateTypeTestCase_output = (Core.Name "output")
+_DeannotateTypeTestCase_output = Core.Name "output"
 
 -- | A test case which flattens nested let terms, lifting inner bindings to the outer let, and compares the result with the expected term
 data FlattenLetTermsTestCase = 
@@ -147,11 +147,11 @@ data FlattenLetTermsTestCase =
     flattenLetTermsTestCaseOutput :: Core.Term}
   deriving (Eq, Ord, Read, Show)
 
-_FlattenLetTermsTestCase = (Core.Name "hydra.testing.FlattenLetTermsTestCase")
+_FlattenLetTermsTestCase = Core.Name "hydra.testing.FlattenLetTermsTestCase"
 
-_FlattenLetTermsTestCase_input = (Core.Name "input")
+_FlattenLetTermsTestCase_input = Core.Name "input"
 
-_FlattenLetTermsTestCase_output = (Core.Name "output")
+_FlattenLetTermsTestCase_output = Core.Name "output"
 
 -- | A predefined fold operation for testing foldOverTerm
 data FoldOperation = 
@@ -163,13 +163,13 @@ data FoldOperation =
   FoldOperationCollectLabels 
   deriving (Eq, Ord, Read, Show)
 
-_FoldOperation = (Core.Name "hydra.testing.FoldOperation")
+_FoldOperation = Core.Name "hydra.testing.FoldOperation"
 
-_FoldOperation_sumInt32Literals = (Core.Name "sumInt32Literals")
+_FoldOperation_sumInt32Literals = Core.Name "sumInt32Literals"
 
-_FoldOperation_collectListLengths = (Core.Name "collectListLengths")
+_FoldOperation_collectListLengths = Core.Name "collectListLengths"
 
-_FoldOperation_collectLabels = (Core.Name "collectLabels")
+_FoldOperation_collectLabels = Core.Name "collectLabels"
 
 -- | A test case which applies a fold operation over a term and compares the result
 data FoldOverTermTestCase = 
@@ -184,15 +184,15 @@ data FoldOverTermTestCase =
     foldOverTermTestCaseOutput :: Core.Term}
   deriving (Eq, Ord, Read, Show)
 
-_FoldOverTermTestCase = (Core.Name "hydra.testing.FoldOverTermTestCase")
+_FoldOverTermTestCase = Core.Name "hydra.testing.FoldOverTermTestCase"
 
-_FoldOverTermTestCase_input = (Core.Name "input")
+_FoldOverTermTestCase_input = Core.Name "input"
 
-_FoldOverTermTestCase_traversalOrder = (Core.Name "traversalOrder")
+_FoldOverTermTestCase_traversalOrder = Core.Name "traversalOrder"
 
-_FoldOverTermTestCase_operation = (Core.Name "operation")
+_FoldOverTermTestCase_operation = Core.Name "operation"
 
-_FoldOverTermTestCase_output = (Core.Name "output")
+_FoldOverTermTestCase_output = Core.Name "output"
 
 -- | A test case which computes the free variables of a term and compares the result with an expected set of names
 data FreeVariablesTestCase = 
@@ -203,11 +203,11 @@ data FreeVariablesTestCase =
     freeVariablesTestCaseOutput :: (S.Set Core.Name)}
   deriving (Eq, Ord, Read, Show)
 
-_FreeVariablesTestCase = (Core.Name "hydra.testing.FreeVariablesTestCase")
+_FreeVariablesTestCase = Core.Name "hydra.testing.FreeVariablesTestCase"
 
-_FreeVariablesTestCase_input = (Core.Name "input")
+_FreeVariablesTestCase_input = Core.Name "input"
 
-_FreeVariablesTestCase_output = (Core.Name "output")
+_FreeVariablesTestCase_output = Core.Name "output"
 
 -- | A predefined predicate for testing hoistSubterms. Each predicate determines which subterms should be hoisted into let bindings.
 data HoistPredicate = 
@@ -221,15 +221,15 @@ data HoistPredicate =
   HoistPredicateNothing 
   deriving (Eq, Ord, Read, Show)
 
-_HoistPredicate = (Core.Name "hydra.testing.HoistPredicate")
+_HoistPredicate = Core.Name "hydra.testing.HoistPredicate"
 
-_HoistPredicate_caseStatements = (Core.Name "caseStatements")
+_HoistPredicate_caseStatements = Core.Name "caseStatements"
 
-_HoistPredicate_applications = (Core.Name "applications")
+_HoistPredicate_applications = Core.Name "applications"
 
-_HoistPredicate_lists = (Core.Name "lists")
+_HoistPredicate_lists = Core.Name "lists"
 
-_HoistPredicate_nothing = (Core.Name "nothing")
+_HoistPredicate_nothing = Core.Name "nothing"
 
 -- | A test case for hoistLetBindings with hoistAll=True, which hoists ALL nested let bindings to the top level of a let term, not just polymorphic ones. This is used for targets like Java that cannot have let expressions in arbitrary positions.
 data HoistLetBindingsTestCase = 
@@ -240,11 +240,11 @@ data HoistLetBindingsTestCase =
     hoistLetBindingsTestCaseOutput :: Core.Let}
   deriving (Eq, Ord, Read, Show)
 
-_HoistLetBindingsTestCase = (Core.Name "hydra.testing.HoistLetBindingsTestCase")
+_HoistLetBindingsTestCase = Core.Name "hydra.testing.HoistLetBindingsTestCase"
 
-_HoistLetBindingsTestCase_input = (Core.Name "input")
+_HoistLetBindingsTestCase_input = Core.Name "input"
 
-_HoistLetBindingsTestCase_output = (Core.Name "output")
+_HoistLetBindingsTestCase_output = Core.Name "output"
 
 -- | A test case for the hoistPolymorphicLetBindings function, which hoists polymorphic let bindings to the top level of a let term. This is used for targets like Java which don't support polymorphic lambdas.
 data HoistPolymorphicLetBindingsTestCase = 
@@ -255,11 +255,11 @@ data HoistPolymorphicLetBindingsTestCase =
     hoistPolymorphicLetBindingsTestCaseOutput :: Core.Let}
   deriving (Eq, Ord, Read, Show)
 
-_HoistPolymorphicLetBindingsTestCase = (Core.Name "hydra.testing.HoistPolymorphicLetBindingsTestCase")
+_HoistPolymorphicLetBindingsTestCase = Core.Name "hydra.testing.HoistPolymorphicLetBindingsTestCase"
 
-_HoistPolymorphicLetBindingsTestCase_input = (Core.Name "input")
+_HoistPolymorphicLetBindingsTestCase_input = Core.Name "input"
 
-_HoistPolymorphicLetBindingsTestCase_output = (Core.Name "output")
+_HoistPolymorphicLetBindingsTestCase_output = Core.Name "output"
 
 -- | A test case which hoists subterms into let bindings based on a predicate, and compares the result with the expected term. The predicate decides which subterms at which positions should be extracted into new bindings.
 data HoistSubtermsTestCase = 
@@ -272,13 +272,13 @@ data HoistSubtermsTestCase =
     hoistSubtermsTestCaseOutput :: Core.Term}
   deriving (Eq, Ord, Read, Show)
 
-_HoistSubtermsTestCase = (Core.Name "hydra.testing.HoistSubtermsTestCase")
+_HoistSubtermsTestCase = Core.Name "hydra.testing.HoistSubtermsTestCase"
 
-_HoistSubtermsTestCase_predicate = (Core.Name "predicate")
+_HoistSubtermsTestCase_predicate = Core.Name "predicate"
 
-_HoistSubtermsTestCase_input = (Core.Name "input")
+_HoistSubtermsTestCase_input = Core.Name "input"
 
-_HoistSubtermsTestCase_output = (Core.Name "output")
+_HoistSubtermsTestCase_output = Core.Name "output"
 
 -- | A test case for the hoistCaseStatements function, which hoists case statements into let bindings, but only when they appear inside a lambda body. This is used for targets like Python which don't support inline match expressions.
 data HoistCaseStatementsTestCase = 
@@ -289,11 +289,11 @@ data HoistCaseStatementsTestCase =
     hoistCaseStatementsTestCaseOutput :: Core.Term}
   deriving (Eq, Ord, Read, Show)
 
-_HoistCaseStatementsTestCase = (Core.Name "hydra.testing.HoistCaseStatementsTestCase")
+_HoistCaseStatementsTestCase = Core.Name "hydra.testing.HoistCaseStatementsTestCase"
 
-_HoistCaseStatementsTestCase_input = (Core.Name "input")
+_HoistCaseStatementsTestCase_input = Core.Name "input"
 
-_HoistCaseStatementsTestCase_output = (Core.Name "output")
+_HoistCaseStatementsTestCase_output = Core.Name "output"
 
 -- | A predefined term rewriter for testing rewriteTerm
 data TermRewriter = 
@@ -303,11 +303,11 @@ data TermRewriter =
   TermRewriterReplaceInt32WithInt64 
   deriving (Eq, Ord, Read, Show)
 
-_TermRewriter = (Core.Name "hydra.testing.TermRewriter")
+_TermRewriter = Core.Name "hydra.testing.TermRewriter"
 
-_TermRewriter_replaceFooWithBar = (Core.Name "replaceFooWithBar")
+_TermRewriter_replaceFooWithBar = Core.Name "replaceFooWithBar"
 
-_TermRewriter_replaceInt32WithInt64 = (Core.Name "replaceInt32WithInt64")
+_TermRewriter_replaceInt32WithInt64 = Core.Name "replaceInt32WithInt64"
 
 -- | A test case which applies a term rewriter and compares the result
 data RewriteTermTestCase = 
@@ -320,13 +320,13 @@ data RewriteTermTestCase =
     rewriteTermTestCaseOutput :: Core.Term}
   deriving (Eq, Ord, Read, Show)
 
-_RewriteTermTestCase = (Core.Name "hydra.testing.RewriteTermTestCase")
+_RewriteTermTestCase = Core.Name "hydra.testing.RewriteTermTestCase"
 
-_RewriteTermTestCase_input = (Core.Name "input")
+_RewriteTermTestCase_input = Core.Name "input"
 
-_RewriteTermTestCase_rewriter = (Core.Name "rewriter")
+_RewriteTermTestCase_rewriter = Core.Name "rewriter"
 
-_RewriteTermTestCase_output = (Core.Name "output")
+_RewriteTermTestCase_output = Core.Name "output"
 
 -- | A predefined type rewriter for testing rewriteType
 data TypeRewriter = 
@@ -334,9 +334,9 @@ data TypeRewriter =
   TypeRewriterReplaceStringWithInt32 
   deriving (Eq, Ord, Read, Show)
 
-_TypeRewriter = (Core.Name "hydra.testing.TypeRewriter")
+_TypeRewriter = Core.Name "hydra.testing.TypeRewriter"
 
-_TypeRewriter_replaceStringWithInt32 = (Core.Name "replaceStringWithInt32")
+_TypeRewriter_replaceStringWithInt32 = Core.Name "replaceStringWithInt32"
 
 -- | A test case which applies a type rewriter and compares the result
 data RewriteTypeTestCase = 
@@ -349,13 +349,13 @@ data RewriteTypeTestCase =
     rewriteTypeTestCaseOutput :: Core.Type}
   deriving (Eq, Ord, Read, Show)
 
-_RewriteTypeTestCase = (Core.Name "hydra.testing.RewriteTypeTestCase")
+_RewriteTypeTestCase = Core.Name "hydra.testing.RewriteTypeTestCase"
 
-_RewriteTypeTestCase_input = (Core.Name "input")
+_RewriteTypeTestCase_input = Core.Name "input"
 
-_RewriteTypeTestCase_rewriter = (Core.Name "rewriter")
+_RewriteTypeTestCase_rewriter = Core.Name "rewriter"
 
-_RewriteTypeTestCase_output = (Core.Name "output")
+_RewriteTypeTestCase_output = Core.Name "output"
 
 -- | A test case which evaluates (reduces) a given term and compares it with the expected result
 data EvaluationTestCase = 
@@ -368,13 +368,13 @@ data EvaluationTestCase =
     evaluationTestCaseOutput :: Core.Term}
   deriving (Eq, Ord, Read, Show)
 
-_EvaluationTestCase = (Core.Name "hydra.testing.EvaluationTestCase")
+_EvaluationTestCase = Core.Name "hydra.testing.EvaluationTestCase"
 
-_EvaluationTestCase_evaluationStyle = (Core.Name "evaluationStyle")
+_EvaluationTestCase_evaluationStyle = Core.Name "evaluationStyle"
 
-_EvaluationTestCase_input = (Core.Name "input")
+_EvaluationTestCase_input = Core.Name "input"
 
-_EvaluationTestCase_output = (Core.Name "output")
+_EvaluationTestCase_output = Core.Name "output"
 
 -- | A test case providing a term for which type inference is expected to fail
 data InferenceFailureTestCase = 
@@ -383,9 +383,9 @@ data InferenceFailureTestCase =
     inferenceFailureTestCaseInput :: Core.Term}
   deriving (Eq, Ord, Read, Show)
 
-_InferenceFailureTestCase = (Core.Name "hydra.testing.InferenceFailureTestCase")
+_InferenceFailureTestCase = Core.Name "hydra.testing.InferenceFailureTestCase"
 
-_InferenceFailureTestCase_input = (Core.Name "input")
+_InferenceFailureTestCase_input = Core.Name "input"
 
 -- | A test case which performs type inference on a given term and compares the result with an expected type scheme
 data InferenceTestCase = 
@@ -396,11 +396,11 @@ data InferenceTestCase =
     inferenceTestCaseOutput :: Core.TypeScheme}
   deriving (Eq, Ord, Read, Show)
 
-_InferenceTestCase = (Core.Name "hydra.testing.InferenceTestCase")
+_InferenceTestCase = Core.Name "hydra.testing.InferenceTestCase"
 
-_InferenceTestCase_input = (Core.Name "input")
+_InferenceTestCase_input = Core.Name "input"
 
-_InferenceTestCase_output = (Core.Name "output")
+_InferenceTestCase_output = Core.Name "output"
 
 -- | A test case for the Either-based JSON decoder. Takes a type, input JSON, and expected result (Either String Term).
 data JsonDecodeTestCase = 
@@ -413,13 +413,13 @@ data JsonDecodeTestCase =
     jsonDecodeTestCaseExpected :: (Either String Core.Term)}
   deriving (Eq, Ord, Read, Show)
 
-_JsonDecodeTestCase = (Core.Name "hydra.testing.JsonDecodeTestCase")
+_JsonDecodeTestCase = Core.Name "hydra.testing.JsonDecodeTestCase"
 
-_JsonDecodeTestCase_type = (Core.Name "type")
+_JsonDecodeTestCase_type = Core.Name "type"
 
-_JsonDecodeTestCase_json = (Core.Name "json")
+_JsonDecodeTestCase_json = Core.Name "json"
 
-_JsonDecodeTestCase_expected = (Core.Name "expected")
+_JsonDecodeTestCase_expected = Core.Name "expected"
 
 -- | A test case for the Either-based JSON encoder. Takes an input term and expected result (Either String Value).
 data JsonEncodeTestCase = 
@@ -430,16 +430,16 @@ data JsonEncodeTestCase =
     jsonEncodeTestCaseExpected :: (Either String Model.Value)}
   deriving (Eq, Ord, Read, Show)
 
-_JsonEncodeTestCase = (Core.Name "hydra.testing.JsonEncodeTestCase")
+_JsonEncodeTestCase = Core.Name "hydra.testing.JsonEncodeTestCase"
 
-_JsonEncodeTestCase_term = (Core.Name "term")
+_JsonEncodeTestCase_term = Core.Name "term"
 
-_JsonEncodeTestCase_expected = (Core.Name "expected")
+_JsonEncodeTestCase_expected = Core.Name "expected"
 
 -- | A test case which parses a JSON string and compares the result with an expected JSON value
 type JsonParserTestCase = (ParserTestCase Model.Value)
 
-_JsonParserTestCase = (Core.Name "hydra.testing.JsonParserTestCase")
+_JsonParserTestCase = Core.Name "hydra.testing.JsonParserTestCase"
 
 -- | A test case for round-trip encoding/decoding using the Either-based JSON functions. Encodes a term, then decodes it back, verifying the result equals the original.
 data JsonRoundtripTestCase = 
@@ -450,11 +450,11 @@ data JsonRoundtripTestCase =
     jsonRoundtripTestCaseTerm :: Core.Term}
   deriving (Eq, Ord, Read, Show)
 
-_JsonRoundtripTestCase = (Core.Name "hydra.testing.JsonRoundtripTestCase")
+_JsonRoundtripTestCase = Core.Name "hydra.testing.JsonRoundtripTestCase"
 
-_JsonRoundtripTestCase_type = (Core.Name "type")
+_JsonRoundtripTestCase_type = Core.Name "type"
 
-_JsonRoundtripTestCase_term = (Core.Name "term")
+_JsonRoundtripTestCase_term = Core.Name "term"
 
 -- | A test case which lifts lambda abstractions above let expressions and compares the result with the expected term
 data LiftLambdaAboveLetTestCase = 
@@ -465,16 +465,16 @@ data LiftLambdaAboveLetTestCase =
     liftLambdaAboveLetTestCaseOutput :: Core.Term}
   deriving (Eq, Ord, Read, Show)
 
-_LiftLambdaAboveLetTestCase = (Core.Name "hydra.testing.LiftLambdaAboveLetTestCase")
+_LiftLambdaAboveLetTestCase = Core.Name "hydra.testing.LiftLambdaAboveLetTestCase"
 
-_LiftLambdaAboveLetTestCase_input = (Core.Name "input")
+_LiftLambdaAboveLetTestCase_input = Core.Name "input"
 
-_LiftLambdaAboveLetTestCase_output = (Core.Name "output")
+_LiftLambdaAboveLetTestCase_output = Core.Name "output"
 
 -- | A test case which serializes a JSON value to a string and compares it to the expected string
 type JsonWriterTestCase = (WriterTestCase Model.Value)
 
-_JsonWriterTestCase = (Core.Name "hydra.testing.JsonWriterTestCase")
+_JsonWriterTestCase = Core.Name "hydra.testing.JsonWriterTestCase"
 
 -- | A test case which parses an input string and compares the result with an expected value
 data ParserTestCase a = 
@@ -485,11 +485,11 @@ data ParserTestCase a =
     parserTestCaseOutput :: (Parsing.ParseResult a)}
   deriving (Eq, Ord, Read, Show)
 
-_ParserTestCase = (Core.Name "hydra.testing.ParserTestCase")
+_ParserTestCase = Core.Name "hydra.testing.ParserTestCase"
 
-_ParserTestCase_input = (Core.Name "input")
+_ParserTestCase_input = Core.Name "input"
 
-_ParserTestCase_output = (Core.Name "output")
+_ParserTestCase_output = Core.Name "output"
 
 -- | A tag for categorizing test cases
 newtype Tag = 
@@ -497,7 +497,7 @@ newtype Tag =
     unTag :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Tag = (Core.Name "hydra.testing.Tag")
+_Tag = Core.Name "hydra.testing.Tag"
 
 -- | A codec for generating compiled test files from test groups into a target programming language
 data TestCodec = 
@@ -525,29 +525,29 @@ data TestCodec =
     -- | A function that determines the necessary imports for a given set of dependencies
     testCodecFindImports :: (S.Set Core.Name -> [String])}
 
-_TestCodec = (Core.Name "hydra.testing.TestCodec")
+_TestCodec = Core.Name "hydra.testing.TestCodec"
 
-_TestCodec_language = (Core.Name "language")
+_TestCodec_language = Core.Name "language"
 
-_TestCodec_fileExtension = (Core.Name "fileExtension")
+_TestCodec_fileExtension = Core.Name "fileExtension"
 
-_TestCodec_encodeTerm = (Core.Name "encodeTerm")
+_TestCodec_encodeTerm = Core.Name "encodeTerm"
 
-_TestCodec_encodeType = (Core.Name "encodeType")
+_TestCodec_encodeType = Core.Name "encodeType"
 
-_TestCodec_formatTestName = (Core.Name "formatTestName")
+_TestCodec_formatTestName = Core.Name "formatTestName"
 
-_TestCodec_formatModuleName = (Core.Name "formatModuleName")
+_TestCodec_formatModuleName = Core.Name "formatModuleName"
 
-_TestCodec_testCaseTemplate = (Core.Name "testCaseTemplate")
+_TestCodec_testCaseTemplate = Core.Name "testCaseTemplate"
 
-_TestCodec_testGroupTemplate = (Core.Name "testGroupTemplate")
+_TestCodec_testGroupTemplate = Core.Name "testGroupTemplate"
 
-_TestCodec_moduleTemplate = (Core.Name "moduleTemplate")
+_TestCodec_moduleTemplate = Core.Name "moduleTemplate"
 
-_TestCodec_importTemplate = (Core.Name "importTemplate")
+_TestCodec_importTemplate = Core.Name "importTemplate"
 
-_TestCodec_findImports = (Core.Name "findImports")
+_TestCodec_findImports = Core.Name "findImports"
 
 -- | A language-agnostic test generator abstraction, parameterized by the namespace/module name type
 data TestGenerator a = 
@@ -561,15 +561,15 @@ data TestGenerator a =
     -- | Generate an aggregator file (e.g., Spec.hs for Haskell, conftest.py for Python). Takes base directory and list of modules, returns (filepath, content) or Nothing if not needed
     testGeneratorAggregatorFile :: (Maybe (String -> [Module.Module] -> (String, String)))}
 
-_TestGenerator = (Core.Name "hydra.testing.TestGenerator")
+_TestGenerator = Core.Name "hydra.testing.TestGenerator"
 
-_TestGenerator_namespacesForModule = (Core.Name "namespacesForModule")
+_TestGenerator_namespacesForModule = Core.Name "namespacesForModule"
 
-_TestGenerator_createCodec = (Core.Name "createCodec")
+_TestGenerator_createCodec = Core.Name "createCodec"
 
-_TestGenerator_generateTestFile = (Core.Name "generateTestFile")
+_TestGenerator_generateTestFile = Core.Name "generateTestFile"
 
-_TestGenerator_aggregatorFile = (Core.Name "aggregatorFile")
+_TestGenerator_aggregatorFile = Core.Name "aggregatorFile"
 
 -- | A simple test case with an input and an expected output
 data TestCase = 
@@ -651,83 +651,83 @@ data TestCase =
   TestCaseUnshadowVariables UnshadowVariablesTestCase
   deriving (Eq, Ord, Read, Show)
 
-_TestCase = (Core.Name "hydra.testing.TestCase")
+_TestCase = Core.Name "hydra.testing.TestCase"
 
-_TestCase_alphaConversion = (Core.Name "alphaConversion")
+_TestCase_alphaConversion = Core.Name "alphaConversion"
 
-_TestCase_caseConversion = (Core.Name "caseConversion")
+_TestCase_caseConversion = Core.Name "caseConversion"
 
-_TestCase_deannotateTerm = (Core.Name "deannotateTerm")
+_TestCase_deannotateTerm = Core.Name "deannotateTerm"
 
-_TestCase_deannotateType = (Core.Name "deannotateType")
+_TestCase_deannotateType = Core.Name "deannotateType"
 
-_TestCase_delegatedEvaluation = (Core.Name "delegatedEvaluation")
+_TestCase_delegatedEvaluation = Core.Name "delegatedEvaluation"
 
-_TestCase_etaExpansion = (Core.Name "etaExpansion")
+_TestCase_etaExpansion = Core.Name "etaExpansion"
 
-_TestCase_flattenLetTerms = (Core.Name "flattenLetTerms")
+_TestCase_flattenLetTerms = Core.Name "flattenLetTerms"
 
-_TestCase_freeVariables = (Core.Name "freeVariables")
+_TestCase_freeVariables = Core.Name "freeVariables"
 
-_TestCase_evaluation = (Core.Name "evaluation")
+_TestCase_evaluation = Core.Name "evaluation"
 
-_TestCase_inference = (Core.Name "inference")
+_TestCase_inference = Core.Name "inference"
 
-_TestCase_inferenceFailure = (Core.Name "inferenceFailure")
+_TestCase_inferenceFailure = Core.Name "inferenceFailure"
 
-_TestCase_jsonDecode = (Core.Name "jsonDecode")
+_TestCase_jsonDecode = Core.Name "jsonDecode"
 
-_TestCase_jsonEncode = (Core.Name "jsonEncode")
+_TestCase_jsonEncode = Core.Name "jsonEncode"
 
-_TestCase_jsonParser = (Core.Name "jsonParser")
+_TestCase_jsonParser = Core.Name "jsonParser"
 
-_TestCase_jsonRoundtrip = (Core.Name "jsonRoundtrip")
+_TestCase_jsonRoundtrip = Core.Name "jsonRoundtrip"
 
-_TestCase_jsonWriter = (Core.Name "jsonWriter")
+_TestCase_jsonWriter = Core.Name "jsonWriter"
 
-_TestCase_liftLambdaAboveLet = (Core.Name "liftLambdaAboveLet")
+_TestCase_liftLambdaAboveLet = Core.Name "liftLambdaAboveLet"
 
-_TestCase_serialization = (Core.Name "serialization")
+_TestCase_serialization = Core.Name "serialization"
 
-_TestCase_simplifyTerm = (Core.Name "simplifyTerm")
+_TestCase_simplifyTerm = Core.Name "simplifyTerm"
 
-_TestCase_topologicalSort = (Core.Name "topologicalSort")
+_TestCase_topologicalSort = Core.Name "topologicalSort"
 
-_TestCase_topologicalSortBindings = (Core.Name "topologicalSortBindings")
+_TestCase_topologicalSortBindings = Core.Name "topologicalSortBindings"
 
-_TestCase_topologicalSortSCC = (Core.Name "topologicalSortSCC")
+_TestCase_topologicalSortSCC = Core.Name "topologicalSortSCC"
 
-_TestCase_typeChecking = (Core.Name "typeChecking")
+_TestCase_typeChecking = Core.Name "typeChecking"
 
-_TestCase_typeCheckingFailure = (Core.Name "typeCheckingFailure")
+_TestCase_typeCheckingFailure = Core.Name "typeCheckingFailure"
 
-_TestCase_typeReduction = (Core.Name "typeReduction")
+_TestCase_typeReduction = Core.Name "typeReduction"
 
-_TestCase_normalizeTypeVariables = (Core.Name "normalizeTypeVariables")
+_TestCase_normalizeTypeVariables = Core.Name "normalizeTypeVariables"
 
-_TestCase_foldOverTerm = (Core.Name "foldOverTerm")
+_TestCase_foldOverTerm = Core.Name "foldOverTerm"
 
-_TestCase_rewriteTerm = (Core.Name "rewriteTerm")
+_TestCase_rewriteTerm = Core.Name "rewriteTerm"
 
-_TestCase_rewriteType = (Core.Name "rewriteType")
+_TestCase_rewriteType = Core.Name "rewriteType"
 
-_TestCase_hoistSubterms = (Core.Name "hoistSubterms")
+_TestCase_hoistSubterms = Core.Name "hoistSubterms"
 
-_TestCase_hoistCaseStatements = (Core.Name "hoistCaseStatements")
+_TestCase_hoistCaseStatements = Core.Name "hoistCaseStatements"
 
-_TestCase_hoistLetBindings = (Core.Name "hoistLetBindings")
+_TestCase_hoistLetBindings = Core.Name "hoistLetBindings"
 
-_TestCase_hoistPolymorphicLetBindings = (Core.Name "hoistPolymorphicLetBindings")
+_TestCase_hoistPolymorphicLetBindings = Core.Name "hoistPolymorphicLetBindings"
 
-_TestCase_substInType = (Core.Name "substInType")
+_TestCase_substInType = Core.Name "substInType"
 
-_TestCase_variableOccursInType = (Core.Name "variableOccursInType")
+_TestCase_variableOccursInType = Core.Name "variableOccursInType"
 
-_TestCase_unifyTypes = (Core.Name "unifyTypes")
+_TestCase_unifyTypes = Core.Name "unifyTypes"
 
-_TestCase_joinTypes = (Core.Name "joinTypes")
+_TestCase_joinTypes = Core.Name "joinTypes"
 
-_TestCase_unshadowVariables = (Core.Name "unshadowVariables")
+_TestCase_unshadowVariables = Core.Name "unshadowVariables"
 
 -- | One of a number of test case variants, together with metadata including a test name, an optional description, and optional tags
 data TestCaseWithMetadata = 
@@ -742,15 +742,15 @@ data TestCaseWithMetadata =
     testCaseWithMetadataTags :: [Tag]}
   deriving (Eq, Ord, Read, Show)
 
-_TestCaseWithMetadata = (Core.Name "hydra.testing.TestCaseWithMetadata")
+_TestCaseWithMetadata = Core.Name "hydra.testing.TestCaseWithMetadata"
 
-_TestCaseWithMetadata_name = (Core.Name "name")
+_TestCaseWithMetadata_name = Core.Name "name"
 
-_TestCaseWithMetadata_case = (Core.Name "case")
+_TestCaseWithMetadata_case = Core.Name "case"
 
-_TestCaseWithMetadata_description = (Core.Name "description")
+_TestCaseWithMetadata_description = Core.Name "description"
 
-_TestCaseWithMetadata_tags = (Core.Name "tags")
+_TestCaseWithMetadata_tags = Core.Name "tags"
 
 -- | A collection of test cases with a name and optional description
 data TestGroup = 
@@ -765,15 +765,15 @@ data TestGroup =
     testGroupCases :: [TestCaseWithMetadata]}
   deriving (Eq, Ord, Read, Show)
 
-_TestGroup = (Core.Name "hydra.testing.TestGroup")
+_TestGroup = Core.Name "hydra.testing.TestGroup"
 
-_TestGroup_name = (Core.Name "name")
+_TestGroup_name = Core.Name "name"
 
-_TestGroup_description = (Core.Name "description")
+_TestGroup_description = Core.Name "description"
 
-_TestGroup_subgroups = (Core.Name "subgroups")
+_TestGroup_subgroups = Core.Name "subgroups"
 
-_TestGroup_cases = (Core.Name "cases")
+_TestGroup_cases = Core.Name "cases"
 
 -- | A test case which performs type checking on a given term and compares the result with an expected annotated term and type
 data TypeCheckingTestCase = 
@@ -786,13 +786,13 @@ data TypeCheckingTestCase =
     typeCheckingTestCaseOutputType :: Core.Type}
   deriving (Eq, Ord, Read, Show)
 
-_TypeCheckingTestCase = (Core.Name "hydra.testing.TypeCheckingTestCase")
+_TypeCheckingTestCase = Core.Name "hydra.testing.TypeCheckingTestCase"
 
-_TypeCheckingTestCase_input = (Core.Name "input")
+_TypeCheckingTestCase_input = Core.Name "input"
 
-_TypeCheckingTestCase_outputTerm = (Core.Name "outputTerm")
+_TypeCheckingTestCase_outputTerm = Core.Name "outputTerm"
 
-_TypeCheckingTestCase_outputType = (Core.Name "outputType")
+_TypeCheckingTestCase_outputType = Core.Name "outputType"
 
 -- | A test case providing a term for which type checking is expected to fail. Note: there are currently no such test cases.
 data TypeCheckingFailureTestCase = 
@@ -801,9 +801,9 @@ data TypeCheckingFailureTestCase =
     typeCheckingFailureTestCaseInput :: Core.Term}
   deriving (Eq, Ord, Read, Show)
 
-_TypeCheckingFailureTestCase = (Core.Name "hydra.testing.TypeCheckingFailureTestCase")
+_TypeCheckingFailureTestCase = Core.Name "hydra.testing.TypeCheckingFailureTestCase"
 
-_TypeCheckingFailureTestCase_input = (Core.Name "input")
+_TypeCheckingFailureTestCase_input = Core.Name "input"
 
 -- | A test case which performs topological sort on a map of bindings (name -> term) and compares the result with expected groups of bindings in topological order
 data TopologicalSortBindingsTestCase = 
@@ -814,11 +814,11 @@ data TopologicalSortBindingsTestCase =
     topologicalSortBindingsTestCaseExpected :: [[(Core.Name, Core.Term)]]}
   deriving (Eq, Ord, Read, Show)
 
-_TopologicalSortBindingsTestCase = (Core.Name "hydra.testing.TopologicalSortBindingsTestCase")
+_TopologicalSortBindingsTestCase = Core.Name "hydra.testing.TopologicalSortBindingsTestCase"
 
-_TopologicalSortBindingsTestCase_bindings = (Core.Name "bindings")
+_TopologicalSortBindingsTestCase_bindings = Core.Name "bindings"
 
-_TopologicalSortBindingsTestCase_expected = (Core.Name "expected")
+_TopologicalSortBindingsTestCase_expected = Core.Name "expected"
 
 -- | A test case which performs topological sort on a directed graph and compares the result with either an expected sorted list or expected cycles
 data TopologicalSortTestCase = 
@@ -829,11 +829,11 @@ data TopologicalSortTestCase =
     topologicalSortTestCaseExpected :: (Either [[Int]] [Int])}
   deriving (Eq, Ord, Read, Show)
 
-_TopologicalSortTestCase = (Core.Name "hydra.testing.TopologicalSortTestCase")
+_TopologicalSortTestCase = Core.Name "hydra.testing.TopologicalSortTestCase"
 
-_TopologicalSortTestCase_adjacencyList = (Core.Name "adjacencyList")
+_TopologicalSortTestCase_adjacencyList = Core.Name "adjacencyList"
 
-_TopologicalSortTestCase_expected = (Core.Name "expected")
+_TopologicalSortTestCase_expected = Core.Name "expected"
 
 -- | A test case which performs topological sort with strongly connected component detection and compares the result with expected components
 data TopologicalSortSCCTestCase = 
@@ -844,11 +844,11 @@ data TopologicalSortSCCTestCase =
     topologicalSortSCCTestCaseExpected :: [[Int]]}
   deriving (Eq, Ord, Read, Show)
 
-_TopologicalSortSCCTestCase = (Core.Name "hydra.testing.TopologicalSortSCCTestCase")
+_TopologicalSortSCCTestCase = Core.Name "hydra.testing.TopologicalSortSCCTestCase"
 
-_TopologicalSortSCCTestCase_adjacencyList = (Core.Name "adjacencyList")
+_TopologicalSortSCCTestCase_adjacencyList = Core.Name "adjacencyList"
 
-_TopologicalSortSCCTestCase_expected = (Core.Name "expected")
+_TopologicalSortSCCTestCase_expected = Core.Name "expected"
 
 -- | A test case which serializes an AST expression to a string and compares it with the expected output
 data SerializationTestCase = 
@@ -859,11 +859,11 @@ data SerializationTestCase =
     serializationTestCaseOutput :: String}
   deriving (Eq, Ord, Read, Show)
 
-_SerializationTestCase = (Core.Name "hydra.testing.SerializationTestCase")
+_SerializationTestCase = Core.Name "hydra.testing.SerializationTestCase"
 
-_SerializationTestCase_input = (Core.Name "input")
+_SerializationTestCase_input = Core.Name "input"
 
-_SerializationTestCase_output = (Core.Name "output")
+_SerializationTestCase_output = Core.Name "output"
 
 -- | A test case which performs term simplification (beta reduction and optimization) and compares the result with the expected term
 data SimplifyTermTestCase = 
@@ -874,11 +874,11 @@ data SimplifyTermTestCase =
     simplifyTermTestCaseOutput :: Core.Term}
   deriving (Eq, Ord, Read, Show)
 
-_SimplifyTermTestCase = (Core.Name "hydra.testing.SimplifyTermTestCase")
+_SimplifyTermTestCase = Core.Name "hydra.testing.SimplifyTermTestCase"
 
-_SimplifyTermTestCase_input = (Core.Name "input")
+_SimplifyTermTestCase_input = Core.Name "input"
 
-_SimplifyTermTestCase_output = (Core.Name "output")
+_SimplifyTermTestCase_output = Core.Name "output"
 
 -- | A test case which normalizes type variables in a term (renaming them to t0, t1, t2, etc.) and compares the result with the expected term
 data NormalizeTypeVariablesTestCase = 
@@ -889,11 +889,11 @@ data NormalizeTypeVariablesTestCase =
     normalizeTypeVariablesTestCaseOutput :: Core.Term}
   deriving (Eq, Ord, Read, Show)
 
-_NormalizeTypeVariablesTestCase = (Core.Name "hydra.testing.NormalizeTypeVariablesTestCase")
+_NormalizeTypeVariablesTestCase = Core.Name "hydra.testing.NormalizeTypeVariablesTestCase"
 
-_NormalizeTypeVariablesTestCase_input = (Core.Name "input")
+_NormalizeTypeVariablesTestCase_input = Core.Name "input"
 
-_NormalizeTypeVariablesTestCase_output = (Core.Name "output")
+_NormalizeTypeVariablesTestCase_output = Core.Name "output"
 
 -- | A test case which performs beta reduction on a type (reducing type applications) and compares the result with the expected type
 data TypeReductionTestCase = 
@@ -904,11 +904,11 @@ data TypeReductionTestCase =
     typeReductionTestCaseOutput :: Core.Type}
   deriving (Eq, Ord, Read, Show)
 
-_TypeReductionTestCase = (Core.Name "hydra.testing.TypeReductionTestCase")
+_TypeReductionTestCase = Core.Name "hydra.testing.TypeReductionTestCase"
 
-_TypeReductionTestCase_input = (Core.Name "input")
+_TypeReductionTestCase_input = Core.Name "input"
 
-_TypeReductionTestCase_output = (Core.Name "output")
+_TypeReductionTestCase_output = Core.Name "output"
 
 -- | A test case which writes a value to a string and compares it to the expected string
 data WriterTestCase a = 
@@ -919,11 +919,11 @@ data WriterTestCase a =
     writerTestCaseOutput :: String}
   deriving (Eq, Ord, Read, Show)
 
-_WriterTestCase = (Core.Name "hydra.testing.WriterTestCase")
+_WriterTestCase = Core.Name "hydra.testing.WriterTestCase"
 
-_WriterTestCase_input = (Core.Name "input")
+_WriterTestCase_input = Core.Name "input"
 
-_WriterTestCase_output = (Core.Name "output")
+_WriterTestCase_output = Core.Name "output"
 
 -- | A test case which applies a type substitution to a type and compares the result. The substitution is provided as a list of (variable name, replacement type) pairs.
 data SubstInTypeTestCase = 
@@ -936,13 +936,13 @@ data SubstInTypeTestCase =
     substInTypeTestCaseOutput :: Core.Type}
   deriving (Eq, Ord, Read, Show)
 
-_SubstInTypeTestCase = (Core.Name "hydra.testing.SubstInTypeTestCase")
+_SubstInTypeTestCase = Core.Name "hydra.testing.SubstInTypeTestCase"
 
-_SubstInTypeTestCase_substitution = (Core.Name "substitution")
+_SubstInTypeTestCase_substitution = Core.Name "substitution"
 
-_SubstInTypeTestCase_input = (Core.Name "input")
+_SubstInTypeTestCase_input = Core.Name "input"
 
-_SubstInTypeTestCase_output = (Core.Name "output")
+_SubstInTypeTestCase_output = Core.Name "output"
 
 -- | A test case which checks whether a type variable occurs in a type expression. This is the occur check used in type unification.
 data VariableOccursInTypeTestCase = 
@@ -955,13 +955,13 @@ data VariableOccursInTypeTestCase =
     variableOccursInTypeTestCaseExpected :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_VariableOccursInTypeTestCase = (Core.Name "hydra.testing.VariableOccursInTypeTestCase")
+_VariableOccursInTypeTestCase = Core.Name "hydra.testing.VariableOccursInTypeTestCase"
 
-_VariableOccursInTypeTestCase_variable = (Core.Name "variable")
+_VariableOccursInTypeTestCase_variable = Core.Name "variable"
 
-_VariableOccursInTypeTestCase_type = (Core.Name "type")
+_VariableOccursInTypeTestCase_type = Core.Name "type"
 
-_VariableOccursInTypeTestCase_expected = (Core.Name "expected")
+_VariableOccursInTypeTestCase_expected = Core.Name "expected"
 
 -- | A test case which renames shadowed variables in a term and compares the result with the expected term
 data UnshadowVariablesTestCase = 
@@ -972,11 +972,11 @@ data UnshadowVariablesTestCase =
     unshadowVariablesTestCaseOutput :: Core.Term}
   deriving (Eq, Ord, Read, Show)
 
-_UnshadowVariablesTestCase = (Core.Name "hydra.testing.UnshadowVariablesTestCase")
+_UnshadowVariablesTestCase = Core.Name "hydra.testing.UnshadowVariablesTestCase"
 
-_UnshadowVariablesTestCase_input = (Core.Name "input")
+_UnshadowVariablesTestCase_input = Core.Name "input"
 
-_UnshadowVariablesTestCase_output = (Core.Name "output")
+_UnshadowVariablesTestCase_output = Core.Name "output"
 
 -- | A test case which attempts to unify two types and compares the result. The expected result is either Left (failure message substring) or Right (substitution).
 data UnifyTypesTestCase = 
@@ -991,15 +991,15 @@ data UnifyTypesTestCase =
     unifyTypesTestCaseExpected :: (Either String Typing.TypeSubst)}
   deriving (Eq, Ord, Read, Show)
 
-_UnifyTypesTestCase = (Core.Name "hydra.testing.UnifyTypesTestCase")
+_UnifyTypesTestCase = Core.Name "hydra.testing.UnifyTypesTestCase"
 
-_UnifyTypesTestCase_schemaTypes = (Core.Name "schemaTypes")
+_UnifyTypesTestCase_schemaTypes = Core.Name "schemaTypes"
 
-_UnifyTypesTestCase_left = (Core.Name "left")
+_UnifyTypesTestCase_left = Core.Name "left"
 
-_UnifyTypesTestCase_right = (Core.Name "right")
+_UnifyTypesTestCase_right = Core.Name "right"
 
-_UnifyTypesTestCase_expected = (Core.Name "expected")
+_UnifyTypesTestCase_expected = Core.Name "expected"
 
 -- | A test case which joins two types (producing type constraints or failing). The expected result is either Left (failure) or Right (list of constraints).
 data JoinTypesTestCase = 
@@ -1012,10 +1012,10 @@ data JoinTypesTestCase =
     joinTypesTestCaseExpected :: (Either () [Typing.TypeConstraint])}
   deriving (Eq, Ord, Read, Show)
 
-_JoinTypesTestCase = (Core.Name "hydra.testing.JoinTypesTestCase")
+_JoinTypesTestCase = Core.Name "hydra.testing.JoinTypesTestCase"
 
-_JoinTypesTestCase_left = (Core.Name "left")
+_JoinTypesTestCase_left = Core.Name "left"
 
-_JoinTypesTestCase_right = (Core.Name "right")
+_JoinTypesTestCase_right = Core.Name "right"
 
-_JoinTypesTestCase_expected = (Core.Name "expected")
+_JoinTypesTestCase_expected = Core.Name "expected"

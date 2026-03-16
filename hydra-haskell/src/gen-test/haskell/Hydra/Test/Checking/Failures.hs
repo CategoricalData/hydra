@@ -14,24 +14,27 @@ import qualified Data.Set as S
 
 -- | Type checking failure test cases
 allTests :: Testing.TestGroup
-allTests = Testing.TestGroup {
-  Testing.testGroupName = "Failures",
-  Testing.testGroupDescription = Nothing,
-  Testing.testGroupSubgroups = [
-    failOnUntypedTests],
-  Testing.testGroupCases = []}
+allTests =
+    Testing.TestGroup {
+      Testing.testGroupName = "Failures",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        failOnUntypedTests],
+      Testing.testGroupCases = []}
 
 failOnUntypedTests :: Testing.TestGroup
-failOnUntypedTests = Testing.TestGroup {
-  Testing.testGroupName = "Fail on untyped (pre-inference) terms",
-  Testing.testGroupDescription = Nothing,
-  Testing.testGroupSubgroups = [
-    untypedLambdasTests],
-  Testing.testGroupCases = []}
+failOnUntypedTests =
+    Testing.TestGroup {
+      Testing.testGroupName = "Fail on untyped (pre-inference) terms",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        untypedLambdasTests],
+      Testing.testGroupCases = []}
 
 untypedLambdasTests :: Testing.TestGroup
-untypedLambdasTests = Testing.TestGroup {
-  Testing.testGroupName = "Untyped lambdas",
-  Testing.testGroupDescription = Nothing,
-  Testing.testGroupSubgroups = [],
-  Testing.testGroupCases = []}
+untypedLambdasTests =
+    Testing.TestGroup {
+      Testing.testGroupName = "Untyped lambdas",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [],
+      Testing.testGroupCases = []}

@@ -69,13 +69,13 @@ def expression_length(e: hydra.ast.Expr) -> int:
                 return 1
             
             case hydra.ast.WsBreak():
-                return 1
+                return 10000
             
-            case hydra.ast.WsBreakAndIndent(value=s):
-                return hydra.lib.math.add(1, hydra.lib.strings.length(s))
+            case hydra.ast.WsBreakAndIndent():
+                return 10000
             
             case hydra.ast.WsDoubleBreak():
-                return 2
+                return 10000
             
             case _:
                 raise AssertionError("Unreachable: all variants handled")
@@ -133,6 +133,20 @@ def expression_length(e: hydra.ast.Expr) -> int:
         def right_len() -> int:
             return expression_length(oe.rhs)
         return hydra.lib.math.add(op_len(), hydra.lib.math.add(left_len(), right_len()))
+    def seq_expr_length(se: hydra.ast.SeqExpr) -> int:
+        @lru_cache(1)
+        def sop_len() -> int:
+            return op_length(se.op)
+        @lru_cache(1)
+        def element_lens() -> frozenlist[int]:
+            return hydra.lib.lists.map((lambda x1: expression_length(x1)), se.elements)
+        @lru_cache(1)
+        def total_el_len() -> int:
+            return hydra.lib.lists.foldl(hydra.lib.math.add, 0, element_lens())
+        @lru_cache(1)
+        def num_seps() -> int:
+            return hydra.lib.math.sub(hydra.lib.lists.length(se.elements), 1)
+        return hydra.lib.math.add(total_el_len(), hydra.lib.math.mul(sop_len(), hydra.lib.logic.if_else(hydra.lib.equality.gt(num_seps(), 0), (lambda : num_seps()), (lambda : 0))))
     match e:
         case hydra.ast.ExprConst(value=s):
             return symbol_length(s)
@@ -145,6 +159,9 @@ def expression_length(e: hydra.ast.Expr) -> int:
         
         case hydra.ast.ExprBrackets(value=be):
             return bracket_expr_length(be)
+        
+        case hydra.ast.ExprSeq(value=se):
+            return seq_expr_length(se)
         
         case _:
             raise AssertionError("Unreachable: all variants handled")
@@ -279,6 +296,9 @@ def parenthesize(exp: hydra.ast.Expr) -> hydra.ast.Expr:
         case hydra.ast.ExprIndent(value=indent_expr):
             return cast(hydra.ast.Expr, hydra.ast.ExprIndent(hydra.ast.IndentedExpression(indent_expr.style, parenthesize(indent_expr.expr))))
         
+        case hydra.ast.ExprSeq(value=seq_expr):
+            return cast(hydra.ast.Expr, hydra.ast.ExprSeq(hydra.ast.SeqExpr(seq_expr.op, hydra.lib.lists.map((lambda x1: parenthesize(x1)), seq_expr.elements))))
+        
         case hydra.ast.ExprOp(value=op_expr):
             op = op_expr.op
             prec = op.precedence.value
@@ -412,6 +432,21 @@ def print_expr(e: hydra.ast.Expr) -> str:
                 return _hoist_ilns_1(style)
             return hydra.lib.strings.intercalate("\n", ilns())
         
+        case hydra.ast.ExprSeq(value=seq_expr):
+            sop = seq_expr.op
+            ssym = sop.symbol.value
+            spadding = sop.padding
+            spadl = spadding.left
+            spadr = spadding.right
+            selements = seq_expr.elements
+            @lru_cache(1)
+            def separator() -> str:
+                return hydra.lib.strings.cat2(hydra.lib.strings.cat2(pad(spadl), ssym), pad(spadr))
+            @lru_cache(1)
+            def printed_elements() -> frozenlist[str]:
+                return hydra.lib.lists.map((lambda el: idt(spadr, print_expr(el))), selements)
+            return hydra.lib.strings.intercalate(separator(), printed_elements())
+        
         case hydra.ast.ExprOp(value=op_expr):
             op = op_expr.op
             sym = op.symbol.value
@@ -456,6 +491,16 @@ def print_expr(e: hydra.ast.Expr) -> str:
 
 def semicolon_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
     return symbol_sep(";", inline_style, v1)
+
+def structural_sep(op: hydra.ast.Op, els: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
+    r"""Like sep, but produces a SeqExpr instead of an OpExpr chain. SeqExpr is treated as structural layout and is not subject to parenthesization."""
+    
+    return hydra.lib.logic.if_else(hydra.lib.lists.null(els), (lambda : cst("")), (lambda : hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(els), 1), (lambda : hydra.lib.lists.head(els)), (lambda : cast(hydra.ast.Expr, hydra.ast.ExprSeq(hydra.ast.SeqExpr(op, els)))))))
+
+def structural_space_sep(v1: frozenlist[hydra.ast.Expr]) -> hydra.ast.Expr:
+    r"""Like spaceSep, but produces a SeqExpr. Use for structural layout that should not trigger parenthesization of children."""
+    
+    return structural_sep(hydra.ast.Op(sym(""), hydra.ast.Padding(cast(hydra.ast.Ws, hydra.ast.WsSpace()), cast(hydra.ast.Ws, hydra.ast.WsNone())), hydra.ast.Precedence(0), hydra.ast.Associativity.NONE), v1)
 
 def suffix(s: str, expr: hydra.ast.Expr) -> hydra.ast.Expr:
     r"""Append a suffix string to an expression."""

@@ -17,48 +17,54 @@ import qualified Data.Set as S
 
 -- | Language constraints for W3C SHACL
 shaclLanguage :: Coders.Language
-shaclLanguage = Coders.Language {
-  Coders.languageName = (Coders.LanguageName "hydra.ext.shacl"),
-  Coders.languageConstraints = Coders.LanguageConstraints {
-    Coders.languageConstraintsEliminationVariants = eliminationVariants,
-    Coders.languageConstraintsLiteralVariants = literalVariants,
-    Coders.languageConstraintsFloatTypes = floatTypes,
-    Coders.languageConstraintsFunctionVariants = functionVariants,
-    Coders.languageConstraintsIntegerTypes = integerTypes,
-    Coders.languageConstraintsTermVariants = termVariants,
-    Coders.languageConstraintsTypeVariants = typeVariants,
-    Coders.languageConstraintsTypes = typePredicate}} 
+shaclLanguage =
+    Coders.Language {
+      Coders.languageName = (Coders.LanguageName "hydra.ext.shacl"),
+      Coders.languageConstraints = Coders.LanguageConstraints {
+        Coders.languageConstraintsEliminationVariants = eliminationVariants,
+        Coders.languageConstraintsLiteralVariants = literalVariants,
+        Coders.languageConstraintsFloatTypes = floatTypes,
+        Coders.languageConstraintsFunctionVariants = functionVariants,
+        Coders.languageConstraintsIntegerTypes = integerTypes,
+        Coders.languageConstraintsTermVariants = termVariants,
+        Coders.languageConstraintsTypeVariants = typeVariants,
+        Coders.languageConstraintsTypes = typePredicate}} 
   where 
     eliminationVariants = Sets.empty
-    literalVariants = (Sets.fromList [
-      Variants.LiteralVariantBoolean,
-      Variants.LiteralVariantFloat,
-      Variants.LiteralVariantInteger,
-      Variants.LiteralVariantString])
-    floatTypes = (Sets.fromList [
-      Core.FloatTypeFloat32,
-      Core.FloatTypeFloat64])
+    literalVariants =
+        Sets.fromList [
+          Variants.LiteralVariantBoolean,
+          Variants.LiteralVariantFloat,
+          Variants.LiteralVariantInteger,
+          Variants.LiteralVariantString]
+    floatTypes =
+        Sets.fromList [
+          Core.FloatTypeFloat32,
+          Core.FloatTypeFloat64]
     functionVariants = Sets.empty
-    integerTypes = (Sets.fromList [
-      Core.IntegerTypeInt32,
-      Core.IntegerTypeInt64])
-    termVariants = (Sets.fromList [
-      Variants.TermVariantList,
-      Variants.TermVariantLiteral,
-      Variants.TermVariantMap,
-      Variants.TermVariantWrap,
-      Variants.TermVariantMaybe,
-      Variants.TermVariantRecord,
-      Variants.TermVariantSet,
-      Variants.TermVariantUnion])
-    typeVariants = (Sets.fromList [
-      Variants.TypeVariantAnnotated,
-      Variants.TypeVariantList,
-      Variants.TypeVariantLiteral,
-      Variants.TypeVariantMap,
-      Variants.TypeVariantWrap,
-      Variants.TypeVariantMaybe,
-      Variants.TypeVariantRecord,
-      Variants.TypeVariantSet,
-      Variants.TypeVariantUnion])
-    typePredicate = (\_ -> True)
+    integerTypes =
+        Sets.fromList [
+          Core.IntegerTypeInt32,
+          Core.IntegerTypeInt64]
+    termVariants =
+        Sets.fromList [
+          Variants.TermVariantList,
+          Variants.TermVariantLiteral,
+          Variants.TermVariantMap,
+          Variants.TermVariantWrap,
+          Variants.TermVariantMaybe,
+          Variants.TermVariantRecord,
+          Variants.TermVariantSet,
+          Variants.TermVariantUnion]
+    typeVariants =
+        Sets.fromList [
+          Variants.TypeVariantAnnotated,
+          Variants.TypeVariantList,
+          Variants.TypeVariantLiteral,
+          Variants.TypeVariantMap,
+          Variants.TypeVariantWrap,
+          Variants.TypeVariantMaybe,
+          Variants.TypeVariantRecord,
+          Variants.TypeVariantSet,
+          Variants.TypeVariantUnion]
+    typePredicate = \_ -> True

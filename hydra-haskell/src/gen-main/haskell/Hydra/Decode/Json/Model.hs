@@ -21,39 +21,41 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-value :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Model.Value)
-value cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermUnion v0 ->  
-    let field = (Core.injectionField v0) 
-        fname = (Core.fieldName field)
-        fterm = (Core.fieldTerm field)
-        variantMap = (Maps.fromList [
-                (Core.Name "array", (\input -> Eithers.map (\t -> Model.ValueArray t) (Helpers.decodeList value cx input))),
-                (Core.Name "boolean", (\input -> Eithers.map (\t -> Model.ValueBoolean t) (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-                  Core.TermLiteral v1 -> ((\x -> case x of
-                    Core.LiteralBoolean v2 -> (Right v2)
-                    _ -> (Left (Error.DecodingError "expected boolean literal"))) v1)
-                  _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx input)))),
-                (Core.Name "null", (\input -> Eithers.map (\t -> Model.ValueNull) (Helpers.decodeUnit cx input))),
-                (Core.Name "number", (\input -> Eithers.map (\t -> Model.ValueNumber t) (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-                  Core.TermLiteral v1 -> ((\x -> case x of
-                    Core.LiteralFloat v2 -> ((\x -> case x of
-                      Core.FloatValueBigfloat v3 -> (Right v3)
-                      _ -> (Left (Error.DecodingError "expected bigfloat value"))) v2)
-                    _ -> (Left (Error.DecodingError "expected bigfloat literal"))) v1)
-                  _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx input)))),
-                (Core.Name "object", (\input -> Eithers.map (\t -> Model.ValueObject t) (Helpers.decodeMap (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-                  Core.TermLiteral v1 -> ((\x -> case x of
-                    Core.LiteralString v2 -> (Right v2)
-                    _ -> (Left (Error.DecodingError "expected string literal"))) v1)
-                  _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) value cx input))),
-                (Core.Name "string", (\input -> Eithers.map (\t -> Model.ValueString t) (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-                  Core.TermLiteral v1 -> ((\x -> case x of
-                    Core.LiteralString v2 -> (Right v2)
-                    _ -> (Left (Error.DecodingError "expected string literal"))) v1)
-                  _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx input))))])
-    in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
-      "no such field ",
-      (Core.unName fname),
-      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+value :: Graph.Graph -> Core.Term -> Either Error.DecodingError Model.Value
+value cx raw =
+    Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+      Core.TermUnion v0 ->  
+        let field = Core.injectionField v0 
+            fname = Core.fieldName field
+            fterm = Core.fieldTerm field
+            variantMap =
+                    Maps.fromList [
+                      (Core.Name "array", (\input -> Eithers.map (\t -> Model.ValueArray t) (Helpers.decodeList value cx input))),
+                      (Core.Name "boolean", (\input -> Eithers.map (\t -> Model.ValueBoolean t) (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+                        Core.TermLiteral v1 -> case v1 of
+                          Core.LiteralBoolean v2 -> Right v2
+                          _ -> Left (Error.DecodingError "expected boolean literal")
+                        _ -> Left (Error.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx input)))),
+                      (Core.Name "null", (\input -> Eithers.map (\t -> Model.ValueNull) (Helpers.decodeUnit cx input))),
+                      (Core.Name "number", (\input -> Eithers.map (\t -> Model.ValueNumber t) (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+                        Core.TermLiteral v1 -> case v1 of
+                          Core.LiteralFloat v2 -> case v2 of
+                            Core.FloatValueBigfloat v3 -> Right v3
+                            _ -> Left (Error.DecodingError "expected bigfloat value")
+                          _ -> Left (Error.DecodingError "expected bigfloat literal")
+                        _ -> Left (Error.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx input)))),
+                      (Core.Name "object", (\input -> Eithers.map (\t -> Model.ValueObject t) (Helpers.decodeMap (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+                        Core.TermLiteral v1 -> case v1 of
+                          Core.LiteralString v2 -> Right v2
+                          _ -> Left (Error.DecodingError "expected string literal")
+                        _ -> Left (Error.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) value cx input))),
+                      (Core.Name "string", (\input -> Eithers.map (\t -> Model.ValueString t) (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+                        Core.TermLiteral v1 -> case v1 of
+                          Core.LiteralString v2 -> Right v2
+                          _ -> Left (Error.DecodingError "expected string literal")
+                        _ -> Left (Error.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx input))))]
+        in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
+          "no such field ",
+          (Core.unName fname),
+          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+      _ -> Left (Error.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)

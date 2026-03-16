@@ -172,12 +172,21 @@ def type_signature_to_expr(type_sig: hydra.ext.haskell.ast.TypeSignature) -> hyd
     
     name = type_sig.name
     typ = type_sig.type
-    return hydra.serialization.space_sep(hydra.lib.lists.cons(name_to_expr(name), hydra.lib.lists.cons(hydra.serialization.cst("::"), (type_to_expr(typ),))))
+    @lru_cache(1)
+    def name_expr() -> hydra.ast.Expr:
+        return name_to_expr(name)
+    @lru_cache(1)
+    def type_expr() -> hydra.ast.Expr:
+        return type_to_expr(typ)
+    @lru_cache(1)
+    def inline_sig() -> hydra.ast.Expr:
+        return hydra.serialization.structural_space_sep((name_expr(), hydra.serialization.cst("::"), type_expr()))
+    return hydra.lib.logic.if_else(hydra.lib.equality.gt(hydra.serialization.expression_length(inline_sig()), 120), (lambda : hydra.serialization.newline_sep((hydra.serialization.space_sep((name_expr(), hydra.serialization.cst("::"))), hydra.serialization.tab_indent(type_expr())))), (lambda : inline_sig()))
 
 def alternative_to_expr(alt: hydra.ext.haskell.ast.Alternative) -> hydra.ast.Expr:
     r"""Convert a pattern-matching alternative to an AST expression."""
     
-    return hydra.serialization.ifx(hydra.ext.haskell.operators.case_op(), pattern_to_expr(alt.pattern), case_rhs_to_expr(alt.rhs))
+    return hydra.serialization.structural_space_sep((pattern_to_expr(alt.pattern), hydra.serialization.cst("->"), case_rhs_to_expr(alt.rhs)))
 
 def application_expression_to_expr(app: hydra.ext.haskell.ast.ApplicationExpression) -> hydra.ast.Expr:
     r"""Convert a function application expression to an AST expression."""
@@ -246,7 +255,7 @@ def expression_to_expr(expr: hydra.ext.haskell.ast.Expression) -> hydra.ast.Expr
             bindings = let_expr.bindings
             inner = let_expr.inner
             def encode_binding(binding: hydra.ext.haskell.ast.LocalBinding) -> hydra.ast.Expr:
-                return hydra.serialization.indent_subsequent_lines("      ", local_binding_to_expr(binding))
+                return hydra.serialization.indent_subsequent_lines("    ", local_binding_to_expr(binding))
             return hydra.serialization.indent_block(hydra.lib.lists.cons(hydra.serialization.cst(""), hydra.lib.lists.cons(hydra.serialization.space_sep(hydra.lib.lists.cons(hydra.serialization.cst("let"), (hydra.serialization.custom_indent_block("    ", hydra.lib.lists.map((lambda x1: encode_binding(x1)), bindings)),))), (hydra.serialization.space_sep(hydra.lib.lists.cons(hydra.serialization.cst("in"), (expression_to_expr(inner),))),))))
         
         case hydra.ext.haskell.ast.ExpressionList(value=exprs):
@@ -321,8 +330,17 @@ def value_binding_to_expr(vb: hydra.ext.haskell.ast.ValueBinding) -> hydra.ast.E
             rhs = simple_v_b.rhs
             local = simple_v_b.local_bindings
             @lru_cache(1)
+            def lhs_expr() -> hydra.ast.Expr:
+                return pattern_to_expr(pat)
+            @lru_cache(1)
+            def rhs_expr() -> hydra.ast.Expr:
+                return right_hand_side_to_expr(rhs)
+            @lru_cache(1)
+            def inline_body() -> hydra.ast.Expr:
+                return hydra.serialization.structural_space_sep((lhs_expr(), hydra.serialization.cst("="), rhs_expr()))
+            @lru_cache(1)
             def body() -> hydra.ast.Expr:
-                return hydra.serialization.ifx(hydra.ext.haskell.operators.define_op(), pattern_to_expr(pat), right_hand_side_to_expr(rhs))
+                return hydra.lib.logic.if_else(hydra.lib.equality.gt(hydra.serialization.expression_length(inline_body()), 120), (lambda : hydra.serialization.newline_sep((hydra.serialization.space_sep((lhs_expr(), hydra.serialization.cst("="))), hydra.serialization.tab_indent(rhs_expr())))), (lambda : inline_body()))
             return hydra.lib.maybes.maybe((lambda : body()), (lambda local_bindings: (bindings := local_bindings.value, hydra.serialization.indent_block(hydra.lib.lists.cons(body(), (hydra.serialization.indent_block(hydra.lib.lists.cons(hydra.serialization.cst("where"), hydra.lib.lists.map((lambda x1: local_binding_to_expr(x1)), bindings))),))))[1]), local)
         
         case _:
@@ -440,7 +458,7 @@ def declaration_to_expr(decl: hydra.ext.haskell.ast.Declaration) -> hydra.ast.Ex
             vb = typed_binding.value_binding
             name = type_sig.name
             htype = type_sig.type
-            return hydra.serialization.newline_sep(hydra.lib.lists.cons(hydra.serialization.ifx(hydra.ext.haskell.operators.type_op(), name_to_expr(name), type_to_expr(htype)), (value_binding_to_expr(vb),)))
+            return hydra.serialization.newline_sep(hydra.lib.lists.cons(hydra.serialization.structural_space_sep((name_to_expr(name), hydra.serialization.cst("::"), type_to_expr(htype))), (value_binding_to_expr(vb),)))
         
         case _:
             raise AssertionError("Unreachable: all variants handled")

@@ -910,7 +910,7 @@
                                                   "term": {
                                                     "function": {
                                                       "lambda": {
-                                                        "body": {"literal": {"integer": {"int32": 1}}},
+                                                        "body": {"literal": {"integer": {"int32": 10000}}},
                                                         "domain": [{"unit": {}}],
                                                         "parameter": "_"}}}},
                                                 {
@@ -918,16 +918,7 @@
                                                   "term": {
                                                     "function": {
                                                       "lambda": {
-                                                        "body": {
-                                                          "application": {
-                                                            "argument": {
-                                                              "application": {
-                                                                "argument": {"variable": "s"},
-                                                                "function": {"function": {"primitive": "hydra.lib.strings.length"}}}},
-                                                            "function": {
-                                                              "application": {
-                                                                "argument": {"literal": {"integer": {"int32": 1}}},
-                                                                "function": {"function": {"primitive": "hydra.lib.math.add"}}}}}},
+                                                        "body": {"literal": {"integer": {"int32": 10000}}},
                                                         "domain": [{"literal": {"string": {}}}],
                                                         "parameter": "s"}}}},
                                                 {
@@ -935,7 +926,7 @@
                                                   "term": {
                                                     "function": {
                                                       "lambda": {
-                                                        "body": {"literal": {"integer": {"int32": 2}}},
+                                                        "body": {"literal": {"integer": {"int32": 10000}}},
                                                         "domain": [{"unit": {}}],
                                                         "parameter": "_"}}}}],
                                               "default": null,
@@ -1452,59 +1443,223 @@
                                                             "domain": {"variable": "hydra.ast.OpExpr"}}},
                                                         "variables": []}]}],
                                                 "body": {
-                                                  "application": {
-                                                    "argument": {"variable": "e"},
-                                                    "function": {
-                                                      "function": {
-                                                        "elimination": {
-                                                          "union": {
-                                                            "cases": [
-                                                              {
-                                                                "name": "const",
-                                                                "term": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "body": {
+                                                  "let": {
+                                                    "bindings": [
+                                                      {
+                                                        "name": "seqExprLength",
+                                                        "term": {
+                                                          "function": {
+                                                            "lambda": {
+                                                              "body": {
+                                                                "let": {
+                                                                  "bindings": [
+                                                                    {
+                                                                      "name": "sopLen",
+                                                                      "term": {
                                                                         "application": {
-                                                                          "argument": {"variable": "s"},
-                                                                          "function": {"variable": "symbolLength"}}},
-                                                                      "domain": [{"variable": "hydra.ast.Symbol"}],
-                                                                      "parameter": "s"}}}},
-                                                              {
-                                                                "name": "indent",
-                                                                "term": {
-                                                                  "function": {
-                                                                    "lambda": {
+                                                                          "argument": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "se"},
+                                                                              "function": {
+                                                                                "function": {
+                                                                                  "elimination": {"record": {"field": "op", "typeName": "hydra.ast.SeqExpr"}}}}}},
+                                                                          "function": {"variable": "opLength"}}},
+                                                                      "type": [
+                                                                        {
+                                                                          "constraints": null,
+                                                                          "type": {"literal": {"integer": {"int32": {}}}},
+                                                                          "variables": []}]}],
+                                                                  "body": {
+                                                                    "let": {
+                                                                      "bindings": [
+                                                                        {
+                                                                          "name": "elementLens",
+                                                                          "term": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "se"},
+                                                                                  "function": {
+                                                                                    "function": {
+                                                                                      "elimination": {"record": {"field": "elements", "typeName": "hydra.ast.SeqExpr"}}}}}},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "hydra.serialization.expressionLength"},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                          "type": {"variable": "hydra.ast.Expr"}}},
+                                                                                      "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                          "type": [
+                                                                            {
+                                                                              "constraints": null,
+                                                                              "type": {"list": {"literal": {"integer": {"int32": {}}}}},
+                                                                              "variables": []}]}],
                                                                       "body": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "ie"},
-                                                                          "function": {"variable": "indentedExpressionLength"}}},
-                                                                      "domain": [{"variable": "hydra.ast.IndentedExpression"}],
-                                                                      "parameter": "ie"}}}},
-                                                              {
-                                                                "name": "op",
-                                                                "term": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "body": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "oe"},
-                                                                          "function": {"variable": "opExprLength"}}},
-                                                                      "domain": [{"variable": "hydra.ast.OpExpr"}],
-                                                                      "parameter": "oe"}}}},
-                                                              {
-                                                                "name": "brackets",
-                                                                "term": {
-                                                                  "function": {
-                                                                    "lambda": {
-                                                                      "body": {
-                                                                        "application": {
-                                                                          "argument": {"variable": "be"},
-                                                                          "function": {"variable": "bracketExprLength"}}},
-                                                                      "domain": [{"variable": "hydra.ast.BracketExpr"}],
-                                                                      "parameter": "be"}}}}],
-                                                            "default": null,
-                                                            "typeName": "hydra.ast.Expr"}}}}}}}}}}}}}}}}}}}}}},
+                                                                        "let": {
+                                                                          "bindings": [
+                                                                            {
+                                                                              "name": "totalElLen",
+                                                                              "term": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "elementLens"},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {"literal": {"integer": {"int32": 0}}},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {"function": {"primitive": "hydra.lib.math.add"}},
+                                                                                          "function": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.foldl"}},
+                                                                                                  "type": {"literal": {"integer": {"int32": {}}}}}},
+                                                                                              "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}},
+                                                                              "type": [
+                                                                                {
+                                                                                  "constraints": null,
+                                                                                  "type": {"literal": {"integer": {"int32": {}}}},
+                                                                                  "variables": []}]}],
+                                                                          "body": {
+                                                                            "let": {
+                                                                              "bindings": [
+                                                                                {
+                                                                                  "name": "numSeps",
+                                                                                  "term": {
+                                                                                    "application": {
+                                                                                      "argument": {"literal": {"integer": {"int32": 1}}},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {
+                                                                                            "application": {
+                                                                                              "argument": {
+                                                                                                "application": {
+                                                                                                  "argument": {"variable": "se"},
+                                                                                                  "function": {
+                                                                                                    "function": {
+                                                                                                      "elimination": {"record": {"field": "elements", "typeName": "hydra.ast.SeqExpr"}}}}}},
+                                                                                              "function": {
+                                                                                                "typeApplication": {
+                                                                                                  "body": {"function": {"primitive": "hydra.lib.lists.length"}},
+                                                                                                  "type": {"variable": "hydra.ast.Expr"}}}}},
+                                                                                          "function": {"function": {"primitive": "hydra.lib.math.sub"}}}}}},
+                                                                                  "type": [
+                                                                                    {
+                                                                                      "constraints": null,
+                                                                                      "type": {"literal": {"integer": {"int32": {}}}},
+                                                                                      "variables": []}]}],
+                                                                              "body": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "argument": {
+                                                                                        "application": {
+                                                                                          "argument": {"literal": {"integer": {"int32": 0}}},
+                                                                                          "function": {
+                                                                                            "application": {
+                                                                                              "argument": {"variable": "numSeps"},
+                                                                                              "function": {
+                                                                                                "application": {
+                                                                                                  "argument": {
+                                                                                                    "application": {
+                                                                                                      "argument": {"literal": {"integer": {"int32": 0}}},
+                                                                                                      "function": {
+                                                                                                        "application": {
+                                                                                                          "argument": {"variable": "numSeps"},
+                                                                                                          "function": {
+                                                                                                            "typeApplication": {
+                                                                                                              "body": {"function": {"primitive": "hydra.lib.equality.gt"}},
+                                                                                                              "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                                                                  "function": {
+                                                                                                    "typeApplication": {
+                                                                                                      "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                                                                      "type": {"literal": {"integer": {"int32": {}}}}}}}}}}}},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {"variable": "sopLen"},
+                                                                                          "function": {"function": {"primitive": "hydra.lib.math.mul"}}}}}},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "totalElLen"},
+                                                                                      "function": {"function": {"primitive": "hydra.lib.math.add"}}}}}}}}}}}}}},
+                                                              "domain": [{"variable": "hydra.ast.SeqExpr"}],
+                                                              "parameter": "se"}}},
+                                                        "type": [
+                                                          {
+                                                            "constraints": null,
+                                                            "type": {
+                                                              "function": {
+                                                                "codomain": {"literal": {"integer": {"int32": {}}}},
+                                                                "domain": {"variable": "hydra.ast.SeqExpr"}}},
+                                                            "variables": []}]}],
+                                                    "body": {
+                                                      "application": {
+                                                        "argument": {"variable": "e"},
+                                                        "function": {
+                                                          "function": {
+                                                            "elimination": {
+                                                              "union": {
+                                                                "cases": [
+                                                                  {
+                                                                    "name": "const",
+                                                                    "term": {
+                                                                      "function": {
+                                                                        "lambda": {
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "s"},
+                                                                              "function": {"variable": "symbolLength"}}},
+                                                                          "domain": [{"variable": "hydra.ast.Symbol"}],
+                                                                          "parameter": "s"}}}},
+                                                                  {
+                                                                    "name": "indent",
+                                                                    "term": {
+                                                                      "function": {
+                                                                        "lambda": {
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "ie"},
+                                                                              "function": {"variable": "indentedExpressionLength"}}},
+                                                                          "domain": [{"variable": "hydra.ast.IndentedExpression"}],
+                                                                          "parameter": "ie"}}}},
+                                                                  {
+                                                                    "name": "op",
+                                                                    "term": {
+                                                                      "function": {
+                                                                        "lambda": {
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "oe"},
+                                                                              "function": {"variable": "opExprLength"}}},
+                                                                          "domain": [{"variable": "hydra.ast.OpExpr"}],
+                                                                          "parameter": "oe"}}}},
+                                                                  {
+                                                                    "name": "brackets",
+                                                                    "term": {
+                                                                      "function": {
+                                                                        "lambda": {
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "be"},
+                                                                              "function": {"variable": "bracketExprLength"}}},
+                                                                          "domain": [{"variable": "hydra.ast.BracketExpr"}],
+                                                                          "parameter": "be"}}}},
+                                                                  {
+                                                                    "name": "seq",
+                                                                    "term": {
+                                                                      "function": {
+                                                                        "lambda": {
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "se"},
+                                                                              "function": {"variable": "seqExprLength"}}},
+                                                                          "domain": [{"variable": "hydra.ast.SeqExpr"}],
+                                                                          "parameter": "se"}}}}],
+                                                                "default": null,
+                                                                "typeName": "hydra.ast.Expr"}}}}}}}}}}}}}}}}}}}}}}}},
                 "domain": [{"variable": "hydra.ast.Expr"}],
                 "parameter": "e"}}}}},
       "type": [
@@ -2569,6 +2724,50 @@
                                           "domain": [{"variable": "hydra.ast.IndentedExpression"}],
                                           "parameter": "indentExpr"}}}},
                                   {
+                                    "name": "seq",
+                                    "term": {
+                                      "function": {
+                                        "lambda": {
+                                          "body": {
+                                            "union": {
+                                              "field": {
+                                                "name": "seq",
+                                                "term": {
+                                                  "record": {
+                                                    "fields": [
+                                                      {
+                                                        "name": "op",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {"variable": "seqExpr"},
+                                                            "function": {
+                                                              "function": {
+                                                                "elimination": {"record": {"field": "op", "typeName": "hydra.ast.SeqExpr"}}}}}}},
+                                                      {
+                                                        "name": "elements",
+                                                        "term": {
+                                                          "application": {
+                                                            "argument": {
+                                                              "application": {
+                                                                "argument": {"variable": "seqExpr"},
+                                                                "function": {
+                                                                  "function": {
+                                                                    "elimination": {"record": {"field": "elements", "typeName": "hydra.ast.SeqExpr"}}}}}},
+                                                            "function": {
+                                                              "application": {
+                                                                "argument": {"variable": "hydra.serialization.parenthesize"},
+                                                                "function": {
+                                                                  "typeApplication": {
+                                                                    "body": {
+                                                                      "typeApplication": {
+                                                                        "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                        "type": {"variable": "hydra.ast.Expr"}}},
+                                                                    "type": {"variable": "hydra.ast.Expr"}}}}}}}}],
+                                                    "typeName": "hydra.ast.SeqExpr"}}},
+                                              "typeName": "hydra.ast.Expr"}},
+                                          "domain": [{"variable": "hydra.ast.SeqExpr"}],
+                                          "parameter": "seqExpr"}}}},
+                                  {
                                     "name": "op",
                                     "term": {
                                       "function": {
@@ -3458,6 +3657,179 @@
                                           "domain": [{"variable": "hydra.ast.IndentedExpression"}],
                                           "parameter": "indentExpr"}}}},
                                   {
+                                    "name": "seq",
+                                    "term": {
+                                      "function": {
+                                        "lambda": {
+                                          "body": {
+                                            "let": {
+                                              "bindings": [
+                                                {
+                                                  "name": "sop",
+                                                  "term": {
+                                                    "application": {
+                                                      "argument": {"variable": "seqExpr"},
+                                                      "function": {
+                                                        "function": {
+                                                          "elimination": {"record": {"field": "op", "typeName": "hydra.ast.SeqExpr"}}}}}},
+                                                  "type": [
+                                                    {
+                                                      "constraints": null,
+                                                      "type": {"variable": "hydra.ast.Op"},
+                                                      "variables": []}]}],
+                                              "body": {
+                                                "let": {
+                                                  "bindings": [
+                                                    {
+                                                      "name": "ssym",
+                                                      "term": {
+                                                        "application": {
+                                                          "argument": {
+                                                            "application": {
+                                                              "argument": {"variable": "sop"},
+                                                              "function": {
+                                                                "function": {
+                                                                  "elimination": {"record": {"field": "symbol", "typeName": "hydra.ast.Op"}}}}}},
+                                                          "function": {"function": {"elimination": {"wrap": "hydra.ast.Symbol"}}}}},
+                                                      "type": [
+                                                        {
+                                                          "constraints": null,
+                                                          "type": {"literal": {"string": {}}},
+                                                          "variables": []}]}],
+                                                  "body": {
+                                                    "let": {
+                                                      "bindings": [
+                                                        {
+                                                          "name": "spadding",
+                                                          "term": {
+                                                            "application": {
+                                                              "argument": {"variable": "sop"},
+                                                              "function": {
+                                                                "function": {
+                                                                  "elimination": {"record": {"field": "padding", "typeName": "hydra.ast.Op"}}}}}},
+                                                          "type": [
+                                                            {
+                                                              "constraints": null,
+                                                              "type": {"variable": "hydra.ast.Padding"},
+                                                              "variables": []}]}],
+                                                      "body": {
+                                                        "let": {
+                                                          "bindings": [
+                                                            {
+                                                              "name": "spadl",
+                                                              "term": {
+                                                                "application": {
+                                                                  "argument": {"variable": "spadding"},
+                                                                  "function": {
+                                                                    "function": {
+                                                                      "elimination": {"record": {"field": "left", "typeName": "hydra.ast.Padding"}}}}}},
+                                                              "type": [
+                                                                {
+                                                                  "constraints": null,
+                                                                  "type": {"variable": "hydra.ast.Ws"},
+                                                                  "variables": []}]}],
+                                                          "body": {
+                                                            "let": {
+                                                              "bindings": [
+                                                                {
+                                                                  "name": "spadr",
+                                                                  "term": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "spadding"},
+                                                                      "function": {
+                                                                        "function": {
+                                                                          "elimination": {"record": {"field": "right", "typeName": "hydra.ast.Padding"}}}}}},
+                                                                  "type": [
+                                                                    {
+                                                                      "constraints": null,
+                                                                      "type": {"variable": "hydra.ast.Ws"},
+                                                                      "variables": []}]}],
+                                                              "body": {
+                                                                "let": {
+                                                                  "bindings": [
+                                                                    {
+                                                                      "name": "selements",
+                                                                      "term": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "seqExpr"},
+                                                                          "function": {
+                                                                            "function": {
+                                                                              "elimination": {"record": {"field": "elements", "typeName": "hydra.ast.SeqExpr"}}}}}},
+                                                                      "type": [
+                                                                        {
+                                                                          "constraints": null,
+                                                                          "type": {"list": {"variable": "hydra.ast.Expr"}},
+                                                                          "variables": []}]}],
+                                                                  "body": {
+                                                                    "let": {
+                                                                      "bindings": [
+                                                                        {
+                                                                          "name": "separator",
+                                                                          "term": {
+                                                                            "application": {
+                                                                              "argument": {
+                                                                                "application": {"argument": {"variable": "spadr"}, "function": {"variable": "pad"}}},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {
+                                                                                    "application": {
+                                                                                      "argument": {"variable": "ssym"},
+                                                                                      "function": {
+                                                                                        "application": {
+                                                                                          "argument": {
+                                                                                            "application": {"argument": {"variable": "spadl"}, "function": {"variable": "pad"}}},
+                                                                                          "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                                                                  "function": {"function": {"primitive": "hydra.lib.strings.cat2"}}}}}},
+                                                                          "type": [
+                                                                            {
+                                                                              "constraints": null,
+                                                                              "type": {"literal": {"string": {}}},
+                                                                              "variables": []}]}],
+                                                                      "body": {
+                                                                        "let": {
+                                                                          "bindings": [
+                                                                            {
+                                                                              "name": "printedElements",
+                                                                              "term": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "selements"},
+                                                                                  "function": {
+                                                                                    "application": {
+                                                                                      "argument": {
+                                                                                        "function": {
+                                                                                          "lambda": {
+                                                                                            "body": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "el"},
+                                                                                                    "function": {"variable": "hydra.serialization.printExpr"}}},
+                                                                                                "function": {
+                                                                                                  "application": {"argument": {"variable": "spadr"}, "function": {"variable": "idt"}}}}},
+                                                                                            "domain": [{"variable": "hydra.ast.Expr"}],
+                                                                                            "parameter": "el"}}},
+                                                                                      "function": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {"function": {"primitive": "hydra.lib.lists.map"}},
+                                                                                              "type": {"variable": "hydra.ast.Expr"}}},
+                                                                                          "type": {"literal": {"string": {}}}}}}}}},
+                                                                              "type": [
+                                                                                {
+                                                                                  "constraints": null,
+                                                                                  "type": {"list": {"literal": {"string": {}}}},
+                                                                                  "variables": []}]}],
+                                                                          "body": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "printedElements"},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {"variable": "separator"},
+                                                                                  "function": {"function": {"primitive": "hydra.lib.strings.intercalate"}}}}}}}}}}}}}}}}}}}}}},
+                                          "domain": [{"variable": "hydra.ast.SeqExpr"}],
+                                          "parameter": "seqExpr"}}}},
+                                  {
                                     "name": "op",
                                     "term": {
                                       "function": {
@@ -4077,6 +4449,163 @@
                       "typeName": "hydra.ast.Associativity"}}}],
               "typeName": "hydra.ast.Op"}},
           "function": {"variable": "hydra.serialization.sep"}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {"variable": "hydra.ast.Expr"},
+              "domain": {"list": {"variable": "hydra.ast.Expr"}}}},
+          "variables": []}]},
+    {
+      "name": "hydra.serialization.structuralSep",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Like sep, but produces a SeqExpr instead of an OpExpr chain. SeqExpr is treated as structural layout and is not subject to parenthesization."}}}],
+          "body": {
+            "function": {
+              "lambda": {
+                "body": {
+                  "function": {
+                    "lambda": {
+                      "body": {
+                        "application": {
+                          "argument": {
+                            "application": {
+                              "argument": {
+                                "union": {
+                                  "field": {
+                                    "name": "seq",
+                                    "term": {
+                                      "record": {
+                                        "fields": [
+                                          {"name": "op", "term": {"variable": "op"}},
+                                          {"name": "elements", "term": {"variable": "els"}}],
+                                        "typeName": "hydra.ast.SeqExpr"}}},
+                                  "typeName": "hydra.ast.Expr"}},
+                              "function": {
+                                "application": {
+                                  "argument": {
+                                    "application": {
+                                      "argument": {"variable": "els"},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {"function": {"primitive": "hydra.lib.lists.head"}},
+                                          "type": {"variable": "hydra.ast.Expr"}}}}},
+                                  "function": {
+                                    "application": {
+                                      "argument": {
+                                        "application": {
+                                          "argument": {"literal": {"integer": {"int32": 1}}},
+                                          "function": {
+                                            "application": {
+                                              "argument": {
+                                                "application": {
+                                                  "argument": {"variable": "els"},
+                                                  "function": {
+                                                    "typeApplication": {
+                                                      "body": {"function": {"primitive": "hydra.lib.lists.length"}},
+                                                      "type": {"variable": "hydra.ast.Expr"}}}}},
+                                              "function": {
+                                                "typeApplication": {
+                                                  "body": {"function": {"primitive": "hydra.lib.equality.equal"}},
+                                                  "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                          "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
+                          "function": {
+                            "application": {
+                              "argument": {
+                                "application": {
+                                  "argument": {"literal": {"string": ""}},
+                                  "function": {"variable": "hydra.serialization.cst"}}},
+                              "function": {
+                                "application": {
+                                  "argument": {
+                                    "application": {
+                                      "argument": {"variable": "els"},
+                                      "function": {
+                                        "typeApplication": {
+                                          "body": {"function": {"primitive": "hydra.lib.lists.null"}},
+                                          "type": {"variable": "hydra.ast.Expr"}}}}},
+                                  "function": {
+                                    "typeApplication": {
+                                      "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                      "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
+                      "domain": [{"list": {"variable": "hydra.ast.Expr"}}],
+                      "parameter": "els"}}},
+                "domain": [{"variable": "hydra.ast.Op"}],
+                "parameter": "op"}}}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {"variable": "hydra.ast.Expr"},
+                  "domain": {"list": {"variable": "hydra.ast.Expr"}}}},
+              "domain": {"variable": "hydra.ast.Op"}}},
+          "variables": []}]},
+    {
+      "name": "hydra.serialization.structuralSpaceSep",
+      "term": {
+        "annotated": {
+          "annotation": [
+            {
+              "@key": "description",
+              "@value": {
+                "literal": {
+                  "string": "Like spaceSep, but produces a SeqExpr. Use for structural layout that should not trigger parenthesization of children."}}}],
+          "body": {
+            "application": {
+              "argument": {
+                "record": {
+                  "fields": [
+                    {
+                      "name": "symbol",
+                      "term": {
+                        "application": {
+                          "argument": {"literal": {"string": ""}},
+                          "function": {"variable": "hydra.serialization.sym"}}}},
+                    {
+                      "name": "padding",
+                      "term": {
+                        "record": {
+                          "fields": [
+                            {
+                              "name": "left",
+                              "term": {
+                                "union": {
+                                  "field": {"name": "space", "term": {"unit": {}}},
+                                  "typeName": "hydra.ast.Ws"}}},
+                            {
+                              "name": "right",
+                              "term": {
+                                "union": {
+                                  "field": {"name": "none", "term": {"unit": {}}},
+                                  "typeName": "hydra.ast.Ws"}}}],
+                          "typeName": "hydra.ast.Padding"}}},
+                    {
+                      "name": "precedence",
+                      "term": {
+                        "wrap": {
+                          "body": {"literal": {"integer": {"int32": 0}}},
+                          "typeName": "hydra.ast.Precedence"}}},
+                    {
+                      "name": "associativity",
+                      "term": {
+                        "union": {
+                          "field": {"name": "none", "term": {"unit": {}}},
+                          "typeName": "hydra.ast.Associativity"}}}],
+                  "typeName": "hydra.ast.Op"}},
+              "function": {"variable": "hydra.serialization.structuralSep"}}}}},
       "type": [
         {
           "constraints": null,

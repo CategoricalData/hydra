@@ -37,7 +37,7 @@ public interface Accessors {
       public hydra.util.Maybe<String> visit(hydra.accessors.TermAccessor.UnionCasesBranch name) {
         return hydra.util.Maybe.just(hydra.lib.strings.Cat2.apply(
           ".",
-          ((name).value).value));
+          (name).value.value));
       }
       
       @Override
@@ -48,7 +48,7 @@ public interface Accessors {
       @Override
       public hydra.util.Maybe<String> visit(hydra.accessors.TermAccessor.LetBinding name) {
         return hydra.util.Maybe.just(hydra.lib.strings.Cat2.apply(
-          ((name).value).value,
+          (name).value.value,
           "="));
       }
       
@@ -85,7 +85,7 @@ public interface Accessors {
       public hydra.util.Maybe<String> visit(hydra.accessors.TermAccessor.RecordField name) {
         return hydra.util.Maybe.just(hydra.lib.strings.Cat2.apply(
           ".",
-          ((name).value).value));
+          (name).value.value));
       }
       
       @Override
@@ -145,11 +145,11 @@ public interface Accessors {
         path));
       hydra.util.Lazy<hydra.util.ConsList<hydra.accessors.AccessorNode>> nodes = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(nodesEdges.get()));
       hydra.util.Lazy<hydra.util.PersistentSet<String>> visited = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(state));
-      return (currentTerm.get()).accept(new hydra.core.Term.PartialVisitor<>() {
+      return currentTerm.get().accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<hydra.accessors.AccessorNode>, hydra.util.ConsList<hydra.accessors.AccessorEdge>>, hydra.util.PersistentSet<String>> otherwise(hydra.core.Term instance) {
           return hydra.lib.lists.Foldl.apply(
-            (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<hydra.accessors.AccessorNode>, hydra.util.ConsList<hydra.accessors.AccessorEdge>>, hydra.util.PersistentSet<String>>, java.util.function.Function<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>, hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<hydra.accessors.AccessorNode>, hydra.util.ConsList<hydra.accessors.AccessorEdge>>, hydra.util.PersistentSet<String>>>>) (v1 -> (java.util.function.Function<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>, hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<hydra.accessors.AccessorNode>, hydra.util.ConsList<hydra.accessors.AccessorEdge>>, hydra.util.PersistentSet<String>>>) (v2 -> (((((helper.get()).apply(ids)).apply(mroot)).apply(nextPath.get())).apply(v1)).apply(v2))),
+            (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<hydra.accessors.AccessorNode>, hydra.util.ConsList<hydra.accessors.AccessorEdge>>, hydra.util.PersistentSet<String>>, java.util.function.Function<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>, hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<hydra.accessors.AccessorNode>, hydra.util.ConsList<hydra.accessors.AccessorEdge>>, hydra.util.PersistentSet<String>>>>) (v1 -> (java.util.function.Function<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>, hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<hydra.accessors.AccessorNode>, hydra.util.ConsList<hydra.accessors.AccessorEdge>>, hydra.util.PersistentSet<String>>>) (v2 -> helper.get().apply(ids).apply(mroot).apply(nextPath.get()).apply(v1).apply(v2))),
             state,
             hydra.rewriting.Rewriting.subtermsWithAccessors(currentTerm.get()));
         }
@@ -180,7 +180,7 @@ public interface Accessors {
               currentVisited.get()));
             return (hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<hydra.accessors.AccessorNode>, hydra.util.PersistentSet<String>>, hydra.util.PersistentMap<hydra.core.Name, hydra.accessors.AccessorNode>>) ((hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<hydra.accessors.AccessorNode>, hydra.util.PersistentSet<String>>, hydra.util.PersistentMap<hydra.core.Name, hydra.accessors.AccessorNode>>) (new hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<hydra.accessors.AccessorNode>, hydra.util.PersistentSet<String>>, hydra.util.PersistentMap<hydra.core.Name, hydra.accessors.AccessorNode>>((hydra.util.Pair<hydra.util.ConsList<hydra.accessors.AccessorNode>, hydra.util.PersistentSet<String>>) ((hydra.util.Pair<hydra.util.ConsList<hydra.accessors.AccessorNode>, hydra.util.PersistentSet<String>>) (new hydra.util.Pair<hydra.util.ConsList<hydra.accessors.AccessorNode>, hydra.util.PersistentSet<String>>(newNodes.get(), newVisited.get()))), newIds.get())));
           }));
-          hydra.util.ConsList<hydra.core.Binding> bindings = ((letExpr).value).bindings;
+          hydra.util.ConsList<hydra.core.Binding> bindings = (letExpr).value.bindings;
           hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> bindingNames = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
             projected -> projected.name,
             bindings));
@@ -192,10 +192,10 @@ public interface Accessors {
           java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<hydra.accessors.AccessorNode>, hydra.util.ConsList<hydra.accessors.AccessorEdge>>, hydra.util.PersistentSet<String>>, java.util.function.Function<hydra.util.Pair<hydra.accessors.AccessorNode, hydra.core.Binding>, hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<hydra.accessors.AccessorNode>, hydra.util.ConsList<hydra.accessors.AccessorEdge>>, hydra.util.PersistentSet<String>>>> addBindingTerm = (java.util.function.Function<hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<hydra.accessors.AccessorNode>, hydra.util.ConsList<hydra.accessors.AccessorEdge>>, hydra.util.PersistentSet<String>>, java.util.function.Function<hydra.util.Pair<hydra.accessors.AccessorNode, hydra.core.Binding>, hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<hydra.accessors.AccessorNode>, hydra.util.ConsList<hydra.accessors.AccessorEdge>>, hydra.util.PersistentSet<String>>>>) (currentState -> (java.util.function.Function<hydra.util.Pair<hydra.accessors.AccessorNode, hydra.core.Binding>, hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<hydra.accessors.AccessorNode>, hydra.util.ConsList<hydra.accessors.AccessorEdge>>, hydra.util.PersistentSet<String>>>) (nodeBinding -> {
             hydra.util.Lazy<hydra.core.Binding> binding = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(nodeBinding));
             hydra.util.Lazy<hydra.accessors.AccessorNode> root = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(nodeBinding));
-            hydra.core.Term term1 = (binding.get()).term;
-            return (((((helper.get()).apply(ids1.get())).apply(hydra.util.Maybe.just(root.get()))).apply((hydra.util.ConsList<hydra.accessors.TermAccessor>) (hydra.util.ConsList.<hydra.accessors.TermAccessor>empty()))).apply(currentState)).apply((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(dontCareAccessor, term1))));
+            hydra.core.Term term1 = binding.get().term;
+            return helper.get().apply(ids1.get()).apply(hydra.util.Maybe.just(root.get())).apply((hydra.util.ConsList<hydra.accessors.TermAccessor>) (hydra.util.ConsList.<hydra.accessors.TermAccessor>empty())).apply(currentState).apply((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(dontCareAccessor, term1))));
           }));
-          hydra.core.Term env = ((letExpr).value).body;
+          hydra.core.Term env = (letExpr).value.body;
           hydra.util.Lazy<hydra.util.ConsList<hydra.accessors.AccessorNode>> nodes1 = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(hydra.lib.pairs.First.apply(nodesVisitedIds1.get())));
           hydra.util.Lazy<hydra.util.ConsList<hydra.util.Pair<hydra.accessors.AccessorNode, hydra.core.Binding>>> nodeBindingPairs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Zip.apply(
             nodes1.get(),
@@ -207,7 +207,7 @@ public interface Accessors {
               nodes1.get(),
               nodes.get()), edges.get()))), visited1.get()))),
             nodeBindingPairs.get()));
-          return (((((helper.get()).apply(ids1.get())).apply(mroot)).apply(nextPath.get())).apply(stateAfterBindings.get())).apply((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.LetBody(), env))));
+          return helper.get().apply(ids1.get()).apply(mroot).apply(nextPath.get()).apply(stateAfterBindings.get()).apply((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.LetBody(), env))));
         }
         
         @Override
@@ -230,7 +230,7 @@ public interface Accessors {
         }
       });
     }))))));
-    hydra.util.Lazy<hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<hydra.accessors.AccessorNode>, hydra.util.ConsList<hydra.accessors.AccessorEdge>>, hydra.util.PersistentSet<String>>> result = new hydra.util.Lazy<>(() -> (((((helper.get()).apply((hydra.util.PersistentMap<hydra.core.Name, hydra.accessors.AccessorNode>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.accessors.AccessorNode>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.accessors.AccessorNode>apply())))).apply((hydra.util.Maybe<hydra.accessors.AccessorNode>) (hydra.util.Maybe.<hydra.accessors.AccessorNode>nothing()))).apply((hydra.util.ConsList<hydra.accessors.TermAccessor>) (hydra.util.ConsList.<hydra.accessors.TermAccessor>empty()))).apply(hydra.show.accessors.Accessors.<hydra.accessors.AccessorNode, hydra.accessors.AccessorEdge, String>termToAccessorGraph_initialState())).apply((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(dontCareAccessor, term)))));
+    hydra.util.Lazy<hydra.util.Pair<hydra.util.Pair<hydra.util.ConsList<hydra.accessors.AccessorNode>, hydra.util.ConsList<hydra.accessors.AccessorEdge>>, hydra.util.PersistentSet<String>>> result = new hydra.util.Lazy<>(() -> helper.get().apply((hydra.util.PersistentMap<hydra.core.Name, hydra.accessors.AccessorNode>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.accessors.AccessorNode>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.accessors.AccessorNode>apply()))).apply((hydra.util.Maybe<hydra.accessors.AccessorNode>) (hydra.util.Maybe.<hydra.accessors.AccessorNode>nothing())).apply((hydra.util.ConsList<hydra.accessors.TermAccessor>) (hydra.util.ConsList.<hydra.accessors.TermAccessor>empty())).apply(hydra.show.accessors.Accessors.<hydra.accessors.AccessorNode, hydra.accessors.AccessorEdge, String>termToAccessorGraph_initialState()).apply((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(dontCareAccessor, term)))));
     hydra.util.Lazy<hydra.util.Pair<hydra.util.ConsList<hydra.accessors.AccessorNode>, hydra.util.ConsList<hydra.accessors.AccessorEdge>>> finalNodesEdges = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(result.get()));
     hydra.util.Lazy<hydra.util.ConsList<hydra.accessors.AccessorEdge>> finalEdges = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(finalNodesEdges.get()));
     hydra.util.Lazy<hydra.util.ConsList<hydra.accessors.AccessorNode>> finalNodes = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(finalNodesEdges.get()));

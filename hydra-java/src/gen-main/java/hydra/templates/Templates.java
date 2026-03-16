@@ -123,7 +123,7 @@ public interface Templates {
     return (t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Type.Annotated at) {
-        return ((inst).apply(tname)).apply(((at).value).body);
+        return (inst).apply(tname).apply((at).value.body);
       }
       
       @Override
@@ -147,7 +147,7 @@ public interface Templates {
           minimal,
           () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.List((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()))),
           () -> hydra.lib.eithers.Bind.apply(
-            ((inst).apply(tname)).apply((et).value),
+            (inst).apply(tname).apply((et).value),
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (e -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.List(hydra.util.ConsList.of(e))))));
       }
       
@@ -158,15 +158,15 @@ public interface Templates {
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Type.Map mt) {
-        hydra.core.Type kt = ((mt).value).keys;
-        hydra.core.Type vt = ((mt).value).values;
+        hydra.core.Type kt = (mt).value.keys;
+        hydra.core.Type vt = (mt).value.values;
         return hydra.lib.logic.IfElse.lazy(
           minimal,
           () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.Map((hydra.util.PersistentMap<hydra.core.Term, hydra.core.Term>) ((hydra.util.PersistentMap<hydra.core.Term, hydra.core.Term>) (hydra.lib.maps.Empty.<hydra.core.Term, hydra.core.Term>apply())))),
           () -> hydra.lib.eithers.Bind.apply(
-            ((inst).apply(tname)).apply(kt),
+            (inst).apply(tname).apply(kt),
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (ke -> hydra.lib.eithers.Bind.apply(
-              ((inst).apply(tname)).apply(vt),
+              (inst).apply(tname).apply(vt),
               (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (ve -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.Map(hydra.lib.maps.Singleton.apply(
                 ke,
                 ve))))))));
@@ -178,14 +178,14 @@ public interface Templates {
           minimal,
           () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.Maybe((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))),
           () -> hydra.lib.eithers.Bind.apply(
-            ((inst).apply(tname)).apply((ot).value),
+            (inst).apply(tname).apply((ot).value),
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (e -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.Maybe(hydra.util.Maybe.just(e))))));
       }
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Type.Record rt) {
         java.util.function.Function<hydra.core.FieldType, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>> toField = (java.util.function.Function<hydra.core.FieldType, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>>) (ft -> hydra.lib.eithers.Bind.apply(
-          ((inst).apply(tname)).apply((ft).type),
+          (inst).apply(tname).apply((ft).type),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>>) (e -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>right(new hydra.core.Field((ft).name, e)))));
         return hydra.lib.eithers.Bind.apply(
           hydra.lib.eithers.MapList.apply(
@@ -200,7 +200,7 @@ public interface Templates {
           minimal,
           () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.Set((hydra.util.PersistentSet<hydra.core.Term>) (hydra.lib.sets.Empty.<hydra.core.Term>apply()))),
           () -> hydra.lib.eithers.Bind.apply(
-            ((inst).apply(tname)).apply((et).value),
+            (inst).apply(tname).apply((et).value),
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (e -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.Set(hydra.lib.sets.FromList.apply(hydra.util.ConsList.of(e)))))));
       }
       
@@ -212,7 +212,7 @@ public interface Templates {
             hydra.lib.strings.Cat2.apply(
               hydra.show.core.Core.term(new hydra.core.Term.Variable((vname).value)),
               " not found in schema")))), cx))),
-          (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (v1 -> ((inst).apply((vname).value)).apply(v1)),
+          (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (v1 -> (inst).apply((vname).value).apply(v1)),
           hydra.lib.maps.Lookup.apply(
             (vname).value,
             schema));
@@ -221,7 +221,7 @@ public interface Templates {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Type.Wrap wt) {
         return hydra.lib.eithers.Bind.apply(
-          ((inst).apply(tname)).apply((wt).value),
+          (inst).apply(tname).apply((wt).value),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (e -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(tname, e)))));
       }
     });

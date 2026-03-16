@@ -31,7 +31,7 @@ public interface Parsing {
                   
                   @Override
                   public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Term.Literal v) {
-                    return ((v).value).accept(new hydra.core.Literal.PartialVisitor<>() {
+                    return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
                       @Override
                       public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Literal instance) {
                         return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"));
@@ -62,7 +62,7 @@ public interface Parsing {
                     
                     @Override
                     public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Term.Literal v) {
-                      return ((v).value).accept(new hydra.core.Literal.PartialVisitor<>() {
+                      return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
                         @Override
                         public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Literal instance) {
                           return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"));
@@ -99,7 +99,7 @@ public interface Parsing {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseResult<T0>> visit(hydra.core.Term.Union inj) {
-          hydra.core.Field field = ((inj).value).field;
+          hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
           return hydra.lib.maybes.Maybe.applyLazy(
@@ -133,7 +133,7 @@ public interface Parsing {
           input)))))),
       (hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseResult<T0>>>>) ((hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseResult<T0>>>>) (new hydra.util.Pair<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseResult<T0>>>>(new hydra.core.Name("failure"), (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseResult<T0>>>) (input -> hydra.lib.eithers.Map.apply(
         (java.util.function.Function<hydra.parsing.ParseError, hydra.parsing.ParseResult<T0>>) (t -> (hydra.parsing.ParseResult<T0>) (new hydra.parsing.ParseResult.Failure(t))),
-        ((hydra_decode_parsing_parseError2).apply(cx)).apply(input))))))));
+        (hydra_decode_parsing_parseError2).apply(cx).apply(input))))))));
   }
   
   static <T0> hydra.util.Either<hydra.error.DecodingError, hydra.parsing.ParseSuccess<T0>> parseSuccess(java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, T0>>> a, hydra.graph.Graph cx, hydra.core.Term raw) {
@@ -167,7 +167,7 @@ public interface Parsing {
                     
                     @Override
                     public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Term.Literal v) {
-                      return ((v).value).accept(new hydra.core.Literal.PartialVisitor<>() {
+                      return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
                         @Override
                         public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Literal instance) {
                           return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"));

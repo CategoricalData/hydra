@@ -21,11 +21,11 @@ data TBinding a =
     tBindingTerm :: (TTerm a)}
   deriving (Eq, Ord, Read, Show)
 
-_TBinding = (Core.Name "hydra.phantoms.TBinding")
+_TBinding = Core.Name "hydra.phantoms.TBinding"
 
-_TBinding_name = (Core.Name "name")
+_TBinding_name = Core.Name "name"
 
-_TBinding_term = (Core.Name "term")
+_TBinding_term = Core.Name "term"
 
 -- | An association of a term with a phantom type
 newtype TTerm a = 
@@ -33,4 +33,4 @@ newtype TTerm a =
     unTTerm :: Core.Term}
   deriving (Eq, Ord, Read, Show)
 
-_TTerm = (Core.Name "hydra.phantoms.TTerm")
+_TTerm = Core.Name "hydra.phantoms.TTerm"

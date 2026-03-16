@@ -51,7 +51,7 @@ public abstract class AggregationQuery implements Serializable, Comparable<Aggre
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(AggregationQuery other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

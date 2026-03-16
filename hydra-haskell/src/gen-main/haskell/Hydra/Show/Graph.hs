@@ -16,10 +16,11 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Show a list of bindings as a string
-graph :: ([Core.Binding] -> String)
-graph elements =  
-  let elementStrs = (Lists.map Core_.binding elements)
-  in (Strings.cat [
-    "{",
-    (Strings.intercalate ", " elementStrs),
-    "}"])
+graph :: [Core.Binding] -> String
+graph elements =
+     
+      let elementStrs = Lists.map Core_.binding elements
+      in (Strings.cat [
+        "{",
+        (Strings.intercalate ", " elementStrs),
+        "}"])

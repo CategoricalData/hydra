@@ -34,37 +34,37 @@ data AnnotationSchema =
     annotationSchemaIgnore :: String}
   deriving (Eq, Ord, Read, Show)
 
-_AnnotationSchema = (Core.Name "hydra.pg.mapping.AnnotationSchema")
+_AnnotationSchema = Core.Name "hydra.pg.mapping.AnnotationSchema"
 
-_AnnotationSchema_vertexLabel = (Core.Name "vertexLabel")
+_AnnotationSchema_vertexLabel = Core.Name "vertexLabel"
 
-_AnnotationSchema_edgeLabel = (Core.Name "edgeLabel")
+_AnnotationSchema_edgeLabel = Core.Name "edgeLabel"
 
-_AnnotationSchema_vertexId = (Core.Name "vertexId")
+_AnnotationSchema_vertexId = Core.Name "vertexId"
 
-_AnnotationSchema_edgeId = (Core.Name "edgeId")
+_AnnotationSchema_edgeId = Core.Name "edgeId"
 
-_AnnotationSchema_propertyKey = (Core.Name "propertyKey")
+_AnnotationSchema_propertyKey = Core.Name "propertyKey"
 
-_AnnotationSchema_propertyValue = (Core.Name "propertyValue")
+_AnnotationSchema_propertyValue = Core.Name "propertyValue"
 
-_AnnotationSchema_outVertex = (Core.Name "outVertex")
+_AnnotationSchema_outVertex = Core.Name "outVertex"
 
-_AnnotationSchema_outVertexLabel = (Core.Name "outVertexLabel")
+_AnnotationSchema_outVertexLabel = Core.Name "outVertexLabel"
 
-_AnnotationSchema_inVertex = (Core.Name "inVertex")
+_AnnotationSchema_inVertex = Core.Name "inVertex"
 
-_AnnotationSchema_inVertexLabel = (Core.Name "inVertexLabel")
+_AnnotationSchema_inVertexLabel = Core.Name "inVertexLabel"
 
-_AnnotationSchema_outEdge = (Core.Name "outEdge")
+_AnnotationSchema_outEdge = Core.Name "outEdge"
 
-_AnnotationSchema_outEdgeLabel = (Core.Name "outEdgeLabel")
+_AnnotationSchema_outEdgeLabel = Core.Name "outEdgeLabel"
 
-_AnnotationSchema_inEdge = (Core.Name "inEdge")
+_AnnotationSchema_inEdge = Core.Name "inEdge"
 
-_AnnotationSchema_inEdgeLabel = (Core.Name "inEdgeLabel")
+_AnnotationSchema_inEdgeLabel = Core.Name "inEdgeLabel"
 
-_AnnotationSchema_ignore = (Core.Name "ignore")
+_AnnotationSchema_ignore = Core.Name "ignore"
 
 -- | A mapping specification producing edges of a specified label.
 data EdgeSpec = 
@@ -81,17 +81,17 @@ data EdgeSpec =
     edgeSpecProperties :: [PropertySpec]}
   deriving (Eq, Ord, Read, Show)
 
-_EdgeSpec = (Core.Name "hydra.pg.mapping.EdgeSpec")
+_EdgeSpec = Core.Name "hydra.pg.mapping.EdgeSpec"
 
-_EdgeSpec_label = (Core.Name "label")
+_EdgeSpec_label = Core.Name "label"
 
-_EdgeSpec_id = (Core.Name "id")
+_EdgeSpec_id = Core.Name "id"
 
-_EdgeSpec_out = (Core.Name "out")
+_EdgeSpec_out = Core.Name "out"
 
-_EdgeSpec_in = (Core.Name "in")
+_EdgeSpec_in = Core.Name "in"
 
-_EdgeSpec_properties = (Core.Name "properties")
+_EdgeSpec_properties = Core.Name "properties"
 
 -- | Either a vertex specification or an edge specification
 data ElementSpec = 
@@ -99,11 +99,11 @@ data ElementSpec =
   ElementSpecEdge EdgeSpec
   deriving (Eq, Ord, Read, Show)
 
-_ElementSpec = (Core.Name "hydra.pg.mapping.ElementSpec")
+_ElementSpec = Core.Name "hydra.pg.mapping.ElementSpec"
 
-_ElementSpec_vertex = (Core.Name "vertex")
+_ElementSpec_vertex = Core.Name "vertex"
 
-_ElementSpec_edge = (Core.Name "edge")
+_ElementSpec_edge = Core.Name "edge"
 
 -- | A mapping specification producing properties of a specified key, and values of the appropriate type.
 data PropertySpec = 
@@ -114,11 +114,11 @@ data PropertySpec =
     propertySpecValue :: ValueSpec}
   deriving (Eq, Ord, Read, Show)
 
-_PropertySpec = (Core.Name "hydra.pg.mapping.PropertySpec")
+_PropertySpec = Core.Name "hydra.pg.mapping.PropertySpec"
 
-_PropertySpec_key = (Core.Name "key")
+_PropertySpec_key = Core.Name "key"
 
-_PropertySpec_value = (Core.Name "value")
+_PropertySpec_value = Core.Name "value"
 
 -- | A set of mappings which translates between Hydra terms and annotations, and application-specific property graph types
 data Schema s t v = 
@@ -133,25 +133,25 @@ data Schema s t v =
     schemaDefaultVertexId :: v,
     schemaDefaultEdgeId :: v}
 
-_Schema = (Core.Name "hydra.pg.mapping.Schema")
+_Schema = Core.Name "hydra.pg.mapping.Schema"
 
-_Schema_vertexIdTypes = (Core.Name "vertexIdTypes")
+_Schema_vertexIdTypes = Core.Name "vertexIdTypes"
 
-_Schema_vertexIds = (Core.Name "vertexIds")
+_Schema_vertexIds = Core.Name "vertexIds"
 
-_Schema_edgeIdTypes = (Core.Name "edgeIdTypes")
+_Schema_edgeIdTypes = Core.Name "edgeIdTypes"
 
-_Schema_edgeIds = (Core.Name "edgeIds")
+_Schema_edgeIds = Core.Name "edgeIds"
 
-_Schema_propertyTypes = (Core.Name "propertyTypes")
+_Schema_propertyTypes = Core.Name "propertyTypes"
 
-_Schema_propertyValues = (Core.Name "propertyValues")
+_Schema_propertyValues = Core.Name "propertyValues"
 
-_Schema_annotations = (Core.Name "annotations")
+_Schema_annotations = Core.Name "annotations"
 
-_Schema_defaultVertexId = (Core.Name "defaultVertexId")
+_Schema_defaultVertexId = Core.Name "defaultVertexId"
 
-_Schema_defaultEdgeId = (Core.Name "defaultEdgeId")
+_Schema_defaultEdgeId = Core.Name "defaultEdgeId"
 
 -- | A mapping specification producing values (usually literal values) whose type is understood in context
 data ValueSpec = 
@@ -161,11 +161,11 @@ data ValueSpec =
   ValueSpecPattern String
   deriving (Eq, Ord, Read, Show)
 
-_ValueSpec = (Core.Name "hydra.pg.mapping.ValueSpec")
+_ValueSpec = Core.Name "hydra.pg.mapping.ValueSpec"
 
-_ValueSpec_value = (Core.Name "value")
+_ValueSpec_value = Core.Name "value"
 
-_ValueSpec_pattern = (Core.Name "pattern")
+_ValueSpec_pattern = Core.Name "pattern"
 
 -- | A mapping specification producing vertices of a specified label
 data VertexSpec = 
@@ -178,10 +178,10 @@ data VertexSpec =
     vertexSpecProperties :: [PropertySpec]}
   deriving (Eq, Ord, Read, Show)
 
-_VertexSpec = (Core.Name "hydra.pg.mapping.VertexSpec")
+_VertexSpec = Core.Name "hydra.pg.mapping.VertexSpec"
 
-_VertexSpec_label = (Core.Name "label")
+_VertexSpec_label = Core.Name "label"
 
-_VertexSpec_id = (Core.Name "id")
+_VertexSpec_id = Core.Name "id"
 
-_VertexSpec_properties = (Core.Name "properties")
+_VertexSpec_properties = Core.Name "properties"

@@ -17,54 +17,60 @@ import qualified Data.Set as S
 
 -- | Language constraints for LinkedIn Pegasus (PDL)
 pdlLanguage :: Coders.Language
-pdlLanguage = Coders.Language {
-  Coders.languageName = (Coders.LanguageName "hydra.ext.pegasus.pdl"),
-  Coders.languageConstraints = Coders.LanguageConstraints {
-    Coders.languageConstraintsEliminationVariants = eliminationVariants,
-    Coders.languageConstraintsLiteralVariants = literalVariants,
-    Coders.languageConstraintsFloatTypes = floatTypes,
-    Coders.languageConstraintsFunctionVariants = functionVariants,
-    Coders.languageConstraintsIntegerTypes = integerTypes,
-    Coders.languageConstraintsTermVariants = termVariants,
-    Coders.languageConstraintsTypeVariants = typeVariants,
-    Coders.languageConstraintsTypes = typePredicate}} 
+pdlLanguage =
+    Coders.Language {
+      Coders.languageName = (Coders.LanguageName "hydra.ext.pegasus.pdl"),
+      Coders.languageConstraints = Coders.LanguageConstraints {
+        Coders.languageConstraintsEliminationVariants = eliminationVariants,
+        Coders.languageConstraintsLiteralVariants = literalVariants,
+        Coders.languageConstraintsFloatTypes = floatTypes,
+        Coders.languageConstraintsFunctionVariants = functionVariants,
+        Coders.languageConstraintsIntegerTypes = integerTypes,
+        Coders.languageConstraintsTermVariants = termVariants,
+        Coders.languageConstraintsTypeVariants = typeVariants,
+        Coders.languageConstraintsTypes = typePredicate}} 
   where 
     eliminationVariants = Sets.empty
-    literalVariants = (Sets.fromList [
-      Variants.LiteralVariantBinary,
-      Variants.LiteralVariantBoolean,
-      Variants.LiteralVariantFloat,
-      Variants.LiteralVariantInteger,
-      Variants.LiteralVariantString])
-    floatTypes = (Sets.fromList [
-      Core.FloatTypeFloat32,
-      Core.FloatTypeFloat64])
+    literalVariants =
+        Sets.fromList [
+          Variants.LiteralVariantBinary,
+          Variants.LiteralVariantBoolean,
+          Variants.LiteralVariantFloat,
+          Variants.LiteralVariantInteger,
+          Variants.LiteralVariantString]
+    floatTypes =
+        Sets.fromList [
+          Core.FloatTypeFloat32,
+          Core.FloatTypeFloat64]
     functionVariants = Sets.empty
-    integerTypes = (Sets.fromList [
-      Core.IntegerTypeInt32,
-      Core.IntegerTypeInt64])
-    termVariants = (Sets.fromList [
-      Variants.TermVariantEither,
-      Variants.TermVariantList,
-      Variants.TermVariantLiteral,
-      Variants.TermVariantMap,
-      Variants.TermVariantPair,
-      Variants.TermVariantSet,
-      Variants.TermVariantWrap,
-      Variants.TermVariantMaybe,
-      Variants.TermVariantRecord,
-      Variants.TermVariantUnion])
-    typeVariants = (Sets.fromList [
-      Variants.TypeVariantAnnotated,
-      Variants.TypeVariantEither,
-      Variants.TypeVariantList,
-      Variants.TypeVariantLiteral,
-      Variants.TypeVariantMap,
-      Variants.TypeVariantPair,
-      Variants.TypeVariantSet,
-      Variants.TypeVariantWrap,
-      Variants.TypeVariantMaybe,
-      Variants.TypeVariantRecord,
-      Variants.TypeVariantUnion,
-      Variants.TypeVariantVariable])
-    typePredicate = (\_ -> True)
+    integerTypes =
+        Sets.fromList [
+          Core.IntegerTypeInt32,
+          Core.IntegerTypeInt64]
+    termVariants =
+        Sets.fromList [
+          Variants.TermVariantEither,
+          Variants.TermVariantList,
+          Variants.TermVariantLiteral,
+          Variants.TermVariantMap,
+          Variants.TermVariantPair,
+          Variants.TermVariantSet,
+          Variants.TermVariantWrap,
+          Variants.TermVariantMaybe,
+          Variants.TermVariantRecord,
+          Variants.TermVariantUnion]
+    typeVariants =
+        Sets.fromList [
+          Variants.TypeVariantAnnotated,
+          Variants.TypeVariantEither,
+          Variants.TypeVariantList,
+          Variants.TypeVariantLiteral,
+          Variants.TypeVariantMap,
+          Variants.TypeVariantPair,
+          Variants.TypeVariantSet,
+          Variants.TypeVariantWrap,
+          Variants.TypeVariantMaybe,
+          Variants.TypeVariantRecord,
+          Variants.TypeVariantUnion,
+          Variants.TypeVariantVariable]
+    typePredicate = \_ -> True

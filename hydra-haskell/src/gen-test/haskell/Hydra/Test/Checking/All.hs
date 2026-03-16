@@ -20,14 +20,15 @@ import qualified Data.Set as S
 
 -- | The group of all type checking tests
 allTests :: Testing.TestGroup
-allTests = Testing.TestGroup {
-  Testing.testGroupName = "checking",
-  Testing.testGroupDescription = Nothing,
-  Testing.testGroupSubgroups = [
-    Advanced.allTests,
-    AlgebraicTypes.allTests,
-    Collections.allTests,
-    Failures.allTests,
-    Fundamentals.allTests,
-    NominalTypes.allTests],
-  Testing.testGroupCases = []}
+allTests =
+    Testing.TestGroup {
+      Testing.testGroupName = "checking",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        Advanced.allTests,
+        AlgebraicTypes.allTests,
+        Collections.allTests,
+        Failures.allTests,
+        Fundamentals.allTests,
+        NominalTypes.allTests],
+      Testing.testGroupCases = []}

@@ -65,7 +65,7 @@ public abstract class Precision implements Serializable, Comparable<Precision> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Precision other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -107,7 +107,7 @@ public abstract class Precision implements Serializable, Comparable<Precision> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Precision other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

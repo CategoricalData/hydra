@@ -17,7 +17,7 @@ public interface Coders {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.coders.CoderDirection> visit(hydra.core.Term.Union inj) {
-          hydra.core.Field field = ((inj).value).field;
+          hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
           hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.coders.CoderDirection>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(
@@ -70,7 +70,7 @@ public interface Coders {
                 
                 @Override
                 public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Term.Literal v) {
-                  return ((v).value).accept(new hydra.core.Literal.PartialVisitor<>() {
+                  return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
                     @Override
                     public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Literal instance) {
                       return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"));
@@ -85,7 +85,7 @@ public interface Coders {
               })),
               hydra.lexical.Lexical.stripAndDereferenceTermEither(
                 cx,
-                ((wrappedTerm).value).body)));
+                (wrappedTerm).value.body)));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(
@@ -104,7 +104,7 @@ public interface Coders {
         
         @Override
         public hydra.util.Either<hydra.error.DecodingError, hydra.coders.TraversalOrder> visit(hydra.core.Term.Union inj) {
-          hydra.core.Field field = ((inj).value).field;
+          hydra.core.Field field = (inj).value.field;
           hydra.core.Name fname = (field).name;
           hydra.core.Term fterm = (field).term;
           hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.error.DecodingError, hydra.coders.TraversalOrder>>>> variantMap = new hydra.util.Lazy<>(() -> hydra.lib.maps.FromList.apply(hydra.util.ConsList.of(

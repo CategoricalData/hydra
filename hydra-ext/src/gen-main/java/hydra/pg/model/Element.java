@@ -66,7 +66,7 @@ public abstract class Element<V> implements Serializable, Comparable<Element<V>>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Element other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -106,7 +106,7 @@ public abstract class Element<V> implements Serializable, Comparable<Element<V>>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Element other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

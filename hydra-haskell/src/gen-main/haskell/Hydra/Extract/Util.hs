@@ -22,7 +22,8 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Extract a comparison from a term
-comparison :: (Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) Util.Comparison)
-comparison cx graph term = (Eithers.bind (Core_.unitVariant cx (Core.Name "hydra.util.Comparison") graph term) (\fname -> Logic.ifElse (Equality.equal (Core.unName fname) "equalTo") (Right Util.ComparisonEqualTo) (Logic.ifElse (Equality.equal (Core.unName fname) "lessThan") (Right Util.ComparisonLessThan) (Logic.ifElse (Equality.equal (Core.unName fname) "greaterThan") (Right Util.ComparisonGreaterThan) (Left (Context.InContext {
-  Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "expected comparison but found " (Core.unName fname)))),
-  Context.inContextContext = cx}))))))
+comparison :: Context.Context -> Graph.Graph -> Core.Term -> Either (Context.InContext Error.Error) Util.Comparison
+comparison cx graph term =
+    Eithers.bind (Core_.unitVariant cx (Core.Name "hydra.util.Comparison") graph term) (\fname -> Logic.ifElse (Equality.equal (Core.unName fname) "equalTo") (Right Util.ComparisonEqualTo) (Logic.ifElse (Equality.equal (Core.unName fname) "lessThan") (Right Util.ComparisonLessThan) (Logic.ifElse (Equality.equal (Core.unName fname) "greaterThan") (Right Util.ComparisonGreaterThan) (Left (Context.InContext {
+      Context.inContextObject = (Error.ErrorOther (Error.OtherError (Strings.cat2 "expected comparison but found " (Core.unName fname)))),
+      Context.inContextContext = cx})))))

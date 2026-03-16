@@ -29,7 +29,7 @@ public interface Schemas {
       public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.module.Definition.Type typeDef) {
         return hydra.rewriting.Rewriting.typeDependencyNames(
           true,
-          ((typeDef).value).type);
+          (typeDef).value.type);
       }
       
       @Override
@@ -38,7 +38,7 @@ public interface Schemas {
           true,
           true,
           true,
-          ((termDef).value).term);
+          (termDef).value.term);
       }
     }));
     hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> allNames = new hydra.util.Lazy<>(() -> hydra.lib.sets.Unions.apply(hydra.lib.lists.Map.apply(
@@ -205,7 +205,7 @@ public interface Schemas {
         (b).name,
         s))),
       (g).lambdaVariables,
-      bindings), (hydra.lib.lists.Foldl.apply(
+      bindings), hydra.lib.lists.Foldl.apply(
       (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.graph.Graph>>) (gAcc -> (java.util.function.Function<hydra.core.Binding, hydra.graph.Graph>) (b -> {
         hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> m = (gAcc).metadata;
         hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term>> newMeta = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
@@ -216,11 +216,11 @@ public interface Schemas {
             (b).name,
             t,
             m)),
-          ((forBinding).apply(gAcc)).apply(b)));
+          (forBinding).apply(gAcc).apply(b)));
         return new hydra.graph.Graph((gAcc).boundTerms, (gAcc).boundTypes, (gAcc).classConstraints, (gAcc).lambdaVariables, newMeta.get(), (gAcc).primitives, (gAcc).schemaTypes, (gAcc).typeVariables);
       })),
       g2,
-      bindings)).metadata, (g).primitives, (g).schemaTypes, (g).typeVariables);
+      bindings).metadata, (g).primitives, (g).schemaTypes, (g).typeVariables);
   }
   
   static hydra.graph.Graph extendGraphForTypeLambda(hydra.graph.Graph g, hydra.core.TypeLambda tlam) {
@@ -248,7 +248,7 @@ public interface Schemas {
     java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>> toMap = (java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>>) (fields -> hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.core.FieldType, hydra.util.Pair<hydra.core.Name, hydra.core.Type>>) (ft -> (hydra.util.Pair<hydra.core.Name, hydra.core.Type>) ((hydra.util.Pair<hydra.core.Name, hydra.core.Type>) (new hydra.util.Pair<hydra.core.Name, hydra.core.Type>((ft).name, (ft).type)))),
       fields)));
-    return (hydra.rewriting.Rewriting.deannotateType(t)).accept(new hydra.core.Type.PartialVisitor<>() {
+    return hydra.rewriting.Rewriting.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>> otherwise(hydra.core.Type instance) {
         return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
@@ -261,7 +261,7 @@ public interface Schemas {
         return hydra.schemas.Schemas.fieldTypes(
           cx,
           graph,
-          ((ft).value).body);
+          (ft).value.body);
       }
       
       @Override
@@ -302,7 +302,7 @@ public interface Schemas {
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> findFieldType(hydra.context.Context cx, hydra.core.Name fname, hydra.util.ConsList<hydra.core.FieldType> fields) {
     hydra.util.Lazy<hydra.util.ConsList<hydra.core.FieldType>> matchingFields = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
       (java.util.function.Function<hydra.core.FieldType, Boolean>) (ft -> hydra.lib.equality.Equal.apply(
-        ((ft).name).value,
+        (ft).name.value,
         (fname).value)),
       fields));
     return hydra.lib.logic.IfElse.lazy(
@@ -314,7 +314,7 @@ public interface Schemas {
         hydra.lib.equality.Equal.apply(
           hydra.lib.lists.Length.apply(matchingFields.get()),
           1),
-        () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>right((hydra.lib.lists.Head.apply(matchingFields.get())).type),
+        () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>right(hydra.lib.lists.Head.apply(matchingFields.get()).type),
         () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
           "Multiple fields named ",
           (fname).value))), cx)))));
@@ -364,7 +364,7 @@ public interface Schemas {
       
       @Override
       public Boolean visit(hydra.core.Type.Annotated at) {
-        return hydra.schemas.Schemas.fTypeIsPolymorphic(((at).value).body);
+        return hydra.schemas.Schemas.fTypeIsPolymorphic((at).value.body);
       }
       
       @Override
@@ -376,7 +376,7 @@ public interface Schemas {
   
   static hydra.core.Type fullyStripAndNormalizeType(hydra.core.Type typ) {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<Integer, java.util.function.Function<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.core.Type>>>>> go = new java.util.concurrent.atomic.AtomicReference<>();
-    go.set((java.util.function.Function<Integer, java.util.function.Function<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.core.Type>>>>) (depth -> (java.util.function.Function<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.core.Type>>>) (subst -> (java.util.function.Function<hydra.core.Type, hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.core.Type>>) (t -> (hydra.rewriting.Rewriting.deannotateType(t)).accept(new hydra.core.Type.PartialVisitor<>() {
+    go.set((java.util.function.Function<Integer, java.util.function.Function<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.core.Type>>>>) (depth -> (java.util.function.Function<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.core.Type>>>) (subst -> (java.util.function.Function<hydra.core.Type, hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.core.Type>>) (t -> hydra.rewriting.Rewriting.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.core.Type> otherwise(hydra.core.Type instance) {
         return (hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.core.Type>) ((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.core.Type>) (new hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.core.Type>(subst, t)));
@@ -387,16 +387,16 @@ public interface Schemas {
         hydra.core.Name newVar = new hydra.core.Name(hydra.lib.strings.Cat2.apply(
           "_",
           hydra.lib.literals.ShowInt32.apply(depth)));
-        hydra.core.Name oldVar = ((ft).value).parameter;
-        return (((go.get()).apply(hydra.lib.math.Add.apply(
+        hydra.core.Name oldVar = (ft).value.parameter;
+        return go.get().apply(hydra.lib.math.Add.apply(
           depth,
-          1))).apply(hydra.lib.maps.Insert.apply(
+          1)).apply(hydra.lib.maps.Insert.apply(
           oldVar,
           newVar,
-          subst))).apply(((ft).value).body);
+          subst)).apply((ft).value.body);
       }
     })))));
-    hydra.util.Lazy<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.core.Type>> result = new hydra.util.Lazy<>(() -> (((go.get()).apply(0)).apply((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())))).apply(typ));
+    hydra.util.Lazy<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.core.Type>> result = new hydra.util.Lazy<>(() -> go.get().apply(0).apply((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply()))).apply(typ));
     hydra.util.Lazy<hydra.core.Type> body = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(result.get()));
     hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>> subst = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(result.get()));
     return hydra.rewriting.Rewriting.substituteTypeVariables(
@@ -405,7 +405,7 @@ public interface Schemas {
   }
   
   static hydra.core.Type fullyStripType(hydra.core.Type typ) {
-    return (hydra.rewriting.Rewriting.deannotateType(typ)).accept(new hydra.core.Type.PartialVisitor<>() {
+    return hydra.rewriting.Rewriting.deannotateType(typ).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.core.Type otherwise(hydra.core.Type instance) {
         return typ;
@@ -413,7 +413,7 @@ public interface Schemas {
       
       @Override
       public hydra.core.Type visit(hydra.core.Type.Forall ft) {
-        return hydra.schemas.Schemas.fullyStripType(((ft).value).body);
+        return hydra.schemas.Schemas.fullyStripType((ft).value.body);
       }
     });
   }
@@ -481,7 +481,7 @@ public interface Schemas {
   }
   
   static Boolean isEncodedTerm(hydra.core.Term t) {
-    return (hydra.rewriting.Rewriting.deannotateTerm(t)).accept(new hydra.core.Term.PartialVisitor<>() {
+    return hydra.rewriting.Rewriting.deannotateTerm(t).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public Boolean otherwise(hydra.core.Term instance) {
         return false;
@@ -489,20 +489,20 @@ public interface Schemas {
       
       @Override
       public Boolean visit(hydra.core.Term.Application a) {
-        return hydra.schemas.Schemas.isEncodedTerm(((a).value).function);
+        return hydra.schemas.Schemas.isEncodedTerm((a).value.function);
       }
       
       @Override
       public Boolean visit(hydra.core.Term.Union i) {
         return hydra.lib.equality.Equal.apply(
           "hydra.core.Term",
-          (((i).value).typeName).value);
+          (i).value.typeName.value);
       }
     });
   }
   
   static Boolean isEncodedType(hydra.core.Term t) {
-    return (hydra.rewriting.Rewriting.deannotateTerm(t)).accept(new hydra.core.Term.PartialVisitor<>() {
+    return hydra.rewriting.Rewriting.deannotateTerm(t).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public Boolean otherwise(hydra.core.Term instance) {
         return false;
@@ -510,14 +510,14 @@ public interface Schemas {
       
       @Override
       public Boolean visit(hydra.core.Term.Application a) {
-        return hydra.schemas.Schemas.isEncodedType(((a).value).function);
+        return hydra.schemas.Schemas.isEncodedType((a).value.function);
       }
       
       @Override
       public Boolean visit(hydra.core.Term.Union i) {
         return hydra.lib.equality.Equal.apply(
           "hydra.core.Type",
-          (((i).value).typeName).value);
+          (i).value.typeName.value);
       }
     });
   }
@@ -534,7 +534,7 @@ public interface Schemas {
   }
   
   static Boolean isEnumType(hydra.core.Type typ) {
-    return (hydra.rewriting.Rewriting.deannotateType(typ)).accept(new hydra.core.Type.PartialVisitor<>() {
+    return hydra.rewriting.Rewriting.deannotateType(typ).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public Boolean otherwise(hydra.core.Type instance) {
         return false;
@@ -617,7 +617,7 @@ public interface Schemas {
   }
   
   static Boolean isType(hydra.core.Type t) {
-    return (hydra.rewriting.Rewriting.deannotateType(t)).accept(new hydra.core.Type.PartialVisitor<>() {
+    return hydra.rewriting.Rewriting.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public Boolean otherwise(hydra.core.Type instance) {
         return false;
@@ -625,12 +625,12 @@ public interface Schemas {
       
       @Override
       public Boolean visit(hydra.core.Type.Application a) {
-        return hydra.schemas.Schemas.isType(((a).value).function);
+        return hydra.schemas.Schemas.isType((a).value.function);
       }
       
       @Override
       public Boolean visit(hydra.core.Type.Forall l) {
-        return hydra.schemas.Schemas.isType(((l).value).body);
+        return hydra.schemas.Schemas.isType((l).value.body);
       }
       
       @Override
@@ -686,7 +686,7 @@ public interface Schemas {
         
         @Override
         public Boolean visit(hydra.core.Term.Literal lit) {
-          return ((lit).value).accept(new hydra.core.Literal.PartialVisitor<>() {
+          return (lit).value.accept(new hydra.core.Literal.PartialVisitor<>() {
             @Override
             public Boolean otherwise(hydra.core.Literal instance) {
               return false;
@@ -816,12 +816,12 @@ public interface Schemas {
       
       @Override
       public hydra.core.Type visit(hydra.core.Type.Annotated at) {
-        return (rawType.get()).apply(((at).value).body);
+        return rawType.get().apply((at).value.body);
       }
       
       @Override
       public hydra.core.Type visit(hydra.core.Type.Forall ft) {
-        return (rawType.get()).apply(((ft).value).body);
+        return rawType.get().apply((ft).value.body);
       }
     })));
     return hydra.lib.eithers.Bind.apply(
@@ -837,7 +837,7 @@ public interface Schemas {
           " type: ",
           hydra.show.core.Core.type(t))))), cx))),
         (java.util.function.Function<T0, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>>) (x -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, T0>right(x)),
-        (getter).apply((rawType.get()).apply(t)))));
+        (getter).apply(rawType.get().apply(t)))));
   }
   
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.core.TypeScheme, hydra.context.Context>> requireSchemaType(hydra.context.Context cx, hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeScheme> types, hydra.core.Name tname) {
@@ -889,7 +889,7 @@ public interface Schemas {
           (fname).value,
           "\" in union type \"",
           (tname).value)))), cx))),
-        () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>right((hydra.lib.lists.Head.apply(matches.get())).type));
+        () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>right(hydra.lib.lists.Head.apply(matches.get()).type));
     });
     return hydra.lib.eithers.Bind.apply(
       hydra.schemas.Schemas.requireUnionType(
@@ -920,7 +920,7 @@ public interface Schemas {
   }
   
   static hydra.util.Maybe<hydra.core.Type> resolveType(hydra.graph.Graph graph, hydra.core.Type typ) {
-    return (hydra.rewriting.Rewriting.deannotateType(typ)).accept(new hydra.core.Type.PartialVisitor<>() {
+    return hydra.rewriting.Rewriting.deannotateType(typ).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Maybe<hydra.core.Type> otherwise(hydra.core.Type instance) {
         return hydra.util.Maybe.just(typ);
@@ -962,7 +962,7 @@ public interface Schemas {
           g,
           term))));
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.util.ConsList<hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.core.TypeScheme>>> toTypeScheme = new java.util.concurrent.atomic.AtomicReference<>();
-    toTypeScheme.set((java.util.function.Function<hydra.util.ConsList<hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.core.TypeScheme>>) (vars -> (java.util.function.Function<hydra.core.Type, hydra.core.TypeScheme>) (typ -> (hydra.rewriting.Rewriting.deannotateType(typ)).accept(new hydra.core.Type.PartialVisitor<>() {
+    toTypeScheme.set((java.util.function.Function<hydra.util.ConsList<hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.core.TypeScheme>>) (vars -> (java.util.function.Function<hydra.core.Type, hydra.core.TypeScheme>) (typ -> hydra.rewriting.Rewriting.deannotateType(typ).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.core.TypeScheme otherwise(hydra.core.Type instance) {
         return new hydra.core.TypeScheme(hydra.lib.lists.Reverse.apply(vars), typ, (hydra.util.Maybe<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()));
@@ -970,9 +970,9 @@ public interface Schemas {
       
       @Override
       public hydra.core.TypeScheme visit(hydra.core.Type.Forall ft) {
-        return ((toTypeScheme.get()).apply(hydra.lib.lists.Cons.apply(
-          ((ft).value).parameter,
-          vars))).apply(((ft).value).body);
+        return toTypeScheme.get().apply(hydra.lib.lists.Cons.apply(
+          (ft).value.parameter,
+          vars)).apply((ft).value.body);
       }
     }))));
     java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>>> toPair = (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>>>) (el -> {
@@ -986,7 +986,7 @@ public interface Schemas {
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<hydra.core.TypeScheme>> visit(hydra.core.Term.Record r) {
           return hydra.lib.logic.IfElse.lazy(
             hydra.lib.equality.Equal.apply(
-              ((r).value).typeName,
+              (r).value.typeName,
               new hydra.core.Name("hydra.core.TypeScheme")),
             () -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<hydra.core.TypeScheme, hydra.util.Maybe<hydra.core.TypeScheme>>) (hydra.lib.maybes.Pure::apply),
@@ -998,10 +998,10 @@ public interface Schemas {
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<hydra.core.TypeScheme>> visit(hydra.core.Term.Union i) {
           return hydra.lib.logic.IfElse.lazy(
             hydra.lib.equality.Equal.apply(
-              ((i).value).typeName,
+              (i).value.typeName,
               new hydra.core.Name("hydra.core.Type")),
             () -> hydra.lib.eithers.Map.apply(
-              (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.TypeScheme>>) (decoded -> hydra.util.Maybe.just(((toTypeScheme.get()).apply((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()))).apply(decoded))),
+              (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.TypeScheme>>) (decoded -> hydra.util.Maybe.just(toTypeScheme.get().apply((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty())).apply(decoded))),
               (decodeType).apply((el).term)),
             () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Maybe<hydra.core.TypeScheme>>right((hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing())));
         }
@@ -1023,7 +1023,7 @@ public interface Schemas {
                 ts,
                 new hydra.core.TypeScheme((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Type")), (hydra.util.Maybe<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()))),
               () -> hydra.lib.eithers.Map.apply(
-                (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.TypeScheme>>) (decoded -> hydra.util.Maybe.just(((toTypeScheme.get()).apply((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()))).apply(decoded))),
+                (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.TypeScheme>>) (decoded -> hydra.util.Maybe.just(toTypeScheme.get().apply((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty())).apply(decoded))),
                 (decodeType).apply((el).term)),
               () -> (forTerm).apply(hydra.rewriting.Rewriting.deannotateTerm((el).term))))),
           (el).type),
@@ -1039,7 +1039,7 @@ public interface Schemas {
   }
   
   static hydra.util.ConsList<hydra.core.Binding> termAsBindings(hydra.core.Term term) {
-    return (hydra.rewriting.Rewriting.deannotateTerm(term)).accept(new hydra.core.Term.PartialVisitor<>() {
+    return hydra.rewriting.Rewriting.deannotateTerm(term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.ConsList<hydra.core.Binding> otherwise(hydra.core.Term instance) {
         return (hydra.util.ConsList<hydra.core.Binding>) (hydra.util.ConsList.<hydra.core.Binding>empty());
@@ -1047,7 +1047,7 @@ public interface Schemas {
       
       @Override
       public hydra.util.ConsList<hydra.core.Binding> visit(hydra.core.Term.Let lt) {
-        return ((lt).value).bindings;
+        return (lt).value.bindings;
       }
     });
   }
@@ -1122,14 +1122,14 @@ public interface Schemas {
           hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> newSeeds = new hydra.util.Lazy<>(() -> hydra.lib.sets.Difference.apply(
             refs.get(),
             visited.get()));
-          return ((deps.get()).apply(newSeeds.get())).apply(newNames.get());
+          return deps.get().apply(newSeeds.get()).apply(newNames.get());
         }))))));
-    return ((deps.get()).apply(hydra.lib.sets.Singleton.apply(name))).apply((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply())));
+    return deps.get().apply(hydra.lib.sets.Singleton.apply(name)).apply((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Type>apply())));
   }
   
   static hydra.core.TypeScheme typeToTypeScheme(hydra.core.Type t0) {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.util.ConsList<hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.core.TypeScheme>>> helper = new java.util.concurrent.atomic.AtomicReference<>();
-    helper.set((java.util.function.Function<hydra.util.ConsList<hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.core.TypeScheme>>) (vars -> (java.util.function.Function<hydra.core.Type, hydra.core.TypeScheme>) (t -> (hydra.rewriting.Rewriting.deannotateType(t)).accept(new hydra.core.Type.PartialVisitor<>() {
+    helper.set((java.util.function.Function<hydra.util.ConsList<hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.core.TypeScheme>>) (vars -> (java.util.function.Function<hydra.core.Type, hydra.core.TypeScheme>) (t -> hydra.rewriting.Rewriting.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.core.TypeScheme otherwise(hydra.core.Type instance) {
         return new hydra.core.TypeScheme(hydra.lib.lists.Reverse.apply(vars), t, (hydra.util.Maybe<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()));
@@ -1137,12 +1137,12 @@ public interface Schemas {
       
       @Override
       public hydra.core.TypeScheme visit(hydra.core.Type.Forall ft) {
-        return ((helper.get()).apply(hydra.lib.lists.Cons.apply(
-          ((ft).value).parameter,
-          vars))).apply(((ft).value).body);
+        return helper.get().apply(hydra.lib.lists.Cons.apply(
+          (ft).value.parameter,
+          vars)).apply((ft).value.body);
       }
     }))));
-    return ((helper.get()).apply((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()))).apply(t0);
+    return helper.get().apply((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty())).apply(t0);
   }
   
   static hydra.util.ConsList<hydra.core.Binding> typesToElements(hydra.util.PersistentMap<hydra.core.Name, hydra.core.Type> typeMap) {
@@ -1159,7 +1159,7 @@ public interface Schemas {
     hydra.graph.Graph newContext = hydra.schemas.Schemas.extendGraphForLambda(
       (getContext).apply(env),
       lam);
-    return (body).apply(((setContext).apply(newContext)).apply(env));
+    return (body).apply((setContext).apply(newContext).apply(env));
   }
   
   static <T0, T1, T2> T2 withLetContext(java.util.function.Function<T0, hydra.graph.Graph> getContext, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, T1>> setContext, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>> forBinding, T0 env, hydra.core.Let letrec, java.util.function.Function<T1, T2> body) {
@@ -1167,13 +1167,13 @@ public interface Schemas {
       forBinding,
       (getContext).apply(env),
       letrec);
-    return (body).apply(((setContext).apply(newContext)).apply(env));
+    return (body).apply((setContext).apply(newContext).apply(env));
   }
   
   static <T0, T1, T2> T2 withTypeLambdaContext(java.util.function.Function<T0, hydra.graph.Graph> getContext, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<T0, T1>> setContext, T0 env, hydra.core.TypeLambda tlam, java.util.function.Function<T1, T2> body) {
     hydra.graph.Graph newContext = hydra.schemas.Schemas.extendGraphForTypeLambda(
       (getContext).apply(env),
       tlam);
-    return (body).apply(((setContext).apply(newContext)).apply(env));
+    return (body).apply((setContext).apply(newContext).apply(env));
   }
 }

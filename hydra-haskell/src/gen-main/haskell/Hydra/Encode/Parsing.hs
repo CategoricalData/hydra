@@ -13,37 +13,40 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-parseError :: (Parsing.ParseError -> Core.Term)
-parseError x = (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.parsing.ParseError"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "message"),
-      Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Parsing.parseErrorMessage x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "remainder"),
-      Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Parsing.parseErrorRemainder x))}]}))
+parseError :: Parsing.ParseError -> Core.Term
+parseError x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.parsing.ParseError"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "message"),
+          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Parsing.parseErrorMessage x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "remainder"),
+          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Parsing.parseErrorRemainder x))}]})
 
-parseResult :: ((t0 -> Core.Term) -> Parsing.ParseResult t0 -> Core.Term)
-parseResult a x = case x of
-  Parsing.ParseResultSuccess v0 -> (Core.TermUnion (Core.Injection {
-    Core.injectionTypeName = (Core.Name "hydra.parsing.ParseResult"),
-    Core.injectionField = Core.Field {
-      Core.fieldName = (Core.Name "success"),
-      Core.fieldTerm = (parseSuccess a v0)}}))
-  Parsing.ParseResultFailure v0 -> (Core.TermUnion (Core.Injection {
-    Core.injectionTypeName = (Core.Name "hydra.parsing.ParseResult"),
-    Core.injectionField = Core.Field {
-      Core.fieldName = (Core.Name "failure"),
-      Core.fieldTerm = (parseError v0)}}))
+parseResult :: (t0 -> Core.Term) -> Parsing.ParseResult t0 -> Core.Term
+parseResult a x =
+    case x of
+      Parsing.ParseResultSuccess v0 -> Core.TermUnion (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.parsing.ParseResult"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "success"),
+          Core.fieldTerm = (parseSuccess a v0)}})
+      Parsing.ParseResultFailure v0 -> Core.TermUnion (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.parsing.ParseResult"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "failure"),
+          Core.fieldTerm = (parseError v0)}})
 
-parseSuccess :: ((t0 -> Core.Term) -> Parsing.ParseSuccess t0 -> Core.Term)
-parseSuccess a x = (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "value"),
-      Core.fieldTerm = (a (Parsing.parseSuccessValue x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "remainder"),
-      Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Parsing.parseSuccessRemainder x))}]}))
+parseSuccess :: (t0 -> Core.Term) -> Parsing.ParseSuccess t0 -> Core.Term
+parseSuccess a x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.parsing.ParseSuccess"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "value"),
+          Core.fieldTerm = (a (Parsing.parseSuccessValue x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "remainder"),
+          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Parsing.parseSuccessRemainder x))}]})

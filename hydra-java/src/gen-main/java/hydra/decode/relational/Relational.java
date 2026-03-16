@@ -29,7 +29,7 @@ public interface Relational {
                 
                 @Override
                 public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Term.Literal v) {
-                  return ((v).value).accept(new hydra.core.Literal.PartialVisitor<>() {
+                  return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
                     @Override
                     public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Literal instance) {
                       return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"));
@@ -44,7 +44,7 @@ public interface Relational {
               })),
               hydra.lexical.Lexical.stripAndDereferenceTermEither(
                 cx,
-                ((wrappedTerm).value).body)));
+                (wrappedTerm).value.body)));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(
@@ -146,7 +146,7 @@ public interface Relational {
                 p0,
                 p1)),
               cx,
-              ((wrappedTerm).value).body));
+              (wrappedTerm).value.body));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(
@@ -173,7 +173,7 @@ public interface Relational {
                 v1,
                 v2))),
               cx,
-              ((wrappedTerm).value).body));
+              (wrappedTerm).value.body));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(
@@ -204,7 +204,7 @@ public interface Relational {
                 
                 @Override
                 public hydra.util.Either<hydra.error.DecodingError, String> visit(hydra.core.Term.Literal v) {
-                  return ((v).value).accept(new hydra.core.Literal.PartialVisitor<>() {
+                  return (v).value.accept(new hydra.core.Literal.PartialVisitor<>() {
                     @Override
                     public hydra.util.Either<hydra.error.DecodingError, String> otherwise(hydra.core.Literal instance) {
                       return hydra.util.Either.<hydra.error.DecodingError, String>left(new hydra.error.DecodingError("expected string literal"));
@@ -219,7 +219,7 @@ public interface Relational {
               })),
               hydra.lexical.Lexical.stripAndDereferenceTermEither(
                 cx,
-                ((wrappedTerm).value).body)));
+                (wrappedTerm).value.body)));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(
@@ -311,7 +311,7 @@ public interface Relational {
                 v1,
                 v2))),
               cx,
-              ((wrappedTerm).value).body));
+              (wrappedTerm).value.body));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(
@@ -335,7 +335,7 @@ public interface Relational {
             hydra.extract.helpers.Helpers.<T0>decodeList(
               v,
               cx,
-              ((wrappedTerm).value).body));
+              (wrappedTerm).value.body));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(

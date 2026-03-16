@@ -63,7 +63,7 @@ public abstract class Plx implements Serializable, Comparable<Plx> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Plx other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -103,7 +103,7 @@ public abstract class Plx implements Serializable, Comparable<Plx> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Plx other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

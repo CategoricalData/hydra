@@ -115,7 +115,7 @@ public interface TestCodec {
     return hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.util.Pair<hydra.module.Namespace, T0>, String>) (entry -> hydra.lib.strings.Cat2.apply(
         "import ",
-        (hydra.lib.pairs.First.apply(entry)).value)),
+        hydra.lib.pairs.First.apply(entry).value)),
       hydra.lib.maps.ToList.apply(hydra.ext.python.testCodec.TestCodec.<T0>findPythonImports_filtered(namespaces_)));
   }
   
@@ -221,13 +221,13 @@ public interface TestCodec {
             hydra.lib.lists.Concat2.apply(
               groupPath,
               hydra.util.ConsList.of(name_)))));
-        String formattedName = ((codec).formatTestName).apply(fullName.get());
-        hydra.core.Term input_ = ((delCase).value).input;
-        hydra.core.Term output_ = ((delCase).value).output;
+        String formattedName = (codec).formatTestName.apply(fullName.get());
+        hydra.core.Term input_ = (delCase).value.input;
+        hydra.core.Term output_ = (delCase).value.output;
         return hydra.lib.eithers.Bind.apply(
-          (((codec).encodeTerm).apply(input_)).apply(g),
+          (codec).encodeTerm.apply(input_).apply(g),
           (java.util.function.Function<String, hydra.util.Either<String, hydra.util.ConsList<String>>>) (inputCode -> hydra.lib.eithers.Bind.apply(
-            (((codec).encodeTerm).apply(output_)).apply(g),
+            (codec).encodeTerm.apply(output_).apply(g),
             (java.util.function.Function<String, hydra.util.Either<String, hydra.util.ConsList<String>>>) (outputCode -> hydra.util.Either.<String, hydra.util.ConsList<String>>right(hydra.util.ConsList.of(
               hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
                 "def ",
@@ -278,7 +278,7 @@ public interface TestCodec {
   }
   
   static <T0, T1> String buildPythonTestModule(hydra.testing.TestCodec codec, T0 testModule, hydra.testing.TestGroup testGroup, String testBody, T1 namespaces_) {
-    hydra.util.Lazy<hydra.util.ConsList<String>> domainImports = new hydra.util.Lazy<>(() -> ((codec).findImports).apply((hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())));
+    hydra.util.Lazy<hydra.util.ConsList<String>> domainImports = new hydra.util.Lazy<>(() -> (codec).findImports.apply((hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())));
     hydra.util.ConsList<String> standardImports = hydra.util.ConsList.of(
       "from __future__ import annotations",
       "from typing import cast",

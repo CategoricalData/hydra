@@ -302,14 +302,14 @@ public interface Formatting {
           prev)),
         () -> hydra.lib.logic.IfElse.lazy(
           hydra.lib.lists.Null.apply(prefix.get()),
-          () -> ((helper.get()).apply(hydra.lib.lists.Cons.apply(
+          () -> helper.get().apply(hydra.lib.lists.Cons.apply(
             trunc.get(),
-            prev))).apply(hydra.lib.lists.Drop.apply(
+            prev)).apply(hydra.lib.lists.Drop.apply(
             maxlen,
             rem)),
-          () -> ((helper.get()).apply(hydra.lib.lists.Cons.apply(
+          () -> helper.get().apply(hydra.lib.lists.Cons.apply(
             hydra.lib.lists.Init.apply(prefix.get()),
-            prev))).apply(hydra.lib.lists.Concat2.apply(
+            prev)).apply(hydra.lib.lists.Concat2.apply(
             suffix.get(),
             hydra.lib.lists.Drop.apply(
               maxlen,
@@ -317,6 +317,6 @@ public interface Formatting {
     })));
     return hydra.lib.strings.FromList.apply(hydra.lib.lists.Intercalate.apply(
       hydra.util.ConsList.of(10),
-      ((helper.get()).apply((hydra.util.ConsList<hydra.util.ConsList<Integer>>) (hydra.util.ConsList.<hydra.util.ConsList<Integer>>empty()))).apply(hydra.lib.strings.ToList.apply(input))));
+      helper.get().apply((hydra.util.ConsList<hydra.util.ConsList<Integer>>) (hydra.util.ConsList.<hydra.util.ConsList<Integer>>empty())).apply(hydra.lib.strings.ToList.apply(input))));
   }
 }

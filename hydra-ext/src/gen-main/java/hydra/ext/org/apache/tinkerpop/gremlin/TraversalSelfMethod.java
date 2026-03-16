@@ -51,7 +51,7 @@ public abstract class TraversalSelfMethod implements Serializable, Comparable<Tr
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TraversalSelfMethod other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

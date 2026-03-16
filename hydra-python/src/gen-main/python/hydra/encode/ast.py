@@ -7,6 +7,7 @@ from functools import lru_cache
 from typing import cast
 import hydra.ast
 import hydra.core
+import hydra.lib.lists
 import hydra.lib.maybes
 
 def associativity(v1: hydra.ast.Associativity) -> hydra.core.Term:
@@ -92,6 +93,9 @@ def expr(v1: hydra.ast.Expr) -> hydra.core.Term:
         case hydra.ast.ExprBrackets(value=y4):
             return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Expr"), hydra.core.Field(hydra.core.Name("brackets"), bracket_expr(y4)))))
         
+        case hydra.ast.ExprSeq(value=y5):
+            return cast(hydra.core.Term, hydra.core.TermUnion(hydra.core.Injection(hydra.core.Name("hydra.ast.Expr"), hydra.core.Field(hydra.core.Name("seq"), seq_expr(y5)))))
+        
         case _:
             raise AssertionError("Unreachable: all variants handled")
 
@@ -100,3 +104,6 @@ def indented_expression(x: hydra.ast.IndentedExpression) -> hydra.core.Term:
 
 def op_expr(x: hydra.ast.OpExpr) -> hydra.core.Term:
     return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.ast.OpExpr"), (hydra.core.Field(hydra.core.Name("op"), op(x.op)), hydra.core.Field(hydra.core.Name("lhs"), expr(x.lhs)), hydra.core.Field(hydra.core.Name("rhs"), expr(x.rhs))))))
+
+def seq_expr(x: hydra.ast.SeqExpr) -> hydra.core.Term:
+    return cast(hydra.core.Term, hydra.core.TermRecord(hydra.core.Record(hydra.core.Name("hydra.ast.SeqExpr"), (hydra.core.Field(hydra.core.Name("op"), op(x.op)), hydra.core.Field(hydra.core.Name("elements"), cast(hydra.core.Term, hydra.core.TermList(hydra.lib.lists.map((lambda x1: expr(x1)), x.elements))))))))

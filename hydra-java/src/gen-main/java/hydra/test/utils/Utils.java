@@ -41,8 +41,8 @@ public interface Utils {
         
         @Override
         public hydra.util.Either<String, hydra.testing.TestCase> visit(hydra.testing.TestCase.DelegatedEvaluation delCase) {
-          hydra.core.Term input_ = ((delCase).value).input;
-          hydra.core.Term output_ = ((delCase).value).output;
+          hydra.core.Term input_ = (delCase).value.input;
+          hydra.core.Term output_ = (delCase).value.output;
           return hydra.lib.eithers.Bind.apply(
             hydra.test.utils.Utils.inferTerm(
               g,

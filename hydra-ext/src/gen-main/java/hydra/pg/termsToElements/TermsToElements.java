@@ -163,7 +163,7 @@ public interface TermsToElements {
   }
   
   static hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.mapping.ValueSpec> decodeValueSpec(hydra.context.Context cx, hydra.graph.Graph g, hydra.core.Term term) {
-    return (hydra.rewriting.Rewriting.deannotateTerm(term)).accept(new hydra.core.Term.PartialVisitor<>() {
+    return hydra.rewriting.Rewriting.deannotateTerm(term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.mapping.ValueSpec> otherwise(hydra.core.Term instance) {
         return hydra.pg.termsToElements.TermsToElements.readInjection(
@@ -182,7 +182,7 @@ public interface TermsToElements {
       
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.mapping.ValueSpec> visit(hydra.core.Term.Literal lit) {
-        return ((lit).value).accept(new hydra.core.Literal.PartialVisitor<>() {
+        return (lit).value.accept(new hydra.core.Literal.PartialVisitor<>() {
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.pg.mapping.ValueSpec> otherwise(hydra.core.Literal instance) {
             return hydra.pg.termsToElements.TermsToElements.readInjection(
@@ -279,7 +279,7 @@ public interface TermsToElements {
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.strings.Null.apply(step),
       () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.Term>>right(hydra.util.ConsList.of(term)),
-      () -> (hydra.rewriting.Rewriting.deannotateTerm(term)).accept(new hydra.core.Term.PartialVisitor<>() {
+      () -> hydra.rewriting.Rewriting.deannotateTerm(term).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.Term>> otherwise(hydra.core.Term instance) {
           return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.Term>>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
@@ -321,19 +321,19 @@ public interface TermsToElements {
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.Term>>>) (t -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.Term>>right(hydra.util.ConsList.of(t))),
             hydra.lib.maps.Lookup.apply(
               new hydra.core.Name(step),
-              hydra.schemas.Schemas.fieldMap(((rec).value).fields)));
+              hydra.schemas.Schemas.fieldMap((rec).value.fields)));
         }
         
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.Term>> visit(hydra.core.Term.Union inj) {
           return hydra.lib.logic.IfElse.lazy(
             hydra.lib.equality.Equal.apply(
-              ((((inj).value).field).name).value,
+              (inj).value.field.name.value,
               step),
             () -> hydra.pg.termsToElements.TermsToElements.evalStep(
               cx,
               step,
-              (((inj).value).field).term),
+              (inj).value.field.term),
             () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.Term>>right((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty())));
         }
         
@@ -342,7 +342,7 @@ public interface TermsToElements {
           return hydra.pg.termsToElements.TermsToElements.evalStep(
             cx,
             step,
-            ((wt).value).body);
+            (wt).value.body);
         }
       }));
   }
@@ -354,7 +354,7 @@ public interface TermsToElements {
         g,
         term),
       (java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<T0>>>) (elems -> hydra.lib.eithers.MapList.apply(
-        (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>>) (v1 -> (((f).apply(cx)).apply(g)).apply(v1)),
+        (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T0>>) (v1 -> (f).apply(cx).apply(g).apply(v1)),
         elems)));
   }
   
@@ -365,9 +365,9 @@ public interface TermsToElements {
         g,
         spec),
       (java.util.function.Function<java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.Term>>>>, hydra.util.Either<T5, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<T4>>>>>>) (fun -> hydra.util.Either.<T5, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<T4>>>>>right((java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<T4>>>>) (cx_ -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<T4>>>) (term -> hydra.lib.eithers.Bind.apply(
-        ((fun).apply(cx_)).apply(term),
+        (fun).apply(cx_).apply(term),
         (java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<T4>>>) (terms -> hydra.lib.eithers.MapList.apply(
-          (((java.util.function.Function<hydra.util.Coder<hydra.core.Term, T4>, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T4>>>>) ((java.util.function.Function<hydra.util.Coder<hydra.core.Term, T4>, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T4>>>>) (projected -> projected.encode))).apply(((java.util.function.Function<hydra.pg.mapping.Schema<T2, T3, T4>, hydra.util.Coder<hydra.core.Term, T4>>) ((java.util.function.Function<hydra.pg.mapping.Schema<T2, T3, T4>, hydra.util.Coder<hydra.core.Term, T4>>) ((java.util.function.Function<hydra.pg.mapping.Schema<T2, T3, T4>, hydra.util.Coder<hydra.core.Term, T4>>) (projected -> projected.edgeIds)))).apply(schema))).apply(cx_),
+          ((java.util.function.Function<hydra.util.Coder<hydra.core.Term, T4>, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T4>>>>) ((java.util.function.Function<hydra.util.Coder<hydra.core.Term, T4>, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T4>>>>) (projected -> projected.encode))).apply(((java.util.function.Function<hydra.pg.mapping.Schema<T2, T3, T4>, hydra.util.Coder<hydra.core.Term, T4>>) ((java.util.function.Function<hydra.pg.mapping.Schema<T2, T3, T4>, hydra.util.Coder<hydra.core.Term, T4>>) ((java.util.function.Function<hydra.pg.mapping.Schema<T2, T3, T4>, hydra.util.Coder<hydra.core.Term, T4>>) (projected -> projected.edgeIds)))).apply(schema)).apply(cx_),
           terms))))))));
   }
   
@@ -407,19 +407,19 @@ public interface TermsToElements {
               hydra.pg.termsToElements.TermsToElements.requireUnique(
                 cx_,
                 "edge id",
-                (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<T4>>>) (v1 -> ((getId).apply(cx_)).apply(v1)),
+                (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<T4>>>) (v1 -> (getId).apply(cx_).apply(v1)),
                 term),
               (java.util.function.Function<T4, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.pg.model.Element<T4>>>>) (tid -> hydra.lib.eithers.Bind.apply(
                 hydra.pg.termsToElements.TermsToElements.requireUnique(
                   cx_,
                   "vertex id",
-                  (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<T4>>>) (v1 -> ((getOut).apply(cx_)).apply(v1)),
+                  (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<T4>>>) (v1 -> (getOut).apply(cx_).apply(v1)),
                   term),
                 (java.util.function.Function<T4, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.pg.model.Element<T4>>>>) (tout -> hydra.lib.eithers.Bind.apply(
                   hydra.pg.termsToElements.TermsToElements.requireUnique(
                     cx_,
                     "edge id",
-                    (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<T4>>>) (v1 -> ((getIn).apply(cx_)).apply(v1)),
+                    (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<T4>>>) (v1 -> (getIn).apply(cx_).apply(v1)),
                     term),
                   (java.util.function.Function<T4, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.pg.model.Element<T4>>>>) (tin -> hydra.lib.eithers.Bind.apply(
                     hydra.lib.eithers.Map.apply(
@@ -428,7 +428,7 @@ public interface TermsToElements {
                         (java.util.function.Function<java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.util.Pair<hydra.pg.model.PropertyKey, T4>>>>>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.pg.model.PropertyKey, T4>>>) (gf -> hydra.pg.termsToElements.TermsToElements.requireUnique(
                           cx_,
                           "property key",
-                          (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.util.Pair<hydra.pg.model.PropertyKey, T4>>>>) (v1 -> ((gf).apply(cx_)).apply(v1)),
+                          (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.util.Pair<hydra.pg.model.PropertyKey, T4>>>>) (v1 -> (gf).apply(cx_).apply(v1)),
                           term)),
                         getProps)),
                     (java.util.function.Function<hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T4>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.pg.model.Element<T4>>>>) (tprops -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.pg.model.Element<T4>>>right(hydra.util.ConsList.of((hydra.pg.model.Element<T4>) (new hydra.pg.model.Element.Edge((hydra.pg.model.Edge<T4>) (new hydra.pg.model.Edge<T4>(label, tid, tout, tin, tprops))))))))))))))))))))))))))));
@@ -493,10 +493,10 @@ public interface TermsToElements {
         g,
         value),
       (java.util.function.Function<java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.Term>>>>, hydra.util.Either<T5, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.util.Pair<hydra.pg.model.PropertyKey, T4>>>>>>>) (fun -> hydra.util.Either.<T5, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.util.Pair<hydra.pg.model.PropertyKey, T4>>>>>>right((java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.util.Pair<hydra.pg.model.PropertyKey, T4>>>>>) (cx_ -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.util.Pair<hydra.pg.model.PropertyKey, T4>>>>) (term -> hydra.lib.eithers.Bind.apply(
-        ((fun).apply(cx_)).apply(term),
+        (fun).apply(cx_).apply(term),
         (java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.util.Pair<hydra.pg.model.PropertyKey, T4>>>>) (results -> hydra.lib.eithers.Bind.apply(
           hydra.lib.eithers.MapList.apply(
-            (((java.util.function.Function<hydra.util.Coder<hydra.core.Term, T4>, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T4>>>>) ((java.util.function.Function<hydra.util.Coder<hydra.core.Term, T4>, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T4>>>>) (projected -> projected.encode))).apply(((java.util.function.Function<hydra.pg.mapping.Schema<T2, T3, T4>, hydra.util.Coder<hydra.core.Term, T4>>) ((java.util.function.Function<hydra.pg.mapping.Schema<T2, T3, T4>, hydra.util.Coder<hydra.core.Term, T4>>) ((java.util.function.Function<hydra.pg.mapping.Schema<T2, T3, T4>, hydra.util.Coder<hydra.core.Term, T4>>) (projected -> projected.propertyValues)))).apply(schema))).apply(cx_),
+            ((java.util.function.Function<hydra.util.Coder<hydra.core.Term, T4>, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T4>>>>) ((java.util.function.Function<hydra.util.Coder<hydra.core.Term, T4>, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T4>>>>) (projected -> projected.encode))).apply(((java.util.function.Function<hydra.pg.mapping.Schema<T2, T3, T4>, hydra.util.Coder<hydra.core.Term, T4>>) ((java.util.function.Function<hydra.pg.mapping.Schema<T2, T3, T4>, hydra.util.Coder<hydra.core.Term, T4>>) ((java.util.function.Function<hydra.pg.mapping.Schema<T2, T3, T4>, hydra.util.Coder<hydra.core.Term, T4>>) (projected -> projected.propertyValues)))).apply(schema)).apply(cx_),
             results),
           (java.util.function.Function<hydra.util.ConsList<T4>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.util.Pair<hydra.pg.model.PropertyKey, T4>>>>) (values -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.util.Pair<hydra.pg.model.PropertyKey, T4>>>right(hydra.lib.lists.Map.apply(
             (java.util.function.Function<T4, hydra.util.Pair<hydra.pg.model.PropertyKey, T4>>) (v -> (hydra.util.Pair<hydra.pg.model.PropertyKey, T4>) ((hydra.util.Pair<hydra.pg.model.PropertyKey, T4>) (new hydra.util.Pair<hydra.pg.model.PropertyKey, T4>(key, v)))),
@@ -527,9 +527,9 @@ public interface TermsToElements {
         g,
         spec),
       (java.util.function.Function<java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.core.Term>>>>, hydra.util.Either<T5, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<T4>>>>>>) (fun -> hydra.util.Either.<T5, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<T4>>>>>right((java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<T4>>>>) (cx_ -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<T4>>>) (term -> hydra.lib.eithers.Bind.apply(
-        ((fun).apply(cx_)).apply(term),
+        (fun).apply(cx_).apply(term),
         (java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<T4>>>) (terms -> hydra.lib.eithers.MapList.apply(
-          (((java.util.function.Function<hydra.util.Coder<hydra.core.Term, T4>, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T4>>>>) ((java.util.function.Function<hydra.util.Coder<hydra.core.Term, T4>, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T4>>>>) (projected -> projected.encode))).apply(((java.util.function.Function<hydra.pg.mapping.Schema<T2, T3, T4>, hydra.util.Coder<hydra.core.Term, T4>>) ((java.util.function.Function<hydra.pg.mapping.Schema<T2, T3, T4>, hydra.util.Coder<hydra.core.Term, T4>>) ((java.util.function.Function<hydra.pg.mapping.Schema<T2, T3, T4>, hydra.util.Coder<hydra.core.Term, T4>>) (projected -> projected.vertexIds)))).apply(schema))).apply(cx_),
+          ((java.util.function.Function<hydra.util.Coder<hydra.core.Term, T4>, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T4>>>>) ((java.util.function.Function<hydra.util.Coder<hydra.core.Term, T4>, java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, T4>>>>) (projected -> projected.encode))).apply(((java.util.function.Function<hydra.pg.mapping.Schema<T2, T3, T4>, hydra.util.Coder<hydra.core.Term, T4>>) ((java.util.function.Function<hydra.pg.mapping.Schema<T2, T3, T4>, hydra.util.Coder<hydra.core.Term, T4>>) ((java.util.function.Function<hydra.pg.mapping.Schema<T2, T3, T4>, hydra.util.Coder<hydra.core.Term, T4>>) (projected -> projected.vertexIds)))).apply(schema)).apply(cx_),
           terms))))))));
   }
   
@@ -555,7 +555,7 @@ public interface TermsToElements {
           hydra.pg.termsToElements.TermsToElements.requireUnique(
             cx_,
             "vertex id",
-            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<T4>>>) (v1 -> ((getId).apply(cx_)).apply(v1)),
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<T4>>>) (v1 -> (getId).apply(cx_).apply(v1)),
             term),
           (java.util.function.Function<T4, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.pg.model.Element<T4>>>>) (tid -> hydra.lib.eithers.Bind.apply(
             hydra.lib.eithers.Map.apply(
@@ -564,7 +564,7 @@ public interface TermsToElements {
                 (java.util.function.Function<java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.util.Pair<hydra.pg.model.PropertyKey, T4>>>>>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.Pair<hydra.pg.model.PropertyKey, T4>>>) (gf -> hydra.pg.termsToElements.TermsToElements.requireUnique(
                   cx_,
                   "property key",
-                  (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.util.Pair<hydra.pg.model.PropertyKey, T4>>>>) (v1 -> ((gf).apply(cx_)).apply(v1)),
+                  (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.util.Pair<hydra.pg.model.PropertyKey, T4>>>>) (v1 -> (gf).apply(cx_).apply(v1)),
                   term)),
                 getProps)),
             (java.util.function.Function<hydra.util.PersistentMap<hydra.pg.model.PropertyKey, T4>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.pg.model.Element<T4>>>>) (tprops -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.pg.model.Element<T4>>>right(hydra.util.ConsList.of((hydra.pg.model.Element<T4>) (new hydra.pg.model.Element.Vertex((hydra.pg.model.Vertex<T4>) (new hydra.pg.model.Vertex<T4>(label, tid, tprops))))))))))))))))))));
@@ -611,8 +611,8 @@ public interface TermsToElements {
                 hydra.lib.lists.Null.apply(matching.get()),
                 () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, T0>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat2.apply(
                   "unexpected field: ",
-                  (key.get()).value))), cx))),
-                () -> (hydra.lib.pairs.Second.apply(hydra.lib.lists.Head.apply(matching.get()))).apply(val.get()));
+                  key.get().value))), cx))),
+                () -> hydra.lib.pairs.Second.apply(hydra.lib.lists.Head.apply(matching.get())).apply(val.get()));
             })).get();
           })).get());
       }));
@@ -688,7 +688,7 @@ public interface TermsToElements {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.util.Adapter<hydra.core.Type, hydra.util.ConsList<hydra.pg.model.Label>, hydra.core.Term, hydra.util.ConsList<hydra.pg.model.Element<T2>>>>right((hydra.util.Adapter<hydra.core.Type, hydra.util.ConsList<hydra.pg.model.Label>, hydra.core.Term, hydra.util.ConsList<hydra.pg.model.Element<T2>>>) ((hydra.util.Adapter<hydra.core.Type, hydra.util.ConsList<hydra.pg.model.Label>, hydra.core.Term, hydra.util.ConsList<hydra.pg.model.Element<T2>>>) ((hydra.util.Adapter<hydra.core.Type, hydra.util.ConsList<hydra.pg.model.Label>, hydra.core.Term, hydra.util.ConsList<hydra.pg.model.Element<T2>>>) ((hydra.util.Adapter<hydra.core.Type, hydra.util.ConsList<hydra.pg.model.Label>, hydra.core.Term, hydra.util.ConsList<hydra.pg.model.Element<T2>>>) (new hydra.util.Adapter<hydra.core.Type, hydra.util.ConsList<hydra.pg.model.Label>, hydra.core.Term, hydra.util.ConsList<hydra.pg.model.Element<T2>>>(false, typ, labels.get(), (hydra.util.Coder<hydra.core.Term, hydra.util.ConsList<hydra.pg.model.Element<T2>>>) ((hydra.util.Coder<hydra.core.Term, hydra.util.ConsList<hydra.pg.model.Element<T2>>>) (new hydra.util.Coder<hydra.core.Term, hydra.util.ConsList<hydra.pg.model.Element<T2>>>((java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.pg.model.Element<T2>>>>>) (cx_ -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.pg.model.Element<T2>>>>) (t -> hydra.lib.eithers.Map.apply(
               (java.util.function.Function<hydra.util.ConsList<hydra.util.ConsList<hydra.pg.model.Element<T2>>>, hydra.util.ConsList<hydra.pg.model.Element<T2>>>) (_xs -> hydra.lib.lists.Concat.apply(_xs)),
               hydra.lib.eithers.MapList.apply(
-                (java.util.function.Function<java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.pg.model.Element<T2>>>>>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.pg.model.Element<T2>>>>) (e -> ((e).apply(cx_)).apply(t)),
+                (java.util.function.Function<java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.pg.model.Element<T2>>>>>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.util.ConsList<hydra.pg.model.Element<T2>>>>) (e -> (e).apply(cx_).apply(t)),
                 hydra.pg.termsToElements.TermsToElements.<T2>termToElementsAdapter_encoders(specs))))), (java.util.function.Function<hydra.context.Context, java.util.function.Function<hydra.util.ConsList<hydra.pg.model.Element<T2>>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>) (cx_ -> (java.util.function.Function<hydra.util.ConsList<hydra.pg.model.Element<T2>>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (_els -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError("element decoding is not yet supported")), cx_))))))))))))));
           }))))),
       hydra.annotations.Annotations.getTypeAnnotation(
@@ -703,7 +703,7 @@ public interface TermsToElements {
   }
   
   static String termToString(hydra.core.Term term) {
-    return (hydra.rewriting.Rewriting.deannotateTerm(term)).accept(new hydra.core.Term.PartialVisitor<>() {
+    return hydra.rewriting.Rewriting.deannotateTerm(term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public String otherwise(hydra.core.Term instance) {
         return hydra.show.core.Core.term(term);
@@ -711,7 +711,7 @@ public interface TermsToElements {
       
       @Override
       public String visit(hydra.core.Term.Literal lit) {
-        return ((lit).value).accept(new hydra.core.Literal.PartialVisitor<>() {
+        return (lit).value.accept(new hydra.core.Literal.PartialVisitor<>() {
           @Override
           public String otherwise(hydra.core.Literal instance) {
             return hydra.show.core.Core.term(term);
@@ -732,7 +732,7 @@ public interface TermsToElements {
           
           @Override
           public String visit(hydra.core.Literal.Integer_ i) {
-            return ((i).value).accept(new hydra.core.IntegerValue.PartialVisitor<>() {
+            return (i).value.accept(new hydra.core.IntegerValue.PartialVisitor<>() {
               @Override
               public String otherwise(hydra.core.IntegerValue instance) {
                 return hydra.show.core.Core.term(term);
@@ -747,7 +747,7 @@ public interface TermsToElements {
           
           @Override
           public String visit(hydra.core.Literal.Float_ f) {
-            return ((f).value).accept(new hydra.core.FloatValue.PartialVisitor<>() {
+            return (f).value.accept(new hydra.core.FloatValue.PartialVisitor<>() {
               @Override
               public String otherwise(hydra.core.FloatValue instance) {
                 return hydra.show.core.Core.term(term);

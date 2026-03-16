@@ -229,7 +229,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CommonConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -272,7 +272,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CommonConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -315,7 +315,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CommonConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -358,7 +358,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CommonConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -401,7 +401,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CommonConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -444,7 +444,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CommonConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -487,7 +487,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CommonConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -530,7 +530,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CommonConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -573,7 +573,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CommonConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -616,7 +616,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CommonConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -659,7 +659,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CommonConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -702,7 +702,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CommonConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -745,7 +745,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CommonConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -788,7 +788,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CommonConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -829,7 +829,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CommonConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -872,7 +872,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CommonConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -915,7 +915,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CommonConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -956,7 +956,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CommonConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -999,7 +999,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CommonConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -1042,7 +1042,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CommonConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -1085,7 +1085,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CommonConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -1128,7 +1128,7 @@ public abstract class CommonConstraint implements Serializable, Comparable<Commo
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CommonConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

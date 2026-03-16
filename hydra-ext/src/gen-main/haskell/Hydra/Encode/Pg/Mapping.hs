@@ -15,123 +15,129 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-annotationSchema :: (Mapping.AnnotationSchema -> Core.Term)
-annotationSchema x = (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "vertexLabel"),
-      Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaVertexLabel x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "edgeLabel"),
-      Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaEdgeLabel x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "vertexId"),
-      Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaVertexId x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "edgeId"),
-      Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaEdgeId x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "propertyKey"),
-      Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaPropertyKey x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "propertyValue"),
-      Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaPropertyValue x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "outVertex"),
-      Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaOutVertex x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "outVertexLabel"),
-      Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaOutVertexLabel x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "inVertex"),
-      Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaInVertex x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "inVertexLabel"),
-      Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaInVertexLabel x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "outEdge"),
-      Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaOutEdge x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "outEdgeLabel"),
-      Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaOutEdgeLabel x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "inEdge"),
-      Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaInEdge x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "inEdgeLabel"),
-      Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaInEdgeLabel x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "ignore"),
-      Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaIgnore x))}]}))
+annotationSchema :: Mapping.AnnotationSchema -> Core.Term
+annotationSchema x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.pg.mapping.AnnotationSchema"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "vertexLabel"),
+          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaVertexLabel x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "edgeLabel"),
+          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaEdgeLabel x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "vertexId"),
+          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaVertexId x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "edgeId"),
+          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaEdgeId x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyKey"),
+          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaPropertyKey x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "propertyValue"),
+          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaPropertyValue x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "outVertex"),
+          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaOutVertex x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "outVertexLabel"),
+          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaOutVertexLabel x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "inVertex"),
+          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaInVertex x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "inVertexLabel"),
+          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaInVertexLabel x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "outEdge"),
+          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaOutEdge x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "outEdgeLabel"),
+          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaOutEdgeLabel x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "inEdge"),
+          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaInEdge x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "inEdgeLabel"),
+          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaInEdgeLabel x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "ignore"),
+          Core.fieldTerm = ((\x -> Core.TermLiteral (Core.LiteralString x)) (Mapping.annotationSchemaIgnore x))}]})
 
-edgeSpec :: (Mapping.EdgeSpec -> Core.Term)
-edgeSpec x = (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.pg.mapping.EdgeSpec"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "label"),
-      Core.fieldTerm = (Model.edgeLabel (Mapping.edgeSpecLabel x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "id"),
-      Core.fieldTerm = (valueSpec (Mapping.edgeSpecId x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "out"),
-      Core.fieldTerm = (valueSpec (Mapping.edgeSpecOut x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "in"),
-      Core.fieldTerm = (valueSpec (Mapping.edgeSpecIn x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "properties"),
-      Core.fieldTerm = ((\xs -> Core.TermList (Lists.map propertySpec xs)) (Mapping.edgeSpecProperties x))}]}))
+edgeSpec :: Mapping.EdgeSpec -> Core.Term
+edgeSpec x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.pg.mapping.EdgeSpec"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "label"),
+          Core.fieldTerm = (Model.edgeLabel (Mapping.edgeSpecLabel x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (valueSpec (Mapping.edgeSpecId x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "out"),
+          Core.fieldTerm = (valueSpec (Mapping.edgeSpecOut x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "in"),
+          Core.fieldTerm = (valueSpec (Mapping.edgeSpecIn x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "properties"),
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map propertySpec xs)) (Mapping.edgeSpecProperties x))}]})
 
-elementSpec :: (Mapping.ElementSpec -> Core.Term)
-elementSpec x = case x of
-  Mapping.ElementSpecVertex v0 -> (Core.TermUnion (Core.Injection {
-    Core.injectionTypeName = (Core.Name "hydra.pg.mapping.ElementSpec"),
-    Core.injectionField = Core.Field {
-      Core.fieldName = (Core.Name "vertex"),
-      Core.fieldTerm = (vertexSpec v0)}}))
-  Mapping.ElementSpecEdge v0 -> (Core.TermUnion (Core.Injection {
-    Core.injectionTypeName = (Core.Name "hydra.pg.mapping.ElementSpec"),
-    Core.injectionField = Core.Field {
-      Core.fieldName = (Core.Name "edge"),
-      Core.fieldTerm = (edgeSpec v0)}}))
+elementSpec :: Mapping.ElementSpec -> Core.Term
+elementSpec x =
+    case x of
+      Mapping.ElementSpecVertex v0 -> Core.TermUnion (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.pg.mapping.ElementSpec"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "vertex"),
+          Core.fieldTerm = (vertexSpec v0)}})
+      Mapping.ElementSpecEdge v0 -> Core.TermUnion (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.pg.mapping.ElementSpec"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "edge"),
+          Core.fieldTerm = (edgeSpec v0)}})
 
-propertySpec :: (Mapping.PropertySpec -> Core.Term)
-propertySpec x = (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.pg.mapping.PropertySpec"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "key"),
-      Core.fieldTerm = (Model.propertyKey (Mapping.propertySpecKey x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "value"),
-      Core.fieldTerm = (valueSpec (Mapping.propertySpecValue x))}]}))
+propertySpec :: Mapping.PropertySpec -> Core.Term
+propertySpec x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.pg.mapping.PropertySpec"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "key"),
+          Core.fieldTerm = (Model.propertyKey (Mapping.propertySpecKey x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "value"),
+          Core.fieldTerm = (valueSpec (Mapping.propertySpecValue x))}]})
 
-valueSpec :: (Mapping.ValueSpec -> Core.Term)
-valueSpec x = case x of
-  Mapping.ValueSpecValue -> (Core.TermUnion (Core.Injection {
-    Core.injectionTypeName = (Core.Name "hydra.pg.mapping.ValueSpec"),
-    Core.injectionField = Core.Field {
-      Core.fieldName = (Core.Name "value"),
-      Core.fieldTerm = Core.TermUnit}}))
-  Mapping.ValueSpecPattern v0 -> (Core.TermUnion (Core.Injection {
-    Core.injectionTypeName = (Core.Name "hydra.pg.mapping.ValueSpec"),
-    Core.injectionField = Core.Field {
-      Core.fieldName = (Core.Name "pattern"),
-      Core.fieldTerm = (Core.TermLiteral (Core.LiteralString v0))}}))
+valueSpec :: Mapping.ValueSpec -> Core.Term
+valueSpec x =
+    case x of
+      Mapping.ValueSpecValue -> Core.TermUnion (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.pg.mapping.ValueSpec"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "value"),
+          Core.fieldTerm = Core.TermUnit}})
+      Mapping.ValueSpecPattern v0 -> Core.TermUnion (Core.Injection {
+        Core.injectionTypeName = (Core.Name "hydra.pg.mapping.ValueSpec"),
+        Core.injectionField = Core.Field {
+          Core.fieldName = (Core.Name "pattern"),
+          Core.fieldTerm = (Core.TermLiteral (Core.LiteralString v0))}})
 
-vertexSpec :: (Mapping.VertexSpec -> Core.Term)
-vertexSpec x = (Core.TermRecord (Core.Record {
-  Core.recordTypeName = (Core.Name "hydra.pg.mapping.VertexSpec"),
-  Core.recordFields = [
-    Core.Field {
-      Core.fieldName = (Core.Name "label"),
-      Core.fieldTerm = (Model.vertexLabel (Mapping.vertexSpecLabel x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "id"),
-      Core.fieldTerm = (valueSpec (Mapping.vertexSpecId x))},
-    Core.Field {
-      Core.fieldName = (Core.Name "properties"),
-      Core.fieldTerm = ((\xs -> Core.TermList (Lists.map propertySpec xs)) (Mapping.vertexSpecProperties x))}]}))
+vertexSpec :: Mapping.VertexSpec -> Core.Term
+vertexSpec x =
+    Core.TermRecord (Core.Record {
+      Core.recordTypeName = (Core.Name "hydra.pg.mapping.VertexSpec"),
+      Core.recordFields = [
+        Core.Field {
+          Core.fieldName = (Core.Name "label"),
+          Core.fieldTerm = (Model.vertexLabel (Mapping.vertexSpecLabel x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "id"),
+          Core.fieldTerm = (valueSpec (Mapping.vertexSpecId x))},
+        Core.Field {
+          Core.fieldName = (Core.Name "properties"),
+          Core.fieldTerm = ((\xs -> Core.TermList (Lists.map propertySpec xs)) (Mapping.vertexSpecProperties x))}]})

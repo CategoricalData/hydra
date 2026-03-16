@@ -349,7 +349,7 @@ public interface Utils {
       
       @Override
       public hydra.util.Maybe<hydra.ext.python.syntax.Primary> visit(hydra.ext.python.syntax.Expression.Simple disj) {
-        hydra.util.ConsList<hydra.ext.python.syntax.Conjunction> conjunctions = ((disj).value).value;
+        hydra.util.ConsList<hydra.ext.python.syntax.Conjunction> conjunctions = (disj).value.value;
         return hydra.lib.logic.IfElse.lazy(
           hydra.lib.equality.Equal.apply(
             hydra.lib.lists.Length.apply(conjunctions),
@@ -410,8 +410,8 @@ public interface Utils {
     build.set((java.util.function.Function<hydra.util.Maybe<hydra.ext.python.syntax.BitwiseOr>, java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.Primary>, hydra.ext.python.syntax.BitwiseOr>>) (prev -> (java.util.function.Function<hydra.util.ConsList<hydra.ext.python.syntax.Primary>, hydra.ext.python.syntax.BitwiseOr>) (ps -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(hydra.lib.lists.Tail.apply(ps)),
       () -> new hydra.ext.python.syntax.BitwiseOr(prev, hydra.ext.python.utils.Utils.pyPrimaryToPyBitwiseXor(hydra.lib.lists.Head.apply(ps))),
-      () -> ((build.get()).apply(hydra.util.Maybe.just(new hydra.ext.python.syntax.BitwiseOr(prev, hydra.ext.python.utils.Utils.pyPrimaryToPyBitwiseXor(hydra.lib.lists.Head.apply(ps)))))).apply(hydra.lib.lists.Tail.apply(ps))))));
-    return hydra.ext.python.utils.Utils.pyBitwiseOrToPyExpression(((build.get()).apply((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseOr>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseOr>nothing()))).apply(prims));
+      () -> build.get().apply(hydra.util.Maybe.just(new hydra.ext.python.syntax.BitwiseOr(prev, hydra.ext.python.utils.Utils.pyPrimaryToPyBitwiseXor(hydra.lib.lists.Head.apply(ps))))).apply(hydra.lib.lists.Tail.apply(ps))))));
+    return hydra.ext.python.utils.Utils.pyBitwiseOrToPyExpression(build.get().apply((hydra.util.Maybe<hydra.ext.python.syntax.BitwiseOr>) (hydra.util.Maybe.<hydra.ext.python.syntax.BitwiseOr>nothing())).apply(prims));
   }
   
   static <T0> hydra.ext.python.syntax.Statement typeAliasStatement310(hydra.ext.python.syntax.Name name, T0 _tparams, hydra.util.Maybe<String> mcomment, hydra.ext.python.syntax.Expression tyexpr) {
@@ -508,7 +508,7 @@ public interface Utils {
       defs));
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Equal.apply(
-        (hydra.lib.pairs.First.apply(((java.util.function.Function<hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>, hydra.util.Pair<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>>) (projected -> projected.focus)).apply(namespaces.get()))).value,
+        hydra.lib.pairs.First.apply(((java.util.function.Function<hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>, hydra.util.Pair<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>>) (projected -> projected.focus)).apply(namespaces.get())).value,
         (coreNs).value),
       () -> namespaces.get(),
       () -> (hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>) (new hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>(((java.util.function.Function<hydra.module.Namespaces<hydra.ext.python.syntax.DottedName>, hydra.util.Pair<hydra.module.Namespace, hydra.ext.python.syntax.DottedName>>) (projected -> projected.focus)).apply(namespaces.get()), hydra.lib.maps.Insert.apply(

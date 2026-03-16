@@ -63,7 +63,7 @@ public abstract class StringArgumentOrNestedTraversal implements Serializable, C
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(StringArgumentOrNestedTraversal other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -103,7 +103,7 @@ public abstract class StringArgumentOrNestedTraversal implements Serializable, C
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(StringArgumentOrNestedTraversal other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

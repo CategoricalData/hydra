@@ -57,7 +57,7 @@ public abstract class TypeRewriter implements Serializable, Comparable<TypeRewri
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TypeRewriter other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

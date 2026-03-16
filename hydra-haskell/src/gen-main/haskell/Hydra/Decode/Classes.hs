@@ -21,17 +21,19 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-typeClass :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Classes.TypeClass)
-typeClass cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermUnion v0 ->  
-    let field = (Core.injectionField v0) 
-        fname = (Core.fieldName field)
-        fterm = (Core.fieldTerm field)
-        variantMap = (Maps.fromList [
-                (Core.Name "equality", (\input -> Eithers.map (\t -> Classes.TypeClassEquality) (Helpers.decodeUnit cx input))),
-                (Core.Name "ordering", (\input -> Eithers.map (\t -> Classes.TypeClassOrdering) (Helpers.decodeUnit cx input)))])
-    in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
-      "no such field ",
-      (Core.unName fname),
-      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+typeClass :: Graph.Graph -> Core.Term -> Either Error.DecodingError Classes.TypeClass
+typeClass cx raw =
+    Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+      Core.TermUnion v0 ->  
+        let field = Core.injectionField v0 
+            fname = Core.fieldName field
+            fterm = Core.fieldTerm field
+            variantMap =
+                    Maps.fromList [
+                      (Core.Name "equality", (\input -> Eithers.map (\t -> Classes.TypeClassEquality) (Helpers.decodeUnit cx input))),
+                      (Core.Name "ordering", (\input -> Eithers.map (\t -> Classes.TypeClassOrdering) (Helpers.decodeUnit cx input)))]
+        in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
+          "no such field ",
+          (Core.unName fname),
+          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+      _ -> Left (Error.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)
