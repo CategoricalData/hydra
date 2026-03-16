@@ -225,6 +225,9 @@ module_ = Module ns elements
       toBinding mathRange,
       toBinding mathRem,
       toBinding mathRound,
+      toBinding mathRoundBigfloat,
+      toBinding mathRoundFloat32,
+      toBinding mathRoundFloat64,
       toBinding mathSignum,
       toBinding mathSin,
       toBinding mathSinh,
@@ -541,9 +544,12 @@ mathPi       = defineName "mathPi" "hydra.lib.math" "pi"
 mathPow      = defineName "mathPow" "hydra.lib.math" "pow"
 mathPred     = defineName "mathPred" "hydra.lib.math" "pred"
 mathRange    = defineName "mathRange" "hydra.lib.math" "range"
-mathRem      = defineName "mathRem" "hydra.lib.math" "rem"
-mathRound    = defineName "mathRound" "hydra.lib.math" "round"
-mathSignum   = defineName "mathSignum" "hydra.lib.math" "signum"
+mathRem          = defineName "mathRem" "hydra.lib.math" "rem"
+mathRound        = defineName "mathRound" "hydra.lib.math" "round"
+mathRoundBigfloat = defineName "mathRoundBigfloat" "hydra.lib.math" "roundBigfloat"
+mathRoundFloat32 = defineName "mathRoundFloat32" "hydra.lib.math" "roundFloat32"
+mathRoundFloat64 = defineName "mathRoundFloat64" "hydra.lib.math" "roundFloat64"
+mathSignum       = defineName "mathSignum" "hydra.lib.math" "signum"
 mathSin      = defineName "mathSin" "hydra.lib.math" "sin"
 mathSinh     = defineName "mathSinh" "hydra.lib.math" "sinh"
 mathSqrt     = defineName "mathSqrt" "hydra.lib.math" "sqrt"

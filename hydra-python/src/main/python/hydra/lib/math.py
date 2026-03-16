@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 import math
+from decimal import Decimal
 
 from hydra.dsl.python import frozenlist
 
@@ -238,6 +239,39 @@ def round_(x: float) -> int:
 
 # Alias for Hydra compatibility (round is a Python builtin)
 round = round_
+
+
+def round_bigfloat(n: int, x: Decimal) -> Decimal:
+    """Round a bigfloat (Decimal) to n significant digits.
+
+    Converts through float to match Haskell semantics (where bigfloat is Double).
+    Uses str() for the Decimal conversion to avoid float64 representation artifacts.
+    """
+    return Decimal(str(round_float64(n, float(x))))
+
+
+def round_float32(n: int, x: float) -> float:
+    """Round a float32 to n significant digits.
+
+    Performs computation in float32 precision to match Haskell semantics.
+    """
+    import struct
+    if x == 0:
+        return 0.0
+    # Round-trip through float32 to ensure input is in float32 precision
+    x32 = struct.unpack('f', struct.pack('f', x))[0]
+    factor = 10 ** (n - 1 - math.floor(math.log10(_builtins.abs(x32))))
+    result = _builtins.round(x32 * factor) / factor
+    # Round-trip result through float32
+    return struct.unpack('f', struct.pack('f', result))[0]
+
+
+def round_float64(n: int, x: float) -> float:
+    """Round a float64 to n significant digits."""
+    if x == 0:
+        return 0.0
+    factor = 10 ** (n - 1 - math.floor(math.log10(_builtins.abs(x))))
+    return _builtins.round(x * factor) / factor
 
 
 def truncate(x: float) -> int:

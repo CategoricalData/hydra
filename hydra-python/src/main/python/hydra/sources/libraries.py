@@ -652,6 +652,15 @@ def register_math_primitives() -> dict[Name, Primitive]:
     primitives[qname(namespace, "round")] = prims.prim1(
         qname(namespace, "round"), math.round_, [], prims.float64(), prims.bigint()
     )
+    primitives[qname(namespace, "roundBigfloat")] = prims.prim2(
+        qname(namespace, "roundBigfloat"), math.round_bigfloat, [], prims.int32(), prims.bigfloat(), prims.bigfloat()
+    )
+    primitives[qname(namespace, "roundFloat32")] = prims.prim2(
+        qname(namespace, "roundFloat32"), math.round_float32, [], prims.int32(), prims.float32(), prims.float32()
+    )
+    primitives[qname(namespace, "roundFloat64")] = prims.prim2(
+        qname(namespace, "roundFloat64"), math.round_float64, [], prims.int32(), prims.float64(), prims.float64()
+    )
     primitives[qname(namespace, "sin")] = prims.prim1(
         qname(namespace, "sin"), math.sin, [], prims.float64(), prims.float64()
     )

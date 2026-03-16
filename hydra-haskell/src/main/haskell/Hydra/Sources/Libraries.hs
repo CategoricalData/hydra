@@ -233,8 +233,11 @@ _math_pow      = LibNames.mathPow
 _math_pred     = LibNames.mathPred
 _math_range    = LibNames.mathRange
 _math_rem      = LibNames.mathRem
-_math_round    = LibNames.mathRound
-_math_signum   = LibNames.mathSignum
+_math_round         = LibNames.mathRound
+_math_roundBigfloat = LibNames.mathRoundBigfloat
+_math_roundFloat32  = LibNames.mathRoundFloat32
+_math_roundFloat64  = LibNames.mathRoundFloat64
+_math_signum        = LibNames.mathSignum
 _math_sin      = LibNames.mathSin
 _math_sinh     = LibNames.mathSinh
 _math_sqrt     = LibNames.mathSqrt
@@ -564,8 +567,11 @@ hydraLibMathFloat64 = standardLibrary _hydra_lib_math [
   prim2 _math_logBase  Math.logBase  [] float64 float64 float64,
   prim0 _math_pi       Math.pi       [] float64,
   prim2 _math_pow      Math.pow      [] float64 float64 float64,
-  prim1 _math_round    Math.round    [] float64 bigint,
-  prim1 _math_sin      Math.sin      [] float64 float64,
+  prim1 _math_round         Math.round         [] float64 bigint,
+  prim2 _math_roundBigfloat Math.roundBigfloat [] int32 bigfloat bigfloat,
+  prim2 _math_roundFloat32  Math.roundFloat32  [] int32 float32 float32,
+  prim2 _math_roundFloat64  Math.roundFloat64  [] int32 float64 float64,
+  prim1 _math_sin            Math.sin           [] float64 float64,
   prim1 _math_sinh     Math.sinh     [] float64 float64,
   prim1 _math_sqrt     Math.sqrt     [] float64 float64,
   prim1 _math_tan      Math.tan      [] float64 float64,

@@ -374,6 +374,12 @@ math_rem = hydra.core.Name("hydra.lib.math.rem")
 
 math_round = hydra.core.Name("hydra.lib.math.round")
 
+math_round_bigfloat = hydra.core.Name("hydra.lib.math.roundBigfloat")
+
+math_round_float32 = hydra.core.Name("hydra.lib.math.roundFloat32")
+
+math_round_float64 = hydra.core.Name("hydra.lib.math.roundFloat64")
+
 math_signum = hydra.core.Name("hydra.lib.math.signum")
 
 math_sin = hydra.core.Name("hydra.lib.math.sin")
