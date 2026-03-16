@@ -22,10 +22,10 @@ import qualified Hydra.Dsl.Meta.Core                       as Core
 import qualified Hydra.Dsl.Meta.Coders                     as Coders
 import qualified Hydra.Dsl.Meta.Context                    as Ctx
 import qualified Hydra.Dsl.Meta.Error                      as Error
-import qualified Hydra.Dsl.Meta.Module                     as Module
-import qualified Hydra.Dsl.Meta.Util                       as Util
+import qualified Hydra.Dsl.Module                     as Module
+import qualified Hydra.Dsl.Util                       as Util
 import qualified Hydra.Dsl.Meta.Graph                      as Graph
-import qualified Hydra.Dsl.Meta.Typing                     as Typing
+import qualified Hydra.Dsl.Typing                     as Typing
 import qualified Hydra.Sources.Kernel.Terms.Formatting     as Formatting
 import qualified Hydra.Sources.Kernel.Terms.Names          as Names
 import qualified Hydra.Sources.Kernel.Terms.Rewriting      as Rewriting

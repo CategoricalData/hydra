@@ -14,7 +14,7 @@ import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Data.List                    as L
 import qualified Data.Map                     as M
 
-import qualified Hydra.Dsl.Meta.Util as Util
+import qualified Hydra.Dsl.Util as Util
 import qualified Hydra.Show.Util as ShowUtil
 
 

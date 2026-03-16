@@ -11,7 +11,7 @@ import qualified Hydra.Dsl.Meta.Types         as T
 import qualified Hydra.Sources.Test.TestTerms as TestTerms
 import qualified Hydra.Sources.Test.TestTypes as TestTypes
 import qualified Hydra.Dsl.Meta.Graph         as Graph
-import qualified Hydra.Dsl.Meta.Module        as DModule
+import qualified Hydra.Dsl.Module        as DModule
 import qualified Hydra.Dsl.Meta.Lib.Chars     as Chars
 import qualified Hydra.Dsl.Meta.Lib.Equality  as Equality
 import qualified Hydra.Dsl.Meta.Lib.Lists     as Lists
