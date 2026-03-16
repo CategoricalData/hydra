@@ -123,6 +123,7 @@ module_ = Module ns elements
       toBinding constantForFieldName,
       toBinding constantForTypeName,
       toBinding constructModule,
+      toBinding encodeCaseExpression,
       toBinding encodeFunction,
       toBinding encodeLiteral,
       toBinding encodeTerm,
@@ -250,6 +251,58 @@ constructModule = haskellCoderDefinition "constructModule" $
       H._Module_imports>>: var "imports",
       H._Module_declarations>>: var "decls"]
 
+encodeCaseExpression :: TBinding (Int -> HaskellNamespaces -> CaseStatement -> H.Expression -> Context -> Graph -> Either (InContext Error) H.Expression)
+encodeCaseExpression = haskellCoderDefinition "encodeCaseExpression" $
+  doc "Encode a Hydra case statement as a Haskell case expression with a given scrutinee" $
+  "depth" ~> "namespaces" ~> "stmt" ~> "scrutinee" ~> "cx" ~> "g" ~> lets [
+    "dn">: Core.caseStatementTypeName $ var "stmt",
+    "def">: Core.caseStatementDefault $ var "stmt",
+    "fields">: Core.caseStatementCases $ var "stmt",
+    "toAlt">: "fieldMap" ~> "field" ~> lets [
+      "fn">: Core.fieldName $ var "field",
+      "fun'">: Core.fieldTerm $ var "field",
+      "v0">: Strings.cat2 (string "v") (Literals.showInt32 $ var "depth"),
+      "raw">: MetaTerms.apply (var "fun'") (Core.termVariable $ Core.name $ var "v0"),
+      "rhsTerm">: Rewriting.simplifyTerm @@ var "raw",
+      "v1">: Logic.ifElse (Rewriting.isFreeVariableInTerm @@ (wrap _Name $ var "v0") @@ var "rhsTerm")
+        (Constants.ignoredVariable)
+        (var "v0"),
+      "hname">: HaskellUtils.unionFieldReference @@ (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g"))) @@ var "namespaces" @@ var "dn" @@ var "fn"] $
+          "args" <<~ (Maybes.cases (Maps.lookup (var "fn") (var "fieldMap"))
+              (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "field ", Literals.showString $ (Core.unName $ var "fn"),
+                string " not found in ", Literals.showString $ (Core.unName $ var "dn")])) (var "cx")) $
+              "fieldType" ~> lets [
+                "ft">: Core.fieldTypeType $ var "fieldType",
+                "noArgs">: list ([] :: [TTerm H.Pattern]),
+                "singleArg">: list [inject H._Pattern H._Pattern_name $ HaskellUtils.rawName @@ var "v1"]] $
+                cases _Type (Rewriting.deannotateType @@ var "ft")
+                  (Just $ right $ var "singleArg") [
+                  _Type_unit>>: constant $ right $ var "noArgs"]) $ lets [
+          "lhs">: HaskellUtils.applicationPattern @@ var "hname" @@ var "args"] $
+          "rhs" <<~ Eithers.map (unaryFunction $ wrap H._CaseRhs) (encodeTerm @@ (Math.add (var "depth") (int32 1)) @@ var "namespaces" @@ var "rhsTerm" @@ var "cx" @@ var "g") $
+          right $ record H._Alternative [
+            H._Alternative_pattern>>: var "lhs",
+            H._Alternative_rhs>>: var "rhs",
+            H._Alternative_binds>>: nothing]] $
+    "rt" <<~ Schemas.requireUnionType @@ var "cx" @@ var "g" @@ var "dn" $ lets [
+    "toFieldMapEntry">: "f" ~>
+      pair (Core.fieldTypeName $ var "f") (var "f"),
+    "fieldMap">: Maps.fromList $ Lists.map (var "toFieldMapEntry") (Core.rowTypeFields $ var "rt")] $
+    "ecases" <<~ Eithers.mapList (var "toAlt" @@ var "fieldMap") (var "fields") $
+    "dcases" <<~ (Maybes.cases (var "def")
+      (right $ list ([] :: [TTerm H.CaseRhs])) $
+      "d" ~>
+        "cs" <<~ Eithers.map (unaryFunction $ wrap H._CaseRhs) (encodeTerm @@ var "depth" @@ var "namespaces" @@ var "d" @@ var "cx" @@ var "g") $ lets [
+        "lhs">: inject H._Pattern H._Pattern_name $ HaskellUtils.rawName @@ (Constants.ignoredVariable),
+        "alt">: record H._Alternative [
+          H._Alternative_pattern>>: var "lhs",
+          H._Alternative_rhs>>: var "cs",
+          H._Alternative_binds>>: nothing]] $
+        right $ list [var "alt"]) $
+    right $ inject H._Expression H._Expression_case $ record H._CaseExpression [
+      H._CaseExpression_case>>: var "scrutinee",
+      H._CaseExpression_alternatives>>: Lists.concat2 (var "ecases") (var "dcases")]
+
 encodeFunction :: TBinding (Int -> HaskellNamespaces -> Function -> Context -> Graph -> Either (InContext Error) H.Expression)
 encodeFunction = haskellCoderDefinition "encodeFunction" $
   doc "Encode a Hydra function as a Haskell expression" $
@@ -264,56 +317,10 @@ encodeFunction = haskellCoderDefinition "encodeFunction" $
             "dn">: Core.projectionTypeName $ var "proj",
             "fname">: Core.projectionField $ var "proj"] $
             right $ inject H._Expression H._Expression_variable $ HaskellUtils.recordFieldReference @@ var "namespaces" @@ var "dn" @@ var "fname",
-          _Elimination_union>>: "stmt" ~> lets [
-            "dn">: Core.caseStatementTypeName $ var "stmt",
-            "def">: Core.caseStatementDefault $ var "stmt",
-            "fields">: Core.caseStatementCases $ var "stmt",
-            "caseExpr">:
-              "rt" <<~ Schemas.requireUnionType @@ var "cx" @@ var "g" @@ var "dn" $ lets [
-              "toFieldMapEntry">: "f" ~>
-                pair (Core.fieldTypeName $ var "f") (var "f"),
-              "fieldMap">: Maps.fromList $ Lists.map (var "toFieldMapEntry") (var "rt")] $
-              "ecases" <<~ Eithers.mapList (var "toAlt" @@ var "fieldMap") (var "fields") $
-              "dcases" <<~ (Maybes.cases (var "def")
-                (right $ list ([] :: [TTerm H.CaseRhs])) $
-                "d" ~>
-                  "cs" <<~ Eithers.map (unaryFunction $ wrap H._CaseRhs) (encodeTerm @@ var "depth" @@ var "namespaces" @@ var "d" @@ var "cx" @@ var "g") $ lets [
-                  "lhs">: inject H._Pattern H._Pattern_name $ HaskellUtils.rawName @@ (Constants.ignoredVariable),
-                  "alt">: record H._Alternative [
-                    H._Alternative_pattern>>: var "lhs",
-                    H._Alternative_rhs>>: var "cs",
-                    H._Alternative_binds>>: nothing]] $
-                  right $ list [var "alt"]) $
-              right $ inject H._Expression H._Expression_case $ record H._CaseExpression [
-                H._CaseExpression_case>>: HaskellUtils.hsvar @@ string "x",
-                H._CaseExpression_alternatives>>: Lists.concat2 (var "ecases") (var "dcases")],
-              "toAlt">: "fieldMap" ~> "field" ~> lets [
-                "fn">: Core.fieldName $ var "field",
-                "fun'">: Core.fieldTerm $ var "field",
-                "v0">: Strings.cat2 (string "v") (Literals.showInt32 $ var "depth"),
-                "raw">: MetaTerms.apply (var "fun'") (Core.termVariable $ Core.name $ var "v0"),
-                "rhsTerm">: Rewriting.simplifyTerm @@ var "raw",
-                "v1">: Logic.ifElse (Rewriting.isFreeVariableInTerm @@ (wrap _Name $ var "v0") @@ var "rhsTerm")
-                  (Constants.ignoredVariable)
-                  (var "v0"),
-                "hname">: HaskellUtils.unionFieldReference @@ (Sets.fromList (Maps.keys (Graph.graphBoundTerms $ var "g"))) @@ var "namespaces" @@ var "dn" @@ var "fn"] $
-                    "args" <<~ (Maybes.cases (Maps.lookup (var "fn") (var "fieldMap"))
-                        (Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat $ list [string "field ", Literals.showString $ (Core.unName $ var "fn"),
-                          string " not found in ", Literals.showString $ (Core.unName $ var "dn")])) (var "cx")) $
-                        "fieldType" ~> lets [
-                          "ft">: Core.fieldTypeType $ var "fieldType",
-                          "noArgs">: list ([] :: [TTerm H.Pattern]),
-                          "singleArg">: list [inject H._Pattern H._Pattern_name $ HaskellUtils.rawName @@ var "v1"]] $
-                          cases _Type (Rewriting.deannotateType @@ var "ft")
-                            (Just $ right $ var "singleArg") [
-                            _Type_unit>>: constant $ right $ var "noArgs"]) $ lets [
-                    "lhs">: HaskellUtils.applicationPattern @@ var "hname" @@ var "args"] $
-                    "rhs" <<~ Eithers.map (unaryFunction $ wrap H._CaseRhs) (encodeTerm @@ (Math.add (var "depth") (int32 1)) @@ var "namespaces" @@ var "rhsTerm" @@ var "cx" @@ var "g") $
-                    right $ record H._Alternative [
-                      H._Alternative_pattern>>: var "lhs",
-                      H._Alternative_rhs>>: var "rhs",
-                      H._Alternative_binds>>: nothing]] $
-            Eithers.map (HaskellUtils.hslambda @@ (HaskellUtils.rawName @@ string "x")) (var "caseExpr")],
+          _Elimination_union>>: "stmt" ~>
+            -- When used standalone (not applied to an argument), wrap in a lambda
+            Eithers.map (HaskellUtils.hslambda @@ (HaskellUtils.rawName @@ string "x"))
+              (encodeCaseExpression @@ var "depth" @@ var "namespaces" @@ var "stmt" @@ (HaskellUtils.hsvar @@ string "x") @@ var "cx" @@ var "g")],
       _Function_lambda>>: "lam" ~> lets [
         "v">: Core.lambdaParameter $ var "lam",
         "body">: Core.lambdaBody $ var "lam"] $
@@ -391,10 +398,30 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
       (Just $ Ctx.failInContext (Error.errorOther $ Error.otherError (Strings.cat2 (string "unexpected term: ") (ShowCore.term @@ var "term"))) (var "cx")) [
       _Term_application>>: "app" ~> lets [
         "fun">: Core.applicationFunction $ var "app",
-        "arg">: Core.applicationArgument $ var "app"] $
-        "hfun" <<~ var "encode" @@ var "fun" $
-          "harg" <<~ var "encode" @@ var "arg" $
-            right $ HaskellUtils.hsapp @@ var "hfun" @@ var "harg",
+        "arg">: Core.applicationArgument $ var "app",
+        "deannotatedFun">: Rewriting.deannotateTerm @@ (var "fun")] $
+        -- When the function is a union elimination, encode as a direct case expression
+        -- instead of (\x -> case x of ...) arg
+        cases _Term (var "deannotatedFun")
+          (Just $
+            "hfun" <<~ var "encode" @@ var "fun" $
+              "harg" <<~ var "encode" @@ var "arg" $
+                right $ HaskellUtils.hsapp @@ var "hfun" @@ var "harg") [
+          _Term_function>>: "f" ~>
+            cases _Function (var "f")
+              (Just $
+                "hfun" <<~ var "encode" @@ var "fun" $
+                  "harg" <<~ var "encode" @@ var "arg" $
+                    right $ HaskellUtils.hsapp @@ var "hfun" @@ var "harg") [
+              _Function_elimination>>: "e" ~>
+                cases _Elimination (var "e")
+                  (Just $
+                    "hfun" <<~ var "encode" @@ var "fun" $
+                      "harg" <<~ var "encode" @@ var "arg" $
+                        right $ HaskellUtils.hsapp @@ var "hfun" @@ var "harg") [
+                  _Elimination_union>>: "stmt" ~>
+                    "harg" <<~ var "encode" @@ var "arg" $
+                      encodeCaseExpression @@ var "depth" @@ var "namespaces" @@ var "stmt" @@ var "harg" @@ var "cx" @@ var "g"]]],
       _Term_either>>: "e" ~> Eithers.either_
           ("l" ~>
             "hl" <<~ var "encode" @@ var "l" $
@@ -406,16 +433,25 @@ encodeTerm = haskellCoderDefinition "encodeTerm" $
       _Term_function>>: "f" ~>
         encodeFunction @@ var "depth" @@ var "namespaces" @@ var "f" @@ var "cx" @@ var "g",
       _Term_let>>: "letTerm" ~> lets [
-        "bindings">: Core.letBindings $ var "letTerm",
-        "env">: Core.letBody $ var "letTerm",
+        "collectBindings">: "lt" ~>
+          "bs" <~ Core.letBindings (var "lt") $
+          "body" <~ Core.letBody (var "lt") $
+          cases _Term (Rewriting.deannotateTerm @@ var "body")
+            (Just $ pair (var "bs") (var "body")) [
+            _Term_let>>: "innerLt" ~>
+              "innerResult" <~ var "collectBindings" @@ var "innerLt" $
+              pair (Lists.concat2 (var "bs") (Pairs.first $ var "innerResult")) (Pairs.second $ var "innerResult")],
+        "collected">: var "collectBindings" @@ var "letTerm",
+        "allBindings">: Pairs.first $ var "collected",
+        "finalBody">: Pairs.second $ var "collected",
         "encodeBinding">: "binding" ~> lets [
           "name">: Core.bindingName $ var "binding",
           "term'">: Core.bindingTerm $ var "binding",
           "hname">: HaskellUtils.simpleName @@ (Core.unName $ var "name")] $
           "hexpr" <<~ var "encode" @@ var "term'" $
           right $ inject H._LocalBinding H._LocalBinding_value $ HaskellUtils.simpleValueBinding @@ var "hname" @@ var "hexpr" @@ nothing] $
-        "hbindings" <<~ Eithers.mapList (var "encodeBinding") (var "bindings") $
-        "hinner" <<~ var "encode" @@ var "env" $
+        "hbindings" <<~ Eithers.mapList (var "encodeBinding") (var "allBindings") $
+        "hinner" <<~ var "encode" @@ var "finalBody" $
         right $ inject H._Expression H._Expression_let $ record H._LetExpression [
           H._LetExpression_bindings>>: var "hbindings",
           H._LetExpression_inner>>: var "hinner"],
