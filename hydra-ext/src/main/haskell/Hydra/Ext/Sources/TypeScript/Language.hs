@@ -128,7 +128,7 @@ typeScriptLanguage = typeScriptLanguageDefinition "typeScriptLanguage" $
       (Just true) [
       _Type_maybe>>: constant false])]] $
   Coders.language
-    (Coders.languageName "hydra.ext.typeScript")
+    (Coders.languageName (string "hydra.ext.typeScript"))
     (Coders.languageConstraints
       (var "eliminationVariants")
       (var "literalVariants")
