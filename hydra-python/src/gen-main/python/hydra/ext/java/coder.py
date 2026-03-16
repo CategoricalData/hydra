@@ -2009,18 +2009,6 @@ def is_non_comparable_type(typ: hydra.core.Type):
                 case _:
                     return False
         match hydra.rewriting.deannotate_type(typ):
-            case hydra.core.TypeList():
-                return True
-            
-            case hydra.core.TypeSet():
-                return True
-            
-            case hydra.core.TypeMap():
-                return True
-            
-            case hydra.core.TypeMaybe():
-                return True
-            
             case hydra.core.TypeEither():
                 return True
             

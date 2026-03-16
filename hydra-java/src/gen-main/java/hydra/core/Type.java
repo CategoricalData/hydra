@@ -616,9 +616,7 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       Record o = (Record) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
@@ -704,9 +702,7 @@ public abstract class Type implements Serializable, Comparable<Type> {
         return tagCmp;
       }
       Union o = (Union) other;
-      return Integer.compare(
-        value.hashCode(),
-        o.value.hashCode());
+      return ((Comparable) value).compareTo(o.value);
     }
     
     @Override
