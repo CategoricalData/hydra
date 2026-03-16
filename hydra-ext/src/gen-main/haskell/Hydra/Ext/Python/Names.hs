@@ -32,121 +32,129 @@ useFutureAnnotations :: Bool
 useFutureAnnotations = True
 
 -- | Generate a constant name for a field definition
-encodeConstantForFieldName :: (t0 -> t1 -> Core.Name -> Syntax.Name)
-encodeConstantForFieldName env tname fname = (Syntax.Name (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionUpperSnake (Core.unName fname)))
+encodeConstantForFieldName :: t0 -> t1 -> Core.Name -> Syntax.Name
+encodeConstantForFieldName env tname fname =
+    Syntax.Name (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionUpperSnake (Core.unName fname))
 
 -- | Generate a constant name for a type definition
-encodeConstantForTypeName :: (t0 -> t1 -> Syntax.Name)
-encodeConstantForTypeName env tname = (Syntax.Name "TYPE_")
+encodeConstantForTypeName :: t0 -> t1 -> Syntax.Name
+encodeConstantForTypeName env tname = Syntax.Name "TYPE_"
 
 -- | Encode a name as a Python enum value (UPPER_SNAKE case)
-encodeEnumValue :: (Helpers.PythonEnvironment -> Core.Name -> Syntax.Name)
-encodeEnumValue = (encodeName False Util.CaseConventionUpperSnake)
+encodeEnumValue :: Helpers.PythonEnvironment -> Core.Name -> Syntax.Name
+encodeEnumValue = encodeName False Util.CaseConventionUpperSnake
 
 -- | Encode a name as a Python field name (lower_snake case)
-encodeFieldName :: (Helpers.PythonEnvironment -> Core.Name -> Syntax.Name)
-encodeFieldName env fname = (encodeName False Util.CaseConventionLowerSnake env fname)
+encodeFieldName :: Helpers.PythonEnvironment -> Core.Name -> Syntax.Name
+encodeFieldName env fname = encodeName False Util.CaseConventionLowerSnake env fname
 
 -- | Encode a Hydra name as a Python name
-encodeName :: (Bool -> Util.CaseConvention -> Helpers.PythonEnvironment -> Core.Name -> Syntax.Name)
-encodeName isQualified conv env name =  
-  let namespaces = (Helpers.pythonEnvironmentNamespaces env) 
-      focusPair = (Module.namespacesFocus namespaces)
-      focusNs = (Pairs.first focusPair)
-      boundVars = (Pairs.second (Helpers.pythonEnvironmentBoundTypeVariables env))
-      qualName = (Names.qualifyName name)
-      mns = (Module.qualifiedNameNamespace qualName)
-      local = (Module.qualifiedNameLocal qualName)
-      pyLocal = (sanitizePythonName (Formatting.convertCase Util.CaseConventionCamel conv local))
-      pyNs = (\nsVal -> Strings.intercalate "." (Lists.map (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake) (Strings.splitOn "." (Module.unNamespace nsVal))))
-  in (Logic.ifElse isQualified (Maybes.maybe (Logic.ifElse (Equality.equal mns (Just focusNs)) (Syntax.Name (Logic.ifElse useFutureAnnotations pyLocal (Serde.escapePythonString True pyLocal))) (Maybes.maybe (Syntax.Name pyLocal) (\nsVal -> Syntax.Name (Strings.cat2 (pyNs nsVal) (Strings.cat2 "." pyLocal))) mns)) (\n -> n) (Maps.lookup name boundVars)) (Syntax.Name pyLocal))
+encodeName :: Bool -> Util.CaseConvention -> Helpers.PythonEnvironment -> Core.Name -> Syntax.Name
+encodeName isQualified conv env name =
+     
+      let namespaces = Helpers.pythonEnvironmentNamespaces env 
+          focusPair = Module.namespacesFocus namespaces
+          focusNs = Pairs.first focusPair
+          boundVars = Pairs.second (Helpers.pythonEnvironmentBoundTypeVariables env)
+          qualName = Names.qualifyName name
+          mns = Module.qualifiedNameNamespace qualName
+          local = Module.qualifiedNameLocal qualName
+          pyLocal = sanitizePythonName (Formatting.convertCase Util.CaseConventionCamel conv local)
+          pyNs =
+                  \nsVal -> Strings.intercalate "." (Lists.map (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake) (Strings.splitOn "." (Module.unNamespace nsVal)))
+      in (Logic.ifElse isQualified (Maybes.maybe (Logic.ifElse (Equality.equal mns (Just focusNs)) (Syntax.Name (Logic.ifElse useFutureAnnotations pyLocal (Serde.escapePythonString True pyLocal))) (Maybes.maybe (Syntax.Name pyLocal) (\nsVal -> Syntax.Name (Strings.cat2 (pyNs nsVal) (Strings.cat2 "." pyLocal))) mns)) (\n -> n) (Maps.lookup name boundVars)) (Syntax.Name pyLocal))
 
 -- | Encode a name as a fully qualified Python name
-encodeNameQualified :: (Helpers.PythonEnvironment -> Core.Name -> Syntax.Name)
-encodeNameQualified env name =  
-  let namespaces = (Helpers.pythonEnvironmentNamespaces env) 
-      focusPair = (Module.namespacesFocus namespaces)
-      focusNs = (Pairs.first focusPair)
-      boundVars = (Pairs.second (Helpers.pythonEnvironmentBoundTypeVariables env))
-      qualName = (Names.qualifyName name)
-      mns = (Module.qualifiedNameNamespace qualName)
-      local = (Module.qualifiedNameLocal qualName)
-  in (Maybes.maybe (Logic.ifElse (Equality.equal mns (Just focusNs)) (Syntax.Name (Logic.ifElse useFutureAnnotations local (Serde.escapePythonString True local))) (Syntax.Name (Strings.intercalate "." (Lists.map sanitizePythonName (Strings.splitOn "." (Core.unName name)))))) (\n -> n) (Maps.lookup name boundVars))
+encodeNameQualified :: Helpers.PythonEnvironment -> Core.Name -> Syntax.Name
+encodeNameQualified env name =
+     
+      let namespaces = Helpers.pythonEnvironmentNamespaces env 
+          focusPair = Module.namespacesFocus namespaces
+          focusNs = Pairs.first focusPair
+          boundVars = Pairs.second (Helpers.pythonEnvironmentBoundTypeVariables env)
+          qualName = Names.qualifyName name
+          mns = Module.qualifiedNameNamespace qualName
+          local = Module.qualifiedNameLocal qualName
+      in (Maybes.maybe (Logic.ifElse (Equality.equal mns (Just focusNs)) (Syntax.Name (Logic.ifElse useFutureAnnotations local (Serde.escapePythonString True local))) (Syntax.Name (Strings.intercalate "." (Lists.map sanitizePythonName (Strings.splitOn "." (Core.unName name)))))) (\n -> n) (Maps.lookup name boundVars))
 
 -- | Encode a namespace as a Python dotted name
-encodeNamespace :: (Module.Namespace -> Syntax.DottedName)
-encodeNamespace nsVal = (Syntax.DottedName (Lists.map (\part -> Syntax.Name (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake part)) (Strings.splitOn "." (Module.unNamespace nsVal))))
+encodeNamespace :: Module.Namespace -> Syntax.DottedName
+encodeNamespace nsVal =
+    Syntax.DottedName (Lists.map (\part -> Syntax.Name (Formatting.convertCase Util.CaseConventionCamel Util.CaseConventionLowerSnake part)) (Strings.splitOn "." (Module.unNamespace nsVal)))
 
 -- | Encode a type variable name (capitalized)
-encodeTypeVariable :: (Core.Name -> Syntax.Name)
-encodeTypeVariable name = (Syntax.Name (Formatting.capitalize (Core.unName name)))
+encodeTypeVariable :: Core.Name -> Syntax.Name
+encodeTypeVariable name = Syntax.Name (Formatting.capitalize (Core.unName name))
 
 -- | Sanitize a string to be a valid Python name
-sanitizePythonName :: (String -> String)
-sanitizePythonName = (Formatting.sanitizeWithUnderscores Language.pythonReservedWords)
+sanitizePythonName :: String -> String
+sanitizePythonName = Formatting.sanitizeWithUnderscores Language.pythonReservedWords
 
 -- | Reference a term variable as a Python expression
-termVariableReference :: (Helpers.PythonEnvironment -> Core.Name -> Syntax.Expression)
-termVariableReference = (variableReference Util.CaseConventionLowerSnake False)
+termVariableReference :: Helpers.PythonEnvironment -> Core.Name -> Syntax.Expression
+termVariableReference = variableReference Util.CaseConventionLowerSnake False
 
 -- | Reference a type variable as a Python expression
-typeVariableReference :: (Helpers.PythonEnvironment -> Core.Name -> Syntax.Expression)
-typeVariableReference = (variableReference Util.CaseConventionPascal False)
+typeVariableReference :: Helpers.PythonEnvironment -> Core.Name -> Syntax.Expression
+typeVariableReference = variableReference Util.CaseConventionPascal False
 
 -- | Generate a variant name from type name and field name
-variantName :: (Bool -> Helpers.PythonEnvironment -> Core.Name -> Core.Name -> Syntax.Name)
-variantName isQualified env tname fname = (encodeName isQualified Util.CaseConventionPascal env (Core.Name (Strings.cat2 (Core.unName tname) (Formatting.capitalize (Core.unName fname)))))
+variantName :: Bool -> Helpers.PythonEnvironment -> Core.Name -> Core.Name -> Syntax.Name
+variantName isQualified env tname fname =
+    encodeName isQualified Util.CaseConventionPascal env (Core.Name (Strings.cat2 (Core.unName tname) (Formatting.capitalize (Core.unName fname))))
 
 -- | Reference a variable as a Python expression
-variableReference :: (Util.CaseConvention -> Bool -> Helpers.PythonEnvironment -> Core.Name -> Syntax.Expression)
-variableReference conv quoted env name =  
-  let pyName = (encodeName True conv env name) 
-      unquoted = (Syntax.ExpressionSimple (Syntax.Disjunction [
-              Syntax.Conjunction [
-                Syntax.InversionSimple (Syntax.Comparison {
-                  Syntax.comparisonLhs = Syntax.BitwiseOr {
-                    Syntax.bitwiseOrLhs = Nothing,
-                    Syntax.bitwiseOrRhs = Syntax.BitwiseXor {
-                      Syntax.bitwiseXorLhs = Nothing,
-                      Syntax.bitwiseXorRhs = Syntax.BitwiseAnd {
-                        Syntax.bitwiseAndLhs = Nothing,
-                        Syntax.bitwiseAndRhs = Syntax.ShiftExpression {
-                          Syntax.shiftExpressionLhs = Nothing,
-                          Syntax.shiftExpressionRhs = Syntax.Sum {
-                            Syntax.sumLhs = Nothing,
-                            Syntax.sumRhs = Syntax.Term {
-                              Syntax.termLhs = Nothing,
-                              Syntax.termRhs = (Syntax.FactorSimple (Syntax.Power {
-                                Syntax.powerLhs = Syntax.AwaitPrimary {
-                                  Syntax.awaitPrimaryAwait = False,
-                                  Syntax.awaitPrimaryPrimary = (Syntax.PrimarySimple (Syntax.AtomName pyName))},
-                                Syntax.powerRhs = Nothing}))}}}}}},
-                  Syntax.comparisonRhs = []})]]))
-      namespaces = (Helpers.pythonEnvironmentNamespaces env)
-      focusPair = (Module.namespacesFocus namespaces)
-      focusNs = (Pairs.first focusPair)
-      mns = (Names.namespaceOf name)
-      sameNamespace = (Maybes.maybe False (\ns -> Equality.equal ns focusNs) mns)
-  in (Logic.ifElse (Logic.and quoted sameNamespace) (Syntax.ExpressionSimple (Syntax.Disjunction [
-    Syntax.Conjunction [
-      Syntax.InversionSimple (Syntax.Comparison {
-        Syntax.comparisonLhs = Syntax.BitwiseOr {
-          Syntax.bitwiseOrLhs = Nothing,
-          Syntax.bitwiseOrRhs = Syntax.BitwiseXor {
-            Syntax.bitwiseXorLhs = Nothing,
-            Syntax.bitwiseXorRhs = Syntax.BitwiseAnd {
-              Syntax.bitwiseAndLhs = Nothing,
-              Syntax.bitwiseAndRhs = Syntax.ShiftExpression {
-                Syntax.shiftExpressionLhs = Nothing,
-                Syntax.shiftExpressionRhs = Syntax.Sum {
-                  Syntax.sumLhs = Nothing,
-                  Syntax.sumRhs = Syntax.Term {
-                    Syntax.termLhs = Nothing,
-                    Syntax.termRhs = (Syntax.FactorSimple (Syntax.Power {
-                      Syntax.powerLhs = Syntax.AwaitPrimary {
-                        Syntax.awaitPrimaryAwait = False,
-                        Syntax.awaitPrimaryPrimary = (Syntax.PrimarySimple (Syntax.AtomString (Syntax.String_ {
-                          Syntax.stringValue = (Syntax.unName pyName),
-                          Syntax.stringQuoteStyle = Syntax.QuoteStyleDouble})))},
-                      Syntax.powerRhs = Nothing}))}}}}}},
-        Syntax.comparisonRhs = []})]])) unquoted)
+variableReference :: Util.CaseConvention -> Bool -> Helpers.PythonEnvironment -> Core.Name -> Syntax.Expression
+variableReference conv quoted env name =
+     
+      let pyName = encodeName True conv env name 
+          unquoted =
+                  Syntax.ExpressionSimple (Syntax.Disjunction [
+                    Syntax.Conjunction [
+                      Syntax.InversionSimple (Syntax.Comparison {
+                        Syntax.comparisonLhs = Syntax.BitwiseOr {
+                          Syntax.bitwiseOrLhs = Nothing,
+                          Syntax.bitwiseOrRhs = Syntax.BitwiseXor {
+                            Syntax.bitwiseXorLhs = Nothing,
+                            Syntax.bitwiseXorRhs = Syntax.BitwiseAnd {
+                              Syntax.bitwiseAndLhs = Nothing,
+                              Syntax.bitwiseAndRhs = Syntax.ShiftExpression {
+                                Syntax.shiftExpressionLhs = Nothing,
+                                Syntax.shiftExpressionRhs = Syntax.Sum {
+                                  Syntax.sumLhs = Nothing,
+                                  Syntax.sumRhs = Syntax.Term {
+                                    Syntax.termLhs = Nothing,
+                                    Syntax.termRhs = (Syntax.FactorSimple (Syntax.Power {
+                                      Syntax.powerLhs = Syntax.AwaitPrimary {
+                                        Syntax.awaitPrimaryAwait = False,
+                                        Syntax.awaitPrimaryPrimary = (Syntax.PrimarySimple (Syntax.AtomName pyName))},
+                                      Syntax.powerRhs = Nothing}))}}}}}},
+                        Syntax.comparisonRhs = []})]])
+          namespaces = Helpers.pythonEnvironmentNamespaces env
+          focusPair = Module.namespacesFocus namespaces
+          focusNs = Pairs.first focusPair
+          mns = Names.namespaceOf name
+          sameNamespace = Maybes.maybe False (\ns -> Equality.equal ns focusNs) mns
+      in (Logic.ifElse (Logic.and quoted sameNamespace) (Syntax.ExpressionSimple (Syntax.Disjunction [
+        Syntax.Conjunction [
+          Syntax.InversionSimple (Syntax.Comparison {
+            Syntax.comparisonLhs = Syntax.BitwiseOr {
+              Syntax.bitwiseOrLhs = Nothing,
+              Syntax.bitwiseOrRhs = Syntax.BitwiseXor {
+                Syntax.bitwiseXorLhs = Nothing,
+                Syntax.bitwiseXorRhs = Syntax.BitwiseAnd {
+                  Syntax.bitwiseAndLhs = Nothing,
+                  Syntax.bitwiseAndRhs = Syntax.ShiftExpression {
+                    Syntax.shiftExpressionLhs = Nothing,
+                    Syntax.shiftExpressionRhs = Syntax.Sum {
+                      Syntax.sumLhs = Nothing,
+                      Syntax.sumRhs = Syntax.Term {
+                        Syntax.termLhs = Nothing,
+                        Syntax.termRhs = (Syntax.FactorSimple (Syntax.Power {
+                          Syntax.powerLhs = Syntax.AwaitPrimary {
+                            Syntax.awaitPrimaryAwait = False,
+                            Syntax.awaitPrimaryPrimary = (Syntax.PrimarySimple (Syntax.AtomString (Syntax.String_ {
+                              Syntax.stringValue = (Syntax.unName pyName),
+                              Syntax.stringQuoteStyle = Syntax.QuoteStyleDouble})))},
+                          Syntax.powerRhs = Nothing}))}}}}}},
+            Syntax.comparisonRhs = []})]])) unquoted)

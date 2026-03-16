@@ -79,7 +79,7 @@ public abstract class ClassLiteral implements Serializable, Comparable<ClassLite
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ClassLiteral other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -119,7 +119,7 @@ public abstract class ClassLiteral implements Serializable, Comparable<ClassLite
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ClassLiteral other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -159,7 +159,7 @@ public abstract class ClassLiteral implements Serializable, Comparable<ClassLite
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ClassLiteral other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -195,7 +195,7 @@ public abstract class ClassLiteral implements Serializable, Comparable<ClassLite
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ClassLiteral other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

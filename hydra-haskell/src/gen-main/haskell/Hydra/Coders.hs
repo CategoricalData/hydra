@@ -25,13 +25,13 @@ data AdapterContext =
     -- | A map of type names to adapters for those types
     adapterContextAdapters :: (M.Map Core.Name (Util.Adapter Core.Type Core.Type Core.Term Core.Term))}
 
-_AdapterContext = (Core.Name "hydra.coders.AdapterContext")
+_AdapterContext = Core.Name "hydra.coders.AdapterContext"
 
-_AdapterContext_graph = (Core.Name "graph")
+_AdapterContext_graph = Core.Name "graph"
 
-_AdapterContext_language = (Core.Name "language")
+_AdapterContext_language = Core.Name "language"
 
-_AdapterContext_adapters = (Core.Name "adapters")
+_AdapterContext_adapters = Core.Name "adapters"
 
 -- | Indicates either the 'out' or the 'in' direction of a coder
 data CoderDirection = 
@@ -39,11 +39,11 @@ data CoderDirection =
   CoderDirectionDecode 
   deriving (Eq, Ord, Read, Show)
 
-_CoderDirection = (Core.Name "hydra.coders.CoderDirection")
+_CoderDirection = Core.Name "hydra.coders.CoderDirection"
 
-_CoderDirection_encode = (Core.Name "encode")
+_CoderDirection_encode = Core.Name "encode"
 
-_CoderDirection_decode = (Core.Name "decode")
+_CoderDirection_decode = Core.Name "decode"
 
 -- | A named language together with language-specific constraints
 data Language = 
@@ -53,11 +53,11 @@ data Language =
     -- | The constraints which characterize the language
     languageConstraints :: LanguageConstraints}
 
-_Language = (Core.Name "hydra.coders.Language")
+_Language = Core.Name "hydra.coders.Language"
 
-_Language_name = (Core.Name "name")
+_Language_name = Core.Name "name"
 
-_Language_constraints = (Core.Name "constraints")
+_Language_constraints = Core.Name "constraints"
 
 -- | A set of constraints on valid type and term expressions, characterizing a language
 data LanguageConstraints = 
@@ -79,23 +79,23 @@ data LanguageConstraints =
     -- | A logical set of types, as a predicate which tests a type for inclusion
     languageConstraintsTypes :: (Core.Type -> Bool)}
 
-_LanguageConstraints = (Core.Name "hydra.coders.LanguageConstraints")
+_LanguageConstraints = Core.Name "hydra.coders.LanguageConstraints"
 
-_LanguageConstraints_eliminationVariants = (Core.Name "eliminationVariants")
+_LanguageConstraints_eliminationVariants = Core.Name "eliminationVariants"
 
-_LanguageConstraints_literalVariants = (Core.Name "literalVariants")
+_LanguageConstraints_literalVariants = Core.Name "literalVariants"
 
-_LanguageConstraints_floatTypes = (Core.Name "floatTypes")
+_LanguageConstraints_floatTypes = Core.Name "floatTypes"
 
-_LanguageConstraints_functionVariants = (Core.Name "functionVariants")
+_LanguageConstraints_functionVariants = Core.Name "functionVariants"
 
-_LanguageConstraints_integerTypes = (Core.Name "integerTypes")
+_LanguageConstraints_integerTypes = Core.Name "integerTypes"
 
-_LanguageConstraints_termVariants = (Core.Name "termVariants")
+_LanguageConstraints_termVariants = Core.Name "termVariants"
 
-_LanguageConstraints_typeVariants = (Core.Name "typeVariants")
+_LanguageConstraints_typeVariants = Core.Name "typeVariants"
 
-_LanguageConstraints_types = (Core.Name "types")
+_LanguageConstraints_types = Core.Name "types"
 
 -- | The unique name of a language
 newtype LanguageName = 
@@ -103,12 +103,12 @@ newtype LanguageName =
     unLanguageName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_LanguageName = (Core.Name "hydra.coders.LanguageName")
+_LanguageName = Core.Name "hydra.coders.LanguageName"
 
 -- | A bidirectional encoder which maps between the same type and term languages on either side
 type SymmetricAdapter t v = (Util.Adapter t t v v)
 
-_SymmetricAdapter = (Core.Name "hydra.coders.SymmetricAdapter")
+_SymmetricAdapter = Core.Name "hydra.coders.SymmetricAdapter"
 
 -- | Specifies either a pre-order or post-order traversal
 data TraversalOrder = 
@@ -118,13 +118,13 @@ data TraversalOrder =
   TraversalOrderPost 
   deriving (Eq, Ord, Read, Show)
 
-_TraversalOrder = (Core.Name "hydra.coders.TraversalOrder")
+_TraversalOrder = Core.Name "hydra.coders.TraversalOrder"
 
-_TraversalOrder_pre = (Core.Name "pre")
+_TraversalOrder_pre = Core.Name "pre"
 
-_TraversalOrder_post = (Core.Name "post")
+_TraversalOrder_post = Core.Name "post"
 
 -- | A function which maps a Hydra type to a symmetric adapter between types and terms
 type TypeAdapter = (AdapterContext -> Core.Type -> Either String (SymmetricAdapter Core.Type Core.Term))
 
-_TypeAdapter = (Core.Name "hydra.coders.TypeAdapter")
+_TypeAdapter = Core.Name "hydra.coders.TypeAdapter"

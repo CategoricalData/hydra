@@ -19,98 +19,106 @@ import qualified Data.Set as S
 
 -- | Language constraints for Protocol Buffers v3
 protobufLanguage :: Coders.Language
-protobufLanguage = Coders.Language {
-  Coders.languageName = (Coders.LanguageName "hydra.ext.protobuf"),
-  Coders.languageConstraints = Coders.LanguageConstraints {
-    Coders.languageConstraintsEliminationVariants = eliminationVariants,
-    Coders.languageConstraintsLiteralVariants = literalVariants,
-    Coders.languageConstraintsFloatTypes = floatTypes,
-    Coders.languageConstraintsFunctionVariants = functionVariants,
-    Coders.languageConstraintsIntegerTypes = integerTypes,
-    Coders.languageConstraintsTermVariants = termVariants,
-    Coders.languageConstraintsTypeVariants = typeVariants,
-    Coders.languageConstraintsTypes = typePredicate}} 
+protobufLanguage =
+    Coders.Language {
+      Coders.languageName = (Coders.LanguageName "hydra.ext.protobuf"),
+      Coders.languageConstraints = Coders.LanguageConstraints {
+        Coders.languageConstraintsEliminationVariants = eliminationVariants,
+        Coders.languageConstraintsLiteralVariants = literalVariants,
+        Coders.languageConstraintsFloatTypes = floatTypes,
+        Coders.languageConstraintsFunctionVariants = functionVariants,
+        Coders.languageConstraintsIntegerTypes = integerTypes,
+        Coders.languageConstraintsTermVariants = termVariants,
+        Coders.languageConstraintsTypeVariants = typeVariants,
+        Coders.languageConstraintsTypes = typePredicate}} 
   where 
     eliminationVariants = Sets.empty
-    literalVariants = (Sets.fromList [
-      Variants.LiteralVariantBinary,
-      Variants.LiteralVariantBoolean,
-      Variants.LiteralVariantFloat,
-      Variants.LiteralVariantInteger,
-      Variants.LiteralVariantString])
-    floatTypes = (Sets.fromList [
-      Core.FloatTypeFloat32,
-      Core.FloatTypeFloat64])
+    literalVariants =
+        Sets.fromList [
+          Variants.LiteralVariantBinary,
+          Variants.LiteralVariantBoolean,
+          Variants.LiteralVariantFloat,
+          Variants.LiteralVariantInteger,
+          Variants.LiteralVariantString]
+    floatTypes =
+        Sets.fromList [
+          Core.FloatTypeFloat32,
+          Core.FloatTypeFloat64]
     functionVariants = Sets.empty
-    integerTypes = (Sets.fromList [
-      Core.IntegerTypeInt32,
-      Core.IntegerTypeInt64,
-      Core.IntegerTypeUint32,
-      Core.IntegerTypeUint64])
-    termVariants = (Sets.fromList [
-      Variants.TermVariantEither,
-      Variants.TermVariantList,
-      Variants.TermVariantLiteral,
-      Variants.TermVariantMap,
-      Variants.TermVariantMaybe,
-      Variants.TermVariantPair,
-      Variants.TermVariantRecord,
-      Variants.TermVariantSet,
-      Variants.TermVariantUnion,
-      Variants.TermVariantUnit,
-      Variants.TermVariantWrap])
-    typeVariants = (Sets.fromList [
-      Variants.TypeVariantAnnotated,
-      Variants.TypeVariantEither,
-      Variants.TypeVariantList,
-      Variants.TypeVariantLiteral,
-      Variants.TypeVariantMap,
-      Variants.TypeVariantMaybe,
-      Variants.TypeVariantPair,
-      Variants.TypeVariantRecord,
-      Variants.TypeVariantSet,
-      Variants.TypeVariantUnion,
-      Variants.TypeVariantUnit,
-      Variants.TypeVariantVariable,
-      Variants.TypeVariantWrap])
-    typePredicate = (\typ -> (\x -> case x of
-      Core.TypeMap v0 ->  
-        let valuesType = (Core.mapTypeValues v0) 
-            stripped = (Rewriting.deannotateType valuesType)
-        in ((\x -> case x of
-          Core.TypeMaybe _ -> False
-          _ -> True) stripped)
-      _ -> True) typ)
+    integerTypes =
+        Sets.fromList [
+          Core.IntegerTypeInt32,
+          Core.IntegerTypeInt64,
+          Core.IntegerTypeUint32,
+          Core.IntegerTypeUint64]
+    termVariants =
+        Sets.fromList [
+          Variants.TermVariantEither,
+          Variants.TermVariantList,
+          Variants.TermVariantLiteral,
+          Variants.TermVariantMap,
+          Variants.TermVariantMaybe,
+          Variants.TermVariantPair,
+          Variants.TermVariantRecord,
+          Variants.TermVariantSet,
+          Variants.TermVariantUnion,
+          Variants.TermVariantUnit,
+          Variants.TermVariantWrap]
+    typeVariants =
+        Sets.fromList [
+          Variants.TypeVariantAnnotated,
+          Variants.TypeVariantEither,
+          Variants.TypeVariantList,
+          Variants.TypeVariantLiteral,
+          Variants.TypeVariantMap,
+          Variants.TypeVariantMaybe,
+          Variants.TypeVariantPair,
+          Variants.TypeVariantRecord,
+          Variants.TypeVariantSet,
+          Variants.TypeVariantUnion,
+          Variants.TypeVariantUnit,
+          Variants.TypeVariantVariable,
+          Variants.TypeVariantWrap]
+    typePredicate =
+        \typ -> case typ of
+          Core.TypeMap v0 ->  
+            let valuesType = Core.mapTypeValues v0 
+                stripped = Rewriting.deannotateType valuesType
+            in case stripped of
+              Core.TypeMaybe _ -> False
+              _ -> True
+          _ -> True
 
 -- | A set of reserved words in Protobuf
-protobufReservedWords :: (S.Set String)
-protobufReservedWords = (Sets.fromList (Lists.concat [
-  fieldNames])) 
+protobufReservedWords :: S.Set String
+protobufReservedWords = Sets.fromList (Lists.concat [
+  fieldNames]) 
   where 
-    fieldNames = [
-      "case",
-      "class",
-      "data",
-      "default",
-      "deriving",
-      "do",
-      "else",
-      "foreign",
-      "if",
-      "import",
-      "in",
-      "infix",
-      "infixl",
-      "infixr",
-      "instance",
-      "let",
-      "mdo",
-      "module",
-      "newtype",
-      "of",
-      "pattern",
-      "proc",
-      "rec",
-      "then",
-      "type",
-      "where"]
+    fieldNames =
+        [
+          "case",
+          "class",
+          "data",
+          "default",
+          "deriving",
+          "do",
+          "else",
+          "foreign",
+          "if",
+          "import",
+          "in",
+          "infix",
+          "infixl",
+          "infixr",
+          "instance",
+          "let",
+          "mdo",
+          "module",
+          "newtype",
+          "of",
+          "pattern",
+          "proc",
+          "rec",
+          "then",
+          "type",
+          "where"]

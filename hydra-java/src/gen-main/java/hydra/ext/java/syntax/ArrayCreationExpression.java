@@ -79,7 +79,7 @@ public abstract class ArrayCreationExpression implements Serializable, Comparabl
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ArrayCreationExpression other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -119,7 +119,7 @@ public abstract class ArrayCreationExpression implements Serializable, Comparabl
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ArrayCreationExpression other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -159,7 +159,7 @@ public abstract class ArrayCreationExpression implements Serializable, Comparabl
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ArrayCreationExpression other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -199,7 +199,7 @@ public abstract class ArrayCreationExpression implements Serializable, Comparabl
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ArrayCreationExpression other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

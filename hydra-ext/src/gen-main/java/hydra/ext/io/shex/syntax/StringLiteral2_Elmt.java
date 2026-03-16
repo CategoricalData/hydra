@@ -71,7 +71,7 @@ public abstract class StringLiteral2_Elmt implements Serializable, Comparable<St
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(StringLiteral2_Elmt other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -111,7 +111,7 @@ public abstract class StringLiteral2_Elmt implements Serializable, Comparable<St
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(StringLiteral2_Elmt other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -151,7 +151,7 @@ public abstract class StringLiteral2_Elmt implements Serializable, Comparable<St
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(StringLiteral2_Elmt other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

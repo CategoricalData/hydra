@@ -21,15 +21,16 @@ import qualified Data.Set as S
 
 -- | The group of all inference tests
 allTests :: Testing.TestGroup
-allTests = Testing.TestGroup {
-  Testing.testGroupName = "inference",
-  Testing.testGroupDescription = Nothing,
-  Testing.testGroupSubgroups = [
-    AlgebraicTypes.allTests,
-    AlgorithmW.allTests,
-    Classes.allTests,
-    Failures.allTests,
-    Fundamentals.allTests,
-    KernelExamples.allTests,
-    NominalTypes.allTests],
-  Testing.testGroupCases = []}
+allTests =
+    Testing.TestGroup {
+      Testing.testGroupName = "inference",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        AlgebraicTypes.allTests,
+        AlgorithmW.allTests,
+        Classes.allTests,
+        Failures.allTests,
+        Fundamentals.allTests,
+        KernelExamples.allTests,
+        NominalTypes.allTests],
+      Testing.testGroupCases = []}

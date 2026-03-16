@@ -21,11 +21,11 @@ data Definition =
   DefinitionType TypeDefinition
   deriving (Eq, Ord, Read, Show)
 
-_Definition = (Core.Name "hydra.module.Definition")
+_Definition = Core.Name "hydra.module.Definition"
 
-_Definition_term = (Core.Name "term")
+_Definition_term = Core.Name "term"
 
-_Definition_type = (Core.Name "type")
+_Definition_type = Core.Name "type"
 
 -- | A file extension (without the dot), e.g. "json" or "py"
 newtype FileExtension = 
@@ -33,7 +33,7 @@ newtype FileExtension =
     unFileExtension :: String}
   deriving (Eq, Ord, Read, Show)
 
-_FileExtension = (Core.Name "hydra.module.FileExtension")
+_FileExtension = Core.Name "hydra.module.FileExtension"
 
 -- | A library of primitive functions
 data Library = 
@@ -45,13 +45,13 @@ data Library =
     -- | The primitives defined in this library
     libraryPrimitives :: [Graph.Primitive]}
 
-_Library = (Core.Name "hydra.module.Library")
+_Library = Core.Name "hydra.module.Library"
 
-_Library_namespace = (Core.Name "namespace")
+_Library_namespace = Core.Name "namespace"
 
-_Library_prefix = (Core.Name "prefix")
+_Library_prefix = Core.Name "prefix"
 
-_Library_primitives = (Core.Name "primitives")
+_Library_primitives = Core.Name "primitives"
 
 -- | A logical collection of elements in the same namespace, having dependencies on zero or more other modules
 data Module = 
@@ -68,17 +68,17 @@ data Module =
     moduleDescription :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_Module = (Core.Name "hydra.module.Module")
+_Module = Core.Name "hydra.module.Module"
 
-_Module_namespace = (Core.Name "namespace")
+_Module_namespace = Core.Name "namespace"
 
-_Module_elements = (Core.Name "elements")
+_Module_elements = Core.Name "elements"
 
-_Module_termDependencies = (Core.Name "termDependencies")
+_Module_termDependencies = Core.Name "termDependencies"
 
-_Module_typeDependencies = (Core.Name "typeDependencies")
+_Module_typeDependencies = Core.Name "typeDependencies"
 
-_Module_description = (Core.Name "description")
+_Module_description = Core.Name "description"
 
 -- | A prefix for element names
 newtype Namespace = 
@@ -86,7 +86,7 @@ newtype Namespace =
     unNamespace :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Namespace = (Core.Name "hydra.module.Namespace")
+_Namespace = Core.Name "hydra.module.Namespace"
 
 -- | A mapping from namespaces to values of type n, with a focus on one namespace
 data Namespaces n = 
@@ -97,11 +97,11 @@ data Namespaces n =
     namespacesMapping :: (M.Map Namespace n)}
   deriving (Eq, Ord, Read, Show)
 
-_Namespaces = (Core.Name "hydra.module.Namespaces")
+_Namespaces = Core.Name "hydra.module.Namespaces"
 
-_Namespaces_focus = (Core.Name "focus")
+_Namespaces_focus = Core.Name "focus"
 
-_Namespaces_mapping = (Core.Name "mapping")
+_Namespaces_mapping = Core.Name "mapping"
 
 -- | A qualified name consisting of an optional namespace together with a mandatory local name
 data QualifiedName = 
@@ -112,11 +112,11 @@ data QualifiedName =
     qualifiedNameLocal :: String}
   deriving (Eq, Ord, Read, Show)
 
-_QualifiedName = (Core.Name "hydra.module.QualifiedName")
+_QualifiedName = Core.Name "hydra.module.QualifiedName"
 
-_QualifiedName_namespace = (Core.Name "namespace")
+_QualifiedName_namespace = Core.Name "namespace"
 
-_QualifiedName_local = (Core.Name "local")
+_QualifiedName_local = Core.Name "local"
 
 -- | A term-level definition, including a name, a term, and the type scheme of the term
 data TermDefinition = 
@@ -129,13 +129,13 @@ data TermDefinition =
     termDefinitionType :: Core.TypeScheme}
   deriving (Eq, Ord, Read, Show)
 
-_TermDefinition = (Core.Name "hydra.module.TermDefinition")
+_TermDefinition = Core.Name "hydra.module.TermDefinition"
 
-_TermDefinition_name = (Core.Name "name")
+_TermDefinition_name = Core.Name "name"
 
-_TermDefinition_term = (Core.Name "term")
+_TermDefinition_term = Core.Name "term"
 
-_TermDefinition_type = (Core.Name "type")
+_TermDefinition_type = Core.Name "type"
 
 -- | A type-level definition, including a name and the type
 data TypeDefinition = 
@@ -146,8 +146,8 @@ data TypeDefinition =
     typeDefinitionType :: Core.Type}
   deriving (Eq, Ord, Read, Show)
 
-_TypeDefinition = (Core.Name "hydra.module.TypeDefinition")
+_TypeDefinition = Core.Name "hydra.module.TypeDefinition"
 
-_TypeDefinition_name = (Core.Name "name")
+_TypeDefinition_name = Core.Name "name"
 
-_TypeDefinition_type = (Core.Name "type")
+_TypeDefinition_type = Core.Name "type"

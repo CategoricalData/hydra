@@ -18,11 +18,11 @@ data AnnotatedDeclaration =
     annotatedDeclarationDeclaration :: TopLevelDecl}
   deriving (Eq, Ord, Read, Show)
 
-_AnnotatedDeclaration = (Core.Name "hydra.ext.go.syntax.AnnotatedDeclaration")
+_AnnotatedDeclaration = Core.Name "hydra.ext.go.syntax.AnnotatedDeclaration"
 
-_AnnotatedDeclaration_comment = (Core.Name "comment")
+_AnnotatedDeclaration_comment = Core.Name "comment"
 
-_AnnotatedDeclaration_declaration = (Core.Name "declaration")
+_AnnotatedDeclaration_declaration = Core.Name "declaration"
 
 data Module = 
   Module {
@@ -31,73 +31,73 @@ data Module =
     moduleDeclarations :: [TopLevelDecl]}
   deriving (Eq, Ord, Read, Show)
 
-_Module = (Core.Name "hydra.ext.go.syntax.Module")
+_Module = Core.Name "hydra.ext.go.syntax.Module"
 
-_Module_package = (Core.Name "package")
+_Module_package = Core.Name "package"
 
-_Module_imports = (Core.Name "imports")
+_Module_imports = Core.Name "imports"
 
-_Module_declarations = (Core.Name "declarations")
+_Module_declarations = Core.Name "declarations"
 
 newtype Identifier = 
   Identifier {
     unIdentifier :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Identifier = (Core.Name "hydra.ext.go.syntax.Identifier")
+_Identifier = Core.Name "hydra.ext.go.syntax.Identifier"
 
 newtype IntLit = 
   IntLit {
     unIntLit :: Integer}
   deriving (Eq, Ord, Read, Show)
 
-_IntLit = (Core.Name "hydra.ext.go.syntax.IntLit")
+_IntLit = Core.Name "hydra.ext.go.syntax.IntLit"
 
 newtype FloatLit = 
   FloatLit {
     unFloatLit :: Double}
   deriving (Eq, Ord, Read, Show)
 
-_FloatLit = (Core.Name "hydra.ext.go.syntax.FloatLit")
+_FloatLit = Core.Name "hydra.ext.go.syntax.FloatLit"
 
 newtype ImaginaryLit = 
   ImaginaryLit {
     unImaginaryLit :: Double}
   deriving (Eq, Ord, Read, Show)
 
-_ImaginaryLit = (Core.Name "hydra.ext.go.syntax.ImaginaryLit")
+_ImaginaryLit = Core.Name "hydra.ext.go.syntax.ImaginaryLit"
 
 newtype RuneLit = 
   RuneLit {
     unRuneLit :: Int}
   deriving (Eq, Ord, Read, Show)
 
-_RuneLit = (Core.Name "hydra.ext.go.syntax.RuneLit")
+_RuneLit = Core.Name "hydra.ext.go.syntax.RuneLit"
 
 data StringLit = 
   StringLitRaw RawStringLit |
   StringLitInterpreted InterpretedStringLit
   deriving (Eq, Ord, Read, Show)
 
-_StringLit = (Core.Name "hydra.ext.go.syntax.StringLit")
+_StringLit = Core.Name "hydra.ext.go.syntax.StringLit"
 
-_StringLit_raw = (Core.Name "raw")
+_StringLit_raw = Core.Name "raw"
 
-_StringLit_interpreted = (Core.Name "interpreted")
+_StringLit_interpreted = Core.Name "interpreted"
 
 newtype RawStringLit = 
   RawStringLit {
     unRawStringLit :: String}
   deriving (Eq, Ord, Read, Show)
 
-_RawStringLit = (Core.Name "hydra.ext.go.syntax.RawStringLit")
+_RawStringLit = Core.Name "hydra.ext.go.syntax.RawStringLit"
 
 newtype InterpretedStringLit = 
   InterpretedStringLit {
     unInterpretedStringLit :: String}
   deriving (Eq, Ord, Read, Show)
 
-_InterpretedStringLit = (Core.Name "hydra.ext.go.syntax.InterpretedStringLit")
+_InterpretedStringLit = Core.Name "hydra.ext.go.syntax.InterpretedStringLit"
 
 data SourceFile = 
   SourceFile {
@@ -106,27 +106,27 @@ data SourceFile =
     sourceFileDeclarations :: [TopLevelDecl]}
   deriving (Eq, Ord, Read, Show)
 
-_SourceFile = (Core.Name "hydra.ext.go.syntax.SourceFile")
+_SourceFile = Core.Name "hydra.ext.go.syntax.SourceFile"
 
-_SourceFile_package = (Core.Name "package")
+_SourceFile_package = Core.Name "package"
 
-_SourceFile_imports = (Core.Name "imports")
+_SourceFile_imports = Core.Name "imports"
 
-_SourceFile_declarations = (Core.Name "declarations")
+_SourceFile_declarations = Core.Name "declarations"
 
 newtype PackageClause = 
   PackageClause {
     unPackageClause :: Identifier}
   deriving (Eq, Ord, Read, Show)
 
-_PackageClause = (Core.Name "hydra.ext.go.syntax.PackageClause")
+_PackageClause = Core.Name "hydra.ext.go.syntax.PackageClause"
 
 newtype ImportDecl = 
   ImportDecl {
     unImportDecl :: [ImportSpec]}
   deriving (Eq, Ord, Read, Show)
 
-_ImportDecl = (Core.Name "hydra.ext.go.syntax.ImportDecl")
+_ImportDecl = Core.Name "hydra.ext.go.syntax.ImportDecl"
 
 data ImportSpec = 
   ImportSpec {
@@ -134,29 +134,29 @@ data ImportSpec =
     importSpecPath :: ImportPath}
   deriving (Eq, Ord, Read, Show)
 
-_ImportSpec = (Core.Name "hydra.ext.go.syntax.ImportSpec")
+_ImportSpec = Core.Name "hydra.ext.go.syntax.ImportSpec"
 
-_ImportSpec_alias = (Core.Name "alias")
+_ImportSpec_alias = Core.Name "alias"
 
-_ImportSpec_path = (Core.Name "path")
+_ImportSpec_path = Core.Name "path"
 
 data ImportAlias = 
   ImportAliasDot  |
   ImportAliasName Identifier
   deriving (Eq, Ord, Read, Show)
 
-_ImportAlias = (Core.Name "hydra.ext.go.syntax.ImportAlias")
+_ImportAlias = Core.Name "hydra.ext.go.syntax.ImportAlias"
 
-_ImportAlias_dot = (Core.Name "dot")
+_ImportAlias_dot = Core.Name "dot"
 
-_ImportAlias_name = (Core.Name "name")
+_ImportAlias_name = Core.Name "name"
 
 newtype ImportPath = 
   ImportPath {
     unImportPath :: StringLit}
   deriving (Eq, Ord, Read, Show)
 
-_ImportPath = (Core.Name "hydra.ext.go.syntax.ImportPath")
+_ImportPath = Core.Name "hydra.ext.go.syntax.ImportPath"
 
 data Declaration = 
   DeclarationConst ConstDecl |
@@ -164,13 +164,13 @@ data Declaration =
   DeclarationVar VarDecl
   deriving (Eq, Ord, Read, Show)
 
-_Declaration = (Core.Name "hydra.ext.go.syntax.Declaration")
+_Declaration = Core.Name "hydra.ext.go.syntax.Declaration"
 
-_Declaration_const = (Core.Name "const")
+_Declaration_const = Core.Name "const"
 
-_Declaration_type = (Core.Name "type")
+_Declaration_type = Core.Name "type"
 
-_Declaration_var = (Core.Name "var")
+_Declaration_var = Core.Name "var"
 
 data TopLevelDecl = 
   TopLevelDeclDeclaration Declaration |
@@ -178,20 +178,20 @@ data TopLevelDecl =
   TopLevelDeclMethod MethodDecl
   deriving (Eq, Ord, Read, Show)
 
-_TopLevelDecl = (Core.Name "hydra.ext.go.syntax.TopLevelDecl")
+_TopLevelDecl = Core.Name "hydra.ext.go.syntax.TopLevelDecl"
 
-_TopLevelDecl_declaration = (Core.Name "declaration")
+_TopLevelDecl_declaration = Core.Name "declaration"
 
-_TopLevelDecl_function = (Core.Name "function")
+_TopLevelDecl_function = Core.Name "function"
 
-_TopLevelDecl_method = (Core.Name "method")
+_TopLevelDecl_method = Core.Name "method"
 
 newtype ConstDecl = 
   ConstDecl {
     unConstDecl :: [ConstSpec]}
   deriving (Eq, Ord, Read, Show)
 
-_ConstDecl = (Core.Name "hydra.ext.go.syntax.ConstDecl")
+_ConstDecl = Core.Name "hydra.ext.go.syntax.ConstDecl"
 
 data ConstSpec = 
   ConstSpec {
@@ -200,20 +200,20 @@ data ConstSpec =
     constSpecValues :: [Expression]}
   deriving (Eq, Ord, Read, Show)
 
-_ConstSpec = (Core.Name "hydra.ext.go.syntax.ConstSpec")
+_ConstSpec = Core.Name "hydra.ext.go.syntax.ConstSpec"
 
-_ConstSpec_names = (Core.Name "names")
+_ConstSpec_names = Core.Name "names"
 
-_ConstSpec_type = (Core.Name "type")
+_ConstSpec_type = Core.Name "type"
 
-_ConstSpec_values = (Core.Name "values")
+_ConstSpec_values = Core.Name "values"
 
 newtype VarDecl = 
   VarDecl {
     unVarDecl :: [VarSpec]}
   deriving (Eq, Ord, Read, Show)
 
-_VarDecl = (Core.Name "hydra.ext.go.syntax.VarDecl")
+_VarDecl = Core.Name "hydra.ext.go.syntax.VarDecl"
 
 data VarSpec = 
   VarSpec {
@@ -222,13 +222,13 @@ data VarSpec =
     varSpecValues :: [Expression]}
   deriving (Eq, Ord, Read, Show)
 
-_VarSpec = (Core.Name "hydra.ext.go.syntax.VarSpec")
+_VarSpec = Core.Name "hydra.ext.go.syntax.VarSpec"
 
-_VarSpec_names = (Core.Name "names")
+_VarSpec_names = Core.Name "names"
 
-_VarSpec_type = (Core.Name "type")
+_VarSpec_type = Core.Name "type"
 
-_VarSpec_values = (Core.Name "values")
+_VarSpec_values = Core.Name "values"
 
 data ShortVarDecl = 
   ShortVarDecl {
@@ -236,29 +236,29 @@ data ShortVarDecl =
     shortVarDeclValues :: [Expression]}
   deriving (Eq, Ord, Read, Show)
 
-_ShortVarDecl = (Core.Name "hydra.ext.go.syntax.ShortVarDecl")
+_ShortVarDecl = Core.Name "hydra.ext.go.syntax.ShortVarDecl"
 
-_ShortVarDecl_names = (Core.Name "names")
+_ShortVarDecl_names = Core.Name "names"
 
-_ShortVarDecl_values = (Core.Name "values")
+_ShortVarDecl_values = Core.Name "values"
 
 newtype TypeDecl = 
   TypeDecl {
     unTypeDecl :: [TypeSpec]}
   deriving (Eq, Ord, Read, Show)
 
-_TypeDecl = (Core.Name "hydra.ext.go.syntax.TypeDecl")
+_TypeDecl = Core.Name "hydra.ext.go.syntax.TypeDecl"
 
 data TypeSpec = 
   TypeSpecAlias AliasDecl |
   TypeSpecDefinition TypeDef
   deriving (Eq, Ord, Read, Show)
 
-_TypeSpec = (Core.Name "hydra.ext.go.syntax.TypeSpec")
+_TypeSpec = Core.Name "hydra.ext.go.syntax.TypeSpec"
 
-_TypeSpec_alias = (Core.Name "alias")
+_TypeSpec_alias = Core.Name "alias"
 
-_TypeSpec_definition = (Core.Name "definition")
+_TypeSpec_definition = Core.Name "definition"
 
 data AliasDecl = 
   AliasDecl {
@@ -266,11 +266,11 @@ data AliasDecl =
     aliasDeclType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_AliasDecl = (Core.Name "hydra.ext.go.syntax.AliasDecl")
+_AliasDecl = Core.Name "hydra.ext.go.syntax.AliasDecl"
 
-_AliasDecl_name = (Core.Name "name")
+_AliasDecl_name = Core.Name "name"
 
-_AliasDecl_type = (Core.Name "type")
+_AliasDecl_type = Core.Name "type"
 
 data TypeDef = 
   TypeDef {
@@ -279,20 +279,20 @@ data TypeDef =
     typeDefType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_TypeDef = (Core.Name "hydra.ext.go.syntax.TypeDef")
+_TypeDef = Core.Name "hydra.ext.go.syntax.TypeDef"
 
-_TypeDef_name = (Core.Name "name")
+_TypeDef_name = Core.Name "name"
 
-_TypeDef_typeParams = (Core.Name "typeParams")
+_TypeDef_typeParams = Core.Name "typeParams"
 
-_TypeDef_type = (Core.Name "type")
+_TypeDef_type = Core.Name "type"
 
 newtype TypeParameters = 
   TypeParameters {
     unTypeParameters :: [TypeParamDecl]}
   deriving (Eq, Ord, Read, Show)
 
-_TypeParameters = (Core.Name "hydra.ext.go.syntax.TypeParameters")
+_TypeParameters = Core.Name "hydra.ext.go.syntax.TypeParameters"
 
 data TypeParamDecl = 
   TypeParamDecl {
@@ -300,18 +300,18 @@ data TypeParamDecl =
     typeParamDeclConstraint :: TypeConstraint}
   deriving (Eq, Ord, Read, Show)
 
-_TypeParamDecl = (Core.Name "hydra.ext.go.syntax.TypeParamDecl")
+_TypeParamDecl = Core.Name "hydra.ext.go.syntax.TypeParamDecl"
 
-_TypeParamDecl_names = (Core.Name "names")
+_TypeParamDecl_names = Core.Name "names"
 
-_TypeParamDecl_constraint = (Core.Name "constraint")
+_TypeParamDecl_constraint = Core.Name "constraint"
 
 newtype TypeConstraint = 
   TypeConstraint {
     unTypeConstraint :: TypeElem}
   deriving (Eq, Ord, Read, Show)
 
-_TypeConstraint = (Core.Name "hydra.ext.go.syntax.TypeConstraint")
+_TypeConstraint = Core.Name "hydra.ext.go.syntax.TypeConstraint"
 
 data FunctionDecl = 
   FunctionDecl {
@@ -321,22 +321,22 @@ data FunctionDecl =
     functionDeclBody :: (Maybe FunctionBody)}
   deriving (Eq, Ord, Read, Show)
 
-_FunctionDecl = (Core.Name "hydra.ext.go.syntax.FunctionDecl")
+_FunctionDecl = Core.Name "hydra.ext.go.syntax.FunctionDecl"
 
-_FunctionDecl_name = (Core.Name "name")
+_FunctionDecl_name = Core.Name "name"
 
-_FunctionDecl_typeParams = (Core.Name "typeParams")
+_FunctionDecl_typeParams = Core.Name "typeParams"
 
-_FunctionDecl_signature = (Core.Name "signature")
+_FunctionDecl_signature = Core.Name "signature"
 
-_FunctionDecl_body = (Core.Name "body")
+_FunctionDecl_body = Core.Name "body"
 
 newtype FunctionBody = 
   FunctionBody {
     unFunctionBody :: Block}
   deriving (Eq, Ord, Read, Show)
 
-_FunctionBody = (Core.Name "hydra.ext.go.syntax.FunctionBody")
+_FunctionBody = Core.Name "hydra.ext.go.syntax.FunctionBody"
 
 data MethodDecl = 
   MethodDecl {
@@ -346,15 +346,15 @@ data MethodDecl =
     methodDeclBody :: (Maybe FunctionBody)}
   deriving (Eq, Ord, Read, Show)
 
-_MethodDecl = (Core.Name "hydra.ext.go.syntax.MethodDecl")
+_MethodDecl = Core.Name "hydra.ext.go.syntax.MethodDecl"
 
-_MethodDecl_receiver = (Core.Name "receiver")
+_MethodDecl_receiver = Core.Name "receiver"
 
-_MethodDecl_name = (Core.Name "name")
+_MethodDecl_name = Core.Name "name"
 
-_MethodDecl_signature = (Core.Name "signature")
+_MethodDecl_signature = Core.Name "signature"
 
-_MethodDecl_body = (Core.Name "body")
+_MethodDecl_body = Core.Name "body"
 
 data Receiver = 
   Receiver {
@@ -362,11 +362,11 @@ data Receiver =
     receiverType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Receiver = (Core.Name "hydra.ext.go.syntax.Receiver")
+_Receiver = Core.Name "hydra.ext.go.syntax.Receiver"
 
-_Receiver_name = (Core.Name "name")
+_Receiver_name = Core.Name "name"
 
-_Receiver_type = (Core.Name "type")
+_Receiver_type = Core.Name "type"
 
 data Type = 
   TypeName_ TypeName |
@@ -374,13 +374,13 @@ data Type =
   TypeParen Type
   deriving (Eq, Ord, Read, Show)
 
-_Type = (Core.Name "hydra.ext.go.syntax.Type")
+_Type = Core.Name "hydra.ext.go.syntax.Type"
 
-_Type_name = (Core.Name "name")
+_Type_name = Core.Name "name"
 
-_Type_literal = (Core.Name "literal")
+_Type_literal = Core.Name "literal"
 
-_Type_paren = (Core.Name "paren")
+_Type_paren = Core.Name "paren"
 
 data TypeName = 
   TypeName {
@@ -388,11 +388,11 @@ data TypeName =
     typeNameTypeArgs :: [Type]}
   deriving (Eq, Ord, Read, Show)
 
-_TypeName = (Core.Name "hydra.ext.go.syntax.TypeName")
+_TypeName = Core.Name "hydra.ext.go.syntax.TypeName"
 
-_TypeName_name = (Core.Name "name")
+_TypeName_name = Core.Name "name"
 
-_TypeName_typeArgs = (Core.Name "typeArgs")
+_TypeName_typeArgs = Core.Name "typeArgs"
 
 data QualifiedIdent = 
   QualifiedIdent {
@@ -400,11 +400,11 @@ data QualifiedIdent =
     qualifiedIdentName :: Identifier}
   deriving (Eq, Ord, Read, Show)
 
-_QualifiedIdent = (Core.Name "hydra.ext.go.syntax.QualifiedIdent")
+_QualifiedIdent = Core.Name "hydra.ext.go.syntax.QualifiedIdent"
 
-_QualifiedIdent_package = (Core.Name "package")
+_QualifiedIdent_package = Core.Name "package"
 
-_QualifiedIdent_name = (Core.Name "name")
+_QualifiedIdent_name = Core.Name "name"
 
 data TypeLit = 
   TypeLitArray ArrayType |
@@ -417,23 +417,23 @@ data TypeLit =
   TypeLitChannel ChannelType
   deriving (Eq, Ord, Read, Show)
 
-_TypeLit = (Core.Name "hydra.ext.go.syntax.TypeLit")
+_TypeLit = Core.Name "hydra.ext.go.syntax.TypeLit"
 
-_TypeLit_array = (Core.Name "array")
+_TypeLit_array = Core.Name "array"
 
-_TypeLit_struct = (Core.Name "struct")
+_TypeLit_struct = Core.Name "struct"
 
-_TypeLit_pointer = (Core.Name "pointer")
+_TypeLit_pointer = Core.Name "pointer"
 
-_TypeLit_function = (Core.Name "function")
+_TypeLit_function = Core.Name "function"
 
-_TypeLit_interface = (Core.Name "interface")
+_TypeLit_interface = Core.Name "interface"
 
-_TypeLit_slice = (Core.Name "slice")
+_TypeLit_slice = Core.Name "slice"
 
-_TypeLit_map = (Core.Name "map")
+_TypeLit_map = Core.Name "map"
 
-_TypeLit_channel = (Core.Name "channel")
+_TypeLit_channel = Core.Name "channel"
 
 data ArrayType = 
   ArrayType {
@@ -441,36 +441,36 @@ data ArrayType =
     arrayTypeElement :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_ArrayType = (Core.Name "hydra.ext.go.syntax.ArrayType")
+_ArrayType = Core.Name "hydra.ext.go.syntax.ArrayType"
 
-_ArrayType_length = (Core.Name "length")
+_ArrayType_length = Core.Name "length"
 
-_ArrayType_element = (Core.Name "element")
+_ArrayType_element = Core.Name "element"
 
 newtype SliceType = 
   SliceType {
     unSliceType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_SliceType = (Core.Name "hydra.ext.go.syntax.SliceType")
+_SliceType = Core.Name "hydra.ext.go.syntax.SliceType"
 
 newtype StructType = 
   StructType {
     unStructType :: [FieldDecl]}
   deriving (Eq, Ord, Read, Show)
 
-_StructType = (Core.Name "hydra.ext.go.syntax.StructType")
+_StructType = Core.Name "hydra.ext.go.syntax.StructType"
 
 data FieldDecl = 
   FieldDeclNamed NamedField |
   FieldDeclEmbedded EmbeddedField
   deriving (Eq, Ord, Read, Show)
 
-_FieldDecl = (Core.Name "hydra.ext.go.syntax.FieldDecl")
+_FieldDecl = Core.Name "hydra.ext.go.syntax.FieldDecl"
 
-_FieldDecl_named = (Core.Name "named")
+_FieldDecl_named = Core.Name "named"
 
-_FieldDecl_embedded = (Core.Name "embedded")
+_FieldDecl_embedded = Core.Name "embedded"
 
 data NamedField = 
   NamedField {
@@ -479,13 +479,13 @@ data NamedField =
     namedFieldTag :: (Maybe Tag)}
   deriving (Eq, Ord, Read, Show)
 
-_NamedField = (Core.Name "hydra.ext.go.syntax.NamedField")
+_NamedField = Core.Name "hydra.ext.go.syntax.NamedField"
 
-_NamedField_names = (Core.Name "names")
+_NamedField_names = Core.Name "names"
 
-_NamedField_type = (Core.Name "type")
+_NamedField_type = Core.Name "type"
 
-_NamedField_tag = (Core.Name "tag")
+_NamedField_tag = Core.Name "tag"
 
 data EmbeddedField = 
   EmbeddedField {
@@ -494,34 +494,34 @@ data EmbeddedField =
     embeddedFieldTag :: (Maybe Tag)}
   deriving (Eq, Ord, Read, Show)
 
-_EmbeddedField = (Core.Name "hydra.ext.go.syntax.EmbeddedField")
+_EmbeddedField = Core.Name "hydra.ext.go.syntax.EmbeddedField"
 
-_EmbeddedField_pointer = (Core.Name "pointer")
+_EmbeddedField_pointer = Core.Name "pointer"
 
-_EmbeddedField_type = (Core.Name "type")
+_EmbeddedField_type = Core.Name "type"
 
-_EmbeddedField_tag = (Core.Name "tag")
+_EmbeddedField_tag = Core.Name "tag"
 
 newtype Tag = 
   Tag {
     unTag :: StringLit}
   deriving (Eq, Ord, Read, Show)
 
-_Tag = (Core.Name "hydra.ext.go.syntax.Tag")
+_Tag = Core.Name "hydra.ext.go.syntax.Tag"
 
 newtype PointerType = 
   PointerType {
     unPointerType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_PointerType = (Core.Name "hydra.ext.go.syntax.PointerType")
+_PointerType = Core.Name "hydra.ext.go.syntax.PointerType"
 
 newtype FunctionType = 
   FunctionType {
     unFunctionType :: Signature}
   deriving (Eq, Ord, Read, Show)
 
-_FunctionType = (Core.Name "hydra.ext.go.syntax.FunctionType")
+_FunctionType = Core.Name "hydra.ext.go.syntax.FunctionType"
 
 data Signature = 
   Signature {
@@ -529,29 +529,29 @@ data Signature =
     signatureResult :: (Maybe Result)}
   deriving (Eq, Ord, Read, Show)
 
-_Signature = (Core.Name "hydra.ext.go.syntax.Signature")
+_Signature = Core.Name "hydra.ext.go.syntax.Signature"
 
-_Signature_parameters = (Core.Name "parameters")
+_Signature_parameters = Core.Name "parameters"
 
-_Signature_result = (Core.Name "result")
+_Signature_result = Core.Name "result"
 
 data Result = 
   ResultParameters Parameters |
   ResultType Type
   deriving (Eq, Ord, Read, Show)
 
-_Result = (Core.Name "hydra.ext.go.syntax.Result")
+_Result = Core.Name "hydra.ext.go.syntax.Result"
 
-_Result_parameters = (Core.Name "parameters")
+_Result_parameters = Core.Name "parameters"
 
-_Result_type = (Core.Name "type")
+_Result_type = Core.Name "type"
 
 newtype Parameters = 
   Parameters {
     unParameters :: [ParameterDecl]}
   deriving (Eq, Ord, Read, Show)
 
-_Parameters = (Core.Name "hydra.ext.go.syntax.Parameters")
+_Parameters = Core.Name "hydra.ext.go.syntax.Parameters"
 
 data ParameterDecl = 
   ParameterDecl {
@@ -560,31 +560,31 @@ data ParameterDecl =
     parameterDeclType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_ParameterDecl = (Core.Name "hydra.ext.go.syntax.ParameterDecl")
+_ParameterDecl = Core.Name "hydra.ext.go.syntax.ParameterDecl"
 
-_ParameterDecl_names = (Core.Name "names")
+_ParameterDecl_names = Core.Name "names"
 
-_ParameterDecl_variadic = (Core.Name "variadic")
+_ParameterDecl_variadic = Core.Name "variadic"
 
-_ParameterDecl_type = (Core.Name "type")
+_ParameterDecl_type = Core.Name "type"
 
 newtype InterfaceType = 
   InterfaceType {
     unInterfaceType :: [InterfaceElem]}
   deriving (Eq, Ord, Read, Show)
 
-_InterfaceType = (Core.Name "hydra.ext.go.syntax.InterfaceType")
+_InterfaceType = Core.Name "hydra.ext.go.syntax.InterfaceType"
 
 data InterfaceElem = 
   InterfaceElemMethod MethodElem |
   InterfaceElemType TypeElem
   deriving (Eq, Ord, Read, Show)
 
-_InterfaceElem = (Core.Name "hydra.ext.go.syntax.InterfaceElem")
+_InterfaceElem = Core.Name "hydra.ext.go.syntax.InterfaceElem"
 
-_InterfaceElem_method = (Core.Name "method")
+_InterfaceElem_method = Core.Name "method"
 
-_InterfaceElem_type = (Core.Name "type")
+_InterfaceElem_type = Core.Name "type"
 
 data MethodElem = 
   MethodElem {
@@ -592,18 +592,18 @@ data MethodElem =
     methodElemSignature :: Signature}
   deriving (Eq, Ord, Read, Show)
 
-_MethodElem = (Core.Name "hydra.ext.go.syntax.MethodElem")
+_MethodElem = Core.Name "hydra.ext.go.syntax.MethodElem"
 
-_MethodElem_name = (Core.Name "name")
+_MethodElem_name = Core.Name "name"
 
-_MethodElem_signature = (Core.Name "signature")
+_MethodElem_signature = Core.Name "signature"
 
 newtype TypeElem = 
   TypeElem {
     unTypeElem :: [TypeTerm]}
   deriving (Eq, Ord, Read, Show)
 
-_TypeElem = (Core.Name "hydra.ext.go.syntax.TypeElem")
+_TypeElem = Core.Name "hydra.ext.go.syntax.TypeElem"
 
 data TypeTerm = 
   TypeTerm {
@@ -611,11 +611,11 @@ data TypeTerm =
     typeTermType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_TypeTerm = (Core.Name "hydra.ext.go.syntax.TypeTerm")
+_TypeTerm = Core.Name "hydra.ext.go.syntax.TypeTerm"
 
-_TypeTerm_underlying = (Core.Name "underlying")
+_TypeTerm_underlying = Core.Name "underlying"
 
-_TypeTerm_type = (Core.Name "type")
+_TypeTerm_type = Core.Name "type"
 
 data MapType = 
   MapType {
@@ -623,11 +623,11 @@ data MapType =
     mapTypeValue :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_MapType = (Core.Name "hydra.ext.go.syntax.MapType")
+_MapType = Core.Name "hydra.ext.go.syntax.MapType"
 
-_MapType_key = (Core.Name "key")
+_MapType_key = Core.Name "key"
 
-_MapType_value = (Core.Name "value")
+_MapType_value = Core.Name "value"
 
 data ChannelType = 
   ChannelType {
@@ -635,11 +635,11 @@ data ChannelType =
     channelTypeElement :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_ChannelType = (Core.Name "hydra.ext.go.syntax.ChannelType")
+_ChannelType = Core.Name "hydra.ext.go.syntax.ChannelType"
 
-_ChannelType_direction = (Core.Name "direction")
+_ChannelType_direction = Core.Name "direction"
 
-_ChannelType_element = (Core.Name "element")
+_ChannelType_element = Core.Name "element"
 
 data ChannelDirection = 
   ChannelDirectionBidirectional  |
@@ -647,35 +647,35 @@ data ChannelDirection =
   ChannelDirectionReceive 
   deriving (Eq, Ord, Read, Show)
 
-_ChannelDirection = (Core.Name "hydra.ext.go.syntax.ChannelDirection")
+_ChannelDirection = Core.Name "hydra.ext.go.syntax.ChannelDirection"
 
-_ChannelDirection_bidirectional = (Core.Name "bidirectional")
+_ChannelDirection_bidirectional = Core.Name "bidirectional"
 
-_ChannelDirection_send = (Core.Name "send")
+_ChannelDirection_send = Core.Name "send"
 
-_ChannelDirection_receive = (Core.Name "receive")
+_ChannelDirection_receive = Core.Name "receive"
 
 data Expression = 
   ExpressionUnary UnaryExpr |
   ExpressionBinary BinaryExpr
   deriving (Eq, Ord, Read, Show)
 
-_Expression = (Core.Name "hydra.ext.go.syntax.Expression")
+_Expression = Core.Name "hydra.ext.go.syntax.Expression"
 
-_Expression_unary = (Core.Name "unary")
+_Expression_unary = Core.Name "unary"
 
-_Expression_binary = (Core.Name "binary")
+_Expression_binary = Core.Name "binary"
 
 data UnaryExpr = 
   UnaryExprPrimary PrimaryExpr |
   UnaryExprOp UnaryOperation
   deriving (Eq, Ord, Read, Show)
 
-_UnaryExpr = (Core.Name "hydra.ext.go.syntax.UnaryExpr")
+_UnaryExpr = Core.Name "hydra.ext.go.syntax.UnaryExpr"
 
-_UnaryExpr_primary = (Core.Name "primary")
+_UnaryExpr_primary = Core.Name "primary"
 
-_UnaryExpr_op = (Core.Name "op")
+_UnaryExpr_op = Core.Name "op"
 
 data UnaryOperation = 
   UnaryOperation {
@@ -683,11 +683,11 @@ data UnaryOperation =
     unaryOperationOperand :: UnaryExpr}
   deriving (Eq, Ord, Read, Show)
 
-_UnaryOperation = (Core.Name "hydra.ext.go.syntax.UnaryOperation")
+_UnaryOperation = Core.Name "hydra.ext.go.syntax.UnaryOperation"
 
-_UnaryOperation_op = (Core.Name "op")
+_UnaryOperation_op = Core.Name "op"
 
-_UnaryOperation_operand = (Core.Name "operand")
+_UnaryOperation_operand = Core.Name "operand"
 
 data BinaryExpr = 
   BinaryExpr {
@@ -696,13 +696,13 @@ data BinaryExpr =
     binaryExprRight :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_BinaryExpr = (Core.Name "hydra.ext.go.syntax.BinaryExpr")
+_BinaryExpr = Core.Name "hydra.ext.go.syntax.BinaryExpr"
 
-_BinaryExpr_left = (Core.Name "left")
+_BinaryExpr_left = Core.Name "left"
 
-_BinaryExpr_op = (Core.Name "op")
+_BinaryExpr_op = Core.Name "op"
 
-_BinaryExpr_right = (Core.Name "right")
+_BinaryExpr_right = Core.Name "right"
 
 data BinaryOp = 
   BinaryOpOr  |
@@ -726,45 +726,45 @@ data BinaryOp =
   BinaryOpBitClear 
   deriving (Eq, Ord, Read, Show)
 
-_BinaryOp = (Core.Name "hydra.ext.go.syntax.BinaryOp")
+_BinaryOp = Core.Name "hydra.ext.go.syntax.BinaryOp"
 
-_BinaryOp_or = (Core.Name "or")
+_BinaryOp_or = Core.Name "or"
 
-_BinaryOp_and = (Core.Name "and")
+_BinaryOp_and = Core.Name "and"
 
-_BinaryOp_equal = (Core.Name "equal")
+_BinaryOp_equal = Core.Name "equal"
 
-_BinaryOp_notEqual = (Core.Name "notEqual")
+_BinaryOp_notEqual = Core.Name "notEqual"
 
-_BinaryOp_less = (Core.Name "less")
+_BinaryOp_less = Core.Name "less"
 
-_BinaryOp_lessEqual = (Core.Name "lessEqual")
+_BinaryOp_lessEqual = Core.Name "lessEqual"
 
-_BinaryOp_greater = (Core.Name "greater")
+_BinaryOp_greater = Core.Name "greater"
 
-_BinaryOp_greaterEqual = (Core.Name "greaterEqual")
+_BinaryOp_greaterEqual = Core.Name "greaterEqual"
 
-_BinaryOp_add = (Core.Name "add")
+_BinaryOp_add = Core.Name "add"
 
-_BinaryOp_subtract = (Core.Name "subtract")
+_BinaryOp_subtract = Core.Name "subtract"
 
-_BinaryOp_bitwiseOr = (Core.Name "bitwiseOr")
+_BinaryOp_bitwiseOr = Core.Name "bitwiseOr"
 
-_BinaryOp_bitwiseXor = (Core.Name "bitwiseXor")
+_BinaryOp_bitwiseXor = Core.Name "bitwiseXor"
 
-_BinaryOp_multiply = (Core.Name "multiply")
+_BinaryOp_multiply = Core.Name "multiply"
 
-_BinaryOp_divide = (Core.Name "divide")
+_BinaryOp_divide = Core.Name "divide"
 
-_BinaryOp_remainder = (Core.Name "remainder")
+_BinaryOp_remainder = Core.Name "remainder"
 
-_BinaryOp_leftShift = (Core.Name "leftShift")
+_BinaryOp_leftShift = Core.Name "leftShift"
 
-_BinaryOp_rightShift = (Core.Name "rightShift")
+_BinaryOp_rightShift = Core.Name "rightShift"
 
-_BinaryOp_bitwiseAnd = (Core.Name "bitwiseAnd")
+_BinaryOp_bitwiseAnd = Core.Name "bitwiseAnd"
 
-_BinaryOp_bitClear = (Core.Name "bitClear")
+_BinaryOp_bitClear = Core.Name "bitClear"
 
 data PrimaryExpr = 
   PrimaryExprOperand Operand |
@@ -777,23 +777,23 @@ data PrimaryExpr =
   PrimaryExprCall CallExpr
   deriving (Eq, Ord, Read, Show)
 
-_PrimaryExpr = (Core.Name "hydra.ext.go.syntax.PrimaryExpr")
+_PrimaryExpr = Core.Name "hydra.ext.go.syntax.PrimaryExpr"
 
-_PrimaryExpr_operand = (Core.Name "operand")
+_PrimaryExpr_operand = Core.Name "operand"
 
-_PrimaryExpr_conversion = (Core.Name "conversion")
+_PrimaryExpr_conversion = Core.Name "conversion"
 
-_PrimaryExpr_methodExpr = (Core.Name "methodExpr")
+_PrimaryExpr_methodExpr = Core.Name "methodExpr"
 
-_PrimaryExpr_selector = (Core.Name "selector")
+_PrimaryExpr_selector = Core.Name "selector"
 
-_PrimaryExpr_index = (Core.Name "index")
+_PrimaryExpr_index = Core.Name "index"
 
-_PrimaryExpr_slice = (Core.Name "slice")
+_PrimaryExpr_slice = Core.Name "slice"
 
-_PrimaryExpr_typeAssertion = (Core.Name "typeAssertion")
+_PrimaryExpr_typeAssertion = Core.Name "typeAssertion"
 
-_PrimaryExpr_call = (Core.Name "call")
+_PrimaryExpr_call = Core.Name "call"
 
 data SelectorExpr = 
   SelectorExpr {
@@ -801,11 +801,11 @@ data SelectorExpr =
     selectorExprSelector :: Identifier}
   deriving (Eq, Ord, Read, Show)
 
-_SelectorExpr = (Core.Name "hydra.ext.go.syntax.SelectorExpr")
+_SelectorExpr = Core.Name "hydra.ext.go.syntax.SelectorExpr"
 
-_SelectorExpr_expr = (Core.Name "expr")
+_SelectorExpr_expr = Core.Name "expr"
 
-_SelectorExpr_selector = (Core.Name "selector")
+_SelectorExpr_selector = Core.Name "selector"
 
 data IndexExpr = 
   IndexExpr {
@@ -813,11 +813,11 @@ data IndexExpr =
     indexExprIndex :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_IndexExpr = (Core.Name "hydra.ext.go.syntax.IndexExpr")
+_IndexExpr = Core.Name "hydra.ext.go.syntax.IndexExpr"
 
-_IndexExpr_expr = (Core.Name "expr")
+_IndexExpr_expr = Core.Name "expr"
 
-_IndexExpr_index = (Core.Name "index")
+_IndexExpr_index = Core.Name "index"
 
 data SliceExpr = 
   SliceExpr {
@@ -825,11 +825,11 @@ data SliceExpr =
     sliceExprSlice :: Slice}
   deriving (Eq, Ord, Read, Show)
 
-_SliceExpr = (Core.Name "hydra.ext.go.syntax.SliceExpr")
+_SliceExpr = Core.Name "hydra.ext.go.syntax.SliceExpr"
 
-_SliceExpr_expr = (Core.Name "expr")
+_SliceExpr_expr = Core.Name "expr"
 
-_SliceExpr_slice = (Core.Name "slice")
+_SliceExpr_slice = Core.Name "slice"
 
 data TypeAssertionExpr = 
   TypeAssertionExpr {
@@ -837,11 +837,11 @@ data TypeAssertionExpr =
     typeAssertionExprType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_TypeAssertionExpr = (Core.Name "hydra.ext.go.syntax.TypeAssertionExpr")
+_TypeAssertionExpr = Core.Name "hydra.ext.go.syntax.TypeAssertionExpr"
 
-_TypeAssertionExpr_expr = (Core.Name "expr")
+_TypeAssertionExpr_expr = Core.Name "expr"
 
-_TypeAssertionExpr_type = (Core.Name "type")
+_TypeAssertionExpr_type = Core.Name "type"
 
 data CallExpr = 
   CallExpr {
@@ -849,11 +849,11 @@ data CallExpr =
     callExprArguments :: Arguments}
   deriving (Eq, Ord, Read, Show)
 
-_CallExpr = (Core.Name "hydra.ext.go.syntax.CallExpr")
+_CallExpr = Core.Name "hydra.ext.go.syntax.CallExpr"
 
-_CallExpr_function = (Core.Name "function")
+_CallExpr_function = Core.Name "function"
 
-_CallExpr_arguments = (Core.Name "arguments")
+_CallExpr_arguments = Core.Name "arguments"
 
 data Operand = 
   OperandLiteral Literal |
@@ -861,13 +861,13 @@ data Operand =
   OperandParen Expression
   deriving (Eq, Ord, Read, Show)
 
-_Operand = (Core.Name "hydra.ext.go.syntax.Operand")
+_Operand = Core.Name "hydra.ext.go.syntax.Operand"
 
-_Operand_literal = (Core.Name "literal")
+_Operand_literal = Core.Name "literal"
 
-_Operand_name = (Core.Name "name")
+_Operand_name = Core.Name "name"
 
-_Operand_paren = (Core.Name "paren")
+_Operand_paren = Core.Name "paren"
 
 data OperandName = 
   OperandName {
@@ -875,11 +875,11 @@ data OperandName =
     operandNameTypeArgs :: [Type]}
   deriving (Eq, Ord, Read, Show)
 
-_OperandName = (Core.Name "hydra.ext.go.syntax.OperandName")
+_OperandName = Core.Name "hydra.ext.go.syntax.OperandName"
 
-_OperandName_name = (Core.Name "name")
+_OperandName_name = Core.Name "name"
 
-_OperandName_typeArgs = (Core.Name "typeArgs")
+_OperandName_typeArgs = Core.Name "typeArgs"
 
 data Literal = 
   LiteralBasic BasicLit |
@@ -887,13 +887,13 @@ data Literal =
   LiteralFunction FunctionLit
   deriving (Eq, Ord, Read, Show)
 
-_Literal = (Core.Name "hydra.ext.go.syntax.Literal")
+_Literal = Core.Name "hydra.ext.go.syntax.Literal"
 
-_Literal_basic = (Core.Name "basic")
+_Literal_basic = Core.Name "basic"
 
-_Literal_composite = (Core.Name "composite")
+_Literal_composite = Core.Name "composite"
 
-_Literal_function = (Core.Name "function")
+_Literal_function = Core.Name "function"
 
 data BasicLit = 
   BasicLitInt IntLit |
@@ -903,17 +903,17 @@ data BasicLit =
   BasicLitString StringLit
   deriving (Eq, Ord, Read, Show)
 
-_BasicLit = (Core.Name "hydra.ext.go.syntax.BasicLit")
+_BasicLit = Core.Name "hydra.ext.go.syntax.BasicLit"
 
-_BasicLit_int = (Core.Name "int")
+_BasicLit_int = Core.Name "int"
 
-_BasicLit_float = (Core.Name "float")
+_BasicLit_float = Core.Name "float"
 
-_BasicLit_imaginary = (Core.Name "imaginary")
+_BasicLit_imaginary = Core.Name "imaginary"
 
-_BasicLit_rune = (Core.Name "rune")
+_BasicLit_rune = Core.Name "rune"
 
-_BasicLit_string = (Core.Name "string")
+_BasicLit_string = Core.Name "string"
 
 data CompositeLit = 
   CompositeLit {
@@ -921,11 +921,11 @@ data CompositeLit =
     compositeLitValue :: LiteralValue}
   deriving (Eq, Ord, Read, Show)
 
-_CompositeLit = (Core.Name "hydra.ext.go.syntax.CompositeLit")
+_CompositeLit = Core.Name "hydra.ext.go.syntax.CompositeLit"
 
-_CompositeLit_type = (Core.Name "type")
+_CompositeLit_type = Core.Name "type"
 
-_CompositeLit_value = (Core.Name "value")
+_CompositeLit_value = Core.Name "value"
 
 data LiteralType = 
   LiteralTypeStruct StructType |
@@ -936,33 +936,33 @@ data LiteralType =
   LiteralTypeName TypeName
   deriving (Eq, Ord, Read, Show)
 
-_LiteralType = (Core.Name "hydra.ext.go.syntax.LiteralType")
+_LiteralType = Core.Name "hydra.ext.go.syntax.LiteralType"
 
-_LiteralType_struct = (Core.Name "struct")
+_LiteralType_struct = Core.Name "struct"
 
-_LiteralType_array = (Core.Name "array")
+_LiteralType_array = Core.Name "array"
 
-_LiteralType_inferredArray = (Core.Name "inferredArray")
+_LiteralType_inferredArray = Core.Name "inferredArray"
 
-_LiteralType_slice = (Core.Name "slice")
+_LiteralType_slice = Core.Name "slice"
 
-_LiteralType_map = (Core.Name "map")
+_LiteralType_map = Core.Name "map"
 
-_LiteralType_name = (Core.Name "name")
+_LiteralType_name = Core.Name "name"
 
 newtype LiteralValue = 
   LiteralValue {
     unLiteralValue :: [KeyedElement]}
   deriving (Eq, Ord, Read, Show)
 
-_LiteralValue = (Core.Name "hydra.ext.go.syntax.LiteralValue")
+_LiteralValue = Core.Name "hydra.ext.go.syntax.LiteralValue"
 
 newtype ElementList = 
   ElementList {
     unElementList :: [KeyedElement]}
   deriving (Eq, Ord, Read, Show)
 
-_ElementList = (Core.Name "hydra.ext.go.syntax.ElementList")
+_ElementList = Core.Name "hydra.ext.go.syntax.ElementList"
 
 data KeyedElement = 
   KeyedElement {
@@ -970,11 +970,11 @@ data KeyedElement =
     keyedElementElement :: Element}
   deriving (Eq, Ord, Read, Show)
 
-_KeyedElement = (Core.Name "hydra.ext.go.syntax.KeyedElement")
+_KeyedElement = Core.Name "hydra.ext.go.syntax.KeyedElement"
 
-_KeyedElement_key = (Core.Name "key")
+_KeyedElement_key = Core.Name "key"
 
-_KeyedElement_element = (Core.Name "element")
+_KeyedElement_element = Core.Name "element"
 
 data Key = 
   KeyField Identifier |
@@ -982,24 +982,24 @@ data Key =
   KeyLiteral LiteralValue
   deriving (Eq, Ord, Read, Show)
 
-_Key = (Core.Name "hydra.ext.go.syntax.Key")
+_Key = Core.Name "hydra.ext.go.syntax.Key"
 
-_Key_field = (Core.Name "field")
+_Key_field = Core.Name "field"
 
-_Key_expression = (Core.Name "expression")
+_Key_expression = Core.Name "expression"
 
-_Key_literal = (Core.Name "literal")
+_Key_literal = Core.Name "literal"
 
 data Element = 
   ElementExpression Expression |
   ElementLiteral LiteralValue
   deriving (Eq, Ord, Read, Show)
 
-_Element = (Core.Name "hydra.ext.go.syntax.Element")
+_Element = Core.Name "hydra.ext.go.syntax.Element"
 
-_Element_expression = (Core.Name "expression")
+_Element_expression = Core.Name "expression"
 
-_Element_literal = (Core.Name "literal")
+_Element_literal = Core.Name "literal"
 
 data FunctionLit = 
   FunctionLit {
@@ -1007,36 +1007,36 @@ data FunctionLit =
     functionLitBody :: FunctionBody}
   deriving (Eq, Ord, Read, Show)
 
-_FunctionLit = (Core.Name "hydra.ext.go.syntax.FunctionLit")
+_FunctionLit = Core.Name "hydra.ext.go.syntax.FunctionLit"
 
-_FunctionLit_signature = (Core.Name "signature")
+_FunctionLit_signature = Core.Name "signature"
 
-_FunctionLit_body = (Core.Name "body")
+_FunctionLit_body = Core.Name "body"
 
 newtype Selector = 
   Selector {
     unSelector :: Identifier}
   deriving (Eq, Ord, Read, Show)
 
-_Selector = (Core.Name "hydra.ext.go.syntax.Selector")
+_Selector = Core.Name "hydra.ext.go.syntax.Selector"
 
 newtype Index = 
   Index {
     unIndex :: [Expression]}
   deriving (Eq, Ord, Read, Show)
 
-_Index = (Core.Name "hydra.ext.go.syntax.Index")
+_Index = Core.Name "hydra.ext.go.syntax.Index"
 
 data Slice = 
   SliceSimple SimpleSlice |
   SliceFull FullSlice
   deriving (Eq, Ord, Read, Show)
 
-_Slice = (Core.Name "hydra.ext.go.syntax.Slice")
+_Slice = Core.Name "hydra.ext.go.syntax.Slice"
 
-_Slice_simple = (Core.Name "simple")
+_Slice_simple = Core.Name "simple"
 
-_Slice_full = (Core.Name "full")
+_Slice_full = Core.Name "full"
 
 data SimpleSlice = 
   SimpleSlice {
@@ -1044,11 +1044,11 @@ data SimpleSlice =
     simpleSliceHigh :: (Maybe Expression)}
   deriving (Eq, Ord, Read, Show)
 
-_SimpleSlice = (Core.Name "hydra.ext.go.syntax.SimpleSlice")
+_SimpleSlice = Core.Name "hydra.ext.go.syntax.SimpleSlice"
 
-_SimpleSlice_low = (Core.Name "low")
+_SimpleSlice_low = Core.Name "low"
 
-_SimpleSlice_high = (Core.Name "high")
+_SimpleSlice_high = Core.Name "high"
 
 data FullSlice = 
   FullSlice {
@@ -1057,20 +1057,20 @@ data FullSlice =
     fullSliceMax :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_FullSlice = (Core.Name "hydra.ext.go.syntax.FullSlice")
+_FullSlice = Core.Name "hydra.ext.go.syntax.FullSlice"
 
-_FullSlice_low = (Core.Name "low")
+_FullSlice_low = Core.Name "low"
 
-_FullSlice_high = (Core.Name "high")
+_FullSlice_high = Core.Name "high"
 
-_FullSlice_max = (Core.Name "max")
+_FullSlice_max = Core.Name "max"
 
 newtype TypeAssertion = 
   TypeAssertion {
     unTypeAssertion :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_TypeAssertion = (Core.Name "hydra.ext.go.syntax.TypeAssertion")
+_TypeAssertion = Core.Name "hydra.ext.go.syntax.TypeAssertion"
 
 data Arguments = 
   Arguments {
@@ -1079,13 +1079,13 @@ data Arguments =
     argumentsEllipsis :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_Arguments = (Core.Name "hydra.ext.go.syntax.Arguments")
+_Arguments = Core.Name "hydra.ext.go.syntax.Arguments"
 
-_Arguments_typeArg = (Core.Name "typeArg")
+_Arguments_typeArg = Core.Name "typeArg"
 
-_Arguments_expressions = (Core.Name "expressions")
+_Arguments_expressions = Core.Name "expressions"
 
-_Arguments_ellipsis = (Core.Name "ellipsis")
+_Arguments_ellipsis = Core.Name "ellipsis"
 
 data MethodExpr = 
   MethodExpr {
@@ -1093,11 +1093,11 @@ data MethodExpr =
     methodExprMethod :: Identifier}
   deriving (Eq, Ord, Read, Show)
 
-_MethodExpr = (Core.Name "hydra.ext.go.syntax.MethodExpr")
+_MethodExpr = Core.Name "hydra.ext.go.syntax.MethodExpr"
 
-_MethodExpr_receiver = (Core.Name "receiver")
+_MethodExpr_receiver = Core.Name "receiver"
 
-_MethodExpr_method = (Core.Name "method")
+_MethodExpr_method = Core.Name "method"
 
 data Conversion = 
   Conversion {
@@ -1105,11 +1105,11 @@ data Conversion =
     conversionExpression :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_Conversion = (Core.Name "hydra.ext.go.syntax.Conversion")
+_Conversion = Core.Name "hydra.ext.go.syntax.Conversion"
 
-_Conversion_type = (Core.Name "type")
+_Conversion_type = Core.Name "type"
 
-_Conversion_expression = (Core.Name "expression")
+_Conversion_expression = Core.Name "expression"
 
 data Statement = 
   StatementDeclaration Declaration |
@@ -1129,37 +1129,37 @@ data Statement =
   StatementDefer DeferStmt
   deriving (Eq, Ord, Read, Show)
 
-_Statement = (Core.Name "hydra.ext.go.syntax.Statement")
+_Statement = Core.Name "hydra.ext.go.syntax.Statement"
 
-_Statement_declaration = (Core.Name "declaration")
+_Statement_declaration = Core.Name "declaration"
 
-_Statement_labeled = (Core.Name "labeled")
+_Statement_labeled = Core.Name "labeled"
 
-_Statement_simple = (Core.Name "simple")
+_Statement_simple = Core.Name "simple"
 
-_Statement_go = (Core.Name "go")
+_Statement_go = Core.Name "go"
 
-_Statement_return = (Core.Name "return")
+_Statement_return = Core.Name "return"
 
-_Statement_break = (Core.Name "break")
+_Statement_break = Core.Name "break"
 
-_Statement_continue = (Core.Name "continue")
+_Statement_continue = Core.Name "continue"
 
-_Statement_goto = (Core.Name "goto")
+_Statement_goto = Core.Name "goto"
 
-_Statement_fallthrough = (Core.Name "fallthrough")
+_Statement_fallthrough = Core.Name "fallthrough"
 
-_Statement_block = (Core.Name "block")
+_Statement_block = Core.Name "block"
 
-_Statement_if = (Core.Name "if")
+_Statement_if = Core.Name "if"
 
-_Statement_switch = (Core.Name "switch")
+_Statement_switch = Core.Name "switch"
 
-_Statement_select = (Core.Name "select")
+_Statement_select = Core.Name "select"
 
-_Statement_for = (Core.Name "for")
+_Statement_for = Core.Name "for"
 
-_Statement_defer = (Core.Name "defer")
+_Statement_defer = Core.Name "defer"
 
 data SimpleStmt = 
   SimpleStmtEmpty EmptyStmt |
@@ -1170,26 +1170,26 @@ data SimpleStmt =
   SimpleStmtShortVarDecl ShortVarDecl
   deriving (Eq, Ord, Read, Show)
 
-_SimpleStmt = (Core.Name "hydra.ext.go.syntax.SimpleStmt")
+_SimpleStmt = Core.Name "hydra.ext.go.syntax.SimpleStmt"
 
-_SimpleStmt_empty = (Core.Name "empty")
+_SimpleStmt_empty = Core.Name "empty"
 
-_SimpleStmt_expression = (Core.Name "expression")
+_SimpleStmt_expression = Core.Name "expression"
 
-_SimpleStmt_send = (Core.Name "send")
+_SimpleStmt_send = Core.Name "send"
 
-_SimpleStmt_incDec = (Core.Name "incDec")
+_SimpleStmt_incDec = Core.Name "incDec"
 
-_SimpleStmt_assignment = (Core.Name "assignment")
+_SimpleStmt_assignment = Core.Name "assignment"
 
-_SimpleStmt_shortVarDecl = (Core.Name "shortVarDecl")
+_SimpleStmt_shortVarDecl = Core.Name "shortVarDecl"
 
 newtype EmptyStmt = 
   EmptyStmt {
     unEmptyStmt :: ()}
   deriving (Eq, Ord, Read, Show)
 
-_EmptyStmt = (Core.Name "hydra.ext.go.syntax.EmptyStmt")
+_EmptyStmt = Core.Name "hydra.ext.go.syntax.EmptyStmt"
 
 data LabeledStmt = 
   LabeledStmt {
@@ -1197,18 +1197,18 @@ data LabeledStmt =
     labeledStmtStatement :: Statement}
   deriving (Eq, Ord, Read, Show)
 
-_LabeledStmt = (Core.Name "hydra.ext.go.syntax.LabeledStmt")
+_LabeledStmt = Core.Name "hydra.ext.go.syntax.LabeledStmt"
 
-_LabeledStmt_label = (Core.Name "label")
+_LabeledStmt_label = Core.Name "label"
 
-_LabeledStmt_statement = (Core.Name "statement")
+_LabeledStmt_statement = Core.Name "statement"
 
 newtype ExpressionStmt = 
   ExpressionStmt {
     unExpressionStmt :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_ExpressionStmt = (Core.Name "hydra.ext.go.syntax.ExpressionStmt")
+_ExpressionStmt = Core.Name "hydra.ext.go.syntax.ExpressionStmt"
 
 data SendStmt = 
   SendStmt {
@@ -1216,11 +1216,11 @@ data SendStmt =
     sendStmtValue :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_SendStmt = (Core.Name "hydra.ext.go.syntax.SendStmt")
+_SendStmt = Core.Name "hydra.ext.go.syntax.SendStmt"
 
-_SendStmt_channel = (Core.Name "channel")
+_SendStmt_channel = Core.Name "channel"
 
-_SendStmt_value = (Core.Name "value")
+_SendStmt_value = Core.Name "value"
 
 data IncDecStmt = 
   IncDecStmt {
@@ -1228,11 +1228,11 @@ data IncDecStmt =
     incDecStmtIncrement :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_IncDecStmt = (Core.Name "hydra.ext.go.syntax.IncDecStmt")
+_IncDecStmt = Core.Name "hydra.ext.go.syntax.IncDecStmt"
 
-_IncDecStmt_expression = (Core.Name "expression")
+_IncDecStmt_expression = Core.Name "expression"
 
-_IncDecStmt_increment = (Core.Name "increment")
+_IncDecStmt_increment = Core.Name "increment"
 
 data Assignment = 
   Assignment {
@@ -1241,13 +1241,13 @@ data Assignment =
     assignmentRhs :: [Expression]}
   deriving (Eq, Ord, Read, Show)
 
-_Assignment = (Core.Name "hydra.ext.go.syntax.Assignment")
+_Assignment = Core.Name "hydra.ext.go.syntax.Assignment"
 
-_Assignment_lhs = (Core.Name "lhs")
+_Assignment_lhs = Core.Name "lhs"
 
-_Assignment_op = (Core.Name "op")
+_Assignment_op = Core.Name "op"
 
-_Assignment_rhs = (Core.Name "rhs")
+_Assignment_rhs = Core.Name "rhs"
 
 data AssignOp = 
   AssignOpSimple  |
@@ -1255,13 +1255,13 @@ data AssignOp =
   AssignOpMul MulOp
   deriving (Eq, Ord, Read, Show)
 
-_AssignOp = (Core.Name "hydra.ext.go.syntax.AssignOp")
+_AssignOp = Core.Name "hydra.ext.go.syntax.AssignOp"
 
-_AssignOp_simple = (Core.Name "simple")
+_AssignOp_simple = Core.Name "simple"
 
-_AssignOp_add = (Core.Name "add")
+_AssignOp_add = Core.Name "add"
 
-_AssignOp_mul = (Core.Name "mul")
+_AssignOp_mul = Core.Name "mul"
 
 data IfStmt = 
   IfStmt {
@@ -1271,37 +1271,37 @@ data IfStmt =
     ifStmtElse :: (Maybe ElseClause)}
   deriving (Eq, Ord, Read, Show)
 
-_IfStmt = (Core.Name "hydra.ext.go.syntax.IfStmt")
+_IfStmt = Core.Name "hydra.ext.go.syntax.IfStmt"
 
-_IfStmt_init = (Core.Name "init")
+_IfStmt_init = Core.Name "init"
 
-_IfStmt_condition = (Core.Name "condition")
+_IfStmt_condition = Core.Name "condition"
 
-_IfStmt_then = (Core.Name "then")
+_IfStmt_then = Core.Name "then"
 
-_IfStmt_else = (Core.Name "else")
+_IfStmt_else = Core.Name "else"
 
 data ElseClause = 
   ElseClauseIf IfStmt |
   ElseClauseBlock Block
   deriving (Eq, Ord, Read, Show)
 
-_ElseClause = (Core.Name "hydra.ext.go.syntax.ElseClause")
+_ElseClause = Core.Name "hydra.ext.go.syntax.ElseClause"
 
-_ElseClause_if = (Core.Name "if")
+_ElseClause_if = Core.Name "if"
 
-_ElseClause_block = (Core.Name "block")
+_ElseClause_block = Core.Name "block"
 
 data SwitchStmt = 
   SwitchStmtExpression ExprSwitchStmt |
   SwitchStmtType TypeSwitchStmt
   deriving (Eq, Ord, Read, Show)
 
-_SwitchStmt = (Core.Name "hydra.ext.go.syntax.SwitchStmt")
+_SwitchStmt = Core.Name "hydra.ext.go.syntax.SwitchStmt"
 
-_SwitchStmt_expression = (Core.Name "expression")
+_SwitchStmt_expression = Core.Name "expression"
 
-_SwitchStmt_type = (Core.Name "type")
+_SwitchStmt_type = Core.Name "type"
 
 data ExprSwitchStmt = 
   ExprSwitchStmt {
@@ -1310,13 +1310,13 @@ data ExprSwitchStmt =
     exprSwitchStmtCases :: [ExprCaseClause]}
   deriving (Eq, Ord, Read, Show)
 
-_ExprSwitchStmt = (Core.Name "hydra.ext.go.syntax.ExprSwitchStmt")
+_ExprSwitchStmt = Core.Name "hydra.ext.go.syntax.ExprSwitchStmt"
 
-_ExprSwitchStmt_init = (Core.Name "init")
+_ExprSwitchStmt_init = Core.Name "init"
 
-_ExprSwitchStmt_expression = (Core.Name "expression")
+_ExprSwitchStmt_expression = Core.Name "expression"
 
-_ExprSwitchStmt_cases = (Core.Name "cases")
+_ExprSwitchStmt_cases = Core.Name "cases"
 
 data ExprCaseClause = 
   ExprCaseClause {
@@ -1324,11 +1324,11 @@ data ExprCaseClause =
     exprCaseClauseStatements :: [Statement]}
   deriving (Eq, Ord, Read, Show)
 
-_ExprCaseClause = (Core.Name "hydra.ext.go.syntax.ExprCaseClause")
+_ExprCaseClause = Core.Name "hydra.ext.go.syntax.ExprCaseClause"
 
-_ExprCaseClause_case = (Core.Name "case")
+_ExprCaseClause_case = Core.Name "case"
 
-_ExprCaseClause_statements = (Core.Name "statements")
+_ExprCaseClause_statements = Core.Name "statements"
 
 data TypeSwitchStmt = 
   TypeSwitchStmt {
@@ -1337,13 +1337,13 @@ data TypeSwitchStmt =
     typeSwitchStmtCases :: [TypeCaseClause]}
   deriving (Eq, Ord, Read, Show)
 
-_TypeSwitchStmt = (Core.Name "hydra.ext.go.syntax.TypeSwitchStmt")
+_TypeSwitchStmt = Core.Name "hydra.ext.go.syntax.TypeSwitchStmt"
 
-_TypeSwitchStmt_init = (Core.Name "init")
+_TypeSwitchStmt_init = Core.Name "init"
 
-_TypeSwitchStmt_guard = (Core.Name "guard")
+_TypeSwitchStmt_guard = Core.Name "guard"
 
-_TypeSwitchStmt_cases = (Core.Name "cases")
+_TypeSwitchStmt_cases = Core.Name "cases"
 
 data TypeSwitchGuard = 
   TypeSwitchGuard {
@@ -1351,11 +1351,11 @@ data TypeSwitchGuard =
     typeSwitchGuardExpression :: PrimaryExpr}
   deriving (Eq, Ord, Read, Show)
 
-_TypeSwitchGuard = (Core.Name "hydra.ext.go.syntax.TypeSwitchGuard")
+_TypeSwitchGuard = Core.Name "hydra.ext.go.syntax.TypeSwitchGuard"
 
-_TypeSwitchGuard_name = (Core.Name "name")
+_TypeSwitchGuard_name = Core.Name "name"
 
-_TypeSwitchGuard_expression = (Core.Name "expression")
+_TypeSwitchGuard_expression = Core.Name "expression"
 
 data TypeCaseClause = 
   TypeCaseClause {
@@ -1363,11 +1363,11 @@ data TypeCaseClause =
     typeCaseClauseStatements :: [Statement]}
   deriving (Eq, Ord, Read, Show)
 
-_TypeCaseClause = (Core.Name "hydra.ext.go.syntax.TypeCaseClause")
+_TypeCaseClause = Core.Name "hydra.ext.go.syntax.TypeCaseClause"
 
-_TypeCaseClause_case = (Core.Name "case")
+_TypeCaseClause_case = Core.Name "case"
 
-_TypeCaseClause_statements = (Core.Name "statements")
+_TypeCaseClause_statements = Core.Name "statements"
 
 data ForStmt = 
   ForStmt {
@@ -1375,11 +1375,11 @@ data ForStmt =
     forStmtBody :: Block}
   deriving (Eq, Ord, Read, Show)
 
-_ForStmt = (Core.Name "hydra.ext.go.syntax.ForStmt")
+_ForStmt = Core.Name "hydra.ext.go.syntax.ForStmt"
 
-_ForStmt_clause = (Core.Name "clause")
+_ForStmt_clause = Core.Name "clause"
 
-_ForStmt_body = (Core.Name "body")
+_ForStmt_body = Core.Name "body"
 
 data ForClauseOrRange = 
   ForClauseOrRangeCondition Expression |
@@ -1387,13 +1387,13 @@ data ForClauseOrRange =
   ForClauseOrRangeRange RangeClause
   deriving (Eq, Ord, Read, Show)
 
-_ForClauseOrRange = (Core.Name "hydra.ext.go.syntax.ForClauseOrRange")
+_ForClauseOrRange = Core.Name "hydra.ext.go.syntax.ForClauseOrRange"
 
-_ForClauseOrRange_condition = (Core.Name "condition")
+_ForClauseOrRange_condition = Core.Name "condition"
 
-_ForClauseOrRange_clause = (Core.Name "clause")
+_ForClauseOrRange_clause = Core.Name "clause"
 
-_ForClauseOrRange_range = (Core.Name "range")
+_ForClauseOrRange_range = Core.Name "range"
 
 data ForClause = 
   ForClause {
@@ -1402,13 +1402,13 @@ data ForClause =
     forClausePost :: (Maybe SimpleStmt)}
   deriving (Eq, Ord, Read, Show)
 
-_ForClause = (Core.Name "hydra.ext.go.syntax.ForClause")
+_ForClause = Core.Name "hydra.ext.go.syntax.ForClause"
 
-_ForClause_init = (Core.Name "init")
+_ForClause_init = Core.Name "init"
 
-_ForClause_condition = (Core.Name "condition")
+_ForClause_condition = Core.Name "condition"
 
-_ForClause_post = (Core.Name "post")
+_ForClause_post = Core.Name "post"
 
 data RangeClause = 
   RangeClause {
@@ -1416,36 +1416,36 @@ data RangeClause =
     rangeClauseExpression :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_RangeClause = (Core.Name "hydra.ext.go.syntax.RangeClause")
+_RangeClause = Core.Name "hydra.ext.go.syntax.RangeClause"
 
-_RangeClause_vars = (Core.Name "vars")
+_RangeClause_vars = Core.Name "vars"
 
-_RangeClause_expression = (Core.Name "expression")
+_RangeClause_expression = Core.Name "expression"
 
 data RangeVars = 
   RangeVarsAssign [Expression] |
   RangeVarsDeclare [Identifier]
   deriving (Eq, Ord, Read, Show)
 
-_RangeVars = (Core.Name "hydra.ext.go.syntax.RangeVars")
+_RangeVars = Core.Name "hydra.ext.go.syntax.RangeVars"
 
-_RangeVars_assign = (Core.Name "assign")
+_RangeVars_assign = Core.Name "assign"
 
-_RangeVars_declare = (Core.Name "declare")
+_RangeVars_declare = Core.Name "declare"
 
 newtype GoStmt = 
   GoStmt {
     unGoStmt :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_GoStmt = (Core.Name "hydra.ext.go.syntax.GoStmt")
+_GoStmt = Core.Name "hydra.ext.go.syntax.GoStmt"
 
 newtype SelectStmt = 
   SelectStmt {
     unSelectStmt :: [CommClause]}
   deriving (Eq, Ord, Read, Show)
 
-_SelectStmt = (Core.Name "hydra.ext.go.syntax.SelectStmt")
+_SelectStmt = Core.Name "hydra.ext.go.syntax.SelectStmt"
 
 data CommClause = 
   CommClause {
@@ -1453,11 +1453,11 @@ data CommClause =
     commClauseStatements :: [Statement]}
   deriving (Eq, Ord, Read, Show)
 
-_CommClause = (Core.Name "hydra.ext.go.syntax.CommClause")
+_CommClause = Core.Name "hydra.ext.go.syntax.CommClause"
 
-_CommClause_case = (Core.Name "case")
+_CommClause_case = Core.Name "case"
 
-_CommClause_statements = (Core.Name "statements")
+_CommClause_statements = Core.Name "statements"
 
 data CommCase = 
   CommCaseSend SendStmt |
@@ -1465,13 +1465,13 @@ data CommCase =
   CommCaseDefault 
   deriving (Eq, Ord, Read, Show)
 
-_CommCase = (Core.Name "hydra.ext.go.syntax.CommCase")
+_CommCase = Core.Name "hydra.ext.go.syntax.CommCase"
 
-_CommCase_send = (Core.Name "send")
+_CommCase_send = Core.Name "send"
 
-_CommCase_receive = (Core.Name "receive")
+_CommCase_receive = Core.Name "receive"
 
-_CommCase_default = (Core.Name "default")
+_CommCase_default = Core.Name "default"
 
 data ReceiveCase = 
   ReceiveCase {
@@ -1479,60 +1479,60 @@ data ReceiveCase =
     receiveCaseExpression :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_ReceiveCase = (Core.Name "hydra.ext.go.syntax.ReceiveCase")
+_ReceiveCase = Core.Name "hydra.ext.go.syntax.ReceiveCase"
 
-_ReceiveCase_vars = (Core.Name "vars")
+_ReceiveCase_vars = Core.Name "vars"
 
-_ReceiveCase_expression = (Core.Name "expression")
+_ReceiveCase_expression = Core.Name "expression"
 
 newtype ReturnStmt = 
   ReturnStmt {
     unReturnStmt :: [Expression]}
   deriving (Eq, Ord, Read, Show)
 
-_ReturnStmt = (Core.Name "hydra.ext.go.syntax.ReturnStmt")
+_ReturnStmt = Core.Name "hydra.ext.go.syntax.ReturnStmt"
 
 newtype BreakStmt = 
   BreakStmt {
     unBreakStmt :: (Maybe Identifier)}
   deriving (Eq, Ord, Read, Show)
 
-_BreakStmt = (Core.Name "hydra.ext.go.syntax.BreakStmt")
+_BreakStmt = Core.Name "hydra.ext.go.syntax.BreakStmt"
 
 newtype ContinueStmt = 
   ContinueStmt {
     unContinueStmt :: (Maybe Identifier)}
   deriving (Eq, Ord, Read, Show)
 
-_ContinueStmt = (Core.Name "hydra.ext.go.syntax.ContinueStmt")
+_ContinueStmt = Core.Name "hydra.ext.go.syntax.ContinueStmt"
 
 newtype GotoStmt = 
   GotoStmt {
     unGotoStmt :: Identifier}
   deriving (Eq, Ord, Read, Show)
 
-_GotoStmt = (Core.Name "hydra.ext.go.syntax.GotoStmt")
+_GotoStmt = Core.Name "hydra.ext.go.syntax.GotoStmt"
 
 newtype FallthroughStmt = 
   FallthroughStmt {
     unFallthroughStmt :: ()}
   deriving (Eq, Ord, Read, Show)
 
-_FallthroughStmt = (Core.Name "hydra.ext.go.syntax.FallthroughStmt")
+_FallthroughStmt = Core.Name "hydra.ext.go.syntax.FallthroughStmt"
 
 newtype DeferStmt = 
   DeferStmt {
     unDeferStmt :: Expression}
   deriving (Eq, Ord, Read, Show)
 
-_DeferStmt = (Core.Name "hydra.ext.go.syntax.DeferStmt")
+_DeferStmt = Core.Name "hydra.ext.go.syntax.DeferStmt"
 
 newtype Block = 
   Block {
     unBlock :: [Statement]}
   deriving (Eq, Ord, Read, Show)
 
-_Block = (Core.Name "hydra.ext.go.syntax.Block")
+_Block = Core.Name "hydra.ext.go.syntax.Block"
 
 data UnaryOp = 
   UnaryOpPlus  |
@@ -1544,21 +1544,21 @@ data UnaryOp =
   UnaryOpReceive 
   deriving (Eq, Ord, Read, Show)
 
-_UnaryOp = (Core.Name "hydra.ext.go.syntax.UnaryOp")
+_UnaryOp = Core.Name "hydra.ext.go.syntax.UnaryOp"
 
-_UnaryOp_plus = (Core.Name "plus")
+_UnaryOp_plus = Core.Name "plus"
 
-_UnaryOp_minus = (Core.Name "minus")
+_UnaryOp_minus = Core.Name "minus"
 
-_UnaryOp_not = (Core.Name "not")
+_UnaryOp_not = Core.Name "not"
 
-_UnaryOp_xor = (Core.Name "xor")
+_UnaryOp_xor = Core.Name "xor"
 
-_UnaryOp_deref = (Core.Name "deref")
+_UnaryOp_deref = Core.Name "deref"
 
-_UnaryOp_addressOf = (Core.Name "addressOf")
+_UnaryOp_addressOf = Core.Name "addressOf"
 
-_UnaryOp_receive = (Core.Name "receive")
+_UnaryOp_receive = Core.Name "receive"
 
 data MulOp = 
   MulOpMultiply  |
@@ -1570,21 +1570,21 @@ data MulOp =
   MulOpBitClear 
   deriving (Eq, Ord, Read, Show)
 
-_MulOp = (Core.Name "hydra.ext.go.syntax.MulOp")
+_MulOp = Core.Name "hydra.ext.go.syntax.MulOp"
 
-_MulOp_multiply = (Core.Name "multiply")
+_MulOp_multiply = Core.Name "multiply"
 
-_MulOp_divide = (Core.Name "divide")
+_MulOp_divide = Core.Name "divide"
 
-_MulOp_remainder = (Core.Name "remainder")
+_MulOp_remainder = Core.Name "remainder"
 
-_MulOp_leftShift = (Core.Name "leftShift")
+_MulOp_leftShift = Core.Name "leftShift"
 
-_MulOp_rightShift = (Core.Name "rightShift")
+_MulOp_rightShift = Core.Name "rightShift"
 
-_MulOp_bitwiseAnd = (Core.Name "bitwiseAnd")
+_MulOp_bitwiseAnd = Core.Name "bitwiseAnd"
 
-_MulOp_bitClear = (Core.Name "bitClear")
+_MulOp_bitClear = Core.Name "bitClear"
 
 data AddOp = 
   AddOpAdd  |
@@ -1593,15 +1593,15 @@ data AddOp =
   AddOpBitwiseXor 
   deriving (Eq, Ord, Read, Show)
 
-_AddOp = (Core.Name "hydra.ext.go.syntax.AddOp")
+_AddOp = Core.Name "hydra.ext.go.syntax.AddOp"
 
-_AddOp_add = (Core.Name "add")
+_AddOp_add = Core.Name "add"
 
-_AddOp_subtract = (Core.Name "subtract")
+_AddOp_subtract = Core.Name "subtract"
 
-_AddOp_bitwiseOr = (Core.Name "bitwiseOr")
+_AddOp_bitwiseOr = Core.Name "bitwiseOr"
 
-_AddOp_bitwiseXor = (Core.Name "bitwiseXor")
+_AddOp_bitwiseXor = Core.Name "bitwiseXor"
 
 data RelOp = 
   RelOpEqual  |
@@ -1612,16 +1612,16 @@ data RelOp =
   RelOpGreaterEqual 
   deriving (Eq, Ord, Read, Show)
 
-_RelOp = (Core.Name "hydra.ext.go.syntax.RelOp")
+_RelOp = Core.Name "hydra.ext.go.syntax.RelOp"
 
-_RelOp_equal = (Core.Name "equal")
+_RelOp_equal = Core.Name "equal"
 
-_RelOp_notEqual = (Core.Name "notEqual")
+_RelOp_notEqual = Core.Name "notEqual"
 
-_RelOp_less = (Core.Name "less")
+_RelOp_less = Core.Name "less"
 
-_RelOp_lessEqual = (Core.Name "lessEqual")
+_RelOp_lessEqual = Core.Name "lessEqual"
 
-_RelOp_greater = (Core.Name "greater")
+_RelOp_greater = Core.Name "greater"
 
-_RelOp_greaterEqual = (Core.Name "greaterEqual")
+_RelOp_greaterEqual = Core.Name "greaterEqual"

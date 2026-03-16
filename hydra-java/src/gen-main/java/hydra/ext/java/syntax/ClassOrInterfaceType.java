@@ -63,7 +63,7 @@ public abstract class ClassOrInterfaceType implements Serializable, Comparable<C
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ClassOrInterfaceType other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -103,7 +103,7 @@ public abstract class ClassOrInterfaceType implements Serializable, Comparable<C
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ClassOrInterfaceType other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

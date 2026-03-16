@@ -58,7 +58,7 @@ public interface Phantoms {
             (java.util.function.Function<hydra.core.Term, hydra.phantoms.TTerm<T1>>) (b -> (hydra.phantoms.TTerm<T1>) (new hydra.phantoms.TTerm(b))),
             hydra.decode.core.Core.term(
               cx,
-              ((wrappedTerm).value).body));
+              (wrappedTerm).value.body));
         }
       })),
       hydra.lexical.Lexical.stripAndDereferenceTermEither(

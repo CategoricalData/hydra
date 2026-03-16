@@ -18,11 +18,11 @@ data FunctionType =
     functionTypeRange :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_FunctionType = (Core.Name "hydra.ext.typeScript.model.FunctionType")
+_FunctionType = Core.Name "hydra.ext.typeScript.model.FunctionType"
 
-_FunctionType_parameters = (Core.Name "parameters")
+_FunctionType_parameters = Core.Name "parameters"
 
-_FunctionType_range = (Core.Name "range")
+_FunctionType_range = Core.Name "range"
 
 data Parameter = 
   Parameter {
@@ -30,11 +30,11 @@ data Parameter =
     parameterType :: Type}
   deriving (Eq, Ord, Read, Show)
 
-_Parameter = (Core.Name "hydra.ext.typeScript.model.Parameter")
+_Parameter = Core.Name "hydra.ext.typeScript.model.Parameter"
 
-_Parameter_name = (Core.Name "name")
+_Parameter_name = Core.Name "name"
 
-_Parameter_type = (Core.Name "type")
+_Parameter_type = Core.Name "type"
 
 data PrimitiveType = 
   -- | integers in the arbitrary precision format
@@ -55,23 +55,23 @@ data PrimitiveType =
   PrimitiveTypeUndefined 
   deriving (Eq, Ord, Read, Show)
 
-_PrimitiveType = (Core.Name "hydra.ext.typeScript.model.PrimitiveType")
+_PrimitiveType = Core.Name "hydra.ext.typeScript.model.PrimitiveType"
 
-_PrimitiveType_bigint = (Core.Name "bigint")
+_PrimitiveType_bigint = Core.Name "bigint"
 
-_PrimitiveType_boolean = (Core.Name "boolean")
+_PrimitiveType_boolean = Core.Name "boolean"
 
-_PrimitiveType_null = (Core.Name "null")
+_PrimitiveType_null = Core.Name "null"
 
-_PrimitiveType_number = (Core.Name "number")
+_PrimitiveType_number = Core.Name "number"
 
-_PrimitiveType_object = (Core.Name "object")
+_PrimitiveType_object = Core.Name "object"
 
-_PrimitiveType_string = (Core.Name "string")
+_PrimitiveType_string = Core.Name "string"
 
-_PrimitiveType_symbol = (Core.Name "symbol")
+_PrimitiveType_symbol = Core.Name "symbol"
 
-_PrimitiveType_undefined = (Core.Name "undefined")
+_PrimitiveType_undefined = Core.Name "undefined"
 
 data Type = 
   -- | mutable arrays, also written Array<T>
@@ -92,20 +92,20 @@ data Type =
   TypeVoid 
   deriving (Eq, Ord, Read, Show)
 
-_Type = (Core.Name "hydra.ext.typeScript.model.Type")
+_Type = Core.Name "hydra.ext.typeScript.model.Type"
 
-_Type_array = (Core.Name "array")
+_Type_array = Core.Name "array"
 
-_Type_function = (Core.Name "function")
+_Type_function = Core.Name "function"
 
-_Type_never = (Core.Name "never")
+_Type_never = Core.Name "never"
 
-_Type_objectLiteral = (Core.Name "objectLiteral")
+_Type_objectLiteral = Core.Name "objectLiteral"
 
-_Type_primitive = (Core.Name "primitive")
+_Type_primitive = Core.Name "primitive"
 
-_Type_tuple = (Core.Name "tuple")
+_Type_tuple = Core.Name "tuple"
 
-_Type_unknown = (Core.Name "unknown")
+_Type_unknown = Core.Name "unknown"
 
-_Type_void = (Core.Name "void")
+_Type_void = Core.Name "void"

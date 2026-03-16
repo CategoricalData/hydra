@@ -101,7 +101,7 @@ public interface Tarjan {
       verts.get()));
     return hydra.lib.lists.Reverse.apply(hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.util.ConsList<Integer>, hydra.util.ConsList<Integer>>) (hydra.lib.lists.Sort::apply),
-      (finalState.get()).sccs));
+      finalState.get().sccs));
   }
   
   static hydra.topology.TarjanState initialState() {
@@ -125,9 +125,9 @@ public interface Tarjan {
           x.get(),
           v),
         () -> (hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.topology.TarjanState>) ((hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.topology.TarjanState>) (new hydra.util.Pair<hydra.util.ConsList<Integer>, hydra.topology.TarjanState>(hydra.lib.lists.Reverse.apply(acc_.get()), newSt2.get()))),
-        () -> ((go.get()).apply(acc_.get())).apply(newSt2.get()));
+        () -> go.get().apply(acc_.get()).apply(newSt2.get()));
     })));
-    return ((go.get()).apply((hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty()))).apply(st0);
+    return go.get().apply((hydra.util.ConsList<Integer>) (hydra.util.ConsList.<Integer>empty())).apply(st0);
   }
   
   static hydra.topology.TarjanState strongConnect(hydra.util.PersistentMap<Integer, hydra.util.ConsList<Integer>> graph, Integer v, hydra.topology.TarjanState st) {
@@ -208,11 +208,11 @@ public interface Tarjan {
     hydra.util.Lazy<Integer> idx_v = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.applyLazy(
       () -> hydra.constants.Constants.maxInt32(),
       v,
-      (stAfterNeighbors.get()).indices));
+      stAfterNeighbors.get().indices));
     hydra.util.Lazy<Integer> low_v = new hydra.util.Lazy<>(() -> hydra.lib.maps.FindWithDefault.applyLazy(
       () -> hydra.constants.Constants.maxInt32(),
       v,
-      (stAfterNeighbors.get()).lowLinks));
+      stAfterNeighbors.get().lowLinks));
     return hydra.lib.logic.IfElse.lazy(
       hydra.lib.equality.Equal.apply(
         low_v.get(),
@@ -225,9 +225,9 @@ public interface Tarjan {
           hydra.util.Lazy<hydra.util.ConsList<Integer>> comp = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(compResult));
           return ((java.util.function.Supplier<hydra.topology.TarjanState>) (() -> {
             hydra.util.Lazy<hydra.topology.TarjanState> stPopped = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(compResult));
-            return new hydra.topology.TarjanState((stPopped.get()).counter, (stPopped.get()).indices, (stPopped.get()).lowLinks, (stPopped.get()).stack, (stPopped.get()).onStack, hydra.lib.lists.Cons.apply(
+            return new hydra.topology.TarjanState(stPopped.get().counter, stPopped.get().indices, stPopped.get().lowLinks, stPopped.get().stack, stPopped.get().onStack, hydra.lib.lists.Cons.apply(
               comp.get(),
-              (stPopped.get()).sccs));
+              stPopped.get().sccs));
           })).get();
         })).get();
       })).get(),

@@ -285,8 +285,33 @@ def java_equals_null(lhs: hydra.ext.java.syntax.EqualityExpression) -> hydra.ext
 def java_expression_name_to_java_expression(en: hydra.ext.java.syntax.ExpressionName) -> hydra.ext.java.syntax.Expression:
     return cast(hydra.ext.java.syntax.Expression, hydra.ext.java.syntax.ExpressionAssignment(cast(hydra.ext.java.syntax.AssignmentExpression, hydra.ext.java.syntax.AssignmentExpressionConditional(cast(hydra.ext.java.syntax.ConditionalExpression, hydra.ext.java.syntax.ConditionalExpressionSimple(hydra.ext.java.syntax.ConditionalOrExpression((hydra.ext.java.syntax.ConditionalAndExpression((hydra.ext.java.syntax.InclusiveOrExpression((hydra.ext.java.syntax.ExclusiveOrExpression((hydra.ext.java.syntax.AndExpression((cast(hydra.ext.java.syntax.EqualityExpression, hydra.ext.java.syntax.EqualityExpressionUnary(cast(hydra.ext.java.syntax.RelationalExpression, hydra.ext.java.syntax.RelationalExpressionSimple(cast(hydra.ext.java.syntax.ShiftExpression, hydra.ext.java.syntax.ShiftExpressionUnary(cast(hydra.ext.java.syntax.AdditiveExpression, hydra.ext.java.syntax.AdditiveExpressionUnary(cast(hydra.ext.java.syntax.MultiplicativeExpression, hydra.ext.java.syntax.MultiplicativeExpressionUnary(cast(hydra.ext.java.syntax.UnaryExpression, hydra.ext.java.syntax.UnaryExpressionOther(cast(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus, hydra.ext.java.syntax.UnaryExpressionNotPlusMinusPostfix(cast(hydra.ext.java.syntax.PostfixExpression, hydra.ext.java.syntax.PostfixExpressionName(en)))))))))))))))),)),)),)),)),))))))))
 
-def java_expression_to_java_primary(e: hydra.ext.java.syntax.Expression) -> hydra.ext.java.syntax.Primary:
-    return cast(hydra.ext.java.syntax.Primary, hydra.ext.java.syntax.PrimaryNoNewArray_(cast(hydra.ext.java.syntax.PrimaryNoNewArray, hydra.ext.java.syntax.PrimaryNoNewArrayParens(e))))
+def java_expression_to_java_primary(e: hydra.ext.java.syntax.Expression):
+    r"""Convert an Expression to a Primary, avoiding unnecessary parentheses when the expression is already a simple primary chain."""
+    
+    @lru_cache(1)
+    def fallback() -> hydra.ext.java.syntax.Primary:
+        return cast(hydra.ext.java.syntax.Primary, hydra.ext.java.syntax.PrimaryNoNewArray_(cast(hydra.ext.java.syntax.PrimaryNoNewArray, hydra.ext.java.syntax.PrimaryNoNewArrayParens(e))))
+    def _hoist_body_1(v1):
+        match v1:
+            case hydra.ext.java.syntax.ConditionalExpressionSimple(value=cor):
+                cands = cor.value
+                return hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(cands), 1), (lambda : (iors := hydra.lib.lists.head(cands).value, hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(iors), 1), (lambda : (xors := hydra.lib.lists.head(iors).value, hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(xors), 1), (lambda : (ands := hydra.lib.lists.head(xors).value, hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(ands), 1), (lambda : (eqs := hydra.lib.lists.head(ands).value, (_hoist_body_1 := (lambda v12: (lambda p: p)(v12.value) if isinstance(v12, hydra.ext.java.syntax.PostfixExpressionPrimary) else fallback()), _hoist_body_2 := (lambda v12: (lambda pf: _hoist_body_1(pf))(v12.value) if isinstance(v12, hydra.ext.java.syntax.UnaryExpressionNotPlusMinusPostfix) else fallback()), _hoist_body_3 := (lambda v12: (lambda npm: _hoist_body_2(npm))(v12.value) if isinstance(v12, hydra.ext.java.syntax.UnaryExpressionOther) else fallback()), _hoist_body_4 := (lambda v12: (lambda unary: _hoist_body_3(unary))(v12.value) if isinstance(v12, hydra.ext.java.syntax.MultiplicativeExpressionUnary) else fallback()), _hoist_body_5 := (lambda v12: (lambda mul: _hoist_body_4(mul))(v12.value) if isinstance(v12, hydra.ext.java.syntax.AdditiveExpressionUnary) else fallback()), _hoist_body_6 := (lambda v12: (lambda add: _hoist_body_5(add))(v12.value) if isinstance(v12, hydra.ext.java.syntax.ShiftExpressionUnary) else fallback()), _hoist_body_7 := (lambda v12: (lambda shift: _hoist_body_6(shift))(v12.value) if isinstance(v12, hydra.ext.java.syntax.RelationalExpressionSimple) else fallback()), _hoist_body_8 := (lambda v12: (lambda rel: _hoist_body_7(rel))(v12.value) if isinstance(v12, hydra.ext.java.syntax.EqualityExpressionUnary) else fallback()), hydra.lib.logic.if_else(hydra.lib.equality.equal(hydra.lib.lists.length(eqs), 1), (lambda : _hoist_body_8(hydra.lib.lists.head(eqs))), (lambda : fallback())))[8])[1]), (lambda : fallback())))[1]), (lambda : fallback())))[1]), (lambda : fallback())))[1]), (lambda : fallback()))
+            
+            case _:
+                return fallback()
+    def _hoist_body_2(v1):
+        match v1:
+            case hydra.ext.java.syntax.AssignmentExpressionConditional(value=ce):
+                return _hoist_body_1(ce)
+            
+            case _:
+                return fallback()
+    match e:
+        case hydra.ext.java.syntax.ExpressionAssignment(value=ae):
+            return _hoist_body_2(ae)
+        
+        case _:
+            return fallback()
 
 def java_field_access_to_java_expression(fa: hydra.ext.java.syntax.FieldAccess) -> hydra.ext.java.syntax.Expression:
     return cast(hydra.ext.java.syntax.Expression, hydra.ext.java.syntax.ExpressionAssignment(cast(hydra.ext.java.syntax.AssignmentExpression, hydra.ext.java.syntax.AssignmentExpressionConditional(cast(hydra.ext.java.syntax.ConditionalExpression, hydra.ext.java.syntax.ConditionalExpressionSimple(hydra.ext.java.syntax.ConditionalOrExpression((hydra.ext.java.syntax.ConditionalAndExpression((hydra.ext.java.syntax.InclusiveOrExpression((hydra.ext.java.syntax.ExclusiveOrExpression((hydra.ext.java.syntax.AndExpression((cast(hydra.ext.java.syntax.EqualityExpression, hydra.ext.java.syntax.EqualityExpressionUnary(cast(hydra.ext.java.syntax.RelationalExpression, hydra.ext.java.syntax.RelationalExpressionSimple(cast(hydra.ext.java.syntax.ShiftExpression, hydra.ext.java.syntax.ShiftExpressionUnary(cast(hydra.ext.java.syntax.AdditiveExpression, hydra.ext.java.syntax.AdditiveExpressionUnary(cast(hydra.ext.java.syntax.MultiplicativeExpression, hydra.ext.java.syntax.MultiplicativeExpressionUnary(cast(hydra.ext.java.syntax.UnaryExpression, hydra.ext.java.syntax.UnaryExpressionOther(cast(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus, hydra.ext.java.syntax.UnaryExpressionNotPlusMinusPostfix(cast(hydra.ext.java.syntax.PostfixExpression, hydra.ext.java.syntax.PostfixExpressionPrimary(cast(hydra.ext.java.syntax.Primary, hydra.ext.java.syntax.PrimaryNoNewArray_(cast(hydra.ext.java.syntax.PrimaryNoNewArray, hydra.ext.java.syntax.PrimaryNoNewArrayFieldAccess(fa)))))))))))))))))))),)),)),)),)),))))))))

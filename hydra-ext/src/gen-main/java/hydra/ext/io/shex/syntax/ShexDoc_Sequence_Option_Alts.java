@@ -63,7 +63,7 @@ public abstract class ShexDoc_Sequence_Option_Alts implements Serializable, Comp
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ShexDoc_Sequence_Option_Alts other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -103,7 +103,7 @@ public abstract class ShexDoc_Sequence_Option_Alts implements Serializable, Comp
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ShexDoc_Sequence_Option_Alts other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

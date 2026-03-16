@@ -22,107 +22,113 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-accessorEdge :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Accessors.AccessorEdge)
-accessorEdge cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v0 ->  
-    let fieldMap = (Helpers.toFieldMap v0)
-    in (Eithers.bind (Helpers.requireField "source" accessorNode fieldMap cx) (\field_source -> Eithers.bind (Helpers.requireField "path" accessorPath fieldMap cx) (\field_path -> Eithers.bind (Helpers.requireField "target" accessorNode fieldMap cx) (\field_target -> Right (Accessors.AccessorEdge {
-      Accessors.accessorEdgeSource = field_source,
-      Accessors.accessorEdgePath = field_path,
-      Accessors.accessorEdgeTarget = field_target})))))
-  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+accessorEdge :: Graph.Graph -> Core.Term -> Either Error.DecodingError Accessors.AccessorEdge
+accessorEdge cx raw =
+    Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+      Core.TermRecord v0 ->  
+        let fieldMap = Helpers.toFieldMap v0
+        in (Eithers.bind (Helpers.requireField "source" accessorNode fieldMap cx) (\field_source -> Eithers.bind (Helpers.requireField "path" accessorPath fieldMap cx) (\field_path -> Eithers.bind (Helpers.requireField "target" accessorNode fieldMap cx) (\field_target -> Right (Accessors.AccessorEdge {
+          Accessors.accessorEdgeSource = field_source,
+          Accessors.accessorEdgePath = field_path,
+          Accessors.accessorEdgeTarget = field_target})))))
+      _ -> Left (Error.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
 
-accessorGraph :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Accessors.AccessorGraph)
-accessorGraph cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v0 ->  
-    let fieldMap = (Helpers.toFieldMap v0)
-    in (Eithers.bind (Helpers.requireField "nodes" (Helpers.decodeList accessorNode) fieldMap cx) (\field_nodes -> Eithers.bind (Helpers.requireField "edges" (Helpers.decodeList accessorEdge) fieldMap cx) (\field_edges -> Right (Accessors.AccessorGraph {
-      Accessors.accessorGraphNodes = field_nodes,
-      Accessors.accessorGraphEdges = field_edges}))))
-  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+accessorGraph :: Graph.Graph -> Core.Term -> Either Error.DecodingError Accessors.AccessorGraph
+accessorGraph cx raw =
+    Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+      Core.TermRecord v0 ->  
+        let fieldMap = Helpers.toFieldMap v0
+        in (Eithers.bind (Helpers.requireField "nodes" (Helpers.decodeList accessorNode) fieldMap cx) (\field_nodes -> Eithers.bind (Helpers.requireField "edges" (Helpers.decodeList accessorEdge) fieldMap cx) (\field_edges -> Right (Accessors.AccessorGraph {
+          Accessors.accessorGraphNodes = field_nodes,
+          Accessors.accessorGraphEdges = field_edges}))))
+      _ -> Left (Error.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
 
-accessorNode :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Accessors.AccessorNode)
-accessorNode cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v0 ->  
-    let fieldMap = (Helpers.toFieldMap v0)
-    in (Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "label" (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v1 -> ((\x -> case x of
-        Core.LiteralString v2 -> (Right v2)
-        _ -> (Left (Error.DecodingError "expected string literal"))) v1)
-      _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_label -> Eithers.bind (Helpers.requireField "id" (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-      Core.TermLiteral v1 -> ((\x -> case x of
-        Core.LiteralString v2 -> (Right v2)
-        _ -> (Left (Error.DecodingError "expected string literal"))) v1)
-      _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_id -> Right (Accessors.AccessorNode {
-      Accessors.accessorNodeName = field_name,
-      Accessors.accessorNodeLabel = field_label,
-      Accessors.accessorNodeId = field_id})))))
-  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+accessorNode :: Graph.Graph -> Core.Term -> Either Error.DecodingError Accessors.AccessorNode
+accessorNode cx raw =
+    Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+      Core.TermRecord v0 ->  
+        let fieldMap = Helpers.toFieldMap v0
+        in (Eithers.bind (Helpers.requireField "name" Core_.name fieldMap cx) (\field_name -> Eithers.bind (Helpers.requireField "label" (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+          Core.TermLiteral v1 -> case v1 of
+            Core.LiteralString v2 -> Right v2
+            _ -> Left (Error.DecodingError "expected string literal")
+          _ -> Left (Error.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_label -> Eithers.bind (Helpers.requireField "id" (\cx -> \raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+          Core.TermLiteral v1 -> case v1 of
+            Core.LiteralString v2 -> Right v2
+            _ -> Left (Error.DecodingError "expected string literal")
+          _ -> Left (Error.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) fieldMap cx) (\field_id -> Right (Accessors.AccessorNode {
+          Accessors.accessorNodeName = field_name,
+          Accessors.accessorNodeLabel = field_label,
+          Accessors.accessorNodeId = field_id})))))
+      _ -> Left (Error.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
 
-accessorPath :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Accessors.AccessorPath)
-accessorPath cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermWrap v0 -> (Eithers.map (\b -> Accessors.AccessorPath b) (Helpers.decodeList termAccessor cx (Core.wrappedTermBody v0)))
-  _ -> (Left (Error.DecodingError "expected wrapped type"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+accessorPath :: Graph.Graph -> Core.Term -> Either Error.DecodingError Accessors.AccessorPath
+accessorPath cx raw =
+    Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+      Core.TermWrap v0 -> Eithers.map (\b -> Accessors.AccessorPath b) (Helpers.decodeList termAccessor cx (Core.wrappedTermBody v0))
+      _ -> Left (Error.DecodingError "expected wrapped type")) (Lexical.stripAndDereferenceTermEither cx raw)
 
-termAccessor :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Accessors.TermAccessor)
-termAccessor cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermUnion v0 ->  
-    let field = (Core.injectionField v0) 
-        fname = (Core.fieldName field)
-        fterm = (Core.fieldTerm field)
-        variantMap = (Maps.fromList [
-                (Core.Name "annotatedBody", (\input -> Eithers.map (\t -> Accessors.TermAccessorAnnotatedBody) (Helpers.decodeUnit cx input))),
-                (Core.Name "applicationFunction", (\input -> Eithers.map (\t -> Accessors.TermAccessorApplicationFunction) (Helpers.decodeUnit cx input))),
-                (Core.Name "applicationArgument", (\input -> Eithers.map (\t -> Accessors.TermAccessorApplicationArgument) (Helpers.decodeUnit cx input))),
-                (Core.Name "lambdaBody", (\input -> Eithers.map (\t -> Accessors.TermAccessorLambdaBody) (Helpers.decodeUnit cx input))),
-                (Core.Name "unionCasesDefault", (\input -> Eithers.map (\t -> Accessors.TermAccessorUnionCasesDefault) (Helpers.decodeUnit cx input))),
-                (Core.Name "unionCasesBranch", (\input -> Eithers.map (\t -> Accessors.TermAccessorUnionCasesBranch t) (Core_.name cx input))),
-                (Core.Name "letBody", (\input -> Eithers.map (\t -> Accessors.TermAccessorLetBody) (Helpers.decodeUnit cx input))),
-                (Core.Name "letBinding", (\input -> Eithers.map (\t -> Accessors.TermAccessorLetBinding t) (Core_.name cx input))),
-                (Core.Name "listElement", (\input -> Eithers.map (\t -> Accessors.TermAccessorListElement t) (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-                  Core.TermLiteral v1 -> ((\x -> case x of
-                    Core.LiteralInteger v2 -> ((\x -> case x of
-                      Core.IntegerValueInt32 v3 -> (Right v3)
-                      _ -> (Left (Error.DecodingError "expected int32 value"))) v2)
-                    _ -> (Left (Error.DecodingError "expected int32 literal"))) v1)
-                  _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx input)))),
-                (Core.Name "mapKey", (\input -> Eithers.map (\t -> Accessors.TermAccessorMapKey t) (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-                  Core.TermLiteral v1 -> ((\x -> case x of
-                    Core.LiteralInteger v2 -> ((\x -> case x of
-                      Core.IntegerValueInt32 v3 -> (Right v3)
-                      _ -> (Left (Error.DecodingError "expected int32 value"))) v2)
-                    _ -> (Left (Error.DecodingError "expected int32 literal"))) v1)
-                  _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx input)))),
-                (Core.Name "mapValue", (\input -> Eithers.map (\t -> Accessors.TermAccessorMapValue t) (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-                  Core.TermLiteral v1 -> ((\x -> case x of
-                    Core.LiteralInteger v2 -> ((\x -> case x of
-                      Core.IntegerValueInt32 v3 -> (Right v3)
-                      _ -> (Left (Error.DecodingError "expected int32 value"))) v2)
-                    _ -> (Left (Error.DecodingError "expected int32 literal"))) v1)
-                  _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx input)))),
-                (Core.Name "maybeTerm", (\input -> Eithers.map (\t -> Accessors.TermAccessorMaybeTerm) (Helpers.decodeUnit cx input))),
-                (Core.Name "productTerm", (\input -> Eithers.map (\t -> Accessors.TermAccessorProductTerm t) (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-                  Core.TermLiteral v1 -> ((\x -> case x of
-                    Core.LiteralInteger v2 -> ((\x -> case x of
-                      Core.IntegerValueInt32 v3 -> (Right v3)
-                      _ -> (Left (Error.DecodingError "expected int32 value"))) v2)
-                    _ -> (Left (Error.DecodingError "expected int32 literal"))) v1)
-                  _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx input)))),
-                (Core.Name "recordField", (\input -> Eithers.map (\t -> Accessors.TermAccessorRecordField t) (Core_.name cx input))),
-                (Core.Name "setElement", (\input -> Eithers.map (\t -> Accessors.TermAccessorSetElement t) (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-                  Core.TermLiteral v1 -> ((\x -> case x of
-                    Core.LiteralInteger v2 -> ((\x -> case x of
-                      Core.IntegerValueInt32 v3 -> (Right v3)
-                      _ -> (Left (Error.DecodingError "expected int32 value"))) v2)
-                    _ -> (Left (Error.DecodingError "expected int32 literal"))) v1)
-                  _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx input)))),
-                (Core.Name "sumTerm", (\input -> Eithers.map (\t -> Accessors.TermAccessorSumTerm) (Helpers.decodeUnit cx input))),
-                (Core.Name "typeLambdaBody", (\input -> Eithers.map (\t -> Accessors.TermAccessorTypeLambdaBody) (Helpers.decodeUnit cx input))),
-                (Core.Name "typeApplicationTerm", (\input -> Eithers.map (\t -> Accessors.TermAccessorTypeApplicationTerm) (Helpers.decodeUnit cx input))),
-                (Core.Name "injectionTerm", (\input -> Eithers.map (\t -> Accessors.TermAccessorInjectionTerm) (Helpers.decodeUnit cx input))),
-                (Core.Name "wrappedTerm", (\input -> Eithers.map (\t -> Accessors.TermAccessorWrappedTerm) (Helpers.decodeUnit cx input)))])
-    in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
-      "no such field ",
-      (Core.unName fname),
-      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+termAccessor :: Graph.Graph -> Core.Term -> Either Error.DecodingError Accessors.TermAccessor
+termAccessor cx raw =
+    Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+      Core.TermUnion v0 ->  
+        let field = Core.injectionField v0 
+            fname = Core.fieldName field
+            fterm = Core.fieldTerm field
+            variantMap =
+                    Maps.fromList [
+                      (Core.Name "annotatedBody", (\input -> Eithers.map (\t -> Accessors.TermAccessorAnnotatedBody) (Helpers.decodeUnit cx input))),
+                      (Core.Name "applicationFunction", (\input -> Eithers.map (\t -> Accessors.TermAccessorApplicationFunction) (Helpers.decodeUnit cx input))),
+                      (Core.Name "applicationArgument", (\input -> Eithers.map (\t -> Accessors.TermAccessorApplicationArgument) (Helpers.decodeUnit cx input))),
+                      (Core.Name "lambdaBody", (\input -> Eithers.map (\t -> Accessors.TermAccessorLambdaBody) (Helpers.decodeUnit cx input))),
+                      (Core.Name "unionCasesDefault", (\input -> Eithers.map (\t -> Accessors.TermAccessorUnionCasesDefault) (Helpers.decodeUnit cx input))),
+                      (Core.Name "unionCasesBranch", (\input -> Eithers.map (\t -> Accessors.TermAccessorUnionCasesBranch t) (Core_.name cx input))),
+                      (Core.Name "letBody", (\input -> Eithers.map (\t -> Accessors.TermAccessorLetBody) (Helpers.decodeUnit cx input))),
+                      (Core.Name "letBinding", (\input -> Eithers.map (\t -> Accessors.TermAccessorLetBinding t) (Core_.name cx input))),
+                      (Core.Name "listElement", (\input -> Eithers.map (\t -> Accessors.TermAccessorListElement t) (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+                        Core.TermLiteral v1 -> case v1 of
+                          Core.LiteralInteger v2 -> case v2 of
+                            Core.IntegerValueInt32 v3 -> Right v3
+                            _ -> Left (Error.DecodingError "expected int32 value")
+                          _ -> Left (Error.DecodingError "expected int32 literal")
+                        _ -> Left (Error.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx input)))),
+                      (Core.Name "mapKey", (\input -> Eithers.map (\t -> Accessors.TermAccessorMapKey t) (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+                        Core.TermLiteral v1 -> case v1 of
+                          Core.LiteralInteger v2 -> case v2 of
+                            Core.IntegerValueInt32 v3 -> Right v3
+                            _ -> Left (Error.DecodingError "expected int32 value")
+                          _ -> Left (Error.DecodingError "expected int32 literal")
+                        _ -> Left (Error.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx input)))),
+                      (Core.Name "mapValue", (\input -> Eithers.map (\t -> Accessors.TermAccessorMapValue t) (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+                        Core.TermLiteral v1 -> case v1 of
+                          Core.LiteralInteger v2 -> case v2 of
+                            Core.IntegerValueInt32 v3 -> Right v3
+                            _ -> Left (Error.DecodingError "expected int32 value")
+                          _ -> Left (Error.DecodingError "expected int32 literal")
+                        _ -> Left (Error.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx input)))),
+                      (Core.Name "maybeTerm", (\input -> Eithers.map (\t -> Accessors.TermAccessorMaybeTerm) (Helpers.decodeUnit cx input))),
+                      (Core.Name "productTerm", (\input -> Eithers.map (\t -> Accessors.TermAccessorProductTerm t) (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+                        Core.TermLiteral v1 -> case v1 of
+                          Core.LiteralInteger v2 -> case v2 of
+                            Core.IntegerValueInt32 v3 -> Right v3
+                            _ -> Left (Error.DecodingError "expected int32 value")
+                          _ -> Left (Error.DecodingError "expected int32 literal")
+                        _ -> Left (Error.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx input)))),
+                      (Core.Name "recordField", (\input -> Eithers.map (\t -> Accessors.TermAccessorRecordField t) (Core_.name cx input))),
+                      (Core.Name "setElement", (\input -> Eithers.map (\t -> Accessors.TermAccessorSetElement t) (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+                        Core.TermLiteral v1 -> case v1 of
+                          Core.LiteralInteger v2 -> case v2 of
+                            Core.IntegerValueInt32 v3 -> Right v3
+                            _ -> Left (Error.DecodingError "expected int32 value")
+                          _ -> Left (Error.DecodingError "expected int32 literal")
+                        _ -> Left (Error.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx input)))),
+                      (Core.Name "sumTerm", (\input -> Eithers.map (\t -> Accessors.TermAccessorSumTerm) (Helpers.decodeUnit cx input))),
+                      (Core.Name "typeLambdaBody", (\input -> Eithers.map (\t -> Accessors.TermAccessorTypeLambdaBody) (Helpers.decodeUnit cx input))),
+                      (Core.Name "typeApplicationTerm", (\input -> Eithers.map (\t -> Accessors.TermAccessorTypeApplicationTerm) (Helpers.decodeUnit cx input))),
+                      (Core.Name "injectionTerm", (\input -> Eithers.map (\t -> Accessors.TermAccessorInjectionTerm) (Helpers.decodeUnit cx input))),
+                      (Core.Name "wrappedTerm", (\input -> Eithers.map (\t -> Accessors.TermAccessorWrappedTerm) (Helpers.decodeUnit cx input)))]
+        in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
+          "no such field ",
+          (Core.unName fname),
+          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+      _ -> Left (Error.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)

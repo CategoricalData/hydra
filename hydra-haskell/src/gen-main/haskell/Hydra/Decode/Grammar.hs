@@ -21,85 +21,94 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-constant :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Grammar.Constant)
-constant cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermWrap v0 -> (Eithers.map (\b -> Grammar.Constant b) ((\raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-    Core.TermLiteral v1 -> ((\x -> case x of
-      Core.LiteralString v2 -> (Right v2)
-      _ -> (Left (Error.DecodingError "expected string literal"))) v1)
-    _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0)))
-  _ -> (Left (Error.DecodingError "expected wrapped type"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+constant :: Graph.Graph -> Core.Term -> Either Error.DecodingError Grammar.Constant
+constant cx raw =
+    Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+      Core.TermWrap v0 -> Eithers.map (\b -> Grammar.Constant b) ((\raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+        Core.TermLiteral v1 -> case v1 of
+          Core.LiteralString v2 -> Right v2
+          _ -> Left (Error.DecodingError "expected string literal")
+        _ -> Left (Error.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0))
+      _ -> Left (Error.DecodingError "expected wrapped type")) (Lexical.stripAndDereferenceTermEither cx raw)
 
-grammar :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Grammar.Grammar)
-grammar cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermWrap v0 -> (Eithers.map (\b -> Grammar.Grammar b) (Helpers.decodeList production cx (Core.wrappedTermBody v0)))
-  _ -> (Left (Error.DecodingError "expected wrapped type"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+grammar :: Graph.Graph -> Core.Term -> Either Error.DecodingError Grammar.Grammar
+grammar cx raw =
+    Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+      Core.TermWrap v0 -> Eithers.map (\b -> Grammar.Grammar b) (Helpers.decodeList production cx (Core.wrappedTermBody v0))
+      _ -> Left (Error.DecodingError "expected wrapped type")) (Lexical.stripAndDereferenceTermEither cx raw)
 
-label :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Grammar.Label)
-label cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermWrap v0 -> (Eithers.map (\b -> Grammar.Label b) ((\raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-    Core.TermLiteral v1 -> ((\x -> case x of
-      Core.LiteralString v2 -> (Right v2)
-      _ -> (Left (Error.DecodingError "expected string literal"))) v1)
-    _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0)))
-  _ -> (Left (Error.DecodingError "expected wrapped type"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+label :: Graph.Graph -> Core.Term -> Either Error.DecodingError Grammar.Label
+label cx raw =
+    Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+      Core.TermWrap v0 -> Eithers.map (\b -> Grammar.Label b) ((\raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+        Core.TermLiteral v1 -> case v1 of
+          Core.LiteralString v2 -> Right v2
+          _ -> Left (Error.DecodingError "expected string literal")
+        _ -> Left (Error.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0))
+      _ -> Left (Error.DecodingError "expected wrapped type")) (Lexical.stripAndDereferenceTermEither cx raw)
 
-labeledPattern :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Grammar.LabeledPattern)
-labeledPattern cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v0 ->  
-    let fieldMap = (Helpers.toFieldMap v0)
-    in (Eithers.bind (Helpers.requireField "label" label fieldMap cx) (\field_label -> Eithers.bind (Helpers.requireField "pattern" pattern fieldMap cx) (\field_pattern -> Right (Grammar.LabeledPattern {
-      Grammar.labeledPatternLabel = field_label,
-      Grammar.labeledPatternPattern = field_pattern}))))
-  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+labeledPattern :: Graph.Graph -> Core.Term -> Either Error.DecodingError Grammar.LabeledPattern
+labeledPattern cx raw =
+    Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+      Core.TermRecord v0 ->  
+        let fieldMap = Helpers.toFieldMap v0
+        in (Eithers.bind (Helpers.requireField "label" label fieldMap cx) (\field_label -> Eithers.bind (Helpers.requireField "pattern" pattern fieldMap cx) (\field_pattern -> Right (Grammar.LabeledPattern {
+          Grammar.labeledPatternLabel = field_label,
+          Grammar.labeledPatternPattern = field_pattern}))))
+      _ -> Left (Error.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
 
-pattern :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Grammar.Pattern)
-pattern cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermUnion v0 ->  
-    let field = (Core.injectionField v0) 
-        fname = (Core.fieldName field)
-        fterm = (Core.fieldTerm field)
-        variantMap = (Maps.fromList [
-                (Core.Name "alternatives", (\input -> Eithers.map (\t -> Grammar.PatternAlternatives t) (Helpers.decodeList pattern cx input))),
-                (Core.Name "constant", (\input -> Eithers.map (\t -> Grammar.PatternConstant t) (constant cx input))),
-                (Core.Name "ignored", (\input -> Eithers.map (\t -> Grammar.PatternIgnored t) (pattern cx input))),
-                (Core.Name "labeled", (\input -> Eithers.map (\t -> Grammar.PatternLabeled t) (labeledPattern cx input))),
-                (Core.Name "nil", (\input -> Eithers.map (\t -> Grammar.PatternNil) (Helpers.decodeUnit cx input))),
-                (Core.Name "nonterminal", (\input -> Eithers.map (\t -> Grammar.PatternNonterminal t) (symbol cx input))),
-                (Core.Name "option", (\input -> Eithers.map (\t -> Grammar.PatternOption t) (pattern cx input))),
-                (Core.Name "plus", (\input -> Eithers.map (\t -> Grammar.PatternPlus t) (pattern cx input))),
-                (Core.Name "regex", (\input -> Eithers.map (\t -> Grammar.PatternRegex t) (regex cx input))),
-                (Core.Name "sequence", (\input -> Eithers.map (\t -> Grammar.PatternSequence t) (Helpers.decodeList pattern cx input))),
-                (Core.Name "star", (\input -> Eithers.map (\t -> Grammar.PatternStar t) (pattern cx input)))])
-    in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
-      "no such field ",
-      (Core.unName fname),
-      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+pattern :: Graph.Graph -> Core.Term -> Either Error.DecodingError Grammar.Pattern
+pattern cx raw =
+    Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+      Core.TermUnion v0 ->  
+        let field = Core.injectionField v0 
+            fname = Core.fieldName field
+            fterm = Core.fieldTerm field
+            variantMap =
+                    Maps.fromList [
+                      (Core.Name "alternatives", (\input -> Eithers.map (\t -> Grammar.PatternAlternatives t) (Helpers.decodeList pattern cx input))),
+                      (Core.Name "constant", (\input -> Eithers.map (\t -> Grammar.PatternConstant t) (constant cx input))),
+                      (Core.Name "ignored", (\input -> Eithers.map (\t -> Grammar.PatternIgnored t) (pattern cx input))),
+                      (Core.Name "labeled", (\input -> Eithers.map (\t -> Grammar.PatternLabeled t) (labeledPattern cx input))),
+                      (Core.Name "nil", (\input -> Eithers.map (\t -> Grammar.PatternNil) (Helpers.decodeUnit cx input))),
+                      (Core.Name "nonterminal", (\input -> Eithers.map (\t -> Grammar.PatternNonterminal t) (symbol cx input))),
+                      (Core.Name "option", (\input -> Eithers.map (\t -> Grammar.PatternOption t) (pattern cx input))),
+                      (Core.Name "plus", (\input -> Eithers.map (\t -> Grammar.PatternPlus t) (pattern cx input))),
+                      (Core.Name "regex", (\input -> Eithers.map (\t -> Grammar.PatternRegex t) (regex cx input))),
+                      (Core.Name "sequence", (\input -> Eithers.map (\t -> Grammar.PatternSequence t) (Helpers.decodeList pattern cx input))),
+                      (Core.Name "star", (\input -> Eithers.map (\t -> Grammar.PatternStar t) (pattern cx input)))]
+        in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
+          "no such field ",
+          (Core.unName fname),
+          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+      _ -> Left (Error.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)
 
-production :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Grammar.Production)
-production cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermRecord v0 ->  
-    let fieldMap = (Helpers.toFieldMap v0)
-    in (Eithers.bind (Helpers.requireField "symbol" symbol fieldMap cx) (\field_symbol -> Eithers.bind (Helpers.requireField "pattern" pattern fieldMap cx) (\field_pattern -> Right (Grammar.Production {
-      Grammar.productionSymbol = field_symbol,
-      Grammar.productionPattern = field_pattern}))))
-  _ -> (Left (Error.DecodingError "expected record"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+production :: Graph.Graph -> Core.Term -> Either Error.DecodingError Grammar.Production
+production cx raw =
+    Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+      Core.TermRecord v0 ->  
+        let fieldMap = Helpers.toFieldMap v0
+        in (Eithers.bind (Helpers.requireField "symbol" symbol fieldMap cx) (\field_symbol -> Eithers.bind (Helpers.requireField "pattern" pattern fieldMap cx) (\field_pattern -> Right (Grammar.Production {
+          Grammar.productionSymbol = field_symbol,
+          Grammar.productionPattern = field_pattern}))))
+      _ -> Left (Error.DecodingError "expected record")) (Lexical.stripAndDereferenceTermEither cx raw)
 
-regex :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Grammar.Regex)
-regex cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermWrap v0 -> (Eithers.map (\b -> Grammar.Regex b) ((\raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-    Core.TermLiteral v1 -> ((\x -> case x of
-      Core.LiteralString v2 -> (Right v2)
-      _ -> (Left (Error.DecodingError "expected string literal"))) v1)
-    _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0)))
-  _ -> (Left (Error.DecodingError "expected wrapped type"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+regex :: Graph.Graph -> Core.Term -> Either Error.DecodingError Grammar.Regex
+regex cx raw =
+    Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+      Core.TermWrap v0 -> Eithers.map (\b -> Grammar.Regex b) ((\raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+        Core.TermLiteral v1 -> case v1 of
+          Core.LiteralString v2 -> Right v2
+          _ -> Left (Error.DecodingError "expected string literal")
+        _ -> Left (Error.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0))
+      _ -> Left (Error.DecodingError "expected wrapped type")) (Lexical.stripAndDereferenceTermEither cx raw)
 
-symbol :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Grammar.Symbol)
-symbol cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermWrap v0 -> (Eithers.map (\b -> Grammar.Symbol b) ((\raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-    Core.TermLiteral v1 -> ((\x -> case x of
-      Core.LiteralString v2 -> (Right v2)
-      _ -> (Left (Error.DecodingError "expected string literal"))) v1)
-    _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0)))
-  _ -> (Left (Error.DecodingError "expected wrapped type"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+symbol :: Graph.Graph -> Core.Term -> Either Error.DecodingError Grammar.Symbol
+symbol cx raw =
+    Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+      Core.TermWrap v0 -> Eithers.map (\b -> Grammar.Symbol b) ((\raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+        Core.TermLiteral v1 -> case v1 of
+          Core.LiteralString v2 -> Right v2
+          _ -> Left (Error.DecodingError "expected string literal")
+        _ -> Left (Error.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0))
+      _ -> Left (Error.DecodingError "expected wrapped type")) (Lexical.stripAndDereferenceTermEither cx raw)

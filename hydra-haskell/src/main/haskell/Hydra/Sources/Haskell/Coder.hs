@@ -287,7 +287,7 @@ encodeCaseExpression = haskellCoderDefinition "encodeCaseExpression" $
     "rt" <<~ Schemas.requireUnionType @@ var "cx" @@ var "g" @@ var "dn" $ lets [
     "toFieldMapEntry">: "f" ~>
       pair (Core.fieldTypeName $ var "f") (var "f"),
-    "fieldMap">: Maps.fromList $ Lists.map (var "toFieldMapEntry") (Core.rowTypeFields $ var "rt")] $
+    "fieldMap">: Maps.fromList $ Lists.map (var "toFieldMapEntry") (var "rt")] $
     "ecases" <<~ Eithers.mapList (var "toAlt" @@ var "fieldMap") (var "fields") $
     "dcases" <<~ (Maybes.cases (var "def")
       (right $ list ([] :: [TTerm H.CaseRhs])) $

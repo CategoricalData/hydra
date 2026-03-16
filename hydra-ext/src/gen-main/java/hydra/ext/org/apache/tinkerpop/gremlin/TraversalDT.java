@@ -75,7 +75,7 @@ public abstract class TraversalDT implements Serializable, Comparable<TraversalD
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TraversalDT other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -110,7 +110,7 @@ public abstract class TraversalDT implements Serializable, Comparable<TraversalD
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TraversalDT other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -145,7 +145,7 @@ public abstract class TraversalDT implements Serializable, Comparable<TraversalD
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TraversalDT other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -180,7 +180,7 @@ public abstract class TraversalDT implements Serializable, Comparable<TraversalD
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TraversalDT other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

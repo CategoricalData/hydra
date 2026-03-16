@@ -1563,15 +1563,15 @@ public interface Serde {
       hydra.lib.strings.SplitOn.apply(
         old,
         str)))));
-    String s1 = (((replace).apply("\\")).apply("\\\\")).apply(s);
-    String s2 = (((replace).apply("\u0000")).apply("\\x00")).apply(s1);
-    String s3 = (((replace).apply("\n")).apply("\\n")).apply(s2);
-    String s4 = (((replace).apply("\t")).apply("\\t")).apply(s3);
-    String s5 = (((replace).apply("\r")).apply("\\r")).apply(s4);
+    String s1 = (replace).apply("\\").apply("\\\\").apply(s);
+    String s2 = (replace).apply("\u0000").apply("\\x00").apply(s1);
+    String s3 = (replace).apply("\n").apply("\\n").apply(s2);
+    String s4 = (replace).apply("\t").apply("\\t").apply(s3);
+    String s5 = (replace).apply("\r").apply("\\r").apply(s4);
     hydra.util.Lazy<String> escaped = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
       doubleQuoted,
-      () -> (((replace).apply("\"")).apply("\\\"")).apply(s5),
-      () -> (((replace).apply("'")).apply("\\'")).apply(s5)));
+      () -> (replace).apply("\"").apply("\\\"").apply(s5),
+      () -> (replace).apply("'").apply("\\'").apply(s5)));
     hydra.util.Lazy<String> quote = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
       doubleQuoted,
       () -> "\"",

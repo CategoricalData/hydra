@@ -111,7 +111,7 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CompoundStatement other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -151,7 +151,7 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CompoundStatement other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -191,7 +191,7 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CompoundStatement other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -231,7 +231,7 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CompoundStatement other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -271,7 +271,7 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CompoundStatement other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -311,7 +311,7 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CompoundStatement other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -351,7 +351,7 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CompoundStatement other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -391,7 +391,7 @@ public abstract class CompoundStatement implements Serializable, Comparable<Comp
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(CompoundStatement other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

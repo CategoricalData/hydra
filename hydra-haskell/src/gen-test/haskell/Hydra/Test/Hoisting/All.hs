@@ -16,10 +16,11 @@ import qualified Data.Set as S
 
 -- | The group of all hoisting tests
 allTests :: Testing.TestGroup
-allTests = Testing.TestGroup {
-  Testing.testGroupName = "hoisting",
-  Testing.testGroupDescription = Nothing,
-  Testing.testGroupSubgroups = [
-    Cases.allTests,
-    Let.allTests],
-  Testing.testGroupCases = []}
+allTests =
+    Testing.TestGroup {
+      Testing.testGroupName = "hoisting",
+      Testing.testGroupDescription = Nothing,
+      Testing.testGroupSubgroups = [
+        Cases.allTests,
+        Let.allTests],
+      Testing.testGroupCases = []}

@@ -29,17 +29,17 @@ data Asset =
     assetRoles :: [Role]}
   deriving (Eq, Ord, Read, Show)
 
-_Asset = (Core.Name "hydra.ext.org.stacspec.items.Asset")
+_Asset = Core.Name "hydra.ext.org.stacspec.items.Asset"
 
-_Asset_href = (Core.Name "href")
+_Asset_href = Core.Name "href"
 
-_Asset_title = (Core.Name "title")
+_Asset_title = Core.Name "title"
 
-_Asset_description = (Core.Name "description")
+_Asset_description = Core.Name "description"
 
-_Asset_type = (Core.Name "type")
+_Asset_type = Core.Name "type"
 
-_Asset_roles = (Core.Name "roles")
+_Asset_roles = Core.Name "roles"
 
 -- | This object describes a STAC Item. The fields id, type, bbox, geometry and properties are inherited from GeoJSON.
 data Item = 
@@ -57,19 +57,19 @@ data Item =
     itemCollection :: (Maybe Model.Id)}
   deriving (Eq, Ord, Read, Show)
 
-_Item = (Core.Name "hydra.ext.org.stacspec.items.Item")
+_Item = Core.Name "hydra.ext.org.stacspec.items.Item"
 
-_Item_feature = (Core.Name "feature")
+_Item_feature = Core.Name "feature"
 
-_Item_stacVersion = (Core.Name "stacVersion")
+_Item_stacVersion = Core.Name "stacVersion"
 
-_Item_stacExtensions = (Core.Name "stacExtensions")
+_Item_stacExtensions = Core.Name "stacExtensions"
 
-_Item_links = (Core.Name "links")
+_Item_links = Core.Name "links"
 
-_Item_assets = (Core.Name "assets")
+_Item_assets = Core.Name "assets"
 
-_Item_collection = (Core.Name "collection")
+_Item_collection = Core.Name "collection"
 
 -- | This object describes a relationship with another entity. Data providers are advised to be liberal with the links section, to describe things like the Catalog an Item is in, related Items, parent or child Items (modeled in different ways, like an 'acquisition' or derived data). It is allowed to add additional fields such as a title and type.
 data Link = 
@@ -84,22 +84,22 @@ data Link =
     linkTitle :: (Maybe String)}
   deriving (Eq, Ord, Read, Show)
 
-_Link = (Core.Name "hydra.ext.org.stacspec.items.Link")
+_Link = Core.Name "hydra.ext.org.stacspec.items.Link"
 
-_Link_href = (Core.Name "href")
+_Link_href = Core.Name "href"
 
-_Link_rel = (Core.Name "rel")
+_Link_rel = Core.Name "rel"
 
-_Link_type = (Core.Name "type")
+_Link_type = Core.Name "type"
 
-_Link_title = (Core.Name "title")
+_Link_title = Core.Name "title"
 
 newtype MediaType = 
   MediaType {
     unMediaType :: String}
   deriving (Eq, Ord, Read, Show)
 
-_MediaType = (Core.Name "hydra.ext.org.stacspec.items.MediaType")
+_MediaType = Core.Name "hydra.ext.org.stacspec.items.MediaType"
 
 -- | STAC Items use a variety of rel types in the link object, to describe the exact nature of the link between this Item and the entity it is linking to. It is recommended to use the official IANA Link Relation Types where possible. The following table explains places where STAC use custom rel types are used with Items. This happens where there is not a clear official option, or where STAC uses an official type but adds additional meaning for the STAC context.
 data RelationType = 
@@ -108,13 +108,13 @@ data RelationType =
   RelationTypeOther String
   deriving (Eq, Ord, Read, Show)
 
-_RelationType = (Core.Name "hydra.ext.org.stacspec.items.RelationType")
+_RelationType = Core.Name "hydra.ext.org.stacspec.items.RelationType"
 
-_RelationType_iana = (Core.Name "iana")
+_RelationType_iana = Core.Name "iana"
 
-_RelationType_stac = (Core.Name "stac")
+_RelationType_stac = Core.Name "stac"
 
-_RelationType_other = (Core.Name "other")
+_RelationType_other = Core.Name "other"
 
 -- | The roles field is used to describe the purpose of each asset. It is recommended to include one for every asset, to give users a sense of why they might want to make use of the asset. There are some emerging standards that enable clients to take particular action when they encounter particular roles, listed below. But implementors are encouraged to come up with their own terms to describe the role.
 data Role = 
@@ -129,17 +129,17 @@ data Role =
   RoleOther String
   deriving (Eq, Ord, Read, Show)
 
-_Role = (Core.Name "hydra.ext.org.stacspec.items.Role")
+_Role = Core.Name "hydra.ext.org.stacspec.items.Role"
 
-_Role_thumbnail = (Core.Name "thumbnail")
+_Role_thumbnail = Core.Name "thumbnail"
 
-_Role_overview = (Core.Name "overview")
+_Role_overview = Core.Name "overview"
 
-_Role_data = (Core.Name "data")
+_Role_data = Core.Name "data"
 
-_Role_metadata = (Core.Name "metadata")
+_Role_metadata = Core.Name "metadata"
 
-_Role_other = (Core.Name "other")
+_Role_other = Core.Name "other"
 
 data StacRelationType = 
   -- | STRONGLY RECOMMENDED. Absolute URL to the Item if it is available at a public URL. This is particularly useful when in a download package that includes metadata, so that the downstream user can know where the data has come from.
@@ -154,35 +154,35 @@ data StacRelationType =
   StacRelationTypeDerivedFrom 
   deriving (Eq, Ord, Read, Show)
 
-_StacRelationType = (Core.Name "hydra.ext.org.stacspec.items.StacRelationType")
+_StacRelationType = Core.Name "hydra.ext.org.stacspec.items.StacRelationType"
 
-_StacRelationType_self = (Core.Name "self")
+_StacRelationType_self = Core.Name "self"
 
-_StacRelationType_root = (Core.Name "root")
+_StacRelationType_root = Core.Name "root"
 
-_StacRelationType_parent = (Core.Name "parent")
+_StacRelationType_parent = Core.Name "parent"
 
-_StacRelationType_collection = (Core.Name "collection")
+_StacRelationType_collection = Core.Name "collection"
 
-_StacRelationType_derivedFrom = (Core.Name "derivedFrom")
+_StacRelationType_derivedFrom = Core.Name "derivedFrom"
 
 newtype StacVersion = 
   StacVersion {
     unStacVersion :: String}
   deriving (Eq, Ord, Read, Show)
 
-_StacVersion = (Core.Name "hydra.ext.org.stacspec.items.StacVersion")
+_StacVersion = Core.Name "hydra.ext.org.stacspec.items.StacVersion"
 
 newtype Uri = 
   Uri {
     unUri :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Uri = (Core.Name "hydra.ext.org.stacspec.items.Uri")
+_Uri = Core.Name "hydra.ext.org.stacspec.items.Uri"
 
 newtype Url = 
   Url {
     unUrl :: String}
   deriving (Eq, Ord, Read, Show)
 
-_Url = (Core.Name "hydra.ext.org.stacspec.items.Url")
+_Url = Core.Name "hydra.ext.org.stacspec.items.Url"

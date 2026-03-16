@@ -18,7 +18,7 @@ newtype ColumnName =
     unColumnName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_ColumnName = (Core.Name "hydra.relational.ColumnName")
+_ColumnName = Core.Name "hydra.relational.ColumnName"
 
 -- | An abstract specification of the domain represented by a column in a relation; a role
 data ColumnSchema t = 
@@ -29,11 +29,11 @@ data ColumnSchema t =
     columnSchemaDomain :: t}
   deriving (Eq, Ord, Read, Show)
 
-_ColumnSchema = (Core.Name "hydra.relational.ColumnSchema")
+_ColumnSchema = Core.Name "hydra.relational.ColumnSchema"
 
-_ColumnSchema_name = (Core.Name "name")
+_ColumnSchema_name = Core.Name "name"
 
-_ColumnSchema_domain = (Core.Name "domain")
+_ColumnSchema_domain = Core.Name "domain"
 
 -- | A mapping from certain columns of a source relation to primary key columns of a target relation
 data ForeignKey = 
@@ -44,11 +44,11 @@ data ForeignKey =
     foreignKeyKeys :: (M.Map ColumnName ColumnName)}
   deriving (Eq, Ord, Read, Show)
 
-_ForeignKey = (Core.Name "hydra.relational.ForeignKey")
+_ForeignKey = Core.Name "hydra.relational.ForeignKey"
 
-_ForeignKey_foreignRelation = (Core.Name "foreignRelation")
+_ForeignKey_foreignRelation = Core.Name "foreignRelation"
 
-_ForeignKey_keys = (Core.Name "keys")
+_ForeignKey_keys = Core.Name "keys"
 
 -- | A primary key of a relation, specified either as a single column, or as a list of columns
 newtype PrimaryKey = 
@@ -56,7 +56,7 @@ newtype PrimaryKey =
     unPrimaryKey :: [ColumnName]}
   deriving (Eq, Ord, Read, Show)
 
-_PrimaryKey = (Core.Name "hydra.relational.PrimaryKey")
+_PrimaryKey = Core.Name "hydra.relational.PrimaryKey"
 
 -- | A set of distinct n-tuples; a table
 newtype Relation v = 
@@ -64,7 +64,7 @@ newtype Relation v =
     unRelation :: [Row v]}
   deriving (Eq, Ord, Read, Show)
 
-_Relation = (Core.Name "hydra.relational.Relation")
+_Relation = Core.Name "hydra.relational.Relation"
 
 -- | A unique relation (table) name
 newtype RelationName = 
@@ -72,7 +72,7 @@ newtype RelationName =
     unRelationName :: String}
   deriving (Eq, Ord, Read, Show)
 
-_RelationName = (Core.Name "hydra.relational.RelationName")
+_RelationName = Core.Name "hydra.relational.RelationName"
 
 -- | An abstract relation; the name and columns of a relation without its actual data
 data RelationSchema t = 
@@ -87,15 +87,15 @@ data RelationSchema t =
     relationSchemaForeignKeys :: [ForeignKey]}
   deriving (Eq, Ord, Read, Show)
 
-_RelationSchema = (Core.Name "hydra.relational.RelationSchema")
+_RelationSchema = Core.Name "hydra.relational.RelationSchema"
 
-_RelationSchema_name = (Core.Name "name")
+_RelationSchema_name = Core.Name "name"
 
-_RelationSchema_columns = (Core.Name "columns")
+_RelationSchema_columns = Core.Name "columns"
 
-_RelationSchema_primaryKeys = (Core.Name "primaryKeys")
+_RelationSchema_primaryKeys = Core.Name "primaryKeys"
 
-_RelationSchema_foreignKeys = (Core.Name "foreignKeys")
+_RelationSchema_foreignKeys = Core.Name "foreignKeys"
 
 -- | A domain-unordered (string-indexed, rather than position-indexed) relation
 newtype Relationship v = 
@@ -103,7 +103,7 @@ newtype Relationship v =
     unRelationship :: (S.Set (M.Map ColumnName v))}
   deriving (Eq, Ord, Read, Show)
 
-_Relationship = (Core.Name "hydra.relational.Relationship")
+_Relationship = Core.Name "hydra.relational.Relationship"
 
 -- | An n-tuple which is an element of a given relation
 newtype Row v = 
@@ -111,4 +111,4 @@ newtype Row v =
     unRow :: [v]}
   deriving (Eq, Ord, Read, Show)
 
-_Row = (Core.Name "hydra.relational.Row")
+_Row = Core.Name "hydra.relational.Row"

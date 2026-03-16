@@ -21,11 +21,11 @@ data PythonVersion =
   PythonVersionPython312 
   deriving (Eq, Ord, Read, Show)
 
-_PythonVersion = (Core.Name "hydra.ext.python.helpers.PythonVersion")
+_PythonVersion = Core.Name "hydra.ext.python.helpers.PythonVersion"
 
-_PythonVersion_python310 = (Core.Name "python310")
+_PythonVersion_python310 = Core.Name "python310"
 
-_PythonVersion_python312 = (Core.Name "python312")
+_PythonVersion_python312 = Core.Name "python312"
 
 -- | Environment for Python code generation
 data PythonEnvironment = 
@@ -45,21 +45,21 @@ data PythonEnvironment =
     -- | Variables that are inline let bindings (walrus operators)
     pythonEnvironmentInlineVariables :: (S.Set Core.Name)}
 
-_PythonEnvironment = (Core.Name "hydra.ext.python.helpers.PythonEnvironment")
+_PythonEnvironment = Core.Name "hydra.ext.python.helpers.PythonEnvironment"
 
-_PythonEnvironment_namespaces = (Core.Name "namespaces")
+_PythonEnvironment_namespaces = Core.Name "namespaces"
 
-_PythonEnvironment_boundTypeVariables = (Core.Name "boundTypeVariables")
+_PythonEnvironment_boundTypeVariables = Core.Name "boundTypeVariables"
 
-_PythonEnvironment_graph = (Core.Name "graph")
+_PythonEnvironment_graph = Core.Name "graph"
 
-_PythonEnvironment_nullaryBindings = (Core.Name "nullaryBindings")
+_PythonEnvironment_nullaryBindings = Core.Name "nullaryBindings"
 
-_PythonEnvironment_version = (Core.Name "version")
+_PythonEnvironment_version = Core.Name "version"
 
-_PythonEnvironment_skipCasts = (Core.Name "skipCasts")
+_PythonEnvironment_skipCasts = Core.Name "skipCasts"
 
-_PythonEnvironment_inlineVariables = (Core.Name "inlineVariables")
+_PythonEnvironment_inlineVariables = Core.Name "inlineVariables"
 
 -- | Temporary metadata used to create the header section of a Python file
 data PythonModuleMetadata = 
@@ -90,51 +90,51 @@ data PythonModuleMetadata =
     pythonModuleMetadataUsesTypeVar :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_PythonModuleMetadata = (Core.Name "hydra.ext.python.helpers.PythonModuleMetadata")
+_PythonModuleMetadata = Core.Name "hydra.ext.python.helpers.PythonModuleMetadata"
 
-_PythonModuleMetadata_namespaces = (Core.Name "namespaces")
+_PythonModuleMetadata_namespaces = Core.Name "namespaces"
 
-_PythonModuleMetadata_typeVariables = (Core.Name "typeVariables")
+_PythonModuleMetadata_typeVariables = Core.Name "typeVariables"
 
-_PythonModuleMetadata_usesAnnotated = (Core.Name "usesAnnotated")
+_PythonModuleMetadata_usesAnnotated = Core.Name "usesAnnotated"
 
-_PythonModuleMetadata_usesCallable = (Core.Name "usesCallable")
+_PythonModuleMetadata_usesCallable = Core.Name "usesCallable"
 
-_PythonModuleMetadata_usesCast = (Core.Name "usesCast")
+_PythonModuleMetadata_usesCast = Core.Name "usesCast"
 
-_PythonModuleMetadata_usesLruCache = (Core.Name "usesLruCache")
+_PythonModuleMetadata_usesLruCache = Core.Name "usesLruCache"
 
-_PythonModuleMetadata_usesTypeAlias = (Core.Name "usesTypeAlias")
+_PythonModuleMetadata_usesTypeAlias = Core.Name "usesTypeAlias"
 
-_PythonModuleMetadata_usesDataclass = (Core.Name "usesDataclass")
+_PythonModuleMetadata_usesDataclass = Core.Name "usesDataclass"
 
-_PythonModuleMetadata_usesDecimal = (Core.Name "usesDecimal")
+_PythonModuleMetadata_usesDecimal = Core.Name "usesDecimal"
 
-_PythonModuleMetadata_usesEither = (Core.Name "usesEither")
+_PythonModuleMetadata_usesEither = Core.Name "usesEither"
 
-_PythonModuleMetadata_usesEnum = (Core.Name "usesEnum")
+_PythonModuleMetadata_usesEnum = Core.Name "usesEnum"
 
-_PythonModuleMetadata_usesFrozenDict = (Core.Name "usesFrozenDict")
+_PythonModuleMetadata_usesFrozenDict = Core.Name "usesFrozenDict"
 
-_PythonModuleMetadata_usesFrozenList = (Core.Name "usesFrozenList")
+_PythonModuleMetadata_usesFrozenList = Core.Name "usesFrozenList"
 
-_PythonModuleMetadata_usesGeneric = (Core.Name "usesGeneric")
+_PythonModuleMetadata_usesGeneric = Core.Name "usesGeneric"
 
-_PythonModuleMetadata_usesJust = (Core.Name "usesJust")
+_PythonModuleMetadata_usesJust = Core.Name "usesJust"
 
-_PythonModuleMetadata_usesLeft = (Core.Name "usesLeft")
+_PythonModuleMetadata_usesLeft = Core.Name "usesLeft"
 
-_PythonModuleMetadata_usesMaybe = (Core.Name "usesMaybe")
+_PythonModuleMetadata_usesMaybe = Core.Name "usesMaybe"
 
-_PythonModuleMetadata_usesName = (Core.Name "usesName")
+_PythonModuleMetadata_usesName = Core.Name "usesName"
 
-_PythonModuleMetadata_usesNode = (Core.Name "usesNode")
+_PythonModuleMetadata_usesNode = Core.Name "usesNode"
 
-_PythonModuleMetadata_usesNothing = (Core.Name "usesNothing")
+_PythonModuleMetadata_usesNothing = Core.Name "usesNothing"
 
-_PythonModuleMetadata_usesRight = (Core.Name "usesRight")
+_PythonModuleMetadata_usesRight = Core.Name "usesRight"
 
-_PythonModuleMetadata_usesTypeVar = (Core.Name "usesTypeVar")
+_PythonModuleMetadata_usesTypeVar = Core.Name "usesTypeVar"
 
 -- | Combined graph and metadata state for Python code generation
 data PyGraph = 
@@ -144,8 +144,8 @@ data PyGraph =
     -- | Accumulated module metadata
     pyGraphMetadata :: PythonModuleMetadata}
 
-_PyGraph = (Core.Name "hydra.ext.python.helpers.PyGraph")
+_PyGraph = Core.Name "hydra.ext.python.helpers.PyGraph"
 
-_PyGraph_graph = (Core.Name "graph")
+_PyGraph_graph = Core.Name "graph"
 
-_PyGraph_metadata = (Core.Name "metadata")
+_PyGraph_metadata = Core.Name "metadata"

@@ -71,7 +71,7 @@ public abstract class TargetWithStarAtom implements Serializable, Comparable<Tar
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TargetWithStarAtom other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -111,7 +111,7 @@ public abstract class TargetWithStarAtom implements Serializable, Comparable<Tar
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TargetWithStarAtom other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -151,7 +151,7 @@ public abstract class TargetWithStarAtom implements Serializable, Comparable<Tar
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TargetWithStarAtom other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

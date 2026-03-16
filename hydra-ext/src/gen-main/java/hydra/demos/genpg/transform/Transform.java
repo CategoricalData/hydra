@@ -15,7 +15,7 @@ public interface Transform {
   }
   
   static hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>> decodeCell(hydra.tabular.ColumnType colType, hydra.util.Maybe<String> mvalue) {
-    String cname = ((colType).name).value;
+    String cname = (colType).name.value;
     hydra.core.Type typ = (colType).type;
     java.util.function.Function<String, hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>> decodeValue = (java.util.function.Function<String, hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>>>) (value -> {
       String parseError = hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
@@ -33,7 +33,7 @@ public interface Transform {
         
         @Override
         public hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>> visit(hydra.core.Type.Literal lt) {
-          return ((lt).value).accept(new hydra.core.LiteralType.PartialVisitor<>() {
+          return (lt).value.accept(new hydra.core.LiteralType.PartialVisitor<>() {
             @Override
             public hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>> otherwise(hydra.core.LiteralType instance) {
               return hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>left(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
@@ -51,7 +51,7 @@ public interface Transform {
             
             @Override
             public hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>> visit(hydra.core.LiteralType.Float_ ft) {
-              return ((ft).value).accept(new hydra.core.FloatType.PartialVisitor<>() {
+              return (ft).value.accept(new hydra.core.FloatType.PartialVisitor<>() {
                 @Override
                 public hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>> otherwise(hydra.core.FloatType instance) {
                   return hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>left(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
@@ -87,7 +87,7 @@ public interface Transform {
             
             @Override
             public hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>> visit(hydra.core.LiteralType.Integer_ it) {
-              return ((it).value).accept(new hydra.core.IntegerType.PartialVisitor<>() {
+              return (it).value.accept(new hydra.core.IntegerType.PartialVisitor<>() {
                 @Override
                 public hydra.util.Either<String, hydra.util.Maybe<hydra.core.Term>> otherwise(hydra.core.IntegerType instance) {
                   return hydra.util.Either.<String, hydra.util.Maybe<hydra.core.Term>>left(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
@@ -404,7 +404,7 @@ public interface Transform {
         
         @Override
         public hydra.util.PersistentSet<String> visit(hydra.core.Term.Function f) {
-          return ((f).value).accept(new hydra.core.Function.PartialVisitor<>() {
+          return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
             @Override
             public hydra.util.PersistentSet<String> otherwise(hydra.core.Function instance) {
               return names;
@@ -412,7 +412,7 @@ public interface Transform {
             
             @Override
             public hydra.util.PersistentSet<String> visit(hydra.core.Function.Elimination e) {
-              return ((e).value).accept(new hydra.core.Elimination.PartialVisitor<>() {
+              return (e).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
                 @Override
                 public hydra.util.PersistentSet<String> otherwise(hydra.core.Elimination instance) {
                   return names;
@@ -421,7 +421,7 @@ public interface Transform {
                 @Override
                 public hydra.util.PersistentSet<String> visit(hydra.core.Elimination.Record proj) {
                   return hydra.lib.sets.Insert.apply(
-                    (((proj).value).typeName).value,
+                    (proj).value.typeName.value,
                     names);
                 }
               });
@@ -580,7 +580,7 @@ public interface Transform {
       () -> hydra.util.Either.<String, String>right(hydra.lib.lists.Head.apply(hydra.lib.sets.ToList.apply(tables.get()))),
       () -> hydra.util.Either.<String, String>left(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
         "Specification for ",
-        (label.get()).value,
+        label.get().value,
         " edges has wrong number of tables"))));
   }
   
@@ -598,7 +598,7 @@ public interface Transform {
       () -> hydra.util.Either.<String, String>right(hydra.lib.lists.Head.apply(hydra.lib.sets.ToList.apply(tables.get()))),
       () -> hydra.util.Either.<String, String>left(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
         "Specification for ",
-        (label.get()).value,
+        label.get().value,
         " vertices has wrong number of tables"))));
   }
   
@@ -611,10 +611,10 @@ public interface Transform {
   static hydra.core.Term termRowToRecord(hydra.tabular.TableType tableType, hydra.tabular.DataRow<hydra.core.Term> row) {
     hydra.util.Lazy<hydra.util.ConsList<hydra.util.Maybe<hydra.core.Term>>> cells = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.tabular.DataRow<hydra.core.Term>, hydra.util.ConsList<hydra.util.Maybe<hydra.core.Term>>>) (wrapped -> (wrapped).value)).apply(row));
     hydra.util.ConsList<hydra.tabular.ColumnType> colTypes = (tableType).columns;
-    String tname = ((tableType).name).value;
+    String tname = (tableType).name.value;
     return new hydra.core.Term.Record(new hydra.core.Record(new hydra.core.Name(tname), hydra.lib.lists.ZipWith.apply(
       (java.util.function.Function<hydra.tabular.ColumnType, java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, hydra.core.Field>>) (colType -> (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, hydra.core.Field>) (mvalue -> {
-        String cname = ((colType).name).value;
+        String cname = (colType).name.value;
         return new hydra.core.Field(new hydra.core.Name(cname), new hydra.core.Term.Maybe(mvalue));
       })),
       colTypes,

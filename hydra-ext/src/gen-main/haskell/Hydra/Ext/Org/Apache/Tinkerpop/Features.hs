@@ -59,43 +59,43 @@ data DataTypeFeatures =
     dataTypeFeaturesSupportsUniformListValues :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_DataTypeFeatures = (Core.Name "hydra.ext.org.apache.tinkerpop.features.DataTypeFeatures")
+_DataTypeFeatures = Core.Name "hydra.ext.org.apache.tinkerpop.features.DataTypeFeatures"
 
-_DataTypeFeatures_supportsBooleanArrayValues = (Core.Name "supportsBooleanArrayValues")
+_DataTypeFeatures_supportsBooleanArrayValues = Core.Name "supportsBooleanArrayValues"
 
-_DataTypeFeatures_supportsBooleanValues = (Core.Name "supportsBooleanValues")
+_DataTypeFeatures_supportsBooleanValues = Core.Name "supportsBooleanValues"
 
-_DataTypeFeatures_supportsByteArrayValues = (Core.Name "supportsByteArrayValues")
+_DataTypeFeatures_supportsByteArrayValues = Core.Name "supportsByteArrayValues"
 
-_DataTypeFeatures_supportsByteValues = (Core.Name "supportsByteValues")
+_DataTypeFeatures_supportsByteValues = Core.Name "supportsByteValues"
 
-_DataTypeFeatures_supportsDoubleArrayValues = (Core.Name "supportsDoubleArrayValues")
+_DataTypeFeatures_supportsDoubleArrayValues = Core.Name "supportsDoubleArrayValues"
 
-_DataTypeFeatures_supportsDoubleValues = (Core.Name "supportsDoubleValues")
+_DataTypeFeatures_supportsDoubleValues = Core.Name "supportsDoubleValues"
 
-_DataTypeFeatures_supportsFloatArrayValues = (Core.Name "supportsFloatArrayValues")
+_DataTypeFeatures_supportsFloatArrayValues = Core.Name "supportsFloatArrayValues"
 
-_DataTypeFeatures_supportsFloatValues = (Core.Name "supportsFloatValues")
+_DataTypeFeatures_supportsFloatValues = Core.Name "supportsFloatValues"
 
-_DataTypeFeatures_supportsIntegerArrayValues = (Core.Name "supportsIntegerArrayValues")
+_DataTypeFeatures_supportsIntegerArrayValues = Core.Name "supportsIntegerArrayValues"
 
-_DataTypeFeatures_supportsIntegerValues = (Core.Name "supportsIntegerValues")
+_DataTypeFeatures_supportsIntegerValues = Core.Name "supportsIntegerValues"
 
-_DataTypeFeatures_supportsLongArrayValues = (Core.Name "supportsLongArrayValues")
+_DataTypeFeatures_supportsLongArrayValues = Core.Name "supportsLongArrayValues"
 
-_DataTypeFeatures_supportsLongValues = (Core.Name "supportsLongValues")
+_DataTypeFeatures_supportsLongValues = Core.Name "supportsLongValues"
 
-_DataTypeFeatures_supportsMapValues = (Core.Name "supportsMapValues")
+_DataTypeFeatures_supportsMapValues = Core.Name "supportsMapValues"
 
-_DataTypeFeatures_supportsMixedListValues = (Core.Name "supportsMixedListValues")
+_DataTypeFeatures_supportsMixedListValues = Core.Name "supportsMixedListValues"
 
-_DataTypeFeatures_supportsSerializableValues = (Core.Name "supportsSerializableValues")
+_DataTypeFeatures_supportsSerializableValues = Core.Name "supportsSerializableValues"
 
-_DataTypeFeatures_supportsStringArrayValues = (Core.Name "supportsStringArrayValues")
+_DataTypeFeatures_supportsStringArrayValues = Core.Name "supportsStringArrayValues"
 
-_DataTypeFeatures_supportsStringValues = (Core.Name "supportsStringValues")
+_DataTypeFeatures_supportsStringValues = Core.Name "supportsStringValues"
 
-_DataTypeFeatures_supportsUniformListValues = (Core.Name "supportsUniformListValues")
+_DataTypeFeatures_supportsUniformListValues = Core.Name "supportsUniformListValues"
 
 -- | Features that are related to Edge operations.
 data EdgeFeatures = 
@@ -110,17 +110,17 @@ data EdgeFeatures =
     edgeFeaturesSupportsUpsert :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_EdgeFeatures = (Core.Name "hydra.ext.org.apache.tinkerpop.features.EdgeFeatures")
+_EdgeFeatures = Core.Name "hydra.ext.org.apache.tinkerpop.features.EdgeFeatures"
 
-_EdgeFeatures_elementFeatures = (Core.Name "elementFeatures")
+_EdgeFeatures_elementFeatures = Core.Name "elementFeatures"
 
-_EdgeFeatures_properties = (Core.Name "properties")
+_EdgeFeatures_properties = Core.Name "properties"
 
-_EdgeFeatures_supportsAddEdges = (Core.Name "supportsAddEdges")
+_EdgeFeatures_supportsAddEdges = Core.Name "supportsAddEdges"
 
-_EdgeFeatures_supportsRemoveEdges = (Core.Name "supportsRemoveEdges")
+_EdgeFeatures_supportsRemoveEdges = Core.Name "supportsRemoveEdges"
 
-_EdgeFeatures_supportsUpsert = (Core.Name "supportsUpsert")
+_EdgeFeatures_supportsUpsert = Core.Name "supportsUpsert"
 
 -- | Features that are related to Edge Property objects.
 data EdgePropertyFeatures = 
@@ -128,9 +128,9 @@ data EdgePropertyFeatures =
     edgePropertyFeaturesPropertyFeatures :: PropertyFeatures}
   deriving (Eq, Ord, Read, Show)
 
-_EdgePropertyFeatures = (Core.Name "hydra.ext.org.apache.tinkerpop.features.EdgePropertyFeatures")
+_EdgePropertyFeatures = Core.Name "hydra.ext.org.apache.tinkerpop.features.EdgePropertyFeatures"
 
-_EdgePropertyFeatures_propertyFeatures = (Core.Name "propertyFeatures")
+_EdgePropertyFeatures_propertyFeatures = Core.Name "propertyFeatures"
 
 -- | Features that are related to Element objects.
 data ElementFeatures = 
@@ -153,32 +153,32 @@ data ElementFeatures =
     elementFeaturesSupportsUuidIds :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_ElementFeatures = (Core.Name "hydra.ext.org.apache.tinkerpop.features.ElementFeatures")
+_ElementFeatures = Core.Name "hydra.ext.org.apache.tinkerpop.features.ElementFeatures"
 
-_ElementFeatures_supportsAddProperty = (Core.Name "supportsAddProperty")
+_ElementFeatures_supportsAddProperty = Core.Name "supportsAddProperty"
 
-_ElementFeatures_supportsAnyIds = (Core.Name "supportsAnyIds")
+_ElementFeatures_supportsAnyIds = Core.Name "supportsAnyIds"
 
-_ElementFeatures_supportsCustomIds = (Core.Name "supportsCustomIds")
+_ElementFeatures_supportsCustomIds = Core.Name "supportsCustomIds"
 
-_ElementFeatures_supportsNumericIds = (Core.Name "supportsNumericIds")
+_ElementFeatures_supportsNumericIds = Core.Name "supportsNumericIds"
 
-_ElementFeatures_supportsRemoveProperty = (Core.Name "supportsRemoveProperty")
+_ElementFeatures_supportsRemoveProperty = Core.Name "supportsRemoveProperty"
 
-_ElementFeatures_supportsStringIds = (Core.Name "supportsStringIds")
+_ElementFeatures_supportsStringIds = Core.Name "supportsStringIds"
 
-_ElementFeatures_supportsUserSuppliedIds = (Core.Name "supportsUserSuppliedIds")
+_ElementFeatures_supportsUserSuppliedIds = Core.Name "supportsUserSuppliedIds"
 
-_ElementFeatures_supportsUuidIds = (Core.Name "supportsUuidIds")
+_ElementFeatures_supportsUuidIds = Core.Name "supportsUuidIds"
 
 -- | Additional features which are needed for the complete specification of language constraints in Hydra, above and beyond TinkerPop Graph.Features
 data ExtraFeatures a = 
   ExtraFeatures {
     extraFeaturesSupportsMapKey :: (Core.Type -> Bool)}
 
-_ExtraFeatures = (Core.Name "hydra.ext.org.apache.tinkerpop.features.ExtraFeatures")
+_ExtraFeatures = Core.Name "hydra.ext.org.apache.tinkerpop.features.ExtraFeatures"
 
-_ExtraFeatures_supportsMapKey = (Core.Name "supportsMapKey")
+_ExtraFeatures_supportsMapKey = Core.Name "supportsMapKey"
 
 -- | An interface that represents the capabilities of a Graph implementation. By default all methods of features return true and it is up to implementers to disable feature they don't support. Users should check features prior to using various functions of TinkerPop to help ensure code portability across implementations. For example, a common usage would be to check if a graph supports transactions prior to calling the commit method on Graph.tx().
 -- | 
@@ -193,13 +193,13 @@ data Features =
     featuresVertex :: VertexFeatures}
   deriving (Eq, Ord, Read, Show)
 
-_Features = (Core.Name "hydra.ext.org.apache.tinkerpop.features.Features")
+_Features = Core.Name "hydra.ext.org.apache.tinkerpop.features.Features"
 
-_Features_edge = (Core.Name "edge")
+_Features_edge = Core.Name "edge"
 
-_Features_graph = (Core.Name "graph")
+_Features_graph = Core.Name "graph"
 
-_Features_vertex = (Core.Name "vertex")
+_Features_vertex = Core.Name "vertex"
 
 -- | Features specific to a operations of a graph.
 data GraphFeatures = 
@@ -222,23 +222,23 @@ data GraphFeatures =
     graphFeaturesVariables :: VariableFeatures}
   deriving (Eq, Ord, Read, Show)
 
-_GraphFeatures = (Core.Name "hydra.ext.org.apache.tinkerpop.features.GraphFeatures")
+_GraphFeatures = Core.Name "hydra.ext.org.apache.tinkerpop.features.GraphFeatures"
 
-_GraphFeatures_supportsComputer = (Core.Name "supportsComputer")
+_GraphFeatures_supportsComputer = Core.Name "supportsComputer"
 
-_GraphFeatures_supportsConcurrentAccess = (Core.Name "supportsConcurrentAccess")
+_GraphFeatures_supportsConcurrentAccess = Core.Name "supportsConcurrentAccess"
 
-_GraphFeatures_supportsIoRead = (Core.Name "supportsIoRead")
+_GraphFeatures_supportsIoRead = Core.Name "supportsIoRead"
 
-_GraphFeatures_supportsIoWrite = (Core.Name "supportsIoWrite")
+_GraphFeatures_supportsIoWrite = Core.Name "supportsIoWrite"
 
-_GraphFeatures_supportsPersistence = (Core.Name "supportsPersistence")
+_GraphFeatures_supportsPersistence = Core.Name "supportsPersistence"
 
-_GraphFeatures_supportsThreadedTransactions = (Core.Name "supportsThreadedTransactions")
+_GraphFeatures_supportsThreadedTransactions = Core.Name "supportsThreadedTransactions"
 
-_GraphFeatures_supportsTransactions = (Core.Name "supportsTransactions")
+_GraphFeatures_supportsTransactions = Core.Name "supportsTransactions"
 
-_GraphFeatures_variables = (Core.Name "variables")
+_GraphFeatures_variables = Core.Name "variables"
 
 -- | A base interface for Edge or Vertex Property features.
 data PropertyFeatures = 
@@ -248,11 +248,11 @@ data PropertyFeatures =
     propertyFeaturesSupportsProperties :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_PropertyFeatures = (Core.Name "hydra.ext.org.apache.tinkerpop.features.PropertyFeatures")
+_PropertyFeatures = Core.Name "hydra.ext.org.apache.tinkerpop.features.PropertyFeatures"
 
-_PropertyFeatures_dataTypeFeatures = (Core.Name "dataTypeFeatures")
+_PropertyFeatures_dataTypeFeatures = Core.Name "dataTypeFeatures"
 
-_PropertyFeatures_supportsProperties = (Core.Name "supportsProperties")
+_PropertyFeatures_supportsProperties = Core.Name "supportsProperties"
 
 -- | Features for Graph.Variables.
 data VariableFeatures = 
@@ -262,11 +262,11 @@ data VariableFeatures =
     variableFeaturesSupportsVariables :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_VariableFeatures = (Core.Name "hydra.ext.org.apache.tinkerpop.features.VariableFeatures")
+_VariableFeatures = Core.Name "hydra.ext.org.apache.tinkerpop.features.VariableFeatures"
 
-_VariableFeatures_dataTypeFeatures = (Core.Name "dataTypeFeatures")
+_VariableFeatures_dataTypeFeatures = Core.Name "dataTypeFeatures"
 
-_VariableFeatures_supportsVariables = (Core.Name "supportsVariables")
+_VariableFeatures_supportsVariables = Core.Name "supportsVariables"
 
 -- | Features that are related to Vertex operations.
 data VertexFeatures = 
@@ -287,23 +287,23 @@ data VertexFeatures =
     vertexFeaturesSupportsUpsert :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_VertexFeatures = (Core.Name "hydra.ext.org.apache.tinkerpop.features.VertexFeatures")
+_VertexFeatures = Core.Name "hydra.ext.org.apache.tinkerpop.features.VertexFeatures"
 
-_VertexFeatures_elementFeatures = (Core.Name "elementFeatures")
+_VertexFeatures_elementFeatures = Core.Name "elementFeatures"
 
-_VertexFeatures_properties = (Core.Name "properties")
+_VertexFeatures_properties = Core.Name "properties"
 
-_VertexFeatures_supportsAddVertices = (Core.Name "supportsAddVertices")
+_VertexFeatures_supportsAddVertices = Core.Name "supportsAddVertices"
 
-_VertexFeatures_supportsDuplicateMultiProperties = (Core.Name "supportsDuplicateMultiProperties")
+_VertexFeatures_supportsDuplicateMultiProperties = Core.Name "supportsDuplicateMultiProperties"
 
-_VertexFeatures_supportsMetaProperties = (Core.Name "supportsMetaProperties")
+_VertexFeatures_supportsMetaProperties = Core.Name "supportsMetaProperties"
 
-_VertexFeatures_supportsMultiProperties = (Core.Name "supportsMultiProperties")
+_VertexFeatures_supportsMultiProperties = Core.Name "supportsMultiProperties"
 
-_VertexFeatures_supportsRemoveVertices = (Core.Name "supportsRemoveVertices")
+_VertexFeatures_supportsRemoveVertices = Core.Name "supportsRemoveVertices"
 
-_VertexFeatures_supportsUpsert = (Core.Name "supportsUpsert")
+_VertexFeatures_supportsUpsert = Core.Name "supportsUpsert"
 
 -- | Features that are related to Vertex Property objects.
 data VertexPropertyFeatures = 
@@ -315,12 +315,12 @@ data VertexPropertyFeatures =
     vertexPropertyFeaturesSupportsRemove :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_VertexPropertyFeatures = (Core.Name "hydra.ext.org.apache.tinkerpop.features.VertexPropertyFeatures")
+_VertexPropertyFeatures = Core.Name "hydra.ext.org.apache.tinkerpop.features.VertexPropertyFeatures"
 
-_VertexPropertyFeatures_dataTypeFeatures = (Core.Name "dataTypeFeatures")
+_VertexPropertyFeatures_dataTypeFeatures = Core.Name "dataTypeFeatures"
 
-_VertexPropertyFeatures_propertyFeatures = (Core.Name "propertyFeatures")
+_VertexPropertyFeatures_propertyFeatures = Core.Name "propertyFeatures"
 
-_VertexPropertyFeatures_elementFeatures = (Core.Name "elementFeatures")
+_VertexPropertyFeatures_elementFeatures = Core.Name "elementFeatures"
 
-_VertexPropertyFeatures_supportsRemove = (Core.Name "supportsRemove")
+_VertexPropertyFeatures_supportsRemove = Core.Name "supportsRemove"

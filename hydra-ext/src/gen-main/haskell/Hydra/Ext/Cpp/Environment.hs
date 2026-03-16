@@ -22,8 +22,8 @@ data CppEnvironment =
     cppEnvironmentBoundTypeVariables :: ([Core.Name], (M.Map Core.Name String))}
   deriving (Eq, Ord, Read, Show)
 
-_CppEnvironment = (Core.Name "hydra.ext.cpp.environment.CppEnvironment")
+_CppEnvironment = Core.Name "hydra.ext.cpp.environment.CppEnvironment"
 
-_CppEnvironment_namespaces = (Core.Name "namespaces")
+_CppEnvironment_namespaces = Core.Name "namespaces"
 
-_CppEnvironment_boundTypeVariables = (Core.Name "boundTypeVariables")
+_CppEnvironment_boundTypeVariables = Core.Name "boundTypeVariables"

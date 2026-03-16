@@ -95,7 +95,7 @@ public abstract class NodeConstraint implements Serializable, Comparable<NodeCon
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(NodeConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -135,7 +135,7 @@ public abstract class NodeConstraint implements Serializable, Comparable<NodeCon
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(NodeConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -175,7 +175,7 @@ public abstract class NodeConstraint implements Serializable, Comparable<NodeCon
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(NodeConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -215,7 +215,7 @@ public abstract class NodeConstraint implements Serializable, Comparable<NodeCon
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(NodeConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -255,7 +255,7 @@ public abstract class NodeConstraint implements Serializable, Comparable<NodeCon
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(NodeConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -295,7 +295,7 @@ public abstract class NodeConstraint implements Serializable, Comparable<NodeCon
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(NodeConstraint other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

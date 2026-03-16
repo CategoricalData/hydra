@@ -63,7 +63,7 @@ public abstract class RepeatRange_Sequence_Option_Option_Option implements Seria
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(RepeatRange_Sequence_Option_Option_Option other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -99,7 +99,7 @@ public abstract class RepeatRange_Sequence_Option_Option_Option implements Seria
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(RepeatRange_Sequence_Option_Option_Option other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

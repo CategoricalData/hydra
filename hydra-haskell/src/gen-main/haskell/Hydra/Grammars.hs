@@ -27,154 +27,155 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Generate child name
-childName :: (String -> String -> String)
-childName lname n = (Strings.cat [
-  lname,
-  "_",
-  (Formatting.capitalize n)])
+childName :: String -> String -> String
+childName lname n =
+    Strings.cat [
+      lname,
+      "_",
+      (Formatting.capitalize n)]
 
 -- | Find unique names for patterns
-findNames :: ([Grammar.Pattern] -> [String])
-findNames pats =  
-  let nextName = (\acc -> \pat ->  
-          let names = (Pairs.first acc)
-          in  
-            let nameMap = (Pairs.second acc)
-            in  
-              let rn = (rawName pat)
-              in  
-                let nameAndIndex = (Maybes.maybe (rn, 1) (\i -> (Strings.cat2 rn (Literals.showInt32 (Math.add i 1)), (Math.add i 1))) (Maps.lookup rn nameMap))
-                in  
-                  let nn = (Pairs.first nameAndIndex)
-                  in  
-                    let ni = (Pairs.second nameAndIndex)
-                    in (Lists.cons nn names, (Maps.insert rn ni nameMap)))
-  in (Lists.reverse (Pairs.first (Lists.foldl nextName ([], Maps.empty) pats)))
+findNames :: [Grammar.Pattern] -> [String]
+findNames pats =
+     
+      let nextName =
+              \acc -> \pat ->  
+                let names = Pairs.first acc 
+                    nameMap = Pairs.second acc
+                    rn = rawName pat
+                    nameAndIndex =
+                            Maybes.maybe (rn, 1) (\i -> (Strings.cat2 rn (Literals.showInt32 (Math.add i 1)), (Math.add i 1))) (Maps.lookup rn nameMap)
+                    nn = Pairs.first nameAndIndex
+                    ni = Pairs.second nameAndIndex
+                in (Lists.cons nn names, (Maps.insert rn ni nameMap))
+      in (Lists.reverse (Pairs.first (Lists.foldl nextName ([], Maps.empty) pats)))
 
 -- | Convert a BNF grammar to a Hydra module
-grammarToModule :: (Module.Namespace -> Grammar.Grammar -> Maybe String -> Module.Module)
-grammarToModule ns grammar desc =  
-  let prodPairs = (Lists.map (\prod -> (Grammar.unSymbol (Grammar.productionSymbol prod), (Grammar.productionPattern prod))) (Grammar.unGrammar grammar))
-  in  
-    let capitalizedNames = (Lists.map (\pair -> Formatting.capitalize (Pairs.first pair)) prodPairs)
-    in  
-      let patterns = (Lists.map (\pair -> Pairs.second pair) prodPairs)
-      in  
-        let elementPairs = (Lists.concat (Lists.zipWith (makeElements False ns) capitalizedNames patterns))
-        in  
-          let elements = (Lists.map (\pair ->  
-                  let lname = (Pairs.first pair)
-                  in  
-                    let elName = (toName ns lname)
-                    in  
-                      let typ = (replacePlaceholders elName (wrapType (Pairs.second pair)))
-                      in (Annotations.typeElement elName typ)) elementPairs)
-          in Module.Module {
-            Module.moduleNamespace = ns,
-            Module.moduleElements = elements,
-            Module.moduleTermDependencies = [],
-            Module.moduleTypeDependencies = [],
-            Module.moduleDescription = desc}
+grammarToModule :: Module.Namespace -> Grammar.Grammar -> Maybe String -> Module.Module
+grammarToModule ns grammar desc =
+     
+      let prodPairs =
+              Lists.map (\prod -> (Grammar.unSymbol (Grammar.productionSymbol prod), (Grammar.productionPattern prod))) (Grammar.unGrammar grammar) 
+          capitalizedNames = Lists.map (\pair -> Formatting.capitalize (Pairs.first pair)) prodPairs
+          patterns = Lists.map (\pair -> Pairs.second pair) prodPairs
+          elementPairs = Lists.concat (Lists.zipWith (makeElements False ns) capitalizedNames patterns)
+          elements =
+                  Lists.map (\pair ->  
+                    let lname = Pairs.first pair 
+                        elName = toName ns lname
+                        typ = replacePlaceholders elName (wrapType (Pairs.second pair))
+                    in (Annotations.typeElement elName typ)) elementPairs
+      in Module.Module {
+        Module.moduleNamespace = ns,
+        Module.moduleElements = elements,
+        Module.moduleTermDependencies = [],
+        Module.moduleTypeDependencies = [],
+        Module.moduleDescription = desc}
 
 -- | Check if pattern is complex
-isComplex :: (Grammar.Pattern -> Bool)
-isComplex pat = ((\x -> case x of
-  Grammar.PatternLabeled v0 -> (isComplex (Grammar.labeledPatternPattern v0))
-  Grammar.PatternSequence v0 -> (isNontrivial True v0)
-  Grammar.PatternAlternatives v0 -> (isNontrivial False v0)
-  _ -> False) pat)
+isComplex :: Grammar.Pattern -> Bool
+isComplex pat =
+    case pat of
+      Grammar.PatternLabeled v0 -> isComplex (Grammar.labeledPatternPattern v0)
+      Grammar.PatternSequence v0 -> isNontrivial True v0
+      Grammar.PatternAlternatives v0 -> isNontrivial False v0
+      _ -> False
 
 -- | Check if patterns are nontrivial
-isNontrivial :: (Bool -> [Grammar.Pattern] -> Bool)
-isNontrivial isRecord pats =  
-  let minPats = (simplify isRecord pats)
-  in  
-    let isLabeled = (\p -> (\x -> case x of
-            Grammar.PatternLabeled _ -> True
-            _ -> False) p)
-    in (Logic.ifElse (Equality.equal (Lists.length minPats) 1) (isLabeled (Lists.head minPats)) True)
+isNontrivial :: Bool -> [Grammar.Pattern] -> Bool
+isNontrivial isRecord pats =
+     
+      let minPats = simplify isRecord pats 
+          isLabeled =
+                  \p -> case p of
+                    Grammar.PatternLabeled _ -> True
+                    _ -> False
+      in (Logic.ifElse (Equality.equal (Lists.length minPats) 1) (isLabeled (Lists.head minPats)) True)
 
 -- | Create elements from pattern
-makeElements :: (Bool -> Module.Namespace -> String -> Grammar.Pattern -> [(String, Core.Type)])
-makeElements omitTrivial ns lname pat =  
-  let trivial = (Logic.ifElse omitTrivial [] [
-          (lname, Core.TypeUnit)])
-  in  
-    let descend = (\n -> \f -> \p ->  
-            let cpairs = (makeElements False ns (childName lname n) p)
-            in (f (Logic.ifElse (isComplex p) (Lists.cons (lname, (Core.TypeVariable (toName ns (Pairs.first (Lists.head cpairs))))) cpairs) (Logic.ifElse (Lists.null cpairs) [
-              (lname, Core.TypeUnit)] (Lists.cons (lname, (Pairs.second (Lists.head cpairs))) (Lists.tail cpairs))))))
-    in  
-      let mod = (\n -> \f -> \p -> descend n (\pairs -> Lists.cons (lname, (f (Pairs.second (Lists.head pairs)))) (Lists.tail pairs)) p)
-      in  
-        let forPat = (\pat -> (\x -> case x of
-                Grammar.PatternAlternatives v0 -> (forRecordOrUnion False (\fields -> Core.TypeUnion fields) v0)
-                Grammar.PatternConstant _ -> trivial
-                Grammar.PatternIgnored _ -> []
-                Grammar.PatternLabeled v0 -> (forPat (Grammar.labeledPatternPattern v0))
-                Grammar.PatternNil -> trivial
-                Grammar.PatternNonterminal v0 -> [
-                  (lname, (Core.TypeVariable (toName ns (Grammar.unSymbol v0))))]
-                Grammar.PatternOption v0 -> (mod "Option" (\x -> Core.TypeMaybe x) v0)
-                Grammar.PatternPlus v0 -> (mod "Elmt" (\x -> Core.TypeList x) v0)
-                Grammar.PatternRegex _ -> [
-                  (lname, (Core.TypeLiteral Core.LiteralTypeString))]
-                Grammar.PatternSequence v0 -> (forRecordOrUnion True (\fields -> Core.TypeRecord fields) v0)
-                Grammar.PatternStar v0 -> (mod "Elmt" (\x -> Core.TypeList x) v0)) pat) 
-            forRecordOrUnion = (\isRecord -> \construct -> \pats ->  
-                    let minPats = (simplify isRecord pats)
-                    in  
-                      let fieldNames = (findNames minPats)
-                      in  
-                        let toField = (\n -> \p -> descend n (\pairs -> (Core.FieldType {
-                                Core.fieldTypeName = (Core.Name n),
-                                Core.fieldTypeType = (Pairs.second (Lists.head pairs))}, (Lists.tail pairs))) p)
-                        in  
-                          let fieldPairs = (Lists.zipWith toField fieldNames minPats)
-                          in  
-                            let fields = (Lists.map Pairs.first fieldPairs)
-                            in  
-                              let els = (Lists.concat (Lists.map Pairs.second fieldPairs))
-                              in (Logic.ifElse (isNontrivial isRecord pats) (Lists.cons (lname, (construct fields)) els) (forPat (Lists.head minPats))))
-        in (forPat pat)
+makeElements :: Bool -> Module.Namespace -> String -> Grammar.Pattern -> [(String, Core.Type)]
+makeElements omitTrivial ns lname pat =
+     
+      let trivial = Logic.ifElse omitTrivial [] [
+            (lname, Core.TypeUnit)] 
+          descend =
+                  \n -> \f -> \p ->  
+                    let cpairs = makeElements False ns (childName lname n) p
+                    in (f (Logic.ifElse (isComplex p) (Lists.cons (lname, (Core.TypeVariable (toName ns (Pairs.first (Lists.head cpairs))))) cpairs) (Logic.ifElse (Lists.null cpairs) [
+                      (lname, Core.TypeUnit)] (Lists.cons (lname, (Pairs.second (Lists.head cpairs))) (Lists.tail cpairs)))))
+          mod =
+                  \n -> \f -> \p -> descend n (\pairs -> Lists.cons (lname, (f (Pairs.second (Lists.head pairs)))) (Lists.tail pairs)) p
+          forPat =
+                  \pat -> case pat of
+                    Grammar.PatternAlternatives v0 -> forRecordOrUnion False (\fields -> Core.TypeUnion fields) v0
+                    Grammar.PatternConstant _ -> trivial
+                    Grammar.PatternIgnored _ -> []
+                    Grammar.PatternLabeled v0 -> forPat (Grammar.labeledPatternPattern v0)
+                    Grammar.PatternNil -> trivial
+                    Grammar.PatternNonterminal v0 -> [
+                      (lname, (Core.TypeVariable (toName ns (Grammar.unSymbol v0))))]
+                    Grammar.PatternOption v0 -> mod "Option" (\x -> Core.TypeMaybe x) v0
+                    Grammar.PatternPlus v0 -> mod "Elmt" (\x -> Core.TypeList x) v0
+                    Grammar.PatternRegex _ -> [
+                      (lname, (Core.TypeLiteral Core.LiteralTypeString))]
+                    Grammar.PatternSequence v0 -> forRecordOrUnion True (\fields -> Core.TypeRecord fields) v0
+                    Grammar.PatternStar v0 -> mod "Elmt" (\x -> Core.TypeList x) v0
+          forRecordOrUnion =
+                  \isRecord -> \construct -> \pats ->  
+                    let minPats = simplify isRecord pats 
+                        fieldNames = findNames minPats
+                        toField =
+                                \n -> \p -> descend n (\pairs -> (Core.FieldType {
+                                  Core.fieldTypeName = (Core.Name n),
+                                  Core.fieldTypeType = (Pairs.second (Lists.head pairs))}, (Lists.tail pairs))) p
+                        fieldPairs = Lists.zipWith toField fieldNames minPats
+                        fields = Lists.map Pairs.first fieldPairs
+                        els = Lists.concat (Lists.map Pairs.second fieldPairs)
+                    in (Logic.ifElse (isNontrivial isRecord pats) (Lists.cons (lname, (construct fields)) els) (forPat (Lists.head minPats)))
+      in (forPat pat)
 
 -- | Get raw name from pattern
-rawName :: (Grammar.Pattern -> String)
-rawName pat = ((\x -> case x of
-  Grammar.PatternAlternatives _ -> "alts"
-  Grammar.PatternConstant v0 -> (Formatting.capitalize (Formatting.withCharacterAliases (Grammar.unConstant v0)))
-  Grammar.PatternIgnored _ -> "ignored"
-  Grammar.PatternLabeled v0 -> (Grammar.unLabel (Grammar.labeledPatternLabel v0))
-  Grammar.PatternNil -> "none"
-  Grammar.PatternNonterminal v0 -> (Formatting.capitalize (Grammar.unSymbol v0))
-  Grammar.PatternOption v0 -> (Formatting.capitalize (rawName v0))
-  Grammar.PatternPlus v0 -> (Strings.cat2 "listOf" (Formatting.capitalize (rawName v0)))
-  Grammar.PatternRegex _ -> "regex"
-  Grammar.PatternSequence _ -> "sequence"
-  Grammar.PatternStar v0 -> (Strings.cat2 "listOf" (Formatting.capitalize (rawName v0)))) pat)
+rawName :: Grammar.Pattern -> String
+rawName pat =
+    case pat of
+      Grammar.PatternAlternatives _ -> "alts"
+      Grammar.PatternConstant v0 -> Formatting.capitalize (Formatting.withCharacterAliases (Grammar.unConstant v0))
+      Grammar.PatternIgnored _ -> "ignored"
+      Grammar.PatternLabeled v0 -> Grammar.unLabel (Grammar.labeledPatternLabel v0)
+      Grammar.PatternNil -> "none"
+      Grammar.PatternNonterminal v0 -> Formatting.capitalize (Grammar.unSymbol v0)
+      Grammar.PatternOption v0 -> Formatting.capitalize (rawName v0)
+      Grammar.PatternPlus v0 -> Strings.cat2 "listOf" (Formatting.capitalize (rawName v0))
+      Grammar.PatternRegex _ -> "regex"
+      Grammar.PatternSequence _ -> "sequence"
+      Grammar.PatternStar v0 -> Strings.cat2 "listOf" (Formatting.capitalize (rawName v0))
 
 -- | Replace Placeholder names in a type with the actual element name (no-op since types no longer carry names)
-replacePlaceholders :: (t0 -> t1 -> t1)
+replacePlaceholders :: t0 -> t1 -> t1
 replacePlaceholders elName typ = typ
 
 -- | Remove trivial patterns from records
-simplify :: (Bool -> [Grammar.Pattern] -> [Grammar.Pattern])
-simplify isRecord pats =  
-  let isConstant = (\p -> (\x -> case x of
-          Grammar.PatternConstant _ -> True
-          _ -> False) p)
-  in (Logic.ifElse isRecord (Lists.filter (\p -> Logic.not (isConstant p)) pats) pats)
+simplify :: Bool -> [Grammar.Pattern] -> [Grammar.Pattern]
+simplify isRecord pats =
+     
+      let isConstant =
+              \p -> case p of
+                Grammar.PatternConstant _ -> True
+                _ -> False
+      in (Logic.ifElse isRecord (Lists.filter (\p -> Logic.not (isConstant p)) pats) pats)
 
 -- | Convert local name to qualified name
-toName :: (Module.Namespace -> String -> Core.Name)
-toName ns local = (Names.unqualifyName (Module.QualifiedName {
-  Module.qualifiedNameNamespace = (Just ns),
-  Module.qualifiedNameLocal = local}))
+toName :: Module.Namespace -> String -> Core.Name
+toName ns local =
+    Names.unqualifyName (Module.QualifiedName {
+      Module.qualifiedNameNamespace = (Just ns),
+      Module.qualifiedNameLocal = local})
 
 -- | Wrap a type in a placeholder name, unless it is already a wrapper, record, or union type
-wrapType :: (Core.Type -> Core.Type)
-wrapType t = ((\x -> case x of
-  Core.TypeRecord _ -> t
-  Core.TypeUnion _ -> t
-  Core.TypeWrap _ -> t
-  _ -> (Core.TypeWrap t)) t)
+wrapType :: Core.Type -> Core.Type
+wrapType t =
+    case t of
+      Core.TypeRecord _ -> t
+      Core.TypeUnion _ -> t
+      Core.TypeWrap _ -> t
+      _ -> Core.TypeWrap t

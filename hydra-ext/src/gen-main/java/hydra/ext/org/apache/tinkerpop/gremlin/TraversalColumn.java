@@ -59,7 +59,7 @@ public abstract class TraversalColumn implements Serializable, Comparable<Traver
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TraversalColumn other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -94,7 +94,7 @@ public abstract class TraversalColumn implements Serializable, Comparable<Traver
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TraversalColumn other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

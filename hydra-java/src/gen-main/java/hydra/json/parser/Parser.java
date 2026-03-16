@@ -248,7 +248,7 @@ public interface Parser {
   }
   
   static hydra.parsing.ParseResult<hydra.json.model.Value> parseJson(String input) {
-    return (((java.util.function.Function<hydra.parsing.Parser<hydra.json.model.Value>, java.util.function.Function<String, hydra.parsing.ParseResult<hydra.json.model.Value>>>) (wrapped -> (wrapped).value)).apply(hydra.parsers.Parsers.bind(
+    return ((java.util.function.Function<hydra.parsing.Parser<hydra.json.model.Value>, java.util.function.Function<String, hydra.parsing.ParseResult<hydra.json.model.Value>>>) (wrapped -> (wrapped).value)).apply(hydra.parsers.Parsers.bind(
       hydra.json.parser.Parser.whitespace(),
       (java.util.function.Function<java.lang.Void, hydra.parsing.Parser<hydra.json.model.Value>>) (ignored -> hydra.parsers.Parsers.bind(
         hydra.json.parser.Parser.jsonValue(),
@@ -256,6 +256,6 @@ public interface Parser {
           hydra.json.parser.Parser.whitespace(),
           (java.util.function.Function<java.lang.Void, hydra.parsing.Parser<hydra.json.model.Value>>) (_2 -> hydra.parsers.Parsers.bind(
             hydra.parsers.Parsers.eof(),
-            (java.util.function.Function<java.lang.Void, hydra.parsing.Parser<hydra.json.model.Value>>) (_3 -> hydra.parsers.Parsers.pure(v))))))))))).apply(input);
+            (java.util.function.Function<java.lang.Void, hydra.parsing.Parser<hydra.json.model.Value>>) (_3 -> hydra.parsers.Parsers.pure(v)))))))))).apply(input);
   }
 }

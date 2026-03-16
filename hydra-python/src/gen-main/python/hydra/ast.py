@@ -6,7 +6,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import Enum
 from functools import lru_cache
-from hydra.dsl.python import Maybe, Node
+from hydra.dsl.python import Maybe, Node, frozenlist
 from typing import Annotated, TypeAlias, cast
 import hydra.core
 
@@ -72,19 +72,23 @@ class ExprOp(Node["OpExpr"]):
 class ExprBrackets(Node["BracketExpr"]):
     r"""A bracketed expression"""
 
+class ExprSeq(Node["SeqExpr"]):
+    r"""A sequence of expressions joined by a separator, treated as structural layout (not subject to parenthesization)"""
+
 class _ExprMeta(type):
     def __getitem__(cls, item):
         return object
 
 # An abstract expression.
 class Expr(metaclass=_ExprMeta):
-    r"""ExprConst | ExprIndent | ExprOp | ExprBrackets"""
+    r"""ExprConst | ExprIndent | ExprOp | ExprBrackets | ExprSeq"""
     
     TYPE_ = hydra.core.Name("hydra.ast.Expr")
     CONST = hydra.core.Name("const")
     INDENT = hydra.core.Name("indent")
     OP = hydra.core.Name("op")
     BRACKETS = hydra.core.Name("brackets")
+    SEQ = hydra.core.Name("seq")
 
 @dataclass(frozen=True)
 class IndentedExpression:
@@ -158,6 +162,17 @@ class Precedence(Node[int]):
     r"""Operator precedence."""
 
 Precedence.TYPE_ = hydra.core.Name("hydra.ast.Precedence")
+
+@dataclass(frozen=True)
+class SeqExpr:
+    r"""A sequence of expressions joined by a separator operator. Unlike OpExpr, parenthesize ignores SeqExpr boundaries."""
+    
+    op: Annotated[Op, "The separator operator"]
+    elements: Annotated[frozenlist[Expr], "The expressions to join"]
+    
+    TYPE_ = hydra.core.Name("hydra.ast.SeqExpr")
+    OP = hydra.core.Name("op")
+    ELEMENTS = hydra.core.Name("elements")
 
 class Symbol(Node[str]):
     r"""Any symbol."""

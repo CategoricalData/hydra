@@ -29,17 +29,17 @@ data JavaSymbolClass =
   JavaSymbolClassLocalVariable 
   deriving (Eq, Ord, Read, Show)
 
-_JavaSymbolClass = (Core.Name "hydra.ext.java.helpers.JavaSymbolClass")
+_JavaSymbolClass = Core.Name "hydra.ext.java.helpers.JavaSymbolClass"
 
-_JavaSymbolClass_constant = (Core.Name "constant")
+_JavaSymbolClass_constant = Core.Name "constant"
 
-_JavaSymbolClass_nullaryFunction = (Core.Name "nullaryFunction")
+_JavaSymbolClass_nullaryFunction = Core.Name "nullaryFunction"
 
-_JavaSymbolClass_hoistedLambda = (Core.Name "hoistedLambda")
+_JavaSymbolClass_hoistedLambda = Core.Name "hoistedLambda"
 
-_JavaSymbolClass_unaryFunction = (Core.Name "unaryFunction")
+_JavaSymbolClass_unaryFunction = Core.Name "unaryFunction"
 
-_JavaSymbolClass_localVariable = (Core.Name "localVariable")
+_JavaSymbolClass_localVariable = Core.Name "localVariable"
 
 -- | Feature flags for the target Java version
 data JavaFeatures = 
@@ -48,9 +48,9 @@ data JavaFeatures =
     javaFeaturesSupportsDiamondOperator :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_JavaFeatures = (Core.Name "hydra.ext.java.helpers.JavaFeatures")
+_JavaFeatures = Core.Name "hydra.ext.java.helpers.JavaFeatures"
 
-_JavaFeatures_supportsDiamondOperator = (Core.Name "supportsDiamondOperator")
+_JavaFeatures_supportsDiamondOperator = Core.Name "supportsDiamondOperator"
 
 -- | Aliases and context for Java code generation
 data Aliases = 
@@ -83,33 +83,33 @@ data Aliases =
     aliasesThunkedVars :: (S.Set Core.Name)}
   deriving (Eq, Ord, Read, Show)
 
-_Aliases = (Core.Name "hydra.ext.java.helpers.Aliases")
+_Aliases = Core.Name "hydra.ext.java.helpers.Aliases"
 
-_Aliases_currentNamespace = (Core.Name "currentNamespace")
+_Aliases_currentNamespace = Core.Name "currentNamespace"
 
-_Aliases_packages = (Core.Name "packages")
+_Aliases_packages = Core.Name "packages"
 
-_Aliases_branchVars = (Core.Name "branchVars")
+_Aliases_branchVars = Core.Name "branchVars"
 
-_Aliases_recursiveVars = (Core.Name "recursiveVars")
+_Aliases_recursiveVars = Core.Name "recursiveVars"
 
-_Aliases_inScopeTypeParams = (Core.Name "inScopeTypeParams")
+_Aliases_inScopeTypeParams = Core.Name "inScopeTypeParams"
 
-_Aliases_polymorphicLocals = (Core.Name "polymorphicLocals")
+_Aliases_polymorphicLocals = Core.Name "polymorphicLocals"
 
-_Aliases_inScopeJavaVars = (Core.Name "inScopeJavaVars")
+_Aliases_inScopeJavaVars = Core.Name "inScopeJavaVars"
 
-_Aliases_varRenames = (Core.Name "varRenames")
+_Aliases_varRenames = Core.Name "varRenames"
 
-_Aliases_lambdaVars = (Core.Name "lambdaVars")
+_Aliases_lambdaVars = Core.Name "lambdaVars"
 
-_Aliases_typeVarSubst = (Core.Name "typeVarSubst")
+_Aliases_typeVarSubst = Core.Name "typeVarSubst"
 
-_Aliases_trustedTypeVars = (Core.Name "trustedTypeVars")
+_Aliases_trustedTypeVars = Core.Name "trustedTypeVars"
 
-_Aliases_methodCodomain = (Core.Name "methodCodomain")
+_Aliases_methodCodomain = Core.Name "methodCodomain"
 
-_Aliases_thunkedVars = (Core.Name "thunkedVars")
+_Aliases_thunkedVars = Core.Name "thunkedVars"
 
 -- | Environment for Java code generation
 data JavaEnvironment = 
@@ -119,8 +119,8 @@ data JavaEnvironment =
     -- | Graph context for type inference
     javaEnvironmentGraph :: Graph.Graph}
 
-_JavaEnvironment = (Core.Name "hydra.ext.java.helpers.JavaEnvironment")
+_JavaEnvironment = Core.Name "hydra.ext.java.helpers.JavaEnvironment"
 
-_JavaEnvironment_aliases = (Core.Name "aliases")
+_JavaEnvironment_aliases = Core.Name "aliases"
 
-_JavaEnvironment_graph = (Core.Name "graph")
+_JavaEnvironment_graph = Core.Name "graph"

@@ -127,7 +127,7 @@ public abstract class PrimaryNoNewArray implements Serializable, Comparable<Prim
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PrimaryNoNewArray other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -167,7 +167,7 @@ public abstract class PrimaryNoNewArray implements Serializable, Comparable<Prim
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PrimaryNoNewArray other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -203,7 +203,7 @@ public abstract class PrimaryNoNewArray implements Serializable, Comparable<Prim
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PrimaryNoNewArray other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -242,7 +242,7 @@ public abstract class PrimaryNoNewArray implements Serializable, Comparable<Prim
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PrimaryNoNewArray other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -282,7 +282,7 @@ public abstract class PrimaryNoNewArray implements Serializable, Comparable<Prim
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PrimaryNoNewArray other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -322,7 +322,7 @@ public abstract class PrimaryNoNewArray implements Serializable, Comparable<Prim
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PrimaryNoNewArray other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -362,7 +362,7 @@ public abstract class PrimaryNoNewArray implements Serializable, Comparable<Prim
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PrimaryNoNewArray other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -402,7 +402,7 @@ public abstract class PrimaryNoNewArray implements Serializable, Comparable<Prim
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PrimaryNoNewArray other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -442,7 +442,7 @@ public abstract class PrimaryNoNewArray implements Serializable, Comparable<Prim
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PrimaryNoNewArray other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -482,7 +482,7 @@ public abstract class PrimaryNoNewArray implements Serializable, Comparable<Prim
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PrimaryNoNewArray other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

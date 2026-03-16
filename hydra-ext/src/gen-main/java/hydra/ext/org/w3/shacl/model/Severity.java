@@ -70,7 +70,7 @@ public abstract class Severity implements Serializable, Comparable<Severity> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Severity other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -108,7 +108,7 @@ public abstract class Severity implements Serializable, Comparable<Severity> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Severity other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -146,7 +146,7 @@ public abstract class Severity implements Serializable, Comparable<Severity> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Severity other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

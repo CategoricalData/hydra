@@ -7,7 +7,7 @@ package hydra.ext.tinkerpop.language;
  */
 public interface Language {
   static <T0> hydra.coders.Language tinkerpopLanguage(hydra.coders.LanguageName name, hydra.ext.org.apache.tinkerpop.features.Features features, hydra.ext.org.apache.tinkerpop.features.ExtraFeatures<T0> extras) {
-    hydra.ext.org.apache.tinkerpop.features.DataTypeFeatures vpFeatures = (((features).vertex).properties).dataTypeFeatures;
+    hydra.ext.org.apache.tinkerpop.features.DataTypeFeatures vpFeatures = (features).vertex.properties.dataTypeFeatures;
     hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.FloatType>> floatTypes = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.maybes.Cat.apply(hydra.util.ConsList.of(
       hydra.ext.tinkerpop.language.Language.tinkerpopLanguage_cond(
         new hydra.core.FloatType.Float32(),
@@ -78,7 +78,7 @@ public interface Language {
         
         @Override
         public Boolean visit(hydra.core.Type.List t) {
-          return (hydra.rewriting.Rewriting.deannotateType((t).value)).accept(new hydra.core.Type.PartialVisitor<>() {
+          return hydra.rewriting.Rewriting.deannotateType((t).value).accept(new hydra.core.Type.PartialVisitor<>() {
             @Override
             public Boolean otherwise(hydra.core.Type instance) {
               return false;
@@ -86,7 +86,7 @@ public interface Language {
             
             @Override
             public Boolean visit(hydra.core.Type.Literal lt) {
-              return ((lt).value).accept(new hydra.core.LiteralType.PartialVisitor<>() {
+              return (lt).value.accept(new hydra.core.LiteralType.PartialVisitor<>() {
                 @Override
                 public Boolean otherwise(hydra.core.LiteralType instance) {
                   return false;
@@ -99,7 +99,7 @@ public interface Language {
                 
                 @Override
                 public Boolean visit(hydra.core.LiteralType.Float_ ft) {
-                  return ((ft).value).accept(new hydra.core.FloatType.PartialVisitor<>() {
+                  return (ft).value.accept(new hydra.core.FloatType.PartialVisitor<>() {
                     @Override
                     public Boolean otherwise(hydra.core.FloatType instance) {
                       return false;
@@ -119,7 +119,7 @@ public interface Language {
                 
                 @Override
                 public Boolean visit(hydra.core.LiteralType.Integer_ it) {
-                  return ((it).value).accept(new hydra.core.IntegerType.PartialVisitor<>() {
+                  return (it).value.accept(new hydra.core.IntegerType.PartialVisitor<>() {
                     @Override
                     public Boolean otherwise(hydra.core.IntegerType instance) {
                       return false;
@@ -158,7 +158,7 @@ public interface Language {
         
         @Override
         public Boolean visit(hydra.core.Type.Map mt) {
-          return (((java.util.function.Function<hydra.ext.org.apache.tinkerpop.features.ExtraFeatures<T0>, java.util.function.Function<hydra.core.Type, Boolean>>) (projected -> projected.supportsMapKey)).apply(extras)).apply(((mt).value).keys);
+          return ((java.util.function.Function<hydra.ext.org.apache.tinkerpop.features.ExtraFeatures<T0>, java.util.function.Function<hydra.core.Type, Boolean>>) (projected -> projected.supportsMapKey)).apply(extras).apply((mt).value.keys);
         }
         
         @Override
@@ -168,7 +168,7 @@ public interface Language {
         
         @Override
         public Boolean visit(hydra.core.Type.Maybe ot) {
-          return (hydra.rewriting.Rewriting.deannotateType((ot).value)).accept(new hydra.core.Type.PartialVisitor<>() {
+          return hydra.rewriting.Rewriting.deannotateType((ot).value).accept(new hydra.core.Type.PartialVisitor<>() {
             @Override
             public Boolean otherwise(hydra.core.Type instance) {
               return false;

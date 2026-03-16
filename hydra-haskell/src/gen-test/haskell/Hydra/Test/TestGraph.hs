@@ -16,37 +16,38 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-testTerms :: (M.Map Core.Name Core.Term)
-testTerms = (Maps.fromList [
-  (Core.Name "testDataArthur", TestTerms.testDataArthur)])
+testTerms :: M.Map Core.Name Core.Term
+testTerms = Maps.fromList [
+  (Core.Name "testDataArthur", TestTerms.testDataArthur)]
 
-testTypes :: (M.Map Core.Name Core.Type)
-testTypes = (Maps.fromList [
-  (TestTypes.testTypeBuddyListAName, TestTypes.testTypeBuddyListA),
-  (TestTypes.testTypeBuddyListBName, TestTypes.testTypeBuddyListB),
-  (TestTypes.testTypeComparisonName, TestTypes.testTypeComparison),
-  (TestTypes.testTypeEitherName, TestTypes.testTypeEither),
-  (TestTypes.testTypeHydraLiteralTypeName, TestTypes.testTypeHydraLiteralType),
-  (TestTypes.testTypeHydraTypeName, TestTypes.testTypeHydraType),
-  (TestTypes.testTypeIntListName, TestTypes.testTypeIntList),
-  (TestTypes.testTypeLatLonName, TestTypes.testTypeLatLon),
-  (TestTypes.testTypeLatLonPolyName, TestTypes.testTypeLatLonPoly),
-  (TestTypes.testTypeListName, TestTypes.testTypeList),
-  (TestTypes.testTypeNumberName, TestTypes.testTypeNumber),
-  (TestTypes.testTypePersonName, TestTypes.testTypePerson),
-  (TestTypes.testTypePersonOrSomethingName, TestTypes.testTypePersonOrSomething),
-  (TestTypes.testTypePolymorphicWrapperName, TestTypes.testTypePolymorphicWrapper),
-  (TestTypes.testTypeSimpleNumberName, TestTypes.testTypeSimpleNumber),
-  (TestTypes.testTypeStringAliasName, TestTypes.testTypeStringAlias),
-  (TestTypes.testTypeSymmetricTripleName, TestTypes.testTypeSymmetricTriple),
-  (TestTypes.testTypeTimestampName, TestTypes.testTypeTimestamp),
-  (TestTypes.testTypeTripleName, TestTypes.testTypeTriple),
-  (TestTypes.testTypeUnionMonomorphicName, TestTypes.testTypeUnionMonomorphic),
-  (TestTypes.testTypeUnionPolymorphicRecursiveName, TestTypes.testTypeUnionPolymorphicRecursive),
-  (TestTypes.testTypeUnitName, TestTypes.testTypeUnit)])
+testTypes :: M.Map Core.Name Core.Type
+testTypes =
+    Maps.fromList [
+      (TestTypes.testTypeBuddyListAName, TestTypes.testTypeBuddyListA),
+      (TestTypes.testTypeBuddyListBName, TestTypes.testTypeBuddyListB),
+      (TestTypes.testTypeComparisonName, TestTypes.testTypeComparison),
+      (TestTypes.testTypeEitherName, TestTypes.testTypeEither),
+      (TestTypes.testTypeHydraLiteralTypeName, TestTypes.testTypeHydraLiteralType),
+      (TestTypes.testTypeHydraTypeName, TestTypes.testTypeHydraType),
+      (TestTypes.testTypeIntListName, TestTypes.testTypeIntList),
+      (TestTypes.testTypeLatLonName, TestTypes.testTypeLatLon),
+      (TestTypes.testTypeLatLonPolyName, TestTypes.testTypeLatLonPoly),
+      (TestTypes.testTypeListName, TestTypes.testTypeList),
+      (TestTypes.testTypeNumberName, TestTypes.testTypeNumber),
+      (TestTypes.testTypePersonName, TestTypes.testTypePerson),
+      (TestTypes.testTypePersonOrSomethingName, TestTypes.testTypePersonOrSomething),
+      (TestTypes.testTypePolymorphicWrapperName, TestTypes.testTypePolymorphicWrapper),
+      (TestTypes.testTypeSimpleNumberName, TestTypes.testTypeSimpleNumber),
+      (TestTypes.testTypeStringAliasName, TestTypes.testTypeStringAlias),
+      (TestTypes.testTypeSymmetricTripleName, TestTypes.testTypeSymmetricTriple),
+      (TestTypes.testTypeTimestampName, TestTypes.testTypeTimestamp),
+      (TestTypes.testTypeTripleName, TestTypes.testTypeTriple),
+      (TestTypes.testTypeUnionMonomorphicName, TestTypes.testTypeUnionMonomorphic),
+      (TestTypes.testTypeUnionPolymorphicRecursiveName, TestTypes.testTypeUnionPolymorphicRecursive),
+      (TestTypes.testTypeUnitName, TestTypes.testTypeUnit)]
 
 testNamespace :: Module.Namespace
-testNamespace = (Module.Namespace "testGraph")
+testNamespace = Module.Namespace "testGraph"
 
 testSchemaNamespace :: Module.Namespace
-testSchemaNamespace = (Module.Namespace "testSchemaGraph")
+testSchemaNamespace = Module.Namespace "testSchemaGraph"

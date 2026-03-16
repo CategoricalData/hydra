@@ -180,7 +180,7 @@ public interface Serialization {
         (blockStyleLength).apply((be).style))));
     java.util.function.Function<hydra.ast.IndentedExpression, Integer> indentedExpressionLength = (java.util.function.Function<hydra.ast.IndentedExpression, Integer>) (ie -> {
       Integer baseLen = hydra.serialization.Serialization.expressionLength((ie).expr);
-      Integer indentLen = ((ie).style).accept(new hydra.ast.IndentStyle.PartialVisitor<>() {
+      Integer indentLen = (ie).style.accept(new hydra.ast.IndentStyle.PartialVisitor<>() {
         @Override
         public Integer visit(hydra.ast.IndentStyle.AllLines s) {
           return hydra.lib.strings.Length.apply((s).value);
@@ -208,19 +208,17 @@ public interface Serialization {
       
       @Override
       public Integer visit(hydra.ast.Ws.Break ignored) {
-        return 1;
+        return 10000;
       }
       
       @Override
       public Integer visit(hydra.ast.Ws.BreakAndIndent s) {
-        return hydra.lib.math.Add.apply(
-          1,
-          hydra.lib.strings.Length.apply((s).value));
+        return 10000;
       }
       
       @Override
       public Integer visit(hydra.ast.Ws.DoubleBreak ignored) {
-        return 2;
+        return 10000;
       }
     }));
     java.util.function.Function<hydra.ast.Op, Integer> opLength = (java.util.function.Function<hydra.ast.Op, Integer>) (op -> {
@@ -244,6 +242,31 @@ public interface Serialization {
           leftLen,
           rightLen));
     });
+    java.util.function.Function<hydra.ast.SeqExpr, Integer> seqExprLength = (java.util.function.Function<hydra.ast.SeqExpr, Integer>) (se -> {
+      hydra.util.Lazy<hydra.util.ConsList<Integer>> elementLens = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+        hydra.serialization.Serialization::expressionLength,
+        (se).elements));
+      hydra.util.Lazy<Integer> numSeps = new hydra.util.Lazy<>(() -> hydra.lib.math.Sub.apply(
+        hydra.lib.lists.Length.apply((se).elements),
+        1));
+      Integer sopLen = (opLength).apply((se).op);
+      hydra.util.Lazy<Integer> totalElLen = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
+        (java.util.function.Function<Integer, java.util.function.Function<Integer, Integer>>) (p0 -> p1 -> hydra.lib.math.Add.apply(
+          p0,
+          p1)),
+        0,
+        elementLens.get()));
+      return hydra.lib.math.Add.apply(
+        totalElLen.get(),
+        hydra.lib.math.Mul.apply(
+          sopLen,
+          hydra.lib.logic.IfElse.lazy(
+            hydra.lib.equality.Gt.apply(
+              numSeps.get(),
+              0),
+            () -> numSeps.get(),
+            () -> 0)));
+    });
     return (e).accept(new hydra.ast.Expr.PartialVisitor<>() {
       @Override
       public Integer visit(hydra.ast.Expr.Const s) {
@@ -263,6 +286,11 @@ public interface Serialization {
       @Override
       public Integer visit(hydra.ast.Expr.Brackets be) {
         return (bracketExprLength).apply((be).value);
+      }
+      
+      @Override
+      public Integer visit(hydra.ast.Expr.Seq se) {
+        return (seqExprLength).apply((se).value);
       }
     });
   }
@@ -426,7 +454,7 @@ public interface Serialization {
     return (exp).accept(new hydra.ast.Expr.PartialVisitor<>() {
       @Override
       public hydra.ast.Expr visit(hydra.ast.Expr.Brackets bracketExpr) {
-        return new hydra.ast.Expr.Brackets(new hydra.ast.BracketExpr(((bracketExpr).value).brackets, hydra.serialization.Serialization.parenthesize(((bracketExpr).value).enclosed), ((bracketExpr).value).style));
+        return new hydra.ast.Expr.Brackets(new hydra.ast.BracketExpr((bracketExpr).value.brackets, hydra.serialization.Serialization.parenthesize((bracketExpr).value.enclosed), (bracketExpr).value.style));
       }
       
       @Override
@@ -436,16 +464,23 @@ public interface Serialization {
       
       @Override
       public hydra.ast.Expr visit(hydra.ast.Expr.Indent indentExpr) {
-        return new hydra.ast.Expr.Indent(new hydra.ast.IndentedExpression(((indentExpr).value).style, hydra.serialization.Serialization.parenthesize(((indentExpr).value).expr)));
+        return new hydra.ast.Expr.Indent(new hydra.ast.IndentedExpression((indentExpr).value.style, hydra.serialization.Serialization.parenthesize((indentExpr).value.expr)));
+      }
+      
+      @Override
+      public hydra.ast.Expr visit(hydra.ast.Expr.Seq seqExpr) {
+        return new hydra.ast.Expr.Seq(new hydra.ast.SeqExpr((seqExpr).value.op, hydra.lib.lists.Map.apply(
+          hydra.serialization.Serialization::parenthesize,
+          (seqExpr).value.elements)));
       }
       
       @Override
       public hydra.ast.Expr visit(hydra.ast.Expr.Op opExpr) {
-        hydra.ast.Op op = ((opExpr).value).op;
+        hydra.ast.Op op = (opExpr).value.op;
         hydra.ast.Associativity assoc = (op).associativity;
-        hydra.ast.Expr lhs = ((opExpr).value).lhs;
+        hydra.ast.Expr lhs = (opExpr).value.lhs;
         hydra.ast.Expr lhs_ = hydra.serialization.Serialization.parenthesize(lhs);
-        Integer prec = ((op).precedence).value;
+        Integer prec = (op).precedence.value;
         hydra.util.Lazy<hydra.ast.Expr> lhs2 = new hydra.util.Lazy<>(() -> (lhs_).accept(new hydra.ast.Expr.PartialVisitor<>() {
           @Override
           public hydra.ast.Expr otherwise(hydra.ast.Expr instance) {
@@ -454,13 +489,13 @@ public interface Serialization {
           
           @Override
           public hydra.ast.Expr visit(hydra.ast.Expr.Op lopExpr) {
-            hydra.ast.Op lop = ((lopExpr).value).op;
-            Integer lprec = ((lop).precedence).value;
+            hydra.ast.Op lop = (lopExpr).value.op;
+            Integer lprec = (lop).precedence.value;
             hydra.util.Lazy<hydra.util.Comparison> comparison = new hydra.util.Lazy<>(() -> hydra.lib.equality.Compare.apply(
               prec,
               lprec));
             hydra.ast.Associativity lassoc = (lop).associativity;
-            return (comparison.get()).accept(new hydra.util.Comparison.PartialVisitor<>() {
+            return comparison.get().accept(new hydra.util.Comparison.PartialVisitor<>() {
               @Override
               public hydra.ast.Expr visit(hydra.util.Comparison.LessThan ignored) {
                 return lhs_;
@@ -483,7 +518,7 @@ public interface Serialization {
             });
           }
         }));
-        hydra.ast.Expr rhs = ((opExpr).value).rhs;
+        hydra.ast.Expr rhs = (opExpr).value.rhs;
         hydra.ast.Expr rhs_ = hydra.serialization.Serialization.parenthesize(rhs);
         hydra.util.Lazy<hydra.ast.Expr> rhs2 = new hydra.util.Lazy<>(() -> (rhs_).accept(new hydra.ast.Expr.PartialVisitor<>() {
           @Override
@@ -493,13 +528,13 @@ public interface Serialization {
           
           @Override
           public hydra.ast.Expr visit(hydra.ast.Expr.Op ropExpr) {
-            hydra.ast.Op rop = ((ropExpr).value).op;
-            Integer rprec = ((rop).precedence).value;
+            hydra.ast.Op rop = (ropExpr).value.op;
+            Integer rprec = (rop).precedence.value;
             hydra.util.Lazy<hydra.util.Comparison> comparison = new hydra.util.Lazy<>(() -> hydra.lib.equality.Compare.apply(
               prec,
               rprec));
             hydra.ast.Associativity rassoc = (rop).associativity;
-            return (comparison.get()).accept(new hydra.util.Comparison.PartialVisitor<>() {
+            return comparison.get().accept(new hydra.util.Comparison.PartialVisitor<>() {
               @Override
               public hydra.ast.Expr visit(hydra.util.Comparison.LessThan ignored) {
                 return rhs_;
@@ -578,14 +613,14 @@ public interface Serialization {
     return (e).accept(new hydra.ast.Expr.PartialVisitor<>() {
       @Override
       public String visit(hydra.ast.Expr.Const symbol) {
-        return ((symbol).value).value;
+        return (symbol).value.value;
       }
       
       @Override
       public String visit(hydra.ast.Expr.Indent indentExpr) {
-        hydra.ast.Expr expr = ((indentExpr).value).expr;
+        hydra.ast.Expr expr = (indentExpr).value.expr;
         hydra.util.ConsList<String> lns = hydra.lib.strings.Lines.apply(hydra.serialization.Serialization.printExpr(expr));
-        hydra.ast.IndentStyle style = ((indentExpr).value).style;
+        hydra.ast.IndentStyle style = (indentExpr).value.style;
         hydra.util.Lazy<hydra.util.ConsList<String>> ilns = new hydra.util.Lazy<>(() -> (style).accept(new hydra.ast.IndentStyle.PartialVisitor<>() {
           @Override
           public hydra.util.ConsList<String> visit(hydra.ast.IndentStyle.AllLines idt2) {
@@ -618,16 +653,37 @@ public interface Serialization {
       }
       
       @Override
+      public String visit(hydra.ast.Expr.Seq seqExpr) {
+        hydra.util.ConsList<hydra.ast.Expr> selements = (seqExpr).value.elements;
+        hydra.ast.Op sop = (seqExpr).value.op;
+        hydra.ast.Padding spadding = (sop).padding;
+        hydra.ast.Ws spadr = (spadding).right;
+        hydra.util.Lazy<hydra.util.ConsList<String>> printedElements = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
+          (java.util.function.Function<hydra.ast.Expr, String>) (el -> (idt).apply(spadr).apply(hydra.serialization.Serialization.printExpr(el))),
+          selements));
+        hydra.ast.Ws spadl = (spadding).left;
+        String ssym = (sop).symbol.value;
+        String separator = hydra.lib.strings.Cat2.apply(
+          hydra.lib.strings.Cat2.apply(
+            (pad).apply(spadl),
+            ssym),
+          (pad).apply(spadr));
+        return hydra.lib.strings.Intercalate.apply(
+          separator,
+          printedElements.get());
+      }
+      
+      @Override
       public String visit(hydra.ast.Expr.Op opExpr) {
-        hydra.ast.Expr l = ((opExpr).value).lhs;
-        hydra.ast.Op op = ((opExpr).value).op;
+        hydra.ast.Expr l = (opExpr).value.lhs;
+        hydra.ast.Op op = (opExpr).value.op;
         hydra.ast.Padding padding = (op).padding;
         hydra.ast.Ws padl = (padding).left;
-        String lhs = ((idt).apply(padl)).apply(hydra.serialization.Serialization.printExpr(l));
+        String lhs = (idt).apply(padl).apply(hydra.serialization.Serialization.printExpr(l));
         hydra.ast.Ws padr = (padding).right;
-        hydra.ast.Expr r = ((opExpr).value).rhs;
-        String rhs = ((idt).apply(padr)).apply(hydra.serialization.Serialization.printExpr(r));
-        String sym = ((op).symbol).value;
+        hydra.ast.Expr r = (opExpr).value.rhs;
+        String rhs = (idt).apply(padr).apply(hydra.serialization.Serialization.printExpr(r));
+        String sym = (op).symbol.value;
         return hydra.lib.strings.Cat2.apply(
           hydra.lib.strings.Cat2.apply(
             hydra.lib.strings.Cat2.apply(
@@ -641,10 +697,10 @@ public interface Serialization {
       
       @Override
       public String visit(hydra.ast.Expr.Brackets bracketExpr) {
-        hydra.ast.Expr e = ((bracketExpr).value).enclosed;
+        hydra.ast.Expr e = (bracketExpr).value.enclosed;
         String body = hydra.serialization.Serialization.printExpr(e);
-        hydra.ast.Brackets brs = ((bracketExpr).value).brackets;
-        hydra.ast.BlockStyle style = ((bracketExpr).value).style;
+        hydra.ast.Brackets brs = (bracketExpr).value.brackets;
+        hydra.ast.BlockStyle style = (bracketExpr).value.style;
         hydra.util.Maybe<String> doIndent = (style).indent;
         hydra.util.Lazy<String> ibody = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
           () -> body,
@@ -652,14 +708,14 @@ public interface Serialization {
             idt2,
             body)),
           doIndent));
-        String l = ((brs).open).value;
+        String l = (brs).open.value;
         Boolean nlAfter = (style).newlineAfterContent;
         Boolean nlBefore = (style).newlineBeforeContent;
         hydra.util.Lazy<String> pre = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
           nlBefore,
           () -> "\n",
           () -> ""));
-        String r = ((brs).close).value;
+        String r = (brs).close.value;
         hydra.util.Lazy<String> suf = new hydra.util.Lazy<>(() -> hydra.lib.logic.IfElse.lazy(
           nlAfter,
           () -> "\n",
@@ -701,6 +757,24 @@ public interface Serialization {
   
   static hydra.ast.Expr spaceSep(hydra.util.ConsList<hydra.ast.Expr> v1) {
     return hydra.serialization.Serialization.sep(
+      new hydra.ast.Op(hydra.serialization.Serialization.sym(""), new hydra.ast.Padding(new hydra.ast.Ws.Space(), new hydra.ast.Ws.None()), new hydra.ast.Precedence(0), new hydra.ast.Associativity.None()),
+      v1);
+  }
+  
+  static hydra.ast.Expr structuralSep(hydra.ast.Op op, hydra.util.ConsList<hydra.ast.Expr> els) {
+    return hydra.lib.logic.IfElse.lazy(
+      hydra.lib.lists.Null.apply(els),
+      () -> hydra.serialization.Serialization.cst(""),
+      () -> hydra.lib.logic.IfElse.lazy(
+        hydra.lib.equality.Equal.apply(
+          hydra.lib.lists.Length.apply(els),
+          1),
+        () -> hydra.lib.lists.Head.apply(els),
+        () -> new hydra.ast.Expr.Seq(new hydra.ast.SeqExpr(op, els))));
+  }
+  
+  static hydra.ast.Expr structuralSpaceSep(hydra.util.ConsList<hydra.ast.Expr> v1) {
+    return hydra.serialization.Serialization.structuralSep(
       new hydra.ast.Op(hydra.serialization.Serialization.sym(""), new hydra.ast.Padding(new hydra.ast.Ws.Space(), new hydra.ast.Ws.None()), new hydra.ast.Precedence(0), new hydra.ast.Associativity.None()),
       v1);
   }

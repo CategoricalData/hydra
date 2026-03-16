@@ -51,7 +51,156 @@ public interface Utils {
   }
   
   static hydra.ext.java.syntax.Primary javaExpressionToJavaPrimary(hydra.ext.java.syntax.Expression e) {
-    return new hydra.ext.java.syntax.Primary.NoNewArray(new hydra.ext.java.syntax.PrimaryNoNewArray.Parens(e));
+    hydra.ext.java.syntax.Primary fallback = new hydra.ext.java.syntax.Primary.NoNewArray(new hydra.ext.java.syntax.PrimaryNoNewArray.Parens(e));
+    return (e).accept(new hydra.ext.java.syntax.Expression.PartialVisitor<>() {
+      @Override
+      public hydra.ext.java.syntax.Primary otherwise(hydra.ext.java.syntax.Expression instance) {
+        return fallback;
+      }
+      
+      @Override
+      public hydra.ext.java.syntax.Primary visit(hydra.ext.java.syntax.Expression.Assignment ae) {
+        return (ae).value.accept(new hydra.ext.java.syntax.AssignmentExpression.PartialVisitor<>() {
+          @Override
+          public hydra.ext.java.syntax.Primary otherwise(hydra.ext.java.syntax.AssignmentExpression instance) {
+            return fallback;
+          }
+          
+          @Override
+          public hydra.ext.java.syntax.Primary visit(hydra.ext.java.syntax.AssignmentExpression.Conditional ce) {
+            return (ce).value.accept(new hydra.ext.java.syntax.ConditionalExpression.PartialVisitor<>() {
+              @Override
+              public hydra.ext.java.syntax.Primary otherwise(hydra.ext.java.syntax.ConditionalExpression instance) {
+                return fallback;
+              }
+              
+              @Override
+              public hydra.ext.java.syntax.Primary visit(hydra.ext.java.syntax.ConditionalExpression.Simple cor) {
+                hydra.util.ConsList<hydra.ext.java.syntax.ConditionalAndExpression> cands = (cor).value.value;
+                return hydra.lib.logic.IfElse.lazy(
+                  hydra.lib.equality.Equal.apply(
+                    hydra.lib.lists.Length.apply(cands),
+                    1),
+                  () -> ((java.util.function.Supplier<hydra.ext.java.syntax.Primary>) (() -> {
+                    hydra.util.Lazy<hydra.util.ConsList<hydra.ext.java.syntax.InclusiveOrExpression>> iors = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(cands).value);
+                    return hydra.lib.logic.IfElse.lazy(
+                      hydra.lib.equality.Equal.apply(
+                        hydra.lib.lists.Length.apply(iors.get()),
+                        1),
+                      () -> ((java.util.function.Supplier<hydra.ext.java.syntax.Primary>) (() -> {
+                        hydra.util.Lazy<hydra.util.ConsList<hydra.ext.java.syntax.ExclusiveOrExpression>> xors = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(iors.get()).value);
+                        return hydra.lib.logic.IfElse.lazy(
+                          hydra.lib.equality.Equal.apply(
+                            hydra.lib.lists.Length.apply(xors.get()),
+                            1),
+                          () -> ((java.util.function.Supplier<hydra.ext.java.syntax.Primary>) (() -> {
+                            hydra.util.Lazy<hydra.util.ConsList<hydra.ext.java.syntax.AndExpression>> ands = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(xors.get()).value);
+                            return hydra.lib.logic.IfElse.lazy(
+                              hydra.lib.equality.Equal.apply(
+                                hydra.lib.lists.Length.apply(ands.get()),
+                                1),
+                              () -> ((java.util.function.Supplier<hydra.ext.java.syntax.Primary>) (() -> {
+                                hydra.util.Lazy<hydra.util.ConsList<hydra.ext.java.syntax.EqualityExpression>> eqs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(ands.get()).value);
+                                return hydra.lib.logic.IfElse.lazy(
+                                  hydra.lib.equality.Equal.apply(
+                                    hydra.lib.lists.Length.apply(eqs.get()),
+                                    1),
+                                  () -> hydra.lib.lists.Head.apply(eqs.get()).accept(new hydra.ext.java.syntax.EqualityExpression.PartialVisitor<>() {
+                                    @Override
+                                    public hydra.ext.java.syntax.Primary otherwise(hydra.ext.java.syntax.EqualityExpression instance) {
+                                      return fallback;
+                                    }
+                                    
+                                    @Override
+                                    public hydra.ext.java.syntax.Primary visit(hydra.ext.java.syntax.EqualityExpression.Unary rel) {
+                                      return (rel).value.accept(new hydra.ext.java.syntax.RelationalExpression.PartialVisitor<>() {
+                                        @Override
+                                        public hydra.ext.java.syntax.Primary otherwise(hydra.ext.java.syntax.RelationalExpression instance) {
+                                          return fallback;
+                                        }
+                                        
+                                        @Override
+                                        public hydra.ext.java.syntax.Primary visit(hydra.ext.java.syntax.RelationalExpression.Simple shift) {
+                                          return (shift).value.accept(new hydra.ext.java.syntax.ShiftExpression.PartialVisitor<>() {
+                                            @Override
+                                            public hydra.ext.java.syntax.Primary otherwise(hydra.ext.java.syntax.ShiftExpression instance) {
+                                              return fallback;
+                                            }
+                                            
+                                            @Override
+                                            public hydra.ext.java.syntax.Primary visit(hydra.ext.java.syntax.ShiftExpression.Unary add) {
+                                              return (add).value.accept(new hydra.ext.java.syntax.AdditiveExpression.PartialVisitor<>() {
+                                                @Override
+                                                public hydra.ext.java.syntax.Primary otherwise(hydra.ext.java.syntax.AdditiveExpression instance) {
+                                                  return fallback;
+                                                }
+                                                
+                                                @Override
+                                                public hydra.ext.java.syntax.Primary visit(hydra.ext.java.syntax.AdditiveExpression.Unary mul) {
+                                                  return (mul).value.accept(new hydra.ext.java.syntax.MultiplicativeExpression.PartialVisitor<>() {
+                                                    @Override
+                                                    public hydra.ext.java.syntax.Primary otherwise(hydra.ext.java.syntax.MultiplicativeExpression instance) {
+                                                      return fallback;
+                                                    }
+                                                    
+                                                    @Override
+                                                    public hydra.ext.java.syntax.Primary visit(hydra.ext.java.syntax.MultiplicativeExpression.Unary unary) {
+                                                      return (unary).value.accept(new hydra.ext.java.syntax.UnaryExpression.PartialVisitor<>() {
+                                                        @Override
+                                                        public hydra.ext.java.syntax.Primary otherwise(hydra.ext.java.syntax.UnaryExpression instance) {
+                                                          return fallback;
+                                                        }
+                                                        
+                                                        @Override
+                                                        public hydra.ext.java.syntax.Primary visit(hydra.ext.java.syntax.UnaryExpression.Other npm) {
+                                                          return (npm).value.accept(new hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.PartialVisitor<>() {
+                                                            @Override
+                                                            public hydra.ext.java.syntax.Primary otherwise(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus instance) {
+                                                              return fallback;
+                                                            }
+                                                            
+                                                            @Override
+                                                            public hydra.ext.java.syntax.Primary visit(hydra.ext.java.syntax.UnaryExpressionNotPlusMinus.Postfix pf) {
+                                                              return (pf).value.accept(new hydra.ext.java.syntax.PostfixExpression.PartialVisitor<>() {
+                                                                @Override
+                                                                public hydra.ext.java.syntax.Primary otherwise(hydra.ext.java.syntax.PostfixExpression instance) {
+                                                                  return fallback;
+                                                                }
+                                                                
+                                                                @Override
+                                                                public hydra.ext.java.syntax.Primary visit(hydra.ext.java.syntax.PostfixExpression.Primary p) {
+                                                                  return (p).value;
+                                                                }
+                                                              });
+                                                            }
+                                                          });
+                                                        }
+                                                      });
+                                                    }
+                                                  });
+                                                }
+                                              });
+                                            }
+                                          });
+                                        }
+                                      });
+                                    }
+                                  }),
+                                  () -> fallback);
+                              })).get(),
+                              () -> fallback);
+                          })).get(),
+                          () -> fallback);
+                      })).get(),
+                      () -> fallback);
+                  })).get(),
+                  () -> fallback);
+              }
+            });
+          }
+        });
+      }
+    });
   }
   
   static hydra.ext.java.syntax.UnaryExpression javaPrimaryToJavaUnaryExpression(hydra.ext.java.syntax.Primary p) {
@@ -340,7 +489,7 @@ public interface Utils {
   }
   
   static hydra.ext.java.syntax.ReferenceType typeParameterToReferenceType(hydra.ext.java.syntax.TypeParameter tp) {
-    return hydra.ext.java.utils.Utils.javaTypeVariable((((tp).identifier).value).value);
+    return hydra.ext.java.utils.Utils.javaTypeVariable((tp).identifier.value.value);
   }
   
   static hydra.ext.java.syntax.Identifier fieldNameToJavaIdentifier(hydra.core.Name fname) {
@@ -703,7 +852,7 @@ public interface Utils {
   }
   
   static String unTypeParameter(hydra.ext.java.syntax.TypeParameter tp) {
-    return (((tp).identifier).value).value;
+    return (tp).identifier.value.value;
   }
   
   static hydra.ext.java.helpers.Aliases importAliasesForModule(hydra.module.Module mod) {
@@ -780,7 +929,7 @@ public interface Utils {
     return (t).accept(new hydra.ext.java.syntax.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.ext.java.syntax.Type.Reference rt) {
-        return ((rt).value).accept(new hydra.ext.java.syntax.ReferenceType.PartialVisitor<>() {
+        return (rt).value.accept(new hydra.ext.java.syntax.ReferenceType.PartialVisitor<>() {
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.ext.java.syntax.ReferenceType.ClassOrInterface cit) {
             return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type>right(new hydra.ext.java.syntax.Type.Reference(new hydra.ext.java.syntax.ReferenceType.Array(new hydra.ext.java.syntax.ArrayType(new hydra.ext.java.syntax.Dims(hydra.util.ConsList.of((hydra.util.ConsList<hydra.ext.java.syntax.Annotation>) (hydra.util.ConsList.<hydra.ext.java.syntax.Annotation>empty()))), new hydra.ext.java.syntax.ArrayType_Variant.ClassOrInterface((cit).value)))));
@@ -788,11 +937,11 @@ public interface Utils {
           
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.ext.java.syntax.ReferenceType.Array at) {
-            hydra.util.ConsList<hydra.util.ConsList<hydra.ext.java.syntax.Annotation>> oldDims = (((at).value).dims).value;
+            hydra.util.ConsList<hydra.util.ConsList<hydra.ext.java.syntax.Annotation>> oldDims = (at).value.dims.value;
             hydra.util.Lazy<hydra.ext.java.syntax.Dims> newDims = new hydra.util.Lazy<>(() -> new hydra.ext.java.syntax.Dims(hydra.lib.lists.Concat2.apply(
               oldDims,
               hydra.util.ConsList.of((hydra.util.ConsList<hydra.ext.java.syntax.Annotation>) (hydra.util.ConsList.<hydra.ext.java.syntax.Annotation>empty())))));
-            hydra.ext.java.syntax.ArrayType_Variant variant = ((at).value).variant;
+            hydra.ext.java.syntax.ArrayType_Variant variant = (at).value.variant;
             return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type>right(new hydra.ext.java.syntax.Type.Reference(new hydra.ext.java.syntax.ReferenceType.Array(new hydra.ext.java.syntax.ArrayType(newDims.get(), variant))));
           }
           
@@ -833,18 +982,18 @@ public interface Utils {
       
       @Override
       public hydra.ext.java.syntax.ReferenceType visit(hydra.ext.java.syntax.ReferenceType.ClassOrInterface cit) {
-        return ((cit).value).accept(new hydra.ext.java.syntax.ClassOrInterfaceType.PartialVisitor<>() {
+        return (cit).value.accept(new hydra.ext.java.syntax.ClassOrInterfaceType.PartialVisitor<>() {
           @Override
           public hydra.ext.java.syntax.ReferenceType visit(hydra.ext.java.syntax.ClassOrInterfaceType.Class_ ct) {
-            hydra.util.ConsList<hydra.ext.java.syntax.Annotation> anns = ((ct).value).annotations;
-            hydra.ext.java.syntax.TypeIdentifier id = ((ct).value).identifier;
-            hydra.ext.java.syntax.ClassTypeQualifier qual = ((ct).value).qualifier;
+            hydra.util.ConsList<hydra.ext.java.syntax.Annotation> anns = (ct).value.annotations;
+            hydra.ext.java.syntax.TypeIdentifier id = (ct).value.identifier;
+            hydra.ext.java.syntax.ClassTypeQualifier qual = (ct).value.qualifier;
             return new hydra.ext.java.syntax.ReferenceType.ClassOrInterface(new hydra.ext.java.syntax.ClassOrInterfaceType.Class_(new hydra.ext.java.syntax.ClassType(anns, qual, id, (hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument>) (hydra.util.ConsList.<hydra.ext.java.syntax.TypeArgument>empty()))));
           }
           
           @Override
           public hydra.ext.java.syntax.ReferenceType visit(hydra.ext.java.syntax.ClassOrInterfaceType.Interface it) {
-            hydra.ext.java.syntax.ClassType ct = ((it).value).value;
+            hydra.ext.java.syntax.ClassType ct = (it).value.value;
             hydra.util.ConsList<hydra.ext.java.syntax.Annotation> anns = (ct).annotations;
             hydra.ext.java.syntax.TypeIdentifier id = (ct).identifier;
             hydra.ext.java.syntax.ClassTypeQualifier qual = (ct).qualifier;
@@ -859,16 +1008,16 @@ public interface Utils {
     return (t).accept(new hydra.ext.java.syntax.Type.PartialVisitor<>() {
       @Override
       public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.ext.java.syntax.Type.Reference rt1) {
-        return ((rt1).value).accept(new hydra.ext.java.syntax.ReferenceType.PartialVisitor<>() {
+        return (rt1).value.accept(new hydra.ext.java.syntax.ReferenceType.PartialVisitor<>() {
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.ext.java.syntax.ReferenceType.ClassOrInterface cit) {
-            return ((cit).value).accept(new hydra.ext.java.syntax.ClassOrInterfaceType.PartialVisitor<>() {
+            return (cit).value.accept(new hydra.ext.java.syntax.ClassOrInterfaceType.PartialVisitor<>() {
               @Override
               public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type> visit(hydra.ext.java.syntax.ClassOrInterfaceType.Class_ ct) {
-                hydra.util.ConsList<hydra.ext.java.syntax.Annotation> anns = ((ct).value).annotations;
-                hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> args = ((ct).value).arguments;
-                hydra.ext.java.syntax.TypeIdentifier id = ((ct).value).identifier;
-                hydra.ext.java.syntax.ClassTypeQualifier qual = ((ct).value).qualifier;
+                hydra.util.ConsList<hydra.ext.java.syntax.Annotation> anns = (ct).value.annotations;
+                hydra.util.ConsList<hydra.ext.java.syntax.TypeArgument> args = (ct).value.arguments;
+                hydra.ext.java.syntax.TypeIdentifier id = (ct).value.identifier;
+                hydra.ext.java.syntax.ClassTypeQualifier qual = (ct).value.qualifier;
                 return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.ext.java.syntax.Type>right(new hydra.ext.java.syntax.Type.Reference(new hydra.ext.java.syntax.ReferenceType.ClassOrInterface(new hydra.ext.java.syntax.ClassOrInterfaceType.Class_(new hydra.ext.java.syntax.ClassType(anns, qual, id, hydra.lib.lists.Concat2.apply(
                   args,
                   hydra.util.ConsList.of(new hydra.ext.java.syntax.TypeArgument.Reference(rt))))))));

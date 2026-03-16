@@ -22,11 +22,11 @@ data HydraSchemaSpec =
     hydraSchemaSpecTypeName :: Core.Name}
   deriving (Eq, Ord, Read, Show)
 
-_HydraSchemaSpec = (Core.Name "hydra.ext.workflow.HydraSchemaSpec")
+_HydraSchemaSpec = Core.Name "hydra.ext.workflow.HydraSchemaSpec"
 
-_HydraSchemaSpec_modules = (Core.Name "modules")
+_HydraSchemaSpec_modules = Core.Name "modules"
 
-_HydraSchemaSpec_typeName = (Core.Name "typeName")
+_HydraSchemaSpec_typeName = Core.Name "typeName"
 
 -- | The specification of a schema at the source end of a workflow
 data SchemaSpec = 
@@ -38,13 +38,13 @@ data SchemaSpec =
   SchemaSpecProvided 
   deriving (Eq, Ord, Read, Show)
 
-_SchemaSpec = (Core.Name "hydra.ext.workflow.SchemaSpec")
+_SchemaSpec = Core.Name "hydra.ext.workflow.SchemaSpec"
 
-_SchemaSpec_hydra = (Core.Name "hydra")
+_SchemaSpec_hydra = Core.Name "hydra"
 
-_SchemaSpec_file = (Core.Name "file")
+_SchemaSpec_file = Core.Name "file"
 
-_SchemaSpec_provided = (Core.Name "provided")
+_SchemaSpec_provided = Core.Name "provided"
 
 -- | The specification of a workflow which takes a schema specification, reads data from a directory, and writes data to another directory
 data TransformWorkflow = 
@@ -59,12 +59,12 @@ data TransformWorkflow =
     transformWorkflowDestDir :: String}
   deriving (Eq, Ord, Read, Show)
 
-_TransformWorkflow = (Core.Name "hydra.ext.workflow.TransformWorkflow")
+_TransformWorkflow = Core.Name "hydra.ext.workflow.TransformWorkflow"
 
-_TransformWorkflow_name = (Core.Name "name")
+_TransformWorkflow_name = Core.Name "name"
 
-_TransformWorkflow_schemaSpec = (Core.Name "schemaSpec")
+_TransformWorkflow_schemaSpec = Core.Name "schemaSpec"
 
-_TransformWorkflow_srcDir = (Core.Name "srcDir")
+_TransformWorkflow_srcDir = Core.Name "srcDir"
 
-_TransformWorkflow_destDir = (Core.Name "destDir")
+_TransformWorkflow_destDir = Core.Name "destDir"

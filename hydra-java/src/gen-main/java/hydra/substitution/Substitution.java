@@ -182,7 +182,7 @@ public interface Substitution {
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Function fun) {
-          return ((fun).value).accept(new hydra.core.Function.PartialVisitor<>() {
+          return (fun).value.accept(new hydra.core.Function.PartialVisitor<>() {
             @Override
             public hydra.core.Term otherwise(hydra.core.Function instance) {
               return (recurse).apply(term);
@@ -239,11 +239,11 @@ public interface Substitution {
       public hydra.core.Type visit(hydra.core.Type.Forall lt) {
         return hydra.lib.maybes.Maybe.applyLazy(
           () -> (recurse).apply(typ),
-          (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (styp -> new hydra.core.Type.Forall(new hydra.core.ForallType(((lt).value).parameter, hydra.substitution.Substitution.substInType(
-            (removeVar).apply(((lt).value).parameter),
-            ((lt).value).body)))),
+          (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (styp -> new hydra.core.Type.Forall(new hydra.core.ForallType((lt).value.parameter, hydra.substitution.Substitution.substInType(
+            (removeVar).apply((lt).value.parameter),
+            (lt).value.body)))),
           hydra.lib.maps.Lookup.apply(
-            ((lt).value).parameter,
+            (lt).value.parameter,
             (subst).value));
       }
       

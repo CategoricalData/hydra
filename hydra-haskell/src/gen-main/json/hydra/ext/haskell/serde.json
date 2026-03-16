@@ -18,18 +18,8 @@
                 "body": {
                   "application": {
                     "argument": {
-                      "application": {
-                        "argument": {
-                          "application": {
-                            "argument": {"variable": "alt"},
-                            "function": {
-                              "function": {
-                                "elimination": {
-                                  "record": {"field": "rhs", "typeName": "hydra.ext.haskell.ast.Alternative"}}}}}},
-                        "function": {"variable": "hydra.ext.haskell.serde.caseRhsToExpr"}}},
-                    "function": {
-                      "application": {
-                        "argument": {
+                      "list": [
+                        {
                           "application": {
                             "argument": {
                               "application": {
@@ -39,10 +29,21 @@
                                     "elimination": {
                                       "record": {"field": "pattern", "typeName": "hydra.ext.haskell.ast.Alternative"}}}}}},
                             "function": {"variable": "hydra.ext.haskell.serde.patternToExpr"}}},
-                        "function": {
+                        {
                           "application": {
-                            "argument": {"variable": "hydra.ext.haskell.operators.caseOp"},
-                            "function": {"variable": "hydra.serialization.ifx"}}}}}}},
+                            "argument": {"literal": {"string": "->"}},
+                            "function": {"variable": "hydra.serialization.cst"}}},
+                        {
+                          "application": {
+                            "argument": {
+                              "application": {
+                                "argument": {"variable": "alt"},
+                                "function": {
+                                  "function": {
+                                    "elimination": {
+                                      "record": {"field": "rhs", "typeName": "hydra.ext.haskell.ast.Alternative"}}}}}},
+                            "function": {"variable": "hydra.ext.haskell.serde.caseRhsToExpr"}}}]},
+                    "function": {"variable": "hydra.serialization.structuralSpaceSep"}}},
                 "domain": [{"variable": "hydra.ext.haskell.ast.Alternative"}],
                 "parameter": "alt"}}}}},
       "type": [
@@ -1432,19 +1433,20 @@
                                                       "argument": {
                                                         "application": {
                                                           "argument": {
-                                                            "application": {
-                                                              "argument": {"variable": "htype"},
-                                                              "function": {"variable": "hydra.ext.haskell.serde.typeToExpr"}}},
-                                                          "function": {
-                                                            "application": {
-                                                              "argument": {
+                                                            "list": [
+                                                              {
                                                                 "application": {
                                                                   "argument": {"variable": "name"},
                                                                   "function": {"variable": "hydra.ext.haskell.serde.nameToExpr"}}},
-                                                              "function": {
+                                                              {
                                                                 "application": {
-                                                                  "argument": {"variable": "hydra.ext.haskell.operators.typeOp"},
-                                                                  "function": {"variable": "hydra.serialization.ifx"}}}}}}},
+                                                                  "argument": {"literal": {"string": "::"}},
+                                                                  "function": {"variable": "hydra.serialization.cst"}}},
+                                                              {
+                                                                "application": {
+                                                                  "argument": {"variable": "htype"},
+                                                                  "function": {"variable": "hydra.ext.haskell.serde.typeToExpr"}}}]},
+                                                          "function": {"variable": "hydra.serialization.structuralSpaceSep"}}},
                                                       "function": {
                                                         "typeApplication": {
                                                           "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
@@ -1744,7 +1746,7 @@
                                                             "function": {"variable": "hydra.ext.haskell.serde.localBindingToExpr"}}},
                                                         "function": {
                                                           "application": {
-                                                            "argument": {"literal": {"string": "      "}},
+                                                            "argument": {"literal": {"string": "    "}},
                                                             "function": {"variable": "hydra.serialization.indentSubsequentLines"}}}}},
                                                     "domain": [{"variable": "hydra.ext.haskell.ast.LocalBinding"}],
                                                     "parameter": "binding"}}},
@@ -3836,10 +3838,51 @@
                           {
                             "constraints": null,
                             "type": {"variable": "hydra.ext.haskell.ast.Type"},
+                            "variables": []}]},
+                      {
+                        "name": "nameExpr",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "name"},
+                            "function": {"variable": "hydra.ext.haskell.serde.nameToExpr"}}},
+                        "type": [
+                          {
+                            "constraints": null,
+                            "type": {"variable": "hydra.ast.Expr"},
+                            "variables": []}]},
+                      {
+                        "name": "typeExpr",
+                        "term": {
+                          "application": {
+                            "argument": {"variable": "typ"},
+                            "function": {"variable": "hydra.ext.haskell.serde.typeToExpr"}}},
+                        "type": [
+                          {
+                            "constraints": null,
+                            "type": {"variable": "hydra.ast.Expr"},
+                            "variables": []}]},
+                      {
+                        "name": "inlineSig",
+                        "term": {
+                          "application": {
+                            "argument": {
+                              "list": [
+                                {"variable": "nameExpr"},
+                                {
+                                  "application": {
+                                    "argument": {"literal": {"string": "::"}},
+                                    "function": {"variable": "hydra.serialization.cst"}}},
+                                {"variable": "typeExpr"}]},
+                            "function": {"variable": "hydra.serialization.structuralSpaceSep"}}},
+                        "type": [
+                          {
+                            "constraints": null,
+                            "type": {"variable": "hydra.ast.Expr"},
                             "variables": []}]}],
                     "body": {
                       "application": {
-                        "argument": {
+                        "argument": {"variable": "inlineSig"},
+                        "function": {
                           "application": {
                             "argument": {
                               "application": {
@@ -3847,29 +3890,38 @@
                                   "list": [
                                     {
                                       "application": {
-                                        "argument": {"variable": "typ"},
-                                        "function": {"variable": "hydra.ext.haskell.serde.typeToExpr"}}}]},
-                                "function": {
-                                  "application": {
-                                    "argument": {
+                                        "argument": {
+                                          "list": [
+                                            {"variable": "nameExpr"},
+                                            {
+                                              "application": {
+                                                "argument": {"literal": {"string": "::"}},
+                                                "function": {"variable": "hydra.serialization.cst"}}}]},
+                                        "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                    {
                                       "application": {
-                                        "argument": {"literal": {"string": "::"}},
-                                        "function": {"variable": "hydra.serialization.cst"}}},
-                                    "function": {
-                                      "typeApplication": {
-                                        "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
-                                        "type": {"variable": "hydra.ast.Expr"}}}}}}},
+                                        "argument": {"variable": "typeExpr"},
+                                        "function": {"variable": "hydra.serialization.tabIndent"}}}]},
+                                "function": {"variable": "hydra.serialization.newlineSep"}}},
                             "function": {
                               "application": {
                                 "argument": {
                                   "application": {
-                                    "argument": {"variable": "name"},
-                                    "function": {"variable": "hydra.ext.haskell.serde.nameToExpr"}}},
+                                    "argument": {"literal": {"integer": {"int32": 120}}},
+                                    "function": {
+                                      "application": {
+                                        "argument": {
+                                          "application": {
+                                            "argument": {"variable": "inlineSig"},
+                                            "function": {"variable": "hydra.serialization.expressionLength"}}},
+                                        "function": {
+                                          "typeApplication": {
+                                            "body": {"function": {"primitive": "hydra.lib.equality.gt"}},
+                                            "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
                                 "function": {
                                   "typeApplication": {
-                                    "body": {"function": {"primitive": "hydra.lib.lists.cons"}},
-                                    "type": {"variable": "hydra.ast.Expr"}}}}}}},
-                        "function": {"variable": "hydra.serialization.spaceSep"}}}}},
+                                    "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                    "type": {"variable": "hydra.ast.Expr"}}}}}}}}}}},
                 "domain": [{"variable": "hydra.ext.haskell.ast.TypeSignature"}],
                 "parameter": "typeSig"}}}}},
       "type": [
@@ -4212,23 +4264,90 @@
                                                   "type": {"maybe": {"variable": "hydra.ext.haskell.ast.LocalBindings"}},
                                                   "variables": []}]},
                                             {
-                                              "name": "body",
+                                              "name": "lhsExpr",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "pat"},
+                                                  "function": {"variable": "hydra.ext.haskell.serde.patternToExpr"}}},
+                                              "type": [
+                                                {
+                                                  "constraints": null,
+                                                  "type": {"variable": "hydra.ast.Expr"},
+                                                  "variables": []}]},
+                                            {
+                                              "name": "rhsExpr",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "rhs"},
+                                                  "function": {"variable": "hydra.ext.haskell.serde.rightHandSideToExpr"}}},
+                                              "type": [
+                                                {
+                                                  "constraints": null,
+                                                  "type": {"variable": "hydra.ast.Expr"},
+                                                  "variables": []}]},
+                                            {
+                                              "name": "inlineBody",
                                               "term": {
                                                 "application": {
                                                   "argument": {
-                                                    "application": {
-                                                      "argument": {"variable": "rhs"},
-                                                      "function": {"variable": "hydra.ext.haskell.serde.rightHandSideToExpr"}}},
+                                                    "list": [
+                                                      {"variable": "lhsExpr"},
+                                                      {
+                                                        "application": {
+                                                          "argument": {"literal": {"string": "="}},
+                                                          "function": {"variable": "hydra.serialization.cst"}}},
+                                                      {"variable": "rhsExpr"}]},
+                                                  "function": {"variable": "hydra.serialization.structuralSpaceSep"}}},
+                                              "type": [
+                                                {
+                                                  "constraints": null,
+                                                  "type": {"variable": "hydra.ast.Expr"},
+                                                  "variables": []}]},
+                                            {
+                                              "name": "body",
+                                              "term": {
+                                                "application": {
+                                                  "argument": {"variable": "inlineBody"},
                                                   "function": {
                                                     "application": {
                                                       "argument": {
                                                         "application": {
-                                                          "argument": {"variable": "pat"},
-                                                          "function": {"variable": "hydra.ext.haskell.serde.patternToExpr"}}},
+                                                          "argument": {
+                                                            "list": [
+                                                              {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "list": [
+                                                                      {"variable": "lhsExpr"},
+                                                                      {
+                                                                        "application": {
+                                                                          "argument": {"literal": {"string": "="}},
+                                                                          "function": {"variable": "hydra.serialization.cst"}}}]},
+                                                                  "function": {"variable": "hydra.serialization.spaceSep"}}},
+                                                              {
+                                                                "application": {
+                                                                  "argument": {"variable": "rhsExpr"},
+                                                                  "function": {"variable": "hydra.serialization.tabIndent"}}}]},
+                                                          "function": {"variable": "hydra.serialization.newlineSep"}}},
                                                       "function": {
                                                         "application": {
-                                                          "argument": {"variable": "hydra.ext.haskell.operators.defineOp"},
-                                                          "function": {"variable": "hydra.serialization.ifx"}}}}}}},
+                                                          "argument": {
+                                                            "application": {
+                                                              "argument": {"literal": {"integer": {"int32": 120}}},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "inlineBody"},
+                                                                      "function": {"variable": "hydra.serialization.expressionLength"}}},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {"function": {"primitive": "hydra.lib.equality.gt"}},
+                                                                      "type": {"literal": {"integer": {"int32": {}}}}}}}}}},
+                                                          "function": {
+                                                            "typeApplication": {
+                                                              "body": {"function": {"primitive": "hydra.lib.logic.ifElse"}},
+                                                              "type": {"variable": "hydra.ast.Expr"}}}}}}}}},
                                               "type": [
                                                 {
                                                   "constraints": null,

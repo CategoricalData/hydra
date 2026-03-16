@@ -63,7 +63,7 @@ public abstract class IriRef_Elmt implements Serializable, Comparable<IriRef_Elm
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(IriRef_Elmt other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -103,7 +103,7 @@ public abstract class IriRef_Elmt implements Serializable, Comparable<IriRef_Elm
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(IriRef_Elmt other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

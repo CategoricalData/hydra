@@ -31,98 +31,107 @@ import qualified Data.Set as S
 
 -- | Default Tinkerpop annotation schema
 defaultTinkerpopAnnotations :: Mapping.AnnotationSchema
-defaultTinkerpopAnnotations = Mapping.AnnotationSchema {
-  Mapping.annotationSchemaVertexLabel = "vertexLabel",
-  Mapping.annotationSchemaEdgeLabel = "edgeLabel",
-  Mapping.annotationSchemaVertexId = "vertexId",
-  Mapping.annotationSchemaEdgeId = "edgeId",
-  Mapping.annotationSchemaPropertyKey = "key",
-  Mapping.annotationSchemaPropertyValue = "value",
-  Mapping.annotationSchemaOutVertex = "outVertex",
-  Mapping.annotationSchemaOutVertexLabel = "outVertexLabel",
-  Mapping.annotationSchemaInVertex = "inVertex",
-  Mapping.annotationSchemaInVertexLabel = "inVertexLabel",
-  Mapping.annotationSchemaOutEdge = "outEdge",
-  Mapping.annotationSchemaOutEdgeLabel = "outEdgeLabel",
-  Mapping.annotationSchemaInEdge = "inEdge",
-  Mapping.annotationSchemaInEdgeLabel = "inEdgeLabel",
-  Mapping.annotationSchemaIgnore = "ignore"}
+defaultTinkerpopAnnotations =
+    Mapping.AnnotationSchema {
+      Mapping.annotationSchemaVertexLabel = "vertexLabel",
+      Mapping.annotationSchemaEdgeLabel = "edgeLabel",
+      Mapping.annotationSchemaVertexId = "vertexId",
+      Mapping.annotationSchemaEdgeId = "edgeId",
+      Mapping.annotationSchemaPropertyKey = "key",
+      Mapping.annotationSchemaPropertyValue = "value",
+      Mapping.annotationSchemaOutVertex = "outVertex",
+      Mapping.annotationSchemaOutVertexLabel = "outVertexLabel",
+      Mapping.annotationSchemaInVertex = "inVertex",
+      Mapping.annotationSchemaInVertexLabel = "inVertexLabel",
+      Mapping.annotationSchemaOutEdge = "outEdge",
+      Mapping.annotationSchemaOutEdgeLabel = "outEdgeLabel",
+      Mapping.annotationSchemaInEdge = "inEdge",
+      Mapping.annotationSchemaInEdgeLabel = "inEdgeLabel",
+      Mapping.annotationSchemaIgnore = "ignore"}
 
 -- | Example property graph schema with string values
-examplePgSchema :: (Mapping.Schema t0 () String)
-examplePgSchema = Mapping.Schema {
-  Mapping.schemaVertexIdTypes = Util.Coder {
-    Util.coderEncode = (\_ -> \_ -> Right ()),
-    Util.coderDecode = (\_ -> \_ -> Right Core.TypeUnit)},
-  Mapping.schemaVertexIds = Util.Coder {
-    Util.coderEncode = (\cx -> \t -> expString cx t),
-    Util.coderDecode = (\_cx -> \s -> Right (Core.TermLiteral (Core.LiteralString s)))},
-  Mapping.schemaEdgeIdTypes = Util.Coder {
-    Util.coderEncode = (\_ -> \_ -> Right ()),
-    Util.coderDecode = (\_ -> \_ -> Right Core.TypeUnit)},
-  Mapping.schemaEdgeIds = Util.Coder {
-    Util.coderEncode = (\cx -> \t -> expString cx t),
-    Util.coderDecode = (\_cx -> \s -> Right (Core.TermLiteral (Core.LiteralString s)))},
-  Mapping.schemaPropertyTypes = Util.Coder {
-    Util.coderEncode = (\_ -> \_ -> Right ()),
-    Util.coderDecode = (\_ -> \_ -> Right Core.TypeUnit)},
-  Mapping.schemaPropertyValues = Util.Coder {
-    Util.coderEncode = (\cx -> \t -> expString cx t),
-    Util.coderDecode = (\_cx -> \s -> Right (Core.TermLiteral (Core.LiteralString s)))},
-  Mapping.schemaAnnotations = defaultTinkerpopAnnotations,
-  Mapping.schemaDefaultVertexId = "defaultVertexId",
-  Mapping.schemaDefaultEdgeId = "defaultEdgeId"}
+examplePgSchema :: Mapping.Schema t0 () String
+examplePgSchema =
+    Mapping.Schema {
+      Mapping.schemaVertexIdTypes = Util.Coder {
+        Util.coderEncode = (\_ -> \_ -> Right ()),
+        Util.coderDecode = (\_ -> \_ -> Right Core.TypeUnit)},
+      Mapping.schemaVertexIds = Util.Coder {
+        Util.coderEncode = (\cx -> \t -> expString cx t),
+        Util.coderDecode = (\_cx -> \s -> Right (Core.TermLiteral (Core.LiteralString s)))},
+      Mapping.schemaEdgeIdTypes = Util.Coder {
+        Util.coderEncode = (\_ -> \_ -> Right ()),
+        Util.coderDecode = (\_ -> \_ -> Right Core.TypeUnit)},
+      Mapping.schemaEdgeIds = Util.Coder {
+        Util.coderEncode = (\cx -> \t -> expString cx t),
+        Util.coderDecode = (\_cx -> \s -> Right (Core.TermLiteral (Core.LiteralString s)))},
+      Mapping.schemaPropertyTypes = Util.Coder {
+        Util.coderEncode = (\_ -> \_ -> Right ()),
+        Util.coderDecode = (\_ -> \_ -> Right Core.TypeUnit)},
+      Mapping.schemaPropertyValues = Util.Coder {
+        Util.coderEncode = (\cx -> \t -> expString cx t),
+        Util.coderDecode = (\_cx -> \s -> Right (Core.TermLiteral (Core.LiteralString s)))},
+      Mapping.schemaAnnotations = defaultTinkerpopAnnotations,
+      Mapping.schemaDefaultVertexId = "defaultVertexId",
+      Mapping.schemaDefaultEdgeId = "defaultEdgeId"}
 
 -- | Extract a string from a term using the empty graph
-expString :: (Context.Context -> Core.Term -> Either (Context.InContext Error.Error) String)
-expString cx term = (Core_.string cx (Graph.Graph {
-  Graph.graphBoundTerms = Maps.empty,
-  Graph.graphBoundTypes = Maps.empty,
-  Graph.graphClassConstraints = Maps.empty,
-  Graph.graphLambdaVariables = Sets.empty,
-  Graph.graphMetadata = Maps.empty,
-  Graph.graphPrimitives = Maps.empty,
-  Graph.graphSchemaTypes = Maps.empty,
-  Graph.graphTypeVariables = Sets.empty}) term)
+expString :: Context.Context -> Core.Term -> Either (Context.InContext Error.Error) String
+expString cx term =
+    Core_.string cx (Graph.Graph {
+      Graph.graphBoundTerms = Maps.empty,
+      Graph.graphBoundTypes = Maps.empty,
+      Graph.graphClassConstraints = Maps.empty,
+      Graph.graphLambdaVariables = Sets.empty,
+      Graph.graphMetadata = Maps.empty,
+      Graph.graphPrimitives = Maps.empty,
+      Graph.graphSchemaTypes = Maps.empty,
+      Graph.graphTypeVariables = Sets.empty}) term
 
 -- | Get all elements from a lazy graph
-lazyGraphToElements :: (Model_.LazyGraph t0 -> [Model_.Element t0])
-lazyGraphToElements lg = (Lists.concat2 (Lists.map (\x -> Model_.ElementVertex x) (Model_.lazyGraphVertices lg)) (Lists.map (\x -> Model_.ElementEdge x) (Model_.lazyGraphEdges lg)))
+lazyGraphToElements :: Model_.LazyGraph t0 -> [Model_.Element t0]
+lazyGraphToElements lg =
+    Lists.concat2 (Lists.map (\x -> Model_.ElementVertex x) (Model_.lazyGraphVertices lg)) (Lists.map (\x -> Model_.ElementEdge x) (Model_.lazyGraphEdges lg))
 
 -- | Convert a property graph element to JSON
-pgElementToJson :: (Mapping.Schema t0 t1 t2 -> Model_.Element t2 -> Context.Context -> Either (Context.InContext Error.Error) Model.Value)
-pgElementToJson schema el cx = ((\x -> case x of
-  Model_.ElementVertex v0 -> (Eithers.bind (Util.coderDecode (Mapping.schemaVertexIds schema) cx (Model_.vertexId v0)) (\term ->  
-    let labelJson = (Model.ValueString (Model_.unVertexLabel (Model_.vertexLabel v0)))
-    in (Eithers.map (\propsJson -> Model.ValueObject (Maps.fromList (Maybes.cat [
-      Just ("label", labelJson),
-      (Just ("id", (Model.ValueString (Core__.term term)))),
-      propsJson]))) ((\pairs -> Logic.ifElse (Maps.null pairs) (Right Nothing) (Eithers.map (\p -> Just ("properties", (Model.ValueObject (Maps.fromList p)))) (Eithers.mapList (\pair ->  
-      let key = (Pairs.first pair) 
-          v = (Pairs.second pair)
-      in (Eithers.bind (Util.coderDecode (Mapping.schemaPropertyValues schema) cx v) (\term -> Right (Model_.unPropertyKey key, (Model.ValueString (Core__.term term)))))) (Maps.toList pairs)))) (Model_.vertexProperties v0)))))
-  Model_.ElementEdge v0 -> (Eithers.bind (Util.coderDecode (Mapping.schemaEdgeIds schema) cx (Model_.edgeId v0)) (\term -> Eithers.bind (Util.coderDecode (Mapping.schemaVertexIds schema) cx (Model_.edgeOut v0)) (\termOut -> Eithers.bind (Util.coderDecode (Mapping.schemaVertexIds schema) cx (Model_.edgeIn v0)) (\termIn ->  
-    let labelJson = (Model.ValueString (Model_.unEdgeLabel (Model_.edgeLabel v0)))
-    in (Eithers.map (\propsJson -> Model.ValueObject (Maps.fromList (Maybes.cat [
-      Just ("label", labelJson),
-      (Just ("id", (Model.ValueString (Core__.term term)))),
-      (Just ("out", (Model.ValueString (Core__.term termOut)))),
-      (Just ("in", (Model.ValueString (Core__.term termIn)))),
-      propsJson]))) ((\pairs -> Logic.ifElse (Maps.null pairs) (Right Nothing) (Eithers.map (\p -> Just ("properties", (Model.ValueObject (Maps.fromList p)))) (Eithers.mapList (\pair ->  
-      let key = (Pairs.first pair) 
-          v = (Pairs.second pair)
-      in (Eithers.bind (Util.coderDecode (Mapping.schemaPropertyValues schema) cx v) (\term -> Right (Model_.unPropertyKey key, (Model.ValueString (Core__.term term)))))) (Maps.toList pairs)))) (Model_.edgeProperties v0)))))))) el)
+pgElementToJson :: Mapping.Schema t0 t1 t2 -> Model_.Element t2 -> Context.Context -> Either (Context.InContext Error.Error) Model.Value
+pgElementToJson schema el cx =
+    (\x -> case x of
+      Model_.ElementVertex v0 -> Eithers.bind (Util.coderDecode (Mapping.schemaVertexIds schema) cx (Model_.vertexId v0)) (\term ->  
+        let labelJson = Model.ValueString (Model_.unVertexLabel (Model_.vertexLabel v0))
+        in (Eithers.map (\propsJson -> Model.ValueObject (Maps.fromList (Maybes.cat [
+          Just ("label", labelJson),
+          (Just ("id", (Model.ValueString (Core__.term term)))),
+          propsJson]))) ((\pairs -> Logic.ifElse (Maps.null pairs) (Right Nothing) (Eithers.map (\p -> Just ("properties", (Model.ValueObject (Maps.fromList p)))) (Eithers.mapList (\pair ->  
+          let key = Pairs.first pair 
+              v = Pairs.second pair
+          in (Eithers.bind (Util.coderDecode (Mapping.schemaPropertyValues schema) cx v) (\term -> Right (Model_.unPropertyKey key, (Model.ValueString (Core__.term term)))))) (Maps.toList pairs)))) (Model_.vertexProperties v0))))
+      Model_.ElementEdge v0 -> Eithers.bind (Util.coderDecode (Mapping.schemaEdgeIds schema) cx (Model_.edgeId v0)) (\term -> Eithers.bind (Util.coderDecode (Mapping.schemaVertexIds schema) cx (Model_.edgeOut v0)) (\termOut -> Eithers.bind (Util.coderDecode (Mapping.schemaVertexIds schema) cx (Model_.edgeIn v0)) (\termIn ->  
+        let labelJson = Model.ValueString (Model_.unEdgeLabel (Model_.edgeLabel v0))
+        in (Eithers.map (\propsJson -> Model.ValueObject (Maps.fromList (Maybes.cat [
+          Just ("label", labelJson),
+          (Just ("id", (Model.ValueString (Core__.term term)))),
+          (Just ("out", (Model.ValueString (Core__.term termOut)))),
+          (Just ("in", (Model.ValueString (Core__.term termIn)))),
+          propsJson]))) ((\pairs -> Logic.ifElse (Maps.null pairs) (Right Nothing) (Eithers.map (\p -> Just ("properties", (Model.ValueObject (Maps.fromList p)))) (Eithers.mapList (\pair ->  
+          let key = Pairs.first pair 
+              v = Pairs.second pair
+          in (Eithers.bind (Util.coderDecode (Mapping.schemaPropertyValues schema) cx v) (\term -> Right (Model_.unPropertyKey key, (Model.ValueString (Core__.term term)))))) (Maps.toList pairs)))) (Model_.edgeProperties v0))))))) el
 
 -- | Convert a list of property graph elements to JSON
-pgElementsToJson :: (Mapping.Schema t0 t1 t2 -> [Model_.Element t2] -> Context.Context -> Either (Context.InContext Error.Error) Model.Value)
-pgElementsToJson schema els cx = (Eithers.map (\els_ -> Model.ValueArray els_) (Eithers.mapList (\el -> pgElementToJson schema el cx) els))
+pgElementsToJson :: Mapping.Schema t0 t1 t2 -> [Model_.Element t2] -> Context.Context -> Either (Context.InContext Error.Error) Model.Value
+pgElementsToJson schema els cx =
+    Eithers.map (\els_ -> Model.ValueArray els_) (Eithers.mapList (\el -> pgElementToJson schema el cx) els)
 
 -- | Get all elements from a property graph
 propertyGraphElements :: Ord t0 => (Model_.Graph t0 -> [Model_.Element t0])
-propertyGraphElements g = (Lists.concat2 (Lists.map (\x -> Model_.ElementVertex x) (Maps.elems (Model_.graphVertices g))) (Lists.map (\x -> Model_.ElementEdge x) (Maps.elems (Model_.graphEdges g))))
+propertyGraphElements g =
+    Lists.concat2 (Lists.map (\x -> Model_.ElementVertex x) (Maps.elems (Model_.graphVertices g))) (Lists.map (\x -> Model_.ElementEdge x) (Maps.elems (Model_.graphEdges g)))
 
 -- | Convert a type-annotated term to property graph elements
-typeApplicationTermToPropertyGraph :: (Mapping.Schema t0 t1 t2 -> Core.Type -> t1 -> t1 -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (Core.Term -> Context.Context -> Either (Context.InContext Error.Error) [Model_.Element t2]))
-typeApplicationTermToPropertyGraph schema typ vidType eidType cx g = (Eithers.bind (Coder.elementCoder Nothing schema typ vidType eidType cx g) (\adapter -> Right (\term -> \cx_ -> Eithers.map (\tree ->  
-  let flattenTree = (\t -> Lists.cons (Model_.elementTreeSelf t) (Lists.concat (Lists.map flattenTree (Model_.elementTreeDependencies t))))
-  in (flattenTree tree)) (Util.coderEncode (Util.adapterCoder adapter) cx_ term))))
+typeApplicationTermToPropertyGraph :: Mapping.Schema t0 t1 t2 -> Core.Type -> t1 -> t1 -> Context.Context -> Graph.Graph -> Either (Context.InContext Error.Error) (Core.Term -> Context.Context -> Either (Context.InContext Error.Error) [Model_.Element t2])
+typeApplicationTermToPropertyGraph schema typ vidType eidType cx g =
+    Eithers.bind (Coder.elementCoder Nothing schema typ vidType eidType cx g) (\adapter -> Right (\term -> \cx_ -> Eithers.map (\tree ->  
+      let flattenTree =
+              \t -> Lists.cons (Model_.elementTreeSelf t) (Lists.concat (Lists.map flattenTree (Model_.elementTreeDependencies t)))
+      in (flattenTree tree)) (Util.coderEncode (Util.adapterCoder adapter) cx_ term)))

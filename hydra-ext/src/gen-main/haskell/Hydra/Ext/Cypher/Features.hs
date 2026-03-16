@@ -65,55 +65,55 @@ data CypherFeatures =
     cypherFeaturesUpdating :: UpdatingFeatures}
   deriving (Eq, Ord, Read, Show)
 
-_CypherFeatures = (Core.Name "hydra.ext.cypher.features.CypherFeatures")
+_CypherFeatures = Core.Name "hydra.ext.cypher.features.CypherFeatures"
 
-_CypherFeatures_arithmetic = (Core.Name "arithmetic")
+_CypherFeatures_arithmetic = Core.Name "arithmetic"
 
-_CypherFeatures_atom = (Core.Name "atom")
+_CypherFeatures_atom = Core.Name "atom"
 
-_CypherFeatures_comparison = (Core.Name "comparison")
+_CypherFeatures_comparison = Core.Name "comparison"
 
-_CypherFeatures_delete = (Core.Name "delete")
+_CypherFeatures_delete = Core.Name "delete"
 
-_CypherFeatures_function = (Core.Name "function")
+_CypherFeatures_function = Core.Name "function"
 
-_CypherFeatures_list = (Core.Name "list")
+_CypherFeatures_list = Core.Name "list"
 
-_CypherFeatures_literal = (Core.Name "literal")
+_CypherFeatures_literal = Core.Name "literal"
 
-_CypherFeatures_logical = (Core.Name "logical")
+_CypherFeatures_logical = Core.Name "logical"
 
-_CypherFeatures_match = (Core.Name "match")
+_CypherFeatures_match = Core.Name "match"
 
-_CypherFeatures_merge = (Core.Name "merge")
+_CypherFeatures_merge = Core.Name "merge"
 
-_CypherFeatures_nodePattern = (Core.Name "nodePattern")
+_CypherFeatures_nodePattern = Core.Name "nodePattern"
 
-_CypherFeatures_null = (Core.Name "null")
+_CypherFeatures_null = Core.Name "null"
 
-_CypherFeatures_path = (Core.Name "path")
+_CypherFeatures_path = Core.Name "path"
 
-_CypherFeatures_procedureCall = (Core.Name "procedureCall")
+_CypherFeatures_procedureCall = Core.Name "procedureCall"
 
-_CypherFeatures_projection = (Core.Name "projection")
+_CypherFeatures_projection = Core.Name "projection"
 
-_CypherFeatures_quantifier = (Core.Name "quantifier")
+_CypherFeatures_quantifier = Core.Name "quantifier"
 
-_CypherFeatures_rangeLiteral = (Core.Name "rangeLiteral")
+_CypherFeatures_rangeLiteral = Core.Name "rangeLiteral"
 
-_CypherFeatures_reading = (Core.Name "reading")
+_CypherFeatures_reading = Core.Name "reading"
 
-_CypherFeatures_relationshipDirection = (Core.Name "relationshipDirection")
+_CypherFeatures_relationshipDirection = Core.Name "relationshipDirection"
 
-_CypherFeatures_relationshipPattern = (Core.Name "relationshipPattern")
+_CypherFeatures_relationshipPattern = Core.Name "relationshipPattern"
 
-_CypherFeatures_remove = (Core.Name "remove")
+_CypherFeatures_remove = Core.Name "remove"
 
-_CypherFeatures_set = (Core.Name "set")
+_CypherFeatures_set = Core.Name "set"
 
-_CypherFeatures_string = (Core.Name "string")
+_CypherFeatures_string = Core.Name "string"
 
-_CypherFeatures_updating = (Core.Name "updating")
+_CypherFeatures_updating = Core.Name "updating"
 
 -- | Arithmetic operations
 data ArithmeticFeatures = 
@@ -132,19 +132,19 @@ data ArithmeticFeatures =
     arithmeticFeaturesPowerOf :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_ArithmeticFeatures = (Core.Name "hydra.ext.cypher.features.ArithmeticFeatures")
+_ArithmeticFeatures = Core.Name "hydra.ext.cypher.features.ArithmeticFeatures"
 
-_ArithmeticFeatures_plus = (Core.Name "plus")
+_ArithmeticFeatures_plus = Core.Name "plus"
 
-_ArithmeticFeatures_minus = (Core.Name "minus")
+_ArithmeticFeatures_minus = Core.Name "minus"
 
-_ArithmeticFeatures_multiply = (Core.Name "multiply")
+_ArithmeticFeatures_multiply = Core.Name "multiply"
 
-_ArithmeticFeatures_divide = (Core.Name "divide")
+_ArithmeticFeatures_divide = Core.Name "divide"
 
-_ArithmeticFeatures_modulus = (Core.Name "modulus")
+_ArithmeticFeatures_modulus = Core.Name "modulus"
 
-_ArithmeticFeatures_powerOf = (Core.Name "powerOf")
+_ArithmeticFeatures_powerOf = Core.Name "powerOf"
 
 -- | Various kinds of atomic expressions
 data AtomFeatures = 
@@ -167,23 +167,23 @@ data AtomFeatures =
     atomFeaturesVariable :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_AtomFeatures = (Core.Name "hydra.ext.cypher.features.AtomFeatures")
+_AtomFeatures = Core.Name "hydra.ext.cypher.features.AtomFeatures"
 
-_AtomFeatures_caseExpression = (Core.Name "caseExpression")
+_AtomFeatures_caseExpression = Core.Name "caseExpression"
 
-_AtomFeatures_count = (Core.Name "count")
+_AtomFeatures_count = Core.Name "count"
 
-_AtomFeatures_existentialSubquery = (Core.Name "existentialSubquery")
+_AtomFeatures_existentialSubquery = Core.Name "existentialSubquery"
 
-_AtomFeatures_functionInvocation = (Core.Name "functionInvocation")
+_AtomFeatures_functionInvocation = Core.Name "functionInvocation"
 
-_AtomFeatures_parameter = (Core.Name "parameter")
+_AtomFeatures_parameter = Core.Name "parameter"
 
-_AtomFeatures_patternComprehension = (Core.Name "patternComprehension")
+_AtomFeatures_patternComprehension = Core.Name "patternComprehension"
 
-_AtomFeatures_patternPredicate = (Core.Name "patternPredicate")
+_AtomFeatures_patternPredicate = Core.Name "patternPredicate"
 
-_AtomFeatures_variable = (Core.Name "variable")
+_AtomFeatures_variable = Core.Name "variable"
 
 -- | Comparison operators and functions
 data ComparisonFeatures = 
@@ -202,19 +202,19 @@ data ComparisonFeatures =
     comparisonFeaturesNotEqual :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_ComparisonFeatures = (Core.Name "hydra.ext.cypher.features.ComparisonFeatures")
+_ComparisonFeatures = Core.Name "hydra.ext.cypher.features.ComparisonFeatures"
 
-_ComparisonFeatures_equal = (Core.Name "equal")
+_ComparisonFeatures_equal = Core.Name "equal"
 
-_ComparisonFeatures_greaterThan = (Core.Name "greaterThan")
+_ComparisonFeatures_greaterThan = Core.Name "greaterThan"
 
-_ComparisonFeatures_greaterThanOrEqual = (Core.Name "greaterThanOrEqual")
+_ComparisonFeatures_greaterThanOrEqual = Core.Name "greaterThanOrEqual"
 
-_ComparisonFeatures_lessThan = (Core.Name "lessThan")
+_ComparisonFeatures_lessThan = Core.Name "lessThan"
 
-_ComparisonFeatures_lessThanOrEqual = (Core.Name "lessThanOrEqual")
+_ComparisonFeatures_lessThanOrEqual = Core.Name "lessThanOrEqual"
 
-_ComparisonFeatures_notEqual = (Core.Name "notEqual")
+_ComparisonFeatures_notEqual = Core.Name "notEqual"
 
 -- | Delete operations
 data DeleteFeatures = 
@@ -225,11 +225,11 @@ data DeleteFeatures =
     deleteFeaturesDetachDelete :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_DeleteFeatures = (Core.Name "hydra.ext.cypher.features.DeleteFeatures")
+_DeleteFeatures = Core.Name "hydra.ext.cypher.features.DeleteFeatures"
 
-_DeleteFeatures_delete = (Core.Name "delete")
+_DeleteFeatures_delete = Core.Name "delete"
 
-_DeleteFeatures_detachDelete = (Core.Name "detachDelete")
+_DeleteFeatures_detachDelete = Core.Name "detachDelete"
 
 -- | Standard Cypher functions
 data FunctionFeatures = 
@@ -268,39 +268,39 @@ data FunctionFeatures =
     functionFeaturesVectorFunction :: VectorFunctionFeatures}
   deriving (Eq, Ord, Read, Show)
 
-_FunctionFeatures = (Core.Name "hydra.ext.cypher.features.FunctionFeatures")
+_FunctionFeatures = Core.Name "hydra.ext.cypher.features.FunctionFeatures"
 
-_FunctionFeatures_aggregateFunction = (Core.Name "aggregateFunction")
+_FunctionFeatures_aggregateFunction = Core.Name "aggregateFunction"
 
-_FunctionFeatures_databaseFunction = (Core.Name "databaseFunction")
+_FunctionFeatures_databaseFunction = Core.Name "databaseFunction"
 
-_FunctionFeatures_genAIFunction = (Core.Name "genAIFunction")
+_FunctionFeatures_genAIFunction = Core.Name "genAIFunction"
 
-_FunctionFeatures_graphFunction = (Core.Name "graphFunction")
+_FunctionFeatures_graphFunction = Core.Name "graphFunction"
 
-_FunctionFeatures_listFunction = (Core.Name "listFunction")
+_FunctionFeatures_listFunction = Core.Name "listFunction"
 
-_FunctionFeatures_loadCSVFunction = (Core.Name "loadCSVFunction")
+_FunctionFeatures_loadCSVFunction = Core.Name "loadCSVFunction"
 
-_FunctionFeatures_logarithmicFunction = (Core.Name "logarithmicFunction")
+_FunctionFeatures_logarithmicFunction = Core.Name "logarithmicFunction"
 
-_FunctionFeatures_numericFunction = (Core.Name "numericFunction")
+_FunctionFeatures_numericFunction = Core.Name "numericFunction"
 
-_FunctionFeatures_predicateFunction = (Core.Name "predicateFunction")
+_FunctionFeatures_predicateFunction = Core.Name "predicateFunction"
 
-_FunctionFeatures_scalarFunction = (Core.Name "scalarFunction")
+_FunctionFeatures_scalarFunction = Core.Name "scalarFunction"
 
-_FunctionFeatures_spatialFunction = (Core.Name "spatialFunction")
+_FunctionFeatures_spatialFunction = Core.Name "spatialFunction"
 
-_FunctionFeatures_stringFunction = (Core.Name "stringFunction")
+_FunctionFeatures_stringFunction = Core.Name "stringFunction"
 
-_FunctionFeatures_temporalDurationFunction = (Core.Name "temporalDurationFunction")
+_FunctionFeatures_temporalDurationFunction = Core.Name "temporalDurationFunction"
 
-_FunctionFeatures_temporalInstantFunction = (Core.Name "temporalInstantFunction")
+_FunctionFeatures_temporalInstantFunction = Core.Name "temporalInstantFunction"
 
-_FunctionFeatures_trigonometricFunction = (Core.Name "trigonometricFunction")
+_FunctionFeatures_trigonometricFunction = Core.Name "trigonometricFunction"
 
-_FunctionFeatures_vectorFunction = (Core.Name "vectorFunction")
+_FunctionFeatures_vectorFunction = Core.Name "vectorFunction"
 
 -- | Aggregate functions
 data AggregateFunctionFeatures = 
@@ -327,27 +327,27 @@ data AggregateFunctionFeatures =
     aggregateFunctionFeaturesSum :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_AggregateFunctionFeatures = (Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures")
+_AggregateFunctionFeatures = Core.Name "hydra.ext.cypher.features.AggregateFunctionFeatures"
 
-_AggregateFunctionFeatures_avg = (Core.Name "avg")
+_AggregateFunctionFeatures_avg = Core.Name "avg"
 
-_AggregateFunctionFeatures_collect = (Core.Name "collect")
+_AggregateFunctionFeatures_collect = Core.Name "collect"
 
-_AggregateFunctionFeatures_count = (Core.Name "count")
+_AggregateFunctionFeatures_count = Core.Name "count"
 
-_AggregateFunctionFeatures_max = (Core.Name "max")
+_AggregateFunctionFeatures_max = Core.Name "max"
 
-_AggregateFunctionFeatures_min = (Core.Name "min")
+_AggregateFunctionFeatures_min = Core.Name "min"
 
-_AggregateFunctionFeatures_percentileCont = (Core.Name "percentileCont")
+_AggregateFunctionFeatures_percentileCont = Core.Name "percentileCont"
 
-_AggregateFunctionFeatures_percentileDisc = (Core.Name "percentileDisc")
+_AggregateFunctionFeatures_percentileDisc = Core.Name "percentileDisc"
 
-_AggregateFunctionFeatures_stdev = (Core.Name "stdev")
+_AggregateFunctionFeatures_stdev = Core.Name "stdev"
 
-_AggregateFunctionFeatures_stdevp = (Core.Name "stdevp")
+_AggregateFunctionFeatures_stdevp = Core.Name "stdevp"
 
-_AggregateFunctionFeatures_sum = (Core.Name "sum")
+_AggregateFunctionFeatures_sum = Core.Name "sum"
 
 -- | Database functions
 data DatabaseFunctionFeatures = 
@@ -356,9 +356,9 @@ data DatabaseFunctionFeatures =
     databaseFunctionFeaturesDb_nameFromElementId :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_DatabaseFunctionFeatures = (Core.Name "hydra.ext.cypher.features.DatabaseFunctionFeatures")
+_DatabaseFunctionFeatures = Core.Name "hydra.ext.cypher.features.DatabaseFunctionFeatures"
 
-_DatabaseFunctionFeatures_db_nameFromElementId = (Core.Name "db.nameFromElementId")
+_DatabaseFunctionFeatures_db_nameFromElementId = Core.Name "db.nameFromElementId"
 
 -- | GenAI functions
 data GenAIFunctionFeatures = 
@@ -367,9 +367,9 @@ data GenAIFunctionFeatures =
     genAIFunctionFeaturesGenai_vector_encode :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_GenAIFunctionFeatures = (Core.Name "hydra.ext.cypher.features.GenAIFunctionFeatures")
+_GenAIFunctionFeatures = Core.Name "hydra.ext.cypher.features.GenAIFunctionFeatures"
 
-_GenAIFunctionFeatures_genai_vector_encode = (Core.Name "genai.vector.encode")
+_GenAIFunctionFeatures_genai_vector_encode = Core.Name "genai.vector.encode"
 
 -- | Graph functions
 data GraphFunctionFeatures = 
@@ -384,15 +384,15 @@ data GraphFunctionFeatures =
     graphFunctionFeaturesGraph_propertiesByName :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_GraphFunctionFeatures = (Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures")
+_GraphFunctionFeatures = Core.Name "hydra.ext.cypher.features.GraphFunctionFeatures"
 
-_GraphFunctionFeatures_graph_byElementId = (Core.Name "graph.byElementId")
+_GraphFunctionFeatures_graph_byElementId = Core.Name "graph.byElementId"
 
-_GraphFunctionFeatures_graph_byName = (Core.Name "graph.byName")
+_GraphFunctionFeatures_graph_byName = Core.Name "graph.byName"
 
-_GraphFunctionFeatures_graph_names = (Core.Name "graph.names")
+_GraphFunctionFeatures_graph_names = Core.Name "graph.names"
 
-_GraphFunctionFeatures_graph_propertiesByName = (Core.Name "graph.propertiesByName")
+_GraphFunctionFeatures_graph_propertiesByName = Core.Name "graph.propertiesByName"
 
 -- | List functions
 data ListFunctionFeatures = 
@@ -423,31 +423,31 @@ data ListFunctionFeatures =
     listFunctionFeaturesToStringList :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_ListFunctionFeatures = (Core.Name "hydra.ext.cypher.features.ListFunctionFeatures")
+_ListFunctionFeatures = Core.Name "hydra.ext.cypher.features.ListFunctionFeatures"
 
-_ListFunctionFeatures_keys = (Core.Name "keys")
+_ListFunctionFeatures_keys = Core.Name "keys"
 
-_ListFunctionFeatures_labels = (Core.Name "labels")
+_ListFunctionFeatures_labels = Core.Name "labels"
 
-_ListFunctionFeatures_nodes = (Core.Name "nodes")
+_ListFunctionFeatures_nodes = Core.Name "nodes"
 
-_ListFunctionFeatures_range = (Core.Name "range")
+_ListFunctionFeatures_range = Core.Name "range"
 
-_ListFunctionFeatures_reduce = (Core.Name "reduce")
+_ListFunctionFeatures_reduce = Core.Name "reduce"
 
-_ListFunctionFeatures_relationships = (Core.Name "relationships")
+_ListFunctionFeatures_relationships = Core.Name "relationships"
 
-_ListFunctionFeatures_reverse = (Core.Name "reverse")
+_ListFunctionFeatures_reverse = Core.Name "reverse"
 
-_ListFunctionFeatures_tail = (Core.Name "tail")
+_ListFunctionFeatures_tail = Core.Name "tail"
 
-_ListFunctionFeatures_toBooleanList = (Core.Name "toBooleanList")
+_ListFunctionFeatures_toBooleanList = Core.Name "toBooleanList"
 
-_ListFunctionFeatures_toFloatList = (Core.Name "toFloatList")
+_ListFunctionFeatures_toFloatList = Core.Name "toFloatList"
 
-_ListFunctionFeatures_toIntegerList = (Core.Name "toIntegerList")
+_ListFunctionFeatures_toIntegerList = Core.Name "toIntegerList"
 
-_ListFunctionFeatures_toStringList = (Core.Name "toStringList")
+_ListFunctionFeatures_toStringList = Core.Name "toStringList"
 
 -- | Load CSV functions
 data LoadCSVFunctionFeatures = 
@@ -458,11 +458,11 @@ data LoadCSVFunctionFeatures =
     loadCSVFunctionFeaturesLinenumber :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_LoadCSVFunctionFeatures = (Core.Name "hydra.ext.cypher.features.LoadCSVFunctionFeatures")
+_LoadCSVFunctionFeatures = Core.Name "hydra.ext.cypher.features.LoadCSVFunctionFeatures"
 
-_LoadCSVFunctionFeatures_file = (Core.Name "file")
+_LoadCSVFunctionFeatures_file = Core.Name "file"
 
-_LoadCSVFunctionFeatures_linenumber = (Core.Name "linenumber")
+_LoadCSVFunctionFeatures_linenumber = Core.Name "linenumber"
 
 -- | Logarithmic functions
 data LogarithmicFunctionFeatures = 
@@ -479,17 +479,17 @@ data LogarithmicFunctionFeatures =
     logarithmicFunctionFeaturesSqrt :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_LogarithmicFunctionFeatures = (Core.Name "hydra.ext.cypher.features.LogarithmicFunctionFeatures")
+_LogarithmicFunctionFeatures = Core.Name "hydra.ext.cypher.features.LogarithmicFunctionFeatures"
 
-_LogarithmicFunctionFeatures_e = (Core.Name "e")
+_LogarithmicFunctionFeatures_e = Core.Name "e"
 
-_LogarithmicFunctionFeatures_exp = (Core.Name "exp")
+_LogarithmicFunctionFeatures_exp = Core.Name "exp"
 
-_LogarithmicFunctionFeatures_log = (Core.Name "log")
+_LogarithmicFunctionFeatures_log = Core.Name "log"
 
-_LogarithmicFunctionFeatures_log10 = (Core.Name "log10")
+_LogarithmicFunctionFeatures_log10 = Core.Name "log10"
 
-_LogarithmicFunctionFeatures_sqrt = (Core.Name "sqrt")
+_LogarithmicFunctionFeatures_sqrt = Core.Name "sqrt"
 
 -- | Numeric functions
 data NumericFunctionFeatures = 
@@ -510,21 +510,21 @@ data NumericFunctionFeatures =
     numericFunctionFeaturesSign :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_NumericFunctionFeatures = (Core.Name "hydra.ext.cypher.features.NumericFunctionFeatures")
+_NumericFunctionFeatures = Core.Name "hydra.ext.cypher.features.NumericFunctionFeatures"
 
-_NumericFunctionFeatures_abs = (Core.Name "abs")
+_NumericFunctionFeatures_abs = Core.Name "abs"
 
-_NumericFunctionFeatures_ceil = (Core.Name "ceil")
+_NumericFunctionFeatures_ceil = Core.Name "ceil"
 
-_NumericFunctionFeatures_floor = (Core.Name "floor")
+_NumericFunctionFeatures_floor = Core.Name "floor"
 
-_NumericFunctionFeatures_isNaN = (Core.Name "isNaN")
+_NumericFunctionFeatures_isNaN = Core.Name "isNaN"
 
-_NumericFunctionFeatures_rand = (Core.Name "rand")
+_NumericFunctionFeatures_rand = Core.Name "rand"
 
-_NumericFunctionFeatures_round = (Core.Name "round")
+_NumericFunctionFeatures_round = Core.Name "round"
 
-_NumericFunctionFeatures_sign = (Core.Name "sign")
+_NumericFunctionFeatures_sign = Core.Name "sign"
 
 -- | Predicate functions
 data PredicateFunctionFeatures = 
@@ -543,19 +543,19 @@ data PredicateFunctionFeatures =
     predicateFunctionFeaturesSingle :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_PredicateFunctionFeatures = (Core.Name "hydra.ext.cypher.features.PredicateFunctionFeatures")
+_PredicateFunctionFeatures = Core.Name "hydra.ext.cypher.features.PredicateFunctionFeatures"
 
-_PredicateFunctionFeatures_all = (Core.Name "all")
+_PredicateFunctionFeatures_all = Core.Name "all"
 
-_PredicateFunctionFeatures_any = (Core.Name "any")
+_PredicateFunctionFeatures_any = Core.Name "any"
 
-_PredicateFunctionFeatures_exists = (Core.Name "exists")
+_PredicateFunctionFeatures_exists = Core.Name "exists"
 
-_PredicateFunctionFeatures_isEmpty = (Core.Name "isEmpty")
+_PredicateFunctionFeatures_isEmpty = Core.Name "isEmpty"
 
-_PredicateFunctionFeatures_none = (Core.Name "none")
+_PredicateFunctionFeatures_none = Core.Name "none"
 
-_PredicateFunctionFeatures_single = (Core.Name "single")
+_PredicateFunctionFeatures_single = Core.Name "single"
 
 -- | Scalar functions
 data ScalarFunctionFeatures = 
@@ -606,51 +606,51 @@ data ScalarFunctionFeatures =
     scalarFunctionFeaturesValueType :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_ScalarFunctionFeatures = (Core.Name "hydra.ext.cypher.features.ScalarFunctionFeatures")
+_ScalarFunctionFeatures = Core.Name "hydra.ext.cypher.features.ScalarFunctionFeatures"
 
-_ScalarFunctionFeatures_char_length = (Core.Name "char_length")
+_ScalarFunctionFeatures_char_length = Core.Name "char_length"
 
-_ScalarFunctionFeatures_character_length = (Core.Name "character_length")
+_ScalarFunctionFeatures_character_length = Core.Name "character_length"
 
-_ScalarFunctionFeatures_coalesce = (Core.Name "coalesce")
+_ScalarFunctionFeatures_coalesce = Core.Name "coalesce"
 
-_ScalarFunctionFeatures_elementId = (Core.Name "elementId")
+_ScalarFunctionFeatures_elementId = Core.Name "elementId"
 
-_ScalarFunctionFeatures_endNode = (Core.Name "endNode")
+_ScalarFunctionFeatures_endNode = Core.Name "endNode"
 
-_ScalarFunctionFeatures_head = (Core.Name "head")
+_ScalarFunctionFeatures_head = Core.Name "head"
 
-_ScalarFunctionFeatures_id = (Core.Name "id")
+_ScalarFunctionFeatures_id = Core.Name "id"
 
-_ScalarFunctionFeatures_last = (Core.Name "last")
+_ScalarFunctionFeatures_last = Core.Name "last"
 
-_ScalarFunctionFeatures_length = (Core.Name "length")
+_ScalarFunctionFeatures_length = Core.Name "length"
 
-_ScalarFunctionFeatures_nullIf = (Core.Name "nullIf")
+_ScalarFunctionFeatures_nullIf = Core.Name "nullIf"
 
-_ScalarFunctionFeatures_properties = (Core.Name "properties")
+_ScalarFunctionFeatures_properties = Core.Name "properties"
 
-_ScalarFunctionFeatures_randomUUID = (Core.Name "randomUUID")
+_ScalarFunctionFeatures_randomUUID = Core.Name "randomUUID"
 
-_ScalarFunctionFeatures_size = (Core.Name "size")
+_ScalarFunctionFeatures_size = Core.Name "size"
 
-_ScalarFunctionFeatures_startNode = (Core.Name "startNode")
+_ScalarFunctionFeatures_startNode = Core.Name "startNode"
 
-_ScalarFunctionFeatures_toBoolean = (Core.Name "toBoolean")
+_ScalarFunctionFeatures_toBoolean = Core.Name "toBoolean"
 
-_ScalarFunctionFeatures_toBooleanOrNull = (Core.Name "toBooleanOrNull")
+_ScalarFunctionFeatures_toBooleanOrNull = Core.Name "toBooleanOrNull"
 
-_ScalarFunctionFeatures_toFloat = (Core.Name "toFloat")
+_ScalarFunctionFeatures_toFloat = Core.Name "toFloat"
 
-_ScalarFunctionFeatures_toFloatOrNull = (Core.Name "toFloatOrNull")
+_ScalarFunctionFeatures_toFloatOrNull = Core.Name "toFloatOrNull"
 
-_ScalarFunctionFeatures_toInteger = (Core.Name "toInteger")
+_ScalarFunctionFeatures_toInteger = Core.Name "toInteger"
 
-_ScalarFunctionFeatures_toIntegerOrNull = (Core.Name "toIntegerOrNull")
+_ScalarFunctionFeatures_toIntegerOrNull = Core.Name "toIntegerOrNull"
 
-_ScalarFunctionFeatures_type = (Core.Name "type")
+_ScalarFunctionFeatures_type = Core.Name "type"
 
-_ScalarFunctionFeatures_valueType = (Core.Name "valueType")
+_ScalarFunctionFeatures_valueType = Core.Name "valueType"
 
 -- | Spatial functions
 data SpatialFunctionFeatures = 
@@ -663,13 +663,13 @@ data SpatialFunctionFeatures =
     spatialFunctionFeaturesPoint_withinBBox :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_SpatialFunctionFeatures = (Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures")
+_SpatialFunctionFeatures = Core.Name "hydra.ext.cypher.features.SpatialFunctionFeatures"
 
-_SpatialFunctionFeatures_point_distance = (Core.Name "point.distance")
+_SpatialFunctionFeatures_point_distance = Core.Name "point.distance"
 
-_SpatialFunctionFeatures_point = (Core.Name "point")
+_SpatialFunctionFeatures_point = Core.Name "point"
 
-_SpatialFunctionFeatures_point_withinBBox = (Core.Name "point.withinBBox")
+_SpatialFunctionFeatures_point_withinBBox = Core.Name "point.withinBBox"
 
 -- | String functions
 data StringFunctionFeatures = 
@@ -710,41 +710,41 @@ data StringFunctionFeatures =
     stringFunctionFeaturesUpper :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_StringFunctionFeatures = (Core.Name "hydra.ext.cypher.features.StringFunctionFeatures")
+_StringFunctionFeatures = Core.Name "hydra.ext.cypher.features.StringFunctionFeatures"
 
-_StringFunctionFeatures_btrim = (Core.Name "btrim")
+_StringFunctionFeatures_btrim = Core.Name "btrim"
 
-_StringFunctionFeatures_left = (Core.Name "left")
+_StringFunctionFeatures_left = Core.Name "left"
 
-_StringFunctionFeatures_lower = (Core.Name "lower")
+_StringFunctionFeatures_lower = Core.Name "lower"
 
-_StringFunctionFeatures_ltrim = (Core.Name "ltrim")
+_StringFunctionFeatures_ltrim = Core.Name "ltrim"
 
-_StringFunctionFeatures_normalize = (Core.Name "normalize")
+_StringFunctionFeatures_normalize = Core.Name "normalize"
 
-_StringFunctionFeatures_replace = (Core.Name "replace")
+_StringFunctionFeatures_replace = Core.Name "replace"
 
-_StringFunctionFeatures_reverse = (Core.Name "reverse")
+_StringFunctionFeatures_reverse = Core.Name "reverse"
 
-_StringFunctionFeatures_right = (Core.Name "right")
+_StringFunctionFeatures_right = Core.Name "right"
 
-_StringFunctionFeatures_rtrim = (Core.Name "rtrim")
+_StringFunctionFeatures_rtrim = Core.Name "rtrim"
 
-_StringFunctionFeatures_split = (Core.Name "split")
+_StringFunctionFeatures_split = Core.Name "split"
 
-_StringFunctionFeatures_substring = (Core.Name "substring")
+_StringFunctionFeatures_substring = Core.Name "substring"
 
-_StringFunctionFeatures_toLower = (Core.Name "toLower")
+_StringFunctionFeatures_toLower = Core.Name "toLower"
 
-_StringFunctionFeatures_toString = (Core.Name "toString")
+_StringFunctionFeatures_toString = Core.Name "toString"
 
-_StringFunctionFeatures_toStringOrNull = (Core.Name "toStringOrNull")
+_StringFunctionFeatures_toStringOrNull = Core.Name "toStringOrNull"
 
-_StringFunctionFeatures_toUpper = (Core.Name "toUpper")
+_StringFunctionFeatures_toUpper = Core.Name "toUpper"
 
-_StringFunctionFeatures_trim = (Core.Name "trim")
+_StringFunctionFeatures_trim = Core.Name "trim"
 
-_StringFunctionFeatures_upper = (Core.Name "upper")
+_StringFunctionFeatures_upper = Core.Name "upper"
 
 -- | Temporal duration functions
 data TemporalDurationFunctionFeatures = 
@@ -761,17 +761,17 @@ data TemporalDurationFunctionFeatures =
     temporalDurationFunctionFeaturesDuration_inSeconds :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_TemporalDurationFunctionFeatures = (Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures")
+_TemporalDurationFunctionFeatures = Core.Name "hydra.ext.cypher.features.TemporalDurationFunctionFeatures"
 
-_TemporalDurationFunctionFeatures_duration = (Core.Name "duration")
+_TemporalDurationFunctionFeatures_duration = Core.Name "duration"
 
-_TemporalDurationFunctionFeatures_duration_between = (Core.Name "duration.between")
+_TemporalDurationFunctionFeatures_duration_between = Core.Name "duration.between"
 
-_TemporalDurationFunctionFeatures_duration_inDays = (Core.Name "duration.inDays")
+_TemporalDurationFunctionFeatures_duration_inDays = Core.Name "duration.inDays"
 
-_TemporalDurationFunctionFeatures_duration_inMonths = (Core.Name "duration.inMonths")
+_TemporalDurationFunctionFeatures_duration_inMonths = Core.Name "duration.inMonths"
 
-_TemporalDurationFunctionFeatures_duration_inSeconds = (Core.Name "duration.inSeconds")
+_TemporalDurationFunctionFeatures_duration_inSeconds = Core.Name "duration.inSeconds"
 
 -- | Temporal instant functions
 data TemporalInstantFunctionFeatures = 
@@ -832,61 +832,61 @@ data TemporalInstantFunctionFeatures =
     temporalInstantFunctionFeaturesTime_truncate :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_TemporalInstantFunctionFeatures = (Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures")
+_TemporalInstantFunctionFeatures = Core.Name "hydra.ext.cypher.features.TemporalInstantFunctionFeatures"
 
-_TemporalInstantFunctionFeatures_date = (Core.Name "date")
+_TemporalInstantFunctionFeatures_date = Core.Name "date"
 
-_TemporalInstantFunctionFeatures_date_realtime = (Core.Name "date.realtime")
+_TemporalInstantFunctionFeatures_date_realtime = Core.Name "date.realtime"
 
-_TemporalInstantFunctionFeatures_date_statement = (Core.Name "date.statement")
+_TemporalInstantFunctionFeatures_date_statement = Core.Name "date.statement"
 
-_TemporalInstantFunctionFeatures_date_transaction = (Core.Name "date.transaction")
+_TemporalInstantFunctionFeatures_date_transaction = Core.Name "date.transaction"
 
-_TemporalInstantFunctionFeatures_date_truncate = (Core.Name "date.truncate")
+_TemporalInstantFunctionFeatures_date_truncate = Core.Name "date.truncate"
 
-_TemporalInstantFunctionFeatures_datetime = (Core.Name "datetime")
+_TemporalInstantFunctionFeatures_datetime = Core.Name "datetime"
 
-_TemporalInstantFunctionFeatures_datetime_fromepoch = (Core.Name "datetime.fromepoch")
+_TemporalInstantFunctionFeatures_datetime_fromepoch = Core.Name "datetime.fromepoch"
 
-_TemporalInstantFunctionFeatures_datetime_fromepochmillis = (Core.Name "datetime.fromepochmillis")
+_TemporalInstantFunctionFeatures_datetime_fromepochmillis = Core.Name "datetime.fromepochmillis"
 
-_TemporalInstantFunctionFeatures_datetime_realtime = (Core.Name "datetime.realtime")
+_TemporalInstantFunctionFeatures_datetime_realtime = Core.Name "datetime.realtime"
 
-_TemporalInstantFunctionFeatures_datetime_statement = (Core.Name "datetime.statement")
+_TemporalInstantFunctionFeatures_datetime_statement = Core.Name "datetime.statement"
 
-_TemporalInstantFunctionFeatures_datetime_transaction = (Core.Name "datetime.transaction")
+_TemporalInstantFunctionFeatures_datetime_transaction = Core.Name "datetime.transaction"
 
-_TemporalInstantFunctionFeatures_datetime_truncate = (Core.Name "datetime.truncate")
+_TemporalInstantFunctionFeatures_datetime_truncate = Core.Name "datetime.truncate"
 
-_TemporalInstantFunctionFeatures_localdatetime = (Core.Name "localdatetime")
+_TemporalInstantFunctionFeatures_localdatetime = Core.Name "localdatetime"
 
-_TemporalInstantFunctionFeatures_localdatetime_realtime = (Core.Name "localdatetime.realtime")
+_TemporalInstantFunctionFeatures_localdatetime_realtime = Core.Name "localdatetime.realtime"
 
-_TemporalInstantFunctionFeatures_localdatetime_statement = (Core.Name "localdatetime.statement")
+_TemporalInstantFunctionFeatures_localdatetime_statement = Core.Name "localdatetime.statement"
 
-_TemporalInstantFunctionFeatures_localdatetime_transaction = (Core.Name "localdatetime.transaction")
+_TemporalInstantFunctionFeatures_localdatetime_transaction = Core.Name "localdatetime.transaction"
 
-_TemporalInstantFunctionFeatures_localdatetime_truncate = (Core.Name "localdatetime.truncate")
+_TemporalInstantFunctionFeatures_localdatetime_truncate = Core.Name "localdatetime.truncate"
 
-_TemporalInstantFunctionFeatures_localtime = (Core.Name "localtime")
+_TemporalInstantFunctionFeatures_localtime = Core.Name "localtime"
 
-_TemporalInstantFunctionFeatures_localtime_realtime = (Core.Name "localtime.realtime")
+_TemporalInstantFunctionFeatures_localtime_realtime = Core.Name "localtime.realtime"
 
-_TemporalInstantFunctionFeatures_localtime_statement = (Core.Name "localtime.statement")
+_TemporalInstantFunctionFeatures_localtime_statement = Core.Name "localtime.statement"
 
-_TemporalInstantFunctionFeatures_localtime_transaction = (Core.Name "localtime.transaction")
+_TemporalInstantFunctionFeatures_localtime_transaction = Core.Name "localtime.transaction"
 
-_TemporalInstantFunctionFeatures_localtime_truncate = (Core.Name "localtime.truncate")
+_TemporalInstantFunctionFeatures_localtime_truncate = Core.Name "localtime.truncate"
 
-_TemporalInstantFunctionFeatures_time = (Core.Name "time")
+_TemporalInstantFunctionFeatures_time = Core.Name "time"
 
-_TemporalInstantFunctionFeatures_time_realtime = (Core.Name "time.realtime")
+_TemporalInstantFunctionFeatures_time_realtime = Core.Name "time.realtime"
 
-_TemporalInstantFunctionFeatures_time_statement = (Core.Name "time.statement")
+_TemporalInstantFunctionFeatures_time_statement = Core.Name "time.statement"
 
-_TemporalInstantFunctionFeatures_time_transaction = (Core.Name "time.transaction")
+_TemporalInstantFunctionFeatures_time_transaction = Core.Name "time.transaction"
 
-_TemporalInstantFunctionFeatures_time_truncate = (Core.Name "time.truncate")
+_TemporalInstantFunctionFeatures_time_truncate = Core.Name "time.truncate"
 
 -- | Trigonometric functions
 data TrigonometricFunctionFeatures = 
@@ -917,31 +917,31 @@ data TrigonometricFunctionFeatures =
     trigonometricFunctionFeaturesTan :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_TrigonometricFunctionFeatures = (Core.Name "hydra.ext.cypher.features.TrigonometricFunctionFeatures")
+_TrigonometricFunctionFeatures = Core.Name "hydra.ext.cypher.features.TrigonometricFunctionFeatures"
 
-_TrigonometricFunctionFeatures_acos = (Core.Name "acos")
+_TrigonometricFunctionFeatures_acos = Core.Name "acos"
 
-_TrigonometricFunctionFeatures_asin = (Core.Name "asin")
+_TrigonometricFunctionFeatures_asin = Core.Name "asin"
 
-_TrigonometricFunctionFeatures_atan = (Core.Name "atan")
+_TrigonometricFunctionFeatures_atan = Core.Name "atan"
 
-_TrigonometricFunctionFeatures_atan2 = (Core.Name "atan2")
+_TrigonometricFunctionFeatures_atan2 = Core.Name "atan2"
 
-_TrigonometricFunctionFeatures_cos = (Core.Name "cos")
+_TrigonometricFunctionFeatures_cos = Core.Name "cos"
 
-_TrigonometricFunctionFeatures_cot = (Core.Name "cot")
+_TrigonometricFunctionFeatures_cot = Core.Name "cot"
 
-_TrigonometricFunctionFeatures_degrees = (Core.Name "degrees")
+_TrigonometricFunctionFeatures_degrees = Core.Name "degrees"
 
-_TrigonometricFunctionFeatures_haversin = (Core.Name "haversin")
+_TrigonometricFunctionFeatures_haversin = Core.Name "haversin"
 
-_TrigonometricFunctionFeatures_pi = (Core.Name "pi")
+_TrigonometricFunctionFeatures_pi = Core.Name "pi"
 
-_TrigonometricFunctionFeatures_radians = (Core.Name "radians")
+_TrigonometricFunctionFeatures_radians = Core.Name "radians"
 
-_TrigonometricFunctionFeatures_sin = (Core.Name "sin")
+_TrigonometricFunctionFeatures_sin = Core.Name "sin"
 
-_TrigonometricFunctionFeatures_tan = (Core.Name "tan")
+_TrigonometricFunctionFeatures_tan = Core.Name "tan"
 
 -- | Vector functions
 data VectorFunctionFeatures = 
@@ -952,11 +952,11 @@ data VectorFunctionFeatures =
     vectorFunctionFeaturesVector_similarity_euclidean :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_VectorFunctionFeatures = (Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures")
+_VectorFunctionFeatures = Core.Name "hydra.ext.cypher.features.VectorFunctionFeatures"
 
-_VectorFunctionFeatures_vector_similarity_cosine = (Core.Name "vector.similarity.cosine")
+_VectorFunctionFeatures_vector_similarity_cosine = Core.Name "vector.similarity.cosine"
 
-_VectorFunctionFeatures_vector_similarity_euclidean = (Core.Name "vector.similarity.euclidean")
+_VectorFunctionFeatures_vector_similarity_euclidean = Core.Name "vector.similarity.euclidean"
 
 -- | List functionality
 data ListFeatures = 
@@ -967,11 +967,11 @@ data ListFeatures =
     listFeaturesListRange :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_ListFeatures = (Core.Name "hydra.ext.cypher.features.ListFeatures")
+_ListFeatures = Core.Name "hydra.ext.cypher.features.ListFeatures"
 
-_ListFeatures_listComprehension = (Core.Name "listComprehension")
+_ListFeatures_listComprehension = Core.Name "listComprehension"
 
-_ListFeatures_listRange = (Core.Name "listRange")
+_ListFeatures_listRange = Core.Name "listRange"
 
 -- | Various types of literal values
 data LiteralFeatures = 
@@ -992,21 +992,21 @@ data LiteralFeatures =
     literalFeaturesString :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_LiteralFeatures = (Core.Name "hydra.ext.cypher.features.LiteralFeatures")
+_LiteralFeatures = Core.Name "hydra.ext.cypher.features.LiteralFeatures"
 
-_LiteralFeatures_boolean = (Core.Name "boolean")
+_LiteralFeatures_boolean = Core.Name "boolean"
 
-_LiteralFeatures_double = (Core.Name "double")
+_LiteralFeatures_double = Core.Name "double"
 
-_LiteralFeatures_integer = (Core.Name "integer")
+_LiteralFeatures_integer = Core.Name "integer"
 
-_LiteralFeatures_list = (Core.Name "list")
+_LiteralFeatures_list = Core.Name "list"
 
-_LiteralFeatures_map = (Core.Name "map")
+_LiteralFeatures_map = Core.Name "map"
 
-_LiteralFeatures_null = (Core.Name "null")
+_LiteralFeatures_null = Core.Name "null"
 
-_LiteralFeatures_string = (Core.Name "string")
+_LiteralFeatures_string = Core.Name "string"
 
 -- | Logical operations
 data LogicalFeatures = 
@@ -1021,15 +1021,15 @@ data LogicalFeatures =
     logicalFeaturesXor :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_LogicalFeatures = (Core.Name "hydra.ext.cypher.features.LogicalFeatures")
+_LogicalFeatures = Core.Name "hydra.ext.cypher.features.LogicalFeatures"
 
-_LogicalFeatures_and = (Core.Name "and")
+_LogicalFeatures_and = Core.Name "and"
 
-_LogicalFeatures_not = (Core.Name "not")
+_LogicalFeatures_not = Core.Name "not"
 
-_LogicalFeatures_or = (Core.Name "or")
+_LogicalFeatures_or = Core.Name "or"
 
-_LogicalFeatures_xor = (Core.Name "xor")
+_LogicalFeatures_xor = Core.Name "xor"
 
 -- | Match queries
 data MatchFeatures = 
@@ -1040,11 +1040,11 @@ data MatchFeatures =
     matchFeaturesOptionalMatch :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_MatchFeatures = (Core.Name "hydra.ext.cypher.features.MatchFeatures")
+_MatchFeatures = Core.Name "hydra.ext.cypher.features.MatchFeatures"
 
-_MatchFeatures_match = (Core.Name "match")
+_MatchFeatures_match = Core.Name "match"
 
-_MatchFeatures_optionalMatch = (Core.Name "optionalMatch")
+_MatchFeatures_optionalMatch = Core.Name "optionalMatch"
 
 -- | Merge operations
 data MergeFeatures = 
@@ -1057,13 +1057,13 @@ data MergeFeatures =
     mergeFeaturesMergeOnMatch :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_MergeFeatures = (Core.Name "hydra.ext.cypher.features.MergeFeatures")
+_MergeFeatures = Core.Name "hydra.ext.cypher.features.MergeFeatures"
 
-_MergeFeatures_merge = (Core.Name "merge")
+_MergeFeatures_merge = Core.Name "merge"
 
-_MergeFeatures_mergeOnCreate = (Core.Name "mergeOnCreate")
+_MergeFeatures_mergeOnCreate = Core.Name "mergeOnCreate"
 
-_MergeFeatures_mergeOnMatch = (Core.Name "mergeOnMatch")
+_MergeFeatures_mergeOnMatch = Core.Name "mergeOnMatch"
 
 -- | Node patterns
 data NodePatternFeatures = 
@@ -1080,17 +1080,17 @@ data NodePatternFeatures =
     nodePatternFeaturesWildcardLabel :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_NodePatternFeatures = (Core.Name "hydra.ext.cypher.features.NodePatternFeatures")
+_NodePatternFeatures = Core.Name "hydra.ext.cypher.features.NodePatternFeatures"
 
-_NodePatternFeatures_multipleLabels = (Core.Name "multipleLabels")
+_NodePatternFeatures_multipleLabels = Core.Name "multipleLabels"
 
-_NodePatternFeatures_parameter = (Core.Name "parameter")
+_NodePatternFeatures_parameter = Core.Name "parameter"
 
-_NodePatternFeatures_propertyMap = (Core.Name "propertyMap")
+_NodePatternFeatures_propertyMap = Core.Name "propertyMap"
 
-_NodePatternFeatures_variableNode = (Core.Name "variableNode")
+_NodePatternFeatures_variableNode = Core.Name "variableNode"
 
-_NodePatternFeatures_wildcardLabel = (Core.Name "wildcardLabel")
+_NodePatternFeatures_wildcardLabel = Core.Name "wildcardLabel"
 
 -- | IS NULL / IS NOT NULL checks
 data NullFeatures = 
@@ -1101,11 +1101,11 @@ data NullFeatures =
     nullFeaturesIsNotNull :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_NullFeatures = (Core.Name "hydra.ext.cypher.features.NullFeatures")
+_NullFeatures = Core.Name "hydra.ext.cypher.features.NullFeatures"
 
-_NullFeatures_isNull = (Core.Name "isNull")
+_NullFeatures_isNull = Core.Name "isNull"
 
-_NullFeatures_isNotNull = (Core.Name "isNotNull")
+_NullFeatures_isNotNull = Core.Name "isNotNull"
 
 -- | Path functions only found in OpenCypher
 data PathFeatures = 
@@ -1114,9 +1114,9 @@ data PathFeatures =
     pathFeaturesShortestPath :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_PathFeatures = (Core.Name "hydra.ext.cypher.features.PathFeatures")
+_PathFeatures = Core.Name "hydra.ext.cypher.features.PathFeatures"
 
-_PathFeatures_shortestPath = (Core.Name "shortestPath")
+_PathFeatures_shortestPath = Core.Name "shortestPath"
 
 -- | Procedure calls
 data ProcedureCallFeatures = 
@@ -1129,13 +1129,13 @@ data ProcedureCallFeatures =
     procedureCallFeaturesYield :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_ProcedureCallFeatures = (Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures")
+_ProcedureCallFeatures = Core.Name "hydra.ext.cypher.features.ProcedureCallFeatures"
 
-_ProcedureCallFeatures_inQueryCall = (Core.Name "inQueryCall")
+_ProcedureCallFeatures_inQueryCall = Core.Name "inQueryCall"
 
-_ProcedureCallFeatures_standaloneCall = (Core.Name "standaloneCall")
+_ProcedureCallFeatures_standaloneCall = Core.Name "standaloneCall"
 
-_ProcedureCallFeatures_yield = (Core.Name "yield")
+_ProcedureCallFeatures_yield = Core.Name "yield"
 
 -- | Projections
 data ProjectionFeatures = 
@@ -1156,21 +1156,21 @@ data ProjectionFeatures =
     projectionFeaturesSortOrder :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_ProjectionFeatures = (Core.Name "hydra.ext.cypher.features.ProjectionFeatures")
+_ProjectionFeatures = Core.Name "hydra.ext.cypher.features.ProjectionFeatures"
 
-_ProjectionFeatures_limit = (Core.Name "limit")
+_ProjectionFeatures_limit = Core.Name "limit"
 
-_ProjectionFeatures_orderBy = (Core.Name "orderBy")
+_ProjectionFeatures_orderBy = Core.Name "orderBy"
 
-_ProjectionFeatures_projectDistinct = (Core.Name "projectDistinct")
+_ProjectionFeatures_projectDistinct = Core.Name "projectDistinct"
 
-_ProjectionFeatures_projectAll = (Core.Name "projectAll")
+_ProjectionFeatures_projectAll = Core.Name "projectAll"
 
-_ProjectionFeatures_projectAs = (Core.Name "projectAs")
+_ProjectionFeatures_projectAs = Core.Name "projectAs"
 
-_ProjectionFeatures_skip = (Core.Name "skip")
+_ProjectionFeatures_skip = Core.Name "skip"
 
-_ProjectionFeatures_sortOrder = (Core.Name "sortOrder")
+_ProjectionFeatures_sortOrder = Core.Name "sortOrder"
 
 -- | Quantifier expressions
 data QuantifierFeatures = 
@@ -1185,15 +1185,15 @@ data QuantifierFeatures =
     quantifierFeaturesSingle :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_QuantifierFeatures = (Core.Name "hydra.ext.cypher.features.QuantifierFeatures")
+_QuantifierFeatures = Core.Name "hydra.ext.cypher.features.QuantifierFeatures"
 
-_QuantifierFeatures_all = (Core.Name "all")
+_QuantifierFeatures_all = Core.Name "all"
 
-_QuantifierFeatures_any = (Core.Name "any")
+_QuantifierFeatures_any = Core.Name "any"
 
-_QuantifierFeatures_none = (Core.Name "none")
+_QuantifierFeatures_none = Core.Name "none"
 
-_QuantifierFeatures_single = (Core.Name "single")
+_QuantifierFeatures_single = Core.Name "single"
 
 -- | Range literals within relationship patterns
 data RangeLiteralFeatures = 
@@ -1210,17 +1210,17 @@ data RangeLiteralFeatures =
     rangeLiteralFeaturesUpperBound :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_RangeLiteralFeatures = (Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures")
+_RangeLiteralFeatures = Core.Name "hydra.ext.cypher.features.RangeLiteralFeatures"
 
-_RangeLiteralFeatures_bounds = (Core.Name "bounds")
+_RangeLiteralFeatures_bounds = Core.Name "bounds"
 
-_RangeLiteralFeatures_exactRange = (Core.Name "exactRange")
+_RangeLiteralFeatures_exactRange = Core.Name "exactRange"
 
-_RangeLiteralFeatures_lowerBound = (Core.Name "lowerBound")
+_RangeLiteralFeatures_lowerBound = Core.Name "lowerBound"
 
-_RangeLiteralFeatures_starRange = (Core.Name "starRange")
+_RangeLiteralFeatures_starRange = Core.Name "starRange"
 
-_RangeLiteralFeatures_upperBound = (Core.Name "upperBound")
+_RangeLiteralFeatures_upperBound = Core.Name "upperBound"
 
 -- | Specific syntax related to reading data from the graph.
 data ReadingFeatures = 
@@ -1233,13 +1233,13 @@ data ReadingFeatures =
     readingFeaturesUnwind :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_ReadingFeatures = (Core.Name "hydra.ext.cypher.features.ReadingFeatures")
+_ReadingFeatures = Core.Name "hydra.ext.cypher.features.ReadingFeatures"
 
-_ReadingFeatures_union = (Core.Name "union")
+_ReadingFeatures_union = Core.Name "union"
 
-_ReadingFeatures_unionAll = (Core.Name "unionAll")
+_ReadingFeatures_unionAll = Core.Name "unionAll"
 
-_ReadingFeatures_unwind = (Core.Name "unwind")
+_ReadingFeatures_unwind = Core.Name "unwind"
 
 -- | Relationship directions / arrow patterns
 data RelationshipDirectionFeatures = 
@@ -1254,15 +1254,15 @@ data RelationshipDirectionFeatures =
     relationshipDirectionFeaturesRight :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_RelationshipDirectionFeatures = (Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures")
+_RelationshipDirectionFeatures = Core.Name "hydra.ext.cypher.features.RelationshipDirectionFeatures"
 
-_RelationshipDirectionFeatures_both = (Core.Name "both")
+_RelationshipDirectionFeatures_both = Core.Name "both"
 
-_RelationshipDirectionFeatures_left = (Core.Name "left")
+_RelationshipDirectionFeatures_left = Core.Name "left"
 
-_RelationshipDirectionFeatures_neither = (Core.Name "neither")
+_RelationshipDirectionFeatures_neither = Core.Name "neither"
 
-_RelationshipDirectionFeatures_right = (Core.Name "right")
+_RelationshipDirectionFeatures_right = Core.Name "right"
 
 -- | Relationship patterns
 data RelationshipPatternFeatures = 
@@ -1275,13 +1275,13 @@ data RelationshipPatternFeatures =
     relationshipPatternFeaturesWildcardType :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_RelationshipPatternFeatures = (Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures")
+_RelationshipPatternFeatures = Core.Name "hydra.ext.cypher.features.RelationshipPatternFeatures"
 
-_RelationshipPatternFeatures_multipleTypes = (Core.Name "multipleTypes")
+_RelationshipPatternFeatures_multipleTypes = Core.Name "multipleTypes"
 
-_RelationshipPatternFeatures_variableRelationship = (Core.Name "variableRelationship")
+_RelationshipPatternFeatures_variableRelationship = Core.Name "variableRelationship"
 
-_RelationshipPatternFeatures_wildcardType = (Core.Name "wildcardType")
+_RelationshipPatternFeatures_wildcardType = Core.Name "wildcardType"
 
 -- | REMOVE operations
 data RemoveFeatures = 
@@ -1292,11 +1292,11 @@ data RemoveFeatures =
     removeFeaturesByProperty :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_RemoveFeatures = (Core.Name "hydra.ext.cypher.features.RemoveFeatures")
+_RemoveFeatures = Core.Name "hydra.ext.cypher.features.RemoveFeatures"
 
-_RemoveFeatures_byLabel = (Core.Name "byLabel")
+_RemoveFeatures_byLabel = Core.Name "byLabel"
 
-_RemoveFeatures_byProperty = (Core.Name "byProperty")
+_RemoveFeatures_byProperty = Core.Name "byProperty"
 
 -- | Set definitions
 data SetFeatures = 
@@ -1311,15 +1311,15 @@ data SetFeatures =
     setFeaturesVariableWithNodeLabels :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_SetFeatures = (Core.Name "hydra.ext.cypher.features.SetFeatures")
+_SetFeatures = Core.Name "hydra.ext.cypher.features.SetFeatures"
 
-_SetFeatures_propertyEquals = (Core.Name "propertyEquals")
+_SetFeatures_propertyEquals = Core.Name "propertyEquals"
 
-_SetFeatures_variableEquals = (Core.Name "variableEquals")
+_SetFeatures_variableEquals = Core.Name "variableEquals"
 
-_SetFeatures_variablePlusEquals = (Core.Name "variablePlusEquals")
+_SetFeatures_variablePlusEquals = Core.Name "variablePlusEquals"
 
-_SetFeatures_variableWithNodeLabels = (Core.Name "variableWithNodeLabels")
+_SetFeatures_variableWithNodeLabels = Core.Name "variableWithNodeLabels"
 
 -- | String functions/keywords only found in OpenCypher
 data StringFeatures = 
@@ -1334,15 +1334,15 @@ data StringFeatures =
     stringFeaturesStartsWith :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_StringFeatures = (Core.Name "hydra.ext.cypher.features.StringFeatures")
+_StringFeatures = Core.Name "hydra.ext.cypher.features.StringFeatures"
 
-_StringFeatures_contains = (Core.Name "contains")
+_StringFeatures_contains = Core.Name "contains"
 
-_StringFeatures_endsWith = (Core.Name "endsWith")
+_StringFeatures_endsWith = Core.Name "endsWith"
 
-_StringFeatures_in = (Core.Name "in")
+_StringFeatures_in = Core.Name "in"
 
-_StringFeatures_startsWith = (Core.Name "startsWith")
+_StringFeatures_startsWith = Core.Name "startsWith"
 
 -- | Specific syntax related to updating data in the graph
 data UpdatingFeatures = 
@@ -1355,10 +1355,10 @@ data UpdatingFeatures =
     updatingFeaturesWith :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_UpdatingFeatures = (Core.Name "hydra.ext.cypher.features.UpdatingFeatures")
+_UpdatingFeatures = Core.Name "hydra.ext.cypher.features.UpdatingFeatures"
 
-_UpdatingFeatures_create = (Core.Name "create")
+_UpdatingFeatures_create = Core.Name "create"
 
-_UpdatingFeatures_set = (Core.Name "set")
+_UpdatingFeatures_set = Core.Name "set"
 
-_UpdatingFeatures_with = (Core.Name "with")
+_UpdatingFeatures_with = Core.Name "with"

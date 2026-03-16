@@ -47,7 +47,7 @@ public interface Grammars {
   
   static hydra.module.Module grammarToModule(hydra.module.Namespace ns, hydra.grammar.Grammar grammar, hydra.util.Maybe<String> desc) {
     hydra.util.Lazy<hydra.util.ConsList<hydra.util.Pair<String, hydra.grammar.Pattern>>> prodPairs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
-      (java.util.function.Function<hydra.grammar.Production, hydra.util.Pair<String, hydra.grammar.Pattern>>) (prod -> (hydra.util.Pair<String, hydra.grammar.Pattern>) ((hydra.util.Pair<String, hydra.grammar.Pattern>) (new hydra.util.Pair<String, hydra.grammar.Pattern>(((prod).symbol).value, (prod).pattern)))),
+      (java.util.function.Function<hydra.grammar.Production, hydra.util.Pair<String, hydra.grammar.Pattern>>) (prod -> (hydra.util.Pair<String, hydra.grammar.Pattern>) ((hydra.util.Pair<String, hydra.grammar.Pattern>) (new hydra.util.Pair<String, hydra.grammar.Pattern>((prod).symbol.value, (prod).pattern)))),
       (grammar).value));
     hydra.util.Lazy<hydra.util.ConsList<String>> capitalizedNames = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
       (java.util.function.Function<hydra.util.Pair<String, hydra.grammar.Pattern>, String>) (pair -> hydra.formatting.Formatting.capitalize(hydra.lib.pairs.First.apply(pair))),
@@ -89,7 +89,7 @@ public interface Grammars {
       
       @Override
       public Boolean visit(hydra.grammar.Pattern.Labeled lp) {
-        return hydra.grammars.Grammars.isComplex(((lp).value).pattern);
+        return hydra.grammars.Grammars.isComplex((lp).value.pattern);
       }
       
       @Override
@@ -161,7 +161,7 @@ public interface Grammars {
     forPat.set((java.util.function.Function<hydra.grammar.Pattern, hydra.util.ConsList<hydra.util.Pair<String, hydra.core.Type>>>) (pat2 -> (pat2).accept(new hydra.grammar.Pattern.PartialVisitor<>() {
       @Override
       public hydra.util.ConsList<hydra.util.Pair<String, hydra.core.Type>> visit(hydra.grammar.Pattern.Alternatives pats) {
-        return (((forRecordOrUnion.get()).apply(false)).apply((java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.core.Type>) (fields -> new hydra.core.Type.Union(fields)))).apply((pats).value);
+        return forRecordOrUnion.get().apply(false).apply((java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.core.Type>) (fields -> new hydra.core.Type.Union(fields))).apply((pats).value);
       }
       
       @Override
@@ -176,7 +176,7 @@ public interface Grammars {
       
       @Override
       public hydra.util.ConsList<hydra.util.Pair<String, hydra.core.Type>> visit(hydra.grammar.Pattern.Labeled lp) {
-        return (forPat.get()).apply(((lp).value).pattern);
+        return forPat.get().apply((lp).value.pattern);
       }
       
       @Override
@@ -188,17 +188,17 @@ public interface Grammars {
       public hydra.util.ConsList<hydra.util.Pair<String, hydra.core.Type>> visit(hydra.grammar.Pattern.Nonterminal s) {
         return hydra.util.ConsList.of((hydra.util.Pair<String, hydra.core.Type>) ((hydra.util.Pair<String, hydra.core.Type>) (new hydra.util.Pair<String, hydra.core.Type>(lname, new hydra.core.Type.Variable(hydra.grammars.Grammars.toName(
           ns,
-          ((s).value).value))))));
+          (s).value.value))))));
       }
       
       @Override
       public hydra.util.ConsList<hydra.util.Pair<String, hydra.core.Type>> visit(hydra.grammar.Pattern.Option p) {
-        return (((mod).apply("Option")).apply((java.util.function.Function<hydra.core.Type, hydra.core.Type>) (x -> new hydra.core.Type.Maybe(x)))).apply((p).value);
+        return (mod).apply("Option").apply((java.util.function.Function<hydra.core.Type, hydra.core.Type>) (x -> new hydra.core.Type.Maybe(x))).apply((p).value);
       }
       
       @Override
       public hydra.util.ConsList<hydra.util.Pair<String, hydra.core.Type>> visit(hydra.grammar.Pattern.Plus p) {
-        return (((mod).apply("Elmt")).apply((java.util.function.Function<hydra.core.Type, hydra.core.Type>) (x -> new hydra.core.Type.List(x)))).apply((p).value);
+        return (mod).apply("Elmt").apply((java.util.function.Function<hydra.core.Type, hydra.core.Type>) (x -> new hydra.core.Type.List(x))).apply((p).value);
       }
       
       @Override
@@ -208,12 +208,12 @@ public interface Grammars {
       
       @Override
       public hydra.util.ConsList<hydra.util.Pair<String, hydra.core.Type>> visit(hydra.grammar.Pattern.Sequence pats) {
-        return (((forRecordOrUnion.get()).apply(true)).apply((java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.core.Type>) (fields -> new hydra.core.Type.Record(fields)))).apply((pats).value);
+        return forRecordOrUnion.get().apply(true).apply((java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.core.Type>) (fields -> new hydra.core.Type.Record(fields))).apply((pats).value);
       }
       
       @Override
       public hydra.util.ConsList<hydra.util.Pair<String, hydra.core.Type>> visit(hydra.grammar.Pattern.Star p) {
-        return (((mod).apply("Elmt")).apply((java.util.function.Function<hydra.core.Type, hydra.core.Type>) (x -> new hydra.core.Type.List(x)))).apply((p).value);
+        return (mod).apply("Elmt").apply((java.util.function.Function<hydra.core.Type, hydra.core.Type>) (x -> new hydra.core.Type.List(x))).apply((p).value);
       }
     })));
     forRecordOrUnion.set((java.util.function.Function<Boolean, java.util.function.Function<java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.core.Type>, java.util.function.Function<hydra.util.ConsList<hydra.grammar.Pattern>, hydra.util.ConsList<hydra.util.Pair<String, hydra.core.Type>>>>>) (isRecord -> (java.util.function.Function<java.util.function.Function<hydra.util.ConsList<hydra.core.FieldType>, hydra.core.Type>, java.util.function.Function<hydra.util.ConsList<hydra.grammar.Pattern>, hydra.util.ConsList<hydra.util.Pair<String, hydra.core.Type>>>>) (construct -> (java.util.function.Function<hydra.util.ConsList<hydra.grammar.Pattern>, hydra.util.ConsList<hydra.util.Pair<String, hydra.core.Type>>>) (pats -> {
@@ -256,17 +256,17 @@ public interface Grammars {
         () -> hydra.lib.lists.Cons.apply(
           (hydra.util.Pair<String, hydra.core.Type>) ((hydra.util.Pair<String, hydra.core.Type>) (new hydra.util.Pair<String, hydra.core.Type>(lname, (construct).apply(fields.get())))),
           els.get()),
-        () -> (forPat.get()).apply(hydra.lib.lists.Head.apply(minPats)));
+        () -> forPat.get().apply(hydra.lib.lists.Head.apply(minPats)));
     }))));
-    return (forPat.get()).apply(pat);
+    return forPat.get().apply(pat);
   }
   
   static <T0> T0 makeElements_descend(java.util.function.Function<String, java.util.function.Function<String, String>> hydra_grammars_childName2, java.util.function.Function<hydra.grammar.Pattern, Boolean> hydra_grammars_isComplex2, java.util.function.Function<Boolean, java.util.function.Function<hydra.module.Namespace, java.util.function.Function<String, java.util.function.Function<hydra.grammar.Pattern, hydra.util.ConsList<hydra.util.Pair<String, hydra.core.Type>>>>>> hydra_grammars_makeElements2, java.util.function.Function<hydra.module.Namespace, java.util.function.Function<String, hydra.core.Name>> hydra_grammars_toName2, String lname, hydra.module.Namespace ns, String n, java.util.function.Function<hydra.util.ConsList<hydra.util.Pair<String, hydra.core.Type>>, T0> f, hydra.grammar.Pattern p) {
-    hydra.util.ConsList<hydra.util.Pair<String, hydra.core.Type>> cpairs = ((((hydra_grammars_makeElements2).apply(false)).apply(ns)).apply(((hydra_grammars_childName2).apply(lname)).apply(n))).apply(p);
+    hydra.util.ConsList<hydra.util.Pair<String, hydra.core.Type>> cpairs = (hydra_grammars_makeElements2).apply(false).apply(ns).apply((hydra_grammars_childName2).apply(lname).apply(n)).apply(p);
     return (f).apply(hydra.lib.logic.IfElse.lazy(
       (hydra_grammars_isComplex2).apply(p),
       () -> hydra.lib.lists.Cons.apply(
-        (hydra.util.Pair<String, hydra.core.Type>) ((hydra.util.Pair<String, hydra.core.Type>) (new hydra.util.Pair<String, hydra.core.Type>(lname, new hydra.core.Type.Variable(((hydra_grammars_toName2).apply(ns)).apply(hydra.lib.pairs.First.apply(hydra.lib.lists.Head.apply(cpairs))))))),
+        (hydra.util.Pair<String, hydra.core.Type>) ((hydra.util.Pair<String, hydra.core.Type>) (new hydra.util.Pair<String, hydra.core.Type>(lname, new hydra.core.Type.Variable((hydra_grammars_toName2).apply(ns).apply(hydra.lib.pairs.First.apply(hydra.lib.lists.Head.apply(cpairs))))))),
         cpairs),
       () -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(cpairs),
@@ -285,7 +285,7 @@ public interface Grammars {
       
       @Override
       public String visit(hydra.grammar.Pattern.Constant c) {
-        return hydra.formatting.Formatting.capitalize(hydra.formatting.Formatting.withCharacterAliases(((c).value).value));
+        return hydra.formatting.Formatting.capitalize(hydra.formatting.Formatting.withCharacterAliases((c).value.value));
       }
       
       @Override
@@ -295,7 +295,7 @@ public interface Grammars {
       
       @Override
       public String visit(hydra.grammar.Pattern.Labeled lp) {
-        return (((lp).value).label).value;
+        return (lp).value.label.value;
       }
       
       @Override
@@ -305,7 +305,7 @@ public interface Grammars {
       
       @Override
       public String visit(hydra.grammar.Pattern.Nonterminal s) {
-        return hydra.formatting.Formatting.capitalize(((s).value).value);
+        return hydra.formatting.Formatting.capitalize((s).value.value);
       }
       
       @Override

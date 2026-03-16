@@ -63,7 +63,7 @@ public abstract class LambdaBody implements Serializable, Comparable<LambdaBody>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(LambdaBody other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -103,7 +103,7 @@ public abstract class LambdaBody implements Serializable, Comparable<LambdaBody>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(LambdaBody other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

@@ -69,7 +69,7 @@ public abstract class Assertion implements Serializable, Comparable<Assertion> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Assertion other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -112,7 +112,7 @@ public abstract class Assertion implements Serializable, Comparable<Assertion> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Assertion other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

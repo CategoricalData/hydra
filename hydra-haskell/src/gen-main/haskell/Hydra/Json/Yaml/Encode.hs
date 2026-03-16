@@ -20,15 +20,16 @@ import qualified Data.Map as M
 import qualified Data.Set as S
 
 -- | Convert a JSON value to a YAML node. Always succeeds since YAML is a superset of JSON.
-jsonToYaml :: (Model_.Value -> Model.Node)
-jsonToYaml value = ((\x -> case x of
-  Model_.ValueArray v0 -> (Model.NodeSequence (Lists.map (\v -> jsonToYaml v) v0))
-  Model_.ValueBoolean v0 -> (Model.NodeScalar (Model.ScalarBool v0))
-  Model_.ValueNull -> (Model.NodeScalar Model.ScalarNull)
-  Model_.ValueNumber v0 -> (Model.NodeScalar (Model.ScalarFloat v0))
-  Model_.ValueObject v0 -> (Model.NodeMapping (Maps.fromList (Lists.map (\kv -> (Model.NodeScalar (Model.ScalarStr (Pairs.first kv)), (jsonToYaml (Pairs.second kv)))) (Maps.toList v0))))
-  Model_.ValueString v0 -> (Model.NodeScalar (Model.ScalarStr v0))) value)
+jsonToYaml :: Model_.Value -> Model.Node
+jsonToYaml value =
+    case value of
+      Model_.ValueArray v0 -> Model.NodeSequence (Lists.map (\v -> jsonToYaml v) v0)
+      Model_.ValueBoolean v0 -> Model.NodeScalar (Model.ScalarBool v0)
+      Model_.ValueNull -> Model.NodeScalar Model.ScalarNull
+      Model_.ValueNumber v0 -> Model.NodeScalar (Model.ScalarFloat v0)
+      Model_.ValueObject v0 -> Model.NodeMapping (Maps.fromList (Lists.map (\kv -> (Model.NodeScalar (Model.ScalarStr (Pairs.first kv)), (jsonToYaml (Pairs.second kv)))) (Maps.toList v0)))
+      Model_.ValueString v0 -> Model.NodeScalar (Model.ScalarStr v0)
 
 -- | Encode a Hydra term to a YAML node via JSON encoding.
-toYaml :: (Core.Term -> Either String Model.Node)
-toYaml term = (Eithers.map (\v -> jsonToYaml v) (Encode.toJson term))
+toYaml :: Core.Term -> Either String Model.Node
+toYaml term = Eithers.map (\v -> jsonToYaml v) (Encode.toJson term)

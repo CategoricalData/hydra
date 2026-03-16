@@ -25,15 +25,15 @@ data AdjacentEdge v =
     adjacentEdgeProperties :: (M.Map PropertyKey v)}
   deriving (Eq, Ord, Read, Show)
 
-_AdjacentEdge = (Core.Name "hydra.pg.model.AdjacentEdge")
+_AdjacentEdge = Core.Name "hydra.pg.model.AdjacentEdge"
 
-_AdjacentEdge_label = (Core.Name "label")
+_AdjacentEdge_label = Core.Name "label"
 
-_AdjacentEdge_id = (Core.Name "id")
+_AdjacentEdge_id = Core.Name "id"
 
-_AdjacentEdge_vertex = (Core.Name "vertex")
+_AdjacentEdge_vertex = Core.Name "vertex"
 
-_AdjacentEdge_properties = (Core.Name "properties")
+_AdjacentEdge_properties = Core.Name "properties"
 
 -- | The direction of an edge or edge pattern
 data Direction = 
@@ -43,15 +43,15 @@ data Direction =
   DirectionUndirected 
   deriving (Eq, Ord, Read, Show)
 
-_Direction = (Core.Name "hydra.pg.model.Direction")
+_Direction = Core.Name "hydra.pg.model.Direction"
 
-_Direction_out = (Core.Name "out")
+_Direction_out = Core.Name "out"
 
-_Direction_in = (Core.Name "in")
+_Direction_in = Core.Name "in"
 
-_Direction_both = (Core.Name "both")
+_Direction_both = Core.Name "both"
 
-_Direction_undirected = (Core.Name "undirected")
+_Direction_undirected = Core.Name "undirected"
 
 -- | An edge
 data Edge v = 
@@ -68,17 +68,17 @@ data Edge v =
     edgeProperties :: (M.Map PropertyKey v)}
   deriving (Eq, Ord, Read, Show)
 
-_Edge = (Core.Name "hydra.pg.model.Edge")
+_Edge = Core.Name "hydra.pg.model.Edge"
 
-_Edge_label = (Core.Name "label")
+_Edge_label = Core.Name "label"
 
-_Edge_id = (Core.Name "id")
+_Edge_id = Core.Name "id"
 
-_Edge_out = (Core.Name "out")
+_Edge_out = Core.Name "out"
 
-_Edge_in = (Core.Name "in")
+_Edge_in = Core.Name "in"
 
-_Edge_properties = (Core.Name "properties")
+_Edge_properties = Core.Name "properties"
 
 -- | The label of an edge
 newtype EdgeLabel = 
@@ -86,7 +86,7 @@ newtype EdgeLabel =
     unEdgeLabel :: String}
   deriving (Eq, Ord, Read, Show)
 
-_EdgeLabel = (Core.Name "hydra.pg.model.EdgeLabel")
+_EdgeLabel = Core.Name "hydra.pg.model.EdgeLabel"
 
 -- | The type of an edge
 data EdgeType t = 
@@ -103,17 +103,17 @@ data EdgeType t =
     edgeTypeProperties :: [PropertyType t]}
   deriving (Eq, Ord, Read, Show)
 
-_EdgeType = (Core.Name "hydra.pg.model.EdgeType")
+_EdgeType = Core.Name "hydra.pg.model.EdgeType"
 
-_EdgeType_label = (Core.Name "label")
+_EdgeType_label = Core.Name "label"
 
-_EdgeType_id = (Core.Name "id")
+_EdgeType_id = Core.Name "id"
 
-_EdgeType_out = (Core.Name "out")
+_EdgeType_out = Core.Name "out"
 
-_EdgeType_in = (Core.Name "in")
+_EdgeType_in = Core.Name "in"
 
-_EdgeType_properties = (Core.Name "properties")
+_EdgeType_properties = Core.Name "properties"
 
 -- | Either a vertex or an edge
 data Element v = 
@@ -121,11 +121,11 @@ data Element v =
   ElementEdge (Edge v)
   deriving (Eq, Ord, Read, Show)
 
-_Element = (Core.Name "hydra.pg.model.Element")
+_Element = Core.Name "hydra.pg.model.Element"
 
-_Element_vertex = (Core.Name "vertex")
+_Element_vertex = Core.Name "vertex"
 
-_Element_edge = (Core.Name "edge")
+_Element_edge = Core.Name "edge"
 
 -- | The kind of an element: vertex or edge
 data ElementKind = 
@@ -133,11 +133,11 @@ data ElementKind =
   ElementKindEdge 
   deriving (Eq, Ord, Read, Show)
 
-_ElementKind = (Core.Name "hydra.pg.model.ElementKind")
+_ElementKind = Core.Name "hydra.pg.model.ElementKind"
 
-_ElementKind_vertex = (Core.Name "vertex")
+_ElementKind_vertex = Core.Name "vertex"
 
-_ElementKind_edge = (Core.Name "edge")
+_ElementKind_edge = Core.Name "edge"
 
 -- | An element together with its dependencies in some context
 data ElementTree v = 
@@ -146,11 +146,11 @@ data ElementTree v =
     elementTreeDependencies :: [ElementTree v]}
   deriving (Eq, Ord, Read, Show)
 
-_ElementTree = (Core.Name "hydra.pg.model.ElementTree")
+_ElementTree = Core.Name "hydra.pg.model.ElementTree"
 
-_ElementTree_self = (Core.Name "self")
+_ElementTree_self = Core.Name "self"
 
-_ElementTree_dependencies = (Core.Name "dependencies")
+_ElementTree_dependencies = Core.Name "dependencies"
 
 -- | The type of a vertex or edge
 data ElementType t = 
@@ -158,11 +158,11 @@ data ElementType t =
   ElementTypeEdge (EdgeType t)
   deriving (Eq, Ord, Read, Show)
 
-_ElementType = (Core.Name "hydra.pg.model.ElementType")
+_ElementType = Core.Name "hydra.pg.model.ElementType"
 
-_ElementType_vertex = (Core.Name "vertex")
+_ElementType_vertex = Core.Name "vertex"
 
-_ElementType_edge = (Core.Name "edge")
+_ElementType_edge = Core.Name "edge"
 
 -- | An element type together with its dependencies in some context
 data ElementTypeTree t = 
@@ -171,11 +171,11 @@ data ElementTypeTree t =
     elementTypeTreeDependencies :: [ElementTypeTree t]}
   deriving (Eq, Ord, Read, Show)
 
-_ElementTypeTree = (Core.Name "hydra.pg.model.ElementTypeTree")
+_ElementTypeTree = Core.Name "hydra.pg.model.ElementTypeTree"
 
-_ElementTypeTree_self = (Core.Name "self")
+_ElementTypeTree_self = Core.Name "self"
 
-_ElementTypeTree_dependencies = (Core.Name "dependencies")
+_ElementTypeTree_dependencies = Core.Name "dependencies"
 
 -- | A graph; a self-contained collection of vertices and edges
 data Graph v = 
@@ -184,11 +184,11 @@ data Graph v =
     graphEdges :: (M.Map v (Edge v))}
   deriving (Eq, Ord, Read, Show)
 
-_Graph = (Core.Name "hydra.pg.model.Graph")
+_Graph = Core.Name "hydra.pg.model.Graph"
 
-_Graph_vertices = (Core.Name "vertices")
+_Graph_vertices = Core.Name "vertices"
 
-_Graph_edges = (Core.Name "edges")
+_Graph_edges = Core.Name "edges"
 
 -- | A graph schema; a vertex and edge types for the vertices and edges of a graph conforming to the schema
 data GraphSchema t = 
@@ -199,11 +199,11 @@ data GraphSchema t =
     graphSchemaEdges :: (M.Map EdgeLabel (EdgeType t))}
   deriving (Eq, Ord, Read, Show)
 
-_GraphSchema = (Core.Name "hydra.pg.model.GraphSchema")
+_GraphSchema = Core.Name "hydra.pg.model.GraphSchema"
 
-_GraphSchema_vertices = (Core.Name "vertices")
+_GraphSchema_vertices = Core.Name "vertices"
 
-_GraphSchema_edges = (Core.Name "edges")
+_GraphSchema_edges = Core.Name "edges"
 
 -- | Either a vertex or edge label
 data Label = 
@@ -211,11 +211,11 @@ data Label =
   LabelEdge EdgeLabel
   deriving (Eq, Ord, Read, Show)
 
-_Label = (Core.Name "hydra.pg.model.Label")
+_Label = Core.Name "hydra.pg.model.Label"
 
-_Label_vertex = (Core.Name "vertex")
+_Label_vertex = Core.Name "vertex"
 
-_Label_edge = (Core.Name "edge")
+_Label_edge = Core.Name "edge"
 
 -- | A graph which does not assume that vertex or edge ids are unique. This is useful in mappings because the id specifications for vertices and/or edges may be non-unique.
 data LazyGraph v = 
@@ -224,11 +224,11 @@ data LazyGraph v =
     lazyGraphEdges :: [Edge v]}
   deriving (Eq, Ord, Read, Show)
 
-_LazyGraph = (Core.Name "hydra.pg.model.LazyGraph")
+_LazyGraph = Core.Name "hydra.pg.model.LazyGraph"
 
-_LazyGraph_vertices = (Core.Name "vertices")
+_LazyGraph_vertices = Core.Name "vertices"
 
-_LazyGraph_edges = (Core.Name "edges")
+_LazyGraph_edges = Core.Name "edges"
 
 -- | A key/value property
 data Property v = 
@@ -239,11 +239,11 @@ data Property v =
     propertyValue :: v}
   deriving (Eq, Ord, Read, Show)
 
-_Property = (Core.Name "hydra.pg.model.Property")
+_Property = Core.Name "hydra.pg.model.Property"
 
-_Property_key = (Core.Name "key")
+_Property_key = Core.Name "key"
 
-_Property_value = (Core.Name "value")
+_Property_value = Core.Name "value"
 
 -- | A property key
 newtype PropertyKey = 
@@ -251,7 +251,7 @@ newtype PropertyKey =
     unPropertyKey :: String}
   deriving (Eq, Ord, Read, Show)
 
-_PropertyKey = (Core.Name "hydra.pg.model.PropertyKey")
+_PropertyKey = Core.Name "hydra.pg.model.PropertyKey"
 
 -- | The type of a property
 data PropertyType t = 
@@ -264,13 +264,13 @@ data PropertyType t =
     propertyTypeRequired :: Bool}
   deriving (Eq, Ord, Read, Show)
 
-_PropertyType = (Core.Name "hydra.pg.model.PropertyType")
+_PropertyType = Core.Name "hydra.pg.model.PropertyType"
 
-_PropertyType_key = (Core.Name "key")
+_PropertyType_key = Core.Name "key"
 
-_PropertyType_value = (Core.Name "value")
+_PropertyType_value = Core.Name "value"
 
-_PropertyType_required = (Core.Name "required")
+_PropertyType_required = Core.Name "required"
 
 -- | A vertex
 data Vertex v = 
@@ -283,13 +283,13 @@ data Vertex v =
     vertexProperties :: (M.Map PropertyKey v)}
   deriving (Eq, Ord, Read, Show)
 
-_Vertex = (Core.Name "hydra.pg.model.Vertex")
+_Vertex = Core.Name "hydra.pg.model.Vertex"
 
-_Vertex_label = (Core.Name "label")
+_Vertex_label = Core.Name "label"
 
-_Vertex_id = (Core.Name "id")
+_Vertex_id = Core.Name "id"
 
-_Vertex_properties = (Core.Name "properties")
+_Vertex_properties = Core.Name "properties"
 
 -- | The label of a vertex. The default (null) vertex is represented by the empty string
 newtype VertexLabel = 
@@ -297,7 +297,7 @@ newtype VertexLabel =
     unVertexLabel :: String}
   deriving (Eq, Ord, Read, Show)
 
-_VertexLabel = (Core.Name "hydra.pg.model.VertexLabel")
+_VertexLabel = Core.Name "hydra.pg.model.VertexLabel"
 
 -- | The type of a vertex
 data VertexType t = 
@@ -310,13 +310,13 @@ data VertexType t =
     vertexTypeProperties :: [PropertyType t]}
   deriving (Eq, Ord, Read, Show)
 
-_VertexType = (Core.Name "hydra.pg.model.VertexType")
+_VertexType = Core.Name "hydra.pg.model.VertexType"
 
-_VertexType_label = (Core.Name "label")
+_VertexType_label = Core.Name "label"
 
-_VertexType_id = (Core.Name "id")
+_VertexType_id = Core.Name "id"
 
-_VertexType_properties = (Core.Name "properties")
+_VertexType_properties = Core.Name "properties"
 
 -- | A vertex together with any outgoing and/or incoming edges; a vertex object
 data VertexWithAdjacentEdges v = 
@@ -329,10 +329,10 @@ data VertexWithAdjacentEdges v =
     vertexWithAdjacentEdgesOuts :: [AdjacentEdge v]}
   deriving (Eq, Ord, Read, Show)
 
-_VertexWithAdjacentEdges = (Core.Name "hydra.pg.model.VertexWithAdjacentEdges")
+_VertexWithAdjacentEdges = Core.Name "hydra.pg.model.VertexWithAdjacentEdges"
 
-_VertexWithAdjacentEdges_vertex = (Core.Name "vertex")
+_VertexWithAdjacentEdges_vertex = Core.Name "vertex"
 
-_VertexWithAdjacentEdges_ins = (Core.Name "ins")
+_VertexWithAdjacentEdges_ins = Core.Name "ins"
 
-_VertexWithAdjacentEdges_outs = (Core.Name "outs")
+_VertexWithAdjacentEdges_outs = Core.Name "outs"

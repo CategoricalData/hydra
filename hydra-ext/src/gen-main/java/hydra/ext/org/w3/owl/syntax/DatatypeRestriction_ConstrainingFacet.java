@@ -66,7 +66,7 @@ public abstract class DatatypeRestriction_ConstrainingFacet implements Serializa
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(DatatypeRestriction_ConstrainingFacet other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -106,7 +106,7 @@ public abstract class DatatypeRestriction_ConstrainingFacet implements Serializa
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(DatatypeRestriction_ConstrainingFacet other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

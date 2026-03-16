@@ -22,8 +22,8 @@ public interface Reduction {
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type> visit(hydra.core.Type.Annotated at) {
           return hydra.lib.eithers.Bind.apply(
-            (reduceApp.get()).apply(new hydra.core.ApplicationType(((at).value).body, rhs)),
-            (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>>) (a -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>right(new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(a, ((at).value).annotation)))));
+            reduceApp.get().apply(new hydra.core.ApplicationType((at).value.body, rhs)),
+            (java.util.function.Function<hydra.core.Type, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>>) (a -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Type>right(new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(a, (at).value.annotation)))));
         }
         
         @Override
@@ -32,9 +32,9 @@ public interface Reduction {
             cx,
             graph,
             hydra.rewriting.Rewriting.replaceFreeTypeVariable(
-              ((ft).value).parameter,
+              (ft).value.parameter,
               rhs,
-              ((ft).value).body));
+              (ft).value.body));
         }
         
         @Override
@@ -102,9 +102,9 @@ public interface Reduction {
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.Application app) {
-        hydra.core.Term lhs = ((app).value).function;
-        hydra.core.Term rhs = ((app).value).argument;
-        return ((hydra_rewriting_deannotateTerm2).apply(lhs)).accept(new hydra.core.Term.PartialVisitor<>() {
+        hydra.core.Term lhs = (app).value.function;
+        hydra.core.Term rhs = (app).value.argument;
+        return (hydra_rewriting_deannotateTerm2).apply(lhs).accept(new hydra.core.Term.PartialVisitor<>() {
           @Override
           public hydra.core.Term otherwise(hydra.core.Term instance) {
             return rec;
@@ -112,7 +112,7 @@ public interface Reduction {
           
           @Override
           public hydra.core.Term visit(hydra.core.Term.Function f) {
-            return ((f).value).accept(new hydra.core.Function.PartialVisitor<>() {
+            return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
               @Override
               public hydra.core.Term otherwise(hydra.core.Function instance) {
                 return rec;
@@ -120,12 +120,12 @@ public interface Reduction {
               
               @Override
               public hydra.core.Term visit(hydra.core.Function.Lambda l) {
-                hydra.core.Term body = ((l).value).body;
-                hydra.core.Name v = ((l).value).parameter;
+                hydra.core.Term body = (l).value.body;
+                hydra.core.Name v = (l).value.parameter;
                 return hydra.lib.logic.IfElse.lazy(
-                  ((hydra_rewriting_isFreeVariableInTerm2).apply(v)).apply(body),
+                  (hydra_rewriting_isFreeVariableInTerm2).apply(v).apply(body),
                   () -> body,
-                  () -> (((hydra_rewriting_replaceFreeTermVariable2).apply(v)).apply(rhs)).apply(body));
+                  () -> (hydra_rewriting_replaceFreeTermVariable2).apply(v).apply(rhs).apply(body));
               }
             });
           }
@@ -145,7 +145,7 @@ public interface Reduction {
       hydra.core.Term body = (l).body;
       hydra.util.Maybe<hydra.core.Type> d = (l).domain;
       hydra.core.Name v = (l).parameter;
-      return (hydra.reduction.Reduction.etaReduceTerm(body)).accept(new hydra.core.Term.PartialVisitor<>() {
+      return hydra.reduction.Reduction.etaReduceTerm(body).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.core.Term otherwise(hydra.core.Term instance) {
           return noChange;
@@ -153,14 +153,14 @@ public interface Reduction {
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Annotated at) {
-          return (reduceLambda.get()).apply(new hydra.core.Lambda(v, d, ((at).value).body));
+          return reduceLambda.get().apply(new hydra.core.Lambda(v, d, (at).value.body));
         }
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Application app) {
-          hydra.core.Term lhs = ((app).value).function;
-          hydra.core.Term rhs = ((app).value).argument;
-          return (hydra.reduction.Reduction.etaReduceTerm(rhs)).accept(new hydra.core.Term.PartialVisitor<>() {
+          hydra.core.Term lhs = (app).value.function;
+          hydra.core.Term rhs = (app).value.argument;
+          return hydra.reduction.Reduction.etaReduceTerm(rhs).accept(new hydra.core.Term.PartialVisitor<>() {
             @Override
             public hydra.core.Term otherwise(hydra.core.Term instance) {
               return noChange;
@@ -168,7 +168,7 @@ public interface Reduction {
             
             @Override
             public hydra.core.Term visit(hydra.core.Term.Annotated at) {
-              return (reduceLambda.get()).apply(new hydra.core.Lambda(v, d, new hydra.core.Term.Application(new hydra.core.Application(lhs, ((at).value).body))));
+              return reduceLambda.get().apply(new hydra.core.Lambda(v, d, new hydra.core.Term.Application(new hydra.core.Application(lhs, (at).value.body))));
             }
             
             @Override
@@ -177,7 +177,7 @@ public interface Reduction {
                 hydra.lib.logic.And.apply(
                   hydra.lib.equality.Equal.apply(
                     (v).value,
-                    ((v1).value).value),
+                    (v1).value.value),
                   hydra.lib.logic.Not.apply(hydra.rewriting.Rewriting.isFreeVariableInTerm(
                     v,
                     lhs))),
@@ -196,12 +196,12 @@ public interface Reduction {
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.Annotated at) {
-        return new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(hydra.reduction.Reduction.etaReduceTerm(((at).value).body), ((at).value).annotation));
+        return new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(hydra.reduction.Reduction.etaReduceTerm((at).value.body), (at).value.annotation));
       }
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.Function f) {
-        return ((f).value).accept(new hydra.core.Function.PartialVisitor<>() {
+        return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
           @Override
           public hydra.core.Term otherwise(hydra.core.Function instance) {
             return noChange;
@@ -209,7 +209,7 @@ public interface Reduction {
           
           @Override
           public hydra.core.Term visit(hydra.core.Function.Lambda l) {
-            return (reduceLambda.get()).apply((l).value);
+            return reduceLambda.get().apply((l).value);
           }
         });
       }
@@ -238,16 +238,16 @@ public interface Reduction {
         () -> t2,
         () -> new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(new hydra.core.Name(hydra.lib.strings.Cat2.apply(
           "v",
-          hydra.lib.literals.ShowInt32.apply(hydra.lib.lists.Head.apply(indices)))), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), ((pad.get()).apply(hydra.lib.lists.Tail.apply(indices))).apply(new hydra.core.Term.Application(new hydra.core.Application(t2, new hydra.core.Term.Variable(new hydra.core.Name(hydra.lib.strings.Cat2.apply(
+          hydra.lib.literals.ShowInt32.apply(hydra.lib.lists.Head.apply(indices)))), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), pad.get().apply(hydra.lib.lists.Tail.apply(indices)).apply(new hydra.core.Term.Application(new hydra.core.Application(t2, new hydra.core.Term.Variable(new hydra.core.Name(hydra.lib.strings.Cat2.apply(
           "v",
           hydra.lib.literals.ShowInt32.apply(hydra.lib.lists.Head.apply(indices)))))))))))))));
-      return ((pad.get()).apply(is.get())).apply(apps.get());
+      return pad.get().apply(is.get()).apply(apps.get());
     })));
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>>> rewrite = new java.util.concurrent.atomic.AtomicReference<>();
     rewrite.set((java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>>) (args -> (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (recurse -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> {
-      java.util.function.Function<hydra.core.Term, hydra.core.Term> afterRecursion = (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (term2 -> (((expand).apply(args)).apply(hydra.reduction.Reduction.etaExpansionArity(
+      java.util.function.Function<hydra.core.Term, hydra.core.Term> afterRecursion = (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (term2 -> (expand).apply(args).apply(hydra.reduction.Reduction.etaExpansionArity(
         graph,
-        term2))).apply(term2));
+        term2)).apply(term2));
       hydra.core.Term t2 = hydra.rewriting.Rewriting.detypeTerm(t);
       return (t2).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
@@ -257,17 +257,17 @@ public interface Reduction {
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Application app) {
-          hydra.core.Term rhs = ((app).value).argument;
-          hydra.util.Lazy<hydra.core.Term> erhs = new hydra.util.Lazy<>(() -> (((rewrite.get()).apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()))).apply(recurse)).apply(rhs));
-          hydra.core.Term lhs = ((app).value).function;
-          return (((rewrite.get()).apply(hydra.lib.lists.Cons.apply(
+          hydra.core.Term rhs = (app).value.argument;
+          hydra.util.Lazy<hydra.core.Term> erhs = new hydra.util.Lazy<>(() -> rewrite.get().apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty())).apply(recurse).apply(rhs));
+          hydra.core.Term lhs = (app).value.function;
+          return rewrite.get().apply(hydra.lib.lists.Cons.apply(
             erhs.get(),
-            args))).apply(recurse)).apply(lhs);
+            args)).apply(recurse).apply(lhs);
         }
       });
     }))));
     return hydra.reduction.Reduction.contractTerm(hydra.rewriting.Rewriting.rewriteTerm(
-      (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (v2 -> (((rewrite.get()).apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()))).apply(v1)).apply(v2))),
+      (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (v2 -> rewrite.get().apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty())).apply(v1).apply(v2))),
       term));
   }
   
@@ -297,25 +297,25 @@ public interface Reduction {
           @Override
           public hydra.util.ConsList<hydra.util.Maybe<hydra.core.Type>> visit(hydra.core.Type.Function ftyp) {
             return hydra.lib.lists.Cons.apply(
-              hydra.util.Maybe.just(((ftyp).value).domain),
-              ((domainTypes.get()).apply(hydra.lib.math.Sub.apply(
+              hydra.util.Maybe.just((ftyp).value.domain),
+              domainTypes.get().apply(hydra.lib.math.Sub.apply(
                 n,
-                1))).apply(hydra.util.Maybe.just(((ftyp).value).codomain)));
+                1)).apply(hydra.util.Maybe.just((ftyp).value.codomain)));
           }
           
           @Override
           public hydra.util.ConsList<hydra.util.Maybe<hydra.core.Type>> visit(hydra.core.Type.Annotated at) {
-            return ((domainTypes.get()).apply(n)).apply(hydra.util.Maybe.just(((at).value).body));
+            return domainTypes.get().apply(n).apply(hydra.util.Maybe.just((at).value.body));
           }
           
           @Override
           public hydra.util.ConsList<hydra.util.Maybe<hydra.core.Type>> visit(hydra.core.Type.Application atyp) {
-            return ((domainTypes.get()).apply(n)).apply(hydra.util.Maybe.just(((atyp).value).function));
+            return domainTypes.get().apply(n).apply(hydra.util.Maybe.just((atyp).value.function));
           }
           
           @Override
           public hydra.util.ConsList<hydra.util.Maybe<hydra.core.Type>> visit(hydra.core.Type.Forall ft) {
-            return ((domainTypes.get()).apply(n)).apply(hydra.util.Maybe.just(((ft).value).body));
+            return domainTypes.get().apply(n).apply(hydra.util.Maybe.just((ft).value.body));
           }
         })),
         mt)))));
@@ -335,24 +335,24 @@ public interface Reduction {
           
           @Override
           public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Type.Function ftyp) {
-            return ((peelFunctionDomains.get()).apply(hydra.util.Maybe.just(((ftyp).value).codomain))).apply(hydra.lib.math.Sub.apply(
+            return peelFunctionDomains.get().apply(hydra.util.Maybe.just((ftyp).value.codomain)).apply(hydra.lib.math.Sub.apply(
               n,
               1));
           }
           
           @Override
           public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Type.Annotated at) {
-            return ((peelFunctionDomains.get()).apply(hydra.util.Maybe.just(((at).value).body))).apply(n);
+            return peelFunctionDomains.get().apply(hydra.util.Maybe.just((at).value.body)).apply(n);
           }
           
           @Override
           public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Type.Application atyp) {
-            return ((peelFunctionDomains.get()).apply(hydra.util.Maybe.just(((atyp).value).function))).apply(n);
+            return peelFunctionDomains.get().apply(hydra.util.Maybe.just((atyp).value.function)).apply(n);
           }
           
           @Override
           public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Type.Forall ft) {
-            return ((peelFunctionDomains.get()).apply(hydra.util.Maybe.just(((ft).value).body))).apply(n);
+            return peelFunctionDomains.get().apply(hydra.util.Maybe.just((ft).value.body)).apply(n);
           }
         })),
         mtyp)))));
@@ -380,11 +380,11 @@ public interface Reduction {
             1,
             needed);
           return ((java.util.function.Supplier<hydra.core.Term>) (() -> {
-            hydra.util.Maybe<hydra.core.Type> remainingType = ((peelFunctionDomains.get()).apply(headTyp)).apply(numArgs.get());
+            hydra.util.Maybe<hydra.core.Type> remainingType = peelFunctionDomains.get().apply(headTyp).apply(numArgs.get());
             return ((java.util.function.Supplier<hydra.core.Term>) (() -> {
-              hydra.util.ConsList<hydra.util.Maybe<hydra.core.Type>> domains = ((domainTypes.get()).apply(needed)).apply(remainingType);
+              hydra.util.ConsList<hydra.util.Maybe<hydra.core.Type>> domains = domainTypes.get().apply(needed).apply(remainingType);
               return ((java.util.function.Supplier<hydra.core.Term>) (() -> {
-                hydra.util.Maybe<hydra.core.Type> codomainType = ((peelFunctionDomains.get()).apply(remainingType)).apply(needed);
+                hydra.util.Maybe<hydra.core.Type> codomainType = peelFunctionDomains.get().apply(remainingType).apply(needed);
                 return ((java.util.function.Supplier<hydra.core.Term>) (() -> {
                   hydra.util.Lazy<hydra.core.Term> fullyAppliedRaw = new hydra.util.Lazy<>(() -> hydra.lib.lists.Foldl.apply(
                     (java.util.function.Function<hydra.core.Term, java.util.function.Function<Integer, hydra.core.Term>>) (body -> (java.util.function.Function<Integer, hydra.core.Term>) (i -> {
@@ -435,19 +435,19 @@ public interface Reduction {
       
       @Override
       public Integer visit(hydra.core.Term.Annotated at) {
-        return ((termArityWithContext.get()).apply(tx)).apply(((at).value).body);
+        return termArityWithContext.get().apply(tx).apply((at).value.body);
       }
       
       @Override
       public Integer visit(hydra.core.Term.Application app) {
         return hydra.lib.math.Sub.apply(
-          ((termArityWithContext.get()).apply(tx)).apply(((app).value).function),
+          termArityWithContext.get().apply(tx).apply((app).value.function),
           1);
       }
       
       @Override
       public Integer visit(hydra.core.Term.Function f) {
-        return ((f).value).accept(new hydra.core.Function.PartialVisitor<>() {
+        return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
           @Override
           public Integer visit(hydra.core.Function.Elimination ignored) {
             return 1;
@@ -474,22 +474,22 @@ public interface Reduction {
       
       @Override
       public Integer visit(hydra.core.Term.Let l) {
-        return ((termArityWithContext.get()).apply(hydra.schemas.Schemas.extendGraphForLet(
+        return termArityWithContext.get().apply(hydra.schemas.Schemas.extendGraphForLet(
           (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (ignored -> (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>) (_2 -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))),
           tx,
-          (l).value))).apply(((l).value).body);
+          (l).value)).apply((l).value.body);
       }
       
       @Override
       public Integer visit(hydra.core.Term.TypeLambda tl) {
-        return ((termArityWithContext.get()).apply(hydra.schemas.Schemas.extendGraphForTypeLambda(
+        return termArityWithContext.get().apply(hydra.schemas.Schemas.extendGraphForTypeLambda(
           tx,
-          (tl).value))).apply(((tl).value).body);
+          (tl).value)).apply((tl).value.body);
       }
       
       @Override
       public Integer visit(hydra.core.Term.TypeApplication tat) {
-        return ((termArityWithContext.get()).apply(tx)).apply(((tat).value).body);
+        return termArityWithContext.get().apply(tx).apply((tat).value.body);
       }
       
       @Override
@@ -515,12 +515,12 @@ public interface Reduction {
         
         @Override
         public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Term.Annotated at2) {
-          return ((termHeadType.get()).apply(tx2)).apply(((at2).value).body);
+          return termHeadType.get().apply(tx2).apply((at2).value.body);
         }
         
         @Override
         public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Term.Function f2) {
-          return ((f2).value).accept(new hydra.core.Function.PartialVisitor<>() {
+          return (f2).value.accept(new hydra.core.Function.PartialVisitor<>() {
             @Override
             public hydra.util.Maybe<hydra.core.Type> otherwise(hydra.core.Function instance) {
               return (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing());
@@ -541,23 +541,23 @@ public interface Reduction {
         
         @Override
         public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Term.Let l2) {
-          return ((termHeadType.get()).apply(hydra.schemas.Schemas.extendGraphForLet(
+          return termHeadType.get().apply(hydra.schemas.Schemas.extendGraphForLet(
             (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (ignored -> (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>) (_2 -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))),
             tx2,
-            (l2).value))).apply(((l2).value).body);
+            (l2).value)).apply((l2).value.body);
         }
         
         @Override
         public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Term.TypeLambda tl2) {
-          return ((termHeadType.get()).apply(hydra.schemas.Schemas.extendGraphForTypeLambda(
+          return termHeadType.get().apply(hydra.schemas.Schemas.extendGraphForTypeLambda(
             tx2,
-            (tl2).value))).apply(((tl2).value).body);
+            (tl2).value)).apply((tl2).value.body);
         }
         
         @Override
         public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Term.TypeApplication tat2) {
           return hydra.lib.maybes.Bind.apply(
-            ((termHeadType.get()).apply(tx2)).apply(((tat2).value).body),
+            termHeadType.get().apply(tx2).apply((tat2).value.body),
             (java.util.function.Function<hydra.core.Type, hydra.util.Maybe<hydra.core.Type>>) (htyp2 -> (htyp2).accept(new hydra.core.Type.PartialVisitor<>() {
               @Override
               public hydra.util.Maybe<hydra.core.Type> otherwise(hydra.core.Type instance) {
@@ -567,9 +567,9 @@ public interface Reduction {
               @Override
               public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Type.Forall ft2) {
                 return hydra.util.Maybe.just(hydra.rewriting.Rewriting.replaceFreeTypeVariable(
-                  ((ft2).value).parameter,
-                  ((tat2).value).type,
-                  ((ft2).value).body));
+                  (ft2).value.parameter,
+                  (tat2).value.type,
+                  (ft2).value.body));
               }
             })));
         }
@@ -584,16 +584,16 @@ public interface Reduction {
         }
       }))));
       java.util.function.Function<hydra.core.Term, hydra.core.Term> afterRecursion = (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (trm -> {
-        Integer arity = ((termArityWithContext.get()).apply(tx)).apply(trm);
-        hydra.util.Maybe<hydra.core.Type> hType = ((termHeadType.get()).apply(tx)).apply(trm);
-        return (((((expand).apply(false)).apply(args)).apply(arity)).apply(hType)).apply(trm);
+        Integer arity = termArityWithContext.get().apply(tx).apply(trm);
+        hydra.util.Maybe<hydra.core.Type> hType = termHeadType.get().apply(tx).apply(trm);
+        return (expand).apply(false).apply(args).apply(arity).apply(hType).apply(trm);
       });
-      java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.core.Term>> recurse = (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (tx1 -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (term1 -> (((rewriteWithArgs.get()).apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()))).apply(tx1)).apply(term1)));
+      java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.core.Term>> recurse = (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (tx1 -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (term1 -> rewriteWithArgs.get().apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty())).apply(tx1).apply(term1)));
       java.util.function.Function<hydra.core.Field, hydra.core.Field> forCaseBranch = (java.util.function.Function<hydra.core.Field, hydra.core.Field>) (f -> {
-        hydra.core.Term branchBody = ((recurse).apply(tx)).apply((f).term);
-        Integer arty = ((termArityWithContext.get()).apply(tx)).apply(branchBody);
-        hydra.util.Maybe<hydra.core.Type> branchHType = ((termHeadType.get()).apply(tx)).apply(branchBody);
-        return new hydra.core.Field((f).name, (((((expand).apply(true)).apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()))).apply(arty)).apply(branchHType)).apply(branchBody));
+        hydra.core.Term branchBody = (recurse).apply(tx).apply((f).term);
+        Integer arty = termArityWithContext.get().apply(tx).apply(branchBody);
+        hydra.util.Maybe<hydra.core.Type> branchHType = termHeadType.get().apply(tx).apply(branchBody);
+        return new hydra.core.Field((f).name, (expand).apply(true).apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty())).apply(arty).apply(branchHType).apply(branchBody));
       });
       java.util.function.Function<hydra.core.Elimination, hydra.core.Elimination> forElimination = (java.util.function.Function<hydra.core.Elimination, hydra.core.Elimination>) (elm -> (elm).accept(new hydra.core.Elimination.PartialVisitor<>() {
         @Override
@@ -603,11 +603,11 @@ public interface Reduction {
         
         @Override
         public hydra.core.Elimination visit(hydra.core.Elimination.Union cs) {
-          return new hydra.core.Elimination.Union(new hydra.core.CaseStatement(((cs).value).typeName, hydra.lib.maybes.Map.apply(
-            (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t1 -> ((recurse).apply(tx)).apply(t1)),
-            ((cs).value).default_), hydra.lib.lists.Map.apply(
+          return new hydra.core.Elimination.Union(new hydra.core.CaseStatement((cs).value.typeName, hydra.lib.maybes.Map.apply(
+            (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t1 -> (recurse).apply(tx).apply(t1)),
+            (cs).value.default_), hydra.lib.lists.Map.apply(
             forCaseBranch,
-            ((cs).value).cases)));
+            (cs).value.cases)));
         }
         
         @Override
@@ -615,9 +615,9 @@ public interface Reduction {
           return new hydra.core.Elimination.Wrap((nm).value);
         }
       }));
-      java.util.function.Function<hydra.core.Field, hydra.core.Field> forField = (java.util.function.Function<hydra.core.Field, hydra.core.Field>) (f -> new hydra.core.Field((f).name, ((recurse).apply(tx)).apply((f).term)));
+      java.util.function.Function<hydra.core.Field, hydra.core.Field> forField = (java.util.function.Function<hydra.core.Field, hydra.core.Field>) (f -> new hydra.core.Field((f).name, (recurse).apply(tx).apply((f).term)));
       java.util.function.Function<hydra.util.PersistentMap<hydra.core.Term, hydra.core.Term>, hydra.util.PersistentMap<hydra.core.Term, hydra.core.Term>> forMap = (java.util.function.Function<hydra.util.PersistentMap<hydra.core.Term, hydra.core.Term>, hydra.util.PersistentMap<hydra.core.Term, hydra.core.Term>>) (mp -> {
-        java.util.function.Function<hydra.util.Pair<hydra.core.Term, hydra.core.Term>, hydra.util.Pair<hydra.core.Term, hydra.core.Term>> forPair = (java.util.function.Function<hydra.util.Pair<hydra.core.Term, hydra.core.Term>, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>) (pr -> (hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(((recurse).apply(tx)).apply(hydra.lib.pairs.First.apply(pr)), ((recurse).apply(tx)).apply(hydra.lib.pairs.Second.apply(pr))))));
+        java.util.function.Function<hydra.util.Pair<hydra.core.Term, hydra.core.Term>, hydra.util.Pair<hydra.core.Term, hydra.core.Term>> forPair = (java.util.function.Function<hydra.util.Pair<hydra.core.Term, hydra.core.Term>, hydra.util.Pair<hydra.core.Term, hydra.core.Term>>) (pr -> (hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>((recurse).apply(tx).apply(hydra.lib.pairs.First.apply(pr)), (recurse).apply(tx).apply(hydra.lib.pairs.Second.apply(pr))))));
         return hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
           forPair,
           hydra.lib.maps.ToList.apply(mp)));
@@ -625,31 +625,31 @@ public interface Reduction {
       return (term).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.core.Term visit(hydra.core.Term.Annotated at) {
-          return (afterRecursion).apply(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(((recurse).apply(tx)).apply(((at).value).body), ((at).value).annotation)));
+          return (afterRecursion).apply(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm((recurse).apply(tx).apply((at).value.body), (at).value.annotation)));
         }
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Application app) {
-          hydra.util.Lazy<hydra.core.Term> rhs = new hydra.util.Lazy<>(() -> (((rewriteWithArgs.get()).apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()))).apply(tx)).apply(((app).value).argument));
-          return (((rewriteWithArgs.get()).apply(hydra.lib.lists.Cons.apply(
+          hydra.util.Lazy<hydra.core.Term> rhs = new hydra.util.Lazy<>(() -> rewriteWithArgs.get().apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty())).apply(tx).apply((app).value.argument));
+          return rewriteWithArgs.get().apply(hydra.lib.lists.Cons.apply(
             rhs.get(),
-            args))).apply(tx)).apply(((app).value).function);
+            args)).apply(tx).apply((app).value.function);
         }
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Either e) {
           return (afterRecursion).apply(new hydra.core.Term.Either(hydra.lib.eithers.Either.apply(
-            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.core.Term, hydra.core.Term>>) (l -> hydra.util.Either.<hydra.core.Term, hydra.core.Term>left(((recurse).apply(tx)).apply(l))),
-            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.core.Term, hydra.core.Term>>) (r -> hydra.util.Either.<hydra.core.Term, hydra.core.Term>right(((recurse).apply(tx)).apply(r))),
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.core.Term, hydra.core.Term>>) (l -> hydra.util.Either.<hydra.core.Term, hydra.core.Term>left((recurse).apply(tx).apply(l))),
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.core.Term, hydra.core.Term>>) (r -> hydra.util.Either.<hydra.core.Term, hydra.core.Term>right((recurse).apply(tx).apply(r))),
             (e).value)));
         }
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Function fn) {
-          return ((fn).value).accept(new hydra.core.Function.PartialVisitor<>() {
+          return (fn).value.accept(new hydra.core.Function.PartialVisitor<>() {
             @Override
             public hydra.core.Term visit(hydra.core.Function.Elimination elm) {
-              hydra.util.Lazy<hydra.util.Maybe<hydra.core.Type>> elimHeadType = new hydra.util.Lazy<>(() -> ((elm).value).accept(new hydra.core.Elimination.PartialVisitor<>() {
+              hydra.util.Lazy<hydra.util.Maybe<hydra.core.Type>> elimHeadType = new hydra.util.Lazy<>(() -> (elm).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
                 @Override
                 public hydra.util.Maybe<hydra.core.Type> otherwise(hydra.core.Elimination instance) {
                   return (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing());
@@ -657,11 +657,11 @@ public interface Reduction {
                 
                 @Override
                 public hydra.util.Maybe<hydra.core.Type> visit(hydra.core.Elimination.Union cs2) {
-                  return hydra.util.Maybe.just(new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(((cs2).value).typeName), new hydra.core.Type.Unit())));
+                  return hydra.util.Maybe.just(new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable((cs2).value.typeName), new hydra.core.Type.Unit())));
                 }
               }));
               hydra.core.Term elimTerm = new hydra.core.Term.Function(new hydra.core.Function.Elimination((forElimination).apply((elm).value)));
-              Boolean padElim = ((elm).value).accept(new hydra.core.Elimination.PartialVisitor<>() {
+              Boolean padElim = (elm).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
                 @Override
                 public Boolean visit(hydra.core.Elimination.Record ignored) {
                   return false;
@@ -677,7 +677,7 @@ public interface Reduction {
                   return false;
                 }
               });
-              return (((((expand).apply(padElim)).apply(args)).apply(1)).apply(elimHeadType.get())).apply(elimTerm);
+              return (expand).apply(padElim).apply(args).apply(1).apply(elimHeadType.get()).apply(elimTerm);
             }
             
             @Override
@@ -685,15 +685,15 @@ public interface Reduction {
               hydra.graph.Graph tx1 = hydra.schemas.Schemas.extendGraphForLambda(
                 tx,
                 (lm).value);
-              hydra.util.Lazy<hydra.core.Term> body = new hydra.util.Lazy<>(() -> (((rewriteWithArgs.get()).apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()))).apply(tx1)).apply(((lm).value).body));
-              hydra.core.Term result = new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(((lm).value).parameter, ((lm).value).domain, body.get())));
-              Integer arty = ((termArityWithContext.get()).apply(tx)).apply(result);
-              return (((((expand).apply(false)).apply(args)).apply(arty)).apply((hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()))).apply(result);
+              hydra.util.Lazy<hydra.core.Term> body = new hydra.util.Lazy<>(() -> rewriteWithArgs.get().apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty())).apply(tx1).apply((lm).value.body));
+              hydra.core.Term result = new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda((lm).value.parameter, (lm).value.domain, body.get())));
+              Integer arty = termArityWithContext.get().apply(tx).apply(result);
+              return (expand).apply(false).apply(args).apply(arty).apply((hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing())).apply(result);
             }
             
             @Override
             public hydra.core.Term visit(hydra.core.Function.Primitive pn) {
-              Integer arty = ((termArityWithContext.get()).apply(tx)).apply(term);
+              Integer arty = termArityWithContext.get().apply(tx).apply(term);
               hydra.util.Lazy<hydra.util.Maybe<hydra.core.Type>> primType = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Map.apply(
                 (java.util.function.Function<hydra.core.TypeScheme, hydra.core.Type>) (ts -> (ts).type),
                 hydra.lib.maps.Lookup.apply(
@@ -701,7 +701,7 @@ public interface Reduction {
                   hydra.lib.maps.FromList.apply(hydra.lib.lists.Map.apply(
                     (java.util.function.Function<hydra.graph.Primitive, hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>>) (_gpt_p -> (hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) ((hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>) (new hydra.util.Pair<hydra.core.Name, hydra.core.TypeScheme>((_gpt_p).name, (_gpt_p).type)))),
                     hydra.lib.maps.Elems.apply((tx).primitives))))));
-              return (((((expand).apply(false)).apply(args)).apply(arty)).apply(primType.get())).apply(term);
+              return (expand).apply(false).apply(args).apply(arty).apply(primType.get()).apply(term);
             }
           });
         }
@@ -712,17 +712,17 @@ public interface Reduction {
             (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (ignored -> (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>) (_2 -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))),
             tx,
             (lt).value));
-          java.util.function.Function<hydra.core.Binding, hydra.core.Binding> mapBinding = (java.util.function.Function<hydra.core.Binding, hydra.core.Binding>) (b -> new hydra.core.Binding((b).name, (((rewriteWithArgs.get()).apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()))).apply(tx1.get())).apply((b).term), (b).type));
+          java.util.function.Function<hydra.core.Binding, hydra.core.Binding> mapBinding = (java.util.function.Function<hydra.core.Binding, hydra.core.Binding>) (b -> new hydra.core.Binding((b).name, rewriteWithArgs.get().apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty())).apply(tx1.get()).apply((b).term), (b).type));
           hydra.util.Lazy<hydra.core.Term> result = new hydra.util.Lazy<>(() -> new hydra.core.Term.Let(new hydra.core.Let(hydra.lib.lists.Map.apply(
             mapBinding,
-            ((lt).value).bindings), (((rewriteWithArgs.get()).apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()))).apply(tx1.get())).apply(((lt).value).body))));
+            (lt).value.bindings), rewriteWithArgs.get().apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty())).apply(tx1.get()).apply((lt).value.body))));
           return (afterRecursion).apply(result.get());
         }
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.List els) {
           return (afterRecursion).apply(new hydra.core.Term.List(hydra.lib.lists.Map.apply(
-            (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (el -> ((recurse).apply(tx)).apply(el)),
+            (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (el -> (recurse).apply(tx).apply(el)),
             (els).value)));
         }
         
@@ -739,32 +739,32 @@ public interface Reduction {
         @Override
         public hydra.core.Term visit(hydra.core.Term.Maybe mb) {
           return (afterRecursion).apply(new hydra.core.Term.Maybe(hydra.lib.maybes.Map.apply(
-            (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (v -> ((recurse).apply(tx)).apply(v)),
+            (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (v -> (recurse).apply(tx).apply(v)),
             (mb).value)));
         }
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Pair pr) {
-          return (afterRecursion).apply(new hydra.core.Term.Pair((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>(((recurse).apply(tx)).apply(hydra.lib.pairs.First.apply((pr).value)), ((recurse).apply(tx)).apply(hydra.lib.pairs.Second.apply((pr).value)))))));
+          return (afterRecursion).apply(new hydra.core.Term.Pair((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) ((hydra.util.Pair<hydra.core.Term, hydra.core.Term>) (new hydra.util.Pair<hydra.core.Term, hydra.core.Term>((recurse).apply(tx).apply(hydra.lib.pairs.First.apply((pr).value)), (recurse).apply(tx).apply(hydra.lib.pairs.Second.apply((pr).value)))))));
         }
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Record rc) {
-          return (afterRecursion).apply(new hydra.core.Term.Record(new hydra.core.Record(((rc).value).typeName, hydra.lib.lists.Map.apply(
+          return (afterRecursion).apply(new hydra.core.Term.Record(new hydra.core.Record((rc).value.typeName, hydra.lib.lists.Map.apply(
             forField,
-            ((rc).value).fields))));
+            (rc).value.fields))));
         }
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Set st) {
           return (afterRecursion).apply(new hydra.core.Term.Set(hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
-            (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (el -> ((recurse).apply(tx)).apply(el)),
+            (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (el -> (recurse).apply(tx).apply(el)),
             hydra.lib.sets.ToList.apply((st).value)))));
         }
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.TypeApplication tt) {
-          return (afterRecursion).apply(new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(((recurse).apply(tx)).apply(((tt).value).body), ((tt).value).type)));
+          return (afterRecursion).apply(new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm((recurse).apply(tx).apply((tt).value.body), (tt).value.type)));
         }
         
         @Override
@@ -772,13 +772,13 @@ public interface Reduction {
           hydra.graph.Graph tx1 = hydra.schemas.Schemas.extendGraphForTypeLambda(
             tx,
             (tl).value);
-          hydra.util.Lazy<hydra.core.Term> result = new hydra.util.Lazy<>(() -> new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda(((tl).value).parameter, (((rewriteWithArgs.get()).apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()))).apply(tx1)).apply(((tl).value).body))));
+          hydra.util.Lazy<hydra.core.Term> result = new hydra.util.Lazy<>(() -> new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda((tl).value.parameter, rewriteWithArgs.get().apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty())).apply(tx1).apply((tl).value.body))));
           return (afterRecursion).apply(result.get());
         }
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Union inj) {
-          return (afterRecursion).apply(new hydra.core.Term.Union(new hydra.core.Injection(((inj).value).typeName, (forField).apply(((inj).value).field))));
+          return (afterRecursion).apply(new hydra.core.Term.Union(new hydra.core.Injection((inj).value.typeName, (forField).apply((inj).value.field))));
         }
         
         @Override
@@ -788,22 +788,22 @@ public interface Reduction {
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Variable vn) {
-          Integer arty = ((termArityWithContext.get()).apply(tx)).apply(term);
+          Integer arty = termArityWithContext.get().apply(tx).apply(term);
           hydra.util.Lazy<hydra.util.Maybe<hydra.core.Type>> varType = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Map.apply(
             hydra.rewriting.Rewriting::typeSchemeToFType,
             hydra.lib.maps.Lookup.apply(
               (vn).value,
               (tx).boundTypes)));
-          return (((((expand).apply(false)).apply(args)).apply(arty)).apply(varType.get())).apply(term);
+          return (expand).apply(false).apply(args).apply(arty).apply(varType.get()).apply(term);
         }
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Wrap wt) {
-          return (afterRecursion).apply(new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(((wt).value).typeName, ((recurse).apply(tx)).apply(((wt).value).body))));
+          return (afterRecursion).apply(new hydra.core.Term.Wrap(new hydra.core.WrappedTerm((wt).value.typeName, (recurse).apply(tx).apply((wt).value.body))));
         }
       });
     }))));
-    return hydra.reduction.Reduction.contractTerm((((rewriteWithArgs.get()).apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()))).apply(tx0)).apply(term0));
+    return hydra.reduction.Reduction.contractTerm(rewriteWithArgs.get().apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty())).apply(tx0).apply(term0));
   }
   
   static Integer etaExpansionArity(hydra.graph.Graph graph, hydra.core.Term term) {
@@ -817,7 +817,7 @@ public interface Reduction {
       public Integer visit(hydra.core.Term.Annotated at) {
         return hydra.reduction.Reduction.etaExpansionArity(
           graph,
-          ((at).value).body);
+          (at).value.body);
       }
       
       @Override
@@ -825,13 +825,13 @@ public interface Reduction {
         return hydra.lib.math.Sub.apply(
           hydra.reduction.Reduction.etaExpansionArity(
             graph,
-            ((app).value).function),
+            (app).value.function),
           1);
       }
       
       @Override
       public Integer visit(hydra.core.Term.Function f) {
-        return ((f).value).accept(new hydra.core.Function.PartialVisitor<>() {
+        return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
           @Override
           public Integer visit(hydra.core.Function.Elimination ignored) {
             return 1;
@@ -855,14 +855,14 @@ public interface Reduction {
       public Integer visit(hydra.core.Term.TypeLambda ta) {
         return hydra.reduction.Reduction.etaExpansionArity(
           graph,
-          ((ta).value).body);
+          (ta).value.body);
       }
       
       @Override
       public Integer visit(hydra.core.Term.TypeApplication tt) {
         return hydra.reduction.Reduction.etaExpansionArity(
           graph,
-          ((tt).value).body);
+          (tt).value.body);
       }
       
       @Override
@@ -902,7 +902,7 @@ public interface Reduction {
             hydra.graph.Graph txl = hydra.schemas.Schemas.extendGraphForLambda(
               tx3,
               (l).value);
-            return ((arityOf.get()).apply(txl)).apply(((l).value).body);
+            return arityOf.get().apply(txl).apply((l).value.body);
           }
           
           @Override
@@ -923,12 +923,12 @@ public interface Reduction {
           
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Integer> visit(hydra.core.Term.Annotated at) {
-            return ((arityOf.get()).apply(tx2)).apply(((at).value).body);
+            return arityOf.get().apply(tx2).apply((at).value.body);
           }
           
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Integer> visit(hydra.core.Term.Function f) {
-            return ((forFunction).apply(tx2)).apply((f).value);
+            return (forFunction).apply(tx2).apply((f).value);
           }
           
           @Override
@@ -937,12 +937,12 @@ public interface Reduction {
               (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (ignored -> (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>) (_2 -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))),
               tx2,
               (l).value));
-            return ((arityOf.get()).apply(txl.get())).apply(((l).value).body);
+            return arityOf.get().apply(txl.get()).apply((l).value.body);
           }
           
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, Integer> visit(hydra.core.Term.TypeApplication tat) {
-            return ((arityOf.get()).apply(tx2)).apply(((tat).value).body);
+            return arityOf.get().apply(tx2).apply((tat).value.body);
           }
           
           @Override
@@ -950,7 +950,7 @@ public interface Reduction {
             hydra.graph.Graph txt = hydra.schemas.Schemas.extendGraphForTypeLambda(
               tx2,
               (tl).value);
-            return ((arityOf.get()).apply(txt)).apply(((tl).value).body);
+            return arityOf.get().apply(txt).apply((tl).value.body);
           }
           
           @Override
@@ -980,7 +980,7 @@ public interface Reduction {
           1,
           n)));
       java.util.function.Function<hydra.core.Field, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>> forCase = (java.util.function.Function<hydra.core.Field, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>>) (f -> hydra.lib.eithers.Bind.apply(
-        ((((((rewrite.get()).apply(false)).apply(true)).apply((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()))).apply(recurse)).apply(tx)).apply((f).term),
+        rewrite.get().apply(false).apply(true).apply((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty())).apply(recurse).apply(tx).apply((f).term),
         (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>>) (r -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Field>right(new hydra.core.Field((f).name, r)))));
       java.util.function.Function<hydra.core.CaseStatement, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>> forCaseStatement = (java.util.function.Function<hydra.core.CaseStatement, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (cs -> {
         hydra.util.ConsList<hydra.core.Field> cases = (cs).cases;
@@ -988,7 +988,7 @@ public interface Reduction {
         hydra.core.Name tname = (cs).typeName;
         return hydra.lib.eithers.Bind.apply(
           hydra.lib.eithers.MapMaybe.apply(
-            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (v1 -> ((((((rewrite.get()).apply(false)).apply(false)).apply((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()))).apply(recurse)).apply(tx)).apply(v1)),
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (v1 -> rewrite.get().apply(false).apply(false).apply((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty())).apply(recurse).apply(tx).apply(v1)),
             dflt),
           (java.util.function.Function<hydra.util.Maybe<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (rdflt -> hydra.lib.eithers.Bind.apply(
             hydra.lib.eithers.MapList.apply(
@@ -1000,8 +1000,8 @@ public interface Reduction {
       pad.set((java.util.function.Function<hydra.util.ConsList<hydra.core.Name>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (vars -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (body -> hydra.lib.logic.IfElse.lazy(
         hydra.lib.lists.Null.apply(vars),
         () -> body,
-        () -> new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(hydra.lib.lists.Head.apply(vars), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), ((pad.get()).apply(hydra.lib.lists.Tail.apply(vars))).apply(new hydra.core.Term.Application(new hydra.core.Application(body, new hydra.core.Term.Variable(hydra.lib.lists.Head.apply(vars))))))))))));
-      java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.core.Term>> padn = (java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (n -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (body -> ((pad.get()).apply((extraVariables).apply(n))).apply(body)));
+        () -> new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(hydra.lib.lists.Head.apply(vars), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), pad.get().apply(hydra.lib.lists.Tail.apply(vars)).apply(new hydra.core.Term.Application(new hydra.core.Application(body, new hydra.core.Term.Variable(hydra.lib.lists.Head.apply(vars))))))))))));
+      java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.core.Term>> padn = (java.util.function.Function<Integer, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (n -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (body -> pad.get().apply((extraVariables).apply(n)).apply(body)));
       java.util.function.Function<hydra.core.Term, hydra.core.Term> unwind = (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (term2 -> hydra.lib.lists.Foldl.apply(
         (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Type, hydra.core.Term>>) (e -> (java.util.function.Function<hydra.core.Type, hydra.core.Term>) (t -> new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(e, t)))),
         term2,
@@ -1010,7 +1010,7 @@ public interface Reduction {
         java.util.function.Function<hydra.core.Elimination, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>> checkBase = (java.util.function.Function<hydra.core.Elimination, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (elm2 -> (elm2).accept(new hydra.core.Elimination.PartialVisitor<>() {
           @Override
           public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> otherwise(hydra.core.Elimination instance) {
-            return ((recurse).apply(tx)).apply(term);
+            return (recurse).apply(tx).apply(term);
           }
           
           @Override
@@ -1026,7 +1026,7 @@ public interface Reduction {
             hydra.lib.logic.Or.apply(
               topLevel,
               forced),
-            () -> ((padn).apply(1)).apply(base),
+            () -> (padn).apply(1).apply(base),
             () -> base))));
       });
       java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>> forceExpansion = (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (t -> hydra.lib.eithers.Bind.apply(
@@ -1037,25 +1037,25 @@ public interface Reduction {
           t),
         (java.util.function.Function<hydra.util.Pair<hydra.core.Type, hydra.context.Context>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (typCx -> {
           hydra.util.Lazy<Integer> arity = new hydra.util.Lazy<>(() -> hydra.arity.Arity.typeArity(hydra.lib.pairs.First.apply(typCx)));
-          return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(((padn).apply(arity.get())).apply((unwind).apply(t)));
+          return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right((padn).apply(arity.get()).apply((unwind).apply(t)));
         })));
       java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>> recurseOrForce = (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (term2 -> hydra.lib.logic.IfElse.lazy(
         forced,
         () -> (forceExpansion).apply(term2),
-        () -> ((recurse).apply(tx)).apply((unwind).apply(term2))));
+        () -> (recurse).apply(tx).apply((unwind).apply(term2))));
       java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>> rewriteSpine = new java.util.concurrent.atomic.AtomicReference<>();
       rewriteSpine.set((java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (term2 -> (term2).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> otherwise(hydra.core.Term instance) {
-          return ((((((rewrite.get()).apply(false)).apply(false)).apply((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()))).apply(recurse)).apply(tx)).apply(term2);
+          return rewrite.get().apply(false).apply(false).apply((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty())).apply(recurse).apply(tx).apply(term2);
         }
         
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Term.Annotated at) {
           return hydra.lib.eithers.Bind.apply(
-            (rewriteSpine.get()).apply(((at).value).body),
+            rewriteSpine.get().apply((at).value.body),
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (body -> {
-              hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> ann = ((at).value).annotation;
+              hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> ann = (at).value.annotation;
               return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(body, ann)));
             }));
         }
@@ -1067,18 +1067,18 @@ public interface Reduction {
             () -> hydra.util.ConsList.of(new hydra.core.Type.Literal(new hydra.core.LiteralType.String_())),
             () -> (hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty())));
           return hydra.lib.eithers.Bind.apply(
-            (rewriteSpine.get()).apply(((a).value).function),
+            rewriteSpine.get().apply((a).value.function),
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (lhs -> hydra.lib.eithers.Bind.apply(
-              ((((((rewrite.get()).apply(true)).apply(false)).apply(l.get())).apply(recurse)).apply(tx)).apply(((a).value).argument),
+              rewrite.get().apply(true).apply(false).apply(l.get()).apply(recurse).apply(tx).apply((a).value.argument),
               (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (rhs -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.Application(new hydra.core.Application(lhs, rhs)))))));
         }
         
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Term.TypeApplication tat) {
           return hydra.lib.eithers.Bind.apply(
-            (rewriteSpine.get()).apply(((tat).value).body),
+            rewriteSpine.get().apply((tat).value.body),
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (body -> {
-              hydra.core.Type typ = ((tat).value).type;
+              hydra.core.Type typ = (tat).value.type;
               return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(body, typ)));
             }));
         }
@@ -1091,30 +1091,30 @@ public interface Reduction {
         
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Term.Application a) {
-          hydra.core.Term lhs = ((a).value).function;
-          hydra.core.Term rhs = ((a).value).argument;
+          hydra.core.Term lhs = (a).value.function;
+          hydra.core.Term rhs = (a).value.argument;
           return hydra.lib.eithers.Bind.apply(
-            ((((((rewrite.get()).apply(true)).apply(false)).apply((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()))).apply(recurse)).apply(tx)).apply(rhs),
+            rewrite.get().apply(true).apply(false).apply((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty())).apply(recurse).apply(tx).apply(rhs),
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (rhs2 -> hydra.lib.eithers.Bind.apply(
-              ((arityOf.get()).apply(tx)).apply(lhs),
+              arityOf.get().apply(tx).apply(lhs),
               (java.util.function.Function<Integer, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (lhsarity -> hydra.lib.eithers.Bind.apply(
-                (rewriteSpine.get()).apply(lhs),
+                rewriteSpine.get().apply(lhs),
                 (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (lhs2 -> {
                   hydra.core.Term a2 = new hydra.core.Term.Application(new hydra.core.Application(lhs2, rhs2));
                   return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(hydra.lib.logic.IfElse.lazy(
                     hydra.lib.equality.Gt.apply(
                       lhsarity,
                       1),
-                    () -> ((padn).apply(hydra.lib.math.Sub.apply(
+                    () -> (padn).apply(hydra.lib.math.Sub.apply(
                       lhsarity,
-                      1))).apply(a2),
+                      1)).apply(a2),
                     () -> a2));
                 }))))));
         }
         
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Term.Function f) {
-          return ((f).value).accept(new hydra.core.Function.PartialVisitor<>() {
+          return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
             @Override
             public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> otherwise(hydra.core.Function instance) {
               return (recurseOrForce).apply(term);
@@ -1132,7 +1132,7 @@ public interface Reduction {
                 (l).value);
               return hydra.lib.eithers.Map.apply(
                 unwind,
-                ((recurse).apply(txl)).apply(term));
+                (recurse).apply(txl).apply(term));
             }
           });
         }
@@ -1143,14 +1143,14 @@ public interface Reduction {
             (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>>) (ignored -> (java.util.function.Function<hydra.core.Binding, hydra.util.Maybe<hydra.core.Term>>) (_2 -> (hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing()))),
             tx,
             (l).value));
-          return ((recurse).apply(txlt.get())).apply(term);
+          return (recurse).apply(txlt.get()).apply(term);
         }
         
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Term.TypeApplication tat) {
-          return ((((((rewrite.get()).apply(topLevel)).apply(forced)).apply(hydra.lib.lists.Cons.apply(
-            ((tat).value).type,
-            typeArgs))).apply(recurse)).apply(tx)).apply(((tat).value).body);
+          return rewrite.get().apply(topLevel).apply(forced).apply(hydra.lib.lists.Cons.apply(
+            (tat).value.type,
+            typeArgs)).apply(recurse).apply(tx).apply((tat).value.body);
         }
         
         @Override
@@ -1158,12 +1158,12 @@ public interface Reduction {
           hydra.graph.Graph txt = hydra.schemas.Schemas.extendGraphForTypeLambda(
             tx,
             (tl).value);
-          return ((recurse).apply(txt)).apply(term);
+          return (recurse).apply(txt).apply(term);
         }
       });
     })))))));
     return hydra.rewriting.Rewriting.rewriteTermWithContextM(
-      (java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>>) (v1 -> (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>) (v2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (v3 -> ((((((rewrite.get()).apply(true)).apply(false)).apply((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty()))).apply(v1)).apply(v2)).apply(v3)))),
+      (java.util.function.Function<java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>, java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>>) (v1 -> (java.util.function.Function<hydra.graph.Graph, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>) (v2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (v3 -> rewrite.get().apply(true).apply(false).apply((hydra.util.ConsList<hydra.core.Type>) (hydra.util.ConsList.<hydra.core.Type>empty())).apply(v1).apply(v2).apply(v3)))),
       tx0,
       term0);
   }
@@ -1175,24 +1175,24 @@ public interface Reduction {
         return hydra.lib.eithers.Bind.apply(
           hydra.extract.core.Core.record(
             cx,
-            ((proj).value).typeName,
+            (proj).value.typeName,
             graph,
             hydra.rewriting.Rewriting.deannotateTerm(reducedArg)),
           (java.util.function.Function<hydra.util.ConsList<hydra.core.Field>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (fields -> {
             hydra.util.Lazy<hydra.util.ConsList<hydra.core.Field>> matchingFields = new hydra.util.Lazy<>(() -> hydra.lib.lists.Filter.apply(
               (java.util.function.Function<hydra.core.Field, Boolean>) (f -> hydra.lib.equality.Equal.apply(
                 (f).name,
-                ((proj).value).field)),
+                (proj).value.field)),
               fields));
             return hydra.lib.logic.IfElse.lazy(
               hydra.lib.lists.Null.apply(matchingFields.get()),
               () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
                 "no such field: ",
-                (((proj).value).field).value,
+                (proj).value.field.value,
                 " in ",
-                (((proj).value).typeName).value,
+                (proj).value.typeName.value,
                 " record")))), cx))),
-              () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right((hydra.lib.lists.Head.apply(matchingFields.get())).term));
+              () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(hydra.lib.lists.Head.apply(matchingFields.get()).term));
           }));
       }
       
@@ -1201,7 +1201,7 @@ public interface Reduction {
         return hydra.lib.eithers.Bind.apply(
           hydra.extract.core.Core.injection(
             cx,
-            ((cs).value).typeName,
+            (cs).value.typeName,
             graph,
             reducedArg),
           (java.util.function.Function<hydra.core.Field, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (field -> {
@@ -1209,19 +1209,19 @@ public interface Reduction {
               (java.util.function.Function<hydra.core.Field, Boolean>) (f -> hydra.lib.equality.Equal.apply(
                 (f).name,
                 (field).name)),
-              ((cs).value).cases));
+              (cs).value.cases));
             return hydra.lib.logic.IfElse.lazy(
               hydra.lib.lists.Null.apply(matchingFields.get()),
               () -> hydra.lib.maybes.Maybe.applyLazy(
                 () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>left((hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
                   "no such field ",
-                  ((field).name).value,
+                  (field).name.value,
                   " in ",
-                  (((cs).value).typeName).value,
+                  (cs).value.typeName.value,
                   " case statement")))), cx))),
                 (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (x -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(x)),
-                ((cs).value).default_),
-              () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.Application(new hydra.core.Application((hydra.lib.lists.Head.apply(matchingFields.get())).term, (field).term))));
+                (cs).value.default_),
+              () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(new hydra.core.Term.Application(new hydra.core.Application(hydra.lib.lists.Head.apply(matchingFields.get()).term, (field).term))));
           }));
       }
       
@@ -1238,7 +1238,7 @@ public interface Reduction {
     applyToArguments.set((java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term>>) (fun -> (java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.core.Term>) (args -> hydra.lib.logic.IfElse.lazy(
       hydra.lib.lists.Null.apply(args),
       () -> fun,
-      () -> ((applyToArguments.get()).apply(new hydra.core.Term.Application(new hydra.core.Application(fun, hydra.lib.lists.Head.apply(args))))).apply(hydra.lib.lists.Tail.apply(args))))));
+      () -> applyToArguments.get().apply(new hydra.core.Term.Application(new hydra.core.Application(fun, hydra.lib.lists.Head.apply(args)))).apply(hydra.lib.lists.Tail.apply(args))))));
     java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, hydra.context.InContext<hydra.error.Error_>> mapErrorToString = (java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, hydra.context.InContext<hydra.error.Error_>>) (ic -> (hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(hydra.show.error.Error_.error(((java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, hydra.error.Error_>) (projected -> projected.object)).apply(ic)))), ((java.util.function.Function<hydra.context.InContext<hydra.error.Error_>, hydra.context.Context>) (projected -> projected.context)).apply(ic))));
     java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>> reduce = (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>) (eager2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (v1 -> hydra.reduction.Reduction.reduceTerm(
       cx,
@@ -1248,19 +1248,19 @@ public interface Reduction {
     java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>> reduceArg = (java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>) (eager2 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (arg -> hydra.lib.logic.IfElse.lazy(
       eager2,
       () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(arg),
-      () -> ((reduce).apply(false)).apply(arg))));
+      () -> (reduce).apply(false).apply(arg))));
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>>> applyIfNullary = new java.util.concurrent.atomic.AtomicReference<>();
     applyIfNullary.set((java.util.function.Function<Boolean, java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>>) (eager2 -> (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>) (original -> (java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (args -> {
       java.util.function.Function<hydra.core.Elimination, java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>> forElimination = (java.util.function.Function<hydra.core.Elimination, java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>) (elm -> (java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (args2 -> {
         hydra.util.Lazy<hydra.core.Term> arg = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(args2));
         hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> remainingArgs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Tail.apply(args2));
         return hydra.lib.eithers.Bind.apply(
-          ((reduceArg).apply(eager2)).apply(hydra.rewriting.Rewriting.deannotateTerm(arg.get())),
+          (reduceArg).apply(eager2).apply(hydra.rewriting.Rewriting.deannotateTerm(arg.get())),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (reducedArg -> hydra.lib.eithers.Bind.apply(
             hydra.lib.eithers.Bind.apply(
-              ((applyElimination).apply(elm)).apply(reducedArg),
-              (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (v1 -> ((reduce).apply(eager2)).apply(v1))),
-            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (reducedResult -> (((applyIfNullary.get()).apply(eager2)).apply(reducedResult)).apply(remainingArgs.get())))));
+              (applyElimination).apply(elm).apply(reducedArg),
+              (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (v1 -> (reduce).apply(eager2).apply(v1))),
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (reducedResult -> applyIfNullary.get().apply(eager2).apply(reducedResult).apply(remainingArgs.get())))));
       }));
       java.util.function.Function<hydra.core.Lambda, java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>> forLambda = (java.util.function.Function<hydra.core.Lambda, java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>) (l -> (java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (args2 -> {
         hydra.util.Lazy<hydra.core.Term> arg = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(args2));
@@ -1268,13 +1268,13 @@ public interface Reduction {
         hydra.core.Name param = (l).parameter;
         hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> remainingArgs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Tail.apply(args2));
         return hydra.lib.eithers.Bind.apply(
-          ((reduce).apply(eager2)).apply(hydra.rewriting.Rewriting.deannotateTerm(arg.get())),
+          (reduce).apply(eager2).apply(hydra.rewriting.Rewriting.deannotateTerm(arg.get())),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (reducedArg -> hydra.lib.eithers.Bind.apply(
-            ((reduce).apply(eager2)).apply(hydra.rewriting.Rewriting.replaceFreeTermVariable(
+            (reduce).apply(eager2).apply(hydra.rewriting.Rewriting.replaceFreeTermVariable(
               param,
               reducedArg,
               body)),
-            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (reducedResult -> (((applyIfNullary.get()).apply(eager2)).apply(reducedResult)).apply(remainingArgs.get())))));
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (reducedResult -> applyIfNullary.get().apply(eager2).apply(reducedResult).apply(remainingArgs.get())))));
       }));
       java.util.function.Function<hydra.graph.Primitive, java.util.function.Function<Integer, java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>> forPrimitive = (java.util.function.Function<hydra.graph.Primitive, java.util.function.Function<Integer, java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>>) (prim -> (java.util.function.Function<Integer, java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>) (arity -> (java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (args2 -> {
         hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> argList = new hydra.util.Lazy<>(() -> hydra.lib.lists.Take.apply(
@@ -1285,7 +1285,7 @@ public interface Reduction {
           args2));
         return hydra.lib.eithers.Bind.apply(
           hydra.lib.eithers.MapList.apply(
-            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (v1 -> ((reduceArg).apply(eager2)).apply(v1)),
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (v1 -> (reduceArg).apply(eager2).apply(v1)),
             argList.get()),
           (java.util.function.Function<hydra.util.ConsList<hydra.core.Term>, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (reducedArgs -> {
             hydra.util.Lazy<hydra.util.ConsList<hydra.core.Term>> strippedArgs = new hydra.util.Lazy<>(() -> hydra.lib.lists.Map.apply(
@@ -1295,35 +1295,35 @@ public interface Reduction {
               hydra.lib.eithers.Bimap.apply(
                 mapErrorToString,
                 (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (x -> x),
-                ((((prim).implementation).apply(cx)).apply(graph)).apply(strippedArgs.get())),
+                (prim).implementation.apply(cx).apply(graph).apply(strippedArgs.get())),
               (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (primResult -> hydra.lib.eithers.Bind.apply(
-                ((reduce).apply(eager2)).apply(primResult),
-                (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (reducedResult -> (((applyIfNullary.get()).apply(eager2)).apply(reducedResult)).apply(remainingArgs.get())))));
+                (reduce).apply(eager2).apply(primResult),
+                (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (reducedResult -> applyIfNullary.get().apply(eager2).apply(reducedResult).apply(remainingArgs.get())))));
           }));
       })));
       hydra.core.Term stripped = hydra.rewriting.Rewriting.deannotateTerm(original);
       return (stripped).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> otherwise(hydra.core.Term instance) {
-          return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(((applyToArguments.get()).apply(original)).apply(args));
+          return hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(applyToArguments.get().apply(original).apply(args));
         }
         
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Term.Application app) {
-          return (((applyIfNullary.get()).apply(eager2)).apply(((app).value).function)).apply(hydra.lib.lists.Cons.apply(
-            ((app).value).argument,
+          return applyIfNullary.get().apply(eager2).apply((app).value.function).apply(hydra.lib.lists.Cons.apply(
+            (app).value.argument,
             args));
         }
         
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Term.Function v1) {
-          return ((v1).value).accept(new hydra.core.Function.PartialVisitor<>() {
+          return (v1).value.accept(new hydra.core.Function.PartialVisitor<>() {
             @Override
             public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Function.Elimination elm) {
               return hydra.lib.logic.IfElse.lazy(
                 hydra.lib.lists.Null.apply(args),
                 () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(original),
-                () -> ((forElimination).apply((elm).value)).apply(args));
+                () -> (forElimination).apply((elm).value).apply(args));
             }
             
             @Override
@@ -1331,7 +1331,7 @@ public interface Reduction {
               return hydra.lib.logic.IfElse.lazy(
                 hydra.lib.lists.Null.apply(args),
                 () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(original),
-                () -> ((forLambda).apply((l).value)).apply(args));
+                () -> (forLambda).apply((l).value).apply(args));
             }
             
             @Override
@@ -1347,8 +1347,8 @@ public interface Reduction {
                     hydra.lib.equality.Gt.apply(
                       arity,
                       hydra.lib.lists.Length.apply(args)),
-                    () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(((applyToArguments.get()).apply(original)).apply(args)),
-                    () -> (((forPrimitive).apply(prim)).apply(arity)).apply(args));
+                    () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(applyToArguments.get().apply(original).apply(args)),
+                    () -> (forPrimitive).apply(prim).apply(arity).apply(args));
                 }));
             }
           });
@@ -1360,15 +1360,15 @@ public interface Reduction {
             graph,
             (v).value);
           return hydra.lib.maybes.Maybe.applyLazy(
-            () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(((applyToArguments.get()).apply(original)).apply(args)),
-            (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (binding -> (((applyIfNullary.get()).apply(eager2)).apply((binding).term)).apply(args)),
+            () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(applyToArguments.get().apply(original).apply(args)),
+            (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (binding -> applyIfNullary.get().apply(eager2).apply((binding).term).apply(args)),
             mBinding);
         }
         
         @Override
         public hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term> visit(hydra.core.Term.Let lt) {
-          hydra.util.ConsList<hydra.core.Binding> bindings = ((lt).value).bindings;
-          hydra.core.Term body = ((lt).value).body;
+          hydra.util.ConsList<hydra.core.Binding> bindings = (lt).value.bindings;
+          hydra.core.Term body = (lt).value.body;
           java.util.function.Function<hydra.core.Binding, hydra.core.Term> letExpr = (java.util.function.Function<hydra.core.Binding, hydra.core.Term>) (b -> new hydra.core.Term.Let(new hydra.core.Let(hydra.util.ConsList.of(b), new hydra.core.Term.Variable((b).name))));
           java.util.function.Function<hydra.core.Binding, hydra.core.Binding> expandBinding = (java.util.function.Function<hydra.core.Binding, hydra.core.Binding>) (b -> new hydra.core.Binding((b).name, hydra.rewriting.Rewriting.replaceFreeTermVariable(
             (b).name,
@@ -1385,10 +1385,10 @@ public interface Reduction {
             substituteBinding,
             term2,
             bs)));
-          hydra.core.Term expandedBody = ((substituteAll).apply(expandedBindings.get())).apply(body);
+          hydra.core.Term expandedBody = (substituteAll).apply(expandedBindings.get()).apply(body);
           return hydra.lib.eithers.Bind.apply(
-            ((reduce).apply(eager2)).apply(expandedBody),
-            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (reducedBody -> (((applyIfNullary.get()).apply(eager2)).apply(reducedBody)).apply(args)));
+            (reduce).apply(eager2).apply(expandedBody),
+            (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (reducedBody -> applyIfNullary.get().apply(eager2).apply(reducedBody).apply(args)));
         }
       });
     }))));
@@ -1426,10 +1426,10 @@ public interface Reduction {
     }));
     java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>> mapping = (java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>, java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>>) (recurse -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (mid -> hydra.lib.eithers.Bind.apply(
       hydra.lib.logic.IfElse.lazy(
-        ((doRecurse).apply(eager)).apply(mid),
+        (doRecurse).apply(eager).apply(mid),
         () -> (recurse).apply(mid),
         () -> hydra.util.Either.<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>right(mid)),
-      (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (inner -> (((applyIfNullary.get()).apply(eager)).apply(inner)).apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()))))));
+      (java.util.function.Function<hydra.core.Term, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Term>>) (inner -> applyIfNullary.get().apply(eager).apply(inner).apply((hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()))))));
     return hydra.rewriting.Rewriting.rewriteTermM(
       mapping,
       term);
@@ -1456,7 +1456,7 @@ public interface Reduction {
     java.util.function.Function<hydra.core.Function, Boolean> functionIsValue = (java.util.function.Function<hydra.core.Function, Boolean>) (f -> (f).accept(new hydra.core.Function.PartialVisitor<>() {
       @Override
       public Boolean visit(hydra.core.Function.Elimination e) {
-        return ((e).value).accept(new hydra.core.Elimination.PartialVisitor<>() {
+        return (e).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
           @Override
           public Boolean visit(hydra.core.Elimination.Wrap ignored) {
             return true;
@@ -1470,18 +1470,18 @@ public interface Reduction {
           @Override
           public Boolean visit(hydra.core.Elimination.Union cs) {
             return hydra.lib.logic.And.apply(
-              (checkFields).apply(((cs).value).cases),
+              (checkFields).apply((cs).value.cases),
               hydra.lib.maybes.Maybe.applyLazy(
                 () -> true,
                 hydra.reduction.Reduction::termIsValue,
-                ((cs).value).default_));
+                (cs).value.default_));
           }
         });
       }
       
       @Override
       public Boolean visit(hydra.core.Function.Lambda l) {
-        return hydra.reduction.Reduction.termIsValue(((l).value).body);
+        return hydra.reduction.Reduction.termIsValue((l).value.body);
       }
       
       @Override
@@ -1489,7 +1489,7 @@ public interface Reduction {
         return true;
       }
     }));
-    return (hydra.rewriting.Rewriting.deannotateTerm(term)).accept(new hydra.core.Term.PartialVisitor<>() {
+    return hydra.rewriting.Rewriting.deannotateTerm(term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public Boolean otherwise(hydra.core.Term instance) {
         return false;
@@ -1545,7 +1545,7 @@ public interface Reduction {
       
       @Override
       public Boolean visit(hydra.core.Term.Record r) {
-        return (checkFields).apply(((r).value).fields);
+        return (checkFields).apply((r).value.fields);
       }
       
       @Override
@@ -1555,7 +1555,7 @@ public interface Reduction {
       
       @Override
       public Boolean visit(hydra.core.Term.Union i) {
-        return (checkField).apply(((i).value).field);
+        return (checkField).apply((i).value.field);
       }
       
       @Override

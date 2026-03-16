@@ -93,7 +93,7 @@ public abstract class Scalar implements Serializable, Comparable<Scalar> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Scalar other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -134,7 +134,7 @@ public abstract class Scalar implements Serializable, Comparable<Scalar> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Scalar other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -175,7 +175,7 @@ public abstract class Scalar implements Serializable, Comparable<Scalar> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Scalar other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -214,7 +214,7 @@ public abstract class Scalar implements Serializable, Comparable<Scalar> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Scalar other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -256,7 +256,7 @@ public abstract class Scalar implements Serializable, Comparable<Scalar> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Scalar other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

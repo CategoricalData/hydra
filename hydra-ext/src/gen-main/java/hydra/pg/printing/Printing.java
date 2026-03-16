@@ -9,7 +9,7 @@ public interface Printing {
   static <T0> String printEdge(java.util.function.Function<T0, String> printValue, hydra.pg.model.Edge<T0> edge) {
     hydra.util.Lazy<String> id = new hydra.util.Lazy<>(() -> (printValue).apply(((java.util.function.Function<hydra.pg.model.Edge<T0>, T0>) (projected -> projected.id)).apply(edge)));
     hydra.util.Lazy<String> inId = new hydra.util.Lazy<>(() -> (printValue).apply(((java.util.function.Function<hydra.pg.model.Edge<T0>, T0>) (projected -> projected.in)).apply(edge)));
-    hydra.util.Lazy<String> label = new hydra.util.Lazy<>(() -> (((java.util.function.Function<hydra.pg.model.Edge<T0>, hydra.pg.model.EdgeLabel>) (projected -> projected.label)).apply(edge)).value);
+    hydra.util.Lazy<String> label = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.pg.model.Edge<T0>, hydra.pg.model.EdgeLabel>) (projected -> projected.label)).apply(edge).value);
     hydra.util.Lazy<String> outId = new hydra.util.Lazy<>(() -> (printValue).apply(((java.util.function.Function<hydra.pg.model.Edge<T0>, T0>) (projected -> projected.out)).apply(edge)));
     hydra.util.Lazy<String> props = new hydra.util.Lazy<>(() -> hydra.lib.strings.Intercalate.apply(
       ", ",
@@ -76,7 +76,7 @@ public interface Printing {
   
   static <T0> String printVertex(java.util.function.Function<T0, String> printValue, hydra.pg.model.Vertex<T0> vertex) {
     hydra.util.Lazy<String> id = new hydra.util.Lazy<>(() -> (printValue).apply(((java.util.function.Function<hydra.pg.model.Vertex<T0>, T0>) (projected -> projected.id)).apply(vertex)));
-    hydra.util.Lazy<String> label = new hydra.util.Lazy<>(() -> (((java.util.function.Function<hydra.pg.model.Vertex<T0>, hydra.pg.model.VertexLabel>) (projected -> projected.label)).apply(vertex)).value);
+    hydra.util.Lazy<String> label = new hydra.util.Lazy<>(() -> ((java.util.function.Function<hydra.pg.model.Vertex<T0>, hydra.pg.model.VertexLabel>) (projected -> projected.label)).apply(vertex).value);
     hydra.util.Lazy<String> props = new hydra.util.Lazy<>(() -> hydra.lib.strings.Intercalate.apply(
       ", ",
       hydra.lib.lists.Map.apply(

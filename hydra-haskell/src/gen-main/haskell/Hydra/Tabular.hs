@@ -20,11 +20,11 @@ data ColumnType =
     columnTypeType :: Core.Type}
   deriving (Eq, Ord, Read, Show)
 
-_ColumnType = (Core.Name "hydra.tabular.ColumnType")
+_ColumnType = Core.Name "hydra.tabular.ColumnType"
 
-_ColumnType_name = (Core.Name "name")
+_ColumnType_name = Core.Name "name"
 
-_ColumnType_type = (Core.Name "type")
+_ColumnType_type = Core.Name "type"
 
 -- | A data row, containing optional-valued cells; one per column
 newtype DataRow v = 
@@ -32,7 +32,7 @@ newtype DataRow v =
     unDataRow :: [Maybe v]}
   deriving (Eq, Ord, Read, Show)
 
-_DataRow = (Core.Name "hydra.tabular.DataRow")
+_DataRow = Core.Name "hydra.tabular.DataRow"
 
 -- | A header row, containing column names (but no types or data)
 newtype HeaderRow = 
@@ -40,7 +40,7 @@ newtype HeaderRow =
     unHeaderRow :: [String]}
   deriving (Eq, Ord, Read, Show)
 
-_HeaderRow = (Core.Name "hydra.tabular.HeaderRow")
+_HeaderRow = Core.Name "hydra.tabular.HeaderRow"
 
 -- | A simple table as in a CSV file, having an optional header row and any number of data rows
 data Table v = 
@@ -51,11 +51,11 @@ data Table v =
     tableData :: [DataRow v]}
   deriving (Eq, Ord, Read, Show)
 
-_Table = (Core.Name "hydra.tabular.Table")
+_Table = Core.Name "hydra.tabular.Table"
 
-_Table_header = (Core.Name "header")
+_Table_header = Core.Name "header"
 
-_Table_data = (Core.Name "data")
+_Table_data = Core.Name "data"
 
 -- | A type definition for a table, including column names and types
 data TableType = 
@@ -64,8 +64,8 @@ data TableType =
     tableTypeColumns :: [ColumnType]}
   deriving (Eq, Ord, Read, Show)
 
-_TableType = (Core.Name "hydra.tabular.TableType")
+_TableType = Core.Name "hydra.tabular.TableType"
 
-_TableType_name = (Core.Name "name")
+_TableType_name = Core.Name "name"
 
-_TableType_columns = (Core.Name "columns")
+_TableType_columns = Core.Name "columns"

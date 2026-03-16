@@ -119,7 +119,7 @@ public abstract class MapKey implements Serializable, Comparable<MapKey> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(MapKey other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -159,7 +159,7 @@ public abstract class MapKey implements Serializable, Comparable<MapKey> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(MapKey other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -199,7 +199,7 @@ public abstract class MapKey implements Serializable, Comparable<MapKey> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(MapKey other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -239,7 +239,7 @@ public abstract class MapKey implements Serializable, Comparable<MapKey> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(MapKey other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -279,7 +279,7 @@ public abstract class MapKey implements Serializable, Comparable<MapKey> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(MapKey other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -319,7 +319,7 @@ public abstract class MapKey implements Serializable, Comparable<MapKey> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(MapKey other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -359,7 +359,7 @@ public abstract class MapKey implements Serializable, Comparable<MapKey> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(MapKey other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -399,7 +399,7 @@ public abstract class MapKey implements Serializable, Comparable<MapKey> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(MapKey other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -439,7 +439,7 @@ public abstract class MapKey implements Serializable, Comparable<MapKey> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(MapKey other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

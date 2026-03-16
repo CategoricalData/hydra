@@ -34,23 +34,23 @@ data Graph =
     -- | The set of type variables introduced specifically by type lambdas
     graphTypeVariables :: (S.Set Core.Name)}
 
-_Graph = (Core.Name "hydra.graph.Graph")
+_Graph = Core.Name "hydra.graph.Graph"
 
-_Graph_boundTerms = (Core.Name "boundTerms")
+_Graph_boundTerms = Core.Name "boundTerms"
 
-_Graph_boundTypes = (Core.Name "boundTypes")
+_Graph_boundTypes = Core.Name "boundTypes"
 
-_Graph_classConstraints = (Core.Name "classConstraints")
+_Graph_classConstraints = Core.Name "classConstraints"
 
-_Graph_lambdaVariables = (Core.Name "lambdaVariables")
+_Graph_lambdaVariables = Core.Name "lambdaVariables"
 
-_Graph_metadata = (Core.Name "metadata")
+_Graph_metadata = Core.Name "metadata"
 
-_Graph_primitives = (Core.Name "primitives")
+_Graph_primitives = Core.Name "primitives"
 
-_Graph_schemaTypes = (Core.Name "schemaTypes")
+_Graph_schemaTypes = Core.Name "schemaTypes"
 
-_Graph_typeVariables = (Core.Name "typeVariables")
+_Graph_typeVariables = Core.Name "typeVariables"
 
 -- | A built-in function or constant
 data Primitive = 
@@ -62,13 +62,13 @@ data Primitive =
     -- | A concrete implementation of the primitive function. The Context and Graph parameters are needed by higher-order primitives (e.g. lists.map, lists.foldl, eithers.bind) which must evaluate function arguments via term reduction; the Graph provides variable and primitive bindings, while the Context supports tracing and error reporting.
     primitiveImplementation :: (Context.Context -> Graph -> [Core.Term] -> Either (Context.InContext Error.Error) Core.Term)}
 
-_Primitive = (Core.Name "hydra.graph.Primitive")
+_Primitive = Core.Name "hydra.graph.Primitive"
 
-_Primitive_name = (Core.Name "name")
+_Primitive_name = Core.Name "name"
 
-_Primitive_type = (Core.Name "type")
+_Primitive_type = Core.Name "type"
 
-_Primitive_implementation = (Core.Name "implementation")
+_Primitive_implementation = Core.Name "implementation"
 
 -- | A type together with a coder for mapping terms into arguments for primitive functions, and mapping computed results into terms.
 data TermCoder a = 
@@ -80,10 +80,10 @@ data TermCoder a =
     -- | A decode function from native values to terms
     termCoderDecode :: (Context.Context -> a -> Either (Context.InContext Error.Error) Core.Term)}
 
-_TermCoder = (Core.Name "hydra.graph.TermCoder")
+_TermCoder = Core.Name "hydra.graph.TermCoder"
 
-_TermCoder_type = (Core.Name "type")
+_TermCoder_type = Core.Name "type"
 
-_TermCoder_encode = (Core.Name "encode")
+_TermCoder_encode = Core.Name "encode"
 
-_TermCoder_decode = (Core.Name "decode")
+_TermCoder_decode = Core.Name "decode"

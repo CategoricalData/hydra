@@ -17,14 +17,14 @@ public interface Rewriting {
       public hydra.core.Term visit(hydra.core.Term.Annotated at) {
         return new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(hydra.rewriting.Rewriting.applyInsideTypeLambdasAndAnnotations(
           f,
-          ((at).value).body), ((at).value).annotation));
+          (at).value.body), (at).value.annotation));
       }
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.TypeLambda tl) {
-        return new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda(((tl).value).parameter, hydra.rewriting.Rewriting.applyInsideTypeLambdasAndAnnotations(
+        return new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda((tl).value.parameter, hydra.rewriting.Rewriting.applyInsideTypeLambdasAndAnnotations(
           f,
-          ((tl).value).body)));
+          (tl).value.body)));
       }
     });
   }
@@ -38,17 +38,17 @@ public interface Rewriting {
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.Annotated at) {
-        return hydra.rewriting.Rewriting.deannotateAndDetypeTerm(((at).value).body);
+        return hydra.rewriting.Rewriting.deannotateAndDetypeTerm((at).value.body);
       }
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.TypeApplication tt) {
-        return hydra.rewriting.Rewriting.deannotateAndDetypeTerm(((tt).value).body);
+        return hydra.rewriting.Rewriting.deannotateAndDetypeTerm((tt).value.body);
       }
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.TypeLambda ta) {
-        return hydra.rewriting.Rewriting.deannotateAndDetypeTerm(((ta).value).body);
+        return hydra.rewriting.Rewriting.deannotateAndDetypeTerm((ta).value.body);
       }
     });
   }
@@ -62,7 +62,7 @@ public interface Rewriting {
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.Annotated at) {
-        return hydra.rewriting.Rewriting.deannotateTerm(((at).value).body);
+        return hydra.rewriting.Rewriting.deannotateTerm((at).value.body);
       }
     });
   }
@@ -76,13 +76,13 @@ public interface Rewriting {
       
       @Override
       public hydra.core.Type visit(hydra.core.Type.Annotated arg_) {
-        return hydra.rewriting.Rewriting.deannotateType(((arg_).value).body);
+        return hydra.rewriting.Rewriting.deannotateType((arg_).value.body);
       }
     });
   }
   
   static hydra.core.Type deannotateTypeParameters(hydra.core.Type t) {
-    return (hydra.rewriting.Rewriting.deannotateType(t)).accept(new hydra.core.Type.PartialVisitor<>() {
+    return hydra.rewriting.Rewriting.deannotateType(t).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.core.Type otherwise(hydra.core.Type instance) {
         return t;
@@ -90,7 +90,7 @@ public interface Rewriting {
       
       @Override
       public hydra.core.Type visit(hydra.core.Type.Forall lt) {
-        return hydra.rewriting.Rewriting.deannotateTypeParameters(((lt).value).body);
+        return hydra.rewriting.Rewriting.deannotateTypeParameters((lt).value.body);
       }
     });
   }
@@ -113,7 +113,7 @@ public interface Rewriting {
       
       @Override
       public hydra.core.Type visit(hydra.core.Type.Annotated at) {
-        return ((at).value).body;
+        return (at).value.body;
       }
     });
   }
@@ -134,19 +134,19 @@ public interface Rewriting {
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.Annotated at) {
-        hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> ann = ((at).value).annotation;
-        hydra.core.Term subj = ((at).value).body;
+        hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> ann = (at).value.annotation;
+        hydra.core.Term subj = (at).value.body;
         return new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(hydra.rewriting.Rewriting.detypeTerm(subj), ann));
       }
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.TypeApplication tt) {
-        return hydra.rewriting.Rewriting.deannotateAndDetypeTerm(((tt).value).body);
+        return hydra.rewriting.Rewriting.deannotateAndDetypeTerm((tt).value.body);
       }
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.TypeLambda ta) {
-        return hydra.rewriting.Rewriting.deannotateAndDetypeTerm(((ta).value).body);
+        return hydra.rewriting.Rewriting.deannotateAndDetypeTerm((ta).value.body);
       }
     });
   }
@@ -163,11 +163,11 @@ public interface Rewriting {
       
       @Override
       public hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, hydra.core.Term> visit(hydra.core.Term.Let innerLt) {
-        hydra.util.ConsList<hydra.core.Binding> innerBindings = ((innerLt).value).bindings;
-        hydra.core.Term innerBody = ((innerLt).value).body;
-        return ((flattenBodyLet.get()).apply(hydra.lib.lists.Concat2.apply(
+        hydra.util.ConsList<hydra.core.Binding> innerBindings = (innerLt).value.bindings;
+        hydra.core.Term innerBody = (innerLt).value.body;
+        return flattenBodyLet.get().apply(hydra.lib.lists.Concat2.apply(
           bindings,
-          innerBindings))).apply(innerBody);
+          innerBindings)).apply(innerBody);
       }
     }))));
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Binding, hydra.util.Pair<hydra.core.Binding, hydra.util.ConsList<hydra.core.Binding>>>> rewriteBinding = new java.util.concurrent.atomic.AtomicReference<>();
@@ -183,19 +183,19 @@ public interface Rewriting {
         
         @Override
         public hydra.util.Pair<hydra.core.Binding, hydra.util.ConsList<hydra.core.Binding>> visit(hydra.core.Term.Annotated at) {
-          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> ann = ((at).value).annotation;
-          hydra.core.Term val1 = ((at).value).body;
-          hydra.util.Pair<hydra.core.Binding, hydra.util.ConsList<hydra.core.Binding>> recursive = (rewriteBinding.get()).apply(new hydra.core.Binding(key0, val1, t));
+          hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> ann = (at).value.annotation;
+          hydra.core.Term val1 = (at).value.body;
+          hydra.util.Pair<hydra.core.Binding, hydra.util.ConsList<hydra.core.Binding>> recursive = rewriteBinding.get().apply(new hydra.core.Binding(key0, val1, t));
           hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> deps = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(recursive));
           hydra.util.Lazy<hydra.core.Binding> innerBinding = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(recursive));
-          hydra.core.Term val2 = (innerBinding.get()).term;
+          hydra.core.Term val2 = innerBinding.get().term;
           return (hydra.util.Pair<hydra.core.Binding, hydra.util.ConsList<hydra.core.Binding>>) ((hydra.util.Pair<hydra.core.Binding, hydra.util.ConsList<hydra.core.Binding>>) (new hydra.util.Pair<hydra.core.Binding, hydra.util.ConsList<hydra.core.Binding>>(new hydra.core.Binding(key0, new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(val2, ann)), t), deps.get())));
         }
         
         @Override
         public hydra.util.Pair<hydra.core.Binding, hydra.util.ConsList<hydra.core.Binding>> visit(hydra.core.Term.Let innerLet) {
-          hydra.util.ConsList<hydra.core.Binding> bindings1 = ((innerLet).value).bindings;
-          hydra.core.Term body1 = ((innerLet).value).body;
+          hydra.util.ConsList<hydra.core.Binding> bindings1 = (innerLet).value.bindings;
+          hydra.core.Term body1 = (innerLet).value.body;
           String prefix = hydra.lib.strings.Cat2.apply(
             (key0).value,
             "_");
@@ -236,12 +236,12 @@ public interface Rewriting {
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.Let lt) {
-        hydra.util.ConsList<hydra.core.Binding> bindings = ((lt).value).bindings;
-        hydra.core.Term body = ((lt).value).body;
+        hydra.util.ConsList<hydra.core.Binding> bindings = (lt).value.bindings;
+        hydra.core.Term body = (lt).value.body;
         hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> flattenedBindings = new hydra.util.Lazy<>(() -> hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
           (java.util.function.Function<hydra.core.Binding, hydra.util.ConsList<hydra.core.Binding>>) (arg_ -> hydra.rewriting.Rewriting.flattenLetTerms_forResult((rewriteBinding).apply(arg_))),
           bindings)));
-        hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, hydra.core.Term> merged = ((flattenBodyLet).apply(flattenedBindings.get())).apply(body);
+        hydra.util.Pair<hydra.util.ConsList<hydra.core.Binding>, hydra.core.Term> merged = (flattenBodyLet).apply(flattenedBindings.get()).apply(body);
         hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> newBindings = new hydra.util.Lazy<>(() -> hydra.lib.pairs.First.apply(merged));
         hydra.util.Lazy<hydra.core.Term> newBody = new hydra.util.Lazy<>(() -> hydra.lib.pairs.Second.apply(merged));
         return new hydra.core.Term.Let(new hydra.core.Let(newBindings.get(), newBody.get()));
@@ -265,20 +265,20 @@ public interface Rewriting {
             fld,
             v1,
             v2))),
-          ((fld).apply(b0)).apply(term),
+          (fld).apply(b0).apply(term),
           hydra.rewriting.Rewriting.subterms(term));
       }
       
       @Override
       public T0 visit(hydra.coders.TraversalOrder.Post ignored) {
-        return ((fld).apply(hydra.lib.lists.Foldl.apply(
+        return (fld).apply(hydra.lib.lists.Foldl.apply(
           (java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, T0>>) (v1 -> (java.util.function.Function<hydra.core.Term, T0>) (v2 -> hydra.rewriting.Rewriting.<T0>foldOverTerm(
             order,
             fld,
             v1,
             v2))),
           b0,
-          hydra.rewriting.Rewriting.subterms(term)))).apply(term);
+          hydra.rewriting.Rewriting.subterms(term))).apply(term);
       }
     });
   }
@@ -293,27 +293,27 @@ public interface Rewriting {
             fld,
             v1,
             v2))),
-          ((fld).apply(b0)).apply(typ),
+          (fld).apply(b0).apply(typ),
           hydra.rewriting.Rewriting.subtypes(typ));
       }
       
       @Override
       public T0 visit(hydra.coders.TraversalOrder.Post ignored) {
-        return ((fld).apply(hydra.lib.lists.Foldl.apply(
+        return (fld).apply(hydra.lib.lists.Foldl.apply(
           (java.util.function.Function<T0, java.util.function.Function<hydra.core.Type, T0>>) (v1 -> (java.util.function.Function<hydra.core.Type, T0>) (v2 -> hydra.rewriting.Rewriting.<T0>foldOverType(
             order,
             fld,
             v1,
             v2))),
           b0,
-          hydra.rewriting.Rewriting.subtypes(typ)))).apply(typ);
+          hydra.rewriting.Rewriting.subtypes(typ))).apply(typ);
       }
     });
   }
   
   static hydra.core.TypeScheme fTypeToTypeScheme(hydra.core.Type typ) {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.util.ConsList<hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.core.TypeScheme>>> gatherForall = new java.util.concurrent.atomic.AtomicReference<>();
-    gatherForall.set((java.util.function.Function<hydra.util.ConsList<hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.core.TypeScheme>>) (vars -> (java.util.function.Function<hydra.core.Type, hydra.core.TypeScheme>) (typ2 -> (hydra.rewriting.Rewriting.deannotateType(typ2)).accept(new hydra.core.Type.PartialVisitor<>() {
+    gatherForall.set((java.util.function.Function<hydra.util.ConsList<hydra.core.Name>, java.util.function.Function<hydra.core.Type, hydra.core.TypeScheme>>) (vars -> (java.util.function.Function<hydra.core.Type, hydra.core.TypeScheme>) (typ2 -> hydra.rewriting.Rewriting.deannotateType(typ2).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.core.TypeScheme otherwise(hydra.core.Type instance) {
         return new hydra.core.TypeScheme(hydra.lib.lists.Reverse.apply(vars), typ2, (hydra.util.Maybe<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>) (hydra.util.Maybe.<hydra.util.PersistentMap<hydra.core.Name, hydra.core.TypeVariableMetadata>>nothing()));
@@ -321,12 +321,12 @@ public interface Rewriting {
       
       @Override
       public hydra.core.TypeScheme visit(hydra.core.Type.Forall ft) {
-        return ((gatherForall.get()).apply(hydra.lib.lists.Cons.apply(
-          ((ft).value).parameter,
-          vars))).apply(((ft).value).body);
+        return gatherForall.get().apply(hydra.lib.lists.Cons.apply(
+          (ft).value.parameter,
+          vars)).apply((ft).value.body);
       }
     }))));
-    return ((gatherForall.get()).apply((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty()))).apply(typ);
+    return gatherForall.get().apply((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty())).apply(typ);
   }
   
   static hydra.util.PersistentSet<hydra.core.Name> freeTypeVariablesInTerm(hydra.core.Term term0) {
@@ -335,7 +335,7 @@ public interface Rewriting {
       tvars)));
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, java.util.function.Function<hydra.core.Term, hydra.util.PersistentSet<hydra.core.Name>>>> getAll = new java.util.concurrent.atomic.AtomicReference<>();
     getAll.set((java.util.function.Function<hydra.util.PersistentSet<hydra.core.Name>, java.util.function.Function<hydra.core.Term, hydra.util.PersistentSet<hydra.core.Name>>>) (vars -> (java.util.function.Function<hydra.core.Term, hydra.util.PersistentSet<hydra.core.Name>>) (term -> {
-      java.util.function.Function<hydra.core.Term, hydra.util.PersistentSet<hydra.core.Name>> recurse = (java.util.function.Function<hydra.core.Term, hydra.util.PersistentSet<hydra.core.Name>>) (v1 -> ((getAll.get()).apply(vars)).apply(v1));
+      java.util.function.Function<hydra.core.Term, hydra.util.PersistentSet<hydra.core.Name>> recurse = (java.util.function.Function<hydra.core.Term, hydra.util.PersistentSet<hydra.core.Name>>) (v1 -> getAll.get().apply(vars).apply(v1));
       hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> dflt = new hydra.util.Lazy<>(() -> hydra.rewriting.Rewriting.freeTypeVariablesInTerm_allOf(hydra.lib.lists.Map.apply(
         recurse,
         hydra.rewriting.Rewriting.subterms(term))));
@@ -347,7 +347,7 @@ public interface Rewriting {
         
         @Override
         public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Term.Function f) {
-          return ((f).value).accept(new hydra.core.Function.PartialVisitor<>() {
+          return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
             @Override
             public hydra.util.PersistentSet<hydra.core.Name> otherwise(hydra.core.Function instance) {
               return dflt.get();
@@ -362,11 +362,11 @@ public interface Rewriting {
             public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Function.Lambda l) {
               hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> domt = new hydra.util.Lazy<>(() -> hydra.lib.maybes.Maybe.applyLazy(
                 () -> (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()),
-                (java.util.function.Function<hydra.core.Type, hydra.util.PersistentSet<hydra.core.Name>>) (v1 -> ((tryType).apply(vars)).apply(v1)),
-                ((l).value).domain));
+                (java.util.function.Function<hydra.core.Type, hydra.util.PersistentSet<hydra.core.Name>>) (v1 -> (tryType).apply(vars).apply(v1)),
+                (l).value.domain));
               return hydra.lib.sets.Union.apply(
                 domt.get(),
-                (recurse).apply(((l).value).body));
+                (recurse).apply((l).value.body));
             }
           });
         }
@@ -381,35 +381,35 @@ public interface Rewriting {
                 hydra.lib.sets.FromList.apply((ts).variables))),
               (b).type));
             return hydra.lib.sets.Union.apply(
-              ((getAll.get()).apply(newVars.get())).apply((b).term),
+              getAll.get().apply(newVars.get()).apply((b).term),
               hydra.lib.maybes.Maybe.applyLazy(
                 () -> (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()),
-                (java.util.function.Function<hydra.core.TypeScheme, hydra.util.PersistentSet<hydra.core.Name>>) (ts -> ((tryType).apply(newVars.get())).apply((ts).type)),
+                (java.util.function.Function<hydra.core.TypeScheme, hydra.util.PersistentSet<hydra.core.Name>>) (ts -> (tryType).apply(newVars.get()).apply((ts).type)),
                 (b).type));
           });
           return hydra.lib.sets.Union.apply(
             hydra.rewriting.Rewriting.freeTypeVariablesInTerm_allOf(hydra.lib.lists.Map.apply(
               forBinding,
-              ((l).value).bindings)),
-            (recurse).apply(((l).value).body));
+              (l).value.bindings)),
+            (recurse).apply((l).value.body));
         }
         
         @Override
         public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Term.TypeApplication tt) {
           return hydra.lib.sets.Union.apply(
-            ((tryType).apply(vars)).apply(((tt).value).type),
-            (recurse).apply(((tt).value).body));
+            (tryType).apply(vars).apply((tt).value.type),
+            (recurse).apply((tt).value.body));
         }
         
         @Override
         public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Term.TypeLambda tl) {
           return hydra.lib.sets.Union.apply(
-            ((tryType).apply(vars)).apply(new hydra.core.Type.Variable(((tl).value).parameter)),
-            (recurse).apply(((tl).value).body));
+            (tryType).apply(vars).apply(new hydra.core.Type.Variable((tl).value.parameter)),
+            (recurse).apply((tl).value.body));
         }
       });
     })));
-    return ((getAll.get()).apply((hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()))).apply(term0);
+    return getAll.get().apply((hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())).apply(term0);
   }
   
   static <T0> hydra.util.PersistentSet<T0> freeTypeVariablesInTerm_allOf(hydra.util.ConsList<hydra.util.PersistentSet<T0>> sets) {
@@ -436,7 +436,7 @@ public interface Rewriting {
       
       @Override
       public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Term.Function v1) {
-        return ((v1).value).accept(new hydra.core.Function.PartialVisitor<>() {
+        return (v1).value.accept(new hydra.core.Function.PartialVisitor<>() {
           @Override
           public hydra.util.PersistentSet<hydra.core.Name> otherwise(hydra.core.Function instance) {
             return dfltVars.get();
@@ -445,8 +445,8 @@ public interface Rewriting {
           @Override
           public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Function.Lambda l) {
             return hydra.lib.sets.Delete.apply(
-              ((l).value).parameter,
-              hydra.rewriting.Rewriting.freeVariablesInTerm(((l).value).body));
+              (l).value.parameter,
+              hydra.rewriting.Rewriting.freeVariablesInTerm((l).value.body));
           }
         });
       }
@@ -457,7 +457,7 @@ public interface Rewriting {
           dfltVars.get(),
           hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
             projected -> projected.name,
-            ((l).value).bindings)));
+            (l).value.bindings)));
       }
       
       @Override
@@ -483,8 +483,8 @@ public interface Rewriting {
       @Override
       public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Type.Forall lt) {
         return hydra.lib.sets.Delete.apply(
-          ((lt).value).parameter,
-          hydra.rewriting.Rewriting.freeVariablesInType(((lt).value).body));
+          (lt).value.parameter,
+          hydra.rewriting.Rewriting.freeVariablesInType((lt).value.body));
       }
       
       @Override
@@ -500,7 +500,7 @@ public interface Rewriting {
       @Override
       public hydra.util.ConsList<hydra.core.Name> otherwise(hydra.core.Type instance) {
         return hydra.lib.lists.Concat.apply(hydra.lib.lists.Map.apply(
-          (java.util.function.Function<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) (v1 -> ((collectVars.get()).apply(boundVars)).apply(v1)),
+          (java.util.function.Function<hydra.core.Type, hydra.util.ConsList<hydra.core.Name>>) (v1 -> collectVars.get().apply(boundVars).apply(v1)),
           hydra.rewriting.Rewriting.subtypes(t)));
       }
       
@@ -516,12 +516,12 @@ public interface Rewriting {
       
       @Override
       public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Forall ft) {
-        return ((collectVars.get()).apply(hydra.lib.sets.Insert.apply(
-          ((ft).value).parameter,
-          boundVars))).apply(((ft).value).body);
+        return collectVars.get().apply(hydra.lib.sets.Insert.apply(
+          (ft).value.parameter,
+          boundVars)).apply((ft).value.body);
       }
     }))));
-    return hydra.lib.lists.Nub.apply(((collectVars.get()).apply((hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply()))).apply(typ));
+    return hydra.lib.lists.Nub.apply(collectVars.get().apply((hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())).apply(typ));
   }
   
   static hydra.util.PersistentSet<hydra.core.Name> freeVariablesInTypeSchemeSimple(hydra.core.TypeScheme ts) {
@@ -585,8 +585,8 @@ public interface Rewriting {
         return hydra.lib.maybes.Maybe.applyLazy(
           () -> hydra.util.Either.<String, hydra.core.Type>left(hydra.lib.strings.Cat2.apply(
             "No such type in schema: ",
-            ((v).value).value)),
-          (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>) (v1 -> ((hydra_rewriting_inlineType2).apply(schema)).apply(v1)),
+            (v).value.value)),
+          (java.util.function.Function<hydra.core.Type, hydra.util.Either<String, hydra.core.Type>>) (v1 -> (hydra_rewriting_inlineType2).apply(schema).apply(v1)),
           hydra.lib.maps.Lookup.apply(
             (v).value,
             schema));
@@ -604,7 +604,7 @@ public interface Rewriting {
   }
   
   static Boolean isLambda(hydra.core.Term term) {
-    return (hydra.rewriting.Rewriting.deannotateTerm(term)).accept(new hydra.core.Term.PartialVisitor<>() {
+    return hydra.rewriting.Rewriting.deannotateTerm(term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public Boolean otherwise(hydra.core.Term instance) {
         return false;
@@ -612,7 +612,7 @@ public interface Rewriting {
       
       @Override
       public Boolean visit(hydra.core.Term.Function v1) {
-        return ((v1).value).accept(new hydra.core.Function.PartialVisitor<>() {
+        return (v1).value.accept(new hydra.core.Function.PartialVisitor<>() {
           @Override
           public Boolean otherwise(hydra.core.Function instance) {
             return false;
@@ -627,7 +627,7 @@ public interface Rewriting {
       
       @Override
       public Boolean visit(hydra.core.Term.Let lt) {
-        return hydra.rewriting.Rewriting.isLambda(((lt).value).body);
+        return hydra.rewriting.Rewriting.isLambda((lt).value.body);
       }
     });
   }
@@ -635,7 +635,7 @@ public interface Rewriting {
   static hydra.core.Term liftLambdaAboveLet(hydra.core.Term term0) {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>> rewrite = new java.util.concurrent.atomic.AtomicReference<>();
     rewrite.set((java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (recurse -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (term -> {
-      java.util.function.Function<hydra.core.Binding, hydra.core.Binding> rewriteBinding = (java.util.function.Function<hydra.core.Binding, hydra.core.Binding>) (b -> new hydra.core.Binding((b).name, ((rewrite.get()).apply(recurse)).apply((b).term), (b).type));
+      java.util.function.Function<hydra.core.Binding, hydra.core.Binding> rewriteBinding = (java.util.function.Function<hydra.core.Binding, hydra.core.Binding>) (b -> new hydra.core.Binding((b).name, rewrite.get().apply(recurse).apply((b).term), (b).type));
       java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.util.ConsList<hydra.core.Binding>> rewriteBindings = (java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.util.ConsList<hydra.core.Binding>>) (bs -> hydra.lib.lists.Map.apply(
         rewriteBinding,
         bs));
@@ -648,12 +648,12 @@ public interface Rewriting {
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Annotated at) {
-          return (((digForLambdas.get()).apply(original)).apply((java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm((cons).apply(t), ((at).value).annotation))))).apply(((at).value).body);
+          return digForLambdas.get().apply(original).apply((java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm((cons).apply(t), (at).value.annotation)))).apply((at).value.body);
         }
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Function f) {
-          return ((f).value).accept(new hydra.core.Function.PartialVisitor<>() {
+          return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
             @Override
             public hydra.core.Term otherwise(hydra.core.Function instance) {
               return (recurse).apply(original);
@@ -661,14 +661,14 @@ public interface Rewriting {
             
             @Override
             public hydra.core.Term visit(hydra.core.Function.Lambda l) {
-              return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(((l).value).parameter, ((l).value).domain, (((digForLambdas.get()).apply((cons).apply(((l).value).body))).apply((java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> (cons).apply(t)))).apply(((l).value).body))));
+              return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda((l).value.parameter, (l).value.domain, digForLambdas.get().apply((cons).apply((l).value.body)).apply((java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> (cons).apply(t))).apply((l).value.body))));
             }
           });
         }
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Let l) {
-          return (((digForLambdas.get()).apply(original)).apply((java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> (cons).apply(new hydra.core.Term.Let(new hydra.core.Let((rewriteBindings).apply(((l).value).bindings), t)))))).apply(((l).value).body);
+          return digForLambdas.get().apply(original).apply((java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> (cons).apply(new hydra.core.Term.Let(new hydra.core.Let((rewriteBindings).apply((l).value.bindings), t))))).apply((l).value.body);
         }
       })))));
       return (term).accept(new hydra.core.Term.PartialVisitor<>() {
@@ -679,7 +679,7 @@ public interface Rewriting {
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Let l) {
-          return (((digForLambdas.get()).apply(term)).apply((java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.Let(new hydra.core.Let((rewriteBindings).apply(((l).value).bindings), t))))).apply(((l).value).body);
+          return digForLambdas.get().apply(term).apply((java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.Let(new hydra.core.Let((rewriteBindings).apply((l).value.bindings), t)))).apply((l).value.body);
         }
       });
     })));
@@ -699,7 +699,7 @@ public interface Rewriting {
       public hydra.core.Type visit(hydra.core.Type.Annotated at) {
         return new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(hydra.rewriting.Rewriting.mapBeneathTypeAnnotations(
           f,
-          ((at).value).body), ((at).value).annotation));
+          (at).value.body), (at).value.annotation));
       }
     });
   }
@@ -737,7 +737,7 @@ public interface Rewriting {
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Function v1) {
-          return ((v1).value).accept(new hydra.core.Function.PartialVisitor<>() {
+          return (v1).value.accept(new hydra.core.Function.PartialVisitor<>() {
             @Override
             public hydra.core.Term otherwise(hydra.core.Function instance) {
               return (recurse).apply(term2);
@@ -750,27 +750,27 @@ public interface Rewriting {
             
             @Override
             public hydra.core.Term visit(hydra.core.Function.Lambda l) {
-              hydra.util.Maybe<hydra.core.Type> domain = ((l).value).domain;
-              return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(((l).value).parameter, hydra.lib.maybes.Map.apply(
-                (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (v12 -> ((substType).apply(subst.get())).apply(v12)),
-                domain), ((rewriteWithSubst.get()).apply((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) ((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) (new hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) ((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) (new hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>(subst.get(), boundVars.get()))), next.get()))))).apply(((l).value).body))));
+              hydra.util.Maybe<hydra.core.Type> domain = (l).value.domain;
+              return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda((l).value.parameter, hydra.lib.maybes.Map.apply(
+                (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (v12 -> (substType).apply(subst.get()).apply(v12)),
+                domain), rewriteWithSubst.get().apply((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) ((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) (new hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) ((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) (new hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>(subst.get(), boundVars.get()))), next.get())))).apply((l).value.body))));
             }
           });
         }
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Let lt) {
-          hydra.util.ConsList<hydra.core.Binding> bindings0 = ((lt).value).bindings;
+          hydra.util.ConsList<hydra.core.Binding> bindings0 = (lt).value.bindings;
           java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.util.ConsList<hydra.core.Binding>>>> step = new java.util.concurrent.atomic.AtomicReference<>();
           step.set((java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.util.ConsList<hydra.core.Binding>>>) (acc -> (java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.util.ConsList<hydra.core.Binding>>) (bs -> {
             hydra.util.Lazy<hydra.core.Binding> b = new hydra.util.Lazy<>(() -> hydra.lib.lists.Head.apply(bs));
-            hydra.util.Lazy<hydra.core.Term> newVal = new hydra.util.Lazy<>(() -> ((rewriteWithSubst.get()).apply((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) ((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) (new hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) ((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) (new hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>(subst.get(), boundVars.get()))), next.get()))))).apply((b.get()).term));
+            hydra.util.Lazy<hydra.core.Term> newVal = new hydra.util.Lazy<>(() -> rewriteWithSubst.get().apply((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) ((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) (new hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) ((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) (new hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>(subst.get(), boundVars.get()))), next.get())))).apply(b.get().term));
             hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> tl = new hydra.util.Lazy<>(() -> hydra.lib.lists.Tail.apply(bs));
             hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> noType = new hydra.util.Lazy<>(() -> ((java.util.function.Supplier<hydra.util.ConsList<hydra.core.Binding>>) (() -> {
-              hydra.util.Lazy<hydra.core.Binding> b1 = new hydra.util.Lazy<>(() -> new hydra.core.Binding((b.get()).name, newVal.get(), (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing())));
-              return ((step.get()).apply(hydra.lib.lists.Cons.apply(
+              hydra.util.Lazy<hydra.core.Binding> b1 = new hydra.util.Lazy<>(() -> new hydra.core.Binding(b.get().name, newVal.get(), (hydra.util.Maybe<hydra.core.TypeScheme>) (hydra.util.Maybe.<hydra.core.TypeScheme>nothing())));
+              return step.get().apply(hydra.lib.lists.Cons.apply(
                 b1.get(),
-                acc))).apply(tl.get());
+                acc)).apply(tl.get());
             })).get());
             java.util.function.Function<hydra.core.TypeScheme, hydra.util.ConsList<hydra.core.Binding>> withType = (java.util.function.Function<hydra.core.TypeScheme, hydra.util.ConsList<hydra.core.Binding>>) (ts -> {
               java.util.concurrent.atomic.AtomicReference<java.util.function.Function<Integer, java.util.function.Function<Integer, java.util.function.Function<hydra.util.ConsList<hydra.core.Name>, hydra.util.ConsList<hydra.core.Name>>>>> gen = new java.util.concurrent.atomic.AtomicReference<>();
@@ -785,17 +785,17 @@ public interface Rewriting {
                     rem,
                     0),
                   () -> hydra.lib.lists.Reverse.apply(acc2),
-                  () -> (((gen.get()).apply(hydra.lib.math.Add.apply(
+                  () -> gen.get().apply(hydra.lib.math.Add.apply(
                     i,
-                    1))).apply(hydra.lib.math.Sub.apply(
+                    1)).apply(hydra.lib.math.Sub.apply(
                     rem,
-                    1))).apply(hydra.lib.lists.Cons.apply(
+                    1)).apply(hydra.lib.lists.Cons.apply(
                     ti,
                     acc2)));
               }))));
               hydra.util.ConsList<hydra.core.Name> vars = (ts).variables;
               hydra.util.Lazy<Integer> k = new hydra.util.Lazy<>(() -> hydra.lib.lists.Length.apply(vars));
-              hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> newVars = new hydra.util.Lazy<>(() -> (((gen.get()).apply(0)).apply(k.get())).apply((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty())));
+              hydra.util.Lazy<hydra.util.ConsList<hydra.core.Name>> newVars = new hydra.util.Lazy<>(() -> gen.get().apply(0).apply(k.get()).apply((hydra.util.ConsList<hydra.core.Name>) (hydra.util.ConsList.<hydra.core.Name>empty())));
               hydra.util.Lazy<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>> newSubst = new hydra.util.Lazy<>(() -> hydra.lib.maps.Union.apply(
                 hydra.lib.maps.FromList.apply(hydra.lib.lists.Zip.apply(
                   vars,
@@ -810,14 +810,14 @@ public interface Rewriting {
               hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> newBound = new hydra.util.Lazy<>(() -> hydra.lib.sets.Union.apply(
                 boundVars.get(),
                 hydra.lib.sets.FromList.apply(newVars.get())));
-              hydra.util.Lazy<hydra.core.Term> newVal2 = new hydra.util.Lazy<>(() -> ((rewriteWithSubst.get()).apply((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) ((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) (new hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) ((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) (new hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>(newSubst.get(), newBound.get()))), hydra.lib.math.Add.apply(
+              hydra.util.Lazy<hydra.core.Term> newVal2 = new hydra.util.Lazy<>(() -> rewriteWithSubst.get().apply((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) ((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) (new hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) ((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) (new hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>(newSubst.get(), newBound.get()))), hydra.lib.math.Add.apply(
                 next.get(),
-                k.get())))))).apply((b.get()).term));
+                k.get()))))).apply(b.get().term));
               hydra.core.Type typ = (ts).type;
-              hydra.core.Binding b1 = new hydra.core.Binding((b.get()).name, newVal2.get(), hydra.util.Maybe.just(new hydra.core.TypeScheme(newVars.get(), ((substType).apply(newSubst.get())).apply(typ), newConstraints.get())));
-              return ((step.get()).apply(hydra.lib.lists.Cons.apply(
+              hydra.core.Binding b1 = new hydra.core.Binding(b.get().name, newVal2.get(), hydra.util.Maybe.just(new hydra.core.TypeScheme(newVars.get(), (substType).apply(newSubst.get()).apply(typ), newConstraints.get())));
+              return step.get().apply(hydra.lib.lists.Cons.apply(
                 b1,
-                acc))).apply(tl.get());
+                acc)).apply(tl.get());
             });
             return hydra.lib.logic.IfElse.lazy(
               hydra.lib.lists.Null.apply(bs),
@@ -825,30 +825,30 @@ public interface Rewriting {
               () -> hydra.lib.maybes.Maybe.applyLazy(
                 () -> noType.get(),
                 (java.util.function.Function<hydra.core.TypeScheme, hydra.util.ConsList<hydra.core.Binding>>) (ts -> (withType).apply(ts)),
-                (b.get()).type));
+                b.get().type));
           })));
-          hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> bindings1 = new hydra.util.Lazy<>(() -> ((step.get()).apply((hydra.util.ConsList<hydra.core.Binding>) (hydra.util.ConsList.<hydra.core.Binding>empty()))).apply(bindings0));
-          hydra.core.Term body0 = ((lt).value).body;
-          return new hydra.core.Term.Let(new hydra.core.Let(bindings1.get(), ((rewriteWithSubst.get()).apply((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) ((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) (new hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) ((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) (new hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>(subst.get(), boundVars.get()))), next.get()))))).apply(body0)));
+          hydra.util.Lazy<hydra.util.ConsList<hydra.core.Binding>> bindings1 = new hydra.util.Lazy<>(() -> step.get().apply((hydra.util.ConsList<hydra.core.Binding>) (hydra.util.ConsList.<hydra.core.Binding>empty())).apply(bindings0));
+          hydra.core.Term body0 = (lt).value.body;
+          return new hydra.core.Term.Let(new hydra.core.Let(bindings1.get(), rewriteWithSubst.get().apply((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) ((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) (new hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) ((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) (new hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>(subst.get(), boundVars.get()))), next.get())))).apply(body0)));
         }
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.TypeApplication tt) {
-          return new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(((rewriteWithSubst.get()).apply((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) ((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) (new hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) ((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) (new hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>(subst.get(), boundVars.get()))), next.get()))))).apply(((tt).value).body), ((substType).apply(subst.get())).apply(((tt).value).type)));
+          return new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(rewriteWithSubst.get().apply((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) ((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) (new hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) ((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) (new hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>(subst.get(), boundVars.get()))), next.get())))).apply((tt).value.body), (substType).apply(subst.get()).apply((tt).value.type)));
         }
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.TypeLambda ta) {
           return new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda(hydra.rewriting.Rewriting.normalizeTypeVariablesInTerm_replaceName(
             subst.get(),
-            ((ta).value).parameter), ((rewriteWithSubst.get()).apply((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) ((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) (new hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) ((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) (new hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>(subst.get(), boundVars.get()))), next.get()))))).apply(((ta).value).body)));
+            (ta).value.parameter), rewriteWithSubst.get().apply((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) ((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) (new hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) ((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) (new hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>(subst.get(), boundVars.get()))), next.get())))).apply((ta).value.body)));
         }
       })));
       return hydra.rewriting.Rewriting.rewriteTerm(
         rewrite,
         term0);
     })));
-    return ((rewriteWithSubst.get()).apply((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) ((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) (new hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) ((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) (new hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())))), 0))))).apply(term);
+    return rewriteWithSubst.get().apply((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) ((hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>) (new hydra.util.Pair<hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>, Integer>((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) ((hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>) (new hydra.util.Pair<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, hydra.util.PersistentSet<hydra.core.Name>>((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) ((hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>) (hydra.lib.maps.Empty.<hydra.core.Name, hydra.core.Name>apply())), (hydra.util.PersistentSet<hydra.core.Name>) (hydra.lib.sets.Empty.<hydra.core.Name>apply())))), 0)))).apply(term);
   }
   
   static <T0> T0 normalizeTypeVariablesInTerm_replaceName(hydra.util.PersistentMap<T0, T0> subst, T0 v) {
@@ -914,7 +914,7 @@ public interface Rewriting {
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Annotated at) {
-          return ((at).value).body;
+          return (at).value.body;
         }
       });
     }));
@@ -941,7 +941,7 @@ public interface Rewriting {
       
       @Override
       public hydra.core.Type visit(hydra.core.Type.Annotated at) {
-        return ((at).value).body;
+        return (at).value.body;
       }
     });
   }
@@ -967,17 +967,17 @@ public interface Rewriting {
       public hydra.core.Term visit(hydra.core.Term.Let lt) {
         return new hydra.core.Term.Let(new hydra.core.Let(hydra.lib.lists.Map.apply(
           stripBinding,
-          ((lt).value).bindings), ((lt).value).body));
+          (lt).value.bindings), (lt).value.body));
       }
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.TypeApplication tt) {
-        return ((tt).value).body;
+        return (tt).value.body;
       }
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.TypeLambda ta) {
-        return ((ta).value).body;
+        return (ta).value.body;
       }
     });
   }
@@ -1001,7 +1001,7 @@ public interface Rewriting {
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.Function f) {
-        return ((f).value).accept(new hydra.core.Function.PartialVisitor<>() {
+        return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
           @Override
           public hydra.core.Term otherwise(hydra.core.Function instance) {
             return new hydra.core.Term.Function((f).value);
@@ -1014,7 +1014,7 @@ public interface Rewriting {
           
           @Override
           public hydra.core.Term visit(hydra.core.Function.Lambda l) {
-            return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(((l).value).parameter, (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), ((l).value).body)));
+            return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda((l).value.parameter, (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), (l).value.body)));
           }
         });
       }
@@ -1023,17 +1023,17 @@ public interface Rewriting {
       public hydra.core.Term visit(hydra.core.Term.Let lt) {
         return new hydra.core.Term.Let(new hydra.core.Let(hydra.lib.lists.Map.apply(
           stripBinding,
-          ((lt).value).bindings), ((lt).value).body));
+          (lt).value.bindings), (lt).value.body));
       }
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.TypeApplication tt) {
-        return ((tt).value).body;
+        return (tt).value.body;
       }
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.TypeLambda ta) {
-        return ((ta).value).body;
+        return (ta).value.body;
       }
     });
   }
@@ -1047,7 +1047,7 @@ public interface Rewriting {
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.Function f) {
-        return ((f).value).accept(new hydra.core.Function.PartialVisitor<>() {
+        return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
           @Override
           public hydra.core.Term otherwise(hydra.core.Function instance) {
             return (recurse).apply(t);
@@ -1055,7 +1055,7 @@ public interface Rewriting {
           
           @Override
           public hydra.core.Term visit(hydra.core.Function.Lambda l) {
-            hydra.core.Name v = ((l).value).parameter;
+            hydra.core.Name v = (l).value.parameter;
             return hydra.lib.logic.IfElse.lazy(
               hydra.lib.equality.Equal.apply(
                 v,
@@ -1093,9 +1093,9 @@ public interface Rewriting {
         return hydra.lib.logic.IfElse.lazy(
           hydra.lib.equality.Equal.apply(
             v,
-            ((ft).value).parameter),
+            (ft).value.parameter),
           () -> t,
-          () -> new hydra.core.Type.Forall(new hydra.core.ForallType(((ft).value).parameter, (recurse).apply(((ft).value).body))));
+          () -> new hydra.core.Type.Forall(new hydra.core.ForallType((ft).value.parameter, (recurse).apply((ft).value.body))));
       }
       
       @Override
@@ -1123,7 +1123,7 @@ public interface Rewriting {
       
       @Override
       public hydra.core.Type visit(hydra.core.Type.Annotated at) {
-        return new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(((rewrite.get()).apply(recurse)).apply(((at).value).body), ((at).value).annotation));
+        return new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(rewrite.get().apply(recurse).apply((at).value.body), (at).value.annotation));
       }
       
       @Override
@@ -1141,7 +1141,7 @@ public interface Rewriting {
         java.util.function.Function<hydra.core.Type, hydra.core.Type> forMono = (java.util.function.Function<hydra.core.Type, hydra.core.Type>) (t -> (t).accept(new hydra.core.Type.PartialVisitor<>() {
           @Override
           public hydra.core.Type otherwise(hydra.core.Type instance) {
-            return ((rewrite.get()).apply(recurse)).apply(t);
+            return rewrite.get().apply(recurse).apply(t);
           }
           
           @Override
@@ -1209,9 +1209,9 @@ public interface Rewriting {
       public hydra.util.Pair<T1, hydra.core.Term> visit(hydra.core.Term.Annotated at) {
         return hydra.rewriting.Rewriting.rewriteAndFoldTerm_forSingle(
           recurse,
-          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(t, ((at).value).annotation))),
+          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(t, (at).value.annotation))),
           val0,
-          ((at).value).body);
+          (at).value.body);
       }
       
       @Override
@@ -1280,7 +1280,7 @@ public interface Rewriting {
             v2))),
           (java.util.function.Function<hydra.util.ConsList<hydra.core.Binding>, hydra.core.Term>) (bins -> new hydra.core.Term.Let(new hydra.core.Let(bins, hydra.lib.pairs.Second.apply(renv.get())))),
           hydra.lib.pairs.First.apply(renv.get()),
-          ((l).value).bindings);
+          (l).value.bindings);
       }
       
       @Override
@@ -1333,9 +1333,9 @@ public interface Rewriting {
       public hydra.util.Pair<T1, hydra.core.Term> visit(hydra.core.Term.Record r) {
         return hydra.rewriting.Rewriting.rewriteAndFoldTerm_forMany(
           forField,
-          (java.util.function.Function<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>) (fields -> new hydra.core.Term.Record(new hydra.core.Record(((r).value).typeName, fields))),
+          (java.util.function.Function<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>) (fields -> new hydra.core.Term.Record(new hydra.core.Record((r).value.typeName, fields))),
           val0,
-          ((r).value).fields);
+          (r).value.fields);
       }
       
       @Override
@@ -1351,48 +1351,48 @@ public interface Rewriting {
       public hydra.util.Pair<T1, hydra.core.Term> visit(hydra.core.Term.TypeApplication ta) {
         return hydra.rewriting.Rewriting.rewriteAndFoldTerm_forSingle(
           recurse,
-          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(t, ((ta).value).type))),
+          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(t, (ta).value.type))),
           val0,
-          ((ta).value).body);
+          (ta).value.body);
       }
       
       @Override
       public hydra.util.Pair<T1, hydra.core.Term> visit(hydra.core.Term.TypeLambda tl) {
         return hydra.rewriting.Rewriting.rewriteAndFoldTerm_forSingle(
           recurse,
-          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda(((tl).value).parameter, t))),
+          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda((tl).value.parameter, t))),
           val0,
-          ((tl).value).body);
+          (tl).value.body);
       }
       
       @Override
       public hydra.util.Pair<T1, hydra.core.Term> visit(hydra.core.Term.Union inj) {
         return hydra.rewriting.Rewriting.rewriteAndFoldTerm_forSingle(
           recurse,
-          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.Union(new hydra.core.Injection(((inj).value).typeName, new hydra.core.Field((((inj).value).field).name, t)))),
+          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.Union(new hydra.core.Injection((inj).value.typeName, new hydra.core.Field((inj).value.field.name, t)))),
           val0,
-          (((inj).value).field).term);
+          (inj).value.field.term);
       }
       
       @Override
       public hydra.util.Pair<T1, hydra.core.Term> visit(hydra.core.Term.Wrap wt) {
         return hydra.rewriting.Rewriting.rewriteAndFoldTerm_forSingle(
           recurse,
-          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(((wt).value).typeName, t))),
+          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.Wrap(new hydra.core.WrappedTerm((wt).value.typeName, t))),
           val0,
-          ((wt).value).body);
+          (wt).value.body);
       }
     });
   }
   
   static <T0> hydra.util.Pair<T0, hydra.core.Term> rewriteAndFoldTerm_recurse(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>> f, T0 v1, hydra.core.Term v2) {
-    return (((f).apply((java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>) (v12 -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>) (v22 -> hydra.rewriting.Rewriting.<T0>rewriteAndFoldTerm_fsub(
+    return (f).apply((java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>) (v12 -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>) (v22 -> hydra.rewriting.Rewriting.<T0>rewriteAndFoldTerm_fsub(
       (java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>) (v13 -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>) (v23 -> hydra.rewriting.Rewriting.<T0>rewriteAndFoldTerm_recurse(
         f,
         v13,
         v23))),
       v12,
-      v22))))).apply(v1)).apply(v2);
+      v22)))).apply(v1).apply(v2);
   }
   
   static <T2, T3, T4, T5, T6> hydra.util.Pair<T4, T6> rewriteAndFoldTerm_forSingle(java.util.function.Function<T2, java.util.function.Function<T3, hydra.util.Pair<T4, T5>>> rec, java.util.function.Function<T5, T6> cons, T2 val, T3 term) {
@@ -1478,7 +1478,7 @@ public interface Rewriting {
           (l).value,
           recurse,
           val));
-        return (hydra.util.Pair<T1, hydra.core.Function>) ((hydra.util.Pair<T1, hydra.core.Function>) (new hydra.util.Pair<T1, hydra.core.Function>(hydra.lib.pairs.First.apply(rl.get()), new hydra.core.Function.Lambda(new hydra.core.Lambda(((l).value).parameter, ((l).value).domain, hydra.lib.pairs.Second.apply(rl.get()))))));
+        return (hydra.util.Pair<T1, hydra.core.Function>) ((hydra.util.Pair<T1, hydra.core.Function>) (new hydra.util.Pair<T1, hydra.core.Function>(hydra.lib.pairs.First.apply(rl.get()), new hydra.core.Function.Lambda(new hydra.core.Lambda((l).value.parameter, (l).value.domain, hydra.lib.pairs.Second.apply(rl.get()))))));
       }
     });
   }
@@ -1488,39 +1488,39 @@ public interface Rewriting {
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTerm_rlhs(hydra.core.Application a, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>> recurse, T1 val0) {
-    return ((recurse).apply(val0)).apply((a).function);
+    return (recurse).apply(val0).apply((a).function);
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTerm_rrhs(hydra.core.Application a, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>> recurse, hydra.util.Pair<T1, hydra.core.Term> rlhs) {
-    return ((recurse).apply(hydra.lib.pairs.First.apply(rlhs))).apply((a).argument);
+    return (recurse).apply(hydra.lib.pairs.First.apply(rlhs)).apply((a).argument);
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTerm_rl(hydra.core.Term l, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>> recurse, T1 val0) {
-    return ((recurse).apply(val0)).apply(l);
+    return (recurse).apply(val0).apply(l);
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTerm_rr(hydra.core.Term r, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>> recurse, T1 val0) {
-    return ((recurse).apply(val0)).apply(r);
+    return (recurse).apply(val0).apply(r);
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTerm_renv(hydra.core.Let l, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>> recurse, T1 val0) {
-    return ((recurse).apply(val0)).apply((l).body);
+    return (recurse).apply(val0).apply((l).body);
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTerm_rf(hydra.util.Pair<hydra.core.Term, hydra.core.Term> p, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>> recurse, T1 val0) {
-    return ((recurse).apply(val0)).apply(hydra.lib.pairs.First.apply(p));
+    return (recurse).apply(val0).apply(hydra.lib.pairs.First.apply(p));
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTerm_rs(hydra.util.Pair<hydra.core.Term, hydra.core.Term> p, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>> recurse, hydra.util.Pair<T1, hydra.core.Term> rf) {
-    return ((recurse).apply(hydra.lib.pairs.First.apply(rf))).apply(hydra.lib.pairs.Second.apply(p));
+    return (recurse).apply(hydra.lib.pairs.First.apply(rf)).apply(hydra.lib.pairs.Second.apply(p));
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Elimination> rewriteAndFoldTerm_re(hydra.core.Elimination elm, java.util.function.Function<T1, java.util.function.Function<hydra.core.Elimination, hydra.util.Pair<T1, hydra.core.Elimination>>> forElimination, T1 val) {
-    return ((forElimination).apply(val)).apply(elm);
+    return (forElimination).apply(val).apply(elm);
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTerm_rl2(hydra.core.Lambda l, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>> recurse, T1 val) {
-    return ((recurse).apply(val)).apply((l).body);
+    return (recurse).apply(val).apply((l).body);
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Elimination> rewriteAndFoldTerm_r(hydra.core.Elimination elm, java.util.function.Function<T1, java.util.function.Function<hydra.util.ConsList<hydra.core.Field>, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Field>>>> forFields, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>> recurse, T1 val) {
@@ -1542,7 +1542,7 @@ public interface Rewriting {
           hydra.rewriting.Rewriting.<T1>rewriteAndFoldTerm_val1(
             rmd.get(),
             val)));
-        return (hydra.util.Pair<T1, hydra.core.Elimination>) ((hydra.util.Pair<T1, hydra.core.Elimination>) (new hydra.util.Pair<T1, hydra.core.Elimination>(hydra.lib.pairs.First.apply(rcases.get()), new hydra.core.Elimination.Union(new hydra.core.CaseStatement(((cs).value).typeName, hydra.lib.maybes.Map.apply(
+        return (hydra.util.Pair<T1, hydra.core.Elimination>) ((hydra.util.Pair<T1, hydra.core.Elimination>) (new hydra.util.Pair<T1, hydra.core.Elimination>(hydra.lib.pairs.First.apply(rcases.get()), new hydra.core.Elimination.Union(new hydra.core.CaseStatement((cs).value.typeName, hydra.lib.maybes.Map.apply(
           (java.util.function.Function<hydra.util.Pair<T1, hydra.core.Term>, hydra.core.Term>) ((java.util.function.Function<hydra.util.Pair<T1, hydra.core.Term>, hydra.core.Term>) (hydra.lib.pairs.Second::apply)),
           rmd.get()), hydra.lib.pairs.Second.apply(rcases.get()))))));
       }
@@ -1551,7 +1551,7 @@ public interface Rewriting {
   
   static <T1> hydra.util.Maybe<hydra.util.Pair<T1, hydra.core.Term>> rewriteAndFoldTerm_rmd(hydra.core.CaseStatement cs, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>> recurse, T1 val) {
     return hydra.lib.maybes.Map.apply(
-      (java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>) (v1 -> ((recurse).apply(val)).apply(v1)),
+      (java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>) (v1 -> (recurse).apply(val).apply(v1)),
       (cs).default_);
   }
   
@@ -1563,23 +1563,23 @@ public interface Rewriting {
   }
   
   static <T1> hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Field>> rewriteAndFoldTerm_rcases(hydra.core.CaseStatement cs, java.util.function.Function<T1, java.util.function.Function<hydra.util.ConsList<hydra.core.Field>, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Field>>>> forFields, T1 val1) {
-    return ((forFields).apply(val1)).apply((cs).cases);
+    return (forFields).apply(val1).apply((cs).cases);
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTerm_r2(hydra.core.Binding binding, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>> recurse, T1 val) {
-    return ((recurse).apply(val)).apply((binding).term);
+    return (recurse).apply(val).apply((binding).term);
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTerm_rk(hydra.util.Pair<hydra.core.Term, hydra.core.Term> kv, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>> recurse, T1 val) {
-    return ((recurse).apply(val)).apply(hydra.lib.pairs.First.apply(kv));
+    return (recurse).apply(val).apply(hydra.lib.pairs.First.apply(kv));
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTerm_rv(hydra.util.Pair<hydra.core.Term, hydra.core.Term> kv, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>> recurse, hydra.util.Pair<T1, hydra.core.Term> rk) {
-    return ((recurse).apply(hydra.lib.pairs.First.apply(rk))).apply(hydra.lib.pairs.Second.apply(kv));
+    return (recurse).apply(hydra.lib.pairs.First.apply(rk)).apply(hydra.lib.pairs.Second.apply(kv));
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTerm_r3(hydra.core.Field field, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>> recurse, T1 val) {
-    return ((recurse).apply(val)).apply((field).term);
+    return (recurse).apply(val).apply((field).term);
   }
   
   static <T2, T3, T4> hydra.util.Pair<T2, hydra.util.ConsList<T4>> rewriteAndFoldTerm_rr2(hydra.util.ConsList<T3> els, java.util.function.Function<T2, java.util.function.Function<T3, hydra.util.Pair<T2, T4>>> rec, T2 val) {
@@ -1598,11 +1598,11 @@ public interface Rewriting {
   }
   
   static <T2, T3, T4> hydra.util.Pair<T2, T4> rewriteAndFoldTerm_r22(T3 el, hydra.util.Pair<T2, hydra.util.ConsList<T4>> r, java.util.function.Function<T2, java.util.function.Function<T3, hydra.util.Pair<T2, T4>>> rec) {
-    return ((rec).apply(hydra.lib.pairs.First.apply(r))).apply(el);
+    return (rec).apply(hydra.lib.pairs.First.apply(r)).apply(el);
   }
   
   static <T2, T3, T4, T5> hydra.util.Pair<T4, T5> rewriteAndFoldTerm_r4(java.util.function.Function<T2, java.util.function.Function<T3, hydra.util.Pair<T4, T5>>> rec, T3 term, T2 val) {
-    return ((rec).apply(val)).apply(term);
+    return (rec).apply(val).apply(term);
   }
   
   static <T0> hydra.util.Pair<T0, hydra.core.Term> rewriteAndFoldTermWithPath(java.util.function.Function<java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>> f, T0 term0, hydra.core.Term v1) {
@@ -1628,10 +1628,10 @@ public interface Rewriting {
         return hydra.rewriting.Rewriting.rewriteAndFoldTermWithPath_forSingleWithAccessor(
           path,
           recurse,
-          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(t, ((at).value).annotation))),
+          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(t, (at).value.annotation))),
           new hydra.accessors.TermAccessor.AnnotatedBody(),
           val0,
-          ((at).value).body);
+          (at).value.body);
       }
       
       @Override
@@ -1767,12 +1767,12 @@ public interface Rewriting {
           (r).value,
           recurse,
           val0));
-        return (hydra.util.Pair<T1, hydra.core.Term>) ((hydra.util.Pair<T1, hydra.core.Term>) (new hydra.util.Pair<T1, hydra.core.Term>(hydra.lib.pairs.First.apply(rfields.get()), new hydra.core.Term.Record(new hydra.core.Record(((r).value).typeName, hydra.lib.lists.Map.apply(
+        return (hydra.util.Pair<T1, hydra.core.Term>) ((hydra.util.Pair<T1, hydra.core.Term>) (new hydra.util.Pair<T1, hydra.core.Term>(hydra.lib.pairs.First.apply(rfields.get()), new hydra.core.Term.Record(new hydra.core.Record((r).value.typeName, hydra.lib.lists.Map.apply(
           (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Term>, hydra.core.Field>) (ft -> new hydra.core.Field(hydra.lib.pairs.First.apply(ft), hydra.lib.pairs.Second.apply(ft))),
           hydra.lib.lists.Zip.apply(
             hydra.lib.lists.Map.apply(
               projected -> projected.name,
-              ((r).value).fields),
+              (r).value.fields),
             hydra.lib.pairs.Second.apply(rfields.get()))))))));
       }
       
@@ -1793,10 +1793,10 @@ public interface Rewriting {
         return hydra.rewriting.Rewriting.rewriteAndFoldTermWithPath_forSingleWithAccessor(
           path,
           recurse,
-          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(t, ((ta).value).type))),
+          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(t, (ta).value.type))),
           new hydra.accessors.TermAccessor.TypeApplicationTerm(),
           val0,
-          ((ta).value).body);
+          (ta).value.body);
       }
       
       @Override
@@ -1804,10 +1804,10 @@ public interface Rewriting {
         return hydra.rewriting.Rewriting.rewriteAndFoldTermWithPath_forSingleWithAccessor(
           path,
           recurse,
-          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda(((tl).value).parameter, t))),
+          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda((tl).value.parameter, t))),
           new hydra.accessors.TermAccessor.TypeLambdaBody(),
           val0,
-          ((tl).value).body);
+          (tl).value.body);
       }
       
       @Override
@@ -1815,10 +1815,10 @@ public interface Rewriting {
         return hydra.rewriting.Rewriting.rewriteAndFoldTermWithPath_forSingleWithAccessor(
           path,
           recurse,
-          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.Union(new hydra.core.Injection(((inj).value).typeName, new hydra.core.Field((((inj).value).field).name, t)))),
+          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.Union(new hydra.core.Injection((inj).value.typeName, new hydra.core.Field((inj).value.field.name, t)))),
           new hydra.accessors.TermAccessor.InjectionTerm(),
           val0,
-          (((inj).value).field).term);
+          (inj).value.field.term);
       }
       
       @Override
@@ -1826,16 +1826,16 @@ public interface Rewriting {
         return hydra.rewriting.Rewriting.rewriteAndFoldTermWithPath_forSingleWithAccessor(
           path,
           recurse,
-          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(((wt).value).typeName, t))),
+          (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (t -> new hydra.core.Term.Wrap(new hydra.core.WrappedTerm((wt).value.typeName, t))),
           new hydra.accessors.TermAccessor.WrappedTerm(),
           val0,
-          ((wt).value).body);
+          (wt).value.body);
       }
     });
   }
   
   static <T0> hydra.util.Pair<T0, hydra.core.Term> rewriteAndFoldTermWithPath_recurse(java.util.function.Function<java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>> f, hydra.util.ConsList<hydra.accessors.TermAccessor> v1, T0 v2, hydra.core.Term v3) {
-    return ((((f).apply((java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>) (v12 -> (java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>) (v22 -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>) (v32 -> hydra.rewriting.Rewriting.<T0>rewriteAndFoldTermWithPath_fsub(
+    return (f).apply((java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>) (v12 -> (java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>) (v22 -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>) (v32 -> hydra.rewriting.Rewriting.<T0>rewriteAndFoldTermWithPath_fsub(
       (java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>>) (v13 -> (java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>>) (v23 -> (java.util.function.Function<hydra.core.Term, hydra.util.Pair<T0, hydra.core.Term>>) (v33 -> hydra.rewriting.Rewriting.<T0>rewriteAndFoldTermWithPath_recurse(
         f,
         v13,
@@ -1843,7 +1843,7 @@ public interface Rewriting {
         v33)))),
       v12,
       v22,
-      v32)))))).apply(v1)).apply(v2)).apply(v3);
+      v32))))).apply(v1).apply(v2).apply(v3);
   }
   
   static <T2, T3, T4, T5, T6> hydra.util.Pair<T4, T6> rewriteAndFoldTermWithPath_forSingleWithAccessor(hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T2, java.util.function.Function<T3, hydra.util.Pair<T4, T5>>>> rec, java.util.function.Function<T5, T6> cons, hydra.accessors.TermAccessor accessor, T2 val, T3 term) {
@@ -1878,7 +1878,7 @@ public interface Rewriting {
   static <T1> hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Field>> rewriteAndFoldTermWithPath_forFieldsWithAccessor(hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<java.util.function.Function<hydra.core.Name, hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Field, hydra.util.Pair<T1, hydra.core.Field>>>> forFieldWithAccessor, java.util.function.Function<hydra.core.Name, hydra.accessors.TermAccessor> mkAccessor, T1 v1, hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Field>> v2) {
     return hydra.rewriting.Rewriting.rewriteAndFoldTermWithPath_forManyWithAccessors(
       path,
-      (java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Field, hydra.util.Pair<T1, hydra.core.Field>>>>) (path1 -> (java.util.function.Function<T1, java.util.function.Function<hydra.core.Field, hydra.util.Pair<T1, hydra.core.Field>>>) (val1 -> (java.util.function.Function<hydra.core.Field, hydra.util.Pair<T1, hydra.core.Field>>) (field1 -> (((forFieldWithAccessor).apply(mkAccessor)).apply(val1)).apply(field1)))),
+      (java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Field, hydra.util.Pair<T1, hydra.core.Field>>>>) (path1 -> (java.util.function.Function<T1, java.util.function.Function<hydra.core.Field, hydra.util.Pair<T1, hydra.core.Field>>>) (val1 -> (java.util.function.Function<hydra.core.Field, hydra.util.Pair<T1, hydra.core.Field>>) (field1 -> (forFieldWithAccessor).apply(mkAccessor).apply(val1).apply(field1)))),
       (java.util.function.Function<hydra.util.ConsList<hydra.core.Field>, hydra.util.ConsList<hydra.core.Field>>) (x -> x),
       v1,
       v2);
@@ -1941,7 +1941,7 @@ public interface Rewriting {
           path,
           recurse,
           val));
-        return (hydra.util.Pair<T1, hydra.core.Function>) ((hydra.util.Pair<T1, hydra.core.Function>) (new hydra.util.Pair<T1, hydra.core.Function>(hydra.lib.pairs.First.apply(rl.get()), new hydra.core.Function.Lambda(new hydra.core.Lambda(((l).value).parameter, ((l).value).domain, hydra.lib.pairs.Second.apply(rl.get()))))));
+        return (hydra.util.Pair<T1, hydra.core.Function>) ((hydra.util.Pair<T1, hydra.core.Function>) (new hydra.util.Pair<T1, hydra.core.Function>(hydra.lib.pairs.First.apply(rl.get()), new hydra.core.Function.Lambda(new hydra.core.Lambda((l).value.parameter, (l).value.domain, hydra.lib.pairs.Second.apply(rl.get()))))));
       }
     });
   }
@@ -1951,37 +1951,37 @@ public interface Rewriting {
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rlhs(hydra.core.Application a, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val0) {
-    return (((recurse).apply(hydra.lib.lists.Concat2.apply(
+    return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.ApplicationFunction())))).apply(val0)).apply((a).function);
+      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.ApplicationFunction()))).apply(val0).apply((a).function);
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rrhs(hydra.core.Application a, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, hydra.util.Pair<T1, hydra.core.Term> rlhs) {
-    return (((recurse).apply(hydra.lib.lists.Concat2.apply(
+    return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.ApplicationArgument())))).apply(hydra.lib.pairs.First.apply(rlhs))).apply((a).argument);
+      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.ApplicationArgument()))).apply(hydra.lib.pairs.First.apply(rlhs)).apply((a).argument);
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rl(hydra.core.Term l, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val0) {
-    return (((recurse).apply(hydra.lib.lists.Concat2.apply(
+    return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.SumTerm())))).apply(val0)).apply(l);
+      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.SumTerm()))).apply(val0).apply(l);
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rr(hydra.util.ConsList<hydra.accessors.TermAccessor> path, hydra.core.Term r, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val0) {
-    return (((recurse).apply(hydra.lib.lists.Concat2.apply(
+    return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.SumTerm())))).apply(val0)).apply(r);
+      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.SumTerm()))).apply(val0).apply(r);
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Function> rewriteAndFoldTermWithPath_rf(hydra.core.Function f, java.util.function.Function<T1, java.util.function.Function<hydra.core.Function, hydra.util.Pair<T1, hydra.core.Function>>> forFunction, T1 val0) {
-    return ((forFunction).apply(val0)).apply(f);
+    return (forFunction).apply(val0).apply(f);
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_renv(hydra.core.Let l, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val0) {
-    return (((recurse).apply(hydra.lib.lists.Concat2.apply(
+    return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.LetBody())))).apply(val0)).apply((l).body);
+      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.LetBody()))).apply(val0).apply((l).body);
   }
   
   static <T1> hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Binding>> rewriteAndFoldTermWithPath_rbindings(java.util.function.Function<T1, java.util.function.Function<hydra.core.Binding, hydra.util.Pair<T1, hydra.core.Binding>>> forBindingWithAccessor, hydra.core.Let l, hydra.util.Pair<T1, hydra.core.Term> renv) {
@@ -2000,7 +2000,7 @@ public interface Rewriting {
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Binding> rewriteAndFoldTermWithPath_rb(hydra.core.Binding binding, java.util.function.Function<T1, java.util.function.Function<hydra.core.Binding, hydra.util.Pair<T1, hydra.core.Binding>>> forBindingWithAccessor, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Binding>> r) {
-    return ((forBindingWithAccessor).apply(hydra.lib.pairs.First.apply(r))).apply(binding);
+    return (forBindingWithAccessor).apply(hydra.lib.pairs.First.apply(r)).apply(binding);
   }
   
   static <T1> hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>> rewriteAndFoldTermWithPath_rr2(hydra.util.ConsList<hydra.core.Term> els, Integer idx, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val0) {
@@ -2022,9 +2022,9 @@ public interface Rewriting {
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_r2(hydra.core.Term el, hydra.util.ConsList<hydra.accessors.TermAccessor> path, hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>> r, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse) {
-    return (((recurse).apply(hydra.lib.lists.Concat2.apply(
+    return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.ListElement(hydra.lib.pairs.First.apply(r)))))).apply(hydra.lib.pairs.First.apply(hydra.lib.pairs.Second.apply(r)))).apply(el);
+      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.ListElement(hydra.lib.pairs.First.apply(r))))).apply(hydra.lib.pairs.First.apply(hydra.lib.pairs.Second.apply(r))).apply(el);
   }
   
   static <T1> hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>> rewriteAndFoldTermWithPath_rr3(Integer idx, hydra.util.PersistentMap<hydra.core.Term, hydra.core.Term> m, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val0) {
@@ -2052,27 +2052,27 @@ public interface Rewriting {
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rk(hydra.util.Pair<hydra.core.Term, hydra.core.Term> kv, hydra.util.ConsList<hydra.accessors.TermAccessor> path, hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>> r, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse) {
-    return (((recurse).apply(hydra.lib.lists.Concat2.apply(
+    return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.MapKey(hydra.lib.pairs.First.apply(r)))))).apply(hydra.lib.pairs.First.apply(hydra.lib.pairs.Second.apply(r)))).apply(hydra.lib.pairs.First.apply(kv));
+      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.MapKey(hydra.lib.pairs.First.apply(r))))).apply(hydra.lib.pairs.First.apply(hydra.lib.pairs.Second.apply(r))).apply(hydra.lib.pairs.First.apply(kv));
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rv(hydra.util.Pair<hydra.core.Term, hydra.core.Term> kv, hydra.util.ConsList<hydra.accessors.TermAccessor> path, hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.util.Pair<hydra.core.Term, hydra.core.Term>>>> r, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, hydra.util.Pair<T1, hydra.core.Term> rk) {
-    return (((recurse).apply(hydra.lib.lists.Concat2.apply(
+    return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.MapValue(hydra.lib.pairs.First.apply(r)))))).apply(hydra.lib.pairs.First.apply(rk))).apply(hydra.lib.pairs.Second.apply(kv));
+      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.MapValue(hydra.lib.pairs.First.apply(r))))).apply(hydra.lib.pairs.First.apply(rk)).apply(hydra.lib.pairs.Second.apply(kv));
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rf2(hydra.util.Pair<hydra.core.Term, hydra.core.Term> p, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val0) {
-    return (((recurse).apply(hydra.lib.lists.Concat2.apply(
+    return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.ProductTerm(0))))).apply(val0)).apply(hydra.lib.pairs.First.apply(p));
+      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.ProductTerm(0)))).apply(val0).apply(hydra.lib.pairs.First.apply(p));
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rs(hydra.util.Pair<hydra.core.Term, hydra.core.Term> p, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, hydra.util.Pair<T1, hydra.core.Term> rf) {
-    return (((recurse).apply(hydra.lib.lists.Concat2.apply(
+    return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.ProductTerm(1))))).apply(hydra.lib.pairs.First.apply(rf))).apply(hydra.lib.pairs.Second.apply(p));
+      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.ProductTerm(1)))).apply(hydra.lib.pairs.First.apply(rf)).apply(hydra.lib.pairs.Second.apply(p));
   }
   
   static <T1> hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>> rewriteAndFoldTermWithPath_rfields(hydra.util.ConsList<hydra.accessors.TermAccessor> path, hydra.core.Record r, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val0) {
@@ -2105,19 +2105,19 @@ public interface Rewriting {
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_r22(hydra.core.Term el, hydra.util.ConsList<hydra.accessors.TermAccessor> path, hydra.util.Pair<Integer, hydra.util.Pair<T1, hydra.util.ConsList<hydra.core.Term>>> r, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse) {
-    return (((recurse).apply(hydra.lib.lists.Concat2.apply(
+    return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.SetElement(hydra.lib.pairs.First.apply(r)))))).apply(hydra.lib.pairs.First.apply(hydra.lib.pairs.Second.apply(r)))).apply(el);
+      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.SetElement(hydra.lib.pairs.First.apply(r))))).apply(hydra.lib.pairs.First.apply(hydra.lib.pairs.Second.apply(r))).apply(el);
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Elimination> rewriteAndFoldTermWithPath_re(hydra.core.Elimination elm, java.util.function.Function<T1, java.util.function.Function<hydra.core.Elimination, hydra.util.Pair<T1, hydra.core.Elimination>>> forElimination, T1 val) {
-    return ((forElimination).apply(val)).apply(elm);
+    return (forElimination).apply(val).apply(elm);
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rl2(hydra.core.Lambda l, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val) {
-    return (((recurse).apply(hydra.lib.lists.Concat2.apply(
+    return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.LambdaBody())))).apply(val)).apply((l).body);
+      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.LambdaBody()))).apply(val).apply((l).body);
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Elimination> rewriteAndFoldTermWithPath_r(hydra.core.Elimination elm, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val) {
@@ -2141,14 +2141,14 @@ public interface Rewriting {
           hydra.rewriting.Rewriting.<T1>rewriteAndFoldTermWithPath_val1(
             rmd.get(),
             val)));
-        return (hydra.util.Pair<T1, hydra.core.Elimination>) ((hydra.util.Pair<T1, hydra.core.Elimination>) (new hydra.util.Pair<T1, hydra.core.Elimination>(hydra.lib.pairs.First.apply(rcases.get()), new hydra.core.Elimination.Union(new hydra.core.CaseStatement(((cs).value).typeName, hydra.lib.maybes.Map.apply(
+        return (hydra.util.Pair<T1, hydra.core.Elimination>) ((hydra.util.Pair<T1, hydra.core.Elimination>) (new hydra.util.Pair<T1, hydra.core.Elimination>(hydra.lib.pairs.First.apply(rcases.get()), new hydra.core.Elimination.Union(new hydra.core.CaseStatement((cs).value.typeName, hydra.lib.maybes.Map.apply(
           (java.util.function.Function<hydra.util.Pair<T1, hydra.core.Term>, hydra.core.Term>) ((java.util.function.Function<hydra.util.Pair<T1, hydra.core.Term>, hydra.core.Term>) (hydra.lib.pairs.Second::apply)),
           rmd.get()), hydra.lib.lists.Map.apply(
           (java.util.function.Function<hydra.util.Pair<hydra.core.Name, hydra.core.Term>, hydra.core.Field>) (ft -> new hydra.core.Field(hydra.lib.pairs.First.apply(ft), hydra.lib.pairs.Second.apply(ft))),
           hydra.lib.lists.Zip.apply(
             hydra.lib.lists.Map.apply(
               projected -> projected.name,
-              ((cs).value).cases),
+              (cs).value.cases),
             hydra.lib.pairs.Second.apply(rcases.get()))))))));
       }
     });
@@ -2156,9 +2156,9 @@ public interface Rewriting {
   
   static <T1> hydra.util.Maybe<hydra.util.Pair<T1, hydra.core.Term>> rewriteAndFoldTermWithPath_rmd(hydra.core.CaseStatement cs, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val) {
     return hydra.lib.maybes.Map.apply(
-      (java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>) (def -> (((recurse).apply(hydra.lib.lists.Concat2.apply(
+      (java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>) (def -> (recurse).apply(hydra.lib.lists.Concat2.apply(
         path,
-        hydra.util.ConsList.of(new hydra.accessors.TermAccessor.UnionCasesDefault())))).apply(val)).apply(def)),
+        hydra.util.ConsList.of(new hydra.accessors.TermAccessor.UnionCasesDefault()))).apply(val).apply(def)),
       (cs).default_);
   }
   
@@ -2181,27 +2181,27 @@ public interface Rewriting {
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_r3(hydra.core.Binding binding, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val) {
-    return (((recurse).apply(hydra.lib.lists.Concat2.apply(
+    return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.LetBinding((binding).name))))).apply(val)).apply((binding).term);
+      hydra.util.ConsList.of(new hydra.accessors.TermAccessor.LetBinding((binding).name)))).apply(val).apply((binding).term);
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rk2(hydra.accessors.TermAccessor keyAccessor, hydra.util.Pair<hydra.core.Term, hydra.core.Term> kv, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val) {
-    return (((recurse).apply(hydra.lib.lists.Concat2.apply(
+    return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(keyAccessor)))).apply(val)).apply(hydra.lib.pairs.First.apply(kv));
+      hydra.util.ConsList.of(keyAccessor))).apply(val).apply(hydra.lib.pairs.First.apply(kv));
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_rv2(hydra.util.Pair<hydra.core.Term, hydra.core.Term> kv, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, hydra.util.Pair<T1, hydra.core.Term> rk, hydra.accessors.TermAccessor valAccessor) {
-    return (((recurse).apply(hydra.lib.lists.Concat2.apply(
+    return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(valAccessor)))).apply(hydra.lib.pairs.First.apply(rk))).apply(hydra.lib.pairs.Second.apply(kv));
+      hydra.util.ConsList.of(valAccessor))).apply(hydra.lib.pairs.First.apply(rk)).apply(hydra.lib.pairs.Second.apply(kv));
   }
   
   static <T1> hydra.util.Pair<T1, hydra.core.Term> rewriteAndFoldTermWithPath_r4(hydra.core.Field field, java.util.function.Function<hydra.core.Name, hydra.accessors.TermAccessor> mkAccessor, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.util.Pair<T1, hydra.core.Term>>>> recurse, T1 val) {
-    return (((recurse).apply(hydra.lib.lists.Concat2.apply(
+    return (recurse).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of((mkAccessor).apply((field).name))))).apply(val)).apply((field).term);
+      hydra.util.ConsList.of((mkAccessor).apply((field).name)))).apply(val).apply((field).term);
   }
   
   static <T2, T3, T4> hydra.util.Pair<T2, hydra.util.ConsList<T4>> rewriteAndFoldTermWithPath_rr5(hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, T3>> accessorTermPairs, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T2, java.util.function.Function<T3, hydra.util.Pair<T2, T4>>>> rec, T2 val) {
@@ -2221,15 +2221,15 @@ public interface Rewriting {
   }
   
   static <T2, T3, T4> hydra.util.Pair<T2, T4> rewriteAndFoldTermWithPath_r23(hydra.util.Pair<hydra.accessors.TermAccessor, T3> atp, hydra.util.ConsList<hydra.accessors.TermAccessor> path, hydra.util.Pair<T2, hydra.util.ConsList<T4>> r, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T2, java.util.function.Function<T3, hydra.util.Pair<T2, T4>>>> rec) {
-    return (((rec).apply(hydra.lib.lists.Concat2.apply(
+    return (rec).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(hydra.lib.pairs.First.apply(atp))))).apply(hydra.lib.pairs.First.apply(r))).apply(hydra.lib.pairs.Second.apply(atp));
+      hydra.util.ConsList.of(hydra.lib.pairs.First.apply(atp)))).apply(hydra.lib.pairs.First.apply(r)).apply(hydra.lib.pairs.Second.apply(atp));
   }
   
   static <T2, T3, T4, T5> hydra.util.Pair<T4, T5> rewriteAndFoldTermWithPath_r5(hydra.accessors.TermAccessor accessor, hydra.util.ConsList<hydra.accessors.TermAccessor> path, java.util.function.Function<hydra.util.ConsList<hydra.accessors.TermAccessor>, java.util.function.Function<T2, java.util.function.Function<T3, hydra.util.Pair<T4, T5>>>> rec, T3 term, T2 val) {
-    return (((rec).apply(hydra.lib.lists.Concat2.apply(
+    return (rec).apply(hydra.lib.lists.Concat2.apply(
       path,
-      hydra.util.ConsList.of(accessor)))).apply(val)).apply(term);
+      hydra.util.ConsList.of(accessor))).apply(val).apply(term);
   }
   
   static hydra.core.Term rewriteTerm(java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.core.Term>, java.util.function.Function<hydra.core.Term, hydra.core.Term>> f, hydra.core.Term term0) {
@@ -2243,11 +2243,11 @@ public interface Rewriting {
         
         @Override
         public hydra.core.Elimination visit(hydra.core.Elimination.Union cs) {
-          return new hydra.core.Elimination.Union(new hydra.core.CaseStatement(((cs).value).typeName, hydra.lib.maybes.Map.apply(
+          return new hydra.core.Elimination.Union(new hydra.core.CaseStatement((cs).value.typeName, hydra.lib.maybes.Map.apply(
             recurse,
-            ((cs).value).default_), hydra.lib.lists.Map.apply(
+            (cs).value.default_), hydra.lib.lists.Map.apply(
             forField,
-            ((cs).value).cases)));
+            (cs).value.cases)));
         }
         
         @Override
@@ -2263,7 +2263,7 @@ public interface Rewriting {
         
         @Override
         public hydra.core.Function visit(hydra.core.Function.Lambda l) {
-          return new hydra.core.Function.Lambda(new hydra.core.Lambda(((l).value).parameter, ((l).value).domain, (recurse).apply(((l).value).body)));
+          return new hydra.core.Function.Lambda(new hydra.core.Lambda((l).value.parameter, (l).value.domain, (recurse).apply((l).value.body)));
         }
         
         @Override
@@ -2286,12 +2286,12 @@ public interface Rewriting {
       return (term).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.core.Term visit(hydra.core.Term.Annotated at) {
-          return new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm((recurse).apply(((at).value).body), ((at).value).annotation));
+          return new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm((recurse).apply((at).value.body), (at).value.annotation));
         }
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Application a) {
-          return new hydra.core.Term.Application(new hydra.core.Application((recurse).apply(((a).value).function), (recurse).apply(((a).value).argument)));
+          return new hydra.core.Term.Application(new hydra.core.Application((recurse).apply((a).value.function), (recurse).apply((a).value.argument)));
         }
         
         @Override
@@ -2343,9 +2343,9 @@ public interface Rewriting {
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Record r) {
-          return new hydra.core.Term.Record(new hydra.core.Record(((r).value).typeName, hydra.lib.lists.Map.apply(
+          return new hydra.core.Term.Record(new hydra.core.Record((r).value.typeName, hydra.lib.lists.Map.apply(
             forField,
-            ((r).value).fields)));
+            (r).value.fields)));
         }
         
         @Override
@@ -2357,17 +2357,17 @@ public interface Rewriting {
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.TypeApplication tt) {
-          return new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm((recurse).apply(((tt).value).body), ((tt).value).type));
+          return new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm((recurse).apply((tt).value.body), (tt).value.type));
         }
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.TypeLambda ta) {
-          return new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda(((ta).value).parameter, (recurse).apply(((ta).value).body)));
+          return new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda((ta).value.parameter, (recurse).apply((ta).value.body)));
         }
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Union i) {
-          return new hydra.core.Term.Union(new hydra.core.Injection(((i).value).typeName, (forField).apply(((i).value).field)));
+          return new hydra.core.Term.Union(new hydra.core.Injection((i).value.typeName, (forField).apply((i).value.field)));
         }
         
         @Override
@@ -2382,13 +2382,13 @@ public interface Rewriting {
         
         @Override
         public hydra.core.Term visit(hydra.core.Term.Wrap wt) {
-          return new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(((wt).value).typeName, (recurse).apply(((wt).value).body)));
+          return new hydra.core.Term.Wrap(new hydra.core.WrappedTerm((wt).value.typeName, (recurse).apply((wt).value.body)));
         }
       });
     }));
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Term, hydra.core.Term>> recurse = new java.util.concurrent.atomic.AtomicReference<>();
-    recurse.set((java.util.function.Function<hydra.core.Term, hydra.core.Term>) (v1 -> ((f).apply((java.util.function.Function<hydra.core.Term, hydra.core.Term>) (v12 -> ((fsub).apply(recurse.get())).apply(v12)))).apply(v1)));
-    return (recurse.get()).apply(term0);
+    recurse.set((java.util.function.Function<hydra.core.Term, hydra.core.Term>) (v1 -> (f).apply((java.util.function.Function<hydra.core.Term, hydra.core.Term>) (v12 -> (fsub).apply(recurse.get()).apply(v12))).apply(v1)));
+    return recurse.get().apply(term0);
   }
   
   static <T0> hydra.util.Either<T0, hydra.core.Term> rewriteTermM(java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<T0, hydra.core.Term>>, java.util.function.Function<hydra.core.Term, hydra.util.Either<T0, hydra.core.Term>>> f, hydra.core.Term term0) {
@@ -2405,16 +2405,16 @@ public interface Rewriting {
       @Override
       public hydra.util.Either<T1, hydra.core.Term> visit(hydra.core.Term.Annotated at) {
         return hydra.lib.eithers.Bind.apply(
-          (recurse).apply(((at).value).body),
-          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (ex -> hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(ex, ((at).value).annotation)))));
+          (recurse).apply((at).value.body),
+          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (ex -> hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(ex, (at).value.annotation)))));
       }
       
       @Override
       public hydra.util.Either<T1, hydra.core.Term> visit(hydra.core.Term.Application app) {
         return hydra.lib.eithers.Bind.apply(
-          (recurse).apply(((app).value).function),
+          (recurse).apply((app).value.function),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (lhs -> hydra.lib.eithers.Bind.apply(
-            (recurse).apply(((app).value).argument),
+            (recurse).apply((app).value.argument),
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (rhs -> hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Application(new hydra.core.Application(lhs, rhs)))))));
       }
       
@@ -2447,8 +2447,8 @@ public interface Rewriting {
       
       @Override
       public hydra.util.Either<T1, hydra.core.Term> visit(hydra.core.Term.Let lt) {
-        hydra.util.ConsList<hydra.core.Binding> bindings = ((lt).value).bindings;
-        hydra.core.Term env = ((lt).value).body;
+        hydra.util.ConsList<hydra.core.Binding> bindings = (lt).value.bindings;
+        hydra.core.Term env = (lt).value.body;
         return hydra.lib.eithers.Bind.apply(
           hydra.lib.eithers.MapList.apply(
             (java.util.function.Function<hydra.core.Binding, hydra.util.Either<T1, hydra.core.Binding>>) (v1 -> hydra.rewriting.Rewriting.<T1>rewriteTermM_mapBinding(
@@ -2505,8 +2505,8 @@ public interface Rewriting {
       
       @Override
       public hydra.util.Either<T1, hydra.core.Term> visit(hydra.core.Term.Record r) {
-        hydra.util.ConsList<hydra.core.Field> fields = ((r).value).fields;
-        hydra.core.Name n = ((r).value).typeName;
+        hydra.util.ConsList<hydra.core.Field> fields = (r).value.fields;
+        hydra.core.Name n = (r).value.typeName;
         return hydra.lib.eithers.Map.apply(
           (java.util.function.Function<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>) (rfields -> new hydra.core.Term.Record(new hydra.core.Record(n, rfields))),
           hydra.lib.eithers.MapList.apply(
@@ -2526,14 +2526,14 @@ public interface Rewriting {
       @Override
       public hydra.util.Either<T1, hydra.core.Term> visit(hydra.core.Term.TypeApplication tt) {
         return hydra.lib.eithers.Bind.apply(
-          (recurse).apply(((tt).value).body),
-          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (t -> hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(t, ((tt).value).type)))));
+          (recurse).apply((tt).value.body),
+          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (t -> hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(t, (tt).value.type)))));
       }
       
       @Override
       public hydra.util.Either<T1, hydra.core.Term> visit(hydra.core.Term.TypeLambda tl) {
-        hydra.core.Term body = ((tl).value).body;
-        hydra.core.Name v = ((tl).value).parameter;
+        hydra.core.Term body = (tl).value.body;
+        hydra.core.Name v = (tl).value.parameter;
         return hydra.lib.eithers.Bind.apply(
           (recurse).apply(body),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (rbody -> hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda(v, rbody)))));
@@ -2541,8 +2541,8 @@ public interface Rewriting {
       
       @Override
       public hydra.util.Either<T1, hydra.core.Term> visit(hydra.core.Term.Union i) {
-        hydra.core.Field field = ((i).value).field;
-        hydra.core.Name n = ((i).value).typeName;
+        hydra.core.Field field = (i).value.field;
+        hydra.core.Name n = (i).value.typeName;
         return hydra.lib.eithers.Map.apply(
           (java.util.function.Function<hydra.core.Field, hydra.core.Term>) (rfield -> new hydra.core.Term.Union(new hydra.core.Injection(n, rfield))),
           (forField).apply(field));
@@ -2560,8 +2560,8 @@ public interface Rewriting {
       
       @Override
       public hydra.util.Either<T1, hydra.core.Term> visit(hydra.core.Term.Wrap wt) {
-        hydra.core.Name name = ((wt).value).typeName;
-        hydra.core.Term t = ((wt).value).body;
+        hydra.core.Name name = (wt).value.typeName;
+        hydra.core.Term t = (wt).value.body;
         return hydra.lib.eithers.Bind.apply(
           (recurse).apply(t),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (rt -> hydra.util.Either.<T1, hydra.core.Term>right(new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(name, rt)))));
@@ -2570,11 +2570,11 @@ public interface Rewriting {
   }
   
   static <T0> hydra.util.Either<T0, hydra.core.Term> rewriteTermM_recurse(java.util.function.Function<java.util.function.Function<hydra.core.Term, hydra.util.Either<T0, hydra.core.Term>>, java.util.function.Function<hydra.core.Term, hydra.util.Either<T0, hydra.core.Term>>> f, hydra.core.Term v1) {
-    return ((f).apply((java.util.function.Function<hydra.core.Term, hydra.util.Either<T0, hydra.core.Term>>) (v12 -> hydra.rewriting.Rewriting.<T0>rewriteTermM_fsub(
+    return (f).apply((java.util.function.Function<hydra.core.Term, hydra.util.Either<T0, hydra.core.Term>>) (v12 -> hydra.rewriting.Rewriting.<T0>rewriteTermM_fsub(
       (java.util.function.Function<hydra.core.Term, hydra.util.Either<T0, hydra.core.Term>>) (v13 -> hydra.rewriting.Rewriting.<T0>rewriteTermM_recurse(
         f,
         v13)),
-      v12)))).apply(v1);
+      v12))).apply(v1);
   }
   
   static <T1> hydra.util.Either<T1, hydra.core.Field> rewriteTermM_forField(java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>> recurse, hydra.core.Field field) {
@@ -2606,9 +2606,9 @@ public interface Rewriting {
       
       @Override
       public hydra.util.Either<T1, hydra.core.Function> visit(hydra.core.Elimination.Union cs) {
-        hydra.util.ConsList<hydra.core.Field> cases = ((cs).value).cases;
-        hydra.util.Maybe<hydra.core.Term> def = ((cs).value).default_;
-        hydra.core.Name n = ((cs).value).typeName;
+        hydra.util.ConsList<hydra.core.Field> cases = (cs).value.cases;
+        hydra.util.Maybe<hydra.core.Term> def = (cs).value.default_;
+        hydra.core.Name n = (cs).value.typeName;
         return hydra.lib.eithers.Bind.apply(
           hydra.lib.maybes.Maybe.applyLazy(
             () -> hydra.util.Either.<T1, hydra.util.Maybe<hydra.core.Term>>right((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing())),
@@ -2639,9 +2639,9 @@ public interface Rewriting {
       
       @Override
       public hydra.util.Either<T1, hydra.core.Function> visit(hydra.core.Function.Lambda l) {
-        hydra.core.Term body = ((l).value).body;
-        hydra.util.Maybe<hydra.core.Type> d = ((l).value).domain;
-        hydra.core.Name v = ((l).value).parameter;
+        hydra.core.Term body = (l).value.body;
+        hydra.util.Maybe<hydra.core.Type> d = (l).value.domain;
+        hydra.core.Name v = (l).value.parameter;
         return hydra.lib.eithers.Bind.apply(
           (recurse).apply(body),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Function>>) (rbody -> hydra.util.Either.<T1, hydra.core.Function>right(new hydra.core.Function.Lambda(new hydra.core.Lambda(v, d, rbody)))));
@@ -2662,7 +2662,7 @@ public interface Rewriting {
   }
   
   static <T1> hydra.core.Term rewriteTermWithContext_forSubterms(java.util.function.Function<T1, java.util.function.Function<hydra.core.Term, hydra.core.Term>> recurse0, T1 cx, hydra.core.Term term) {
-    java.util.function.Function<hydra.core.Term, hydra.core.Term> recurse = (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (v1 -> ((recurse0).apply(cx)).apply(v1));
+    java.util.function.Function<hydra.core.Term, hydra.core.Term> recurse = (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (v1 -> (recurse0).apply(cx).apply(v1));
     java.util.function.Function<hydra.core.Field, hydra.core.Field> forField = (java.util.function.Function<hydra.core.Field, hydra.core.Field>) (field -> new hydra.core.Field((field).name, (recurse).apply((field).term)));
     java.util.function.Function<hydra.core.Elimination, hydra.core.Elimination> forElimination = (java.util.function.Function<hydra.core.Elimination, hydra.core.Elimination>) (elm -> (elm).accept(new hydra.core.Elimination.PartialVisitor<>() {
       @Override
@@ -2672,11 +2672,11 @@ public interface Rewriting {
       
       @Override
       public hydra.core.Elimination visit(hydra.core.Elimination.Union cs) {
-        return new hydra.core.Elimination.Union(new hydra.core.CaseStatement(((cs).value).typeName, hydra.lib.maybes.Map.apply(
+        return new hydra.core.Elimination.Union(new hydra.core.CaseStatement((cs).value.typeName, hydra.lib.maybes.Map.apply(
           recurse,
-          ((cs).value).default_), hydra.lib.lists.Map.apply(
+          (cs).value.default_), hydra.lib.lists.Map.apply(
           forField,
-          ((cs).value).cases)));
+          (cs).value.cases)));
       }
       
       @Override
@@ -2692,7 +2692,7 @@ public interface Rewriting {
       
       @Override
       public hydra.core.Function visit(hydra.core.Function.Lambda l) {
-        return new hydra.core.Function.Lambda(new hydra.core.Lambda(((l).value).parameter, ((l).value).domain, (recurse).apply(((l).value).body)));
+        return new hydra.core.Function.Lambda(new hydra.core.Lambda((l).value.parameter, (l).value.domain, (recurse).apply((l).value.body)));
       }
       
       @Override
@@ -2715,12 +2715,12 @@ public interface Rewriting {
     return (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.core.Term visit(hydra.core.Term.Annotated at) {
-        return new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm((recurse).apply(((at).value).body), ((at).value).annotation));
+        return new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm((recurse).apply((at).value.body), (at).value.annotation));
       }
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.Application a) {
-        return new hydra.core.Term.Application(new hydra.core.Application((recurse).apply(((a).value).function), (recurse).apply(((a).value).argument)));
+        return new hydra.core.Term.Application(new hydra.core.Application((recurse).apply((a).value.function), (recurse).apply((a).value.argument)));
       }
       
       @Override
@@ -2772,9 +2772,9 @@ public interface Rewriting {
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.Record r) {
-        return new hydra.core.Term.Record(new hydra.core.Record(((r).value).typeName, hydra.lib.lists.Map.apply(
+        return new hydra.core.Term.Record(new hydra.core.Record((r).value.typeName, hydra.lib.lists.Map.apply(
           forField,
-          ((r).value).fields)));
+          (r).value.fields)));
       }
       
       @Override
@@ -2786,17 +2786,17 @@ public interface Rewriting {
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.TypeApplication tt) {
-        return new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm((recurse).apply(((tt).value).body), ((tt).value).type));
+        return new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm((recurse).apply((tt).value.body), (tt).value.type));
       }
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.TypeLambda ta) {
-        return new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda(((ta).value).parameter, (recurse).apply(((ta).value).body)));
+        return new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda((ta).value.parameter, (recurse).apply((ta).value.body)));
       }
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.Union i) {
-        return new hydra.core.Term.Union(new hydra.core.Injection(((i).value).typeName, (forField).apply(((i).value).field)));
+        return new hydra.core.Term.Union(new hydra.core.Injection((i).value.typeName, (forField).apply((i).value.field)));
       }
       
       @Override
@@ -2811,19 +2811,19 @@ public interface Rewriting {
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.Wrap wt) {
-        return new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(((wt).value).typeName, (recurse).apply(((wt).value).body)));
+        return new hydra.core.Term.Wrap(new hydra.core.WrappedTerm((wt).value.typeName, (recurse).apply((wt).value.body)));
       }
     });
   }
   
   static <T0> hydra.core.Term rewriteTermWithContext_rewrite(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.core.Term>>, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.core.Term>>> f, T0 cx, hydra.core.Term term) {
-    return (((f).apply((java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (v2 -> hydra.rewriting.Rewriting.<T0>rewriteTermWithContext_forSubterms(
+    return (f).apply((java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (v2 -> hydra.rewriting.Rewriting.<T0>rewriteTermWithContext_forSubterms(
       (java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (v12 -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (v22 -> hydra.rewriting.Rewriting.<T0>rewriteTermWithContext_rewrite(
         f,
         v12,
         v22))),
       v1,
-      v2))))).apply(cx)).apply(term);
+      v2)))).apply(cx).apply(term);
   }
   
   static <T0, T1> hydra.util.Either<T1, hydra.core.Term> rewriteTermWithContextM(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>>, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>>> f, T0 cx0, hydra.core.Term term0) {
@@ -2845,16 +2845,16 @@ public interface Rewriting {
       @Override
       public hydra.util.Either<T3, hydra.core.Term> visit(hydra.core.Term.Annotated at) {
         return hydra.lib.eithers.Bind.apply(
-          (recurse).apply(((at).value).body),
-          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>>) (ex -> hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(ex, ((at).value).annotation)))));
+          (recurse).apply((at).value.body),
+          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>>) (ex -> hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(ex, (at).value.annotation)))));
       }
       
       @Override
       public hydra.util.Either<T3, hydra.core.Term> visit(hydra.core.Term.Application app) {
         return hydra.lib.eithers.Bind.apply(
-          (recurse).apply(((app).value).function),
+          (recurse).apply((app).value.function),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>>) (lhs -> hydra.lib.eithers.Bind.apply(
-            (recurse).apply(((app).value).argument),
+            (recurse).apply((app).value.argument),
             (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>>) (rhs -> hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Application(new hydra.core.Application(lhs, rhs)))))));
       }
       
@@ -2887,8 +2887,8 @@ public interface Rewriting {
       
       @Override
       public hydra.util.Either<T3, hydra.core.Term> visit(hydra.core.Term.Let lt) {
-        hydra.util.ConsList<hydra.core.Binding> bindings = ((lt).value).bindings;
-        hydra.core.Term body = ((lt).value).body;
+        hydra.util.ConsList<hydra.core.Binding> bindings = (lt).value.bindings;
+        hydra.core.Term body = (lt).value.body;
         return hydra.lib.eithers.Bind.apply(
           hydra.lib.eithers.MapList.apply(
             (java.util.function.Function<hydra.core.Binding, hydra.util.Either<T3, hydra.core.Binding>>) (v1 -> hydra.rewriting.Rewriting.<T3>rewriteTermWithContextM_mapBinding(
@@ -2945,8 +2945,8 @@ public interface Rewriting {
       
       @Override
       public hydra.util.Either<T3, hydra.core.Term> visit(hydra.core.Term.Record r) {
-        hydra.util.ConsList<hydra.core.Field> fields = ((r).value).fields;
-        hydra.core.Name n = ((r).value).typeName;
+        hydra.util.ConsList<hydra.core.Field> fields = (r).value.fields;
+        hydra.core.Name n = (r).value.typeName;
         return hydra.lib.eithers.Map.apply(
           (java.util.function.Function<hydra.util.ConsList<hydra.core.Field>, hydra.core.Term>) (rfields -> new hydra.core.Term.Record(new hydra.core.Record(n, rfields))),
           hydra.lib.eithers.MapList.apply(
@@ -2966,14 +2966,14 @@ public interface Rewriting {
       @Override
       public hydra.util.Either<T3, hydra.core.Term> visit(hydra.core.Term.TypeApplication tt) {
         return hydra.lib.eithers.Bind.apply(
-          (recurse).apply(((tt).value).body),
-          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>>) (t -> hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(t, ((tt).value).type)))));
+          (recurse).apply((tt).value.body),
+          (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>>) (t -> hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.TypeApplication(new hydra.core.TypeApplicationTerm(t, (tt).value.type)))));
       }
       
       @Override
       public hydra.util.Either<T3, hydra.core.Term> visit(hydra.core.Term.TypeLambda tl) {
-        hydra.core.Term body = ((tl).value).body;
-        hydra.core.Name v = ((tl).value).parameter;
+        hydra.core.Term body = (tl).value.body;
+        hydra.core.Name v = (tl).value.parameter;
         return hydra.lib.eithers.Bind.apply(
           (recurse).apply(body),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>>) (rbody -> hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.TypeLambda(new hydra.core.TypeLambda(v, rbody)))));
@@ -2981,8 +2981,8 @@ public interface Rewriting {
       
       @Override
       public hydra.util.Either<T3, hydra.core.Term> visit(hydra.core.Term.Union i) {
-        hydra.core.Field field = ((i).value).field;
-        hydra.core.Name n = ((i).value).typeName;
+        hydra.core.Field field = (i).value.field;
+        hydra.core.Name n = (i).value.typeName;
         return hydra.lib.eithers.Map.apply(
           (java.util.function.Function<hydra.core.Field, hydra.core.Term>) (rfield -> new hydra.core.Term.Union(new hydra.core.Injection(n, rfield))),
           (forField).apply(field));
@@ -3000,8 +3000,8 @@ public interface Rewriting {
       
       @Override
       public hydra.util.Either<T3, hydra.core.Term> visit(hydra.core.Term.Wrap wt) {
-        hydra.core.Name name = ((wt).value).typeName;
-        hydra.core.Term t = ((wt).value).body;
+        hydra.core.Name name = (wt).value.typeName;
+        hydra.core.Term t = (wt).value.body;
         return hydra.lib.eithers.Bind.apply(
           (recurse).apply(t),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>>) (rt -> hydra.util.Either.<T3, hydra.core.Term>right(new hydra.core.Term.Wrap(new hydra.core.WrappedTerm(name, rt)))));
@@ -3010,17 +3010,17 @@ public interface Rewriting {
   }
   
   static <T0, T1> hydra.util.Either<T1, hydra.core.Term> rewriteTermWithContextM_rewrite(java.util.function.Function<java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>>, java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>>> f, T0 cx, hydra.core.Term term) {
-    return (((f).apply((java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (v2 -> hydra.rewriting.Rewriting.<T0, T1>rewriteTermWithContextM_forSubterms(
+    return (f).apply((java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>>) (v1 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (v2 -> hydra.rewriting.Rewriting.<T0, T1>rewriteTermWithContextM_forSubterms(
       (java.util.function.Function<T0, java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>>) (v12 -> (java.util.function.Function<hydra.core.Term, hydra.util.Either<T1, hydra.core.Term>>) (v22 -> hydra.rewriting.Rewriting.<T0, T1>rewriteTermWithContextM_rewrite(
         f,
         v12,
         v22))),
       v1,
-      v2))))).apply(cx)).apply(term);
+      v2)))).apply(cx).apply(term);
   }
   
   static <T2, T3> hydra.util.Either<T3, hydra.core.Term> rewriteTermWithContextM_recurse(T2 cx, java.util.function.Function<T2, java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>>> recurse0, hydra.core.Term v1) {
-    return ((recurse0).apply(cx)).apply(v1);
+    return (recurse0).apply(cx).apply(v1);
   }
   
   static <T3> hydra.util.Either<T3, hydra.core.Field> rewriteTermWithContextM_forField(java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Term>> recurse, hydra.core.Field field) {
@@ -3046,9 +3046,9 @@ public interface Rewriting {
       
       @Override
       public hydra.util.Either<T3, hydra.core.Function> visit(hydra.core.Elimination.Union cs) {
-        hydra.util.ConsList<hydra.core.Field> cases = ((cs).value).cases;
-        hydra.util.Maybe<hydra.core.Term> def = ((cs).value).default_;
-        hydra.core.Name n = ((cs).value).typeName;
+        hydra.util.ConsList<hydra.core.Field> cases = (cs).value.cases;
+        hydra.util.Maybe<hydra.core.Term> def = (cs).value.default_;
+        hydra.core.Name n = (cs).value.typeName;
         return hydra.lib.eithers.Bind.apply(
           hydra.lib.maybes.Maybe.applyLazy(
             () -> hydra.util.Either.<T3, hydra.util.Maybe<hydra.core.Term>>right((hydra.util.Maybe<hydra.core.Term>) (hydra.util.Maybe.<hydra.core.Term>nothing())),
@@ -3079,9 +3079,9 @@ public interface Rewriting {
       
       @Override
       public hydra.util.Either<T3, hydra.core.Function> visit(hydra.core.Function.Lambda l) {
-        hydra.core.Term body = ((l).value).body;
-        hydra.util.Maybe<hydra.core.Type> d = ((l).value).domain;
-        hydra.core.Name v = ((l).value).parameter;
+        hydra.core.Term body = (l).value.body;
+        hydra.util.Maybe<hydra.core.Type> d = (l).value.domain;
+        hydra.core.Name v = (l).value.parameter;
         return hydra.lib.eithers.Bind.apply(
           (recurse).apply(body),
           (java.util.function.Function<hydra.core.Term, hydra.util.Either<T3, hydra.core.Function>>) (rbody -> hydra.util.Either.<T3, hydra.core.Function>right(new hydra.core.Function.Lambda(new hydra.core.Lambda(v, d, rbody)))));
@@ -3106,32 +3106,32 @@ public interface Rewriting {
       return (typ).accept(new hydra.core.Type.PartialVisitor<>() {
         @Override
         public hydra.core.Type visit(hydra.core.Type.Annotated at) {
-          return new hydra.core.Type.Annotated(new hydra.core.AnnotatedType((recurse).apply(((at).value).body), ((at).value).annotation));
+          return new hydra.core.Type.Annotated(new hydra.core.AnnotatedType((recurse).apply((at).value.body), (at).value.annotation));
         }
         
         @Override
         public hydra.core.Type visit(hydra.core.Type.Application app) {
-          return new hydra.core.Type.Application(new hydra.core.ApplicationType((recurse).apply(((app).value).function), (recurse).apply(((app).value).argument)));
+          return new hydra.core.Type.Application(new hydra.core.ApplicationType((recurse).apply((app).value.function), (recurse).apply((app).value.argument)));
         }
         
         @Override
         public hydra.core.Type visit(hydra.core.Type.Either et) {
-          return new hydra.core.Type.Either(new hydra.core.EitherType((recurse).apply(((et).value).left), (recurse).apply(((et).value).right)));
+          return new hydra.core.Type.Either(new hydra.core.EitherType((recurse).apply((et).value.left), (recurse).apply((et).value.right)));
         }
         
         @Override
         public hydra.core.Type visit(hydra.core.Type.Pair pt) {
-          return new hydra.core.Type.Pair(new hydra.core.PairType((recurse).apply(((pt).value).first), (recurse).apply(((pt).value).second)));
+          return new hydra.core.Type.Pair(new hydra.core.PairType((recurse).apply((pt).value.first), (recurse).apply((pt).value.second)));
         }
         
         @Override
         public hydra.core.Type visit(hydra.core.Type.Function fun) {
-          return new hydra.core.Type.Function(new hydra.core.FunctionType((recurse).apply(((fun).value).domain), (recurse).apply(((fun).value).codomain)));
+          return new hydra.core.Type.Function(new hydra.core.FunctionType((recurse).apply((fun).value.domain), (recurse).apply((fun).value.codomain)));
         }
         
         @Override
         public hydra.core.Type visit(hydra.core.Type.Forall lt) {
-          return new hydra.core.Type.Forall(new hydra.core.ForallType(((lt).value).parameter, (recurse).apply(((lt).value).body)));
+          return new hydra.core.Type.Forall(new hydra.core.ForallType((lt).value.parameter, (recurse).apply((lt).value.body)));
         }
         
         @Override
@@ -3146,7 +3146,7 @@ public interface Rewriting {
         
         @Override
         public hydra.core.Type visit(hydra.core.Type.Map mt) {
-          return new hydra.core.Type.Map(new hydra.core.MapType((recurse).apply(((mt).value).keys), (recurse).apply(((mt).value).values)));
+          return new hydra.core.Type.Map(new hydra.core.MapType((recurse).apply((mt).value.keys), (recurse).apply((mt).value.values)));
         }
         
         @Override
@@ -3190,8 +3190,8 @@ public interface Rewriting {
       });
     }));
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<hydra.core.Type, hydra.core.Type>> recurse = new java.util.concurrent.atomic.AtomicReference<>();
-    recurse.set((java.util.function.Function<hydra.core.Type, hydra.core.Type>) (v1 -> ((f).apply((java.util.function.Function<hydra.core.Type, hydra.core.Type>) (v12 -> ((fsub).apply(recurse.get())).apply(v12)))).apply(v1)));
-    return (recurse.get()).apply(typ0);
+    recurse.set((java.util.function.Function<hydra.core.Type, hydra.core.Type>) (v1 -> (f).apply((java.util.function.Function<hydra.core.Type, hydra.core.Type>) (v12 -> (fsub).apply(recurse.get()).apply(v12))).apply(v1)));
+    return recurse.get().apply(typ0);
   }
   
   static <T0> hydra.util.Either<T0, hydra.core.Type> rewriteTypeM(java.util.function.Function<java.util.function.Function<hydra.core.Type, hydra.util.Either<T0, hydra.core.Type>>, java.util.function.Function<hydra.core.Type, hydra.util.Either<T0, hydra.core.Type>>> f, hydra.core.Type typ0) {
@@ -3205,51 +3205,51 @@ public interface Rewriting {
       @Override
       public hydra.util.Either<T1, hydra.core.Type> visit(hydra.core.Type.Annotated at) {
         return hydra.lib.eithers.Bind.apply(
-          (recurse).apply(((at).value).body),
-          (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (t -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(t, ((at).value).annotation)))));
+          (recurse).apply((at).value.body),
+          (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (t -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Annotated(new hydra.core.AnnotatedType(t, (at).value.annotation)))));
       }
       
       @Override
       public hydra.util.Either<T1, hydra.core.Type> visit(hydra.core.Type.Application at) {
         return hydra.lib.eithers.Bind.apply(
-          (recurse).apply(((at).value).function),
+          (recurse).apply((at).value.function),
           (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (lhs -> hydra.lib.eithers.Bind.apply(
-            (recurse).apply(((at).value).argument),
+            (recurse).apply((at).value.argument),
             (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (rhs -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Application(new hydra.core.ApplicationType(lhs, rhs)))))));
       }
       
       @Override
       public hydra.util.Either<T1, hydra.core.Type> visit(hydra.core.Type.Either et) {
         return hydra.lib.eithers.Bind.apply(
-          (recurse).apply(((et).value).left),
+          (recurse).apply((et).value.left),
           (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (left -> hydra.lib.eithers.Bind.apply(
-            (recurse).apply(((et).value).right),
+            (recurse).apply((et).value.right),
             (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (right -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Either(new hydra.core.EitherType(left, right)))))));
       }
       
       @Override
       public hydra.util.Either<T1, hydra.core.Type> visit(hydra.core.Type.Pair pt) {
         return hydra.lib.eithers.Bind.apply(
-          (recurse).apply(((pt).value).first),
+          (recurse).apply((pt).value.first),
           (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (pairFirst -> hydra.lib.eithers.Bind.apply(
-            (recurse).apply(((pt).value).second),
+            (recurse).apply((pt).value.second),
             (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (pairSecond -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Pair(new hydra.core.PairType(pairFirst, pairSecond)))))));
       }
       
       @Override
       public hydra.util.Either<T1, hydra.core.Type> visit(hydra.core.Type.Function ft) {
         return hydra.lib.eithers.Bind.apply(
-          (recurse).apply(((ft).value).domain),
+          (recurse).apply((ft).value.domain),
           (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (dom -> hydra.lib.eithers.Bind.apply(
-            (recurse).apply(((ft).value).codomain),
+            (recurse).apply((ft).value.codomain),
             (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (cod -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Function(new hydra.core.FunctionType(dom, cod)))))));
       }
       
       @Override
       public hydra.util.Either<T1, hydra.core.Type> visit(hydra.core.Type.Forall ft) {
         return hydra.lib.eithers.Bind.apply(
-          (recurse).apply(((ft).value).body),
-          (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (b -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Forall(new hydra.core.ForallType(((ft).value).parameter, b)))));
+          (recurse).apply((ft).value.body),
+          (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (b -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Forall(new hydra.core.ForallType((ft).value.parameter, b)))));
       }
       
       @Override
@@ -3267,9 +3267,9 @@ public interface Rewriting {
       @Override
       public hydra.util.Either<T1, hydra.core.Type> visit(hydra.core.Type.Map mt) {
         return hydra.lib.eithers.Bind.apply(
-          (recurse).apply(((mt).value).keys),
+          (recurse).apply((mt).value.keys),
           (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (kt -> hydra.lib.eithers.Bind.apply(
-            (recurse).apply(((mt).value).values),
+            (recurse).apply((mt).value.values),
             (java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>>) (vt -> hydra.util.Either.<T1, hydra.core.Type>right(new hydra.core.Type.Map(new hydra.core.MapType(kt, vt)))))));
       }
       
@@ -3329,11 +3329,11 @@ public interface Rewriting {
   }
   
   static <T0> hydra.util.Either<T0, hydra.core.Type> rewriteTypeM_recurse(java.util.function.Function<java.util.function.Function<hydra.core.Type, hydra.util.Either<T0, hydra.core.Type>>, java.util.function.Function<hydra.core.Type, hydra.util.Either<T0, hydra.core.Type>>> f, hydra.core.Type v1) {
-    return ((f).apply((java.util.function.Function<hydra.core.Type, hydra.util.Either<T0, hydra.core.Type>>) (v12 -> hydra.rewriting.Rewriting.<T0>rewriteTypeM_fsub(
+    return (f).apply((java.util.function.Function<hydra.core.Type, hydra.util.Either<T0, hydra.core.Type>>) (v12 -> hydra.rewriting.Rewriting.<T0>rewriteTypeM_fsub(
       (java.util.function.Function<hydra.core.Type, hydra.util.Either<T0, hydra.core.Type>>) (v13 -> hydra.rewriting.Rewriting.<T0>rewriteTypeM_recurse(
         f,
         v13)),
-      v12)))).apply(v1);
+      v12))).apply(v1);
   }
   
   static <T1> hydra.util.Either<T1, hydra.core.FieldType> rewriteTypeM_forField(java.util.function.Function<hydra.core.Type, hydra.util.Either<T1, hydra.core.Type>> recurse, hydra.core.FieldType f) {
@@ -3364,7 +3364,7 @@ public interface Rewriting {
   }
   
   static <T0> T0 simplifyTerm_simplify(java.util.function.Function<hydra.core.Term, hydra.core.Term> hydra_rewriting_deannotateTerm2, java.util.function.Function<hydra.core.Term, hydra.util.PersistentSet<hydra.core.Name>> hydra_rewriting_freeVariablesInTerm2, java.util.function.Function<hydra.core.Term, hydra.core.Term> hydra_rewriting_simplifyTerm2, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.core.Term>>> hydra_rewriting_substituteVariable2, java.util.function.Function<hydra.core.Term, T0> recurse, hydra.core.Term term) {
-    java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.core.Term>>> forRhs = (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.core.Term>>>) (rhs -> (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (var -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (body -> ((hydra_rewriting_deannotateTerm2).apply(rhs)).accept(new hydra.core.Term.PartialVisitor<>() {
+    java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.core.Term>>> forRhs = (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.core.Term>>>) (rhs -> (java.util.function.Function<hydra.core.Name, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (var -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (body -> (hydra_rewriting_deannotateTerm2).apply(rhs).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.core.Term otherwise(hydra.core.Term instance) {
         return term;
@@ -3372,7 +3372,7 @@ public interface Rewriting {
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.Variable v) {
-        return (hydra_rewriting_simplifyTerm2).apply((((hydra_rewriting_substituteVariable2).apply(var)).apply((v).value)).apply(body));
+        return (hydra_rewriting_simplifyTerm2).apply((hydra_rewriting_substituteVariable2).apply(var).apply((v).value).apply(body));
       }
     }))));
     java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Term, hydra.core.Term>> forLhs = (java.util.function.Function<hydra.core.Term, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (lhs -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (rhs -> {
@@ -3384,17 +3384,17 @@ public interface Rewriting {
         
         @Override
         public hydra.core.Term visit(hydra.core.Function.Lambda l) {
-          hydra.core.Term body = ((l).value).body;
-          hydra.core.Name var = ((l).value).parameter;
+          hydra.core.Term body = (l).value.body;
+          hydra.core.Name var = (l).value.parameter;
           return hydra.lib.logic.IfElse.lazy(
             hydra.lib.sets.Member.apply(
               var,
               (hydra_rewriting_freeVariablesInTerm2).apply(body)),
-            () -> (((forRhs).apply(rhs)).apply(var)).apply(body),
+            () -> (forRhs).apply(rhs).apply(var).apply(body),
             () -> (hydra_rewriting_simplifyTerm2).apply(body));
         }
       }));
-      return ((hydra_rewriting_deannotateTerm2).apply(lhs)).accept(new hydra.core.Term.PartialVisitor<>() {
+      return (hydra_rewriting_deannotateTerm2).apply(lhs).accept(new hydra.core.Term.PartialVisitor<>() {
         @Override
         public hydra.core.Term otherwise(hydra.core.Term instance) {
           return term;
@@ -3414,9 +3414,9 @@ public interface Rewriting {
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.Application app) {
-        hydra.core.Term lhs = ((app).value).function;
-        hydra.core.Term rhs = ((app).value).argument;
-        return ((forLhs).apply(lhs)).apply(rhs);
+        hydra.core.Term lhs = (app).value.function;
+        hydra.core.Term rhs = (app).value.argument;
+        return (forLhs).apply(lhs).apply(rhs);
       }
     }));
     hydra.core.Term stripped = (hydra_rewriting_deannotateTerm2).apply(term);
@@ -3463,7 +3463,7 @@ public interface Rewriting {
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.Function v1) {
-        return ((v1).value).accept(new hydra.core.Function.PartialVisitor<>() {
+        return (v1).value.accept(new hydra.core.Function.PartialVisitor<>() {
           @Override
           public hydra.core.Term otherwise(hydra.core.Function instance) {
             return (recurse).apply(term2);
@@ -3473,7 +3473,7 @@ public interface Rewriting {
           public hydra.core.Term visit(hydra.core.Function.Lambda l) {
             return hydra.lib.logic.IfElse.lazy(
               hydra.lib.equality.Equal.apply(
-                ((l).value).parameter,
+                (l).value.parameter,
                 from),
               () -> term2,
               () -> (recurse).apply(term2));
@@ -3504,7 +3504,7 @@ public interface Rewriting {
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.Function v1) {
-        return ((v1).value).accept(new hydra.core.Function.PartialVisitor<>() {
+        return (v1).value.accept(new hydra.core.Function.PartialVisitor<>() {
           @Override
           public hydra.core.Term otherwise(hydra.core.Function instance) {
             return (recurse).apply(term2);
@@ -3516,7 +3516,7 @@ public interface Rewriting {
               () -> (recurse).apply(term2),
               (java.util.function.Function<hydra.core.Name, hydra.core.Term>) (ignored -> term2),
               hydra.lib.maps.Lookup.apply(
-                ((l).value).parameter,
+                (l).value.parameter,
                 subst));
           }
         });
@@ -3536,14 +3536,14 @@ public interface Rewriting {
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.Annotated at) {
-        hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> ann = ((at).value).annotation;
-        hydra.core.Term subj = ((at).value).body;
+        hydra.util.PersistentMap<hydra.core.Name, hydra.core.Term> ann = (at).value.annotation;
+        hydra.core.Term subj = (at).value.body;
         return new hydra.core.Term.Annotated(new hydra.core.AnnotatedTerm(hydra.rewriting.Rewriting.stripTypeLambdas(subj), ann));
       }
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.TypeLambda ta) {
-        return hydra.rewriting.Rewriting.stripTypeLambdas(((ta).value).body);
+        return hydra.rewriting.Rewriting.stripTypeLambdas((ta).value.body);
       }
     });
   }
@@ -3552,14 +3552,14 @@ public interface Rewriting {
     return (v1).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.ConsList<hydra.core.Term> visit(hydra.core.Term.Annotated at) {
-        return hydra.util.ConsList.of(((at).value).body);
+        return hydra.util.ConsList.of((at).value.body);
       }
       
       @Override
       public hydra.util.ConsList<hydra.core.Term> visit(hydra.core.Term.Application p) {
         return hydra.util.ConsList.of(
-          ((p).value).function,
-          ((p).value).argument);
+          (p).value.function,
+          (p).value.argument);
       }
       
       @Override
@@ -3572,7 +3572,7 @@ public interface Rewriting {
       
       @Override
       public hydra.util.ConsList<hydra.core.Term> visit(hydra.core.Term.Function v12) {
-        return ((v12).value).accept(new hydra.core.Function.PartialVisitor<>() {
+        return (v12).value.accept(new hydra.core.Function.PartialVisitor<>() {
           @Override
           public hydra.util.ConsList<hydra.core.Term> otherwise(hydra.core.Function instance) {
             return (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty());
@@ -3580,7 +3580,7 @@ public interface Rewriting {
           
           @Override
           public hydra.util.ConsList<hydra.core.Term> visit(hydra.core.Function.Elimination v13) {
-            return ((v13).value).accept(new hydra.core.Elimination.PartialVisitor<>() {
+            return (v13).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
               @Override
               public hydra.util.ConsList<hydra.core.Term> otherwise(hydra.core.Elimination instance) {
                 return (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty());
@@ -3592,17 +3592,17 @@ public interface Rewriting {
                   hydra.lib.maybes.Maybe.applyLazy(
                     () -> (hydra.util.ConsList<hydra.core.Term>) (hydra.util.ConsList.<hydra.core.Term>empty()),
                     (java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.core.Term>>) (t -> hydra.util.ConsList.of(t)),
-                    ((cs).value).default_),
+                    (cs).value.default_),
                   hydra.lib.lists.Map.apply(
                     projected -> projected.term,
-                    ((cs).value).cases));
+                    (cs).value.cases));
               }
             });
           }
           
           @Override
           public hydra.util.ConsList<hydra.core.Term> visit(hydra.core.Function.Lambda l) {
-            return hydra.util.ConsList.of(((l).value).body);
+            return hydra.util.ConsList.of((l).value.body);
           }
         });
       }
@@ -3610,10 +3610,10 @@ public interface Rewriting {
       @Override
       public hydra.util.ConsList<hydra.core.Term> visit(hydra.core.Term.Let lt) {
         return hydra.lib.lists.Cons.apply(
-          ((lt).value).body,
+          (lt).value.body,
           hydra.lib.lists.Map.apply(
             projected -> projected.term,
-            ((lt).value).bindings));
+            (lt).value.bindings));
       }
       
       @Override
@@ -3654,7 +3654,7 @@ public interface Rewriting {
       public hydra.util.ConsList<hydra.core.Term> visit(hydra.core.Term.Record rt) {
         return hydra.lib.lists.Map.apply(
           projected -> projected.term,
-          ((rt).value).fields);
+          (rt).value.fields);
       }
       
       @Override
@@ -3664,17 +3664,17 @@ public interface Rewriting {
       
       @Override
       public hydra.util.ConsList<hydra.core.Term> visit(hydra.core.Term.TypeApplication ta) {
-        return hydra.util.ConsList.of(((ta).value).body);
+        return hydra.util.ConsList.of((ta).value.body);
       }
       
       @Override
       public hydra.util.ConsList<hydra.core.Term> visit(hydra.core.Term.TypeLambda ta) {
-        return hydra.util.ConsList.of(((ta).value).body);
+        return hydra.util.ConsList.of((ta).value.body);
       }
       
       @Override
       public hydra.util.ConsList<hydra.core.Term> visit(hydra.core.Term.Union ut) {
-        return hydra.util.ConsList.of((((ut).value).field).term);
+        return hydra.util.ConsList.of((ut).value.field.term);
       }
       
       @Override
@@ -3689,7 +3689,7 @@ public interface Rewriting {
       
       @Override
       public hydra.util.ConsList<hydra.core.Term> visit(hydra.core.Term.Wrap n) {
-        return hydra.util.ConsList.of(((n).value).body);
+        return hydra.util.ConsList.of((n).value.body);
       }
     });
   }
@@ -3698,14 +3698,14 @@ public interface Rewriting {
     return (v1).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Annotated at) {
-        return hydra.util.ConsList.of((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.AnnotatedBody(), ((at).value).body))));
+        return hydra.util.ConsList.of((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.AnnotatedBody(), (at).value.body))));
       }
       
       @Override
       public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Application p) {
         return hydra.util.ConsList.of(
-          (hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.ApplicationFunction(), ((p).value).function))),
-          (hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.ApplicationArgument(), ((p).value).argument))));
+          (hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.ApplicationFunction(), (p).value.function))),
+          (hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.ApplicationArgument(), (p).value.argument))));
       }
       
       @Override
@@ -3715,7 +3715,7 @@ public interface Rewriting {
       
       @Override
       public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Function v12) {
-        return ((v12).value).accept(new hydra.core.Function.PartialVisitor<>() {
+        return (v12).value.accept(new hydra.core.Function.PartialVisitor<>() {
           @Override
           public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> otherwise(hydra.core.Function instance) {
             return (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>empty());
@@ -3723,7 +3723,7 @@ public interface Rewriting {
           
           @Override
           public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Function.Elimination v13) {
-            return ((v13).value).accept(new hydra.core.Elimination.PartialVisitor<>() {
+            return (v13).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
               @Override
               public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> otherwise(hydra.core.Elimination instance) {
                 return (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>empty());
@@ -3735,17 +3735,17 @@ public interface Rewriting {
                   hydra.lib.maybes.Maybe.applyLazy(
                     () -> (hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (hydra.util.ConsList.<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>empty()),
                     (java.util.function.Function<hydra.core.Term, hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>>) (t -> hydra.util.ConsList.of((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.UnionCasesDefault(), t))))),
-                    ((cs).value).default_),
+                    (cs).value.default_),
                   hydra.lib.lists.Map.apply(
                     (java.util.function.Function<hydra.core.Field, hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (f -> (hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.UnionCasesBranch((f).name), (f).term)))),
-                    ((cs).value).cases));
+                    (cs).value.cases));
               }
             });
           }
           
           @Override
           public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Function.Lambda l) {
-            return hydra.util.ConsList.of((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.LambdaBody(), ((l).value).body))));
+            return hydra.util.ConsList.of((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.LambdaBody(), (l).value.body))));
           }
         });
       }
@@ -3753,10 +3753,10 @@ public interface Rewriting {
       @Override
       public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Let lt) {
         return hydra.lib.lists.Cons.apply(
-          (hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.LetBody(), ((lt).value).body))),
+          (hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.LetBody(), (lt).value.body))),
           hydra.lib.lists.Map.apply(
             (java.util.function.Function<hydra.core.Binding, hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (b -> (hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.LetBinding((b).name), (b).term)))),
-            ((lt).value).bindings));
+            (lt).value.bindings));
       }
       
       @Override
@@ -3797,7 +3797,7 @@ public interface Rewriting {
       public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Record rt) {
         return hydra.lib.lists.Map.apply(
           (java.util.function.Function<hydra.core.Field, hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>>) (f -> (hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.RecordField((f).name), (f).term)))),
-          ((rt).value).fields);
+          (rt).value.fields);
       }
       
       @Override
@@ -3809,17 +3809,17 @@ public interface Rewriting {
       
       @Override
       public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.TypeApplication ta) {
-        return hydra.util.ConsList.of((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.TypeApplicationTerm(), ((ta).value).body))));
+        return hydra.util.ConsList.of((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.TypeApplicationTerm(), (ta).value.body))));
       }
       
       @Override
       public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.TypeLambda ta) {
-        return hydra.util.ConsList.of((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.TypeLambdaBody(), ((ta).value).body))));
+        return hydra.util.ConsList.of((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.TypeLambdaBody(), (ta).value.body))));
       }
       
       @Override
       public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Union ut) {
-        return hydra.util.ConsList.of((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.InjectionTerm(), (((ut).value).field).term))));
+        return hydra.util.ConsList.of((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.InjectionTerm(), (ut).value.field.term))));
       }
       
       @Override
@@ -3834,7 +3834,7 @@ public interface Rewriting {
       
       @Override
       public hydra.util.ConsList<hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>> visit(hydra.core.Term.Wrap n) {
-        return hydra.util.ConsList.of((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.WrappedTerm(), ((n).value).body))));
+        return hydra.util.ConsList.of((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) ((hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>) (new hydra.util.Pair<hydra.accessors.TermAccessor, hydra.core.Term>(new hydra.accessors.TermAccessor.WrappedTerm(), (n).value.body))));
       }
     });
   }
@@ -3843,40 +3843,40 @@ public interface Rewriting {
     return (v1).accept(new hydra.core.Type.PartialVisitor<>() {
       @Override
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Annotated at) {
-        return hydra.util.ConsList.of(((at).value).body);
+        return hydra.util.ConsList.of((at).value.body);
       }
       
       @Override
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Application at) {
         return hydra.util.ConsList.of(
-          ((at).value).function,
-          ((at).value).argument);
+          (at).value.function,
+          (at).value.argument);
       }
       
       @Override
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Either et) {
         return hydra.util.ConsList.of(
-          ((et).value).left,
-          ((et).value).right);
+          (et).value.left,
+          (et).value.right);
       }
       
       @Override
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Pair pt) {
         return hydra.util.ConsList.of(
-          ((pt).value).first,
-          ((pt).value).second);
+          (pt).value.first,
+          (pt).value.second);
       }
       
       @Override
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Function ft) {
         return hydra.util.ConsList.of(
-          ((ft).value).domain,
-          ((ft).value).codomain);
+          (ft).value.domain,
+          (ft).value.codomain);
       }
       
       @Override
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Forall lt) {
-        return hydra.util.ConsList.of(((lt).value).body);
+        return hydra.util.ConsList.of((lt).value.body);
       }
       
       @Override
@@ -3892,8 +3892,8 @@ public interface Rewriting {
       @Override
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Map mt) {
         return hydra.util.ConsList.of(
-          ((mt).value).keys,
-          ((mt).value).values);
+          (mt).value.keys,
+          (mt).value.values);
       }
       
       @Override
@@ -3965,7 +3965,7 @@ public interface Rewriting {
         
         @Override
         public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Term.Function f) {
-          return ((f).value).accept(new hydra.core.Function.PartialVisitor<>() {
+          return (f).value.accept(new hydra.core.Function.PartialVisitor<>() {
             @Override
             public hydra.util.PersistentSet<hydra.core.Name> otherwise(hydra.core.Function instance) {
               return names;
@@ -3978,15 +3978,15 @@ public interface Rewriting {
             
             @Override
             public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Function.Elimination e) {
-              return ((e).value).accept(new hydra.core.Elimination.PartialVisitor<>() {
+              return (e).value.accept(new hydra.core.Elimination.PartialVisitor<>() {
                 @Override
                 public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Elimination.Record proj) {
-                  return (nominal).apply(((proj).value).typeName);
+                  return (nominal).apply((proj).value.typeName);
                 }
                 
                 @Override
                 public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Elimination.Union caseStmt) {
-                  return (nominal).apply(((caseStmt).value).typeName);
+                  return (nominal).apply((caseStmt).value.typeName);
                 }
                 
                 @Override
@@ -4000,12 +4000,12 @@ public interface Rewriting {
         
         @Override
         public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Term.Record record) {
-          return (nominal).apply(((record).value).typeName);
+          return (nominal).apply((record).value.typeName);
         }
         
         @Override
         public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Term.Union injection) {
-          return (nominal).apply(((injection).value).typeName);
+          return (nominal).apply((injection).value.typeName);
         }
         
         @Override
@@ -4015,7 +4015,7 @@ public interface Rewriting {
         
         @Override
         public hydra.util.PersistentSet<hydra.core.Name> visit(hydra.core.Term.Wrap wrappedTerm) {
-          return (nominal).apply(((wrappedTerm).value).typeName);
+          return (nominal).apply((wrappedTerm).value.typeName);
         }
       });
     }));
@@ -4056,7 +4056,7 @@ public interface Rewriting {
     java.util.concurrent.atomic.AtomicReference<java.util.function.Function<Integer, hydra.util.ConsList<Integer>>> rangeFrom = new java.util.concurrent.atomic.AtomicReference<>();
     rangeFrom.set((java.util.function.Function<Integer, hydra.util.ConsList<Integer>>) (start -> hydra.lib.lists.Cons.apply(
       start,
-      (rangeFrom.get()).apply(hydra.lib.math.Add.apply(
+      rangeFrom.get().apply(hydra.lib.math.Add.apply(
         start,
         1)))));
     return hydra.lib.lists.ZipWith.apply(
@@ -4065,7 +4065,7 @@ public interface Rewriting {
         v1,
         v2))),
       hydra.lib.sets.ToList.apply(hydra.rewriting.Rewriting.<T0>toShortNames_names(localNames)),
-      (rangeFrom.get()).apply(1));
+      rangeFrom.get().apply(1));
   }
   
   static <T0> hydra.util.PersistentSet<T0> toShortNames_names(hydra.util.Pair<String, hydra.util.PersistentSet<T0>> localNames) {
@@ -4094,7 +4094,7 @@ public interface Rewriting {
       
       @Override
       public Boolean visit(hydra.core.Term.Annotated at) {
-        return (hasTypeAnnotation.get()).apply(((at).value).body);
+        return hasTypeAnnotation.get().apply((at).value.body);
       }
     })));
     hydra.util.Lazy<hydra.util.PersistentSet<hydra.core.Name>> keys = new hydra.util.Lazy<>(() -> hydra.lib.sets.FromList.apply(hydra.lib.lists.Map.apply(
@@ -4180,22 +4180,22 @@ public interface Rewriting {
     f.set((java.util.function.Function<java.util.function.Function<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>, java.util.function.Function<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>>) (recurse -> (java.util.function.Function<hydra.util.PersistentMap<hydra.core.Name, hydra.core.Name>, java.util.function.Function<hydra.core.Term, hydra.core.Term>>) (m -> (java.util.function.Function<hydra.core.Term, hydra.core.Term>) (term -> (term).accept(new hydra.core.Term.PartialVisitor<>() {
       @Override
       public hydra.core.Term otherwise(hydra.core.Term instance) {
-        return ((recurse).apply(m)).apply(term);
+        return (recurse).apply(m).apply(term);
       }
       
       @Override
       public hydra.core.Term visit(hydra.core.Term.Function fn) {
-        return ((fn).value).accept(new hydra.core.Function.PartialVisitor<>() {
+        return (fn).value.accept(new hydra.core.Function.PartialVisitor<>() {
           @Override
           public hydra.core.Term otherwise(hydra.core.Function instance) {
-            return ((recurse).apply(m)).apply(term);
+            return (recurse).apply(m).apply(term);
           }
           
           @Override
           public hydra.core.Term visit(hydra.core.Function.Lambda l) {
-            hydra.core.Term body = ((l).value).body;
-            hydra.util.Maybe<hydra.core.Type> domain = ((l).value).domain;
-            hydra.core.Name v = ((l).value).parameter;
+            hydra.core.Term body = (l).value.body;
+            hydra.util.Maybe<hydra.core.Type> domain = (l).value.domain;
+            hydra.core.Name v = (l).value.parameter;
             return hydra.lib.logic.IfElse.lazy(
               hydra.lib.maps.Member.apply(
                 v,
@@ -4213,13 +4213,13 @@ public interface Rewriting {
                       v2.get(),
                       v2.get(),
                       m)));
-                  return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(v2.get(), domain, (((f.get()).apply(recurse)).apply(m2.get())).apply(body))));
+                  return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(v2.get(), domain, f.get().apply(recurse).apply(m2.get()).apply(body))));
                 })).get();
               })).get(),
-              () -> new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(v, domain, (((f.get()).apply(recurse)).apply(hydra.lib.maps.Insert.apply(
+              () -> new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(v, domain, f.get().apply(recurse).apply(hydra.lib.maps.Insert.apply(
                 v,
                 v,
-                m))).apply(body)))));
+                m)).apply(body)))));
           }
         });
       }
@@ -4240,8 +4240,8 @@ public interface Rewriting {
                 acc));
           })),
           m,
-          ((lt).value).bindings));
-        return ((recurse).apply(m2.get())).apply(term);
+          (lt).value.bindings));
+        return (recurse).apply(m2.get()).apply(term);
       }
       
       @Override

@@ -28,16 +28,16 @@ data Value =
   ValueString String
   deriving (Eq, Ord, Read, Show)
 
-_Value = (Core.Name "hydra.json.model.Value")
+_Value = Core.Name "hydra.json.model.Value"
 
-_Value_array = (Core.Name "array")
+_Value_array = Core.Name "array"
 
-_Value_boolean = (Core.Name "boolean")
+_Value_boolean = Core.Name "boolean"
 
-_Value_null = (Core.Name "null")
+_Value_null = Core.Name "null"
 
-_Value_number = (Core.Name "number")
+_Value_number = Core.Name "number"
 
-_Value_object = (Core.Name "object")
+_Value_object = Core.Name "object"
 
-_Value_string = (Core.Name "string")
+_Value_string = Core.Name "string"

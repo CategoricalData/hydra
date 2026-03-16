@@ -63,7 +63,7 @@ public abstract class ExistentialSubquery implements Serializable, Comparable<Ex
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ExistentialSubquery other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -103,7 +103,7 @@ public abstract class ExistentialSubquery implements Serializable, Comparable<Ex
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(ExistentialSubquery other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

@@ -60,12 +60,12 @@ public interface Encode {
         java.util.function.Function<hydra.core.Field, hydra.util.Either<String, hydra.util.Pair<String, hydra.json.model.Value>>> encodeField = (java.util.function.Function<hydra.core.Field, hydra.util.Either<String, hydra.util.Pair<String, hydra.json.model.Value>>>) (f -> {
           hydra.core.Term fterm = (f).term;
           hydra.util.Either<String, hydra.json.model.Value> encodedField = hydra.json.encode.Encode.toJson(fterm);
-          String fname = ((f).name).value;
+          String fname = (f).name.value;
           return hydra.lib.eithers.Map.apply(
             (java.util.function.Function<hydra.json.model.Value, hydra.util.Pair<String, hydra.json.model.Value>>) (v -> (hydra.util.Pair<String, hydra.json.model.Value>) ((hydra.util.Pair<String, hydra.json.model.Value>) (new hydra.util.Pair<String, hydra.json.model.Value>(fname, v)))),
             encodedField);
         });
-        hydra.util.ConsList<hydra.core.Field> fields = ((r).value).fields;
+        hydra.util.ConsList<hydra.core.Field> fields = (r).value.fields;
         hydra.util.Lazy<hydra.util.Either<String, hydra.util.ConsList<hydra.util.Pair<String, hydra.json.model.Value>>>> encodedFields = new hydra.util.Lazy<>(() -> hydra.lib.eithers.MapList.apply(
           encodeField,
           fields));
@@ -76,10 +76,10 @@ public interface Encode {
       
       @Override
       public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.core.Term.Union inj) {
-        hydra.core.Field field = ((inj).value).field;
+        hydra.core.Field field = (inj).value.field;
         hydra.core.Term fterm = (field).term;
         hydra.util.Either<String, hydra.json.model.Value> encodedUnion = hydra.json.encode.Encode.toJson(fterm);
-        String fname = ((field).name).value;
+        String fname = (field).name.value;
         return hydra.lib.eithers.Map.apply(
           (java.util.function.Function<hydra.json.model.Value, hydra.json.model.Value>) (v -> new hydra.json.model.Value.Object_(hydra.lib.maps.FromList.apply(hydra.util.ConsList.of((hydra.util.Pair<String, hydra.json.model.Value>) ((hydra.util.Pair<String, hydra.json.model.Value>) (new hydra.util.Pair<String, hydra.json.model.Value>(fname, v))))))),
           encodedUnion);
@@ -92,7 +92,7 @@ public interface Encode {
       
       @Override
       public hydra.util.Either<String, hydra.json.model.Value> visit(hydra.core.Term.Wrap wt) {
-        return hydra.json.encode.Encode.toJson(((wt).value).body);
+        return hydra.json.encode.Encode.toJson((wt).value.body);
       }
       
       @Override

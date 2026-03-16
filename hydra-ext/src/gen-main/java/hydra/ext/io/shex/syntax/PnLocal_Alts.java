@@ -79,7 +79,7 @@ public abstract class PnLocal_Alts implements Serializable, Comparable<PnLocal_A
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PnLocal_Alts other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -115,7 +115,7 @@ public abstract class PnLocal_Alts implements Serializable, Comparable<PnLocal_A
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PnLocal_Alts other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -154,7 +154,7 @@ public abstract class PnLocal_Alts implements Serializable, Comparable<PnLocal_A
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PnLocal_Alts other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -194,7 +194,7 @@ public abstract class PnLocal_Alts implements Serializable, Comparable<PnLocal_A
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PnLocal_Alts other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

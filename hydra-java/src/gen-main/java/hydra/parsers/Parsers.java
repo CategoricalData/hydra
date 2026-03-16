@@ -24,12 +24,12 @@ public interface Parsers {
       public hydra.parsing.ParseResult<T0> visit(hydra.parsing.ParseResult.Failure<T0> e) {
         return hydra.lib.logic.IfElse.lazy(
           hydra.lib.equality.Equal.apply(
-            ((e).value).remainder,
+            (e).value.remainder,
             input),
-          () -> (((java.util.function.Function<hydra.parsing.Parser<T0>, java.util.function.Function<String, hydra.parsing.ParseResult<T0>>>) (wrapped -> (wrapped).value)).apply(p2)).apply(input),
+          () -> ((java.util.function.Function<hydra.parsing.Parser<T0>, java.util.function.Function<String, hydra.parsing.ParseResult<T0>>>) (wrapped -> (wrapped).value)).apply(p2).apply(input),
           () -> (hydra.parsing.ParseResult<T0>) (new hydra.parsing.ParseResult.Failure((e).value)));
       }
-    })))).apply(v1))).apply((((java.util.function.Function<hydra.parsing.Parser<T0>, java.util.function.Function<String, hydra.parsing.ParseResult<T0>>>) (wrapped -> (wrapped).value)).apply(p1)).apply(input));
+    })))).apply(v1))).apply(((java.util.function.Function<hydra.parsing.Parser<T0>, java.util.function.Function<String, hydra.parsing.ParseResult<T0>>>) (wrapped -> (wrapped).value)).apply(p1).apply(input));
   }
   
   static hydra.parsing.Parser<Integer> anyChar() {
@@ -50,21 +50,21 @@ public interface Parsers {
         return ((java.util.function.Function<hydra.parsing.ParseResult, hydra.parsing.ParseResult<T1>>) (v12 -> ((java.util.function.Function<hydra.parsing.ParseResult<T0>, hydra.parsing.ParseResult<T1>>) ((java.util.function.Function<hydra.parsing.ParseResult<T0>, hydra.parsing.ParseResult<T1>>) (u -> (u).accept(new hydra.parsing.ParseResult.PartialVisitor<>() {
           @Override
           public hydra.parsing.ParseResult<T1> visit(hydra.parsing.ParseResult.Success<T0> sa) {
-            return (hydra.parsing.ParseResult<T1>) (new hydra.parsing.ParseResult.Success((hydra.parsing.ParseSuccess<T1>) (new hydra.parsing.ParseSuccess<T1>((((java.util.function.Function<hydra.parsing.ParseSuccess<java.util.function.Function<T0, T1>>, java.util.function.Function<T0, T1>>) (projected -> projected.value)).apply((sf).value)).apply(((java.util.function.Function<hydra.parsing.ParseSuccess<T0>, T0>) (projected -> projected.value)).apply((sa).value)), ((java.util.function.Function<hydra.parsing.ParseSuccess<T0>, String>) (projected -> projected.remainder)).apply((sa).value)))));
+            return (hydra.parsing.ParseResult<T1>) (new hydra.parsing.ParseResult.Success((hydra.parsing.ParseSuccess<T1>) (new hydra.parsing.ParseSuccess<T1>(((java.util.function.Function<hydra.parsing.ParseSuccess<java.util.function.Function<T0, T1>>, java.util.function.Function<T0, T1>>) (projected -> projected.value)).apply((sf).value).apply(((java.util.function.Function<hydra.parsing.ParseSuccess<T0>, T0>) (projected -> projected.value)).apply((sa).value)), ((java.util.function.Function<hydra.parsing.ParseSuccess<T0>, String>) (projected -> projected.remainder)).apply((sa).value)))));
           }
           
           @Override
           public hydra.parsing.ParseResult<T1> visit(hydra.parsing.ParseResult.Failure<T0> e) {
             return (hydra.parsing.ParseResult<T1>) (new hydra.parsing.ParseResult.Failure((e).value));
           }
-        })))).apply(v12))).apply((((java.util.function.Function<hydra.parsing.Parser<T0>, java.util.function.Function<String, hydra.parsing.ParseResult<T0>>>) (wrapped -> (wrapped).value)).apply(pa)).apply(((java.util.function.Function<hydra.parsing.ParseSuccess<java.util.function.Function<T0, T1>>, String>) (projected -> projected.remainder)).apply((sf).value)));
+        })))).apply(v12))).apply(((java.util.function.Function<hydra.parsing.Parser<T0>, java.util.function.Function<String, hydra.parsing.ParseResult<T0>>>) (wrapped -> (wrapped).value)).apply(pa).apply(((java.util.function.Function<hydra.parsing.ParseSuccess<java.util.function.Function<T0, T1>>, String>) (projected -> projected.remainder)).apply((sf).value)));
       }
       
       @Override
       public hydra.parsing.ParseResult<T1> visit(hydra.parsing.ParseResult.Failure<java.util.function.Function<T0, T1>> e) {
         return (hydra.parsing.ParseResult<T1>) (new hydra.parsing.ParseResult.Failure((e).value));
       }
-    })))).apply(v1))).apply((((java.util.function.Function<hydra.parsing.Parser<java.util.function.Function<T0, T1>>, java.util.function.Function<String, hydra.parsing.ParseResult<java.util.function.Function<T0, T1>>>>) (wrapped -> (wrapped).value)).apply(pf)).apply(input));
+    })))).apply(v1))).apply(((java.util.function.Function<hydra.parsing.Parser<java.util.function.Function<T0, T1>>, java.util.function.Function<String, hydra.parsing.ParseResult<java.util.function.Function<T0, T1>>>>) (wrapped -> (wrapped).value)).apply(pf).apply(input));
   }
   
   static <T0, T1, T2> hydra.parsing.Parser<T2> between(hydra.parsing.Parser<T0> open, hydra.parsing.Parser<T1> close, hydra.parsing.Parser<T2> p) {
@@ -88,14 +88,14 @@ public interface Parsers {
     return ((java.util.function.Function<hydra.parsing.ParseResult, hydra.parsing.ParseResult<T1>>) (v1 -> ((java.util.function.Function<hydra.parsing.ParseResult<T0>, hydra.parsing.ParseResult<T1>>) ((java.util.function.Function<hydra.parsing.ParseResult<T0>, hydra.parsing.ParseResult<T1>>) (u -> (u).accept(new hydra.parsing.ParseResult.PartialVisitor<>() {
       @Override
       public hydra.parsing.ParseResult<T1> visit(hydra.parsing.ParseResult.Success<T0> s) {
-        return (((java.util.function.Function<hydra.parsing.Parser<T1>, java.util.function.Function<String, hydra.parsing.ParseResult<T1>>>) (wrapped -> (wrapped).value)).apply((f).apply(((java.util.function.Function<hydra.parsing.ParseSuccess<T0>, T0>) (projected -> projected.value)).apply((s).value)))).apply(((java.util.function.Function<hydra.parsing.ParseSuccess<T0>, String>) (projected -> projected.remainder)).apply((s).value));
+        return ((java.util.function.Function<hydra.parsing.Parser<T1>, java.util.function.Function<String, hydra.parsing.ParseResult<T1>>>) (wrapped -> (wrapped).value)).apply((f).apply(((java.util.function.Function<hydra.parsing.ParseSuccess<T0>, T0>) (projected -> projected.value)).apply((s).value))).apply(((java.util.function.Function<hydra.parsing.ParseSuccess<T0>, String>) (projected -> projected.remainder)).apply((s).value));
       }
       
       @Override
       public hydra.parsing.ParseResult<T1> visit(hydra.parsing.ParseResult.Failure<T0> e) {
         return (hydra.parsing.ParseResult<T1>) (new hydra.parsing.ParseResult.Failure((e).value));
       }
-    })))).apply(v1))).apply((((java.util.function.Function<hydra.parsing.Parser<T0>, java.util.function.Function<String, hydra.parsing.ParseResult<T0>>>) (wrapped -> (wrapped).value)).apply(pa)).apply(input));
+    })))).apply(v1))).apply(((java.util.function.Function<hydra.parsing.Parser<T0>, java.util.function.Function<String, hydra.parsing.ParseResult<T0>>>) (wrapped -> (wrapped).value)).apply(pa).apply(input));
   }
   
   static hydra.parsing.Parser<Integer> char_(Integer c) {
@@ -127,7 +127,7 @@ public interface Parsers {
   }
   
   static <T0> hydra.parsing.Parser<T0> lazy(java.util.function.Function<java.lang.Void, hydra.parsing.Parser<T0>> f) {
-    return (hydra.parsing.Parser<T0>) (new hydra.parsing.Parser((java.util.function.Function<String, hydra.parsing.ParseResult<T0>>) (input -> (((java.util.function.Function<hydra.parsing.Parser<T0>, java.util.function.Function<String, hydra.parsing.ParseResult<T0>>>) (wrapped -> (wrapped).value)).apply((f).apply(null))).apply(input))));
+    return (hydra.parsing.Parser<T0>) (new hydra.parsing.Parser((java.util.function.Function<String, hydra.parsing.ParseResult<T0>>) (input -> ((java.util.function.Function<hydra.parsing.Parser<T0>, java.util.function.Function<String, hydra.parsing.ParseResult<T0>>>) (wrapped -> (wrapped).value)).apply((f).apply(null)).apply(input))));
   }
   
   static <T0> hydra.parsing.Parser<hydra.util.ConsList<T0>> many(hydra.parsing.Parser<T0> p) {
@@ -154,7 +154,7 @@ public interface Parsers {
       public hydra.parsing.ParseResult<T1> visit(hydra.parsing.ParseResult.Failure<T0> e) {
         return (hydra.parsing.ParseResult<T1>) (new hydra.parsing.ParseResult.Failure((e).value));
       }
-    })))).apply(v1))).apply((((java.util.function.Function<hydra.parsing.Parser<T0>, java.util.function.Function<String, hydra.parsing.ParseResult<T0>>>) (wrapped -> (wrapped).value)).apply(pa)).apply(input));
+    })))).apply(v1))).apply(((java.util.function.Function<hydra.parsing.Parser<T0>, java.util.function.Function<String, hydra.parsing.ParseResult<T0>>>) (wrapped -> (wrapped).value)).apply(pa).apply(input));
   }
   
   static <T0> hydra.parsing.Parser<hydra.util.Maybe<T0>> optional(hydra.parsing.Parser<T0> p) {
@@ -170,7 +170,7 @@ public interface Parsers {
   }
   
   static <T0> hydra.parsing.ParseResult<T0> runParser(hydra.parsing.Parser<T0> p, String input) {
-    return (((java.util.function.Function<hydra.parsing.Parser<T0>, java.util.function.Function<String, hydra.parsing.ParseResult<T0>>>) (wrapped -> (wrapped).value)).apply(p)).apply(input);
+    return ((java.util.function.Function<hydra.parsing.Parser<T0>, java.util.function.Function<String, hydra.parsing.ParseResult<T0>>>) (wrapped -> (wrapped).value)).apply(p).apply(input);
   }
   
   static hydra.parsing.Parser<Integer> satisfy(java.util.function.Function<Integer, Boolean> pred) {

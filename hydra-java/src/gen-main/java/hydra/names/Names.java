@@ -25,11 +25,11 @@ public interface Names {
   }
   
   static String localNameOf(hydra.core.Name arg_) {
-    return (hydra.names.Names.qualifyName(arg_)).local;
+    return hydra.names.Names.qualifyName(arg_).local;
   }
   
   static hydra.util.Maybe<hydra.module.Namespace> namespaceOf(hydra.core.Name arg_) {
-    return (hydra.names.Names.qualifyName(arg_)).namespace;
+    return hydra.names.Names.qualifyName(arg_).namespace;
   }
   
   static String namespaceToFilePath(hydra.util.CaseConvention caseConv, hydra.module.FileExtension ext, hydra.module.Namespace ns) {

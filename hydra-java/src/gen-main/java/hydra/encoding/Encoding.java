@@ -49,14 +49,14 @@ public interface Encoding {
       
       @Override
       public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Annotated at) {
-        return hydra.encoding.Encoding.encoderCollectForallVariables(((at).value).body);
+        return hydra.encoding.Encoding.encoderCollectForallVariables((at).value.body);
       }
       
       @Override
       public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Forall ft) {
         return hydra.lib.lists.Cons.apply(
-          ((ft).value).parameter,
-          hydra.encoding.Encoding.encoderCollectForallVariables(((ft).value).body));
+          (ft).value.parameter,
+          hydra.encoding.Encoding.encoderCollectForallVariables((ft).value.body));
       }
     });
   }
@@ -70,26 +70,26 @@ public interface Encoding {
       
       @Override
       public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Annotated at) {
-        return hydra.encoding.Encoding.encoderCollectOrdVars(((at).value).body);
+        return hydra.encoding.Encoding.encoderCollectOrdVars((at).value.body);
       }
       
       @Override
       public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Application appType) {
         return hydra.lib.lists.Concat2.apply(
-          hydra.encoding.Encoding.encoderCollectOrdVars(((appType).value).function),
-          hydra.encoding.Encoding.encoderCollectOrdVars(((appType).value).argument));
+          hydra.encoding.Encoding.encoderCollectOrdVars((appType).value.function),
+          hydra.encoding.Encoding.encoderCollectOrdVars((appType).value.argument));
       }
       
       @Override
       public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Either et) {
         return hydra.lib.lists.Concat2.apply(
-          hydra.encoding.Encoding.encoderCollectOrdVars(((et).value).left),
-          hydra.encoding.Encoding.encoderCollectOrdVars(((et).value).right));
+          hydra.encoding.Encoding.encoderCollectOrdVars((et).value.left),
+          hydra.encoding.Encoding.encoderCollectOrdVars((et).value.right));
       }
       
       @Override
       public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Forall ft) {
-        return hydra.encoding.Encoding.encoderCollectOrdVars(((ft).value).body);
+        return hydra.encoding.Encoding.encoderCollectOrdVars((ft).value.body);
       }
       
       @Override
@@ -100,9 +100,9 @@ public interface Encoding {
       @Override
       public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Map mt) {
         return hydra.lib.lists.Concat.apply(hydra.util.ConsList.of(
-          hydra.encoding.Encoding.encoderCollectTypeVarsFromType(((mt).value).keys),
-          hydra.encoding.Encoding.encoderCollectOrdVars(((mt).value).keys),
-          hydra.encoding.Encoding.encoderCollectOrdVars(((mt).value).values)));
+          hydra.encoding.Encoding.encoderCollectTypeVarsFromType((mt).value.keys),
+          hydra.encoding.Encoding.encoderCollectOrdVars((mt).value.keys),
+          hydra.encoding.Encoding.encoderCollectOrdVars((mt).value.values)));
       }
       
       @Override
@@ -113,8 +113,8 @@ public interface Encoding {
       @Override
       public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Pair pt) {
         return hydra.lib.lists.Concat2.apply(
-          hydra.encoding.Encoding.encoderCollectOrdVars(((pt).value).first),
-          hydra.encoding.Encoding.encoderCollectOrdVars(((pt).value).second));
+          hydra.encoding.Encoding.encoderCollectOrdVars((pt).value.first),
+          hydra.encoding.Encoding.encoderCollectOrdVars((pt).value.second));
       }
       
       @Override
@@ -154,19 +154,19 @@ public interface Encoding {
       
       @Override
       public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Annotated at) {
-        return hydra.encoding.Encoding.encoderCollectTypeVarsFromType(((at).value).body);
+        return hydra.encoding.Encoding.encoderCollectTypeVarsFromType((at).value.body);
       }
       
       @Override
       public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Application appType) {
         return hydra.lib.lists.Concat2.apply(
-          hydra.encoding.Encoding.encoderCollectTypeVarsFromType(((appType).value).function),
-          hydra.encoding.Encoding.encoderCollectTypeVarsFromType(((appType).value).argument));
+          hydra.encoding.Encoding.encoderCollectTypeVarsFromType((appType).value.function),
+          hydra.encoding.Encoding.encoderCollectTypeVarsFromType((appType).value.argument));
       }
       
       @Override
       public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Forall ft) {
-        return hydra.encoding.Encoding.encoderCollectTypeVarsFromType(((ft).value).body);
+        return hydra.encoding.Encoding.encoderCollectTypeVarsFromType((ft).value.body);
       }
       
       @Override
@@ -177,8 +177,8 @@ public interface Encoding {
       @Override
       public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Map mt) {
         return hydra.lib.lists.Concat2.apply(
-          hydra.encoding.Encoding.encoderCollectTypeVarsFromType(((mt).value).keys),
-          hydra.encoding.Encoding.encoderCollectTypeVarsFromType(((mt).value).values));
+          hydra.encoding.Encoding.encoderCollectTypeVarsFromType((mt).value.keys),
+          hydra.encoding.Encoding.encoderCollectTypeVarsFromType((mt).value.values));
       }
       
       @Override
@@ -189,8 +189,8 @@ public interface Encoding {
       @Override
       public hydra.util.ConsList<hydra.core.Name> visit(hydra.core.Type.Pair pt) {
         return hydra.lib.lists.Concat2.apply(
-          hydra.encoding.Encoding.encoderCollectTypeVarsFromType(((pt).value).first),
-          hydra.encoding.Encoding.encoderCollectTypeVarsFromType(((pt).value).second));
+          hydra.encoding.Encoding.encoderCollectTypeVarsFromType((pt).value.first),
+          hydra.encoding.Encoding.encoderCollectTypeVarsFromType((pt).value.second));
       }
       
       @Override
@@ -233,22 +233,22 @@ public interface Encoding {
       
       @Override
       public hydra.core.Type visit(hydra.core.Type.Annotated at) {
-        return hydra.encoding.Encoding.encoderFullResultType(((at).value).body);
+        return hydra.encoding.Encoding.encoderFullResultType((at).value.body);
       }
       
       @Override
       public hydra.core.Type visit(hydra.core.Type.Application appType) {
-        return new hydra.core.Type.Application(new hydra.core.ApplicationType(hydra.encoding.Encoding.encoderFullResultType(((appType).value).function), ((appType).value).argument));
+        return new hydra.core.Type.Application(new hydra.core.ApplicationType(hydra.encoding.Encoding.encoderFullResultType((appType).value.function), (appType).value.argument));
       }
       
       @Override
       public hydra.core.Type visit(hydra.core.Type.Either et) {
-        return new hydra.core.Type.Either(new hydra.core.EitherType(hydra.encoding.Encoding.encoderFullResultType(((et).value).left), hydra.encoding.Encoding.encoderFullResultType(((et).value).right)));
+        return new hydra.core.Type.Either(new hydra.core.EitherType(hydra.encoding.Encoding.encoderFullResultType((et).value.left), hydra.encoding.Encoding.encoderFullResultType((et).value.right)));
       }
       
       @Override
       public hydra.core.Type visit(hydra.core.Type.Forall ft) {
-        return new hydra.core.Type.Application(new hydra.core.ApplicationType(hydra.encoding.Encoding.encoderFullResultType(((ft).value).body), new hydra.core.Type.Variable(((ft).value).parameter)));
+        return new hydra.core.Type.Application(new hydra.core.ApplicationType(hydra.encoding.Encoding.encoderFullResultType((ft).value.body), new hydra.core.Type.Variable((ft).value.parameter)));
       }
       
       @Override
@@ -263,7 +263,7 @@ public interface Encoding {
       
       @Override
       public hydra.core.Type visit(hydra.core.Type.Map mt) {
-        return new hydra.core.Type.Map(new hydra.core.MapType(hydra.encoding.Encoding.encoderFullResultType(((mt).value).keys), hydra.encoding.Encoding.encoderFullResultType(((mt).value).values)));
+        return new hydra.core.Type.Map(new hydra.core.MapType(hydra.encoding.Encoding.encoderFullResultType((mt).value.keys), hydra.encoding.Encoding.encoderFullResultType((mt).value.values)));
       }
       
       @Override
@@ -273,7 +273,7 @@ public interface Encoding {
       
       @Override
       public hydra.core.Type visit(hydra.core.Type.Pair pt) {
-        return new hydra.core.Type.Pair(new hydra.core.PairType(hydra.encoding.Encoding.encoderFullResultType(((pt).value).first), hydra.encoding.Encoding.encoderFullResultType(((pt).value).second)));
+        return new hydra.core.Type.Pair(new hydra.core.PairType(hydra.encoding.Encoding.encoderFullResultType((pt).value.first), hydra.encoding.Encoding.encoderFullResultType((pt).value.second)));
       }
       
       @Override
@@ -319,24 +319,24 @@ public interface Encoding {
       public hydra.core.Type visit(hydra.core.Type.Annotated at) {
         return hydra.encoding.Encoding.encoderFullResultTypeNamed(
           ename,
-          ((at).value).body);
+          (at).value.body);
       }
       
       @Override
       public hydra.core.Type visit(hydra.core.Type.Application appType) {
-        return new hydra.core.Type.Application(new hydra.core.ApplicationType(hydra.encoding.Encoding.encoderFullResultType(((appType).value).function), ((appType).value).argument));
+        return new hydra.core.Type.Application(new hydra.core.ApplicationType(hydra.encoding.Encoding.encoderFullResultType((appType).value.function), (appType).value.argument));
       }
       
       @Override
       public hydra.core.Type visit(hydra.core.Type.Either et) {
-        return new hydra.core.Type.Either(new hydra.core.EitherType(hydra.encoding.Encoding.encoderFullResultType(((et).value).left), hydra.encoding.Encoding.encoderFullResultType(((et).value).right)));
+        return new hydra.core.Type.Either(new hydra.core.EitherType(hydra.encoding.Encoding.encoderFullResultType((et).value.left), hydra.encoding.Encoding.encoderFullResultType((et).value.right)));
       }
       
       @Override
       public hydra.core.Type visit(hydra.core.Type.Forall ft) {
         return new hydra.core.Type.Application(new hydra.core.ApplicationType(hydra.encoding.Encoding.encoderFullResultTypeNamed(
           ename,
-          ((ft).value).body), new hydra.core.Type.Variable(((ft).value).parameter)));
+          (ft).value.body), new hydra.core.Type.Variable((ft).value.parameter)));
       }
       
       @Override
@@ -351,7 +351,7 @@ public interface Encoding {
       
       @Override
       public hydra.core.Type visit(hydra.core.Type.Map mt) {
-        return new hydra.core.Type.Map(new hydra.core.MapType(hydra.encoding.Encoding.encoderFullResultType(((mt).value).keys), hydra.encoding.Encoding.encoderFullResultType(((mt).value).values)));
+        return new hydra.core.Type.Map(new hydra.core.MapType(hydra.encoding.Encoding.encoderFullResultType((mt).value.keys), hydra.encoding.Encoding.encoderFullResultType((mt).value.values)));
       }
       
       @Override
@@ -361,7 +361,7 @@ public interface Encoding {
       
       @Override
       public hydra.core.Type visit(hydra.core.Type.Pair pt) {
-        return new hydra.core.Type.Pair(new hydra.core.PairType(hydra.encoding.Encoding.encoderFullResultType(((pt).value).first), hydra.encoding.Encoding.encoderFullResultType(((pt).value).second)));
+        return new hydra.core.Type.Pair(new hydra.core.PairType(hydra.encoding.Encoding.encoderFullResultType((pt).value.first), hydra.encoding.Encoding.encoderFullResultType((pt).value.second)));
       }
       
       @Override
@@ -463,14 +463,14 @@ public interface Encoding {
       public hydra.core.Type visit(hydra.core.Type.Annotated at) {
         return hydra.encoding.Encoding.prependForallEncoders(
           baseType,
-          ((at).value).body);
+          (at).value.body);
       }
       
       @Override
       public hydra.core.Type visit(hydra.core.Type.Forall ft) {
-        return new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable(((ft).value).parameter), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term")))), hydra.encoding.Encoding.prependForallEncoders(
+        return new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Function(new hydra.core.FunctionType(new hydra.core.Type.Variable((ft).value.parameter), new hydra.core.Type.Variable(new hydra.core.Name("hydra.core.Term")))), hydra.encoding.Encoding.prependForallEncoders(
           baseType,
-          ((ft).value).body)));
+          (ft).value.body)));
       }
     });
   }
@@ -632,7 +632,7 @@ public interface Encoding {
         () -> hydra.lib.eithers.Bind.apply(
           hydra.lib.eithers.MapList.apply(
             (java.util.function.Function<hydra.core.Binding, hydra.util.Either<hydra.context.InContext<hydra.error.Error_>, hydra.core.Binding>>) (b -> hydra.lib.eithers.Bimap.apply(
-              (java.util.function.Function<hydra.context.InContext<hydra.error.DecodingError>, hydra.context.InContext<hydra.error.Error_>>) (ic -> (hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError((((java.util.function.Function<hydra.context.InContext<hydra.error.DecodingError>, hydra.error.DecodingError>) (projected -> projected.object)).apply(ic)).value)), ((java.util.function.Function<hydra.context.InContext<hydra.error.DecodingError>, hydra.context.Context>) (projected -> projected.context)).apply(ic)))),
+              (java.util.function.Function<hydra.context.InContext<hydra.error.DecodingError>, hydra.context.InContext<hydra.error.Error_>>) (ic -> (hydra.context.InContext<hydra.error.Error_>) (new hydra.context.InContext<hydra.error.Error_>(new hydra.error.Error_.Other(new hydra.error.OtherError(((java.util.function.Function<hydra.context.InContext<hydra.error.DecodingError>, hydra.error.DecodingError>) (projected -> projected.object)).apply(ic).value)), ((java.util.function.Function<hydra.context.InContext<hydra.error.DecodingError>, hydra.context.Context>) (projected -> projected.context)).apply(ic)))),
               (java.util.function.Function<hydra.core.Binding, hydra.core.Binding>) (x -> x),
               hydra.encoding.Encoding.encodeBinding(
                 cx,
@@ -647,7 +647,7 @@ public interface Encoding {
               hydra.encoding.Encoding::encodeNamespace,
               (mod).termDependencies))), hydra.util.ConsList.of((mod).namespace), hydra.util.Maybe.just(hydra.lib.strings.Cat.apply(hydra.util.ConsList.of(
             "Term encoders for ",
-            ((mod).namespace).value)))))))))));
+            (mod).namespace.value)))))))))));
   }
   
   static hydra.core.Term encodeName(hydra.core.Name n) {
@@ -693,12 +693,12 @@ public interface Encoding {
       
       @Override
       public hydra.core.Term visit(hydra.core.Type.Annotated at) {
-        return hydra.encoding.Encoding.encodeType(((at).value).body);
+        return hydra.encoding.Encoding.encodeType((at).value.body);
       }
       
       @Override
       public hydra.core.Term visit(hydra.core.Type.Application appType) {
-        return new hydra.core.Term.Application(new hydra.core.Application(hydra.encoding.Encoding.encodeType(((appType).value).function), hydra.encoding.Encoding.encodeType(((appType).value).argument)));
+        return new hydra.core.Term.Application(new hydra.core.Application(hydra.encoding.Encoding.encodeType((appType).value.function), hydra.encoding.Encoding.encodeType((appType).value.argument)));
       }
       
       @Override
@@ -784,12 +784,12 @@ public interface Encoding {
       public hydra.core.Term visit(hydra.core.Type.Annotated at) {
         return hydra.encoding.Encoding.encodeTypeNamed(
           ename,
-          ((at).value).body);
+          (at).value.body);
       }
       
       @Override
       public hydra.core.Term visit(hydra.core.Type.Application appType) {
-        return new hydra.core.Term.Application(new hydra.core.Application(hydra.encoding.Encoding.encodeType(((appType).value).function), hydra.encoding.Encoding.encodeType(((appType).value).argument)));
+        return new hydra.core.Term.Application(new hydra.core.Application(hydra.encoding.Encoding.encodeType((appType).value.function), hydra.encoding.Encoding.encodeType((appType).value.argument)));
       }
       
       @Override
@@ -799,9 +799,9 @@ public interface Encoding {
       
       @Override
       public hydra.core.Term visit(hydra.core.Type.Forall ft) {
-        return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(hydra.encoding.Encoding.encodeBindingName(((ft).value).parameter), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), hydra.encoding.Encoding.encodeTypeNamed(
+        return new hydra.core.Term.Function(new hydra.core.Function.Lambda(new hydra.core.Lambda(hydra.encoding.Encoding.encodeBindingName((ft).value.parameter), (hydra.util.Maybe<hydra.core.Type>) (hydra.util.Maybe.<hydra.core.Type>nothing()), hydra.encoding.Encoding.encodeTypeNamed(
           ename,
-          ((ft).value).body))));
+          (ft).value.body))));
       }
       
       @Override

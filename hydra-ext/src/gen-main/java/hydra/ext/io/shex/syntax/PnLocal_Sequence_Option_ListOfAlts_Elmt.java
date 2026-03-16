@@ -79,7 +79,7 @@ public abstract class PnLocal_Sequence_Option_ListOfAlts_Elmt implements Seriali
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PnLocal_Sequence_Option_ListOfAlts_Elmt other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -115,7 +115,7 @@ public abstract class PnLocal_Sequence_Option_ListOfAlts_Elmt implements Seriali
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PnLocal_Sequence_Option_ListOfAlts_Elmt other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -150,7 +150,7 @@ public abstract class PnLocal_Sequence_Option_ListOfAlts_Elmt implements Seriali
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PnLocal_Sequence_Option_ListOfAlts_Elmt other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -189,7 +189,7 @@ public abstract class PnLocal_Sequence_Option_ListOfAlts_Elmt implements Seriali
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(PnLocal_Sequence_Option_ListOfAlts_Elmt other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

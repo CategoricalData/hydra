@@ -74,7 +74,7 @@ public abstract class Reference<A> implements Serializable, Comparable<Reference
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Reference other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -117,7 +117,7 @@ public abstract class Reference<A> implements Serializable, Comparable<Reference
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Reference other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -160,7 +160,7 @@ public abstract class Reference<A> implements Serializable, Comparable<Reference
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Reference other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

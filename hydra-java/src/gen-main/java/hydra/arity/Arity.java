@@ -17,7 +17,7 @@ public interface Arity {
       public Integer visit(hydra.core.Function.Lambda arg_) {
         return hydra.lib.math.Add.apply(
           1,
-          hydra.arity.Arity.termArity(((arg_).value).body));
+          hydra.arity.Arity.termArity((arg_).value.body));
       }
       
       @Override
@@ -28,7 +28,7 @@ public interface Arity {
   }
   
   static Integer primitiveArity(hydra.graph.Primitive arg_) {
-    return hydra.arity.Arity.typeArity(((arg_).type).type);
+    return hydra.arity.Arity.typeArity((arg_).type.type);
   }
   
   static Integer termArity(hydra.core.Term v1) {
@@ -41,7 +41,7 @@ public interface Arity {
       @Override
       public Integer visit(hydra.core.Term.Application arg_) {
         return hydra.lib.math.Sub.apply(
-          hydra.arity.Arity.termArity(((arg_).value).function),
+          hydra.arity.Arity.termArity((arg_).value.function),
           1);
       }
       
@@ -61,24 +61,24 @@ public interface Arity {
       
       @Override
       public Integer visit(hydra.core.Type.Annotated arg_) {
-        return hydra.arity.Arity.typeArity(((arg_).value).body);
+        return hydra.arity.Arity.typeArity((arg_).value.body);
       }
       
       @Override
       public Integer visit(hydra.core.Type.Application arg_) {
-        return hydra.arity.Arity.typeArity(((arg_).value).function);
+        return hydra.arity.Arity.typeArity((arg_).value.function);
       }
       
       @Override
       public Integer visit(hydra.core.Type.Forall arg_) {
-        return hydra.arity.Arity.typeArity(((arg_).value).body);
+        return hydra.arity.Arity.typeArity((arg_).value.body);
       }
       
       @Override
       public Integer visit(hydra.core.Type.Function f) {
         return hydra.lib.math.Add.apply(
           1,
-          hydra.arity.Arity.typeArity(((f).value).codomain));
+          hydra.arity.Arity.typeArity((f).value.codomain));
       }
     });
   }
@@ -96,24 +96,24 @@ public interface Arity {
       
       @Override
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Annotated arg_) {
-        return hydra.arity.Arity.uncurryType(((arg_).value).body);
+        return hydra.arity.Arity.uncurryType((arg_).value.body);
       }
       
       @Override
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Application arg_) {
-        return hydra.arity.Arity.uncurryType(((arg_).value).function);
+        return hydra.arity.Arity.uncurryType((arg_).value.function);
       }
       
       @Override
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Forall arg_) {
-        return hydra.arity.Arity.uncurryType(((arg_).value).body);
+        return hydra.arity.Arity.uncurryType((arg_).value.body);
       }
       
       @Override
       public hydra.util.ConsList<hydra.core.Type> visit(hydra.core.Type.Function ft) {
         return hydra.lib.lists.Cons.apply(
-          ((ft).value).domain,
-          hydra.arity.Arity.uncurryType(((ft).value).codomain));
+          (ft).value.domain,
+          hydra.arity.Arity.uncurryType((ft).value.codomain));
       }
     });
   }

@@ -23,13 +23,13 @@ data AccessorEdge =
     accessorEdgeTarget :: AccessorNode}
   deriving (Eq, Ord, Read, Show)
 
-_AccessorEdge = (Core.Name "hydra.accessors.AccessorEdge")
+_AccessorEdge = Core.Name "hydra.accessors.AccessorEdge"
 
-_AccessorEdge_source = (Core.Name "source")
+_AccessorEdge_source = Core.Name "source"
 
-_AccessorEdge_path = (Core.Name "path")
+_AccessorEdge_path = Core.Name "path"
 
-_AccessorEdge_target = (Core.Name "target")
+_AccessorEdge_target = Core.Name "target"
 
 -- | A graph of accessor nodes and edges, representing term access patterns
 data AccessorGraph = 
@@ -40,11 +40,11 @@ data AccessorGraph =
     accessorGraphEdges :: [AccessorEdge]}
   deriving (Eq, Ord, Read, Show)
 
-_AccessorGraph = (Core.Name "hydra.accessors.AccessorGraph")
+_AccessorGraph = Core.Name "hydra.accessors.AccessorGraph"
 
-_AccessorGraph_nodes = (Core.Name "nodes")
+_AccessorGraph_nodes = Core.Name "nodes"
 
-_AccessorGraph_edges = (Core.Name "edges")
+_AccessorGraph_edges = Core.Name "edges"
 
 -- | A node in an accessor graph, representing a term or subterm
 data AccessorNode = 
@@ -57,13 +57,13 @@ data AccessorNode =
     accessorNodeId :: String}
   deriving (Eq, Ord, Read, Show)
 
-_AccessorNode = (Core.Name "hydra.accessors.AccessorNode")
+_AccessorNode = Core.Name "hydra.accessors.AccessorNode"
 
-_AccessorNode_name = (Core.Name "name")
+_AccessorNode_name = Core.Name "name"
 
-_AccessorNode_label = (Core.Name "label")
+_AccessorNode_label = Core.Name "label"
 
-_AccessorNode_id = (Core.Name "id")
+_AccessorNode_id = Core.Name "id"
 
 -- | A sequence of term accessors forming a path through a term
 newtype AccessorPath = 
@@ -71,7 +71,7 @@ newtype AccessorPath =
     unAccessorPath :: [TermAccessor]}
   deriving (Eq, Ord, Read, Show)
 
-_AccessorPath = (Core.Name "hydra.accessors.AccessorPath")
+_AccessorPath = Core.Name "hydra.accessors.AccessorPath"
 
 -- | A function which maps from a term to a particular immediate subterm
 data TermAccessor = 
@@ -117,44 +117,44 @@ data TermAccessor =
   TermAccessorWrappedTerm 
   deriving (Eq, Ord, Read, Show)
 
-_TermAccessor = (Core.Name "hydra.accessors.TermAccessor")
+_TermAccessor = Core.Name "hydra.accessors.TermAccessor"
 
-_TermAccessor_annotatedBody = (Core.Name "annotatedBody")
+_TermAccessor_annotatedBody = Core.Name "annotatedBody"
 
-_TermAccessor_applicationFunction = (Core.Name "applicationFunction")
+_TermAccessor_applicationFunction = Core.Name "applicationFunction"
 
-_TermAccessor_applicationArgument = (Core.Name "applicationArgument")
+_TermAccessor_applicationArgument = Core.Name "applicationArgument"
 
-_TermAccessor_lambdaBody = (Core.Name "lambdaBody")
+_TermAccessor_lambdaBody = Core.Name "lambdaBody"
 
-_TermAccessor_unionCasesDefault = (Core.Name "unionCasesDefault")
+_TermAccessor_unionCasesDefault = Core.Name "unionCasesDefault"
 
-_TermAccessor_unionCasesBranch = (Core.Name "unionCasesBranch")
+_TermAccessor_unionCasesBranch = Core.Name "unionCasesBranch"
 
-_TermAccessor_letBody = (Core.Name "letBody")
+_TermAccessor_letBody = Core.Name "letBody"
 
-_TermAccessor_letBinding = (Core.Name "letBinding")
+_TermAccessor_letBinding = Core.Name "letBinding"
 
-_TermAccessor_listElement = (Core.Name "listElement")
+_TermAccessor_listElement = Core.Name "listElement"
 
-_TermAccessor_mapKey = (Core.Name "mapKey")
+_TermAccessor_mapKey = Core.Name "mapKey"
 
-_TermAccessor_mapValue = (Core.Name "mapValue")
+_TermAccessor_mapValue = Core.Name "mapValue"
 
-_TermAccessor_maybeTerm = (Core.Name "maybeTerm")
+_TermAccessor_maybeTerm = Core.Name "maybeTerm"
 
-_TermAccessor_productTerm = (Core.Name "productTerm")
+_TermAccessor_productTerm = Core.Name "productTerm"
 
-_TermAccessor_recordField = (Core.Name "recordField")
+_TermAccessor_recordField = Core.Name "recordField"
 
-_TermAccessor_setElement = (Core.Name "setElement")
+_TermAccessor_setElement = Core.Name "setElement"
 
-_TermAccessor_sumTerm = (Core.Name "sumTerm")
+_TermAccessor_sumTerm = Core.Name "sumTerm"
 
-_TermAccessor_typeLambdaBody = (Core.Name "typeLambdaBody")
+_TermAccessor_typeLambdaBody = Core.Name "typeLambdaBody"
 
-_TermAccessor_typeApplicationTerm = (Core.Name "typeApplicationTerm")
+_TermAccessor_typeApplicationTerm = Core.Name "typeApplicationTerm"
 
-_TermAccessor_injectionTerm = (Core.Name "injectionTerm")
+_TermAccessor_injectionTerm = Core.Name "injectionTerm"
 
-_TermAccessor_wrappedTerm = (Core.Name "wrappedTerm")
+_TermAccessor_wrappedTerm = Core.Name "wrappedTerm"

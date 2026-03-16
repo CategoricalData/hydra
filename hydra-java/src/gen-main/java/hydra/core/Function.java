@@ -77,7 +77,7 @@ public abstract class Function implements Serializable, Comparable<Function> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Function other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -120,7 +120,7 @@ public abstract class Function implements Serializable, Comparable<Function> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Function other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -163,7 +163,7 @@ public abstract class Function implements Serializable, Comparable<Function> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Function other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

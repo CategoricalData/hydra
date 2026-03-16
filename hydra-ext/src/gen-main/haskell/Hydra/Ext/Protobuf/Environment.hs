@@ -20,8 +20,8 @@ data StructuralTypeRef =
   StructuralTypeRefPair (Core.Type, Core.Type)
   deriving (Eq, Ord, Read, Show)
 
-_StructuralTypeRef = (Core.Name "hydra.ext.protobuf.environment.StructuralTypeRef")
+_StructuralTypeRef = Core.Name "hydra.ext.protobuf.environment.StructuralTypeRef"
 
-_StructuralTypeRef_either = (Core.Name "either")
+_StructuralTypeRef_either = Core.Name "either"
 
-_StructuralTypeRef_pair = (Core.Name "pair")
+_StructuralTypeRef_pair = Core.Name "pair"

@@ -21,41 +21,46 @@ import qualified Data.List as L
 import qualified Data.Map as M
 import qualified Data.Set as S
 
-coderDirection :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Coders.CoderDirection)
-coderDirection cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermUnion v0 ->  
-    let field = (Core.injectionField v0) 
-        fname = (Core.fieldName field)
-        fterm = (Core.fieldTerm field)
-        variantMap = (Maps.fromList [
-                (Core.Name "encode", (\input -> Eithers.map (\t -> Coders.CoderDirectionEncode) (Helpers.decodeUnit cx input))),
-                (Core.Name "decode", (\input -> Eithers.map (\t -> Coders.CoderDirectionDecode) (Helpers.decodeUnit cx input)))])
-    in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
-      "no such field ",
-      (Core.unName fname),
-      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+coderDirection :: Graph.Graph -> Core.Term -> Either Error.DecodingError Coders.CoderDirection
+coderDirection cx raw =
+    Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+      Core.TermUnion v0 ->  
+        let field = Core.injectionField v0 
+            fname = Core.fieldName field
+            fterm = Core.fieldTerm field
+            variantMap =
+                    Maps.fromList [
+                      (Core.Name "encode", (\input -> Eithers.map (\t -> Coders.CoderDirectionEncode) (Helpers.decodeUnit cx input))),
+                      (Core.Name "decode", (\input -> Eithers.map (\t -> Coders.CoderDirectionDecode) (Helpers.decodeUnit cx input)))]
+        in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
+          "no such field ",
+          (Core.unName fname),
+          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+      _ -> Left (Error.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)
 
-languageName :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Coders.LanguageName)
-languageName cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermWrap v0 -> (Eithers.map (\b -> Coders.LanguageName b) ((\raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-    Core.TermLiteral v1 -> ((\x -> case x of
-      Core.LiteralString v2 -> (Right v2)
-      _ -> (Left (Error.DecodingError "expected string literal"))) v1)
-    _ -> (Left (Error.DecodingError "expected literal"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0)))
-  _ -> (Left (Error.DecodingError "expected wrapped type"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+languageName :: Graph.Graph -> Core.Term -> Either Error.DecodingError Coders.LanguageName
+languageName cx raw =
+    Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+      Core.TermWrap v0 -> Eithers.map (\b -> Coders.LanguageName b) ((\raw -> Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+        Core.TermLiteral v1 -> case v1 of
+          Core.LiteralString v2 -> Right v2
+          _ -> Left (Error.DecodingError "expected string literal")
+        _ -> Left (Error.DecodingError "expected literal")) (Lexical.stripAndDereferenceTermEither cx raw)) (Core.wrappedTermBody v0))
+      _ -> Left (Error.DecodingError "expected wrapped type")) (Lexical.stripAndDereferenceTermEither cx raw)
 
-traversalOrder :: (Graph.Graph -> Core.Term -> Either Error.DecodingError Coders.TraversalOrder)
-traversalOrder cx raw = (Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> (\x -> case x of
-  Core.TermUnion v0 ->  
-    let field = (Core.injectionField v0) 
-        fname = (Core.fieldName field)
-        fterm = (Core.fieldTerm field)
-        variantMap = (Maps.fromList [
-                (Core.Name "pre", (\input -> Eithers.map (\t -> Coders.TraversalOrderPre) (Helpers.decodeUnit cx input))),
-                (Core.Name "post", (\input -> Eithers.map (\t -> Coders.TraversalOrderPost) (Helpers.decodeUnit cx input)))])
-    in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
-      "no such field ",
-      (Core.unName fname),
-      " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
-  _ -> (Left (Error.DecodingError "expected union"))) stripped) (Lexical.stripAndDereferenceTermEither cx raw))
+traversalOrder :: Graph.Graph -> Core.Term -> Either Error.DecodingError Coders.TraversalOrder
+traversalOrder cx raw =
+    Eithers.either (\err -> Left (Error.DecodingError err)) (\stripped -> case stripped of
+      Core.TermUnion v0 ->  
+        let field = Core.injectionField v0 
+            fname = Core.fieldName field
+            fterm = Core.fieldTerm field
+            variantMap =
+                    Maps.fromList [
+                      (Core.Name "pre", (\input -> Eithers.map (\t -> Coders.TraversalOrderPre) (Helpers.decodeUnit cx input))),
+                      (Core.Name "post", (\input -> Eithers.map (\t -> Coders.TraversalOrderPost) (Helpers.decodeUnit cx input)))]
+        in (Maybes.maybe (Left (Error.DecodingError (Strings.cat [
+          "no such field ",
+          (Core.unName fname),
+          " in union"]))) (\f -> f fterm) (Maps.lookup fname variantMap))
+      _ -> Left (Error.DecodingError "expected union")) (Lexical.stripAndDereferenceTermEither cx raw)

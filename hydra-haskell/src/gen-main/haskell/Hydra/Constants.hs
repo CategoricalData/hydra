@@ -22,47 +22,47 @@ ignoredVariable = "_"
 
 -- | Annotation key for type classes
 key_classes :: Core.Name
-key_classes = (Core.Name "classes")
+key_classes = Core.Name "classes"
 
 -- | Annotation key for debug identifiers
 key_debugId :: Core.Name
-key_debugId = (Core.Name "debugId")
+key_debugId = Core.Name "debugId"
 
 -- | Annotation key for deprecated markers
 key_deprecated :: Core.Name
-key_deprecated = (Core.Name "deprecated")
+key_deprecated = Core.Name "deprecated"
 
 -- | Annotation key for descriptions
 key_description :: Core.Name
-key_description = (Core.Name "description")
+key_description = Core.Name "description"
 
 -- | Annotation key for exclusions
 key_exclude :: Core.Name
-key_exclude = (Core.Name "exclude")
+key_exclude = Core.Name "exclude"
 
 -- | A flag which tells the language coders to encode a given encoded type as a term rather than a native type
 key_firstClassType :: Core.Name
-key_firstClassType = (Core.Name "firstClassType")
+key_firstClassType = Core.Name "firstClassType"
 
 -- | Annotation key for maximum length constraints
 key_maxLength :: Core.Name
-key_maxLength = (Core.Name "maxLength")
+key_maxLength = Core.Name "maxLength"
 
 -- | Annotation key for minimum length constraints
 key_minLength :: Core.Name
-key_minLength = (Core.Name "minLength")
+key_minLength = Core.Name "minLength"
 
 -- | Annotation key for preserving field names during code generation
 key_preserveFieldName :: Core.Name
-key_preserveFieldName = (Core.Name "preserveFieldName")
+key_preserveFieldName = Core.Name "preserveFieldName"
 
 -- | Annotation key for type information
 key_type :: Core.Name
-key_type = (Core.Name "type")
+key_type = Core.Name "type"
 
 -- | A counter for generating fresh type variable names
 key_freshTypeVariableCount :: Core.Name
-key_freshTypeVariableCount = (Core.Name "freshTypeVariableCount")
+key_freshTypeVariableCount = Core.Name "freshTypeVariableCount"
 
 -- | The maximum value of a 32-bit integer
 maxInt32 :: Int

@@ -38,10 +38,10 @@ public interface Transform {
       
       @Override
       public hydra.util.Maybe<hydra.testing.TestCaseWithMetadata> visit(hydra.testing.TestCase.CaseConversion ccase) {
-        hydra.util.CaseConvention fromConv = ((ccase).value).fromConvention;
-        String fromStr = ((ccase).value).fromString;
-        hydra.util.CaseConvention toConv = ((ccase).value).toConvention;
-        String toStr = ((ccase).value).toString;
+        hydra.util.CaseConvention fromConv = (ccase).value.fromConvention;
+        String fromStr = (ccase).value.fromString;
+        hydra.util.CaseConvention toConv = (ccase).value.toConvention;
+        String toStr = (ccase).value.toString;
         return hydra.util.Maybe.just(new hydra.testing.TestCaseWithMetadata(name_, new hydra.testing.TestCase.DelegatedEvaluation(new hydra.testing.DelegatedEvaluationTestCase(hydra.test.transform.Transform.buildConvertCaseCall(
           fromConv,
           toConv,
@@ -50,8 +50,8 @@ public interface Transform {
       
       @Override
       public hydra.util.Maybe<hydra.testing.TestCaseWithMetadata> visit(hydra.testing.TestCase.Evaluation ecase) {
-        hydra.core.Term input_ = ((ecase).value).input;
-        hydra.core.Term output_ = ((ecase).value).output;
+        hydra.core.Term input_ = (ecase).value.input;
+        hydra.core.Term output_ = (ecase).value.output;
         return hydra.util.Maybe.just(new hydra.testing.TestCaseWithMetadata(name_, new hydra.testing.TestCase.DelegatedEvaluation(new hydra.testing.DelegatedEvaluationTestCase(input_, output_)), desc, tags_));
       }
       
@@ -62,15 +62,15 @@ public interface Transform {
       
       @Override
       public hydra.util.Maybe<hydra.testing.TestCaseWithMetadata> visit(hydra.testing.TestCase.TopologicalSort tscase) {
-        hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>> adjList = ((tscase).value).adjacencyList;
-        hydra.util.Either<hydra.util.ConsList<hydra.util.ConsList<Integer>>, hydra.util.ConsList<Integer>> expected = ((tscase).value).expected;
+        hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>> adjList = (tscase).value.adjacencyList;
+        hydra.util.Either<hydra.util.ConsList<hydra.util.ConsList<Integer>>, hydra.util.ConsList<Integer>> expected = (tscase).value.expected;
         return hydra.util.Maybe.just(new hydra.testing.TestCaseWithMetadata(name_, new hydra.testing.TestCase.DelegatedEvaluation(new hydra.testing.DelegatedEvaluationTestCase(hydra.test.transform.Transform.buildTopologicalSortCall(adjList), hydra.test.transform.Transform.encodeEitherListList(expected))), desc, tags_));
       }
       
       @Override
       public hydra.util.Maybe<hydra.testing.TestCaseWithMetadata> visit(hydra.testing.TestCase.TopologicalSortSCC scccase) {
-        hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>> adjList = ((scccase).value).adjacencyList;
-        hydra.util.ConsList<hydra.util.ConsList<Integer>> expected = ((scccase).value).expected;
+        hydra.util.ConsList<hydra.util.Pair<Integer, hydra.util.ConsList<Integer>>> adjList = (scccase).value.adjacencyList;
+        hydra.util.ConsList<hydra.util.ConsList<Integer>> expected = (scccase).value.expected;
         return hydra.util.Maybe.just(new hydra.testing.TestCaseWithMetadata(name_, new hydra.testing.TestCase.DelegatedEvaluation(new hydra.testing.DelegatedEvaluationTestCase(hydra.test.transform.Transform.buildTopologicalSortSCCCall(adjList), hydra.test.transform.Transform.encodeListList(expected))), desc, tags_));
       }
     });

@@ -77,7 +77,7 @@ public abstract class Name implements Serializable, Comparable<Name> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Name other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -120,7 +120,7 @@ public abstract class Name implements Serializable, Comparable<Name> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Name other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -163,7 +163,7 @@ public abstract class Name implements Serializable, Comparable<Name> {
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(Name other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

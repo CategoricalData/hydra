@@ -71,7 +71,7 @@ public abstract class TypeDeclaration implements Serializable, Comparable<TypeDe
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TypeDeclaration other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -111,7 +111,7 @@ public abstract class TypeDeclaration implements Serializable, Comparable<TypeDe
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TypeDeclaration other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -147,7 +147,7 @@ public abstract class TypeDeclaration implements Serializable, Comparable<TypeDe
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(TypeDeclaration other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }

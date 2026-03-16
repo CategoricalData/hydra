@@ -1854,6 +1854,59 @@
                                                                                 "either": {
                                                                                   "left": {"variable": "hydra.error.DecodingError"},
                                                                                   "right": {"variable": "hydra.ast.Expr"}}},
+                                                                              "domain": {"variable": "hydra.core.Term"}}}}},
+                                                                      {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {
+                                                                                "pair": {
+                                                                                  "@first": {
+                                                                                    "wrap": {
+                                                                                      "body": {"literal": {"string": "seq"}},
+                                                                                      "typeName": "hydra.core.Name"}},
+                                                                                  "@second": {
+                                                                                    "function": {
+                                                                                      "lambda": {
+                                                                                        "body": {
+                                                                                          "application": {
+                                                                                            "argument": {
+                                                                                              "application": {
+                                                                                                "argument": {"variable": "input"},
+                                                                                                "function": {
+                                                                                                  "application": {
+                                                                                                    "argument": {"variable": "cx"},
+                                                                                                    "function": {"variable": "hydra.decode.ast.seqExpr"}}}}},
+                                                                                            "function": {
+                                                                                              "application": {
+                                                                                                "argument": {
+                                                                                                  "function": {
+                                                                                                    "lambda": {
+                                                                                                      "body": {
+                                                                                                        "union": {
+                                                                                                          "field": {"name": "seq", "term": {"variable": "t"}},
+                                                                                                          "typeName": "hydra.ast.Expr"}},
+                                                                                                      "domain": [{"variable": "hydra.ast.SeqExpr"}],
+                                                                                                      "parameter": "t"}}},
+                                                                                                "function": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {
+                                                                                                          "typeApplication": {
+                                                                                                            "body": {"function": {"primitive": "hydra.lib.eithers.map"}},
+                                                                                                            "type": {"variable": "hydra.ast.SeqExpr"}}},
+                                                                                                        "type": {"variable": "hydra.ast.Expr"}}},
+                                                                                                    "type": {"variable": "hydra.error.DecodingError"}}}}}}},
+                                                                                        "domain": [{"variable": "hydra.core.Term"}],
+                                                                                        "parameter": "input"}}}}},
+                                                                              "type": {"variable": "hydra.core.Name"}}},
+                                                                          "type": {
+                                                                            "function": {
+                                                                              "codomain": {
+                                                                                "either": {
+                                                                                  "left": {"variable": "hydra.error.DecodingError"},
+                                                                                  "right": {"variable": "hydra.ast.Expr"}}},
                                                                               "domain": {"variable": "hydra.core.Term"}}}}}]},
                                                                   "function": {
                                                                     "typeApplication": {
@@ -3878,6 +3931,226 @@
                     "either": {
                       "left": {"variable": "hydra.error.DecodingError"},
                       "right": {"variable": "hydra.ast.Precedence"}}},
+                  "domain": {"variable": "hydra.core.Term"}}},
+              "domain": {"variable": "hydra.graph.Graph"}}},
+          "variables": []}]},
+    {
+      "name": "hydra.decode.ast.seqExpr",
+      "term": {
+        "function": {
+          "lambda": {
+            "body": {
+              "function": {
+                "lambda": {
+                  "body": {
+                    "application": {
+                      "argument": {
+                        "application": {
+                          "argument": {"variable": "raw"},
+                          "function": {
+                            "application": {
+                              "argument": {"variable": "cx"},
+                              "function": {"variable": "hydra.lexical.stripAndDereferenceTermEither"}}}}},
+                      "function": {
+                        "application": {
+                          "argument": {
+                            "function": {
+                              "lambda": {
+                                "body": {
+                                  "application": {
+                                    "argument": {"variable": "stripped"},
+                                    "function": {
+                                      "function": {
+                                        "elimination": {
+                                          "union": {
+                                            "cases": [
+                                              {
+                                                "name": "record",
+                                                "term": {
+                                                  "function": {
+                                                    "lambda": {
+                                                      "body": {
+                                                        "let": {
+                                                          "bindings": [
+                                                            {
+                                                              "name": "fieldMap",
+                                                              "term": {
+                                                                "application": {
+                                                                  "argument": {"variable": "record"},
+                                                                  "function": {"variable": "hydra.extract.helpers.toFieldMap"}}},
+                                                              "type": [
+                                                                {
+                                                                  "constraints": null,
+                                                                  "type": {
+                                                                    "map": {
+                                                                      "keys": {"variable": "hydra.core.Name"},
+                                                                      "values": {"variable": "hydra.core.Term"}}},
+                                                                  "variables": []}]}],
+                                                          "body": {
+                                                            "application": {
+                                                              "argument": {
+                                                                "function": {
+                                                                  "lambda": {
+                                                                    "body": {
+                                                                      "application": {
+                                                                        "argument": {
+                                                                          "function": {
+                                                                            "lambda": {
+                                                                              "body": {
+                                                                                "typeApplication": {
+                                                                                  "body": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "either": {
+                                                                                          "@right": {
+                                                                                            "record": {
+                                                                                              "fields": [
+                                                                                                {"name": "op", "term": {"variable": "field_op"}},
+                                                                                                {"name": "elements", "term": {"variable": "field_elements"}}],
+                                                                                              "typeName": "hydra.ast.SeqExpr"}}}},
+                                                                                      "type": {"variable": "hydra.error.DecodingError"}}},
+                                                                                  "type": {"variable": "hydra.ast.SeqExpr"}}},
+                                                                              "domain": [{"list": {"variable": "hydra.ast.Expr"}}],
+                                                                              "parameter": "field_elements"}}},
+                                                                        "function": {
+                                                                          "application": {
+                                                                            "argument": {
+                                                                              "application": {
+                                                                                "argument": {"variable": "cx"},
+                                                                                "function": {
+                                                                                  "application": {
+                                                                                    "argument": {"variable": "fieldMap"},
+                                                                                    "function": {
+                                                                                      "application": {
+                                                                                        "argument": {
+                                                                                          "application": {
+                                                                                            "argument": {"variable": "hydra.decode.ast.expr"},
+                                                                                            "function": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {"variable": "hydra.extract.helpers.decodeList"},
+                                                                                                "type": {"variable": "hydra.ast.Expr"}}}}},
+                                                                                        "function": {
+                                                                                          "application": {
+                                                                                            "argument": {"literal": {"string": "elements"}},
+                                                                                            "function": {
+                                                                                              "typeApplication": {
+                                                                                                "body": {
+                                                                                                  "typeApplication": {
+                                                                                                    "body": {
+                                                                                                      "typeApplication": {
+                                                                                                        "body": {"variable": "hydra.extract.helpers.requireField"},
+                                                                                                        "type": {"variable": "hydra.graph.Graph"}}},
+                                                                                                    "type": {"variable": "hydra.core.Term"}}},
+                                                                                                "type": {"list": {"variable": "hydra.ast.Expr"}}}}}}}}}}}},
+                                                                            "function": {
+                                                                              "typeApplication": {
+                                                                                "body": {
+                                                                                  "typeApplication": {
+                                                                                    "body": {
+                                                                                      "typeApplication": {
+                                                                                        "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                                        "type": {"variable": "hydra.error.DecodingError"}}},
+                                                                                    "type": {"list": {"variable": "hydra.ast.Expr"}}}},
+                                                                                "type": {"variable": "hydra.ast.SeqExpr"}}}}}}},
+                                                                    "domain": [{"variable": "hydra.ast.Op"}],
+                                                                    "parameter": "field_op"}}},
+                                                              "function": {
+                                                                "application": {
+                                                                  "argument": {
+                                                                    "application": {
+                                                                      "argument": {"variable": "cx"},
+                                                                      "function": {
+                                                                        "application": {
+                                                                          "argument": {"variable": "fieldMap"},
+                                                                          "function": {
+                                                                            "application": {
+                                                                              "argument": {"variable": "hydra.decode.ast.op"},
+                                                                              "function": {
+                                                                                "application": {
+                                                                                  "argument": {"literal": {"string": "op"}},
+                                                                                  "function": {
+                                                                                    "typeApplication": {
+                                                                                      "body": {
+                                                                                        "typeApplication": {
+                                                                                          "body": {
+                                                                                            "typeApplication": {
+                                                                                              "body": {"variable": "hydra.extract.helpers.requireField"},
+                                                                                              "type": {"variable": "hydra.graph.Graph"}}},
+                                                                                          "type": {"variable": "hydra.core.Term"}}},
+                                                                                      "type": {"variable": "hydra.ast.Op"}}}}}}}}}}},
+                                                                  "function": {
+                                                                    "typeApplication": {
+                                                                      "body": {
+                                                                        "typeApplication": {
+                                                                          "body": {
+                                                                            "typeApplication": {
+                                                                              "body": {"function": {"primitive": "hydra.lib.eithers.bind"}},
+                                                                              "type": {"variable": "hydra.error.DecodingError"}}},
+                                                                          "type": {"variable": "hydra.ast.Op"}}},
+                                                                      "type": {"variable": "hydra.ast.SeqExpr"}}}}}}}}},
+                                                      "domain": [{"variable": "hydra.core.Record"}],
+                                                      "parameter": "record"}}}}],
+                                            "default": [
+                                              {
+                                                "typeApplication": {
+                                                  "body": {
+                                                    "typeApplication": {
+                                                      "body": {
+                                                        "either": {
+                                                          "@left": {
+                                                            "wrap": {
+                                                              "body": {"literal": {"string": "expected record"}},
+                                                              "typeName": "hydra.error.DecodingError"}}}},
+                                                      "type": {"variable": "hydra.error.DecodingError"}}},
+                                                  "type": {"variable": "hydra.ast.SeqExpr"}}}],
+                                            "typeName": "hydra.core.Term"}}}}}},
+                                "domain": [{"variable": "hydra.core.Term"}],
+                                "parameter": "stripped"}}},
+                          "function": {
+                            "application": {
+                              "argument": {
+                                "function": {
+                                  "lambda": {
+                                    "body": {
+                                      "typeApplication": {
+                                        "body": {
+                                          "typeApplication": {
+                                            "body": {
+                                              "either": {
+                                                "@left": {
+                                                  "wrap": {"body": {"variable": "err"}, "typeName": "hydra.error.DecodingError"}}}},
+                                            "type": {"variable": "hydra.error.DecodingError"}}},
+                                        "type": {"variable": "hydra.ast.SeqExpr"}}},
+                                    "domain": [{"literal": {"string": {}}}],
+                                    "parameter": "err"}}},
+                              "function": {
+                                "typeApplication": {
+                                  "body": {
+                                    "typeApplication": {
+                                      "body": {
+                                        "typeApplication": {
+                                          "body": {"function": {"primitive": "hydra.lib.eithers.either"}},
+                                          "type": {"literal": {"string": {}}}}},
+                                      "type": {"variable": "hydra.core.Term"}}},
+                                  "type": {
+                                    "either": {
+                                      "left": {"variable": "hydra.error.DecodingError"},
+                                      "right": {"variable": "hydra.ast.SeqExpr"}}}}}}}}}}},
+                  "domain": [{"variable": "hydra.core.Term"}],
+                  "parameter": "raw"}}},
+            "domain": [{"variable": "hydra.graph.Graph"}],
+            "parameter": "cx"}}},
+      "type": [
+        {
+          "constraints": null,
+          "type": {
+            "function": {
+              "codomain": {
+                "function": {
+                  "codomain": {
+                    "either": {
+                      "left": {"variable": "hydra.error.DecodingError"},
+                      "right": {"variable": "hydra.ast.SeqExpr"}}},
                   "domain": {"variable": "hydra.core.Term"}}},
               "domain": {"variable": "hydra.graph.Graph"}}},
           "variables": []}]},

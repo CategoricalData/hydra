@@ -18,48 +18,55 @@ import qualified Data.Set as S
 
 -- | Language constraints for Apache Avro
 avroLanguage :: Coders.Language
-avroLanguage = Coders.Language {
-  Coders.languageName = (Coders.LanguageName "hydra.ext.avro"),
-  Coders.languageConstraints = Coders.LanguageConstraints {
-    Coders.languageConstraintsEliminationVariants = eliminationVariants,
-    Coders.languageConstraintsLiteralVariants = literalVariants,
-    Coders.languageConstraintsFloatTypes = floatTypes,
-    Coders.languageConstraintsFunctionVariants = functionVariants,
-    Coders.languageConstraintsIntegerTypes = integerTypes,
-    Coders.languageConstraintsTermVariants = termVariants,
-    Coders.languageConstraintsTypeVariants = typeVariants,
-    Coders.languageConstraintsTypes = typePredicate}} 
+avroLanguage =
+    Coders.Language {
+      Coders.languageName = (Coders.LanguageName "hydra.ext.avro"),
+      Coders.languageConstraints = Coders.LanguageConstraints {
+        Coders.languageConstraintsEliminationVariants = eliminationVariants,
+        Coders.languageConstraintsLiteralVariants = literalVariants,
+        Coders.languageConstraintsFloatTypes = floatTypes,
+        Coders.languageConstraintsFunctionVariants = functionVariants,
+        Coders.languageConstraintsIntegerTypes = integerTypes,
+        Coders.languageConstraintsTermVariants = termVariants,
+        Coders.languageConstraintsTypeVariants = typeVariants,
+        Coders.languageConstraintsTypes = typePredicate}} 
   where 
     eliminationVariants = Sets.empty
-    literalVariants = (Sets.fromList [
-      Variants.LiteralVariantBinary,
-      Variants.LiteralVariantBoolean,
-      Variants.LiteralVariantFloat,
-      Variants.LiteralVariantInteger,
-      Variants.LiteralVariantString])
-    floatTypes = (Sets.fromList [
-      Core.FloatTypeFloat32,
-      Core.FloatTypeFloat64])
+    literalVariants =
+        Sets.fromList [
+          Variants.LiteralVariantBinary,
+          Variants.LiteralVariantBoolean,
+          Variants.LiteralVariantFloat,
+          Variants.LiteralVariantInteger,
+          Variants.LiteralVariantString]
+    floatTypes =
+        Sets.fromList [
+          Core.FloatTypeFloat32,
+          Core.FloatTypeFloat64]
     functionVariants = Sets.empty
-    integerTypes = (Sets.fromList [
-      Core.IntegerTypeInt32,
-      Core.IntegerTypeInt64])
-    termVariants = (Sets.fromList [
-      Variants.TermVariantList,
-      Variants.TermVariantLiteral,
-      Variants.TermVariantMap,
-      Variants.TermVariantMaybe,
-      Variants.TermVariantRecord])
-    typeVariants = (Sets.fromList [
-      Variants.TypeVariantAnnotated,
-      Variants.TypeVariantList,
-      Variants.TypeVariantLiteral,
-      Variants.TypeVariantMap,
-      Variants.TypeVariantWrap,
-      Variants.TypeVariantMaybe,
-      Variants.TypeVariantRecord])
-    typePredicate = (\typ -> (\x -> case x of
-      Core.TypeMaybe v0 -> ((\x -> case x of
-        Core.TypeMaybe _ -> False
-        _ -> True) (Rewriting.deannotateType v0))
-      _ -> True) (Rewriting.deannotateType typ))
+    integerTypes =
+        Sets.fromList [
+          Core.IntegerTypeInt32,
+          Core.IntegerTypeInt64]
+    termVariants =
+        Sets.fromList [
+          Variants.TermVariantList,
+          Variants.TermVariantLiteral,
+          Variants.TermVariantMap,
+          Variants.TermVariantMaybe,
+          Variants.TermVariantRecord]
+    typeVariants =
+        Sets.fromList [
+          Variants.TypeVariantAnnotated,
+          Variants.TypeVariantList,
+          Variants.TypeVariantLiteral,
+          Variants.TypeVariantMap,
+          Variants.TypeVariantWrap,
+          Variants.TypeVariantMaybe,
+          Variants.TypeVariantRecord]
+    typePredicate =
+        \typ -> case (Rewriting.deannotateType typ) of
+          Core.TypeMaybe v0 -> case (Rewriting.deannotateType v0) of
+            Core.TypeMaybe _ -> False
+            _ -> True
+          _ -> True

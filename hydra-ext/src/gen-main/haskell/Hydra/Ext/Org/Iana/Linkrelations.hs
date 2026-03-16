@@ -258,246 +258,246 @@ data LinkRelationType =
   LinkRelationTypeWorking_copy_of 
   deriving (Eq, Ord, Read, Show)
 
-_LinkRelationType = (Core.Name "hydra.ext.org.iana.linkrelations.LinkRelationType")
+_LinkRelationType = Core.Name "hydra.ext.org.iana.linkrelations.LinkRelationType"
 
-_LinkRelationType_about = (Core.Name "about")
+_LinkRelationType_about = Core.Name "about"
 
-_LinkRelationType_acl = (Core.Name "acl")
+_LinkRelationType_acl = Core.Name "acl"
 
-_LinkRelationType_alternate = (Core.Name "alternate")
+_LinkRelationType_alternate = Core.Name "alternate"
 
-_LinkRelationType_amphtml = (Core.Name "amphtml")
+_LinkRelationType_amphtml = Core.Name "amphtml"
 
-_LinkRelationType_appendix = (Core.Name "appendix")
+_LinkRelationType_appendix = Core.Name "appendix"
 
-_LinkRelationType_apple_touch_icon = (Core.Name "apple-touch-icon")
+_LinkRelationType_apple_touch_icon = Core.Name "apple-touch-icon"
 
-_LinkRelationType_apple_touch_startup_image = (Core.Name "apple-touch-startup-image")
+_LinkRelationType_apple_touch_startup_image = Core.Name "apple-touch-startup-image"
 
-_LinkRelationType_archives = (Core.Name "archives")
+_LinkRelationType_archives = Core.Name "archives"
 
-_LinkRelationType_author = (Core.Name "author")
+_LinkRelationType_author = Core.Name "author"
 
-_LinkRelationType_blocked_by = (Core.Name "blocked-by")
+_LinkRelationType_blocked_by = Core.Name "blocked-by"
 
-_LinkRelationType_bookmark = (Core.Name "bookmark")
+_LinkRelationType_bookmark = Core.Name "bookmark"
 
-_LinkRelationType_canonical = (Core.Name "canonical")
+_LinkRelationType_canonical = Core.Name "canonical"
 
-_LinkRelationType_chapter = (Core.Name "chapter")
+_LinkRelationType_chapter = Core.Name "chapter"
 
-_LinkRelationType_cite_as = (Core.Name "cite-as")
+_LinkRelationType_cite_as = Core.Name "cite-as"
 
-_LinkRelationType_collection = (Core.Name "collection")
+_LinkRelationType_collection = Core.Name "collection"
 
-_LinkRelationType_contents = (Core.Name "contents")
+_LinkRelationType_contents = Core.Name "contents"
 
-_LinkRelationType_convertedfrom = (Core.Name "convertedfrom")
+_LinkRelationType_convertedfrom = Core.Name "convertedfrom"
 
-_LinkRelationType_copyright = (Core.Name "copyright")
+_LinkRelationType_copyright = Core.Name "copyright"
 
-_LinkRelationType_create_form = (Core.Name "create-form")
+_LinkRelationType_create_form = Core.Name "create-form"
 
-_LinkRelationType_current = (Core.Name "current")
+_LinkRelationType_current = Core.Name "current"
 
-_LinkRelationType_describedby = (Core.Name "describedby")
+_LinkRelationType_describedby = Core.Name "describedby"
 
-_LinkRelationType_describes = (Core.Name "describes")
+_LinkRelationType_describes = Core.Name "describes"
 
-_LinkRelationType_disclosure = (Core.Name "disclosure")
+_LinkRelationType_disclosure = Core.Name "disclosure"
 
-_LinkRelationType_dns_prefetch = (Core.Name "dns-prefetch")
+_LinkRelationType_dns_prefetch = Core.Name "dns-prefetch"
 
-_LinkRelationType_duplicate = (Core.Name "duplicate")
+_LinkRelationType_duplicate = Core.Name "duplicate"
 
-_LinkRelationType_edit = (Core.Name "edit")
+_LinkRelationType_edit = Core.Name "edit"
 
-_LinkRelationType_edit_form = (Core.Name "edit-form")
+_LinkRelationType_edit_form = Core.Name "edit-form"
 
-_LinkRelationType_edit_media = (Core.Name "edit-media")
+_LinkRelationType_edit_media = Core.Name "edit-media"
 
-_LinkRelationType_enclosure = (Core.Name "enclosure")
+_LinkRelationType_enclosure = Core.Name "enclosure"
 
-_LinkRelationType_external = (Core.Name "external")
+_LinkRelationType_external = Core.Name "external"
 
-_LinkRelationType_first = (Core.Name "first")
+_LinkRelationType_first = Core.Name "first"
 
-_LinkRelationType_glossary = (Core.Name "glossary")
+_LinkRelationType_glossary = Core.Name "glossary"
 
-_LinkRelationType_help = (Core.Name "help")
+_LinkRelationType_help = Core.Name "help"
 
-_LinkRelationType_hosts = (Core.Name "hosts")
+_LinkRelationType_hosts = Core.Name "hosts"
 
-_LinkRelationType_hub = (Core.Name "hub")
+_LinkRelationType_hub = Core.Name "hub"
 
-_LinkRelationType_icon = (Core.Name "icon")
+_LinkRelationType_icon = Core.Name "icon"
 
-_LinkRelationType_index = (Core.Name "index")
+_LinkRelationType_index = Core.Name "index"
 
-_LinkRelationType_intervalafter = (Core.Name "intervalafter")
+_LinkRelationType_intervalafter = Core.Name "intervalafter"
 
-_LinkRelationType_intervalbefore = (Core.Name "intervalbefore")
+_LinkRelationType_intervalbefore = Core.Name "intervalbefore"
 
-_LinkRelationType_intervalcontains = (Core.Name "intervalcontains")
+_LinkRelationType_intervalcontains = Core.Name "intervalcontains"
 
-_LinkRelationType_intervaldisjoint = (Core.Name "intervaldisjoint")
+_LinkRelationType_intervaldisjoint = Core.Name "intervaldisjoint"
 
-_LinkRelationType_intervalduring = (Core.Name "intervalduring")
+_LinkRelationType_intervalduring = Core.Name "intervalduring"
 
-_LinkRelationType_intervalequals = (Core.Name "intervalequals")
+_LinkRelationType_intervalequals = Core.Name "intervalequals"
 
-_LinkRelationType_intervalfinishedby = (Core.Name "intervalfinishedby")
+_LinkRelationType_intervalfinishedby = Core.Name "intervalfinishedby"
 
-_LinkRelationType_intervalfinishes = (Core.Name "intervalfinishes")
+_LinkRelationType_intervalfinishes = Core.Name "intervalfinishes"
 
-_LinkRelationType_intervalin = (Core.Name "intervalin")
+_LinkRelationType_intervalin = Core.Name "intervalin"
 
-_LinkRelationType_intervalmeets = (Core.Name "intervalmeets")
+_LinkRelationType_intervalmeets = Core.Name "intervalmeets"
 
-_LinkRelationType_intervalmetby = (Core.Name "intervalmetby")
+_LinkRelationType_intervalmetby = Core.Name "intervalmetby"
 
-_LinkRelationType_intervaloverlappedby = (Core.Name "intervaloverlappedby")
+_LinkRelationType_intervaloverlappedby = Core.Name "intervaloverlappedby"
 
-_LinkRelationType_intervaloverlaps = (Core.Name "intervaloverlaps")
+_LinkRelationType_intervaloverlaps = Core.Name "intervaloverlaps"
 
-_LinkRelationType_intervalstartedby = (Core.Name "intervalstartedby")
+_LinkRelationType_intervalstartedby = Core.Name "intervalstartedby"
 
-_LinkRelationType_intervalstarts = (Core.Name "intervalstarts")
+_LinkRelationType_intervalstarts = Core.Name "intervalstarts"
 
-_LinkRelationType_item = (Core.Name "item")
+_LinkRelationType_item = Core.Name "item"
 
-_LinkRelationType_last = (Core.Name "last")
+_LinkRelationType_last = Core.Name "last"
 
-_LinkRelationType_latest_version = (Core.Name "latest-version")
+_LinkRelationType_latest_version = Core.Name "latest-version"
 
-_LinkRelationType_license = (Core.Name "license")
+_LinkRelationType_license = Core.Name "license"
 
-_LinkRelationType_linkset = (Core.Name "linkset")
+_LinkRelationType_linkset = Core.Name "linkset"
 
-_LinkRelationType_lrdd = (Core.Name "lrdd")
+_LinkRelationType_lrdd = Core.Name "lrdd"
 
-_LinkRelationType_manifest = (Core.Name "manifest")
+_LinkRelationType_manifest = Core.Name "manifest"
 
-_LinkRelationType_mask_icon = (Core.Name "mask-icon")
+_LinkRelationType_mask_icon = Core.Name "mask-icon"
 
-_LinkRelationType_media_feed = (Core.Name "media-feed")
+_LinkRelationType_media_feed = Core.Name "media-feed"
 
-_LinkRelationType_memento = (Core.Name "memento")
+_LinkRelationType_memento = Core.Name "memento"
 
-_LinkRelationType_micropub = (Core.Name "micropub")
+_LinkRelationType_micropub = Core.Name "micropub"
 
-_LinkRelationType_modulepreload = (Core.Name "modulepreload")
+_LinkRelationType_modulepreload = Core.Name "modulepreload"
 
-_LinkRelationType_monitor = (Core.Name "monitor")
+_LinkRelationType_monitor = Core.Name "monitor"
 
-_LinkRelationType_monitor_group = (Core.Name "monitor-group")
+_LinkRelationType_monitor_group = Core.Name "monitor-group"
 
-_LinkRelationType_next = (Core.Name "next")
+_LinkRelationType_next = Core.Name "next"
 
-_LinkRelationType_next_archive = (Core.Name "next-archive")
+_LinkRelationType_next_archive = Core.Name "next-archive"
 
-_LinkRelationType_nofollow = (Core.Name "nofollow")
+_LinkRelationType_nofollow = Core.Name "nofollow"
 
-_LinkRelationType_noopener = (Core.Name "noopener")
+_LinkRelationType_noopener = Core.Name "noopener"
 
-_LinkRelationType_noreferrer = (Core.Name "noreferrer")
+_LinkRelationType_noreferrer = Core.Name "noreferrer"
 
-_LinkRelationType_opener = (Core.Name "opener")
+_LinkRelationType_opener = Core.Name "opener"
 
-_LinkRelationType_openid2_local_id = (Core.Name "openid2.local_id")
+_LinkRelationType_openid2_local_id = Core.Name "openid2.local_id"
 
-_LinkRelationType_openid2_provider = (Core.Name "openid2.provider")
+_LinkRelationType_openid2_provider = Core.Name "openid2.provider"
 
-_LinkRelationType_original = (Core.Name "original")
+_LinkRelationType_original = Core.Name "original"
 
-_LinkRelationType_p3pv1 = (Core.Name "p3pv1")
+_LinkRelationType_p3pv1 = Core.Name "p3pv1"
 
-_LinkRelationType_payment = (Core.Name "payment")
+_LinkRelationType_payment = Core.Name "payment"
 
-_LinkRelationType_pingback = (Core.Name "pingback")
+_LinkRelationType_pingback = Core.Name "pingback"
 
-_LinkRelationType_preconnect = (Core.Name "preconnect")
+_LinkRelationType_preconnect = Core.Name "preconnect"
 
-_LinkRelationType_predecessor_version = (Core.Name "predecessor-version")
+_LinkRelationType_predecessor_version = Core.Name "predecessor-version"
 
-_LinkRelationType_prefetch = (Core.Name "prefetch")
+_LinkRelationType_prefetch = Core.Name "prefetch"
 
-_LinkRelationType_preload = (Core.Name "preload")
+_LinkRelationType_preload = Core.Name "preload"
 
-_LinkRelationType_prerender = (Core.Name "prerender")
+_LinkRelationType_prerender = Core.Name "prerender"
 
-_LinkRelationType_prev = (Core.Name "prev")
+_LinkRelationType_prev = Core.Name "prev"
 
-_LinkRelationType_preview = (Core.Name "preview")
+_LinkRelationType_preview = Core.Name "preview"
 
-_LinkRelationType_previous = (Core.Name "previous")
+_LinkRelationType_previous = Core.Name "previous"
 
-_LinkRelationType_prev_archive = (Core.Name "prev-archive")
+_LinkRelationType_prev_archive = Core.Name "prev-archive"
 
-_LinkRelationType_privacy_policy = (Core.Name "privacy-policy")
+_LinkRelationType_privacy_policy = Core.Name "privacy-policy"
 
-_LinkRelationType_profile = (Core.Name "profile")
+_LinkRelationType_profile = Core.Name "profile"
 
-_LinkRelationType_publication = (Core.Name "publication")
+_LinkRelationType_publication = Core.Name "publication"
 
-_LinkRelationType_related = (Core.Name "related")
+_LinkRelationType_related = Core.Name "related"
 
-_LinkRelationType_restconf = (Core.Name "restconf")
+_LinkRelationType_restconf = Core.Name "restconf"
 
-_LinkRelationType_replies = (Core.Name "replies")
+_LinkRelationType_replies = Core.Name "replies"
 
-_LinkRelationType_ruleinput = (Core.Name "ruleinput")
+_LinkRelationType_ruleinput = Core.Name "ruleinput"
 
-_LinkRelationType_search = (Core.Name "search")
+_LinkRelationType_search = Core.Name "search"
 
-_LinkRelationType_section = (Core.Name "section")
+_LinkRelationType_section = Core.Name "section"
 
-_LinkRelationType_self = (Core.Name "self")
+_LinkRelationType_self = Core.Name "self"
 
-_LinkRelationType_service = (Core.Name "service")
+_LinkRelationType_service = Core.Name "service"
 
-_LinkRelationType_service_desc = (Core.Name "service-desc")
+_LinkRelationType_service_desc = Core.Name "service-desc"
 
-_LinkRelationType_service_doc = (Core.Name "service-doc")
+_LinkRelationType_service_doc = Core.Name "service-doc"
 
-_LinkRelationType_service_meta = (Core.Name "service-meta")
+_LinkRelationType_service_meta = Core.Name "service-meta"
 
-_LinkRelationType_siptrunkingcapability = (Core.Name "siptrunkingcapability")
+_LinkRelationType_siptrunkingcapability = Core.Name "siptrunkingcapability"
 
-_LinkRelationType_sponsored = (Core.Name "sponsored")
+_LinkRelationType_sponsored = Core.Name "sponsored"
 
-_LinkRelationType_start = (Core.Name "start")
+_LinkRelationType_start = Core.Name "start"
 
-_LinkRelationType_status = (Core.Name "status")
+_LinkRelationType_status = Core.Name "status"
 
-_LinkRelationType_stylesheet = (Core.Name "stylesheet")
+_LinkRelationType_stylesheet = Core.Name "stylesheet"
 
-_LinkRelationType_subsection = (Core.Name "subsection")
+_LinkRelationType_subsection = Core.Name "subsection"
 
-_LinkRelationType_successor_version = (Core.Name "successor-version")
+_LinkRelationType_successor_version = Core.Name "successor-version"
 
-_LinkRelationType_sunset = (Core.Name "sunset")
+_LinkRelationType_sunset = Core.Name "sunset"
 
-_LinkRelationType_tag = (Core.Name "tag")
+_LinkRelationType_tag = Core.Name "tag"
 
-_LinkRelationType_terms_of_service = (Core.Name "terms-of-service")
+_LinkRelationType_terms_of_service = Core.Name "terms-of-service"
 
-_LinkRelationType_timegate = (Core.Name "timegate")
+_LinkRelationType_timegate = Core.Name "timegate"
 
-_LinkRelationType_timemap = (Core.Name "timemap")
+_LinkRelationType_timemap = Core.Name "timemap"
 
-_LinkRelationType_type = (Core.Name "type")
+_LinkRelationType_type = Core.Name "type"
 
-_LinkRelationType_ugc = (Core.Name "ugc")
+_LinkRelationType_ugc = Core.Name "ugc"
 
-_LinkRelationType_up = (Core.Name "up")
+_LinkRelationType_up = Core.Name "up"
 
-_LinkRelationType_version_history = (Core.Name "version-history")
+_LinkRelationType_version_history = Core.Name "version-history"
 
-_LinkRelationType_via = (Core.Name "via")
+_LinkRelationType_via = Core.Name "via"
 
-_LinkRelationType_webmention = (Core.Name "webmention")
+_LinkRelationType_webmention = Core.Name "webmention"
 
-_LinkRelationType_working_copy = (Core.Name "working-copy")
+_LinkRelationType_working_copy = Core.Name "working-copy"
 
-_LinkRelationType_working_copy_of = (Core.Name "working-copy-of")
+_LinkRelationType_working_copy_of = Core.Name "working-copy-of"

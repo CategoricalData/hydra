@@ -63,7 +63,7 @@ public abstract class MethodBody implements Serializable, Comparable<MethodBody>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(MethodBody other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
@@ -99,7 +99,7 @@ public abstract class MethodBody implements Serializable, Comparable<MethodBody>
     @Override
     @SuppressWarnings("unchecked")
     public int compareTo(MethodBody other) {
-      int tagCmp = (this).getClass().getName().compareTo(other.getClass().getName());
+      int tagCmp = this.getClass().getName().compareTo(other.getClass().getName());
       if (tagCmp != 0) {
         return tagCmp;
       }
